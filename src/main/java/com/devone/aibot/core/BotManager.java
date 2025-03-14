@@ -5,6 +5,8 @@ import net.citizensnpcs.api.npc.NPC;
 import org.bukkit.Bukkit;
 import com.devone.aibot.AIBotPlugin;
 import com.devone.aibot.utils.BotLogger;
+import com.devone.aibot.utils.bluemap.BlueMapMarkers;
+import com.devone.aibot.utils.bluemap.BlueMapUtils;
 
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.configuration.file.YamlConfiguration;
@@ -112,7 +114,12 @@ public class BotManager {
         // ✅ После загрузки сразу обновляем маркеры
         BotLogger.debug("✅ Обновляем карту: " );
 
-        //dynmapBotMarkers.scheduleMarkerUpdate();
+
+
+        BlueMapMarkers bmm = new BlueMapMarkers(this);
+        
+
+        //BlueMapUtils.updateBlueMapMarkers(mSet);
 
     }
 

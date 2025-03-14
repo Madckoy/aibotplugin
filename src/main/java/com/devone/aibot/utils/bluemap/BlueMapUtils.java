@@ -3,61 +3,98 @@ package com.devone.aibot.utils.bluemap;
 
 import de.bluecolored.bluemap.api.BlueMapAPI;
 import de.bluecolored.bluemap.api.BlueMapMap;
+import de.bluecolored.bluemap.api.markers.MarkerSet;
+
+import de.bluecolored.bluemap.api.markers.POIMarker;
 
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 
+import com.devone.aibot.core.Bot;
 import com.devone.aibot.utils.BotLogger;
+import com.devone.aibot.utils.BotUtils;
+import com.flowpowered.math.vector.Vector3d;
 
-import de.bluecolored.bluemap.api.BlueMapAPI;
-
+import java.util.List;
 import java.util.Map;
 import java.util.Optional;
+import java.util.UUID;
 
 public class BlueMapUtils {
 
-    public static void updateBlueMapMarkers(Map<String, Location> lastKnownLocations) {
-        if (lastKnownLocations.isEmpty()) {
-            BotLogger.debug("[BlueMapUtils] ❌ No known bot locations, skipping update.");
+    private static final String MARKERS_SET_ID = "bot-markers";
+
+
+    public static MarkerSet setupMarkerSet(BlueMapAPI api) {
+        Optional<BlueMapMap> mapOptional = api.getMap("world"); // Change "world" to your actual map name
+    
+        if (mapOptional.isPresent()) {
+            BlueMapMap map = mapOptional.get();
+    
+            // Check if the marker set already exists, otherwise create and add a new one
+            MarkerSet markerSet = map.getMarkerSets().get(MARKERS_SET_ID);
+            if (markerSet == null) {
+                markerSet = new MarkerSet(MARKERS_SET_ID); // Create with ID
+                map.getMarkerSets().put(MARKERS_SET_ID, markerSet);
+            }
+    
+            BotLogger.info("[BlueMapUtils]: 📚 BlueMap marker set initialized.");
+            return markerSet;
+        } else {
+            BotLogger.info("[BlueMapUtils]: ❌ No valid map found!");
+            return null;
+        }
+    }
+
+    public static void updateBlueMapMarkers(MarkerSet mSet, List<Bot> bots,  Map<String, Location> lastKnownLocations) {
+        if (bots.isEmpty()) {
+            BotLogger.debug("[BlueMapUtils]: ❌ No bots in list, skipping update.");
+            return;
+        }
+
+        if (mSet == null) {
+            BotLogger.info("Marker set is not initialized yet!");
             return;
         }
 
         boolean updateTriggered = false;
 
-        for (Map.Entry<String, Location> entry : lastKnownLocations.entrySet()) {
-            String botId = entry.getKey();
-            Location loc = entry.getValue();
+       // for (Map.Entry<String, Location> entry : lastKnownLocations.entrySet()) {
 
-            if (loc == null) {
-                BotLogger.debug("[BlueMapUtils] ⚠ " + botId + " has no known location, skipping.");
-                continue;
-            }
+       for (Bot bot : bots) {
 
-            //
-            // use BlueMapAPI here
-            //
-        
-            Optional<BlueMapAPI> optionalApi = BlueMapAPI.getInstance();
+            String botId = bot.getId();
+            Location loc = bot.getNPCCurrentLocation();
+            UUID botUUID = bot.getUuid();
 
+            // -----------------------------------------------------------------------------------
+            // using BlueMapAPI here
 
-            BlueMapAPI.getInstance().ifPresent(api -> {
-                //code executed when the api is enabled (skipped if the api is not enabled)
-                Optional<BlueMapMap> mapOptional = api.getMap("world");
+            int x = loc.getBlockX();
+            int y = loc.getBlockY();
+            int z = loc.getBlockZ();
 
+            String markerId = botId;
 
+            // ✅ Get or download the bot’s skin icon
+            String skinFilePath = BotUtils.getSkinFile(botUUID);
 
-             });
-            
-            //
+            POIMarker marker = new POIMarker(markerId,  new Vector3d(x, y, z));
+
+            marker.setLabel(botId);
+            marker.setIcon(skinFilePath, 16, 16); // ✅ Use the local skin instead of fetching from the internet
+            marker.setDetail("[ "+bot.getCurrentTask().getName()+" ]");
+
+            mSet.put(markerId, marker);
+            BotLogger.info("Updated bot marker: " + botId + " at X:" + x + " Y:" + y + " Z:" + z);                
+            //--------------------------------------------------------------------------------------
 
             updateTriggered = true;
 
             BotLogger.debug("[BlueMapUtils] 🔄 Updating BlueMap Marjers for bot: " + botId +
                     " at X:" + loc.getBlockX() + " Y:" + loc.getBlockY() + " Z:" + loc.getBlockZ());
-        }
 
-        if (updateTriggered) {
-            BotLogger.info("[BlueMapUtilss] ✅ Map updated for bots.");
+            BotLogger.info("[BlueMapUtils] ✅ Map updated for bots.");        
         }
     }
 }

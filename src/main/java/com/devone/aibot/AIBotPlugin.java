@@ -1,5 +1,7 @@
 package com.devone.aibot;
 
+import de.bluecolored.bluemap.api.BlueMapAPI;
+import de.bluecolored.bluemap.api.markers.MarkerSet;
 import java.io.File;
 import java.io.IOException;
 
@@ -13,7 +15,12 @@ import com.devone.aibot.core.CommandDispatcher;
 import com.devone.aibot.core.ZoneManager;
 import com.devone.aibot.utils.BotLogger;
 import com.devone.aibot.utils.bluemap.BlueMapMarkers;
+import com.devone.aibot.utils.bluemap.BlueMapUtils;
 import com.devone.aibot.web.BotStatusServer;
+
+import de.bluecolored.bluemap.api.markers.MarkerSet;
+
+import java.util.Optional;
 
 public class AIBotPlugin extends JavaPlugin {
     private static AIBotPlugin instance;
@@ -27,7 +34,9 @@ public class AIBotPlugin extends JavaPlugin {
         instance = this; // ✅ Store the plugin instance
 
         ensureDataFolderExists();
+
         setupConfig();
+
         reloadPlugin(); // ✅ Now `onEnable()` only calls `reloadPlugin()`
 
         BotLogger.debug("✅ AI Bot Plugin has been enabled successfully!");
@@ -90,8 +99,6 @@ public class AIBotPlugin extends JavaPlugin {
 
         BotLogger.debug("✅ AI Bot Plugin перезагружен успешно!");
 
-        //DynmapBotMarkers dynmapBotMarkers = new DynmapBotMarkers(botManager);
-        //dynmapBotMarkers.scheduleMarkerUpdate();
     }
 
     private void setupConfig() {

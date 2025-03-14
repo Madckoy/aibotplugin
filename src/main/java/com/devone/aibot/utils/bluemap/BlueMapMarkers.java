@@ -1,10 +1,16 @@
 package com.devone.aibot.utils.bluemap;
 
+import com.devone.aibot.AIBotPlugin;
 import com.devone.aibot.core.Bot;
 import com.devone.aibot.core.BotManager;
 import com.devone.aibot.utils.BotLogger;
 import com.devone.aibot.utils.BotMovementLogger;
+import com.devone.aibot.utils.Constants;
 
+import de.bluecolored.bluemap.api.BlueMapAPI;
+import de.bluecolored.bluemap.api.BlueMapAPI;
+import de.bluecolored.bluemap.api.markers.MarkerSet;
+import de.bluecolored.bluemap.api.markers.MarkerSet;
 import de.bluecolored.bluemap.api.markers.POIMarker;
 
 import org.bukkit.Bukkit;
@@ -25,7 +31,7 @@ public class BlueMapMarkers {
 
     public BlueMapMarkers(BotManager botManager) {
         this.botManager = botManager;
-        this.markersFile = new File("plugins/dynmap/markers.yml");
+        this.markersFile = new File(Constants.PLUGIN_PATH+"/markers.yml");
 
         if (!markersFile.exists()) {
             try {
@@ -35,9 +41,20 @@ public class BlueMapMarkers {
                 BotLogger.error("[DynmapBotMarkers] Ошибка создания markers.yml: " + e.getMessage());
             }
         }
+
+        // BLUE MAP INTEGRATION IS HERE
+        BlueMapAPI.onEnable(api -> {
+
+            MarkerSet mSet = BlueMapUtils.setupMarkerSet(api);
+
+            scheduleMarkerUpdate(mSet);
+            
+            BotLogger.info("BlueMapAPI detected! Initializing marker system...");
+
+        });
     }
 
-    public void updateAllMarkers() {
+    private void updateAllMarkers(MarkerSet mSet) {
         if (!markersFile.exists()) {
             BotLogger.error("[DynmapBotMarkers] ❌ markers.yml отсутствует! Перезапустите сервер или создайте файл вручную.");
             return;
@@ -55,6 +72,7 @@ public class BlueMapMarkers {
         }
     
         boolean hasChanges = false;
+        
         List<Bot> bots = List.copyOf(botManager.getAllBots());
     
         if (bots.isEmpty()) {
@@ -116,7 +134,7 @@ public class BlueMapMarkers {
                 Bukkit.getScheduler().runTaskLater(botManager.getPlugin(), () -> {
                     BotLogger.info("[DynmapBotMarkers] 🔄 Форсируем обновление карты!");
 
-                    BlueMapUtils.updateBlueMapMarkers(lastKnownLocations);
+                    BlueMapUtils.updateBlueMapMarkers(mSet, bots, lastKnownLocations);
    
    
             }, 20L); // 1-секундная задержка, чтобы не грузить сервер
@@ -128,12 +146,12 @@ public class BlueMapMarkers {
         }
     }
 
-    public void scheduleMarkerUpdate() {
+    public void scheduleMarkerUpdate( MarkerSet mSet ) {
 
-        Bukkit.getScheduler().runTaskTimer(botManager.getPlugin(), () -> {
+        Bukkit.getScheduler().runTaskTimer(AIBotPlugin.getInstance(), () -> {
             BotLogger.debug("[DynmapBotMarkers] ✅ Обновление маркеров запущено.");
             
-            updateAllMarkers();
+            updateAllMarkers( mSet );
 
         }, 0L, 100L); // Обновляем маркеры 
 

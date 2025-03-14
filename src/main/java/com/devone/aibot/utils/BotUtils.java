@@ -1,7 +1,13 @@
 package com.devone.aibot.utils;
 
 import org.bukkit.Location;
+import java.nio.file.Files;
+import java.nio.file.StandardCopyOption;
+import java.io.File;
+import java.io.IOException;
+import java.net.URL;
 import java.util.Random;
+import java.util.UUID;
 
 public class BotUtils {
     private static final Random random = new Random();
@@ -37,5 +43,30 @@ public class BotUtils {
         }
         return false;
     }
+
+    public static String getSkinFile(UUID botUUID) {
+    File skinFolder = new File(Constants.PLUGIN_NAME+"/bot-skins");
+    if (!skinFolder.exists()) skinFolder.mkdirs();
+
+    File skinFile = new File(skinFolder, botUUID + ".png");
+
+    // ✅ If skin is already downloaded, return its local path
+    if (skinFile.exists()) return Constants.PLUGIN_NAME+"/bot-skins/" + botUUID + ".png";
+
+    try {
+        // ✅ Download the skin only once and save it
+        URL url = new URL("https://crafatar.com/avatars/" + botUUID + "?size=16");
+        
+        Files.copy(url.openStream(), skinFile.toPath(), StandardCopyOption.REPLACE_EXISTING);
+
+        BotLogger.info("Downloaded skin for " + botUUID);
+
+    } catch (IOException e) {
+        BotLogger.warning("Failed to download bot skin: " + e.getMessage());
+        return "assets/default-bot.png"; // ✅ Fallback if download fails
+    }
+
+    return Constants.PLUGIN_NAME+"/bot-skins/" + botUUID + ".png";
+}
 
 }
