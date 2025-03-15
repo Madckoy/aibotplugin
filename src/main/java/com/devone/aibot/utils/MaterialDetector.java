@@ -18,6 +18,12 @@ public class MaterialDetector {
         Material.CHERRY_LEAVES, Material.SPRUCE_LEAVES
     );
 
+    
+    public MaterialDetector(int radius) {
+        this.radiusXZ = radius;
+        this.radiusY = radius;
+    }
+
     public MaterialDetector(int radiusXZ, int radiusY) {
         this.radiusXZ = radiusXZ;
         this.radiusY = radiusY;

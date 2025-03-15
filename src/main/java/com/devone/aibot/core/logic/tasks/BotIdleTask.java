@@ -4,6 +4,7 @@ import com.devone.aibot.core.logic.tasks.configs.BotIdleTaskConfig;
 import com.devone.aibot.core.logic.tasks.configs.BotPatrolTaskConfig;
 
 import org.bukkit.Location;
+import org.bukkit.Material;
 
 import com.devone.aibot.core.Bot;
 import com.devone.aibot.utils.BotLogger;
@@ -30,11 +31,24 @@ public class BotIdleTask implements BotTask {
     @Override
     public void update() {
         if (isPaused) return;
-
-        BotLogger.debug(bot.getId() + " 👀 Start Patroling");
-
-        BotPatrolTask patrolTask = new BotPatrolTask(bot);
-        bot.getLifeCycle().getTaskStackManager().pushTask(patrolTask);
+    
+        double rand = Math.random();
+        
+        if (rand < 0.4) {
+            // 📌 40% шанс начать патрулирование
+            BotLogger.debug(bot.getId() + " 👀 Start Patroling");
+            BotPatrolTask patrolTask = new BotPatrolTask(bot);
+            bot.getLifeCycle().getTaskStackManager().pushTask(patrolTask);
+        } else if (rand < 0.7) {
+            // ⛏ 30% шанс начать добычу
+            BotLogger.debug(bot.getId() + " ⛏ Start Mining");
+            BotBreakBlockTask mineTask = new BotBreakBlockTask(bot);
+            mineTask.configure(Material.DIRT, 64, 4);
+            bot.getLifeCycle().getTaskStackManager().pushTask(mineTask);
+        } else {
+            // 💤 30% шанс остаться в IDLE
+            BotLogger.debug(bot.getId() + " 🌙 Остаётся в IDLE.");
+        }
     }
 
     @Override

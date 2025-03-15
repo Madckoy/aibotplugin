@@ -178,11 +178,11 @@ public class BotWebService {
                 if (loc != null) {
                     botJson.addProperty("skin", "http://" + getServerHost() + ":3000/skins/" + bot.getUuid() + ".png");
                     botJson.addProperty("id", bot.getId());
-                    botJson.addProperty("position", loc.getBlockX() + " , " + loc.getBlockY() + " , " + loc.getBlockZ());
+                    botJson.addProperty("position", BotUtils.formatLocation(loc));
                     botJson.addProperty("task", bot.getCurrentTask().getName());
                     
                     Location tg_loc = bot.getCurrentTask().getTargetLocation();
-                    String targetLoc = tg_loc.getBlockX() +" , "+tg_loc.getBlockY()+" , "+ tg_loc.getBlockZ();
+                    String targetLoc = BotUtils.formatLocation(tg_loc);
                     botJson.addProperty("target", targetLoc);
                     // ✅ Добавлено время выполнения таска
                     botJson.addProperty("elapsedTime", BotUtils.formatTime(bot.getCurrentTask().getElapsedTime()));

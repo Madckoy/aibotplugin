@@ -50,7 +50,11 @@ public class BotUtils {
     }
 
     public static String formatLocation(Location loc) {
+        if( loc!=null ) {
         return "(" + loc.getBlockX() + ", " + loc.getBlockY() + ", " + loc.getBlockZ() + ")";
+        } else {
+            return "";
+        }
     }
 
     public static boolean hasReachedTarget(Location current, Location target, double tolerance) {

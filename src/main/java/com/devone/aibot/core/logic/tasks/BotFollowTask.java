@@ -12,7 +12,7 @@ public class BotFollowTask extends PlayerLinkedTask {
 
     private Location targetLocation;
 
-    private String name = "FOLLOW_PLAYER";
+    private String name = "FOLLOW";
 
     private long startTime = System.currentTimeMillis();
 
