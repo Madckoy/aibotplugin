@@ -36,9 +36,9 @@ public class BlueMapMarkers {
         if (!markersFile.exists()) {
             try {
                 markersFile.createNewFile();
-                BotLogger.debug("[DynmapBotMarkers] markers.yml не найден, создан новый файл.");
+                BotLogger.debug("[BlueMapMarkers] markers.yml не найден, создан новый файл.");
             } catch (IOException e) {
-                BotLogger.error("[DynmapBotMarkers] Ошибка создания markers.yml: " + e.getMessage());
+                BotLogger.error("[BlueMapMarkers] Ошибка создания markers.yml: " + e.getMessage());
             }
         }
 
@@ -56,7 +56,7 @@ public class BlueMapMarkers {
 
     private void updateAllMarkers(MarkerSet mSet) {
         if (!markersFile.exists()) {
-            BotLogger.error("[DynmapBotMarkers] ❌ markers.yml отсутствует! Перезапустите сервер или создайте файл вручную.");
+            BotLogger.error("[BlueMapMarkers] ❌ markers.yml отсутствует! Перезапустите сервер или создайте файл вручную.");
             return;
         }
     
@@ -76,7 +76,7 @@ public class BlueMapMarkers {
         List<Bot> bots = List.copyOf(botManager.getAllBots());
     
         if (bots.isEmpty()) {
-            BotLogger.debug("[DynmapBotMarkers] ⚠ Нет ботов, markers.yml не обновляется.");
+            BotLogger.debug("[BlueMapMarkers] ⚠ Нет ботов, markers.yml не обновляется.");
             return;
         }
     
@@ -89,13 +89,13 @@ public class BlueMapMarkers {
                 Location lastLocation = lastKnownLocations.get(botId);
 
                 if( lastLocation!=null ) {
-                    BotLogger.debug("[DynmapBotMarkers]" + bot.getId() +" 📍Last known location on map: " +
+                    BotLogger.debug("[BlueMapMarkers]" + bot.getId() +" 📍Last known location on map: " +
                             " X:" + lastLocation.getBlockX() + " Y:" + lastLocation.getBlockY() + " Z:" + lastLocation.getBlockZ());
                     
 
                     // Если позиция не изменилась – пропускаем обновление
                     if (lastLocation.equals(loc)) {
-                        BotLogger.debug("[DynmapBotMarkers]" + bot.getId() +" 📍 Locations are the same! ");
+                        BotLogger.debug("[BlueMapMarkers]" + bot.getId() +" 📍 Locations are the same! ");
                         continue; 
                     }
                 }
@@ -115,11 +115,11 @@ public class BlueMapMarkers {
                 
                 BotMovementLogger.logBotMovement(bot);
     
-                BotLogger.debug("[DynmapBotMarkers]" + bot.getId() +" 📍 Обновлён маркер бота : " +
+                BotLogger.debug("[BlueMapMarkers]" + bot.getId() +" 📍 Обновлён маркер бота : " +
                         " X:" + loc.getBlockX() + " Y:" + loc.getBlockY() + " Z:" + loc.getBlockZ());
 
             } else {
-                BotLogger.debug("[DynmapBotMarkers]" + bot.getId() + " 📍 ALL Bot Locations are unknown. Skip update.");
+                BotLogger.debug("[BlueMapMarkers]" + bot.getId() + " 📍 ALL Bot Locations are unknown. Skip update.");
             }
            
         }
@@ -132,7 +132,7 @@ public class BlueMapMarkers {
 
                 // 🔥 Форсируем обновление карты ОДИН раз, после завершения цикла
                 Bukkit.getScheduler().runTaskLater(botManager.getPlugin(), () -> {
-                    BotLogger.info("[DynmapBotMarkers] 🔄 Форсируем обновление карты!");
+                    BotLogger.info("[BlueMapMarkers] 🔄 Форсируем обновление карты!");
 
                     BlueMapUtils.updateBlueMapMarkers(mSet, bots, lastKnownLocations);
    
@@ -141,7 +141,7 @@ public class BlueMapMarkers {
 
 
             } catch (IOException e) {
-                BotLogger.error("[DynmapBotMarkers] ❌ Ошибка при сохранении marker: " + e.getMessage());
+                BotLogger.error("[BlueMapMarkers] ❌ Ошибка при сохранении marker: " + e.getMessage());
             }
         }
     }
@@ -149,7 +149,7 @@ public class BlueMapMarkers {
     public void scheduleMarkerUpdate( MarkerSet mSet ) {
 
         Bukkit.getScheduler().runTaskTimer(AIBotPlugin.getInstance(), () -> {
-            BotLogger.debug("[DynmapBotMarkers] ✅ Обновление маркеров запущено.");
+            BotLogger.debug("[BlueMapMarkers] ✅ Обновление маркеров запущено.");
             
             updateAllMarkers( mSet );
 

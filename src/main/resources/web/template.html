@@ -4,6 +4,8 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>StatusDashboard</title>
+    <link rel="stylesheet" href="/assets/styles.css">
+    <script src="/assets/script.js"></script>
     <style>
         body {
             font-family: Arial, sans-serif;
@@ -81,7 +83,7 @@
             <th>Task</th>
             <th>Target</th>
             <th>Elapsed Time</th>
-            <th class="queue-column">Queue</th>
+            <th>Queue</th>
         </tr>
     </table>
 </div>
@@ -89,7 +91,7 @@
 <div id="botMap" class="map"></div>
 
 <script>
-    const BLUE_MAP_URL = "http://{{SERVER_HOST}}:8100";
+    const BLUE_MAP_URL = "http://{{MAP_HOST}}:8100";
     const BOT_STATUS_URL = "/status";
 
     function loadBlueMap() {
@@ -111,7 +113,8 @@
 
             data.bots.forEach(bot => {
                 let row = table.insertRow();
-                row.insertCell(0).innerText = bot.id;
+                let botCell = row.insertCell(0);
+                botCell.innerHTML = "<img src="+bot.skin+" width='24' height='24' style='border-radius: 4px; margin-right: 8px;'> "+bot.id;
                 row.insertCell(1).innerText = bot.position;
                 row.insertCell(2).innerText = bot.task;
                 row.insertCell(3).innerText = bot.target;

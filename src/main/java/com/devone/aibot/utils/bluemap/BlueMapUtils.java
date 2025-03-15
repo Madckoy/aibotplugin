@@ -13,6 +13,7 @@ import org.bukkit.Location;
 import com.devone.aibot.core.Bot;
 import com.devone.aibot.utils.BotLogger;
 import com.devone.aibot.utils.BotUtils;
+import com.devone.aibot.web.BotWebService;
 import com.flowpowered.math.vector.Vector3d;
 
 import java.util.List;
@@ -84,13 +85,12 @@ public class BlueMapUtils {
             marker.setLabel(botId);
 
             // ✅ Генерируем абсолютный URL к скину, который хостит AIBotPlugin
-            String iconPath = "http://192.168.3.33:3000/skins/" + botUUID + ".png";
-            
-            marker.setIcon(iconPath, 16, 16); // ✅ Use the local skin instead of fetching from the internet
-            
-            
-            marker.setDetail("[ "+bot.getCurrentTask().getName()+" ]");
+            String iconPath = "http://" + BotWebService.SERVER_HOST + ":3000/skins/" + botUUID + ".png";
 
+
+            marker.setIcon(iconPath, 0,0); 
+            marker.setLabel(bot.getId());
+            
             mSet.put(markerId, marker);
             BotLogger.info("Updated bot marker: " + botId + " at X:" + x + " Y:" + y + " Z:" + z);                
             //--------------------------------------------------------------------------------------

@@ -8,6 +8,7 @@ import java.io.IOException;
 import java.net.URL;
 import java.util.Random;
 import java.util.UUID;
+import java.util.concurrent.TimeUnit;
 
 public class BotUtils {
     private static final Random random = new Random();
@@ -68,6 +69,12 @@ public class BotUtils {
         return "/skins/" + botUUID + ".png";
     }
     
+    public static String formatTime(long milliseconds) {
+        long hours   = TimeUnit.MILLISECONDS.toHours(milliseconds);
+        long minutes = TimeUnit.MILLISECONDS.toMinutes(milliseconds) % 60;
+        long seconds = TimeUnit.MILLISECONDS.toSeconds(milliseconds) % 60;
+        return String.format("%02d:%02d:%02d", hours, minutes, seconds);
+    }
     
 
 }
