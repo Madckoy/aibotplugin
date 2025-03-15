@@ -9,7 +9,6 @@ import com.devone.aibot.utils.BotLogger;
 import io.papermc.paper.event.entity.EntityMoveEvent;
 
 import org.bukkit.Location;
-import org.bukkit.entity.Entity;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import java.util.HashMap;

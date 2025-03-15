@@ -2,6 +2,8 @@ package com.devone.aibot.commands;
 
 import com.devone.aibot.core.Bot;
 import com.devone.aibot.core.BotManager;
+import com.devone.aibot.utils.BotUtils;
+
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
@@ -28,14 +30,8 @@ public class BotList implements CommandExecutor {
 
         for (Bot bot : botManager.getAllBots()) {
             Location loc = bot.getNPCCurrentLocation();
-            String locationText = (loc != null) ?
-                "[X: " + (int) loc.getX() + ", Y: " + (int) loc.getY() + ", Z: " + (int) loc.getZ() + "]" :
-                "[Location Unknown]";
-
-            String goalText = (bot.getGoal() != null) ? bot.getGoal().name() : "NO_GOAL";
-            String statusText = (bot.getStatus() != null) ? bot.getStatus().name() : "UNKNOWN";
-
-            player.sendMessage(" - " + bot.getId() + " " + locationText + " " + goalText + " " + statusText);
+            String locationText = BotUtils.formatLocation(loc);
+            player.sendMessage(bot.getId() + " " + locationText );
         }
 
         if (botManager.getAllBots().isEmpty()) {

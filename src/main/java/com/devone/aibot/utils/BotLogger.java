@@ -33,7 +33,7 @@ public class BotLogger {
         }
     }
 
-    public static void warning(String message) {
+    public static void warn(String message) {
         logger.severe("[WARN] " + message);
     }
 

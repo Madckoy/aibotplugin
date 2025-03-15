@@ -4,6 +4,7 @@ import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.block.Block;
 
+import java.util.Comparator;
 import java.util.EnumSet;
 import java.util.Set;
 
@@ -36,42 +37,68 @@ public class MaterialDetector {
     public Location findClosestMaterialInSet(Set<Material> materials, Location start) {
         Location bestLocation = null;
         double minDistance = Double.MAX_VALUE;
-
-        for (int y = 0; y <= radiusY; y++) { // ✅ Проверяем сначала уровень старта, потом вверх и вниз
+    
+        for (int y = 0; y <= radiusY; y++) {
             for (int x = -radiusXZ; x <= radiusXZ; x++) {
                 for (int z = -radiusXZ; z <= radiusXZ; z++) {
                     Location loc = start.clone().add(x, y, z);
+                    
                     if (isValidMaterial(materials, loc)) {
-                        double distance = start.distanceSquared(loc); // ✅ Используем `distanceSquared()` (быстрее, чем `distance()`)
+                        double distance = start.distanceSquared(loc);
+                        
                         if (distance < minDistance) {
                             minDistance = distance;
                             bestLocation = loc;
+                            
+                            // 🚀 Оптимизация: если нашли блок в 1 блоке от бота, останавливаем поиск!
+                            if (distance == 1) {
+                                return bestLocation;
+                            }
                         }
                     }
                 }
             }
+            
             if (y > 0) {
                 for (int x = -radiusXZ; x <= radiusXZ; x++) {
                     for (int z = -radiusXZ; z <= radiusXZ; z++) {
                         Location loc = start.clone().add(x, -y, z);
+                        
                         if (isValidMaterial(materials, loc)) {
                             double distance = start.distanceSquared(loc);
+                            
                             if (distance < minDistance) {
                                 minDistance = distance;
                                 bestLocation = loc;
+                                
+                                if (distance == 1) {
+                                    return bestLocation;
+                                }
                             }
                         }
                     }
                 }
             }
         }
+    
+        // **Логируем найденный блок**
+        if (bestLocation != null) {
+            BotLogger.debug("🔍 Ближайший найденный блок: " + bestLocation.getBlock().getType() +
+                " на " + BotUtils.formatLocation(bestLocation));
+        } else {
+            BotLogger.warn("⚠️ Блоков не найдено в радиусе " + radiusXZ);
+        }
+    
         return bestLocation;
     }
-
-    private boolean isValidMaterial(Set<Material> materials, Location location) {
-        if (location == null) return false;
-        Block block = location.getBlock();
-        return block != null && materials.contains(block.getType());
+    private boolean isValidMaterial(Set<Material> materials, Location loc) {
+        Material type = loc.getBlock().getType();
+    
+        if (type == Material.AIR || type == Material.WATER || type == Material.CAVE_AIR) {
+            return false; // ❌ Игнорируем воздух, воду и пещерный воздух!
+        }
+    
+        return materials == null || materials.contains(type);
     }
 
     public Location findClosestSolidBlock(Location currentLocation) {

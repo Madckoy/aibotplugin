@@ -52,6 +52,9 @@ public class BotManager {
             botMap.remove(name); // Удаляем из списка
             BotLogger.debug("Бот " + name + " был удалён.");
             saveBots(); // Сохраняем список после удаления одного бота
+
+            // update Map Markers
+    
         }
     }
 

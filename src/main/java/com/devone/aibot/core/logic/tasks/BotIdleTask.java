@@ -3,6 +3,8 @@ package com.devone.aibot.core.logic.tasks;
 import com.devone.aibot.core.logic.tasks.configs.BotIdleTaskConfig;
 import com.devone.aibot.core.logic.tasks.configs.BotPatrolTaskConfig;
 
+import java.util.Set;
+
 import org.bukkit.Location;
 import org.bukkit.Material;
 
@@ -42,9 +44,21 @@ public class BotIdleTask implements BotTask {
         } else if (rand < 0.7) {
             // ⛏ 30% шанс начать добычу
             BotLogger.debug(bot.getId() + " ⛏ Start Mining");
-            BotBreakBlockTask mineTask = new BotBreakBlockTask(bot);
-            mineTask.configure(Material.DIRT, 64, 4);
-            bot.getLifeCycle().getTaskStackManager().pushTask(mineTask);
+
+            Set<Material> dirtTypes = Set.of(
+                    Material.DIRT, 
+                    Material.GRASS_BLOCK, 
+                    Material.PODZOL, 
+                    Material.MYCELIUM, 
+                    Material.COARSE_DIRT, 
+                    Material.ROOTED_DIRT
+            );
+
+            BotBreakBlockTask breakTask = new BotBreakBlockTask(bot);
+
+            breakTask.configure(dirtTypes, 64, 4); //ломаем все, включая кабины (тестовый режим)
+
+            bot.getLifeCycle().getTaskStackManager().pushTask(breakTask);
         } else {
             // 💤 30% шанс остаться в IDLE
             BotLogger.debug(bot.getId() + " 🌙 Остаётся в IDLE.");

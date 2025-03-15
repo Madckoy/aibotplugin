@@ -5,14 +5,12 @@ import org.bukkit.Location;
 import com.devone.aibot.core.Bot;
 import com.devone.aibot.utils.BotLogger;
 import com.devone.aibot.utils.BotUtils;
-import com.devone.aibot.utils.MaterialDetector;
 
 public class BotMoveTask implements BotTask {
     private final Bot bot;
     private Location targetLocation;
     private boolean isDone = false;
     private boolean isPaused = false;
-    private final MaterialDetector detector;
     private String name = "MOVE";
 
     private long startTime;
@@ -22,7 +20,6 @@ public class BotMoveTask implements BotTask {
 
     public BotMoveTask(Bot bot) {
         this.bot = bot;
-        this.detector = new MaterialDetector(1, 1);
     }
 
     @Override

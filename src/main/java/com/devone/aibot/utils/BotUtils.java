@@ -59,12 +59,12 @@ public class BotUtils {
 
     public static boolean hasReachedTarget(Location current, Location target, double tolerance) {
         if (current == null || target == null) {
-            BotLogger.warning("⚠ Ошибка: hasReachedTarget() вызван с null-координатами!");
+            BotLogger.warn("⚠ Ошибка: hasReachedTarget() вызван с null-координатами!");
             return false;
         }
     
         if (!current.getWorld().equals(target.getWorld())) {
-            BotLogger.warning("⚠ Ошибка: hasReachedTarget() вызван для разных миров!");
+            BotLogger.warn("⚠ Ошибка: hasReachedTarget() вызван для разных миров!");
             return false;
         }
     
@@ -105,7 +105,7 @@ public class BotUtils {
     
             BotLogger.info("✅ Скачан и уменьшен скин для " + botUUID);
         } catch (IOException e) {
-            BotLogger.warning("⚠ Ошибка скачивания скина: " + e.getMessage());
+            BotLogger.warn("⚠ Ошибка скачивания скина: " + e.getMessage());
             return "/skins/default-bot.png"; // ✅ Запасной скин
         }
     
