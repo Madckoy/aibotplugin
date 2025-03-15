@@ -45,28 +45,29 @@ public class BotUtils {
     }
 
     public static String getSkinFile(UUID botUUID) {
-    File skinFolder = new File(Constants.PLUGIN_NAME+"/bot-skins");
-    if (!skinFolder.exists()) skinFolder.mkdirs();
-
-    File skinFile = new File(skinFolder, botUUID + ".png");
-
-    // ✅ If skin is already downloaded, return its local path
-    if (skinFile.exists()) return Constants.PLUGIN_NAME+"/bot-skins/" + botUUID + ".png";
-
-    try {
-        // ✅ Download the skin only once and save it
-        URL url = new URL("https://crafatar.com/avatars/" + botUUID + "?size=16");
-        
-        Files.copy(url.openStream(), skinFile.toPath(), StandardCopyOption.REPLACE_EXISTING);
-
-        BotLogger.info("Downloaded skin for " + botUUID);
-
-    } catch (IOException e) {
-        BotLogger.warning("Failed to download bot skin: " + e.getMessage());
-        return "assets/default-bot.png"; // ✅ Fallback if download fails
+        File skinFolder = new File(Constants.PLUGIN_PATH + "/web/skins");
+        if (!skinFolder.exists()) skinFolder.mkdirs();
+    
+        File skinFile = new File(skinFolder, botUUID + ".png");
+    
+        // ✅ Если файл уже существует — просто возвращаем путь
+        if (skinFile.exists()) return "/skins/" + botUUID + ".png";
+    
+        try {
+            // ✅ Скачиваем скин с сервиса Crafatar (официальное API Mojang)
+            URL url = new URL("https://crafatar.com/avatars/" + botUUID + "?size=32");
+    
+            Files.copy(url.openStream(), skinFile.toPath(), StandardCopyOption.REPLACE_EXISTING);
+    
+            BotLogger.info("✅ Скачан скин для " + botUUID);
+        } catch (IOException e) {
+            BotLogger.warning("⚠ Ошибка скачивания скина: " + e.getMessage());
+            return "/skins/default-bot.png"; // ✅ Используем запасной скин
+        }
+    
+        return "/skins/" + botUUID + ".png";
     }
-
-    return Constants.PLUGIN_NAME+"/bot-skins/" + botUUID + ".png";
-}
+    
+    
 
 }

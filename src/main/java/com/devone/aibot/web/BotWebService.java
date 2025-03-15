@@ -3,9 +3,11 @@ package com.devone.aibot.web;
 import com.devone.aibot.core.Bot;
 import com.devone.aibot.core.BotManager;
 import com.devone.aibot.core.logic.tasks.BotTask;
+import com.devone.aibot.utils.Constants;
+import org.bukkit.configuration.file.FileConfiguration;
+import org.bukkit.configuration.file.YamlConfiguration;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
-
 import org.bukkit.Location;
 import org.eclipse.jetty.server.Server;
 import org.eclipse.jetty.servlet.ServletContextHandler;
@@ -17,53 +19,34 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 
 import java.io.*;
-import java.net.InetAddress;
-import java.net.NetworkInterface;
-import java.nio.charset.StandardCharsets;
+import java.nio.file.Files;
 import java.util.ArrayList;
 import java.util.Collection;
-import java.util.Enumeration;
 import java.util.List;
 import java.util.stream.Collectors;
 
-public class BotStatusServer {
+public class BotWebService {
     private final Server server;
-    private final String serverIp; // ✅ Stores the internal server IP
+    private static final String SKIN_PATH = Constants.PLUGIN_PATH + "/web/skins/";
+    private static final String CONFIG_PATH = Constants.PLUGIN_PATH + "/config.yml";
+    private static final String SERVER_HOST;
 
-    public BotStatusServer(int port, BotManager botManager) {
+    static {
+        File configFile = new File(CONFIG_PATH);
+        FileConfiguration config = YamlConfiguration.loadConfiguration(configFile);
+        SERVER_HOST = config.getString("server.host", "localhost");
+    }
 
+    public BotWebService(int port, BotManager botManager) {
         this.server = new Server(port);
-        this.serverIp = getLocalIpAddress(); // ✅ Gets the internal server IP
 
         ServletContextHandler context = new ServletContextHandler(ServletContextHandler.SESSIONS);
         context.setContextPath("/");
         server.setHandler(context);
 
-        // ✅ Main HTML Page (Injects IP dynamically)
-        context.addServlet(new ServletHolder(new MainPageServlet(serverIp)), "/");
-
-        // ✅ API endpoint for bot status
+        context.addServlet(new ServletHolder(new MainPageServlet()), "/");
         context.addServlet(new ServletHolder(new BotStatusServlet(botManager)), "/status");
-    }
-
-    // ✅ Gets the local server IP address dynamically
-    private String getLocalIpAddress() {
-        try {
-            Enumeration<NetworkInterface> interfaces = NetworkInterface.getNetworkInterfaces();
-            while (interfaces.hasMoreElements()) {
-                NetworkInterface iface = interfaces.nextElement();
-                Enumeration<InetAddress> addresses = iface.getInetAddresses();
-                while (addresses.hasMoreElements()) {
-                    InetAddress addr = addresses.nextElement();
-                    if (!addr.isLoopbackAddress() && addr.isSiteLocalAddress()) {
-                        return addr.getHostAddress(); // ✅ Uses the internal IP
-                    }
-                }
-            }
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-        return "127.0.0.1"; // Fallback to localhost if no valid IP is found
+        context.addServlet(new ServletHolder(new SkinServlet()), "/skins/*");
     }
 
     public void start() throws Exception {
@@ -74,37 +57,33 @@ public class BotStatusServer {
         server.stop();
     }
 
-    // ✅ Serves the dynamically generated main page with correct server IP
-    private class MainPageServlet extends HttpServlet {
-        private final String serverIp;
-
-        public MainPageServlet(String serverIp) {
-            this.serverIp = serverIp;
-        }
-
+    /**
+     * ✅ Отдаёт страницу мониторинга
+     */
+    private static class MainPageServlet extends HttpServlet {
         @Override
         protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
             resp.setContentType("text/html");
             resp.setCharacterEncoding("UTF-8");
 
-            // ✅ Load the template from resources
             InputStream inputStream = getClass().getClassLoader().getResourceAsStream("web/template.html");
             if (inputStream == null) {
                 resp.getWriter().println("Error: template.html not found.");
                 return;
             }
 
-            // ✅ Read file content and replace {{SERVER_IP}}
-            String html = new BufferedReader(new InputStreamReader(inputStream, StandardCharsets.UTF_8))
+            String html = new BufferedReader(new InputStreamReader(inputStream))
                     .lines()
                     .collect(Collectors.joining("\n"))
-                    .replace("{{SERVER_IP}}", serverIp);
+                    .replace("{{SERVER_HOST}}", SERVER_HOST);
 
             resp.getWriter().println(html);
         }
     }
 
-    // ✅ API /status — Returns JSON with bot data
+    /**
+     * ✅ API /status — отдаёт JSON с информацией о ботах
+     */
     private static class BotStatusServlet extends HttpServlet {
         private final BotManager botManager;
 
@@ -116,8 +95,6 @@ public class BotStatusServer {
         protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
             resp.setContentType("application/json");
             resp.setCharacterEncoding("UTF-8");
-
-            // ✅ Fix CORS issue for external access
             resp.setHeader("Access-Control-Allow-Origin", "*");
 
             JsonObject result = new JsonObject();
@@ -125,20 +102,19 @@ public class BotStatusServer {
 
             Collection<Bot> bots = botManager.getAllBots();
             for (Bot bot : bots) {
-
                 JsonObject botJson = new JsonObject();
-
-                Location  loc = bot.getNPCCurrentLocation();
+                Location loc = bot.getNPCCurrentLocation();
 
                 if (loc != null) {
-
                     botJson.addProperty("id", bot.getId());
-                    String currentLoc = loc.getBlockX() +" , "+loc.getBlockY()+" , "+ loc.getBlockZ();
-                    botJson.addProperty("position", currentLoc);
+                    botJson.addProperty("position", loc.getBlockX() + " , " + loc.getBlockY() + " , " + loc.getBlockZ());
                     botJson.addProperty("task", bot.getCurrentTask().getName());
+                    
                     Location tg_loc = bot.getCurrentTask().getTargetLocation();
                     String targetLoc = tg_loc.getBlockX() +" , "+tg_loc.getBlockY()+" , "+ tg_loc.getBlockZ();
                     botJson.addProperty("target", targetLoc);
+                    // ✅ Добавлено время выполнения таска
+                    botJson.addProperty("elapsedTime", bot.getCurrentTask().getElapsedTime());
 
                     // Получаем TaskStack (очередь задач) и конвертируем в List
                     List<BotTask> taskStack = (bot.getLifeCycle() != null
@@ -154,15 +130,39 @@ public class BotStatusServer {
 
                     botJson.addProperty("queue", taskStackText);
 
-                    // ✅ Добавлено время выполнения таска
-                    botJson.addProperty("elapsedTime", bot.getCurrentTask().getElapsedTime());
-
                     botsArray.add(botJson);
+
                 }
             }
 
             result.add("bots", botsArray);
             resp.getWriter().write(result.toString());
+        }
+    }
+
+    /**
+     * ✅ Отдаёт изображения скинов (/skins/{UUID}.png)
+     */
+    private static class SkinServlet extends HttpServlet {
+        @Override
+        protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+            String path = req.getPathInfo();
+            if (path == null || path.length() <= 1) {
+                resp.sendError(HttpServletResponse.SC_BAD_REQUEST, "Invalid skin request");
+                return;
+            }
+
+            File skinFile = new File(SKIN_PATH + path.substring(1));
+            if (!skinFile.exists()) {
+                skinFile = new File(SKIN_PATH + "default-bot.png");
+            }
+
+            resp.setContentType("image/png");
+            try (OutputStream os = resp.getOutputStream()) {
+                Files.copy(skinFile.toPath(), os);
+            } catch (IOException e) {
+                resp.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR, "Error serving skin file");
+            }
         }
     }
 }

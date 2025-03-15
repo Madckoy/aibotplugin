@@ -16,7 +16,7 @@ import com.devone.aibot.core.ZoneManager;
 import com.devone.aibot.utils.BotLogger;
 import com.devone.aibot.utils.bluemap.BlueMapMarkers;
 import com.devone.aibot.utils.bluemap.BlueMapUtils;
-import com.devone.aibot.web.BotStatusServer;
+import com.devone.aibot.web.BotWebService;
 
 import de.bluecolored.bluemap.api.markers.MarkerSet;
 
@@ -27,7 +27,7 @@ public class AIBotPlugin extends JavaPlugin {
 
     private ZoneManager zoneManager;
     private BotManager botManager;
-    private BotStatusServer status_server;
+    private BotWebService web_service;
 
     @Override
     public void onEnable() {
@@ -52,10 +52,10 @@ public class AIBotPlugin extends JavaPlugin {
         //}
 
         // Остановка HTTP сервера
-        if (status_server != null) {
+        if (web_service!= null) {
             try {
-                status_server.stop();
-                BotLogger.debug("🛑 HTTP server stopped.");
+                web_service.stop();
+                BotLogger.debug("🛑 HTTP WEB server stopped.");
             } catch (Exception e) {
                 e.printStackTrace();
             }
@@ -81,21 +81,22 @@ public class AIBotPlugin extends JavaPlugin {
         BotLogger.debug("✅ Менеджеры перезапущены!");
 
         // ✅ Restart HTTP server properly
-        if (status_server != null) {
+        if (web_service != null) {
             try {
-                status_server.stop();
+                web_service.stop();
             } catch (Exception e) {
                 e.printStackTrace();
             }
         }
 
-        status_server = new BotStatusServer(3000, botManager);
+        web_service = new BotWebService(3000, botManager);
         try {
-            status_server.start();
-            BotLogger.debug("🌐 HTTP Server started on port 3000.");
+            web_service.start();
+            BotLogger.debug("🌐 HTTP WEB Server started on port 3000.");
         } catch (Exception e) {
             e.printStackTrace();
         }
+
 
         BotLogger.debug("✅ AI Bot Plugin перезагружен успешно!");
 

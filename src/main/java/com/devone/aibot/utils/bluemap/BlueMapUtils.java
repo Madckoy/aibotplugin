@@ -82,7 +82,13 @@ public class BlueMapUtils {
             POIMarker marker = new POIMarker(markerId,  new Vector3d(x, y, z));
 
             marker.setLabel(botId);
-            marker.setIcon(skinFilePath, 16, 16); // ✅ Use the local skin instead of fetching from the internet
+
+            // ✅ Генерируем абсолютный URL к скину, который хостит AIBotPlugin
+            String iconPath = "http://192.168.3.33:3000/skins/" + botUUID + ".png";
+            
+            marker.setIcon(iconPath, 16, 16); // ✅ Use the local skin instead of fetching from the internet
+            
+            
             marker.setDetail("[ "+bot.getCurrentTask().getName()+" ]");
 
             mSet.put(markerId, marker);
