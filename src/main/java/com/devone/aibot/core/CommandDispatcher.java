@@ -28,6 +28,7 @@ public class CommandDispatcher implements CommandExecutor {
 
         registerCommand("bot-add", new BotAdd(botManager));
         registerCommand("bot-select", new BotSelect(botManager));
+        registerCommand("bot-unselect", new BotUnselect(botManager));
         registerCommand("bot-list", new BotList(botManager));
         registerCommand("bot-remove", new BotRemove(botManager));
         registerCommand("bot-remove-all", new BotRemoveAll(botManager));

@@ -13,6 +13,8 @@ import org.bukkit.plugin.java.JavaPlugin;
 import com.devone.aibot.core.BotManager;
 import com.devone.aibot.core.CommandDispatcher;
 import com.devone.aibot.core.ZoneManager;
+import com.devone.aibot.core.events.BotEvents;
+import com.devone.aibot.core.events.PlayerEvents;
 import com.devone.aibot.utils.BotLogger;
 import com.devone.aibot.utils.bluemap.BlueMapMarkers;
 import com.devone.aibot.utils.bluemap.BlueMapUtils;
@@ -97,6 +99,10 @@ public class AIBotPlugin extends JavaPlugin {
             e.printStackTrace();
         }
 
+        // тут зарегаем ивенты
+        getServer().getPluginManager().registerEvents(new PlayerEvents(botManager), this);
+        //
+        getServer().getPluginManager().registerEvents(new BotEvents(botManager), this);
 
         BotLogger.debug("✅ AI Bot Plugin перезагружен успешно!");
 

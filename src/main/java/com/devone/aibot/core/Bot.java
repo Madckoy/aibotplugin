@@ -58,10 +58,8 @@ public class Bot {
             npc.destroy();
             npc = null;
         }
-
-        BotLogger.debug("Бот " + id + " был удалён.");
-        botManager.removeBot(id);
-    }
+        BotLogger.debug("Бот " + id + " деспавнен.");
+    }  
 
     public BotInventory getInventory() {
         return inventory;

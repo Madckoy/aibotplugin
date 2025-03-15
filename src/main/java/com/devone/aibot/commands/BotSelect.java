@@ -2,6 +2,7 @@ package com.devone.aibot.commands;
 
 import com.devone.aibot.core.Bot;
 import com.devone.aibot.core.BotManager;
+import com.devone.aibot.utils.BotUtils;
 
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
@@ -43,14 +44,12 @@ public class BotSelect implements CommandExecutor {
         // ✅ Store the selected bot in BotManager
         botManager.selectBot(player.getUniqueId(), bot);
 
-        player.sendMessage("§aYou have selected bot '" + botName + "'.");
+        BotUtils.sendMessageToPlayer(player, botName, "You have selected bot " + botName + ".");
 
         // ✅ Bot responds with a modern chat message to confirm using Adventure API
-        String botMessage = "I am now under your command, " + player.getName() + "!";
-        Component chatMessage = Component.text("§7[§b" + botName + "§7] " + botMessage);
+        String botMessage = "I am now under your command!";
 
-        // ✅ Send the confirmation message to the player who selected the bot
-        player.sendMessage(chatMessage);  // Send the confirmation to the player
+        BotUtils.sendMessageToPlayer(player, botName, botMessage);
 
         return true;
     }

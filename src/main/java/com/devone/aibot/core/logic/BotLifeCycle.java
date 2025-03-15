@@ -1,5 +1,7 @@
 package com.devone.aibot.core.logic;
 
+import org.bukkit.Bukkit;
+
 import com.devone.aibot.core.Bot;
 import com.devone.aibot.core.logic.tasks.BotIdleTask;
 import com.devone.aibot.core.logic.tasks.TaskStackManager;
@@ -34,6 +36,8 @@ public class BotLifeCycle {
     }
 
     public void update() {
+        if (Bukkit.getServer().isStopping()) return;
+
         if (!taskStackManager.isEmpty()) {
             idleAdded = false; // ✅ Если есть активность, сбрасываем флаг
             taskStackManager.updateCurrentTask();

@@ -10,6 +10,7 @@ import com.devone.aibot.utils.bluemap.BlueMapUtils;
 
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.configuration.file.YamlConfiguration;
+import org.bukkit.entity.Entity;
 import org.bukkit.Location;
 import java.io.File;
 import java.io.IOException;
@@ -47,10 +48,11 @@ public class BotManager {
     public void removeBot(String name) {
         Bot bot = getBot(name);
         if (bot != null) {
-            bot.despawn();
+            bot.despawn();  // Деспавн вызывается из самого бота
+            botMap.remove(name); // Удаляем из списка
+            BotLogger.debug("Бот " + name + " был удалён.");
+            saveBots(); // Сохраняем список после удаления одного бота
         }
-        botMap.remove(name);
-        saveBots(); // ✅ Сохраняем при удалении
     }
 
     public boolean botExists(String name) {
@@ -154,23 +156,24 @@ public class BotManager {
         }
     }
 
-    public void clearAllBots() {
-        botMap.clear();
-        BotLogger.debug("🗑 Все боты удалены.");
-        saveBots();
-    }
-
-    public void despawnBots() {
-        for (Bot bot : botMap.values()) {
-            bot.despawn();
+    public void removeAllBots() {
+        for (String botId : new ArrayList<>(botMap.keySet())) { // Используем keySet(), чтобы передавать только идентификаторы
+            removeBot(botId); // Вызываем стандартный метод удаления
         }
-        botMap.clear();
-        BotLogger.debug("🗑 Все боты desawned].");
-        saveBots();
+        BotLogger.debug("🗑 Все боты удалены.");
     }
 
     public void selectBot(UUID playerUUID, Bot bot) {
         selectedBots.put(playerUUID, bot);
+    }
+
+    public boolean unselectBot(UUID playerUUID) {
+        if (!selectedBots.containsKey(playerUUID)) {
+            return false; // Бот не был выбран
+        }
+    
+        selectedBots.remove(playerUUID);
+        return true; // Бот успешно сброшен
     }
 
     public Bot getOrSelectBot(UUID playerId) {
@@ -191,5 +194,14 @@ public class BotManager {
 
     public AIBotPlugin getPlugin(){
         return plugin;
+    }
+
+    /**
+     * Проверка, является ли Entity ботом (перебором ботов)
+     */
+    public boolean isBot(Entity entity) {
+        return botMap.values().stream()
+            .filter(bot -> bot.getNPCEntity() != null) // ✅ Фильтруем null-значения
+            .anyMatch(bot -> bot.getNPCEntity().getUniqueId().equals(entity.getUniqueId()));
     }
 }

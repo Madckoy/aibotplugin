@@ -27,7 +27,9 @@ public class BlueMapUtils {
 
 
     public static MarkerSet setupMarkerSet(BlueMapAPI api) {
-        Optional<BlueMapMap> mapOptional = api.getMap("world"); // Change "world" to your actual map name
+
+        String worldName = Bukkit.getWorlds().isEmpty() ? "world" : Bukkit.getWorlds().get(0).getName();
+        Optional<BlueMapMap> mapOptional = api.getMap(worldName);
     
         if (mapOptional.isPresent()) {
             BlueMapMap map = mapOptional.get();

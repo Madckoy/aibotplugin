@@ -41,6 +41,12 @@ public class BotMoveTask implements BotTask {
     @Override
     public void update() {
 
+        if (Bukkit.getServer().isStopping()) {
+            BotLogger.info(bot.getId() + " ⚠️ Сервер выключается, отменяем обновление BotMoveTask.");
+            return;
+        }
+        
+
         BotLogger.info("BotMoveTask:update()");
 
         if (isDone || 
@@ -50,7 +56,7 @@ public class BotMoveTask implements BotTask {
             ) return;
 
         // Проверяем, достиг ли бот цели
-        if (BotUtils.hasReachedTarget(bot.getNPCCurrentLocation(), targetLocation)) {
+        if (BotUtils.hasReachedTarget(bot.getNPCCurrentLocation(), targetLocation, 2.0)) {
 
             BotLogger.info(bot.getId() + " 🎉 Has reached the target: "+targetLocation);
 
@@ -107,6 +113,24 @@ public class BotMoveTask implements BotTask {
     @Override
     public long getElapsedTime() {
         return System.currentTimeMillis() - startTime;
+    }
+
+    public void handleStuck() {
+        BotLogger.info(bot.getId() + " 🔄 Бот застрял! Пересчитываем маршрут...");
+    
+        // Пытаемся найти ближайшую доступную точку
+        Location newTarget = BotUtils.findNearestNavigableLocation(bot.getNPCCurrentLocation(), targetLocation, 5);
+        
+        if (newTarget != null) {
+            targetLocation = newTarget;
+            BotLogger.info(bot.getId() + " 🛠 Новая цель: " + BotUtils.formatLocation(targetLocation));
+            bot.getNPCNavigator().setTarget(targetLocation);
+        } else {
+            BotLogger.error(bot.getId() + " ❌ Не удалось найти маршрут. Телепортируем...");
+            bot.getNPCEntity().teleport(targetLocation);
+
+
+        }
     }
 
 }

@@ -56,7 +56,7 @@ public class BotPatrolTask implements BotTask {
         
         if ( patrolTarget == null ) return false;
         
-        if(BotUtils.hasReachedTarget(bot.getNPCCurrentLocation(), patrolTarget)) {
+        if(BotUtils.hasReachedTarget(bot.getNPCCurrentLocation(), patrolTarget, 2.0)) {
             patrolTarget = BotNavigationUtil.getRandomWalkLocation(bot.getNPCCurrentLocation(), -patrolRadius, patrolRadius);
             return true;
         } else {
