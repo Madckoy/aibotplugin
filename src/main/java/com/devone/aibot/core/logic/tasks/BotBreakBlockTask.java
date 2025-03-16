@@ -84,6 +84,8 @@ public class BotBreakBlockTask implements BotTask {
 
     @Override
     public void update() {
+        BotLogger.info(bot.getId() + " Running task: " + name);
+
         if (isDone) return;
 
         if(!BotInventory.hasFreeInventorySpace(bot, targetMaterials)) {
@@ -94,7 +96,7 @@ public class BotBreakBlockTask implements BotTask {
 
         //
         if (BotInventory.hasCollectedEnoughBlocks(bot, targetMaterials, maxBlocks)){
-            BotLogger.debug(bot.getId() + " 🔄 Not enoguh free space inInventory!");
+            BotLogger.debug(bot.getId() + " 🔄 Colleacted enough materials! Stopping the task");
             isDone = true;
             return;
         }

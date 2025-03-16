@@ -12,12 +12,10 @@ public class BotFollowTask extends PlayerLinkedTask {
 
     private Location targetLocation;
 
-    private String name = "FOLLOW";
-
     private long startTime = System.currentTimeMillis();
 
     public BotFollowTask(Bot bot, Player player) {
-        super(bot, player);
+        super(bot, player, "FOLLOW");
     }
 
     @Override

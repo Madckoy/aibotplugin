@@ -8,14 +8,17 @@ public abstract class PlayerLinkedTask implements BotTask {
     protected final Bot bot;
     protected final Player player;
     protected boolean isDone = false;
+    protected String name;
 
-    public PlayerLinkedTask(Bot bot, Player player) {
+    public PlayerLinkedTask(Bot bot, Player player, String name) {
         this.bot = bot;
         this.player = player;
+        this.name = name;
     }
 
     @Override
     public void update() {
+        BotLogger.info(bot.getId() + " Running task: " + name);
         if (!isPlayerOnline()) {
             handlePlayerDisconnect();
             return;

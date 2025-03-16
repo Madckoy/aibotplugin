@@ -13,13 +13,12 @@ public class BotProtectTask extends PlayerLinkedTask {
 
     private static final double ATTACK_RANGE = 3.5;
     private static final double PROTECT_RADIUS = 10.0;
-    private String name = "PROTECT";
     private long startTime = System.currentTimeMillis();
 
     private Location targetLocation;
 
     public BotProtectTask(Bot bot, Player player) {
-        super(bot, player);
+        super(bot, player, "PROTECT");
     }
 
     @Override
