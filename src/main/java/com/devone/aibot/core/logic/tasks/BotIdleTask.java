@@ -9,6 +9,7 @@ import org.bukkit.Location;
 import org.bukkit.Material;
 
 import com.devone.aibot.core.Bot;
+import com.devone.aibot.core.BotInventory;
 import com.devone.aibot.utils.BotLogger;
 
 public class BotIdleTask implements BotTask {
@@ -32,8 +33,8 @@ public class BotIdleTask implements BotTask {
 
     @Override
     public void update() {
-        BotLogger.info(bot.getId() + " Running task: " + name);
-        
+        BotLogger.debug(bot.getId() + " Running task: " + name);
+
         if (isPaused) return;
     
         double rand = Math.random();
@@ -58,7 +59,9 @@ public class BotIdleTask implements BotTask {
 
             BotBreakBlockTask breakTask = new BotBreakBlockTask(bot);
 
-            breakTask.configure(dirtTypes, 64, 5, true); //ломаем все, включая кабины (тестовый режим) и лутаем!!!
+            BotInventory.dropAllItems(bot);
+
+            breakTask.configure(dirtTypes, 256, 5, true); //ломаем все, включая кабины (тестовый режим) и лутаем!!!
 
             bot.getLifeCycle().getTaskStackManager().pushTask(breakTask);
         } else {

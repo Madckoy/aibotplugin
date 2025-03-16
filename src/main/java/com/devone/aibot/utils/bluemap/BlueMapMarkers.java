@@ -38,7 +38,7 @@ public class BlueMapMarkers {
                 markersFile.createNewFile();
                 BotLogger.debug("[BlueMapMarkers] markers.yml не найден, создан новый файл.");
             } catch (IOException e) {
-                BotLogger.error("[BlueMapMarkers] Ошибка создания markers.yml: " + e.getMessage());
+                BotLogger.debug("[BlueMapMarkers] Ошибка создания markers.yml: " + e.getMessage());
             }
         }
 
@@ -49,14 +49,14 @@ public class BlueMapMarkers {
 
             scheduleMarkerUpdate(mSet);
             
-            BotLogger.info("BlueMapAPI detected! Initializing marker system...");
+            BotLogger.debug("BlueMapAPI detected! Initializing marker system...");
 
         });
     }
 
     private void updateAllMarkers(MarkerSet mSet) {
         if (!markersFile.exists()) {
-            BotLogger.error("[BlueMapMarkers] ❌ markers.yml отсутствует! Перезапустите сервер или создайте файл вручную.");
+            BotLogger.debug("[BlueMapMarkers] ❌ markers.yml отсутствует! Перезапустите сервер или создайте файл вручную.");
             return;
         }
     
@@ -132,7 +132,7 @@ public class BlueMapMarkers {
 
                 // 🔥 Форсируем обновление карты ОДИН раз, после завершения цикла
                 Bukkit.getScheduler().runTaskLater(botManager.getPlugin(), () -> {
-                    BotLogger.info("[BlueMapMarkers] 🔄 Форсируем обновление карты!");
+                    BotLogger.debug("[BlueMapMarkers] 🔄 Форсируем обновление карты!");
 
                     BlueMapUtils.updateBlueMapMarkers(mSet, bots, lastKnownLocations);
    
@@ -141,7 +141,7 @@ public class BlueMapMarkers {
 
 
             } catch (IOException e) {
-                BotLogger.error("[BlueMapMarkers] ❌ Ошибка при сохранении marker: " + e.getMessage());
+                BotLogger.debug("[BlueMapMarkers] ❌ Ошибка при сохранении marker: " + e.getMessage());
             }
         }
     }

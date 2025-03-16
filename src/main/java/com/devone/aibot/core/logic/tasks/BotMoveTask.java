@@ -39,15 +39,15 @@ public class BotMoveTask implements BotTask {
     @Override
     public void update() {
 
-        BotLogger.info(bot.getId() + " Running task: " + name);
+        BotLogger.debug(bot.getId() + " Running task: " + name);
 
         if (Bukkit.getServer().isStopping()) {
-            BotLogger.info(bot.getId() + " ⚠️ Сервер выключается, отменяем обновление BotMoveTask.");
+            BotLogger.debug(bot.getId() + " ⚠️ Сервер выключается, отменяем обновление BotMoveTask.");
             return;
         }
         
 
-        BotLogger.info("BotMoveTask:update()");
+        BotLogger.debug("BotMoveTask:update()");
 
         if (isDone || 
             isPaused || 
@@ -58,7 +58,7 @@ public class BotMoveTask implements BotTask {
         // Проверяем, достиг ли бот цели
         if (BotUtils.hasReachedTarget(bot.getNPCCurrentLocation(), targetLocation, 2.0)) {
 
-            BotLogger.info(bot.getId() + " 🎉 Has reached the target: "+targetLocation);
+            BotLogger.debug(bot.getId() + " 🎉 Has reached the target: "+targetLocation);
 
             bot.resetTargetLocation();
 
@@ -82,14 +82,14 @@ public class BotMoveTask implements BotTask {
             // Навигация в основном потоке
             Bukkit.getScheduler().runTask(Bukkit.getPluginManager().getPlugin("AIBotPlugin"), () -> {
                 // Логика движения
-                BotLogger.info(bot.getId() + " Moving to " + BotUtils.formatLocation(targetLocation));
+                BotLogger.debug(bot.getId() + " Moving to " + BotUtils.formatLocation(targetLocation));
 
                 bot.getNPCNavigator().setTarget(targetLocation);
 
-                BotLogger.info(bot.getId()+" 📌 Navigation point has accepted: " + BotUtils.formatLocation(targetLocation));
+                BotLogger.debug(bot.getId()+" 📌 Navigation point has accepted: " + BotUtils.formatLocation(targetLocation));
             });
         } else {
-            BotLogger.info(bot.getId() + " ⚲ Can't navigate from "+BotUtils.formatLocation(currentLocation)+" to " + BotUtils.formatLocation(targetLocation));
+            BotLogger.debug(bot.getId() + " ⚲ Can't navigate from "+BotUtils.formatLocation(currentLocation)+" to " + BotUtils.formatLocation(targetLocation));
 
             bot.resetTargetLocation();
             isDone = true;
@@ -123,17 +123,17 @@ public class BotMoveTask implements BotTask {
     }
 
     public void handleStuck() {
-        BotLogger.info(bot.getId() + " 🔄 Бот застрял! Пересчитываем маршрут...");
+        BotLogger.debug(bot.getId() + " 🔄 Бот застрял! Пересчитываем маршрут...");
     
         // Пытаемся найти ближайшую доступную точку
         Location newTarget = BotUtils.findNearestNavigableLocation(bot.getNPCCurrentLocation(), targetLocation, 5);
         
         if (newTarget != null) {
             targetLocation = newTarget;
-            BotLogger.info(bot.getId() + " 🛠 Новая цель: " + BotUtils.formatLocation(targetLocation));
+            BotLogger.debug(bot.getId() + " 🛠 Новая цель: " + BotUtils.formatLocation(targetLocation));
             bot.getNPCNavigator().setTarget(targetLocation);
         } else {
-            BotLogger.error(bot.getId() + " ❌ Не удалось найти маршрут. Телепортируем...");
+            BotLogger.debug(bot.getId() + " ❌ Не удалось найти маршрут. Телепортируем...");
             bot.getNPCEntity().teleport(targetLocation);
 
 

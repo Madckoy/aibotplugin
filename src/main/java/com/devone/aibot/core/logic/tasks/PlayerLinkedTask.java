@@ -18,7 +18,7 @@ public abstract class PlayerLinkedTask implements BotTask {
 
     @Override
     public void update() {
-        BotLogger.info(bot.getId() + " Running task: " + name);
+        BotLogger.debug(bot.getId() + " Running task: " + name);
         if (!isPlayerOnline()) {
             handlePlayerDisconnect();
             return;

@@ -41,10 +41,10 @@ public class BlueMapUtils {
                 map.getMarkerSets().put(MARKERS_SET_ID, markerSet);
             }
     
-            BotLogger.info("[BlueMapUtils]: 📚 BlueMap marker set initialized.");
+            BotLogger.debug("[BlueMapUtils]: 📚 BlueMap marker set initialized.");
             return markerSet;
         } else {
-            BotLogger.info("[BlueMapUtils]: ❌ No valid map found!");
+            BotLogger.debug("[BlueMapUtils]: ❌ No valid map found!");
             return null;
         }
     }
@@ -56,7 +56,7 @@ public class BlueMapUtils {
         }
 
         if (mSet == null) {
-            BotLogger.info("Marker set is not initialized yet!");
+            BotLogger.debug("Marker set is not initialized yet!");
             return;
         }
 
@@ -94,7 +94,7 @@ public class BlueMapUtils {
             marker.setLabel(bot.getId());
             
             mSet.put(markerId, marker);
-            BotLogger.info("Updated bot marker: " + botId + " at X:" + x + " Y:" + y + " Z:" + z);                
+            BotLogger.debug("Updated bot marker: " + botId + " at X:" + x + " Y:" + y + " Z:" + z);                
             //--------------------------------------------------------------------------------------
 
             updateTriggered = true;
@@ -102,7 +102,7 @@ public class BlueMapUtils {
             BotLogger.debug("[BlueMapUtils] 🔄 Updating BlueMap Marjers for bot: " + botId +
                     " at X:" + loc.getBlockX() + " Y:" + loc.getBlockY() + " Z:" + loc.getBlockZ());
 
-            BotLogger.info("[BlueMapUtils] ✅ Map updated for bots.");        
+            BotLogger.debug("[BlueMapUtils] ✅ Map updated for bots.");        
         }
     }
 }

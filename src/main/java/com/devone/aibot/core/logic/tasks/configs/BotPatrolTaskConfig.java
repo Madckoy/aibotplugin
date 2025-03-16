@@ -51,7 +51,7 @@ public class BotPatrolTaskConfig {
             config.save(file);
             BotLogger.debug("[BotPatrolTaskConfig] Конфигурация сохранена: " + file.getName());
         } catch (IOException e) {
-            BotLogger.error("[BotPatrolTaskConfig] Ошибка сохранения конфига для: " + file.getName());
+            BotLogger.debug("[BotPatrolTaskConfig] Ошибка сохранения конфига для: " + file.getName());
         }
     }
 }

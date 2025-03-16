@@ -84,7 +84,7 @@ public class BotBreakBlockTask implements BotTask {
 
     @Override
     public void update() {
-        BotLogger.info(bot.getId() + " Running task: " + name);
+        BotLogger.debug(bot.getId() + " Running task: " + name);
 
         if (isDone) return;
 
@@ -102,7 +102,7 @@ public class BotBreakBlockTask implements BotTask {
         }
 
         // pickup items
-        // bot.pickupNearbyItems(shouldPickup);
+        bot.pickupNearbyItems(shouldPickup);
 
         if (targetLocation == null) {
             if (!pendingBlocks.isEmpty()) {
