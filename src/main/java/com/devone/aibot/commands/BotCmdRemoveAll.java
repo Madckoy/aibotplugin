@@ -1,34 +1,40 @@
 package com.devone.aibot.commands;
 
+import com.devone.aibot.core.Bot;
 import com.devone.aibot.core.BotManager;
-import com.devone.aibot.utils.BotUtils;
 
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
-public class BotUnselect implements CommandExecutor {
+import java.util.Collection;
+
+public class BotCmdRemoveAll implements CommandExecutor {
 
     private final BotManager botManager;
 
-    public BotUnselect(BotManager botManager) {
+    public BotCmdRemoveAll(BotManager botManager) {
         this.botManager = botManager;
     }
 
     @Override
     public boolean onCommand(CommandSender sender, Command command, String label, String[] args) {
+
         if (!(sender instanceof Player)) {
-            BotUtils.sendMessageToPlayer((Player)sender, null, "Эту команду может использовать только игрок.");
+            sender.sendMessage("§cOnly players can use this command.");
             return true;
         }
 
-        Player player = (Player) sender;
-        if (!botManager.unselectBot(player.getUniqueId())) {
-            BotUtils.sendMessageToPlayer(player, null, "Бот больше не выбран.");
+        Collection<Bot> bots = botManager.getAllBots();
+
+        if (bots.isEmpty()) {
+            sender.sendMessage("§cNo active bots to remove.");
             return true;
         }
-        
+
+        botManager.removeAllBots();
+
         return true;
     }
 }

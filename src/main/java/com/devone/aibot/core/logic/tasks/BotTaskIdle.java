@@ -1,7 +1,7 @@
 package com.devone.aibot.core.logic.tasks;
 
-import com.devone.aibot.core.logic.tasks.configs.BotIdleTaskConfig;
-import com.devone.aibot.core.logic.tasks.configs.BotPatrolTaskConfig;
+import com.devone.aibot.core.logic.tasks.configs.BotCfgTaskIdle;
+import com.devone.aibot.core.logic.tasks.configs.BotCfgTaskPatrol;
 
 import java.util.Set;
 
@@ -10,23 +10,23 @@ import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.Material;
 
-import com.devone.aibot.commands.BotMove;
+import com.devone.aibot.commands.BotCmdMove;
 import com.devone.aibot.core.Bot;
 import com.devone.aibot.core.BotInventory;
 import com.devone.aibot.utils.BotLogger;
 
-public class BotIdleTask implements BotTask {
+public class BotTaskIdle implements BotTask {
     private final Bot bot;
     private boolean isPaused = false;
     private final String name = "IDLE";
-    private final BotIdleTaskConfig config;
-    private final BotPatrolTaskConfig patrolConfig;
+    private final BotCfgTaskIdle config;
+    private final BotCfgTaskPatrol patrolConfig;
     private long startTime = System.currentTimeMillis();
 
-    public BotIdleTask(Bot bot) {
+    public BotTaskIdle(Bot bot) {
         this.bot = bot;
-        this.config = new BotIdleTaskConfig();
-        this.patrolConfig = new BotPatrolTaskConfig();
+        this.config = new BotCfgTaskIdle();
+        this.patrolConfig = new BotCfgTaskPatrol();
     }
 
     @Override
@@ -57,7 +57,7 @@ public class BotIdleTask implements BotTask {
         // Check if bot needs to clean up the inventory
         if(!BotInventory.hasFreeInventorySpace(bot, dirtTypes) || BotInventory.hasEnoughBlocks(bot, dirtTypes, maxDirtToCollect)) {
             bot.setAutoPickupEnabled(false);
-            BotMoveTask moveTask = new BotMoveTask(bot);
+            BotTaskMove moveTask = new BotTaskMove(bot);
             Location drop_off_loc = new Location(Bukkit.getWorld("world"), 0.0, -60.0, 0.0);
             moveTask.configure(drop_off_loc);
             bot.getLifeCycle().getTaskStackManager().pushTask(moveTask);
@@ -69,13 +69,13 @@ public class BotIdleTask implements BotTask {
         if (rand < 0.4) {
             // 📌 40% шанс начать патрулирование
             BotLogger.info("👀 " + bot.getId() + " Starts Patrolling");
-            BotPatrolTask patrolTask = new BotPatrolTask(bot);
+            BotTaskPatrol patrolTask = new BotTaskPatrol(bot);
             bot.getLifeCycle().getTaskStackManager().pushTask(patrolTask);
 
         } else if (rand < 0.7) {
             // ⛏ 30% шанс начать добычу
             BotLogger.info("⛏ " + bot.getId() + " Starts Breaking the blocks");
-            BotBreakBlockTask breakTask = new BotBreakBlockTask(bot);
+            BotTaskBreakBlock breakTask = new BotTaskBreakBlock(bot);
             breakTask.configure(dirtTypes, maxDirtToCollect, 5, true); //ломаем все, включая кабины (тестовый режим) и лутаем!!!
             bot.getLifeCycle().getTaskStackManager().pushTask(breakTask);
 

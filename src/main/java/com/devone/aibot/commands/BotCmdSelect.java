@@ -10,11 +10,11 @@ import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 import net.kyori.adventure.text.Component;
 
-public class BotSelect implements CommandExecutor {
+public class BotCmdSelect implements CommandExecutor {
 
     private final BotManager botManager;
 
-    public BotSelect(BotManager botManager) {
+    public BotCmdSelect(BotManager botManager) {
         this.botManager = botManager;
     }
 

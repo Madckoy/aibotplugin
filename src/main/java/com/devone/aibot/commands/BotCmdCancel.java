@@ -2,19 +2,17 @@ package com.devone.aibot.commands;
 
 import com.devone.aibot.core.Bot;
 import com.devone.aibot.core.BotManager;
-import com.devone.aibot.core.logic.tasks.BotFollowTask;
 import com.devone.aibot.utils.BotLogger;
-
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
-public class BotFollow implements CommandExecutor {
+public class BotCmdCancel implements CommandExecutor {
 
     private final BotManager botManager;
 
-    public BotFollow(BotManager botManager) {
+    public BotCmdCancel(BotManager botManager) {
         this.botManager = botManager;
     }
 
@@ -33,13 +31,11 @@ public class BotFollow implements CommandExecutor {
             return true;
         }
 
-        BotLogger.info("📌 /bot-follow: Бот " + bot.getId() + " следует за " + player.getName());
+        // ✅ Очищаем стек задач
+        bot.getLifeCycle().getTaskStackManager().clearTasks();
+        player.sendMessage("§aВсе задачи бота " + bot.getId() + " отменены!");
 
-        // ✅ Добавляем задачу на следование
-        BotFollowTask followTask = new BotFollowTask(bot, player);
-        bot.getLifeCycle().getTaskStackManager().pushTask(followTask);
-
-        player.sendMessage("§aБот " + bot.getId() + " теперь следует за вами!");
+        BotLogger.info("🛑 /bot-cancel: Очищен стек задач бота " + bot.getId());
 
         return true;
     }

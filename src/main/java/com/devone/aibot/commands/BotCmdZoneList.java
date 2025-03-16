@@ -1,17 +1,17 @@
 package com.devone.aibot.commands;
 
-import com.devone.aibot.core.ProtectedZone;
-import com.devone.aibot.core.ZoneManager;
+import com.devone.aibot.core.BotProtectedZone;
+import com.devone.aibot.core.BotZoneManager;
 
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
-public class ZoneList implements CommandExecutor {
-    private final ZoneManager zoneManager;
+public class BotCmdZoneList implements CommandExecutor {
+    private final BotZoneManager zoneManager;
 
-    public ZoneList(ZoneManager zoneManager) {
+    public BotCmdZoneList(BotZoneManager zoneManager) {
         this.zoneManager = zoneManager;
     }
 
@@ -28,7 +28,7 @@ public class ZoneList implements CommandExecutor {
             sender.sendMessage("§aProtected Zones:");
             for (String name : zoneManager.listZones()) {
                 int radius = zoneManager.getZoneRadius(name);
-                ProtectedZone zone = zoneManager.getZone(name); // ✅ Get zone details
+                BotProtectedZone zone = zoneManager.getZone(name); // ✅ Get zone details
                 if (zone != null) {
                     sender.sendMessage(" - " + name + " (Radius: " + radius + ") at [X: " +
                         (int) zone.getX() + ", Y: " + (int) zone.getY() + ", Z: " + (int) zone.getZ() + "]");

@@ -2,7 +2,7 @@ package com.devone.aibot.commands;
 
 import com.devone.aibot.core.Bot;
 import com.devone.aibot.core.BotManager;
-import com.devone.aibot.core.logic.tasks.BotMoveTask;
+import com.devone.aibot.core.logic.tasks.BotTaskMove;
 import com.devone.aibot.utils.BotLogger;
 
 import org.bukkit.Location;
@@ -12,11 +12,11 @@ import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
-public class BotMove implements CommandExecutor {
+public class BotCmdMove implements CommandExecutor {
 
     private final BotManager botManager;
 
-    public BotMove(BotManager botManager) {
+    public BotCmdMove(BotManager botManager) {
         this.botManager = botManager;
     }
 
@@ -52,7 +52,7 @@ public class BotMove implements CommandExecutor {
 
 
             // ✅ Добавляем задачу на перемещение
-            BotMoveTask moveTask = new BotMoveTask(bot);
+            BotTaskMove moveTask = new BotTaskMove(bot);
             moveTask.configure(targetLocation);
             bot.getLifeCycle().getTaskStackManager().pushTask(moveTask);
 

@@ -2,7 +2,7 @@ package com.devone.aibot.core.events;
 
 import com.devone.aibot.core.Bot;
 import com.devone.aibot.core.BotManager;
-import com.devone.aibot.core.logic.tasks.BotMoveTask;
+import com.devone.aibot.core.logic.tasks.BotTaskMove;
 import com.devone.aibot.core.logic.tasks.BotTask;
 import com.devone.aibot.utils.BotLogger;
 
@@ -49,7 +49,7 @@ public class BotEvents implements Listener {
                 // Получаем последнюю активную задачу бота
                 BotTask activeTask = botManager.getBot(botId.toString()).getCurrentTask();
                 
-                if (activeTask instanceof BotMoveTask moveTask) {
+                if (activeTask instanceof BotTaskMove moveTask) {
                     moveTask.handleStuck(); // Сообщаем задаче, что бот застрял
                 }
             }

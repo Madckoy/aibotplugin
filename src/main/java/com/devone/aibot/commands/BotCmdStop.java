@@ -2,17 +2,18 @@ package com.devone.aibot.commands;
 
 import com.devone.aibot.core.Bot;
 import com.devone.aibot.core.BotManager;
+import com.devone.aibot.core.logic.tasks.BotTaskIdle;
 
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
-public class BotRemove implements CommandExecutor {
+public class BotCmdStop implements CommandExecutor {
 
     private final BotManager botManager;
 
-    public BotRemove(BotManager botManager) {
+    public BotCmdStop(BotManager botManager) {
         this.botManager = botManager;
     }
 
@@ -23,30 +24,20 @@ public class BotRemove implements CommandExecutor {
             return true;
         }
 
-        String botName = "";
         Player player = (Player) sender;
-
         Bot bot = botManager.getOrSelectBot(player.getUniqueId());
 
-        if (args.length > 1) {
-            sender.sendMessage("§cUsage: /bot-remove <bot_name>");
-            return true;
-        }
-
-        if(bot == null) {
-            botName = args[0];
-        }
-
-        bot = botManager.getBot(botName);
-
         if (bot == null) {
-            sender.sendMessage("§cBot '" + botName + "' not found.");
+            player.sendMessage("§cБот не найден.");
             return true;
         }
 
-        botManager.removeBot(botName);
+        // ✅ Добавляем задачу на ожидание 5 минут
+        BotTaskIdle idleTask = new BotTaskIdle(bot);
 
-        sender.sendMessage("§aBot '" + botName + "' Has been removed.");
+        bot.getLifeCycle().getTaskStackManager().pushTask(idleTask);
+
+        player.sendMessage("§aБот " + bot.getId() + " Остановился и ждет!");
 
         return true;
     }

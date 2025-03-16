@@ -7,10 +7,10 @@ import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
-public class BotReloadPlugin implements CommandExecutor {
+public class BotCmdReloadPlugin implements CommandExecutor {
     private final AIBotPlugin plugin;
 
-    public BotReloadPlugin(AIBotPlugin plugin) {
+    public BotCmdReloadPlugin(AIBotPlugin plugin) {
         this.plugin = plugin;
     }
 

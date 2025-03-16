@@ -12,17 +12,17 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Set;
 
-public class ZoneManager {
+public class BotZoneManager {
 
-    public static ZoneManager instance; // ✅ Статическая ссылка на текущий экземпляр
+    public static BotZoneManager instance; // ✅ Статическая ссылка на текущий экземпляр
 
     private final AIBotPlugin plugin;
     private final File zonesFile;
     private final FileConfiguration config;
-    private final Map<String, ProtectedZone> protectedZones = new HashMap<>();
+    private final Map<String, BotProtectedZone> protectedZones = new HashMap<>();
     private static final long AUTO_SAVE_INTERVAL = 5 * 60 * 20; // 5 minutes in ticks
 
-    public ZoneManager(AIBotPlugin plugin, File pluginFolder) {
+    public BotZoneManager(AIBotPlugin plugin, File pluginFolder) {
         this.plugin = plugin;
         instance = this; // ✅ Сохраняем экземпляр для статического доступа
 
@@ -46,7 +46,7 @@ public class ZoneManager {
                 double y = config.getDouble("zones." + zoneName + ".y");
                 double z = config.getDouble("zones." + zoneName + ".z");
                 int radius = config.getInt("zones." + zoneName + ".radius");
-                protectedZones.put(zoneName, new ProtectedZone(x, y, z, radius));
+                protectedZones.put(zoneName, new BotProtectedZone(x, y, z, radius));
                 BotLogger.debug("Loaded zone: " + zoneName + " at (" + x + ", " + y + ", " + z + ") with radius " + radius);
             }
         }
@@ -55,9 +55,9 @@ public class ZoneManager {
 
     public void saveZones() {
         config.set("zones", null);
-        for (Map.Entry<String, ProtectedZone> entry : protectedZones.entrySet()) {
+        for (Map.Entry<String, BotProtectedZone> entry : protectedZones.entrySet()) {
             String zoneName = entry.getKey();
-            ProtectedZone zone = entry.getValue();
+            BotProtectedZone zone = entry.getValue();
             config.set("zones." + zoneName + ".x", (int) Math.round(zone.getX()));
             config.set("zones." + zoneName + ".y", (int) Math.round(zone.getY()));
             config.set("zones." + zoneName + ".z", (int) Math.round(zone.getZ()));
@@ -72,7 +72,7 @@ public class ZoneManager {
     }    
 
     public void addZone(String name, Location center, int radius) {
-        protectedZones.put(name, new ProtectedZone(center.getX(), center.getY(), center.getZ(), radius));
+        protectedZones.put(name, new BotProtectedZone(center.getX(), center.getY(), center.getZ(), radius));
         BotLogger.debug("Added new zone: " + name + " at " + center.toString() + " with radius " + radius);
     }
 
@@ -85,7 +85,7 @@ public class ZoneManager {
     }
 
     public boolean isInProtectedZone(Location location) {
-        for (ProtectedZone zone : protectedZones.values()) {
+        for (BotProtectedZone zone : protectedZones.values()) {
             if (zone.isInside(location)) {
                 return true;
             }
@@ -98,11 +98,11 @@ public class ZoneManager {
     }
 
     public int getZoneRadius(String zoneName) {
-        ProtectedZone zone = protectedZones.get(zoneName);
+        BotProtectedZone zone = protectedZones.get(zoneName);
         return (zone != null) ? zone.getRadius() : -1;
     }
 
-    public ProtectedZone getZone(String zoneName) {
+    public BotProtectedZone getZone(String zoneName) {
         return protectedZones.get(zoneName);
     }    
 
@@ -120,7 +120,7 @@ public class ZoneManager {
         Bukkit.getScheduler().runTaskTimerAsynchronously(plugin, this::saveZones, AUTO_SAVE_INTERVAL, AUTO_SAVE_INTERVAL);
     }
 
-    public static ZoneManager getInstance() {
+    public static BotZoneManager getInstance() {
         return AIBotPlugin.getInstance().getZoneManager();
     }
     

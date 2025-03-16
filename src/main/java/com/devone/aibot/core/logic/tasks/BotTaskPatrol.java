@@ -1,7 +1,7 @@
 package com.devone.aibot.core.logic.tasks;
 
 import com.devone.aibot.core.Bot;
-import com.devone.aibot.core.logic.tasks.configs.BotPatrolTaskConfig;
+import com.devone.aibot.core.logic.tasks.configs.BotCfgTaskPatrol;
 import com.devone.aibot.utils.BotLogger;
 import com.devone.aibot.utils.BotNavigationUtils;
 
@@ -9,18 +9,18 @@ import org.bukkit.Location;
 
 import java.util.Random;
 
-public class BotPatrolTask implements BotTask {
+public class BotTaskPatrol implements BotTask {
     private final Bot bot;
-    private final BotPatrolTaskConfig config;
+    private final BotCfgTaskPatrol config;
     private boolean isPaused = false;
     private final String name = "PATROL";
     private Location patrolTarget;
     private long startTime = System.currentTimeMillis();
     private  int patrolRadius = 10;
 
-    public BotPatrolTask(Bot bot) {
+    public BotTaskPatrol(Bot bot) {
         this.bot = bot;
-        this.config = new BotPatrolTaskConfig();
+        this.config = new BotCfgTaskPatrol();
 
         this.patrolRadius = config.getPatrolRadius();
     }
@@ -49,7 +49,7 @@ public class BotPatrolTask implements BotTask {
 
         patrolTarget = BotNavigationUtils.findNearestNavigableLocation(bot.getNPCCurrentLocation(), patrolTarget, patrolRadius);
 
-        BotMoveTask moveTask = new BotMoveTask(bot);
+        BotTaskMove moveTask = new BotTaskMove(bot);
         moveTask.configure(patrolTarget);
 
         bot.getLifeCycle().getTaskStackManager().pushTask(moveTask);

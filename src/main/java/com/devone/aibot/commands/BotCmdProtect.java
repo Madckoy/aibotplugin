@@ -2,7 +2,7 @@ package com.devone.aibot.commands;
 
 import com.devone.aibot.core.Bot;
 import com.devone.aibot.core.BotManager;
-import com.devone.aibot.core.logic.tasks.BotProtectTask;
+import com.devone.aibot.core.logic.tasks.BotTaskProtect;
 import com.devone.aibot.utils.BotLogger;
 
 import org.bukkit.command.Command;
@@ -10,11 +10,11 @@ import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
-public class BotProtect implements CommandExecutor {
+public class BotCmdProtect implements CommandExecutor {
 
     private final BotManager botManager;
 
-    public BotProtect(BotManager botManager) {
+    public BotCmdProtect(BotManager botManager) {
         this.botManager = botManager;
     }
 
@@ -36,7 +36,7 @@ public class BotProtect implements CommandExecutor {
         BotLogger.debug("🛡️ /bot-protect: Бот " + bot.getId() + " защищает " + player.getName());
 
         // ✅ Добавляем задачу на защиту
-        BotProtectTask protectTask = new BotProtectTask(bot, player);
+        BotTaskProtect protectTask = new BotTaskProtect(bot, player);
         bot.getLifeCycle().getTaskStackManager().pushTask(protectTask);
 
         player.sendMessage("§aБот " + bot.getId() + " теперь защищает вас!");

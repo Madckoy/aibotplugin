@@ -4,7 +4,7 @@ import com.devone.aibot.utils.BotLogger;
 
 import java.util.Stack;
 
-public class TaskStackManager {
+public class BotTaskStackManager {
     private final Stack<BotTask> taskStack = new Stack<>();
 
     public void pushTask(BotTask task) {

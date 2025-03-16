@@ -5,7 +5,7 @@ import com.devone.aibot.utils.BotLogger;
 import org.bukkit.Location;
 import org.bukkit.entity.Player;
 
-public class BotFollowTask extends PlayerLinkedTask {
+public class BotTaskFollow extends BotTaskPlayerLinked {
 
     private static final double FOLLOW_DISTANCE = 2.5;
     private static final double MAX_FOLLOW_RADIUS = 15.0;
@@ -14,7 +14,7 @@ public class BotFollowTask extends PlayerLinkedTask {
 
     private long startTime = System.currentTimeMillis();
 
-    public BotFollowTask(Bot bot, Player player) {
+    public BotTaskFollow(Bot bot, Player player) {
         super(bot, player, "FOLLOW");
     }
 
@@ -30,8 +30,8 @@ public class BotFollowTask extends PlayerLinkedTask {
         }
 
         if (distanceToPlayer < MAX_FOLLOW_RADIUS) {
-            if (!bot.getLifeCycle().getTaskStackManager().isTaskActive(BotMoveTask.class)) {
-                BotMoveTask moveTask = new BotMoveTask(bot);
+            if (!bot.getLifeCycle().getTaskStackManager().isTaskActive(BotTaskMove.class)) {
+                BotTaskMove moveTask = new BotTaskMove(bot);
                 moveTask.configure(targetLocation);
                 bot.getLifeCycle().getTaskStackManager().pushTask(moveTask);
                 BotLogger.info("🚶‍ " +  bot.getId() + " Идет за игроком " + player.getName());

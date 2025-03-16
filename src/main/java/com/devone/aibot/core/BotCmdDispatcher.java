@@ -12,37 +12,37 @@ import com.devone.aibot.utils.BotLogger;
 import java.util.HashMap;
 import java.util.Map;
 
-public class CommandDispatcher implements CommandExecutor {
+public class BotCmdDispatcher implements CommandExecutor {
 
     private final JavaPlugin plugin;
     private final Map<String, CommandExecutor> commandExecutors = new HashMap<>();
 
-    public CommandDispatcher(AIBotPlugin plugin, BotManager botManager, ZoneManager zoneManager) {
+    public BotCmdDispatcher(AIBotPlugin plugin, BotManager botManager, BotZoneManager zoneManager) {
         this.plugin = plugin;
         registerCommands(plugin, botManager, zoneManager);
     }
 
     // ✅ Регистрируем все команды
-    private void registerCommands(AIBotPlugin plugin, BotManager botManager, ZoneManager zoneManager) {
-        registerCommand("bot-reload-plugin", new BotReloadPlugin(plugin));
+    private void registerCommands(AIBotPlugin plugin, BotManager botManager, BotZoneManager zoneManager) {
+        registerCommand("bot-reload-plugin", new BotCmdReloadPlugin(plugin));
 
-        registerCommand("bot-add", new BotAdd(botManager));
-        registerCommand("bot-select", new BotSelect(botManager));
-        registerCommand("bot-unselect", new BotUnselect(botManager));
-        registerCommand("bot-list", new BotList(botManager));
-        registerCommand("bot-remove", new BotRemove(botManager));
-        registerCommand("bot-remove-all", new BotRemoveAll(botManager));
+        registerCommand("bot-add", new BotCmdAdd(botManager));
+        registerCommand("bot-select", new BotCmdSelect(botManager));
+        registerCommand("bot-unselect", new BotCmdUnselect(botManager));
+        registerCommand("bot-list", new BotCmdList(botManager));
+        registerCommand("bot-remove", new BotCmdRemove(botManager));
+        registerCommand("bot-remove-all", new BotCmdRemoveAll(botManager));
 
-        registerCommand("bot-here", new BotHere(botManager));
-        registerCommand("bot-move", new BotMove(botManager));
-        registerCommand("bot-stop", new BotStop(botManager));
-        registerCommand("bot-follow", new BotFollow(botManager));
-        registerCommand("bot-protect", new BotProtect(botManager));
-        registerCommand("bot-cancel", new BotCancel(botManager));
+        registerCommand("bot-here", new BotCmdHere(botManager));
+        registerCommand("bot-move", new BotCmdMove(botManager));
+        registerCommand("bot-stop", new BotCmdStop(botManager));
+        registerCommand("bot-follow", new BotCmdFollow(botManager));
+        registerCommand("bot-protect", new BotCmdProtect(botManager));
+        registerCommand("bot-cancel", new BotCmdCancel(botManager));
 
-        registerCommand("zone-add", new ZoneAdd(zoneManager));
-        registerCommand("zone-remove", new ZoneRemove(zoneManager));
-        registerCommand("zone-list", new ZoneList(zoneManager));
+        registerCommand("zone-add", new BotCmdZoneAdd(zoneManager));
+        registerCommand("zone-remove", new BotCmdZoneRemove(zoneManager));
+        registerCommand("zone-list", new BotCmdZoneList(zoneManager));
 
         BotLogger.debug("✅ Все команды зарегистрированы: " + commandExecutors.keySet());
     }

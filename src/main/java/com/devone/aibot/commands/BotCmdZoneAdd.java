@@ -6,12 +6,12 @@ import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
-import com.devone.aibot.core.ZoneManager;
+import com.devone.aibot.core.BotZoneManager;
 
-public class ZoneAdd implements CommandExecutor {
-    private final ZoneManager zoneManager;
+public class BotCmdZoneAdd implements CommandExecutor {
+    private final BotZoneManager zoneManager;
 
-    public ZoneAdd(ZoneManager zoneManager) {
+    public BotCmdZoneAdd(BotZoneManager zoneManager) {
         this.zoneManager = zoneManager;
     }
 

@@ -2,18 +2,20 @@ package com.devone.aibot.commands;
 
 import com.devone.aibot.core.Bot;
 import com.devone.aibot.core.BotManager;
-import com.devone.aibot.core.logic.tasks.BotIdleTask;
+import com.devone.aibot.utils.BotStringUtils;
+import com.devone.aibot.utils.BotUtils;
 
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
+import org.bukkit.Location;
 
-public class BotStop implements CommandExecutor {
+public class BotCmdList implements CommandExecutor {
 
     private final BotManager botManager;
 
-    public BotStop(BotManager botManager) {
+    public BotCmdList(BotManager botManager) {
         this.botManager = botManager;
     }
 
@@ -25,19 +27,17 @@ public class BotStop implements CommandExecutor {
         }
 
         Player player = (Player) sender;
-        Bot bot = botManager.getOrSelectBot(player.getUniqueId());
+        player.sendMessage("§aActive Bots:");
 
-        if (bot == null) {
-            player.sendMessage("§cБот не найден.");
-            return true;
+        for (Bot bot : botManager.getAllBots()) {
+            Location loc = bot.getNPCCurrentLocation();
+            String locationText = BotStringUtils.formatLocation(loc);
+            player.sendMessage(bot.getId() + " " + locationText );
         }
 
-        // ✅ Добавляем задачу на ожидание 5 минут
-        BotIdleTask idleTask = new BotIdleTask(bot);
-
-        bot.getLifeCycle().getTaskStackManager().pushTask(idleTask);
-
-        player.sendMessage("§aБот " + bot.getId() + " Остановился и ждет!");
+        if (botManager.getAllBots().isEmpty()) {
+            player.sendMessage("§cNo bots have been created yet.");
+        }
 
         return true;
     }

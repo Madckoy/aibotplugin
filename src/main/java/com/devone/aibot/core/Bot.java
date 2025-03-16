@@ -15,7 +15,7 @@ import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
 
 import com.devone.aibot.core.logic.BotLifeCycle;
-import com.devone.aibot.core.logic.tasks.BotMoveTask;
+import com.devone.aibot.core.logic.tasks.BotTaskMove;
 import com.devone.aibot.core.logic.tasks.BotTask;
 import com.devone.aibot.utils.BotLogger;
 import com.devone.aibot.utils.BotStringUtils;
@@ -198,7 +198,7 @@ public class Bot {
         // Если предметов рядом нет, двигаем бота к последнему разрушенному блоку
         BotLogger.info("✅ "+getId() +" Дроп подобран, двигаюсь к последнему разрушенному блоку " + lastBrokenBlock);
        
-        BotMoveTask mv_task = new BotMoveTask(this);
+        BotTaskMove mv_task = new BotTaskMove(this);
         mv_task.configure(lastBrokenBlock);
 
         getLifeCycle().getTaskStackManager().pushTask(mv_task);

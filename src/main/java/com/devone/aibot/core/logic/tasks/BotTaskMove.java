@@ -6,7 +6,7 @@ import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import com.devone.aibot.core.Bot;
 
-public class BotMoveTask implements BotTask {
+public class BotTaskMove implements BotTask {
     private final Bot bot;
     private Location targetLocation;
     private boolean isDone = false;
@@ -18,7 +18,7 @@ public class BotMoveTask implements BotTask {
 
     private Location lastTargetLocation;
 
-    public BotMoveTask(Bot bot) {
+    public BotTaskMove(Bot bot) {
         this.bot = bot;
     }
 

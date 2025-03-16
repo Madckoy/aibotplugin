@@ -9,7 +9,7 @@ import org.bukkit.entity.Monster;
 import org.bukkit.entity.Player;
 import java.util.List;
 
-public class BotProtectTask extends PlayerLinkedTask {
+public class BotTaskProtect extends BotTaskPlayerLinked {
 
     private static final double ATTACK_RANGE = 3.5;
     private static final double PROTECT_RADIUS = 10.0;
@@ -17,7 +17,7 @@ public class BotProtectTask extends PlayerLinkedTask {
 
     private Location targetLocation;
 
-    public BotProtectTask(Bot bot, Player player) {
+    public BotTaskProtect(Bot bot, Player player) {
         super(bot, player, "PROTECT");
     }
 
@@ -27,11 +27,11 @@ public class BotProtectTask extends PlayerLinkedTask {
         targetLocation = player.getLocation();
 
         if (botLocation.distance(targetLocation) > PROTECT_RADIUS) {
-            if (!bot.getLifeCycle().getTaskStackManager().isTaskActive(BotMoveTask.class)) {
+            if (!bot.getLifeCycle().getTaskStackManager().isTaskActive(BotTaskMove.class)) {
 
                 BotLogger.info("🚶 "+bot.getId() + " Бот начнет двигаться к игроку для защиты.");
 
-                BotMoveTask moveTask = new BotMoveTask(bot);
+                BotTaskMove moveTask = new BotTaskMove(bot);
                 moveTask.configure(targetLocation);
                 bot.getLifeCycle().getTaskStackManager().pushTask(moveTask);
 

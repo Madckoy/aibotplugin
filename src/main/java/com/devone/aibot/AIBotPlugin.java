@@ -9,8 +9,8 @@ import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.plugin.java.JavaPlugin;
 
 import com.devone.aibot.core.BotManager;
-import com.devone.aibot.core.CommandDispatcher;
-import com.devone.aibot.core.ZoneManager;
+import com.devone.aibot.core.BotCmdDispatcher;
+import com.devone.aibot.core.BotZoneManager;
 import com.devone.aibot.core.events.BotEvents;
 import com.devone.aibot.core.events.PlayerEvents;
 import com.devone.aibot.utils.BotLogger;
@@ -19,7 +19,7 @@ import com.devone.aibot.web.BotWebService;
 public class AIBotPlugin extends JavaPlugin {
     private static AIBotPlugin instance;
 
-    private ZoneManager zoneManager;
+    private BotZoneManager zoneManager;
     private BotManager botManager;
     private BotWebService web_service;
 
@@ -64,8 +64,8 @@ public class AIBotPlugin extends JavaPlugin {
         BotLogger.info("🔄 Конфигурация загружена заново.");
 
         botManager = new BotManager(this);
-        zoneManager = new ZoneManager(this, getDataFolder());
-        new CommandDispatcher(this, botManager, zoneManager);
+        zoneManager = new BotZoneManager(this, getDataFolder());
+        new BotCmdDispatcher(this, botManager, zoneManager);
 
         BotLogger.info("✅ Менеджеры перезапущены!");
 
@@ -133,7 +133,7 @@ public class AIBotPlugin extends JavaPlugin {
         return botManager;
     }
 
-    public ZoneManager getZoneManager() {
+    public BotZoneManager getZoneManager() {
         return zoneManager;
     }
 }

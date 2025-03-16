@@ -2,11 +2,11 @@ package com.devone.aibot.core;
 
 import org.bukkit.Location;
 
-public class ProtectedZone {
+public class BotProtectedZone {
     private final double x, y, z;
     private final int radius;
 
-    public ProtectedZone(double x, double y, double z, int radius) {
+    public BotProtectedZone(double x, double y, double z, int radius) {
         this.x = x;
         this.y = y;
         this.z = z;

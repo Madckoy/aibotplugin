@@ -4,14 +4,14 @@ import com.devone.aibot.core.Bot;
 import com.devone.aibot.utils.BotLogger;
 import org.bukkit.entity.Player;
 
-public abstract class PlayerLinkedTask implements BotTask {
+public abstract class BotTaskPlayerLinked implements BotTask {
     protected final Bot bot;
     protected final Player player;
     protected boolean isDone = false;
     protected boolean isPaused = false;
     protected String name;
 
-    public PlayerLinkedTask(Bot bot, Player player, String name) {
+    public BotTaskPlayerLinked(Bot bot, Player player, String name) {
         this.bot = bot;
         this.player = player;
         this.name = name;
@@ -38,7 +38,7 @@ public abstract class PlayerLinkedTask implements BotTask {
     private void handlePlayerDisconnect() {
         BotLogger.info("🚨 Игрок " + player.getName() + " вышел! Бот " + bot.getId() + " переходит в автономный режим.");
         bot.getLifeCycle().getTaskStackManager().clearTasks();
-        bot.getLifeCycle().getTaskStackManager().pushTask(new BotIdleTask(bot));
+        bot.getLifeCycle().getTaskStackManager().pushTask(new BotTaskIdle(bot));
         isDone = true;
     }
 

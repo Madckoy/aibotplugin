@@ -8,13 +8,13 @@ import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import com.devone.aibot.core.Bot;
-import com.devone.aibot.core.ZoneManager;
+import com.devone.aibot.core.BotZoneManager;
 import com.devone.aibot.utils.BotLogger;
 import com.devone.aibot.utils.BotUtils;
 import com.devone.aibot.utils.BotScanEnv;
 import com.devone.aibot.AIBotPlugin;
 
-public class BotBreakBlockTask implements BotTask {
+public class BotTaskBreakBlock implements BotTask {
 
     private final Bot bot;
     private Location targetLocation;
@@ -33,7 +33,7 @@ public class BotBreakBlockTask implements BotTask {
 
     private static final Map<Material, Integer> BREAK_TIME_PER_BLOCK = new HashMap<>();
     
-    public BotBreakBlockTask(Bot bot) {
+    public BotTaskBreakBlock(Bot bot) {
         this.bot = bot;
     }
     
@@ -130,7 +130,7 @@ public class BotBreakBlockTask implements BotTask {
 
                         if(newLocation!=null) {
 
-                            BotMoveTask moveTask = new BotMoveTask(bot);
+                            BotTaskMove moveTask = new BotTaskMove(bot);
                             moveTask.configure(newLocation);
                       
                             bot.getLifeCycle().getTaskStackManager().pushTask(moveTask); // Перемещаем бота через новый таск в стеке
@@ -160,7 +160,7 @@ public class BotBreakBlockTask implements BotTask {
             return;
         }
 
-        if (ZoneManager.getInstance().isInProtectedZone(targetLocation)) {
+        if (BotZoneManager.getInstance().isInProtectedZone(targetLocation)) {
             BotLogger.info("⛔ " + bot.getId() + " в запретной зоне, НЕ будет разрушать блок: " + BotStringUtils.formatLocation(targetLocation));
             isDone = true;
             return;
