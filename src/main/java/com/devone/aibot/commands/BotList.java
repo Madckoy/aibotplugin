@@ -2,6 +2,7 @@ package com.devone.aibot.commands;
 
 import com.devone.aibot.core.Bot;
 import com.devone.aibot.core.BotManager;
+import com.devone.aibot.utils.BotStringUtils;
 import com.devone.aibot.utils.BotUtils;
 
 import org.bukkit.command.Command;
@@ -30,7 +31,7 @@ public class BotList implements CommandExecutor {
 
         for (Bot bot : botManager.getAllBots()) {
             Location loc = bot.getNPCCurrentLocation();
-            String locationText = BotUtils.formatLocation(loc);
+            String locationText = BotStringUtils.formatLocation(loc);
             player.sendMessage(bot.getId() + " " + locationText );
         }
 

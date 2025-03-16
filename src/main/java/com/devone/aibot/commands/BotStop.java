@@ -31,6 +31,7 @@ public class BotStop implements CommandExecutor {
             player.sendMessage("§cБот не найден.");
             return true;
         }
+
         // ✅ Добавляем задачу на ожидание 5 минут
         BotIdleTask idleTask = new BotIdleTask(bot);
 

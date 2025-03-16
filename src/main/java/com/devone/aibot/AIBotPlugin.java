@@ -1,7 +1,5 @@
 package com.devone.aibot;
 
-import de.bluecolored.bluemap.api.BlueMapAPI;
-import de.bluecolored.bluemap.api.markers.MarkerSet;
 import java.io.File;
 import java.io.IOException;
 
@@ -16,13 +14,7 @@ import com.devone.aibot.core.ZoneManager;
 import com.devone.aibot.core.events.BotEvents;
 import com.devone.aibot.core.events.PlayerEvents;
 import com.devone.aibot.utils.BotLogger;
-import com.devone.aibot.utils.bluemap.BlueMapMarkers;
-import com.devone.aibot.utils.bluemap.BlueMapUtils;
 import com.devone.aibot.web.BotWebService;
-
-import de.bluecolored.bluemap.api.markers.MarkerSet;
-
-import java.util.Optional;
 
 public class AIBotPlugin extends JavaPlugin {
     private static AIBotPlugin instance;
@@ -41,62 +33,57 @@ public class AIBotPlugin extends JavaPlugin {
 
         reloadPlugin(); // ✅ Now `onEnable()` only calls `reloadPlugin()`
 
-        BotLogger.debug("✅ AI Bot Plugin has been enabled successfully!");
+        BotLogger.info("✅ AI Bot Plugin has been enabled successfully!");
     }
 
     @Override
     public void onDisable() {
-        BotLogger.debug("♻️ AI Bot Plugin is shutting down...");
-
-        //if (botManager != null) {
-            //BotLogger.debug("💾 Сохраняем состояние ботов перед отключением...");
-            //botManager.saveBots(); // ✅ Только сохраняем, НЕ очищаем!
-        //}
+        BotLogger.info("♻️ AI Bot Plugin is shutting down...");
 
         // Остановка HTTP сервера
         if (web_service!= null) {
             try {
                 web_service.stop();
-                BotLogger.debug("🛑 HTTP WEB server stopped.");
+                BotLogger.info("🛑 HTTP WEB server stopped.");
             } catch (Exception e) {
-                e.printStackTrace();
+                BotLogger.error("❌ HTTP WEB server could not be stopped." + e.getMessage());
             }
         }
 
-        BotLogger.debug("✅ AI Bot Plugin has been disabled.");
+        BotLogger.info("✅ AI Bot Plugin has been disabled.");
         Bukkit.getScheduler().cancelTasks(this);
     }
 
     public void reloadPlugin() {
         BotLogger.init(this); // ✅ Log initialization first
-        BotLogger.debug("🔧 Логирование перезапущено.");
+        BotLogger.info("🔧 Логирование перезапущено.");
 
-        BotLogger.debug("♻️ Перезагрузка AI Bot Plugin...");
+        BotLogger.info("♻️ Перезагрузка AI Bot Plugin...");
 
         reloadConfig();
-        BotLogger.debug("🔄 Конфигурация загружена заново.");
+        BotLogger.info("🔄 Конфигурация загружена заново.");
 
         botManager = new BotManager(this);
         zoneManager = new ZoneManager(this, getDataFolder());
         new CommandDispatcher(this, botManager, zoneManager);
 
-        BotLogger.debug("✅ Менеджеры перезапущены!");
+        BotLogger.info("✅ Менеджеры перезапущены!");
 
         // ✅ Restart HTTP server properly
         if (web_service != null) {
             try {
                 web_service.stop();
             } catch (Exception e) {
-                e.printStackTrace();
+                BotLogger.error("❌ Ошибка: " + e.getMessage());
             }
         }
 
         web_service = new BotWebService(3000, botManager);
         try {
             web_service.start();
-            BotLogger.debug("🌐 HTTP WEB Server started on port 3000.");
+            BotLogger.info("🌐 HTTP WEB Server started on port 3000.");
         } catch (Exception e) {
-            e.printStackTrace();
+            BotLogger.error("❌ Ошибка: " + e.getMessage());
         }
 
         // тут зарегаем ивенты
@@ -104,7 +91,7 @@ public class AIBotPlugin extends JavaPlugin {
         //
         getServer().getPluginManager().registerEvents(new BotEvents(botManager), this);
 
-        BotLogger.debug("✅ AI Bot Plugin перезагружен успешно!");
+        BotLogger.info("✅ AI Bot Plugin перезагружен успешно!");
 
     }
 
@@ -123,18 +110,18 @@ public class AIBotPlugin extends JavaPlugin {
 
             try {
                 config.save(configFile);
-                getLogger().info("✅ Создан config.yml с уровнем логирования INFO.");
+                BotLogger.info("✅ Создан config.yml с уровнем логирования INFO.");
             } catch (IOException e) {
-                getLogger().severe("❌ Ошибка при создании config.yml: " + e.getMessage());
+                BotLogger.error("❌ Ошибка при создании config.yml: " + e.getMessage());
             }
         }
     }
 
     private void ensureDataFolderExists() {
         if (!getDataFolder().exists() && getDataFolder().mkdirs()) {
-            BotLogger.debug("📁 Created plugin data folder: " + getDataFolder().getAbsolutePath());
+            BotLogger.info("📁 Created plugin data folder: " + getDataFolder().getAbsolutePath());
         } else if (!getDataFolder().exists()) {
-            BotLogger.debug("❌ Failed to create plugin data folder!");
+            BotLogger.error("❌ Failed to create plugin data folder!");
         }
     }
 

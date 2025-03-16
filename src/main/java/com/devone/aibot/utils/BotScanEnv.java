@@ -1,10 +1,8 @@
 package com.devone.aibot.utils;
 
-import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.World;
-import org.bukkit.block.Block;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.Item;
 import org.bukkit.inventory.ItemStack;
@@ -15,9 +13,9 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-public class BlockScanner3D {
+public class BotScanEnv {
 
-    public static Map<Location, Material> scanSurroundings(Location center, int scanRadius) {
+    public static Map<Location, Material> scan3D(Location center, int scanRadius) {
         World world = center.getWorld();
         int centerX = center.getBlockX();
         int centerY = center.getBlockY();
@@ -54,15 +52,19 @@ public class BlockScanner3D {
         return scannedBlocks;
     }
 
-    public static void logNearbyEntities(Bot bot, double radius) {
-        List<Entity> nearbyEntities = bot.getNPCEntity().getNearbyEntities(radius, radius, radius);
+    public static List<Entity> scanNearbyNatural(Bot bot, double radius) {
+        return bot.getNPCEntity().getNearbyEntities(radius, radius, radius);
+    }
+
+    public static void logScanNatural(Bot bot, double radius) {
+        List<Entity> nearbyEntities = BotScanEnv.scanNearbyNatural(bot, radius);
     
         if (nearbyEntities.isEmpty()) {
-            BotLogger.debug(bot.getId()+" В радиусе " + radius + " блоков нет НИЧЕГО.");
+            BotLogger.info(bot.getId()+" В радиусе " + radius + " блоков нет НИЧЕГО.");
             return;
         }
     
-        BotLogger.debug(bot.getId()+" В радиусе " + radius + " блоков есть:");
+        BotLogger.info(bot.getId()+" В радиусе " + radius + " блоков есть:");
 
         for (Entity entity : nearbyEntities) {
             if (entity instanceof Item) {

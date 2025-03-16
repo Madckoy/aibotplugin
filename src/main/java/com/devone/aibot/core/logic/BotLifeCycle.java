@@ -21,11 +21,12 @@ public class BotLifeCycle {
     }
 
     private void startLifeCycle() {
-        BotLogger.debug("🔄 Запускаем LifeCycle для бота " + bot.getId());
-        BotLogger.debug("🔄 Запускаем LifeCycle для бота " + bot.getId());
+        BotLogger.info("🔄 Запускаем LifeCycle для бота " + bot.getId());
 
         Bukkit.getScheduler().runTaskTimer(AIBotPlugin.getInstance(), () -> {
+
             update();
+
         }, 0L, 2L); // 2 тика = 0.1 секунды (в 10 раз быстрее, чем было!)
     }
 
@@ -37,7 +38,7 @@ public class BotLifeCycle {
             taskStackManager.updateCurrentTask();
         } else {
             if (!idleAdded) {
-                BotLogger.debug("😴 Бот " + bot.getId() + " простаивает. Добавляем IdleActivity.");
+                BotLogger.info("😴 Бот " + bot.getId() + " Без задач. Добавляем IdleTask.");
                 taskStackManager.pushTask(new BotIdleTask(bot));
                 idleAdded = true; // ✅ Ставим флаг, что IdleActivity уже добавлена
             }

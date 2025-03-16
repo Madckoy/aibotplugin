@@ -109,7 +109,7 @@ public class ZoneManager {
     // ✅ Статический метод для проверки зоны
     public static boolean isLocationInProtectedZone(Location location) {
         if (instance == null) {
-            BotLogger.debug("❌ ZoneManager не инициализирован! Невозможно проверить зону.");
+            BotLogger.error("❌ ZoneManager не инициализирован! Невозможно проверить зону.");
             return false;
         }
         return instance.isInProtectedZone(location);

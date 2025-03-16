@@ -18,7 +18,7 @@ import com.devone.aibot.core.logic.BotLifeCycle;
 import com.devone.aibot.core.logic.tasks.BotMoveTask;
 import com.devone.aibot.core.logic.tasks.BotTask;
 import com.devone.aibot.utils.BotLogger;
-import com.devone.aibot.utils.BotUtils;
+import com.devone.aibot.utils.BotStringUtils;
 
 import net.citizensnpcs.api.ai.Navigator;
 import net.citizensnpcs.api.npc.NPC;
@@ -27,8 +27,6 @@ public class Bot {
     // private UUID uuid;
     private final String id; // Уникальное имя бота
     private NPC npc; // Связанный NPC
-    private BotStatus status = BotStatus.IDLING; // Текущее состояние
-    private BotGoal currentGoal = BotGoal.IDLE; // Цель
     private final BotLifeCycle lifeCycle; // Цикл жизни бота
     private Location targetLocation; // Куда бот должен идти
 
@@ -50,7 +48,7 @@ public class Bot {
 
         this.lifeCycle = new BotLifeCycle(this);
 
-        BotLogger.debug("Бот " + id + " успешно создан!");
+        BotLogger.info("➕ "+ id + " Has been CREATED AND SPAWNED!");
 
     }
 
@@ -66,13 +64,18 @@ public class Bot {
         }
     }
 
-    public void despawn() {
+    public void despawnNPC() {
         if (npc != null) {
+            //stop all tasks!
+            BotLogger.info("➖ "+ id + " Stopping ALL Tasks!");
+            getLifeCycle().getTaskStackManager().clearTasks();
+
+            BotLogger.info("➖ "+ id + " Despawning and Destroying NPC");
             npc.despawn();
             npc.destroy();
             npc = null;
         }
-        BotLogger.debug("Бот " + id + " деспавнен.");
+        BotLogger.info("➖ "+ id + " Has been DESPAWNED and DESTROYED!");
     }  
 
     public BotInventory getInventory() {
@@ -85,16 +88,16 @@ public class Bot {
 
     public void moveTo(Location location) {
         if (npc == null || !npc.isSpawned()) {
-            BotLogger.debug("❌ Бот " + id + " не может двигаться - NPC не заспавнен!");
+            BotLogger.error("❌ " + id + " Не может двигаться - NPC не заспавнен!");
             return;
         }
 
         if (location == null) {
-            BotLogger.debug("❌ Ошибка: `moveTo()` получил null-локацию!");
+            BotLogger.error("❌ " + id + " Получил null-локацию!");
             return;
         }
 
-        BotLogger.debug("🚶 Бот " + id + " направляется в " + formatLocation(location));
+        BotLogger.info("🚶 " + id + " Направляется в " + BotStringUtils.formatLocation(location));
 
         this.targetLocation = location;
         npc.getNavigator().setTarget(location);
@@ -108,23 +111,6 @@ public class Bot {
         return this.targetLocation;
     }
 
-    public void setGoal(BotGoal goal) {
-        this.currentGoal = goal;
-
-        //botManager.saveBots(); // ✅ Сохраняем цель
-
-        BotLogger.debug("Бот " + id + " получил новую цель: " + (goal != null ? goal.name() : "null"));
-    }
-
-    public BotGoal getGoal() {
-        return this.currentGoal;
-    }
-
-    // ✅ Восстановленный метод `getCurrentGoal()`
-    public BotGoal getCurrentGoal() {
-        return currentGoal;
-    }
-
     public void say(String message) {
         if (npc != null && npc.getEntity() instanceof Player) {
             ((Player) npc.getEntity()).sendMessage("[Bot] " + message);
@@ -133,14 +119,6 @@ public class Bot {
 
     public String getId() {
         return id;
-    }
-
-    public BotStatus getStatus() {
-        return status;
-    }
-
-    public void setStatus(BotStatus status) {
-        this.status = status;
     }
 
     public BotTask getCurrentTask() {
@@ -156,22 +134,17 @@ public class Bot {
         return lifeCycle;
     }
 
-    private String formatLocation(Location loc) {
-        return "(" + loc.getBlockX() + ", " + loc.getBlockY() + ", " + loc.getBlockZ() + ")";
-
-    }
-
     public Location getNPCCurrentLocation() {
         if (npc != null) {
                 //BotLogger.debug(getNPCDetails(npc));
 
                 Location currLoc = npc.getStoredLocation();
                 
-                BotLogger.debug("Bot/NPC " + id + " Current Location " + BotUtils.formatLocation(currLoc));
+                BotLogger.debug("Bot/NPC " + id + " Current Location: " + BotStringUtils.formatLocation(currLoc));
                 lastKnownLocation = currLoc;
             return currLoc;
         } else {
-            BotLogger.debug("Unable to get Current Location ! NPC is not spawned. "+id);
+            BotLogger.error("❌ " + id + "Unable to get Current Location! NPC is not spawned. "+id);
             //
             // ✅ Пробуем взять сохраненное значение
             return lastKnownLocation;
@@ -181,6 +154,7 @@ public class Bot {
     public Entity getNPCEntity() {
         return npc.getEntity();
     }
+
     public Navigator getNPCNavigator() {
         return npc.getNavigator();
     }
@@ -217,12 +191,12 @@ public class Bot {
     
         // Если есть дроп в радиусе 2 блоков — бот остается на месте
         if (!nearbyItems.isEmpty()) {
-            BotLogger.debug(getId() +"В радиусе " + pickupRadius + " блоков есть предметы, остаюсь на месте.");
+            BotLogger.info("✅ "+ getId() +"В радиусе " + pickupRadius + " блоков есть предметы, остаюсь на месте.");
             return;
         }
     
         // Если предметов рядом нет, двигаем бота к последнему разрушенному блоку
-        BotLogger.debug(getId() +" Дроп подобран, двигаюсь к последнему разрушенному блоку " + lastBrokenBlock);
+        BotLogger.info("✅ "+getId() +" Дроп подобран, двигаюсь к последнему разрушенному блоку " + lastBrokenBlock);
        
         BotMoveTask mv_task = new BotMoveTask(this);
         mv_task.configure(lastBrokenBlock);

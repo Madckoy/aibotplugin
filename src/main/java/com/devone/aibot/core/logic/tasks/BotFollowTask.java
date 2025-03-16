@@ -34,18 +34,19 @@ public class BotFollowTask extends PlayerLinkedTask {
                 BotMoveTask moveTask = new BotMoveTask(bot);
                 moveTask.configure(targetLocation);
                 bot.getLifeCycle().getTaskStackManager().pushTask(moveTask);
-                BotLogger.debug("🚶‍♂️ Бот " + bot.getId() + " идет за игроком " + player.getName());
+                BotLogger.info("🚶‍ " +  bot.getId() + " Идет за игроком " + player.getName());
             }
         }
 
         if (distanceToPlayer >= MAX_FOLLOW_RADIUS) {
             bot.getNPCEntity().teleport(targetLocation);
-            BotLogger.debug("⚡ Бот " + bot.getId() + " телепортирован к игроку " + player.getName());
+            BotLogger.info("⚡ " + bot.getId() + " Телепортирован к игроку " + player.getName());
         }
     }
 
     @Override
     public void configure(Object... params) {
+        startTime = System.currentTimeMillis();
         return;
     }
 

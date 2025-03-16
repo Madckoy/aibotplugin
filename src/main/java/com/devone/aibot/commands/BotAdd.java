@@ -55,7 +55,7 @@ public class BotAdd implements CommandExecutor {
         // ✅ Создаём объект бота и добавляем его в `BotManager`
         botManager.addBot(botName, new Bot(botName, npc, botManager));
 
-        player.sendMessage("§aBot " + botName + " has been spawned!");
+        player.sendMessage("§aBot " + botName + " Has been spawned!");
 
         return true;
     }

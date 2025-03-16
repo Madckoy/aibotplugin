@@ -40,4 +40,6 @@ public class BotLogger {
     public static void error(String message) {
         logger.severe("[ERROR] " + message);
     }
+
+
 }

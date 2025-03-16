@@ -8,6 +8,7 @@ public abstract class PlayerLinkedTask implements BotTask {
     protected final Bot bot;
     protected final Player player;
     protected boolean isDone = false;
+    protected boolean isPaused = false;
     protected String name;
 
     public PlayerLinkedTask(Bot bot, Player player, String name) {
@@ -18,7 +19,7 @@ public abstract class PlayerLinkedTask implements BotTask {
 
     @Override
     public void update() {
-        BotLogger.debug(bot.getId() + " Running task: " + name);
+        BotLogger.info(bot.getId() + " Running task: " + name);
         if (!isPlayerOnline()) {
             handlePlayerDisconnect();
             return;
@@ -35,7 +36,7 @@ public abstract class PlayerLinkedTask implements BotTask {
     }
 
     private void handlePlayerDisconnect() {
-        BotLogger.debug("🚨 Игрок " + player.getName() + " вышел! Бот " + bot.getId() + " переходит в Idle.");
+        BotLogger.info("🚨 Игрок " + player.getName() + " вышел! Бот " + bot.getId() + " переходит в автономный режим.");
         bot.getLifeCycle().getTaskStackManager().clearTasks();
         bot.getLifeCycle().getTaskStackManager().pushTask(new BotIdleTask(bot));
         isDone = true;
@@ -48,6 +49,11 @@ public abstract class PlayerLinkedTask implements BotTask {
 
     @Override
     public void setPaused(boolean paused) {
-        // Не требуется
+        this.isPaused = paused;
+        if (isPaused) {
+            BotLogger.info("⏯ " + bot.getId() + " ꩜ Pausing...");
+        } else {
+            BotLogger.info("⏯ " + bot.getId() + " ꩜ Resuming...");
+        }
     }
 }

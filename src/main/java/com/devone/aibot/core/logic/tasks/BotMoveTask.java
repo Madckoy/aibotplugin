@@ -1,18 +1,17 @@
 package com.devone.aibot.core.logic.tasks;
 
+import com.devone.aibot.AIBotPlugin;
+import com.devone.aibot.utils.*;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import com.devone.aibot.core.Bot;
-import com.devone.aibot.utils.BotLogger;
-import com.devone.aibot.utils.BotUtils;
-import com.devone.aibot.utils.BlockScanner3D;
 
 public class BotMoveTask implements BotTask {
     private final Bot bot;
     private Location targetLocation;
     private boolean isDone = false;
     private boolean isPaused = false;
-    private String name = "MOVE";
+    private final String name = "MOVE";
 
     private long startTime;
     private static final long TIMEOUT = 10000; // 10 секундs
@@ -30,23 +29,21 @@ public class BotMoveTask implements BotTask {
             lastTargetLocation = null;
             startTime = System.currentTimeMillis(); // ✅ Сбрасываем таймер при старте новой задачи
             isDone = false;
-            BotLogger.debug(" ⚙️ MoveTask is configured: " + BotUtils.formatLocation(targetLocation));
+            BotLogger.info(" ⚙️ MoveTask is configured: " + BotStringUtils.formatLocation(targetLocation));
         } else {
-            BotLogger.debug("❌ Ошибка конфигурации MoveTask: неверные параметры");
+            BotLogger.info("❌ Ошибка конфигурации MoveTask: неверные параметры");
         }
     }
 
     @Override
     public void update() {
 
-        BotLogger.debug(bot.getId() + " Running task: " + name);
+        BotLogger.info("update(): "+bot.getId() + " Running task: " + name);
 
         if (Bukkit.getServer().isStopping()) {
-            BotLogger.debug(bot.getId() + " ⚠️ Сервер выключается, отменяем обновление BotMoveTask.");
+            BotLogger.info("⚠️ " + bot.getId() + " Сервер выключается, отменяем обновление BotMoveTask.");
             return;
         }
-
-        BotLogger.debug("BotMoveTask:update()");
 
         if (isDone ||
                 isPaused ||
@@ -56,9 +53,9 @@ public class BotMoveTask implements BotTask {
             return;
 
         // Проверяем, достиг ли бот цели
-        if (BotUtils.hasReachedTarget(bot.getNPCCurrentLocation(), targetLocation, 2.0)) {
+        if (BotNavigationUtils.hasReachedTarget(bot, targetLocation, 2.0)) {
 
-            BotLogger.debug(bot.getId() + " 🎉 Has reached the target: " + targetLocation);
+            BotLogger.info("🎉" + bot.getId() + " Has reached the target: " + targetLocation);
 
             bot.resetTargetLocation();
 
@@ -69,32 +66,29 @@ public class BotMoveTask implements BotTask {
         Location currentLocation = bot.getNPCCurrentLocation();
         //
         // 3d scan
-        BlockScanner3D.scanSurroundings(currentLocation, 4);
+        BotScanEnv.scan3D(currentLocation, 5);
         //
         // pickup all items
         bot.pickupNearbyItems(true);
         //
         //
-        BotLogger.debug(bot.getId() + " 📍 Current position is: " + BotUtils.formatLocation(currentLocation));
-        BotLogger.debug(bot.getId() + " 🎯 Target location is: " + BotUtils.formatLocation(targetLocation));
+        BotLogger.info("📍 " + bot.getId() + " Current position is: " + BotStringUtils.formatLocation(currentLocation));
+        BotLogger.info("🎯 " + bot.getId() + " Selected new target location: " + BotStringUtils.formatLocation(targetLocation));
 
         if (bot.getNPCNavigator().canNavigateTo(targetLocation)) {
+            BotLogger.info("📌 " + bot.getId() + " Navigation point has accepted: " + BotStringUtils.formatLocation(targetLocation));
             // Навигация в основном потоке
-            Bukkit.getScheduler().runTask(Bukkit.getPluginManager().getPlugin("AIBotPlugin"), () -> {
-                // Логика движения
-                BotLogger.debug(bot.getId() + " Moving to " + BotUtils.formatLocation(targetLocation));
-
+            Bukkit.getScheduler().runTask(AIBotPlugin.getInstance(), () -> {
                 bot.getNPCNavigator().setTarget(targetLocation);
-
-                BotLogger.debug(
-                        bot.getId() + " 📌 Navigation point has accepted: " + BotUtils.formatLocation(targetLocation));
             });
+
         } else {
-            BotLogger.debug(bot.getId() + " ⚲ Can't navigate from " + BotUtils.formatLocation(currentLocation) + " to "
-                    + BotUtils.formatLocation(targetLocation));
-            handleStuck();
-            // bot.resetTargetLocation();
-            isDone = true;
+            BotLogger.info("⚲ " + bot.getId() + " Can't navigate from " +
+                    BotStringUtils.formatLocation(currentLocation) + " to "
+                    + BotStringUtils.formatLocation(targetLocation));
+
+            isDone = handleStuck();
+
         }
 
     }
@@ -107,7 +101,11 @@ public class BotMoveTask implements BotTask {
     @Override
     public void setPaused(boolean paused) {
         this.isPaused = paused;
-        BotLogger.debug(bot.getId() + (paused ? " ꩜ Waiting" : " ▶️ Resuming"));
+        if (isPaused) {
+            BotLogger.info("꩜ " + bot.getId() + " ꩜ Pausing...");
+        } else {
+            BotLogger.info("▶️ " + bot.getId() + " ꩜ Resuming...");
+        }
     }
 
     @Override
@@ -124,27 +122,45 @@ public class BotMoveTask implements BotTask {
         return System.currentTimeMillis() - startTime;
     }
 
-    public void handleStuck() {
-        BotLogger.debug(bot.getId() + " 🔄 Бот застрял! Пересчитываем маршрут...");
+    public boolean handleStuck() {
+        boolean return_state = false;
+
+        BotLogger.info("🔄 " + bot.getId() + " Застрял! Пересчитываем маршрут...");
 
         // Пытаемся найти ближайшую доступную точку
-        Location newTarget = BotUtils.findNearestNavigableLocation(bot.getNPCCurrentLocation(), targetLocation, 30);
+        Location newTarget = BotNavigationUtils.findNearestNavigableLocation(bot.getNPCCurrentLocation(), targetLocation, 30);
         try {
             if (newTarget != null) {
-
                 targetLocation = newTarget;
-                BotLogger.debug(bot.getId() + " 🛠 Новая цель: " + BotUtils.formatLocation(targetLocation));
-                bot.getNPCNavigator().setTarget(targetLocation);
+                BotLogger.info("🎯 " + bot.getId() + " 🛠 Новая цель: " + BotStringUtils.formatLocation(targetLocation));
+
+                if(bot.getNPCNavigator().canNavigateTo(targetLocation)) {
+                    bot.getNPCNavigator().setTarget(targetLocation);
+                } else {
+                    BotLogger.info("❌ " + bot.getId() + " Пробуем телепортировать в "+ BotStringUtils.formatLocation(targetLocation));
+                    bot.getNPCEntity().teleport(targetLocation);
+                    BotLogger.info("⚡ " + bot.getId() + " Телепортирован?");
+                }
+
+                // return_state = true; // // stop doing the active task
 
             } else {
+                //--- hack
+                BotLogger.info("❌ " + bot.getId() + " Не удалось найти маршрут. Пробуем телепортировать в "+ BotStringUtils.formatLocation(targetLocation));
 
-                BotLogger.debug(bot.getId() + " ❌ Не удалось найти маршрут. Телепортируем...");
                 bot.getNPCEntity().teleport(targetLocation);
+
+                BotLogger.info("⚡ " + bot.getId() + " Телепортирован?");
+                //
+                //return_state = false; // continue doing the active task
+                //-------------
             }
 
         } catch (Exception ex) {
-            BotLogger.debug(bot.getId() + ex.getMessage());
+            BotLogger.error("⚠ " + bot.getId() + ex.getMessage());
+            return_state = true; // stop doing the active task
         }
+        return return_state;
     }
 
 }

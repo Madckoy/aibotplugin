@@ -14,12 +14,12 @@ public class TaskStackManager {
         }
 
         taskStack.push(task);
-        BotLogger.debug("📌 Добавлена активность: " + task.getClass().getSimpleName());
+        BotLogger.info("✚ Добавлена задача: " + task.getClass().getSimpleName());
     }
 
     public void popActivity() {
         if (!taskStack.isEmpty()) {
-            BotLogger.debug("🗑 Удаляем активность: " + taskStack.peek().getClass().getSimpleName());
+            BotLogger.info("➖ Удалена задача: " + taskStack.peek().getClass().getSimpleName());
             taskStack.pop();
 
             // ✅ Если осталась активность, снимаем с неё паузу

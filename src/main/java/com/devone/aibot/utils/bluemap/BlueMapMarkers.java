@@ -3,85 +3,53 @@ package com.devone.aibot.utils.bluemap;
 import com.devone.aibot.AIBotPlugin;
 import com.devone.aibot.core.Bot;
 import com.devone.aibot.core.BotManager;
-import com.devone.aibot.utils.BotLogger;
-import com.devone.aibot.utils.BotMovementLogger;
-import com.devone.aibot.utils.Constants;
+import com.devone.aibot.utils.*;
 
+import com.devone.aibot.web.BotWebService;
+import com.flowpowered.math.vector.Vector3d;
 import de.bluecolored.bluemap.api.BlueMapAPI;
-import de.bluecolored.bluemap.api.BlueMapAPI;
+import de.bluecolored.bluemap.api.BlueMapMap;
 import de.bluecolored.bluemap.api.markers.MarkerSet;
-import de.bluecolored.bluemap.api.markers.MarkerSet;
+
 import de.bluecolored.bluemap.api.markers.POIMarker;
-
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.configuration.file.YamlConfiguration;
 
 import java.io.File;
 import java.io.IOException;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 public class BlueMapMarkers {
     private final BotManager botManager;
-    private final File markersFile;
-
+    private static final String MARKERS_SET_ID = "blue-map-bot-markers";
     private MarkerSet mSet;
-
     private final Map<String, Location> lastKnownLocations = new HashMap<>();
 
     public BlueMapMarkers(BotManager botManager) {
         this.botManager = botManager;
-        this.markersFile = new File(Constants.PLUGIN_PATH + "/markers.yml");
-
-        if (!markersFile.exists()) {
-            try {
-                markersFile.createNewFile();
-                BotLogger.debug("[BlueMapMarkers] markers.yml не найден, создан новый файл.");
-            } catch (IOException e) {
-                BotLogger.debug("[BlueMapMarkers] Ошибка создания markers.yml: " + e.getMessage());
-            }
-        }
 
         // BLUE MAP INTEGRATION IS HERE
         BlueMapAPI.onEnable(api -> {
 
-            mSet = BlueMapUtils.setupMarkerSet(api);
+            mSet = setupMarkerSet(api);
 
-            scheduleMarkerUpdate(mSet);
+            //scheduleMarkerUpdate();
 
-            BotLogger.debug("BlueMapAPI detected! Initializing marker system...");
+            BotLogger.info("BlueMapAPI detected! Initializing marker system...");
 
         });
     }
 
-    private void updateAllMarkers(MarkerSet mSet) {
-        if (!markersFile.exists()) {
-            BotLogger.debug(
-                    "[BlueMapMarkers] ❌ markers.yml отсутствует! Перезапустите сервер или создайте файл вручную.");
-            return;
-        }
+    public MarkerSet getMarkerSet() {
+        return mSet;
+    }
 
-        YamlConfiguration config = YamlConfiguration.loadConfiguration(markersFile);
-
-        if (!config.contains("sets.bots")) {
-            config.set("sets.bots.hide", false);
-            config.set("sets.bots.layerprio", 10);
-            config.set("sets.bots.minzoom", 0);
-            config.set("sets.bots.showlabels", true);
-            config.set("sets.bots.label", "Bots");
-            config.createSection("sets.bots.markers");
-        }
+    public void updateAllMarkers() {
 
         boolean hasChanges = false;
 
         List<Bot> bots = List.copyOf(botManager.getAllBots());
-
-        if (bots.isEmpty()) {
-            BotLogger.debug("[BlueMapMarkers] ⚠ Нет ботов, markers.yml не обновляется.");
-            return;
-        }
 
         for (Bot bot : bots) {
 
@@ -92,26 +60,14 @@ public class BlueMapMarkers {
                 Location lastLocation = lastKnownLocations.get(botId);
 
                 if (lastLocation != null) {
-                    BotLogger.debug("[BlueMapMarkers]" + bot.getId() + " 📍Last known location on map: " +
-                            " X:" + lastLocation.getBlockX() + " Y:" + lastLocation.getBlockY() + " Z:"
-                            + lastLocation.getBlockZ());
+                    BotLogger.info("[BlueMapMarkers]" + bot.getId() + " 📍Last known location on map: " + BotStringUtils.formatLocation(lastLocation));
 
                     // Если позиция не изменилась – пропускаем обновление
                     if (lastLocation.equals(loc)) {
-                        BotLogger.debug("[BlueMapMarkers]" + bot.getId() + " 📍 Locations are the same! ");
+                        BotLogger.info("[BlueMapMarkers]" + bot.getId() + " 📍 Locations are the same! ");
                         continue;
                     }
                 }
-
-                // Обновляем маркер
-                String path = "sets.bots.markers." + botId;
-                config.set(path + ".world", loc.getWorld().getName());
-                config.set(path + ".x", loc.getBlockX());
-                config.set(path + ".y", loc.getBlockY());
-                config.set(path + ".z", loc.getBlockZ());
-                config.set(path + ".label",
-                        botId + " (" + loc.getBlockX() + "," + loc.getBlockY() + "," + loc.getBlockZ() + ")");
-                config.set(path + ".icon", "default/robot");
 
                 lastKnownLocations.put(botId, loc.clone()); // Обновляем кешированное значение
 
@@ -119,42 +75,108 @@ public class BlueMapMarkers {
 
                 BotMovementLogger.logBotMovement(bot);
 
-                BotLogger.debug("[BlueMapMarkers]" + bot.getId() + " 📍 Обновлён маркер бота : " +
-                        " X:" + loc.getBlockX() + " Y:" + loc.getBlockY() + " Z:" + loc.getBlockZ());
+                BotLogger.info("📍 " +bot.getId() + "Обновлён маркер бота : " + BotStringUtils.formatLocation(loc));
 
             } else {
-                BotLogger.debug("[BlueMapMarkers]" + bot.getId() + " 📍 ALL Bot Locations are unknown. Skip update.");
+                BotLogger.info("📍 " + bot.getId() + "All Locations are unknown. Skip update.");
             }
 
         }
 
         if (hasChanges) {
-            try {
-                config.save(markersFile);
-                BotLogger.debug("[BlueMapMarkers] ✅ markers.yml обновлён!");
+             updateBlueMapMarkers(bots, lastKnownLocations);
 
                 // 🔥 Форсируем обновление карты ОДИН раз, после завершения цикла
-                Bukkit.getScheduler().runTaskLater(botManager.getPlugin(), () -> {
-                    BotLogger.debug("[BlueMapMarkers] 🔄 Форсируем обновление карты!");
+                // Bukkit.getScheduler().runTaskLater(botManager.getPlugin(), () -> {
+                //    BotLogger.info("🔄 Форсируем обновление карты!");
 
-                    BlueMapUtils.updateBlueMapMarkers(mSet, bots, lastKnownLocations);
+                //    updateBlueMapMarkers(bots, lastKnownLocations);
+                //
+                // }, 100L); // 1-секундная задержка, чтобы не грузить сервер
 
-                }, 20L); // 1-секундная задержка, чтобы не грузить сервер
-
-            } catch (IOException e) {
-                BotLogger.debug("[BlueMapMarkers] ❌ Ошибка при сохранении marker: " + e.getMessage());
-            }
         }
     }
 
-    public void scheduleMarkerUpdate(MarkerSet mSet) {
+    public void scheduleMarkerUpdate() {
 
         Bukkit.getScheduler().runTaskTimer(AIBotPlugin.getInstance(), () -> {
-            BotLogger.debug("[BlueMapMarkers] ✅ Обновление маркеров запущено.");
+            BotLogger.info("✅ Обновление маркеров запущено.");
 
-            updateAllMarkers(mSet);
+            updateAllMarkers();
 
         }, 0L, 100L); // Обновляем маркеры
 
+    }
+
+    public static MarkerSet setupMarkerSet(BlueMapAPI api) {
+
+        String worldName = Bukkit.getWorlds().isEmpty() ? "world" : Bukkit.getWorlds().get(0).getName();
+        Optional<BlueMapMap> mapOptional = api.getMap(worldName);
+
+        if (mapOptional.isPresent()) {
+            BlueMapMap map = mapOptional.get();
+
+            // Check if the marker set already exists, otherwise create and add a new one
+            MarkerSet markerSet = map.getMarkerSets().get(MARKERS_SET_ID);
+            if (markerSet == null) {
+                markerSet = new MarkerSet(MARKERS_SET_ID); // Create with ID
+                map.getMarkerSets().put(MARKERS_SET_ID, markerSet);
+            }
+
+            BotLogger.info("📚 BlueMap marker set initialized.");
+
+            return markerSet;
+        } else {
+            BotLogger.debug("❌ No valid map found!");
+            return null;
+        }
+    }
+
+    public void updateBlueMapMarkers(List<Bot> bots,  Map<String, Location> lastKnownLocations) {
+
+        if (mSet == null) {
+            BotLogger.info("❌ MarkerSet set is not initialized yet!");
+            return;
+        }
+
+        if (bots.isEmpty()) {
+            BotLogger.info("❌ No bots on the Map, skipping update.");
+            return;
+        }
+
+        boolean updateTriggered = false;
+
+        for (Bot bot : bots) {
+
+            String botId = bot.getId();
+            Location loc = bot.getNPCCurrentLocation();
+            UUID botUUID = bot.getUuid();
+
+            // -----------------------------------------------------------------------------------
+            // using BlueMapAPI here
+
+            int x = loc.getBlockX();
+            int y = loc.getBlockY();
+            int z = loc.getBlockZ();
+
+            // ✅ Get or download the bot’s skin icon
+            String skinFilePath = BotUtils.getSkinFile(botUUID);
+
+            POIMarker marker = new POIMarker(botId,  new Vector3d(x, y, z));
+
+            marker.setLabel(botId);
+
+            // ✅ Генерируем абсолютный URL к скину, который хостит AIBotPlugin
+            String iconPath = "http://" + BotWebService.SERVER_HOST + ":3000/skins/" + botUUID + ".png";
+
+
+            marker.setIcon(iconPath, 0,0);
+            marker.setLabel(bot.getId());
+
+            mSet.put(botId, marker);
+
+            BotLogger.info("🔄 Updating BlueMap Markers for bot: " + botId + " at " + BotStringUtils.formatLocation(loc));
+
+        }
     }
 }

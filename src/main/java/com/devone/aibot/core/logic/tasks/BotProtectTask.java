@@ -13,7 +13,7 @@ public class BotProtectTask extends PlayerLinkedTask {
 
     private static final double ATTACK_RANGE = 3.5;
     private static final double PROTECT_RADIUS = 10.0;
-    private long startTime = System.currentTimeMillis();
+    private final long startTime = System.currentTimeMillis();
 
     private Location targetLocation;
 
@@ -28,10 +28,13 @@ public class BotProtectTask extends PlayerLinkedTask {
 
         if (botLocation.distance(targetLocation) > PROTECT_RADIUS) {
             if (!bot.getLifeCycle().getTaskStackManager().isTaskActive(BotMoveTask.class)) {
+
+                BotLogger.info("🚶 "+bot.getId() + " Бот начнет двигаться к игроку для защиты.");
+
                 BotMoveTask moveTask = new BotMoveTask(bot);
                 moveTask.configure(targetLocation);
                 bot.getLifeCycle().getTaskStackManager().pushTask(moveTask);
-                BotLogger.debug("🚶 Бот " + bot.getId() + " приближается к игроку для защиты.");
+
             }
             return;
         }

@@ -2,6 +2,8 @@ package com.devone.aibot.core.logic.tasks;
 
 import com.devone.aibot.core.BotInventory;
 import java.util.*;
+
+import com.devone.aibot.utils.BotStringUtils;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.Material;
@@ -9,7 +11,7 @@ import com.devone.aibot.core.Bot;
 import com.devone.aibot.core.ZoneManager;
 import com.devone.aibot.utils.BotLogger;
 import com.devone.aibot.utils.BotUtils;
-import com.devone.aibot.utils.BlockScanner3D;
+import com.devone.aibot.utils.BotScanEnv;
 import com.devone.aibot.AIBotPlugin;
 
 public class BotBreakBlockTask implements BotTask {
@@ -17,8 +19,7 @@ public class BotBreakBlockTask implements BotTask {
     private final Bot bot;
     private Location targetLocation;
     private long startTime = System.currentTimeMillis();
-    private String name = "BREAK";
-    private int blocksMined = 0;
+    private final String name = "BREAK";
     private int maxBlocks;
     private int searchRadius;
     private int breakProgress = 0;
@@ -26,6 +27,7 @@ public class BotBreakBlockTask implements BotTask {
     private boolean isDone;
     private Map<Location, Material> scannedBlocks;
     private boolean shouldPickup = true;
+    private boolean isPaused;
     
     private Queue<Location> pendingBlocks = new LinkedList<>(); // Очередь блоков рядом
 
@@ -53,9 +55,11 @@ public class BotBreakBlockTask implements BotTask {
         if (params.length >= 4 && params[3] instanceof Integer) {
             this.shouldPickup = (boolean) params[3];
         }
+        startTime = System.currentTimeMillis();
 
+        bot.setAutoPickupEnabled(shouldPickup);
 
-        BotLogger.debug("🔨 BreakBlockTask сконфигурирована: " + (targetMaterials == null ? "ВСЕ БЛОКИ" : targetMaterials));
+        BotLogger.info("🔨 BreakBlockTask сконфигурирована: " + (targetMaterials == null ? "ВСЕ БЛОКИ" : targetMaterials));
     }
     
     @Override
@@ -65,7 +69,12 @@ public class BotBreakBlockTask implements BotTask {
     
     @Override
     public void setPaused(boolean paused) {
-        BotLogger.debug("⏸ Пауза не поддерживается для " + name);
+        this.isPaused = paused;
+        if (isPaused) {
+            BotLogger.info("꩜ " + bot.getId() + " ꩜ Pausing...");
+        } else {
+            BotLogger.info("▶️ " + bot.getId() + " ꩜ Resuming...");
+        }
     }
     
     @Override
@@ -84,40 +93,38 @@ public class BotBreakBlockTask implements BotTask {
 
     @Override
     public void update() {
-        BotLogger.debug(bot.getId() + " Running task: " + name);
+        BotLogger.info("update(): " + bot.getId() + " Running task: " + name);
 
         if (isDone) return;
 
         if(!BotInventory.hasFreeInventorySpace(bot, targetMaterials)) {
-            BotLogger.debug(bot.getId() + " 🔄 Not enoguh free space inInventory!");
+            BotLogger.info("🔄 " +bot.getId() + " No free space in Inventory! Exiting...");
             isDone = true;
             return;
         }
 
         //
-        if (BotInventory.hasCollectedEnoughBlocks(bot, targetMaterials, maxBlocks)){
-            BotLogger.debug(bot.getId() + " 🔄 Colleacted enough materials! Stopping the task");
+        if (BotInventory.hasEnoughBlocks(bot, targetMaterials, maxBlocks)){
+            BotLogger.info("🔄 " + bot.getId() + " Collected enough materials! Exiting...");
             isDone = true;
             return;
         }
 
         // pickup items
         bot.pickupNearbyItems(shouldPickup);
-        
-        bot.setAutoPickupEnabled(shouldPickup);
 
         if (targetLocation == null) {
             if (!pendingBlocks.isEmpty()) {
                 targetLocation = pendingBlocks.poll(); // Берем следующий блок из очереди
-                BotLogger.debug(bot.getId() + " 🔄 Переход к следующему блоку " + BotUtils.formatLocation(targetLocation));
+                BotLogger.info(" 🔄 " + bot.getId() + " Переход к следующему блоку " + BotStringUtils.formatLocation(targetLocation));
             } else {
                 // Получаем карту блоков в радиусе поиска
-                Map<Location, Material> scannedBlocks = BlockScanner3D.scanSurroundings(bot.getNPCCurrentLocation(), searchRadius);
+                Map<Location, Material> scannedBlocks = BotScanEnv.scan3D(bot.getNPCCurrentLocation(), searchRadius);
 
                 targetLocation = findNearestTargetBlock(scannedBlocks);
 
                 if (targetLocation == null) {
-                    BotLogger.debug(bot.getId() + " ❌ Нет доступных блоков для добычи! Перемещаемся к новой цели.");
+                    BotLogger.info("❌ " + bot.getId() + " Нет доступных блоков для добычи! Перемещаемся к новой цели.");
                                                
                         Location newLocation = findNearestTargetBlock(scannedBlocks);
 
@@ -126,7 +133,7 @@ public class BotBreakBlockTask implements BotTask {
                             BotMoveTask moveTask = new BotMoveTask(bot);
                             moveTask.configure(newLocation);
                       
-                            bot.getLifeCycle().getTaskStackManager().pushTask(moveTask); // Перемещаем бота чере новый таск
+                            bot.getLifeCycle().getTaskStackManager().pushTask(moveTask); // Перемещаем бота через новый таск в стеке
 
                            return;
 
@@ -137,7 +144,7 @@ public class BotBreakBlockTask implements BotTask {
                         }
                 }
 
-                BotLogger.debug(bot.getId() + " 🛠️ Нашел " + targetLocation.getBlock().getType() + " на " + BotUtils.formatLocation(targetLocation));
+                BotLogger.info("🛠️ " + bot.getId() + " Нашел " + targetLocation.getBlock().getType() + " на " + BotStringUtils.formatLocation(targetLocation));
 
                 // Телепортация в основном потоке
                 Bukkit.getScheduler().runTask(AIBotPlugin.getInstance(), () -> {
@@ -148,13 +155,13 @@ public class BotBreakBlockTask implements BotTask {
         }
 
         if (targetLocation.getBlock().getType() == Material.AIR) {
-            BotLogger.debug("⚠️ Бот пытается ломать воздух! Меняем цель...");
+            BotLogger.info("⚠️ " + bot.getId() + " Бот пытается ломать воздух! Меняем цель...");
             targetLocation = null;
             return;
         }
 
         if (ZoneManager.getInstance().isInProtectedZone(targetLocation)) {
-            BotLogger.debug("⛔ Бот " + bot.getId() + " в запретной зоне, НЕ разрушает блок " + BotUtils.formatLocation(targetLocation));
+            BotLogger.info("⛔ " + bot.getId() + " в запретной зоне, НЕ будет разрушать блок: " + BotStringUtils.formatLocation(targetLocation));
             isDone = true;
             return;
         }
@@ -164,16 +171,18 @@ public class BotBreakBlockTask implements BotTask {
         if (breakProgress < breakTime) {
             breakProgress += 1; // ⚡ Ускоряем в 1 раз
             bot.getNPCEntity().getWorld().playEffect(targetLocation, org.bukkit.Effect.STEP_SOUND, targetLocation.getBlock().getType());
-            BotLogger.debug(bot.getId() + " ⏳ Ломаем " + targetLocation.getBlock().getType() + " [" + breakProgress + "/" + breakTime + "]");
+            BotLogger.info("⏳ "+ bot.getId() + " Ломает " + targetLocation.getBlock().getType() + " [" + breakProgress + "/" + breakTime + "]");
             return;
         }
 
         Bukkit.getScheduler().runTask(AIBotPlugin.getInstance(), () -> {
             if (targetLocation != null && targetLocation.getBlock().getType() != Material.AIR) {
                 targetLocation.getBlock().breakNaturally();
-                BotLogger.debug("✅ Блок разрушен на " + BotUtils.formatLocation(targetLocation));
+                BotLogger.info("✅ Блок разрушен на " + BotStringUtils.formatLocation(targetLocation));
 
-                blocksMined++;
+                // check inventory here
+
+                //blocksMined++;
                 breakProgress = 0;
 
                 // Добавляем соседние блоки в очередь для добычи
@@ -190,7 +199,7 @@ public class BotBreakBlockTask implements BotTask {
         Location botLocation = bot.getNPCCurrentLocation();
         Location closestBlock = null;
         double minDistance = Double.MAX_VALUE;
-        
+
         for (Map.Entry<Location, Material> entry : scannedBlocks.entrySet()) {
             if (targetMaterials == null || targetMaterials.contains(entry.getValue())) {
                 double distance = botLocation.distanceSquared(entry.getKey());
@@ -215,7 +224,7 @@ public class BotBreakBlockTask implements BotTask {
         for (Location loc : neighbors) {
             if (targetMaterials == null || targetMaterials.contains(loc.getBlock().getType())) {
                 pendingBlocks.add(loc);
-                BotLogger.debug("➕ Добавили соседний блок в очередь " + BotUtils.formatLocation(loc));
+                BotLogger.info("➕ Добавили соседний блок в очередь " + BotStringUtils.formatLocation(loc));
             }
         }
     }

@@ -23,13 +23,21 @@ public class BotRemove implements CommandExecutor {
             return true;
         }
 
-        if (args.length != 1) {
+        String botName = "";
+        Player player = (Player) sender;
+
+        Bot bot = botManager.getOrSelectBot(player.getUniqueId());
+
+        if (args.length > 1) {
             sender.sendMessage("§cUsage: /bot-remove <bot_name>");
             return true;
         }
 
-        String botName = args[0];
-        Bot bot = botManager.getBot(botName);
+        if(bot == null) {
+            botName = args[0];
+        }
+
+        bot = botManager.getBot(botName);
 
         if (bot == null) {
             sender.sendMessage("§cBot '" + botName + "' not found.");
@@ -38,7 +46,7 @@ public class BotRemove implements CommandExecutor {
 
         botManager.removeBot(botName);
 
-        sender.sendMessage("§aBot '" + botName + "' has been removed.");
+        sender.sendMessage("§aBot '" + botName + "' Has been removed.");
 
         return true;
     }

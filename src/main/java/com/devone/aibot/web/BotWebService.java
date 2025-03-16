@@ -3,8 +3,9 @@ package com.devone.aibot.web;
 import com.devone.aibot.core.Bot;
 import com.devone.aibot.core.BotManager;
 import com.devone.aibot.core.logic.tasks.BotTask;
+import com.devone.aibot.utils.BotConstants;
+import com.devone.aibot.utils.BotStringUtils;
 import com.devone.aibot.utils.BotUtils;
-import com.devone.aibot.utils.Constants;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.configuration.file.YamlConfiguration;
 import com.google.gson.JsonArray;
@@ -30,8 +31,8 @@ import java.util.stream.Collectors;
 
 public class BotWebService {
     private final Server server;
-    private static final String SKIN_PATH = Constants.PLUGIN_PATH + "/web/skins/";
-    private static final String CONFIG_PATH = Constants.PLUGIN_PATH + "/config.yml";
+    private static final String SKIN_PATH = BotConstants.PLUGIN_PATH + "/web/skins/";
+    private static final String CONFIG_PATH = BotConstants.PLUGIN_PATH + "/config.yml";
     public static final String SERVER_HOST;
     private static final String MAP_HOST;
 
@@ -76,7 +77,7 @@ public class BotWebService {
                     System.err.println("⚠ Resource not found: " + resource);
                     continue;
                 }
-                File targetFile = new File(Constants.PLUGIN_PATH_WEB_ASSETS + new File(resource).getName());
+                File targetFile = new File(BotConstants.PLUGIN_PATH_WEB_ASSETS + new File(resource).getName());
                 targetFile.getParentFile().mkdirs();
                 Files.copy(in, targetFile.toPath(), StandardCopyOption.REPLACE_EXISTING);
                 System.out.println("✅ Copied: " + resource + " → " + targetFile.getPath());
@@ -97,7 +98,7 @@ public class BotWebService {
 
     private static class StaticFileServlet extends HttpServlet {
 
-        private static final String ASSETS_PATH = Constants.PLUGIN_PATH + "/web/assets/";
+        private static final String ASSETS_PATH = BotConstants.PLUGIN_PATH + "/web/assets/";
     
         @Override
         protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
@@ -178,14 +179,14 @@ public class BotWebService {
                 if (loc != null) {
                     botJson.addProperty("skin", "http://" + getServerHost() + ":3000/skins/" + bot.getUuid() + ".png");
                     botJson.addProperty("id", bot.getId());
-                    botJson.addProperty("position", BotUtils.formatLocation(loc));
+                    botJson.addProperty("position", BotStringUtils.formatLocation(loc));
                     botJson.addProperty("task", bot.getCurrentTask().getName());
                     
                     Location tg_loc = bot.getCurrentTask().getTargetLocation();
-                    String targetLoc = BotUtils.formatLocation(tg_loc);
+                    String targetLoc = BotStringUtils.formatLocation(tg_loc);
                     botJson.addProperty("target", targetLoc);
                     // ✅ Добавлено время выполнения таска
-                    botJson.addProperty("elapsedTime", BotUtils.formatTime(bot.getCurrentTask().getElapsedTime()));
+                    botJson.addProperty("elapsedTime", BotStringUtils.formatTime(bot.getCurrentTask().getElapsedTime()));
 
                     // Получаем TaskStack (очередь задач) и конвертируем в List
                     List<BotTask> taskStack = (bot.getLifeCycle() != null

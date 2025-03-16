@@ -6,14 +6,14 @@ import org.bukkit.configuration.file.YamlConfiguration;
 import java.io.File;
 import java.io.IOException;
 import com.devone.aibot.utils.BotLogger;
-import com.devone.aibot.utils.Constants;
+import com.devone.aibot.utils.BotConstants;
 
 public class BotPatrolTaskConfig {
     private final File file;
     private final FileConfiguration config;
 
     public BotPatrolTaskConfig() {
-        File configFolder = new File(Constants.PLUGIN_PATH_CONFIGS_TASKS);
+        File configFolder = new File(BotConstants.PLUGIN_PATH_CONFIGS_TASKS);
         if (!configFolder.exists()) {
             configFolder.mkdirs();
         }
@@ -31,7 +31,7 @@ public class BotPatrolTaskConfig {
         config.set("patrol_radius", 100);
         config.set("patrol_points", "");
         save();
-        BotLogger.debug("[BotPatrolTaskConfig] Создан новый конфигурационный файл: " + file.getName());
+        BotLogger.info("✅ Создан новый конфигурационный файл: " + file.getName());
     }
 
     public boolean isEnabled() {
@@ -49,9 +49,9 @@ public class BotPatrolTaskConfig {
     public void save() {
         try {
             config.save(file);
-            BotLogger.debug("[BotPatrolTaskConfig] Конфигурация сохранена: " + file.getName());
+            BotLogger.info("✅ Конфигурация сохранена: " + file.getName());
         } catch (IOException e) {
-            BotLogger.debug("[BotPatrolTaskConfig] Ошибка сохранения конфига для: " + file.getName());
+            BotLogger.error("❌ Ошибка сохранения конфига для: " + file.getName());
         }
     }
 }

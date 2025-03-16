@@ -3,8 +3,7 @@ package com.devone.aibot.core.logic.tasks;
 import com.devone.aibot.core.Bot;
 import com.devone.aibot.core.logic.tasks.configs.BotPatrolTaskConfig;
 import com.devone.aibot.utils.BotLogger;
-import com.devone.aibot.utils.BotNavigationUtil;
-import com.devone.aibot.utils.BotUtils;
+import com.devone.aibot.utils.BotNavigationUtils;
 
 import org.bukkit.Location;
 
@@ -12,10 +11,9 @@ import java.util.Random;
 
 public class BotPatrolTask implements BotTask {
     private final Bot bot;
-    private final Random random = new Random();
     private final BotPatrolTaskConfig config;
     private boolean isPaused = false;
-    private String name = "PATROL";
+    private final String name = "PATROL";
     private Location patrolTarget;
     private long startTime = System.currentTimeMillis();
     private  int patrolRadius = 10;
@@ -29,24 +27,27 @@ public class BotPatrolTask implements BotTask {
 
     @Override
     public void configure(Object... params) {
+        startTime = System.currentTimeMillis();
         // Можно использовать параметры для динамической настройки патрулирования
     }
 
     @Override
     public void update() {
-        BotLogger.debug(bot.getId() + " Running task: " + name);
+        BotLogger.info("update(): "+bot.getId() + " Running task: " + name);
 
         if (isPaused) return;
 
         if (shouldExitPatrol()) {
-            BotLogger.debug(bot.getId() +" 👀 Finishing patrolling...");
+            BotLogger.info("👀 "+bot.getId() + " Has finished patrolling.");
             return;
         }
 
         patrolRadius = config.getPatrolRadius();
-        BotLogger.debug(bot.getId() + " 👀 Patrolling with radius:  " + patrolRadius);
+        BotLogger.info("👀 "+bot.getId() + " Patrolling with radius:  " + patrolRadius);
 
-        patrolTarget = BotNavigationUtil.getRandomWalkLocation(bot.getNPCCurrentLocation(), -patrolRadius, patrolRadius);
+        patrolTarget = BotNavigationUtils.getRandomWalkLocation(bot.getNPCCurrentLocation(), -patrolRadius, patrolRadius);
+
+        patrolTarget = BotNavigationUtils.findNearestNavigableLocation(bot.getNPCCurrentLocation(), patrolTarget, patrolRadius);
 
         BotMoveTask moveTask = new BotMoveTask(bot);
         moveTask.configure(patrolTarget);
@@ -58,8 +59,8 @@ public class BotPatrolTask implements BotTask {
         
         if ( patrolTarget == null ) return false;
         
-        if(BotUtils.hasReachedTarget(bot.getNPCCurrentLocation(), patrolTarget, 2.0)) {
-            patrolTarget = BotNavigationUtil.getRandomWalkLocation(bot.getNPCCurrentLocation(), -patrolRadius, patrolRadius);
+        if(BotNavigationUtils.hasReachedTarget(bot, patrolTarget, 2.0)) {
+            patrolTarget = BotNavigationUtils.getRandomWalkLocation(bot.getNPCCurrentLocation(), -patrolRadius, patrolRadius);
             return true;
         } else {
             return false;
@@ -74,7 +75,11 @@ public class BotPatrolTask implements BotTask {
     @Override
     public void setPaused(boolean paused) {
         this.isPaused = paused;
-        BotLogger.debug(bot.getId() + (paused ? " ꩜ Waiting" : " ▶️ Resuming"));
+        if (isPaused) {
+            BotLogger.info("꩜ " + bot.getId() + " ꩜ Pausing...");
+        } else {
+            BotLogger.info("▶️ " + bot.getId() + " ꩜ Resuming...");
+        }
     }
 
     @Override

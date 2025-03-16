@@ -1,6 +1,7 @@
 package com.devone.aibot.core.logic.tasks.configs;
 
-import com.devone.aibot.utils.Constants;
+import com.devone.aibot.utils.BotConstants;
+
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.configuration.file.YamlConfiguration;
 
@@ -14,7 +15,7 @@ public class BotIdleTaskConfig {
     private final FileConfiguration config;
 
     public BotIdleTaskConfig() {
-        File configFolder = new File(Constants.PLUGIN_PATH_CONFIGS_TASKS);
+        File configFolder = new File(BotConstants.PLUGIN_PATH_CONFIGS_TASKS);
         if (!configFolder.exists()) {
             configFolder.mkdirs();
         }
@@ -31,7 +32,7 @@ public class BotIdleTaskConfig {
         config.set("enabled", true);
         config.set("priority", 1);
         save();
-        BotLogger.debug("[BotIdleTaskConfig] Создан новый конфигурационный файл: " + file.getName());
+        BotLogger.info("✅ Создан новый конфигурационный файл: " + file.getName());
     }
 
     public boolean isEnabled() {
@@ -45,9 +46,9 @@ public class BotIdleTaskConfig {
     public void save() {
         try {
             config.save(file);
-            BotLogger.debug("[BotIdleTaskConfig] Конфигурация сохранена: " + file.getName());
+            BotLogger.info("✅ Конфигурация сохранена: " + file.getName());
         } catch (IOException e) {
-            BotLogger.debug("[BotIdleTaskConfig] Ошибка сохранения конфига для: " + file.getName());
+            BotLogger.info("❌ Ошибка сохранения конфига для: " + file.getName());
         }
     }
 }
