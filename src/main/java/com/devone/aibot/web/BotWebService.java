@@ -4,6 +4,7 @@ import com.devone.aibot.core.Bot;
 import com.devone.aibot.core.BotManager;
 import com.devone.aibot.core.logic.tasks.BotTask;
 import com.devone.aibot.utils.BotConstants;
+import com.devone.aibot.utils.BotLogger;
 import com.devone.aibot.utils.BotStringUtils;
 import com.devone.aibot.utils.BotUtils;
 import org.bukkit.configuration.file.FileConfiguration;
@@ -80,9 +81,9 @@ public class BotWebService {
                 File targetFile = new File(BotConstants.PLUGIN_PATH_WEB_ASSETS + new File(resource).getName());
                 targetFile.getParentFile().mkdirs();
                 Files.copy(in, targetFile.toPath(), StandardCopyOption.REPLACE_EXISTING);
-                System.out.println("✅ Copied: " + resource + " → " + targetFile.getPath());
+                BotLogger.info("✅ Copied: " + resource + " → " + targetFile.getPath());
             } catch (IOException e) {
-                System.err.println("❌ Failed to copy " + resource + ": " + e.getMessage());
+                BotLogger.info("❌ Failed to copy " + resource + ": " + e.getMessage());
             }
         }
     }
