@@ -131,9 +131,11 @@ public class BotMoveTask implements BotTask {
         Location newTarget = BotUtils.findNearestNavigableLocation(bot.getNPCCurrentLocation(), targetLocation, 30);
         try {
             if (newTarget != null) {
+
                 targetLocation = newTarget;
                 BotLogger.debug(bot.getId() + " 🛠 Новая цель: " + BotUtils.formatLocation(targetLocation));
                 bot.getNPCNavigator().setTarget(targetLocation);
+
             } else {
 
                 BotLogger.debug(bot.getId() + " ❌ Не удалось найти маршрут. Телепортируем...");
