@@ -56,7 +56,7 @@ public class BotIdleTask implements BotTask {
 
             BotBreakBlockTask breakTask = new BotBreakBlockTask(bot);
 
-            breakTask.configure(dirtTypes, 64, 4, true); //ломаем все, включая кабины (тестовый режим) и лутаем!!!
+            breakTask.configure(dirtTypes, 64, 5, true); //ломаем все, включая кабины (тестовый режим) и лутаем!!!
 
             bot.getLifeCycle().getTaskStackManager().pushTask(breakTask);
         } else {

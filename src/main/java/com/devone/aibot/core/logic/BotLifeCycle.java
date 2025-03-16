@@ -2,6 +2,7 @@ package com.devone.aibot.core.logic;
 
 import org.bukkit.Bukkit;
 
+import com.devone.aibot.AIBotPlugin;
 import com.devone.aibot.core.Bot;
 import com.devone.aibot.core.logic.tasks.BotIdleTask;
 import com.devone.aibot.core.logic.tasks.TaskStackManager;
@@ -21,18 +22,11 @@ public class BotLifeCycle {
 
     private void startLifeCycle() {
         BotLogger.debug("🔄 Запускаем LifeCycle для бота " + bot.getId());
+        BotLogger.debug("🔄 Запускаем LifeCycle для бота " + bot.getId());
 
-        new Thread(() -> {
-            while (true) {
-                update();
-                try {
-                    Thread.sleep(1000);
-                } catch (InterruptedException e) {
-                    Thread.currentThread().interrupt();
-                    break;
-                }
-            }
-        }).start();
+        Bukkit.getScheduler().runTaskTimer(AIBotPlugin.getInstance(), () -> {
+            update();
+        }, 0L, 2L); // 2 тика = 0.1 секунды (в 10 раз быстрее, чем было!)
     }
 
     public void update() {
