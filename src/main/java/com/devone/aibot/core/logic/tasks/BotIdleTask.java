@@ -5,9 +5,11 @@ import com.devone.aibot.core.logic.tasks.configs.BotPatrolTaskConfig;
 
 import java.util.Set;
 
+import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.Material;
 
+import com.devone.aibot.commands.BotMove;
 import com.devone.aibot.core.Bot;
 import com.devone.aibot.core.BotInventory;
 import com.devone.aibot.utils.BotLogger;
@@ -57,10 +59,16 @@ public class BotIdleTask implements BotTask {
                     Material.ROOTED_DIRT
             );
 
+            bot.setAutoPickupEnabled(false);
+
+            BotMoveTask  moveTask = new BotMoveTask(bot);
+
+            Location drop_off_loc = new Location(Bukkit.getWorld("world"), 0.0, (double)bot.getNPCCurrentLocation().getBlockY(), 0.0);
+            moveTask.configure(drop_off_loc);
+            bot.getLifeCycle().getTaskStackManager().pushTask(moveTask);
+
             BotBreakBlockTask breakTask = new BotBreakBlockTask(bot);
-
             BotInventory.dropAllItems(bot);
-
             breakTask.configure(dirtTypes, 256, 5, true); //ломаем все, включая кабины (тестовый режим) и лутаем!!!
 
             bot.getLifeCycle().getTaskStackManager().pushTask(breakTask);

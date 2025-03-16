@@ -103,6 +103,8 @@ public class BotBreakBlockTask implements BotTask {
 
         // pickup items
         bot.pickupNearbyItems(shouldPickup);
+        
+        bot.setAutoPickupEnabled(shouldPickup);
 
         if (targetLocation == null) {
             if (!pendingBlocks.isEmpty()) {

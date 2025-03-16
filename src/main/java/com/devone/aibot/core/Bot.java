@@ -35,7 +35,7 @@ public class Bot {
     private final BotInventory inventory; // Инвентарь бота
     private final BotManager botManager; // Менеджер ботов
 
-    private boolean autoPickupEnabled = true;
+    private boolean autoPickupEnabled = false;
 
     private Location lastKnownLocation = Bot.getFallbackLocation();
 
@@ -205,7 +205,7 @@ public class Bot {
 
     public void setAutoPickupEnabled(boolean enabled) {
             this.autoPickupEnabled = enabled;
-        }
+    }
 
     public void pickupNearbyItems(boolean shouldPickup) {
         getInventory().pickupAll(shouldPickup, autoPickupEnabled);
