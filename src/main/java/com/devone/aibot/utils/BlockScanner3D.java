@@ -54,16 +54,15 @@ public class BlockScanner3D {
         return scannedBlocks;
     }
 
-    public static void logNearbyEntities(Bot bot) {
-        double radius = 5.0; // Увеличенный радиус
+    public static void logNearbyEntities(Bot bot, double radius) {
         List<Entity> nearbyEntities = bot.getNPCEntity().getNearbyEntities(radius, radius, radius);
     
         if (nearbyEntities.isEmpty()) {
-            Bukkit.getLogger().info("[Bot] В радиусе " + radius + " блоков нет НИЧЕГО.");
+            BotLogger.info(bot.getId()+" В радиусе " + radius + " блоков нет НИЧЕГО.");
             return;
         }
     
-        Bukkit.getLogger().info("[Bot] В радиусе " + radius + " блоков есть:");
+        BotLogger.info(bot.getId()+" В радиусе  " + radius + " блоков есть:");
         for (Entity entity : nearbyEntities) {
             if (entity instanceof Item) {
                 ItemStack item = ((Item) entity).getItemStack();

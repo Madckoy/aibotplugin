@@ -63,7 +63,7 @@ public class BotIdleTask implements BotTask {
 
             BotMoveTask  moveTask = new BotMoveTask(bot);
 
-            Location drop_off_loc = new Location(Bukkit.getWorld("world"), 0.0, (double)bot.getNPCCurrentLocation().getBlockY(), 0.0);
+            Location drop_off_loc = new Location(Bukkit.getWorld("world"), 0.0, -60.0, 0.0);
             moveTask.configure(drop_off_loc);
             bot.getLifeCycle().getTaskStackManager().pushTask(moveTask);
 
@@ -72,6 +72,7 @@ public class BotIdleTask implements BotTask {
             breakTask.configure(dirtTypes, 256, 5, true); //ломаем все, включая кабины (тестовый режим) и лутаем!!!
 
             bot.getLifeCycle().getTaskStackManager().pushTask(breakTask);
+            
         } else {
             // 💤 30% шанс остаться в IDLE
             BotLogger.debug(bot.getId() + " 🌙 Остаётся в IDLE.");

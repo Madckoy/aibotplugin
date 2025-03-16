@@ -74,7 +74,7 @@ public class BotInventory {
 
            
     public void pickupAll(Boolean shouldPickup, Boolean autoPickupEnabled) {
-        
+
         logInventory();
 
         if (!shouldPickup || !autoPickupEnabled || !bot.isNPCSpawned() || bot.getNPC() == null) {
@@ -84,7 +84,7 @@ public class BotInventory {
 
         BotLogger.debug(bot.getId()+" 🛒 Будет подобирать материал! Параметры подбора: " + shouldPickup + " | " + autoPickupEnabled );
 
-        BlockScanner3D.logNearbyEntities(bot);
+        BlockScanner3D.logNearbyEntities(bot, 20.0);
 
         if(autoPickupEnabled) {
             pullAllItemsinRadius(2.0);
