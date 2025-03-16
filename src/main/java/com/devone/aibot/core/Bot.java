@@ -1,11 +1,14 @@
 package com.devone.aibot.core;
 
+import java.util.List;
 import java.util.UUID;
 
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
+import org.bukkit.Material;
 import org.bukkit.World;
 import org.bukkit.entity.Entity;
+import org.bukkit.entity.Item;
 import org.bukkit.entity.Player;
 
 import com.devone.aibot.core.logic.BotLifeCycle;
@@ -26,6 +29,8 @@ public class Bot {
 
     private final BotInventory inventory; // Инвентарь бота
     private final BotManager botManager; // Менеджер ботов
+
+    private boolean autoPickupEnabled = true;
 
     private Location lastKnownLocation = Bot.getFallbackLocation();
 
@@ -188,4 +193,32 @@ public class Bot {
         return npc_props;
 
     }
+
+    public void setAutoPickupEnabled(boolean enabled) {
+            this.autoPickupEnabled = enabled;
+        }
+
+        public void pickupNearbyItems() {
+        if (!autoPickupEnabled || npc == null || !npc.isSpawned()) {
+            return;
+        }
+        Location botLocation = getNPCCurrentLocation();
+        List<Entity> nearbyEntities = botLocation.getWorld().getEntities();
+        for (Entity entity : nearbyEntities) {
+            if (entity instanceof Item) {
+                Item item = (Item) entity;
+                if (botLocation.distance(item.getLocation()) < 2.0) {
+                    Material material = item.getItemStack().getType();
+                    int amount = item.getItemStack().getAmount();
+                    
+                    inventory.addItem(material, amount); // Передаём два параметра в инвентарь
+                    
+                    item.remove(); // Удаляем предмет с земли
+                    BotLogger.debug("🛒 Бот " + id + " подобрал " + amount + " x " + material);
+                }
+            }
+        }
+    }
+
+
 }

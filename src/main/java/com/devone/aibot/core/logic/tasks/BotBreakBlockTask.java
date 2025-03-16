@@ -23,6 +23,7 @@ public class BotBreakBlockTask implements BotTask {
     private int breakProgress = 0;
     private Set<Material> targetMaterials = null;
     private boolean isDone;
+    private boolean shouldPickup = false; // ✅ Новый параметр
     private Map<Location, Material> scannedBlocks;
     
     private static final Map<Material, Integer> BREAK_TIME_PER_BLOCK = new HashMap<>();
@@ -45,7 +46,14 @@ public class BotBreakBlockTask implements BotTask {
         if (params.length >= 2 && params[2] instanceof Integer) {
             this.searchRadius = (Integer) params[2];
         }
-        BotLogger.debug("🔨 BreakBlockTask сконфигурирована: " + (targetMaterials == null ? "ВСЕ БЛОКИ" : targetMaterials));
+
+        if (params.length >= 4 && params[3] instanceof Boolean) { // ✅ Добавили параметр подбора
+            this.shouldPickup = (Boolean) params[3];
+        }
+
+        BotLogger.debug("🔨 BreakBlockTask сконфигурирована: " + 
+            (targetMaterials == null ? "ВСЕ БЛОКИ" : targetMaterials) +
+            " | Подбор предметов: " + shouldPickup);
     }
     
     @Override
@@ -77,20 +85,26 @@ public class BotBreakBlockTask implements BotTask {
         if (isDone) return;
     
         if (targetLocation == null) {
-            // Получаем карту блоков в радиусе поиска
             Map<Location, Material> scannedBlocks = BlockScanner3D.scanSurroundings(bot.getNPCCurrentLocation(), searchRadius);
 
-            targetLocation = findNearestTargetBlock(scannedBlocks);
+            for (Map.Entry<Location, Material> entry : scannedBlocks.entrySet()) {
+                Location loc = entry.getKey();
+                Material material = entry.getValue();
+                
+                if (targetMaterials.contains(material)) {
+                    targetLocation = loc;
+                    BotLogger.debug(bot.getId() + " 🛠️ Нашел " + material + " на " + BotUtils.formatLocation(targetLocation));
+                    break;
+                }
+            }
+            
+            bot.getNPCEntity().teleport(bot.getNPCCurrentLocation().setDirection(targetLocation.toVector().subtract(bot.getNPCCurrentLocation().toVector())));
 
             if (targetLocation == null) {
                 BotLogger.debug(bot.getId() + " ❌ Нет доступных блоков для добычи!");
                 isDone = true;
                 return;
             }
-
-            // Разворачиваем бота к цели
-            bot.getNPCEntity().teleport(bot.getNPCCurrentLocation().setDirection(targetLocation.toVector().subtract(bot.getNPCCurrentLocation().toVector())));
-            BotLogger.debug(bot.getId() + " 🛠️ Нашел " + targetLocation.getBlock().getType() + " на " + BotUtils.formatLocation(targetLocation));
         }
 
         if (targetLocation.getBlock().getType() == Material.AIR) {
@@ -105,10 +119,9 @@ public class BotBreakBlockTask implements BotTask {
             return;
         }
 
-        int breakTime = BREAK_TIME_PER_BLOCK.getOrDefault(targetLocation.getBlock().getType(), 10);
-
+        int breakTime = BREAK_TIME_PER_BLOCK.getOrDefault(targetLocation.getBlock().getType(), 5); // ⏳ Ускорил процесс в 2 раза
         if (breakProgress < breakTime) {
-            breakProgress += 2; // ⚡ Ускоряем в 2 раза
+            breakProgress++;
             bot.getNPCEntity().getWorld().playEffect(targetLocation, org.bukkit.Effect.STEP_SOUND, targetLocation.getBlock().getType());
             BotLogger.debug(bot.getId() + " ⏳ Ломаем " + targetLocation.getBlock().getType() + " [" + breakProgress + "/" + breakTime + "]");
             return;
@@ -120,25 +133,13 @@ public class BotBreakBlockTask implements BotTask {
                 BotLogger.debug("✅ Блок разрушен на " + BotUtils.formatLocation(targetLocation));
                 blocksMined++;
                 breakProgress = 0;
+                
+                if (shouldPickup) { // ✅ Если нужно подбирать - вызываем метод
+                    bot.pickupNearbyItems();
+                }
+
                 targetLocation = null;
             }
         });
-    }
-
-    private Location findNearestTargetBlock(Map<Location, Material> scannedBlocks) {
-        Location botLocation = bot.getNPCCurrentLocation();
-        Location closestBlock = null;
-        double minDistance = Double.MAX_VALUE;
-        
-        for (Map.Entry<Location, Material> entry : scannedBlocks.entrySet()) {
-            if (targetMaterials == null || targetMaterials.contains(entry.getValue())) {
-                double distance = botLocation.distanceSquared(entry.getKey());
-                if (distance < minDistance) {
-                    minDistance = distance;
-                    closestBlock = entry.getKey();
-                }
-            }
-        }
-        return closestBlock;
     }
 }
