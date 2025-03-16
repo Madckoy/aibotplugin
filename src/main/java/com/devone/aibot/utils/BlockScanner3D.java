@@ -62,7 +62,7 @@ public class BlockScanner3D {
             return;
         }
     
-        BotLogger.info(bot.getId()+" В радиусе " + radius + " блоков есть:");
+        BotLogger.debug(bot.getId()+" В радиусе " + radius + " блоков есть:");
 
         for (Entity entity : nearbyEntities) {
             if (entity instanceof Item) {
