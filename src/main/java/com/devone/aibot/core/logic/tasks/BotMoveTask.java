@@ -70,7 +70,7 @@ public class BotMoveTask implements BotTask {
         BlockScanner3D.scanSurroundings(currentLocation, 4);
         //
         // pickup all items
-        bot.pickupNearbyItems();
+        bot.pickupNearbyItems(true);
         //
         //
         BotLogger.debug(bot.getId() + " 📍 Current position is: " + BotUtils.formatLocation(currentLocation));

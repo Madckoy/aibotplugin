@@ -1,5 +1,6 @@
 package com.devone.aibot.core;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
@@ -201,11 +202,12 @@ public class Bot {
             this.autoPickupEnabled = enabled;
         }
 
-    public void pickupNearbyItems() {
+    public void pickupNearbyItems(boolean shouldPickup) {
         
         logInventory();
 
-        if (!autoPickupEnabled || npc == null || !npc.isSpawned()) {
+        if (!shouldPickup || !autoPickupEnabled || npc == null || !npc.isSpawned()) {
+            BotLogger.debug(getId()+" 🛒 Не будет подобирать материал! Параметры подбора: " + shouldPickup + " | " + autoPickupEnabled );
             return;
         }
         Location botLocation = getNPCCurrentLocation();
@@ -226,16 +228,38 @@ public class Bot {
         }
     }
 
-    private void logInventory() {
-        Inventory inventory = getInventory().getNPCInventory();
-        BotLogger.debug(getId() + " Инвентарь: [ ");
 
-        for (ItemStack item : inventory.getContents()) {
+    public void logInventory() {
+        Inventory inventory = getInventory().getNPCInventory();
+        List<String> rows = new ArrayList<>();
+        int columns = 9; // Количество слотов в строке (как в GUI)
+
+        StringBuilder row = new StringBuilder("| ");
+        int count = 0;
+
+        for (int i = 0; i < inventory.getSize(); i++) {
+            ItemStack item = inventory.getItem(i);
             if (item != null && item.getType() != Material.AIR) {
-                BotLogger.debug("- " + item.getAmount() + "x " + item.getType());
+                String material = item.getType().toString();
+                int amount = item.getAmount();
+                row.append(String.format("%2d x %-15s ", amount, material)); // Количество -> Материал
+            } else {
+                row.append(String.format("-- x %-15s ", "------")); // Пустой слот
+            }
+
+            count++;
+            if (count == columns) {
+                rows.add(row.toString() + "|");
+                row = new StringBuilder("| ");
+                count = 0;
             }
         }
-        BotLogger.debug(" ]");
+
+        // Вывод в логи
+        BotLogger.debug(getId() + "Инвентарь:");
+        for (String r : rows) {
+            BotLogger.debug(r);
+        }
     }
 
 

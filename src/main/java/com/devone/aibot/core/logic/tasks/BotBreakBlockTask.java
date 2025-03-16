@@ -24,6 +24,7 @@ public class BotBreakBlockTask implements BotTask {
     private Set<Material> targetMaterials = null;
     private boolean isDone;
     private Map<Location, Material> scannedBlocks;
+    private boolean shouldPickup = true;
     
     private Queue<Location> pendingBlocks = new LinkedList<>(); // Очередь блоков рядом
 
@@ -40,13 +41,19 @@ public class BotBreakBlockTask implements BotTask {
             if (targetMaterials.isEmpty()) targetMaterials = null;
         }
 
-        if (params.length >= 3 && params[1] instanceof Integer) {
+        if (params.length >= 2 && params[1] instanceof Integer) {
             this.maxBlocks = (Integer) params[1];
         }
 
-        if (params.length >= 2 && params[2] instanceof Integer) {
+        if (params.length >= 3 && params[2] instanceof Integer) {
             this.searchRadius = (Integer) params[2];
         }
+        
+        if (params.length >= 4 && params[3] instanceof Integer) {
+            this.shouldPickup = (boolean) params[3];
+        }
+
+
         BotLogger.debug("🔨 BreakBlockTask сконфигурирована: " + (targetMaterials == null ? "ВСЕ БЛОКИ" : targetMaterials));
     }
     
@@ -79,7 +86,7 @@ public class BotBreakBlockTask implements BotTask {
         if (isDone) return;
 
         // pickup items
-        bot.pickupNearbyItems();
+        bot.pickupNearbyItems(shouldPickup);
         //
 
         if (targetLocation == null) {
