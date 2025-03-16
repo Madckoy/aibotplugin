@@ -15,6 +15,7 @@ import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
 
 import com.devone.aibot.core.logic.BotLifeCycle;
+import com.devone.aibot.core.logic.tasks.BotMoveTask;
 import com.devone.aibot.core.logic.tasks.BotTask;
 import com.devone.aibot.utils.BotLogger;
 import com.devone.aibot.utils.BotUtils;
@@ -51,6 +52,10 @@ public class Bot {
 
         BotLogger.debug("Бот " + id + " успешно создан!");
 
+    }
+
+    public NPC getNPC() {
+        return npc;
     }
 
     public UUID getUuid() {
@@ -203,64 +208,27 @@ public class Bot {
         }
 
     public void pickupNearbyItems(boolean shouldPickup) {
-        
-        logInventory();
+        getInventory().pickupAll(shouldPickup, autoPickupEnabled);
+    }    
 
-        if (!shouldPickup || !autoPickupEnabled || npc == null || !npc.isSpawned()) {
-            BotLogger.debug(getId()+" 🛒 Не будет подобирать материал! Параметры подбора: " + shouldPickup + " | " + autoPickupEnabled );
+    public void checkAndSelfMove(Location lastBrokenBlock) {
+        double pickupRadius = 2.0; // Радиус, в котором проверяем предметы
+        List<Entity> nearbyItems = getNPCEntity().getNearbyEntities(pickupRadius, pickupRadius, pickupRadius);
+    
+        // Если есть дроп в радиусе 2 блоков — бот остается на месте
+        if (!nearbyItems.isEmpty()) {
+            BotLogger.debug(getId() +"В радиусе " + pickupRadius + " блоков есть предметы, остаюсь на месте.");
             return;
         }
-        Location botLocation = getNPCCurrentLocation();
-        List<Entity> nearbyEntities = botLocation.getWorld().getEntities();
-        for (Entity entity : nearbyEntities) {
-            if (entity instanceof Item) {
-                Item item = (Item) entity;
-                if (botLocation.distance(item.getLocation()) < 2.0) {
-                    Material material = item.getItemStack().getType();
-                    int amount = item.getItemStack().getAmount();
-                    
-                    inventory.addItem(material, amount); // Передаём два параметра в инвентарь
-                    
-                    item.remove(); // Удаляем предмет с земли
-                    BotLogger.debug("🛒 Бот " + id + " подобрал " + amount + " x " + material);
-                }
-            }
-        }
+    
+        // Если предметов рядом нет, двигаем бота к последнему разрушенному блоку
+        BotLogger.debug(getId() +" Дроп подобран, двигаюсь к последнему разрушенному блоку " + lastBrokenBlock);
+       
+        BotMoveTask mv_task = new BotMoveTask(this);
+        mv_task.configure(lastBrokenBlock);
+
+        getLifeCycle().getTaskStackManager().pushTask(mv_task);
     }
-
-
-    public void logInventory() {
-        Inventory inventory = getInventory().getNPCInventory();
-        List<String> rows = new ArrayList<>();
-        int columns = 9; // Количество слотов в строке (как в GUI)
-
-        StringBuilder row = new StringBuilder("| ");
-        int count = 0;
-
-        for (int i = 0; i < inventory.getSize(); i++) {
-            ItemStack item = inventory.getItem(i);
-            if (item != null && item.getType() != Material.AIR) {
-                String material = item.getType().toString();
-                int amount = item.getAmount();
-                row.append(String.format("%2d x %-15s ", amount, material)); // Количество -> Материал
-            } else {
-                row.append(String.format("-- x %-15s ", "------")); // Пустой слот
-            }
-
-            count++;
-            if (count == columns) {
-                rows.add(row.toString() + "|");
-                row = new StringBuilder("| ");
-                count = 0;
-            }
-        }
-
-        // Вывод в логи
-        BotLogger.debug(getId() + "Инвентарь:");
-        for (String r : rows) {
-            BotLogger.debug(r);
-        }
-    }
-
+    
 
 }

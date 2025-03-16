@@ -1,5 +1,6 @@
 package com.devone.aibot.core.logic.tasks;
 
+import com.devone.aibot.core.BotInventory;
 import java.util.*;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
@@ -85,9 +86,21 @@ public class BotBreakBlockTask implements BotTask {
     public void update() {
         if (isDone) return;
 
-        // pickup items
-        bot.pickupNearbyItems(shouldPickup);
+        if(!BotInventory.hasFreeInventorySpace(bot, targetMaterials)) {
+            BotLogger.debug(bot.getId() + " 🔄 Not enoguh free space inInventory!");
+            isDone = true;
+            return;
+        }
+
         //
+        if (BotInventory.hasCollectedEnoughBlocks(bot, targetMaterials, maxBlocks)){
+            BotLogger.debug(bot.getId() + " 🔄 Not enoguh free space inInventory!");
+            isDone = true;
+            return;
+        }
+
+        // pickup items
+        // bot.pickupNearbyItems(shouldPickup);
 
         if (targetLocation == null) {
             if (!pendingBlocks.isEmpty()) {
@@ -109,7 +122,7 @@ public class BotBreakBlockTask implements BotTask {
                             BotMoveTask moveTask = new BotMoveTask(bot);
                             moveTask.configure(newLocation);
                       
-                            bot.getLifeCycle().getTaskStackManager().pushTask(moveTask); // Перемещаем бота черещ новый таск
+                            bot.getLifeCycle().getTaskStackManager().pushTask(moveTask); // Перемещаем бота чере новый таск
 
                            return;
 
@@ -161,6 +174,8 @@ public class BotBreakBlockTask implements BotTask {
 
                 // Добавляем соседние блоки в очередь для добычи
                 addAdjacentBlocksToQueue(targetLocation);
+
+                bot.checkAndSelfMove(targetLocation);
 
                 targetLocation = null;
             }

@@ -1,11 +1,18 @@
 package com.devone.aibot.utils;
 
+import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.World;
 import org.bukkit.block.Block;
+import org.bukkit.entity.Entity;
+import org.bukkit.entity.Item;
+import org.bukkit.inventory.ItemStack;
+
+import com.devone.aibot.core.Bot;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 public class BlockScanner3D {
@@ -46,4 +53,26 @@ public class BlockScanner3D {
 
         return scannedBlocks;
     }
+
+    public static void logNearbyEntities(Bot bot) {
+        double radius = 5.0; // Увеличенный радиус
+        List<Entity> nearbyEntities = bot.getNPCEntity().getNearbyEntities(radius, radius, radius);
+    
+        if (nearbyEntities.isEmpty()) {
+            Bukkit.getLogger().info("[Bot] В радиусе " + radius + " блоков нет НИЧЕГО.");
+            return;
+        }
+    
+        Bukkit.getLogger().info("[Bot] В радиусе " + radius + " блоков есть:");
+        for (Entity entity : nearbyEntities) {
+            if (entity instanceof Item) {
+                ItemStack item = ((Item) entity).getItemStack();
+                Bukkit.getLogger().info("  - 🎁 " + item.getAmount() + "x " + item.getType());
+            } else {
+                Bukkit.getLogger().info("  - 🔹 " + entity.getType() + " (" + entity.getName() + ")");
+            }
+        }
+    }
+
+
 }

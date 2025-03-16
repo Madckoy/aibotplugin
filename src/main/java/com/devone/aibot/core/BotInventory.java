@@ -1,9 +1,21 @@
 package com.devone.aibot.core;
 
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.Set;
+
+import org.bukkit.Location;
 import org.bukkit.Material;
+import org.bukkit.entity.Entity;
+import org.bukkit.entity.Item;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.InventoryHolder;
 import org.bukkit.inventory.ItemStack;
+
+import com.devone.aibot.utils.BlockScanner3D;
+import com.devone.aibot.utils.BotLogger;
 
 public class BotInventory {
 
@@ -59,7 +71,137 @@ public class BotInventory {
         }
         return false;
     }
+
+           
+    public void pickupAll(Boolean shouldPickup, Boolean autoPickupEnabled) {
+        
+        logInventory();
+
+        if (!shouldPickup || !autoPickupEnabled || !bot.isNPCSpawned() || bot.getNPC() == null) {
+            BotLogger.debug(bot.getId()+" 🛒 Не будет подобирать материал! Параметры подбора: " + shouldPickup + " | " + autoPickupEnabled );
+            return;
+        }
+
+        BotLogger.debug(bot.getId()+" 🛒 Будет подобирать материал! Параметры подбора: " + shouldPickup + " | " + autoPickupEnabled );
+
+        BlockScanner3D.logNearbyEntities(bot);
+
+        if(autoPickupEnabled) {
+            pullAllItemsinRadius(2.0);
+        }
+
+        Location botLocation = bot.getNPCCurrentLocation();
+        List<Entity> nearbyEntities = botLocation.getWorld().getEntities();
+        for (Entity entity : nearbyEntities) {
+            if (entity instanceof Item) {
+                Item item = (Item) entity;
+                if (botLocation.distance(item.getLocation()) < 2.0) {
+                    Material material = item.getItemStack().getType();
+                    int amount = item.getItemStack().getAmount();
+                    
+                    addItem(material, amount); // Передаём два параметра в инвентарь
+                    
+                    item.remove(); // Удаляем предмет с земли
+                    BotLogger.debug(bot.getId() +  "🛒 подобрал " + amount + " x " + material);
+                }
+            }
+        }
+    }
     
+    public static boolean hasCollectedEnoughBlocks(Bot bot, Set<Material> targetMaterials, int maxBlocksPerMaterial) {
+        Map<Material, Integer> collectedCounts = new HashMap<>();
+
+        // Считаем количество каждого целевого материала в инвентаре
+        for (ItemStack item : bot.getInventory().getNPCInventory().getContents()) {
+            if (item != null && targetMaterials.contains(item.getType())) {
+                collectedCounts.put(item.getType(), collectedCounts.getOrDefault(item.getType(), 0) + item.getAmount());
+            }
+        }
+
+        // Проверяем, достигнуто ли нужное количество для любого из целевых материалов
+        for (Material material : targetMaterials) {
+            int count = collectedCounts.getOrDefault(material, 0);
+            BotLogger.debug(bot.getId() + " 📦 " + material + ": " + count + "/" + maxBlocksPerMaterial);
+
+            if (count >= maxBlocksPerMaterial) {
+                return true; // Достигнута цель по какому-то материалу → завершаем задачу
+            }
+        }
+
+        return false; // Ещё не набрали нужное количество
+    }
+
+    public static boolean hasFreeInventorySpace(Bot bot, Set<Material> targetMaterials) {
+        for (ItemStack item : bot.getInventory().getNPCInventory().getContents()) {
+            if (item == null || item.getType() == Material.AIR) {
+                return true; // Есть свободный слот
+            }
+    
+            // Проверяем, есть ли место в существующем стаке для любого из целевых материалов
+            if (targetMaterials.contains(item.getType()) && item.getAmount() < item.getMaxStackSize()) {
+                return true; // В этом слоте можно добавить ещё
+            }
+        }
+        return false; // Нет места ни в одном слоте
+    }
+    
+    public static void dropAllItems(Bot bot) {
+        Inventory inventory = bot.getInventory().getNPCInventory();
+        
+        for (ItemStack item : inventory.getContents()) {
+            if (item != null && item.getType() != Material.AIR) {
+                bot.getNPCEntity().getWorld().dropItemNaturally(bot.getNPCEntity().getLocation(), item);
+            }
+        }
+        
+        inventory.clear(); // Полностью очищаем инвентарь после выброса
+        BotLogger.debug(bot.getId() + " 🚮 Выбросил все предметы из инвентаря!");
+    }
+
+    public void pullAllItemsinRadius(double radius) {
+        List<Entity> nearbyItems = bot.getNPCEntity().getNearbyEntities(radius, radius, radius);
+        
+        for (Entity entity : nearbyItems) {
+            if (entity instanceof Item) {
+                    entity.teleport(bot.getNPCEntity().getLocation()); // Притягиваем предмет
+                    BotLogger.debug(bot.getId()+" 🛒 Pulled up a near item!");
+            }
+        }
+    }
+
+    public void logInventory() {
+        Inventory inventory = getNPCInventory();
+        List<String> rows = new ArrayList<>();
+        int columns = 9; // Количество слотов в строке (как в GUI)
+
+        StringBuilder row = new StringBuilder("| ");
+        int count = 0;
+
+        for (int i = 0; i < inventory.getSize(); i++) {
+            ItemStack item = inventory.getItem(i);
+            if (item != null && item.getType() != Material.AIR) {
+                String material = item.getType().toString();
+                int amount = item.getAmount();
+                row.append(String.format("%2d x %-15s ", amount, material)); // Количество -> Материал
+            } else {
+                row.append(String.format("-- x %-15s ", "------")); // Пустой слот
+            }
+
+            count++;
+            if (count == columns) {
+                rows.add(row.toString() + "|");
+                row = new StringBuilder("| ");
+                count = 0;
+            }
+        }
+
+        // Вывод в логи
+        BotLogger.debug(bot.getId() + "Инвентарь:");
+        for (String r : rows) {
+            BotLogger.debug(r);
+        }
+    }
+
 
 }
 
