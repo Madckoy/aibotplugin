@@ -38,24 +38,31 @@ public class MaterialDetector {
         Location bestLocation = null;
         double minDistance = Double.MAX_VALUE;
     
+
         for (int y = 0; y <= radiusY; y++) {
             for (int x = -radiusXZ; x <= radiusXZ; x++) {
                 for (int z = -radiusXZ; z <= radiusXZ; z++) {
                     Location loc = start.clone().add(x, y, z);
-                    
                     if (isValidMaterial(materials, loc)) {
                         double distance = start.distanceSquared(loc);
                         
                         if (distance < minDistance) {
                             minDistance = distance;
                             bestLocation = loc;
-                            
+
                             // 🚀 Оптимизация: если нашли блок в 1 блоке от бота, останавливаем поиск!
                             if (distance == 1) {
+                                BotLogger.debug("[MaterialDetector]: Material "+ materials + " found at " + BotUtils.formatLocation(loc)+" (closest)");
                                 return bestLocation;
                             }
+
+                            BotLogger.debug("[MaterialDetector]: Material "+ materials + " found at " + BotUtils.formatLocation(loc)+" (close)");
+                            return bestLocation;
                         }
-                    }
+
+                        BotLogger.debug("[MaterialDetector]: Material "+ materials + " found at " + BotUtils.formatLocation(loc)+" (far)");
+                        return loc;
+                    }   
                 }
             }
             

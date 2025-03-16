@@ -5,6 +5,7 @@ import org.bukkit.Location;
 import com.devone.aibot.core.Bot;
 import com.devone.aibot.utils.BotLogger;
 import com.devone.aibot.utils.BotUtils;
+import com.devone.aibot.utils.BlockScanner3D;
 
 public class BotMoveTask implements BotTask {
     private final Bot bot;
@@ -64,7 +65,9 @@ public class BotMoveTask implements BotTask {
         }
 
         Location currentLocation = bot.getNPCCurrentLocation();
-
+        // 3d scan
+        BlockScanner3D.scanSurroundings(currentLocation, 4);
+        //
         BotLogger.debug(bot.getId() + " 📍 Current position is: " + BotUtils.formatLocation(currentLocation));
         BotLogger.debug(bot.getId() + " 🎯 Target location is: " + BotUtils.formatLocation(targetLocation));
 
