@@ -6,7 +6,6 @@ import com.devone.aibot.core.logic.tasks.BotTask;
 import com.devone.aibot.utils.BotConstants;
 import com.devone.aibot.utils.BotLogger;
 import com.devone.aibot.utils.BotStringUtils;
-import com.devone.aibot.utils.BotUtils;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.configuration.file.YamlConfiguration;
 import com.google.gson.JsonArray;
@@ -27,7 +26,7 @@ import java.nio.file.StandardCopyOption;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
-import java.util.concurrent.TimeUnit;
+
 import java.util.stream.Collectors;
 
 public class BotWebService {
@@ -75,7 +74,7 @@ public class BotWebService {
         for (String resource : resourceFiles) {
             try (InputStream in = getClass().getClassLoader().getResourceAsStream(resource)) {
                 if (in == null) {
-                    System.err.println("⚠ Resource not found: " + resource);
+                    BotLogger.error("❌ Resource not found: " + resource);
                     continue;
                 }
                 File targetFile = new File(BotConstants.PLUGIN_PATH_WEB_ASSETS + new File(resource).getName());
@@ -83,7 +82,7 @@ public class BotWebService {
                 Files.copy(in, targetFile.toPath(), StandardCopyOption.REPLACE_EXISTING);
                 BotLogger.info("✅ Copied: " + resource + " → " + targetFile.getPath());
             } catch (IOException e) {
-                BotLogger.info("❌ Failed to copy " + resource + ": " + e.getMessage());
+                BotLogger.error("❌ Failed to copy " + resource + ": " + e.getMessage());
             }
         }
     }

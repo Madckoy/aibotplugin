@@ -1,18 +1,16 @@
 package com.devone.aibot.core;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
-import org.bukkit.Material;
+
 import org.bukkit.World;
 import org.bukkit.entity.Entity;
-import org.bukkit.entity.Item;
+
 import org.bukkit.entity.Player;
-import org.bukkit.inventory.Inventory;
-import org.bukkit.inventory.ItemStack;
+
 
 import com.devone.aibot.core.logic.BotLifeCycle;
 import com.devone.aibot.core.logic.tasks.BotTaskMove;

@@ -2,34 +2,21 @@ package com.devone.aibot.utils;
 
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.format.NamedTextColor;
-import org.bukkit.Location;
-import org.bukkit.Material;
-import org.bukkit.World;
-import org.bukkit.block.Block;
 import org.bukkit.entity.Player;
 
-import java.nio.file.Files;
-import java.nio.file.StandardCopyOption;
 import java.awt.Graphics2D;
 import java.awt.Image;
 import java.awt.image.BufferedImage;
 import java.io.File;
-import java.io.FileInputStream;
+
 import java.io.IOException;
 import java.net.URL;
 import java.util.Random;
 import java.util.UUID;
-import java.util.concurrent.TimeUnit;
+
 
 import javax.imageio.ImageIO;
 
-import java.io.File;
-import java.io.IOException;
-import java.net.URL;
-import java.io.File;
-import java.io.IOException;
-
-import org.bukkit.entity.Player;
 
 public class BotUtils {
     private static final Random random = new Random();

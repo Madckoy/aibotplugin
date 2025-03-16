@@ -7,8 +7,6 @@ import com.devone.aibot.utils.BotNavigationUtils;
 
 import org.bukkit.Location;
 
-import java.util.Random;
-
 public class BotTaskPatrol implements BotTask {
     private final Bot bot;
     private final BotCfgTaskPatrol config;

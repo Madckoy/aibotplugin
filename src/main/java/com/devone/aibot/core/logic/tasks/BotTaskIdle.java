@@ -10,7 +10,6 @@ import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.Material;
 
-import com.devone.aibot.commands.BotCmdMove;
 import com.devone.aibot.core.Bot;
 import com.devone.aibot.core.BotInventory;
 import com.devone.aibot.utils.BotLogger;

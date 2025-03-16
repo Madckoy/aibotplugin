@@ -10,7 +10,6 @@ import org.bukkit.Material;
 import com.devone.aibot.core.Bot;
 import com.devone.aibot.core.BotZoneManager;
 import com.devone.aibot.utils.BotLogger;
-import com.devone.aibot.utils.BotUtils;
 import com.devone.aibot.utils.BotScanEnv;
 import com.devone.aibot.AIBotPlugin;
 
