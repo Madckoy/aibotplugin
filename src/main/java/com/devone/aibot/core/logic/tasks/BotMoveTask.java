@@ -90,8 +90,8 @@ public class BotMoveTask implements BotTask {
             });
         } else {
             BotLogger.debug(bot.getId() + " ⚲ Can't navigate from "+BotUtils.formatLocation(currentLocation)+" to " + BotUtils.formatLocation(targetLocation));
-
-            bot.resetTargetLocation();
+            handleStuck();
+            //bot.resetTargetLocation();
             isDone = true;
         }
 
@@ -126,7 +126,7 @@ public class BotMoveTask implements BotTask {
         BotLogger.debug(bot.getId() + " 🔄 Бот застрял! Пересчитываем маршрут...");
     
         // Пытаемся найти ближайшую доступную точку
-        Location newTarget = BotUtils.findNearestNavigableLocation(bot.getNPCCurrentLocation(), targetLocation, 5);
+        Location newTarget = BotUtils.findNearestNavigableLocation(bot.getNPCCurrentLocation(), targetLocation, 30);
         
         if (newTarget != null) {
             targetLocation = newTarget;
@@ -135,8 +135,6 @@ public class BotMoveTask implements BotTask {
         } else {
             BotLogger.debug(bot.getId() + " ❌ Не удалось найти маршрут. Телепортируем...");
             bot.getNPCEntity().teleport(targetLocation);
-
-
         }
     }
 
