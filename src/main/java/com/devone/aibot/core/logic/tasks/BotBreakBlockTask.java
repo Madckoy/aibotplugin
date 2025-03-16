@@ -78,6 +78,10 @@ public class BotBreakBlockTask implements BotTask {
     public void update() {
         if (isDone) return;
 
+        // pickup items
+        bot.pickupNearbyItems();
+        //
+
         if (targetLocation == null) {
             if (!pendingBlocks.isEmpty()) {
                 targetLocation = pendingBlocks.poll(); // Берем следующий блок из очереди
@@ -85,12 +89,28 @@ public class BotBreakBlockTask implements BotTask {
             } else {
                 // Получаем карту блоков в радиусе поиска
                 Map<Location, Material> scannedBlocks = BlockScanner3D.scanSurroundings(bot.getNPCCurrentLocation(), searchRadius);
+
                 targetLocation = findNearestTargetBlock(scannedBlocks);
 
                 if (targetLocation == null) {
-                    BotLogger.debug(bot.getId() + " ❌ Нет доступных блоков для добычи!");
-                    isDone = true;
-                    return;
+                    BotLogger.debug(bot.getId() + " ❌ Нет доступных блоков для добычи! Перемещаемся к новой цели.");
+                                               
+                        Location newLocation = findNearestTargetBlock(scannedBlocks);
+
+                        if(newLocation!=null) {
+
+                            BotMoveTask moveTask = new BotMoveTask(bot);
+                            moveTask.configure(newLocation);
+                      
+                            bot.getLifeCycle().getTaskStackManager().pushTask(moveTask); // Перемещаем бота черещ новый таск
+
+                           return;
+
+                        } else {
+                            //  Stop Task and exit
+                            isDone = true;
+                            return;
+                        }
                 }
 
                 BotLogger.debug(bot.getId() + " 🛠️ Нашел " + targetLocation.getBlock().getType() + " на " + BotUtils.formatLocation(targetLocation));
@@ -115,11 +135,10 @@ public class BotBreakBlockTask implements BotTask {
             return;
         }
 
-    
         int breakTime = BREAK_TIME_PER_BLOCK.getOrDefault(targetLocation.getBlock().getType(), 10);
 
         if (breakProgress < breakTime) {
-            breakProgress += 2; // ⚡ Ускоряем в 2 раза
+            breakProgress += 1; // ⚡ Ускоряем в 1 раз
             bot.getNPCEntity().getWorld().playEffect(targetLocation, org.bukkit.Effect.STEP_SOUND, targetLocation.getBlock().getType());
             BotLogger.debug(bot.getId() + " ⏳ Ломаем " + targetLocation.getBlock().getType() + " [" + breakProgress + "/" + breakTime + "]");
             return;
@@ -132,8 +151,6 @@ public class BotBreakBlockTask implements BotTask {
 
                 blocksMined++;
                 breakProgress = 0;
-                
-                bot.pickupNearbyItems();
 
                 // Добавляем соседние блоки в очередь для добычи
                 addAdjacentBlocksToQueue(targetLocation);

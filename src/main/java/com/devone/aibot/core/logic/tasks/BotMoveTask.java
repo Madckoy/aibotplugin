@@ -65,8 +65,13 @@ public class BotMoveTask implements BotTask {
         }
 
         Location currentLocation = bot.getNPCCurrentLocation();
+        //
         // 3d scan
         BlockScanner3D.scanSurroundings(currentLocation, 4);
+        //
+        // pickup all items
+        bot.pickupNearbyItems();
+        //
         //
         BotLogger.debug(bot.getId() + " 📍 Current position is: " + BotUtils.formatLocation(currentLocation));
         BotLogger.debug(bot.getId() + " 🎯 Target location is: " + BotUtils.formatLocation(targetLocation));

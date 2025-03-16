@@ -10,10 +10,13 @@ import org.bukkit.World;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.Item;
 import org.bukkit.entity.Player;
+import org.bukkit.inventory.Inventory;
+import org.bukkit.inventory.ItemStack;
 
 import com.devone.aibot.core.logic.BotLifeCycle;
 import com.devone.aibot.core.logic.tasks.BotTask;
 import com.devone.aibot.utils.BotLogger;
+import com.devone.aibot.utils.BotUtils;
 
 import net.citizensnpcs.api.ai.Navigator;
 import net.citizensnpcs.api.npc.NPC;
@@ -158,7 +161,7 @@ public class Bot {
 
                 Location currLoc = npc.getStoredLocation();
                 
-                BotLogger.debug("Bot/NPC " + id + " Current Location " + currLoc);
+                BotLogger.debug("Bot/NPC " + id + " Current Location " + BotUtils.formatLocation(currLoc));
                 lastKnownLocation = currLoc;
             return currLoc;
         } else {
@@ -198,7 +201,10 @@ public class Bot {
             this.autoPickupEnabled = enabled;
         }
 
-        public void pickupNearbyItems() {
+    public void pickupNearbyItems() {
+        
+        logInventory();
+
         if (!autoPickupEnabled || npc == null || !npc.isSpawned()) {
             return;
         }
@@ -218,6 +224,18 @@ public class Bot {
                 }
             }
         }
+    }
+
+    private void logInventory() {
+        Inventory inventory = getInventory().getNPCInventory();
+        BotLogger.debug(getId() + " Инвентарь: [ ");
+
+        for (ItemStack item : inventory.getContents()) {
+            if (item != null && item.getType() != Material.AIR) {
+                BotLogger.debug("- " + item.getAmount() + "x " + item.getType());
+            }
+        }
+        BotLogger.debug(" ]");
     }
 
 
