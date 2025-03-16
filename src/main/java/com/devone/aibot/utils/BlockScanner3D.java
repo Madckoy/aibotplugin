@@ -58,17 +58,18 @@ public class BlockScanner3D {
         List<Entity> nearbyEntities = bot.getNPCEntity().getNearbyEntities(radius, radius, radius);
     
         if (nearbyEntities.isEmpty()) {
-            BotLogger.info(bot.getId()+" В радиусе " + radius + " блоков нет НИЧЕГО.");
+            BotLogger.debug(bot.getId()+" В радиусе " + radius + " блоков нет НИЧЕГО.");
             return;
         }
     
-        BotLogger.info(bot.getId()+" В радиусе  " + radius + " блоков есть:");
+        BotLogger.info(bot.getId()+" В радиусе " + radius + " блоков есть:");
+
         for (Entity entity : nearbyEntities) {
             if (entity instanceof Item) {
                 ItemStack item = ((Item) entity).getItemStack();
-                Bukkit.getLogger().info("  - 🎁 " + item.getAmount() + "x " + item.getType());
+                 BotLogger.debug(bot.getId() + " - 🎁 " + item.getAmount() + "x " + item.getType());
             } else {
-                Bukkit.getLogger().info("  - 🔹 " + entity.getType() + " (" + entity.getName() + ")");
+                BotLogger.debug(bot.getId() + " - 🔹 " + entity.getType() + " (" + entity.getName() + ")");
             }
         }
     }
