@@ -171,6 +171,11 @@ public class BotInventory {
 
     public void logInventory() {
         Inventory inventory = getNPCInventory();
+        
+        if (inventory == null) {
+            return;
+        }
+
         List<String> rows = new ArrayList<>();
         int columns = 9; // Количество слотов в строке (как в GUI)
 
