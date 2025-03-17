@@ -37,6 +37,7 @@ public class BotTaskDropAll extends BotTaskPlayerLinked {
     @Override
     protected void executeTask() {
         BotInventory.dropAllItems(bot);
+        isDone = true;
     }
 
 }

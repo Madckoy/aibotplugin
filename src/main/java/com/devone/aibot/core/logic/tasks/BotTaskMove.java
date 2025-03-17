@@ -53,7 +53,7 @@ public class BotTaskMove implements BotTask {
             return;
 
         // Проверяем, достиг ли бот цели
-        if (BotNavigationUtils.hasReachedTarget(bot, targetLocation, 2.0)) {
+        if (BotNavigationUtils.hasReachedTarget(bot, targetLocation, 4.0)) {
 
             BotLogger.info("🎉" + bot.getId() + " Has reached the target: " + targetLocation);
 
