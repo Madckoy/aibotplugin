@@ -8,6 +8,7 @@ import java.util.logging.Logger;
 public class BotLogger {
     private static Logger logger;
     private static Level logLevel = Level.OFF;
+    private static boolean loggingEnabled = true;
 
     public static void init(AIBotPlugin plugin) {
         logger = plugin.getLogger();
@@ -22,25 +23,25 @@ public class BotLogger {
     }
 
     public static void debug(String message) {
-        if (logLevel.intValue() <= Level.FINE.intValue()) {
+        if (loggingEnabled && logLevel.intValue() <= Level.FINE.intValue()) {
             logger.info("🐌 " + message);
         }
     }
 
     public static void info(String message) {
-        if (logLevel.intValue() <= Level.INFO.intValue()) {
+        if (loggingEnabled && logLevel.intValue() <= Level.INFO.intValue()) {
             logger.info("ℹ️ " + message);
         }
     }
 
     public static void warn(String message) {
-        if (logLevel.intValue() <= Level.WARNING.intValue()) {
+        if (loggingEnabled) {
             logger.severe("⚠️ " + message);
         }
     }
 
     public static void error(String message) {
-        if (logLevel.intValue() <= Level.SEVERE.intValue()) {
+        if (loggingEnabled) {
             logger.severe("🚨 " + message);
         }
     }
