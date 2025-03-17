@@ -32,9 +32,11 @@ public class BotTaskPatrol extends BotTask {
 
         BotLogger.info("👀 "+bot.getId() + " Patrolling with radius:  " + patrolRadius);
 
-        patrolTarget = BotNavigation.getRandomPatrolPoint(bot,patrolRadius);
+        patrolTarget = BotNavigation.getRandomPatrolPoint(bot, patrolRadius);
 
-        BotNavigation.navigateTo(bot, patrolTarget, patrolRadius);
+ 
+        BotNavigation.navigateTo(bot, patrolTarget, 10);
+
     }
 
     private boolean shouldExitPatrol() {

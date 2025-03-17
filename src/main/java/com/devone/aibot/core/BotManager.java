@@ -129,7 +129,7 @@ public class BotManager {
 
     public void saveBots() {
 
-        File file = new File(plugin.getDataFolder(), "bots.yml");
+        File file = new File(BotConstants.PLUGIN_PATH_CONFIGS, "bots.yml");
         FileConfiguration config = new YamlConfiguration();
 
         for (Bot bot : botsMap.values()) {
