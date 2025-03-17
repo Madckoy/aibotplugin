@@ -22,9 +22,9 @@ public class BotTaskPatrol extends BotTask {
 
     public void executeTask() {
 
-        BotLogger.debug("🚦 " + bot.getId() +  " Состояние семафоров: "+ isDone + isPaused + BotStringUtils.formatLocation(targetLocation) + " [ID: " + uuid + "]");
+        BotLogger.debug("🚦 " + bot.getId() +  " Состояние семафоров: "+ this.isDone + this.isPaused + BotStringUtils.formatLocation(this.targetLocation) + " [ID: " + this.uuid + "]");
 
-        if (isPaused) return;
+        if (this.isPaused) return;
 
         if (shouldExitPatrol()) {
             BotLogger.debug("👀 " + bot.getId() + " Has finished patrolling." +  " [ID: " + uuid + "]");
@@ -39,9 +39,9 @@ public class BotTaskPatrol extends BotTask {
 
         // 🛑 Не выбираем точку слишком близко!
         do {
-            targetLocation = BotNavigation.getRandomPatrolPoint(bot, patrolRadius);
+            this.targetLocation = BotNavigation.getRandomPatrolPoint(bot, patrolRadius);
             attempts++;
-        } while (targetLocation.distanceSquared(bot.getNPCEntity().getLocation()) < 4.0 && attempts < 5);
+        } while (this.targetLocation.distanceSquared(bot.getNPCEntity().getLocation()) < 4.0 && attempts < 5);
 
         // ✅ Если бот уже идёт — не даём ему новую команду
         if (bot.getNPCNavigator().isNavigating()) {
@@ -49,30 +49,21 @@ public class BotTaskPatrol extends BotTask {
             return;
         }
 
-        BotLogger.debug("🚶 " + bot.getId() + " Moving to patrol point: " + BotStringUtils.formatLocation(targetLocation) + " [Task ID: " + uuid + "]");
-        BotNavigation.navigateTo(bot, targetLocation, 10);
+        BotLogger.debug("🚶 " + bot.getId() + " Moving to patrol point: " + BotStringUtils.formatLocation(this.targetLocation) + " [Task ID: " + uuid + "]");
+
+        BotNavigation.navigateTo(bot, this.targetLocation, 10); //via a new MoVeTask()
 
         isDone = shouldExitPatrol();
     }
 
     private boolean shouldExitPatrol() {
 
-        if (targetLocation == null) return true;
+        if (this.targetLocation == null) return true;
 
-        if (BotNavigation.hasReachedTarget(bot, targetLocation, 2.0)) { // 🔧 Уменьшен tolerance, чтобы патруль не завершался сразу
-            isDone = true;
+        if (BotNavigation.hasReachedTarget(bot, this.targetLocation, 2.0)) { // 🔧 Уменьшен tolerance, чтобы патруль не завершался сразу
+            this.isDone = true;
             return true;
         }
         return false;
-    }
-
-    @Override
-    public boolean isDone() {
-        return isDone();
-    }
-
-    @Override
-    public Location getTargetLocation() {
-        return targetLocation;
     }
 }
