@@ -127,7 +127,7 @@ public class BotInventory {
         // Проверяем, достигнуто ли нужное количество для любого из целевых материалов
         for (Material material : targetMaterials) {
             int count = collectedCounts.getOrDefault(material, 0);
-            BotLogger.info("📦 " + bot.getId() + " | " + material + ": ( " + count + "/" + maxBlocksPerMaterial+")");
+            BotLogger.debug("📦 " + bot.getId() + " | " + material + ": ( " + count + "/" + maxBlocksPerMaterial+")");
 
             if (count >= maxBlocksPerMaterial) {
                 return true; // Достигнута цель по какому-то материалу → завершаем задачу
@@ -140,7 +140,7 @@ public class BotInventory {
     public static boolean hasFreeInventorySpace(Bot bot, Set<Material> targetMaterials) {
 
         if(bot.getInventory().getNPCInventory() == null) {
-            BotLogger.info("🛒 " + bot.getId()+" Has no inventory yet!");
+            BotLogger.debug("🛒 " + bot.getId()+" Has no inventory yet!");
             return true;
         } //not yet created
 
@@ -217,9 +217,9 @@ public class BotInventory {
         }
 
         // Вывод в логи
-        BotLogger.debug("🎁 " + bot.getId() + "Инвентарь:");
+        BotLogger.trace("🎁 " + bot.getId() + "Инвентарь:");
         for (String r : rows) {
-            BotLogger.debug(r);
+            BotLogger.trace(r);
         }
     }
 

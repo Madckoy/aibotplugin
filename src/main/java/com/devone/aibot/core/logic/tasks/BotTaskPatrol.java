@@ -22,17 +22,17 @@ public class BotTaskPatrol extends BotTask {
 
     public void executeTask() {
 
-        BotLogger.debug(bot.getId() + " 🚦 Состояние семафоров: "+ isDone + isPaused + BotStringUtils.formatLocation(targetLocation) + " [Task ID: " + taskId + "]");
+        BotLogger.debug("🚦 " + bot.getId() +  " Состояние семафоров: "+ isDone + isPaused + BotStringUtils.formatLocation(targetLocation) + " [ID: " + uuid + "]");
 
         if (isPaused) return;
 
         if (shouldExitPatrol()) {
-            BotLogger.debug("👀 " + bot.getId() + " Has finished patrolling." +  " [Task ID: " + taskId + "]");
+            BotLogger.debug("👀 " + bot.getId() + " Has finished patrolling." +  " [ID: " + uuid + "]");
             isDone = true; // ✅ Теперь `PATROL` корректно завершает себя
             return;
         }
 
-        BotLogger.debug("👀 " + bot.getId() + " Patrolling with radius: " + patrolRadius + " [Task ID: " + taskId + "]");
+        BotLogger.debug("👀 " + bot.getId() + " Patrolling with radius: " + patrolRadius + " [ID: " + uuid + "]");
 
         //Location newPatrolTarget;
         int attempts = 0;
@@ -45,11 +45,11 @@ public class BotTaskPatrol extends BotTask {
 
         // ✅ Если бот уже идёт — не даём ему новую команду
         if (bot.getNPCNavigator().isNavigating()) {
-            BotLogger.debug("👀 " + bot.getId() + " Already moving, skipping patrol update."+ " [Task ID: " + taskId + "]");
+            BotLogger.debug("👀 " + bot.getId() + " Already moving, skipping patrol update."+ " [ID: " + uuid + "]");
             return;
         }
 
-        BotLogger.debug("🚶 " + bot.getId() + " Moving to patrol point: " + BotStringUtils.formatLocation(targetLocation) + " [Task ID: " + taskId + "]");
+        BotLogger.debug("🚶 " + bot.getId() + " Moving to patrol point: " + BotStringUtils.formatLocation(targetLocation) + " [Task ID: " + uuid + "]");
         BotNavigation.navigateTo(bot, targetLocation, 10);
 
         isDone = shouldExitPatrol();

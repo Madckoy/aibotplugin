@@ -21,7 +21,7 @@ public class BotLifeCycle {
     }
 
     private void startLifeCycle() {
-        BotLogger.info("🎲 Запускаем LifeCycle для бота " + bot.getId());
+        BotLogger.debug("🎲 Запускаем LifeCycle для бота " + bot.getId());
 
         Bukkit.getScheduler().runTaskTimer(AIBotPlugin.getInstance(), () -> {
 
@@ -38,7 +38,8 @@ public class BotLifeCycle {
             taskStackManager.updateActiveTask();
         } else {
             if (!idleAdded) {
-                BotLogger.info("😴 Бот " + bot.getId() + " Без задач. Добавляем IdleTask.");
+                BotLogger.debug("😴 Бот " + bot.getId() + " Без задач. Добавляем IdleTask.");
+                
                 taskStackManager.pushTask(new BotTaskIdle(bot));
                 idleAdded = true; // ✅ Ставим флаг, что IdleActivity уже добавлена
             }

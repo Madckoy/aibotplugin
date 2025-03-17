@@ -21,7 +21,7 @@ public class BotTaskStackManager {
         }
 
         taskStack.push(task);
-        BotLogger.debug("✚ Добавлена задача: " + task.getClass().getSimpleName());
+        BotLogger.debug("✚ Добавлена задача: " + task.getClass().getSimpleName() + "[ " + task.getUUID()+" ]");
     }
 
     public void popTask() {
@@ -42,6 +42,7 @@ public class BotTaskStackManager {
     public BotTask getActiveTask() {
         if (!taskStack.isEmpty()) {
             return  taskStack.peek();
+
         } else {
             return null;
         }
@@ -69,6 +70,8 @@ public class BotTaskStackManager {
         if (!taskStack.isEmpty()) {
 
             BotTask currentTask = taskStack.peek();
+
+            BotLogger.debug("✨ Active task: " + currentTask.getClass().getSimpleName() + " [" +currentTask.getUUID() +"]");
     
             // 🛑 Если у бота нет NPCEntity, удаляем ВСЕ задачи
             //if (bot.getNPCEntity() == null) {

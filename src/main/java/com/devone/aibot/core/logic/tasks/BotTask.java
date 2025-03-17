@@ -20,30 +20,30 @@ public abstract class BotTask implements IBotTask{
     protected boolean isDone = false;
     protected Location targetLocation;
     protected boolean isEnabled = true;
-    protected final String taskId; // 🆕 Уникальный ID задачи
+    protected final String uuid; // 🆕 Уникальный ID задачи
 
     public BotTask(Bot bot) {
         this.bot = bot;
-        this.taskId = UUID.randomUUID().toString(); // 🆕 Генерируем ID
+        this.uuid = UUID.randomUUID().toString(); // 🆕 Генерируем ID
     }
 
     public BotTask(Bot bot, String name) {
         this.bot = bot;
         this.name = name;
-        this.taskId = UUID.randomUUID().toString(); // 🆕 Генерируем ID
+        this.uuid = UUID.randomUUID().toString(); // 🆕 Генерируем ID
     }
 
     public BotTask(Bot bot, Player player, String name) {
         this.bot = bot;
         this.player = player;
         this.name = name;
-        this.taskId = UUID.randomUUID().toString(); // 🆕 Генерируем ID
+        this.uuid = UUID.randomUUID().toString(); // 🆕 Генерируем ID
     }
 
     @Override
     public void update() {
 
-        BotLogger.debug("✨ " + bot.getId() + " Running task: " + name + " [ID: " + taskId + "]");
+        BotLogger.debug("✨ " + bot.getId() + " Running task: " + name + " [ID: " + uuid + "]");
         
         if (isPaused) return;
 
@@ -57,8 +57,8 @@ public abstract class BotTask implements IBotTask{
 
     public abstract void executeTask();
 
-    public String getTaskId() {
-        return taskId;
+    public String getUUID() {
+        return uuid;
     }
 
     @Override
@@ -74,7 +74,7 @@ public abstract class BotTask implements IBotTask{
     public void setPaused(boolean paused) {
         this.isPaused = paused;
         String status = isPaused ? "⏳ Pausing..." : "▶️ Resuming...";
-        BotLogger.debug(status + bot.getId());
+        BotLogger.debug(status + bot.getId() + " [ID: " + uuid + "]");
     }
 
     @Override

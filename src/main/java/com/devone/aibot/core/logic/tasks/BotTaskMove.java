@@ -34,14 +34,16 @@ public class BotTaskMove extends BotTask {
     @Override
     public void executeTask() {
 
-        BotLogger.debug(bot.getId() + " 🚦 Состояние семафоров: "+ isDone + isPaused + BotStringUtils.formatLocation(targetLocation) + " [Task ID: " + taskId + "]");
+        BotLogger.debug(bot.getId() + " 🚦 Состояние семафоров: "+ isDone + isPaused + BotStringUtils.formatLocation(targetLocation) + " [Task ID: " + uuid + "]");
 
-        if (isDone || isPaused || targetLocation == null) { // ✅ Фикс условия
-            return;
-        }
         if (taskHandle != null && !taskHandle.isCancelled()) {
-            BotLogger.debug(bot.getId() + " ⏳ Таймер уже запущен, жду... [Task ID: " + taskId + "]");
-            return;
+            BotLogger.debug(bot.getId() + " ⏳ Таймер уже запущен, жду... [ID: " + uuid + "]");
+        } else {
+
+            if (isDone || isPaused || targetLocation == null) { // ✅ Фикс условия
+                return;
+            }
+
         }
 
         // 🟢 Запускаем таймер и сохраняем его в `taskHandle`
@@ -49,7 +51,7 @@ public class BotTaskMove extends BotTask {
             if (isDone) {
                 if (taskHandle != null) {
                     taskHandle.cancel(); // ✅ Останавливаем таймер
-                    BotLogger.debug(bot.getId() + " 🛑 Move task завершён, таймер остановлен. [Task ID: " + taskId + "]");
+                    BotLogger.debug(bot.getId() + " 🛑 Move task завершён, таймер остановлен. [ID: " + uuid + "]");
                 }
                 return;
             }
@@ -63,7 +65,7 @@ public class BotTaskMove extends BotTask {
             if (BotNavigation.hasReachedTarget(bot, targetLocation, 1.5)) {
                 bot.resetTargetLocation();
                 isDone = true; // ✅ Теперь это действительно завершает задачу!
-                BotLogger.debug(bot.getId() + " 🎯 Достиг цели! Реальная позиция: " + bot.getNPCEntity().getLocation() + " [Task ID: " + taskId + "]");
+                BotLogger.debug(bot.getId() + " 🎯 Достиг цели! Реальная позиция: " + bot.getNPCEntity().getLocation() + " [ID: " + uuid + "]");
                 return;
             }
 
@@ -75,7 +77,7 @@ public class BotTaskMove extends BotTask {
                 .collect(Collectors.toList());
 
             if (validPoints.isEmpty()) {
-                BotLogger.debug(bot.getId() + " ⚠️ Нет доступных точек для движения! Пробуем снова..." + " [Task ID: " + taskId + "]");
+                BotLogger.debug(bot.getId() + " ⚠️ Нет доступных точек для движения! Пробуем снова..." + " [ID: " + uuid + "]");
                 return;
             }
 
@@ -86,13 +88,13 @@ public class BotTaskMove extends BotTask {
 
             // 5. Проверяем, может ли бот туда пройти
             if (!bot.getNPCNavigator().canNavigateTo(nextNavLoc)) {
-                BotLogger.debug(bot.getId() + " ❌ Не могу найти путь, пробую пересканировать..." + " [Task ID: " + taskId + "]");
+                BotLogger.debug(bot.getId() + " ❌ Не могу найти путь, пробую пересканировать..." + " [ID: " + uuid + "]");
                 return;
             }
 
             // 6. Двигаемся к следующей точке
             bot.getNPCNavigator().setTarget(nextNavLoc);
-            BotLogger.debug(bot.getId() + " 🚶 Двигаюсь в " + BotStringUtils.formatLocation(nextNavLoc) + " [Task ID: " + taskId + "]");
+            BotLogger.debug(bot.getId() + " 🚶 Двигаюсь в " + BotStringUtils.formatLocation(nextNavLoc) + " [ID: " + uuid + "]");
 
         }, 0L, 20L); // ✅ Запускаем обновление навигации каждые 20 тиков (1 секунда)
     }

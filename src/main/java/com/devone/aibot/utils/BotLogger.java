@@ -43,7 +43,7 @@ public class BotLogger {
 
     public static void debug(String message) {
         if (loggingEnabled && logLevel.intValue() == Level.FINE.intValue()) {
-            logger.fine("🐌 " + message);
+            logger.fine("🟡 " + message);
         }
     }
 
@@ -62,6 +62,12 @@ public class BotLogger {
     public static void error(String message) {
         if (loggingEnabled && logLevel.intValue() == Level.SEVERE.intValue()) {
             logger.severe("🚨 " + message);
+        }
+    }
+
+    public static void trace(String message) {
+        if (loggingEnabled && logLevel.intValue() == Level.FINER.intValue()) {
+            logger.severe("📃 " + message);
         }
     }
 }

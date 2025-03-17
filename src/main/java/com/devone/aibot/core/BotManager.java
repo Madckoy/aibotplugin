@@ -29,7 +29,7 @@ public class BotManager {
 
         // ✅ Теперь вызываем `loadExistingBots()` напрямую в единственном `runTaskLater`
         Bukkit.getScheduler().runTaskLater(plugin, () -> {
-            BotLogger.info("Загружаем ботов...");
+            BotLogger.info("💡 Загружаем ботов...");
 
             loadExistingBots(); // ✅ Загружаем ботов из CitizensAPI и `bots.yml`
 
@@ -53,7 +53,7 @@ public class BotManager {
 
             bot.despawnNPC();  // Деспавн и очистка стека задач вызывается из самого бота
 
-            BotLogger.info("➖" + name + " был удалён.");
+            BotLogger.debug("➖" + name + " был удалён.");
 
             saveBots(); // Сохраняем список после удаления одного бота
 
