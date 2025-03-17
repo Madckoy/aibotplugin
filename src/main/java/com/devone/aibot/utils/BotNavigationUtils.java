@@ -67,9 +67,8 @@ public class BotNavigationUtils {
                 return null;
             }
 
-
-            
-
+            //Thread.sleep(10);
+    
         }
 
         return nav_loc;
