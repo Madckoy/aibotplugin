@@ -70,9 +70,9 @@ public class BotTaskBreakBlock implements BotTask {
     public void setPaused(boolean paused) {
         this.isPaused = paused;
         if (isPaused) {
-            BotLogger.info("ℹ️ " + bot.getId() + " ꩜ Pausing...");
+            BotLogger.info("⏳ " + bot.getId() + " Pausing...");
         } else {
-            BotLogger.info("ℹ️ " + bot.getId() + " ꩜ Resuming...");
+            BotLogger.info("▶️ " + bot.getId() + " Resuming...");
         }
     }
     
