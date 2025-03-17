@@ -1,7 +1,7 @@
 package com.devone.aibot.core.logic.tasks;
 
 import com.devone.aibot.core.Bot;
-import com.devone.aibot.core.logic.tasks.configs.BotCfgTaskPatrol;
+import com.devone.aibot.core.logic.tasks.configs.BotTaskPatrolConfig;
 import com.devone.aibot.utils.BotLogger;
 import com.devone.aibot.utils.BotNavigation;
 import org.bukkit.Location;
@@ -10,13 +10,13 @@ public class BotTaskPatrol extends BotTask {
   
     private Location patrolTarget;
     private int patrolRadius = 10;
-    private BotCfgTaskPatrol config;
+    private BotTaskPatrolConfig config;
 
     public BotTaskPatrol(Bot bot) {
 
         super(bot, "PATROL");
 
-        this.config = new BotCfgTaskPatrol();
+        this.config = new BotTaskPatrolConfig();
 
         this.patrolRadius = config.getPatrolRadius();
     }

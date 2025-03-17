@@ -30,22 +30,28 @@ public class BotNavigation {
             List<Location> validPoints = scannedBlocks.entrySet().stream()
                 .filter(entry -> isSuitableForNavigation(entry.getKey(), entry.getValue()))
                 .map(Map.Entry::getKey)
-                .filter(loc -> !loc.equals(currentLocation[0])) // ✅ НЕ выбираем свою же точку
+                .filter(loc -> !loc.equals(currentLocation[0])) // ✅ НЕ выбираем текущую позицию
                 .collect(Collectors.toList());
     
             if (validPoints.isEmpty()) {
-                bot.getNPCEntity().teleport(target); // Если совсем нет вариантов, телепортируем
+                bot.getActiveTask().handleStuck();; // Если совсем нет вариантов, телепортируем
                 return;
             }
     
             // Пересчитываем маршрут, избегая своей же позиции
             Location nextStep = validPoints.stream()
-                .filter(loc -> !loc.equals(currentLocation[0])) // ✅ НЕ выбираем текущую позицию
                 .min(Comparator.comparingDouble(loc -> loc.distanceSquared(target)))
                 .orElse(target);
     
+            // ✅ Если бот уже на месте, не добавляем `MOVE`
             if (nextStep.equals(currentLocation[0])) { 
-                bot.getActiveTask().handleStuck(); // Если всё равно выбрал себя, обработка застревания
+                bot.getActiveTask().handleStuck();;
+                return;
+            }
+    
+            // ✅ Если бот уже достиг цели, очищаем очередь задач
+            if (hasReachedTarget(bot, nextStep, 0.5)) {
+                pathQueue.clear();
                 return;
             }
     
@@ -67,7 +73,7 @@ public class BotNavigation {
             }
         }, 0L, 40L); // ✅ Запускаем реже (каждые 2 секунды)
     }
-        
+            
 
     public static Location getRandomPatrolPoint(Bot bot, int scanRadius) {
         if (scanRadius > 20) scanRadius = 20; // ✅ Ограничение радиуса

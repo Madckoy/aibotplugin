@@ -9,6 +9,8 @@ import org.bukkit.Location;
 import org.bukkit.Material;
 import com.devone.aibot.core.Bot;
 import com.devone.aibot.core.BotZoneManager;
+import com.devone.aibot.core.logic.tasks.configs.BotTaskBreakBlockConfig;
+import com.devone.aibot.core.logic.tasks.configs.BotTaskPatrolConfig;
 import com.devone.aibot.utils.BotLogger;
 import com.devone.aibot.utils.BotScanEnv;
 import com.devone.aibot.AIBotPlugin;
@@ -26,11 +28,15 @@ public class BotTaskBreakBlock extends BotTask {
 
     private Queue<Location> pendingBlocks = new LinkedList<>(); // Очередь блоков рядом
 
+    private BotTaskBreakBlockConfig config;
+
     private static final Map<Material, Integer> BREAK_TIME_PER_BLOCK = new HashMap<>();
     
     public BotTaskBreakBlock(Bot bot) {
         super(bot, "BREAK");
         this.bot = bot;
+        this.config = new BotTaskBreakBlockConfig();
+        isEnabled = config.isEnabled();
     }
     
     @Override

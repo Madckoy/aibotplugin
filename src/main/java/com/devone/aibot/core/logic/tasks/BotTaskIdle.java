@@ -1,6 +1,6 @@
 package com.devone.aibot.core.logic.tasks;
 
-import com.devone.aibot.core.logic.tasks.configs.BotCfgTaskIdle;
+import com.devone.aibot.core.logic.tasks.configs.BotTaskIdleConfig;
 
 import java.util.Set;
 
@@ -17,7 +17,7 @@ public class BotTaskIdle extends BotTask {
     public BotTaskIdle(Bot bot) {
         super(bot, "IDLE");
         this.bot = bot;
-        new BotCfgTaskIdle();
+        new BotTaskIdleConfig();
     }
 
     @Override
@@ -66,8 +66,11 @@ public class BotTaskIdle extends BotTask {
             // ⛏ 30% шанс начать добычу
             BotLogger.info("⛏ " + bot.getId() + " Starts Breaking the blocks");
             BotTaskBreakBlock breakTask = new BotTaskBreakBlock(bot);
-            breakTask.configure(dirtTypes, maxDirtToCollect, 5, true); //ломаем все, включая кабины (тестовый режим) и лутаем!!!
-            bot.getLifeCycle().getTaskStackManager().pushTask(breakTask);
+            
+            if(breakTask.isEnabled) {
+                breakTask.configure(dirtTypes, maxDirtToCollect, 5, true); //ломаем все, включая кабины (тестовый режим) и лутаем!!!
+                bot.getLifeCycle().getTaskStackManager().pushTask(breakTask);
+            }
 
         } else {
             // 💤 30% шанс остаться в IDLE

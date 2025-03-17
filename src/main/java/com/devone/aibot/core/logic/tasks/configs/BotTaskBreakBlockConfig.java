@@ -1,24 +1,26 @@
 package com.devone.aibot.core.logic.tasks.configs;
 
+import com.devone.aibot.utils.BotConstants;
+
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.configuration.file.YamlConfiguration;
 
 import java.io.File;
 import java.io.IOException;
 import com.devone.aibot.utils.BotLogger;
-import com.devone.aibot.utils.BotConstants;
 
-public class BotCfgTaskPatrol {
+
+public class BotTaskBreakBlockConfig {
     private final File file;
     private final FileConfiguration config;
 
-    public BotCfgTaskPatrol() {
+    public BotTaskBreakBlockConfig() {
         File configFolder = new File(BotConstants.PLUGIN_PATH_CONFIGS_TASKS);
         if (!configFolder.exists()) {
             configFolder.mkdirs();
         }
         
-        this.file = new File(configFolder, "BotTaskPatrol.yml");
+        this.file = new File(configFolder, "BotTaskBreakBlock.yml");
         this.config = YamlConfiguration.loadConfiguration(file);
         
         if (!file.exists()) {
@@ -28,8 +30,7 @@ public class BotCfgTaskPatrol {
 
     private void generateDefaultConfig() {
         config.set("enabled", true);
-        config.set("patrol_radius", 100);
-        config.set("patrol_points", "");
+        config.set("priority", 1);
         save();
         BotLogger.info("✅ Создан новый конфигурационный файл: " + file.getName());
     }
@@ -38,12 +39,8 @@ public class BotCfgTaskPatrol {
         return config.getBoolean("enabled", true);
     }
 
-    public int getPatrolRadius() {
-        return config.getInt("patrol_radius", 100);
-    }
-
-    public String getPatrolPoints() {
-        return config.getString("patrol_points", "");
+    public int getPriority() {
+        return config.getInt("priority", 1);
     }
 
     public void save() {
@@ -51,7 +48,7 @@ public class BotCfgTaskPatrol {
             config.save(file);
             BotLogger.info("✅ Конфигурация сохранена: " + file.getName());
         } catch (IOException e) {
-            BotLogger.error("❌ Ошибка сохранения конфига для: " + file.getName());
+            BotLogger.info("❌ Ошибка сохранения конфига для: " + file.getName());
         }
     }
 }

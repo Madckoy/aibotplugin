@@ -15,6 +15,7 @@ public abstract class BotTask implements IBotTask{
     protected boolean isPaused  = false;
     protected boolean isDone = false;
     protected Location targetLocation;
+    protected boolean isEnabled = true;
 
     public BotTask(Bot bot) {
         this.bot = bot;
@@ -33,7 +34,7 @@ public abstract class BotTask implements IBotTask{
 
     @Override
     public void update() {
-        BotLogger.info("✨ " + bot.getId() + " Running task: " + name);
+        BotLogger.debug("✨ " + bot.getId() + " Running task: " + name);
         
         if (isPaused) return;
 
@@ -42,7 +43,7 @@ public abstract class BotTask implements IBotTask{
             return;
         }
 
-        executeTask();
+        if(isEnabled ) { executeTask(); }
     }
 
     public abstract void executeTask();
@@ -50,6 +51,10 @@ public abstract class BotTask implements IBotTask{
     @Override
     public boolean isDone() {
         return isDone;
+    }
+
+    public boolean isEnabled(){
+        return isEnabled;
     }
 
     @Override

@@ -22,6 +22,7 @@ public class BotTaskMove extends BotTask {
 
     @Override
     public void executeTask() {
+        
         if (isDone ||
                 isPaused ||
                 targetLocation == null
