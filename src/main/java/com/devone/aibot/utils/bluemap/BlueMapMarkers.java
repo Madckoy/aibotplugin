@@ -8,9 +8,16 @@ import com.devone.aibot.utils.*;
 import com.devone.aibot.web.BotWebService;
 import com.flowpowered.math.vector.Vector3d;
 import de.bluecolored.bluemap.api.BlueMapAPI;
+import de.bluecolored.bluemap.api.BlueMapAPI;
+import de.bluecolored.bluemap.api.BlueMapAPI;
+import de.bluecolored.bluemap.api.BlueMapMap;
 import de.bluecolored.bluemap.api.BlueMapMap;
 import de.bluecolored.bluemap.api.markers.MarkerSet;
 
+import de.bluecolored.bluemap.api.markers.MarkerSet;
+import de.bluecolored.bluemap.api.markers.MarkerSet;
+import de.bluecolored.bluemap.api.markers.MarkerSet;
+import de.bluecolored.bluemap.api.markers.POIMarker;
 import de.bluecolored.bluemap.api.markers.POIMarker;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;

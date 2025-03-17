@@ -100,15 +100,20 @@ public class BotManager {
 
                 storedLocation = new Location(Bukkit.getWorlds().get(0), x, y, z);
             }
+
             BotLogger.info("♻️ " + botName + " Has been loaded.");
 
             if (!npc.isSpawned()) {
-                npc.spawn(storedLocation);
-                BotLogger.info("✅ " + botName + " NPC has been spawned.");
 
-                Bot bot = new Bot(botName, npc, this);
-                botsMap.put(botName, bot);
-            }
+                npc.spawn(storedLocation);
+
+                BotLogger.info("✅ " + botName + " a new NPC has been spawned.");
+            }    
+            
+            Bot bot = new Bot(botName, npc, this);
+            botsMap.put(botName, bot);
+            BotLogger.info("✅" + bot.getId() + " Added to the Map!");
+            
         }
 
         BotLogger.info("✅ Загружено NPC ботов: " + botsMap.size());

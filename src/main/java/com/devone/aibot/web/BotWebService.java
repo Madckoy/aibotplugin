@@ -70,7 +70,7 @@ public class BotWebService {
      * ✅ Метод копирования ресурсов (CSS и JS) в plugins/AIBotPlugin/web/assets/
      */
     private void copyResourceFiles() {
-        String[] resourceFiles = {"web/assets/styles.css", "web/assets/script.js"};
+        String[] resourceFiles = {"web/assets/styles.css", "web/assets/scripts.js"};
         for (String resource : resourceFiles) {
             try (InputStream in = getClass().getClassLoader().getResourceAsStream(resource)) {
                 if (in == null) {
