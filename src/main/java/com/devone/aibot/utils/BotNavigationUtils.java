@@ -34,13 +34,11 @@ public class BotNavigationUtils {
 
     private static Location getRandomLocationV2(Location currentLocation, int minRange, int maxRange) {
 
-        double velocity = 1.0; // movement speed change here
-
         int offsetX = random.nextInt(maxRange - minRange + 1) + minRange;
         int offsetZ = random.nextInt(maxRange - minRange + 1) + minRange;
-        int offsetY = random.nextInt(maxRange - minRange + 1) + minRange;
+        int offsetY = currentLocation.getBlockY();//random.nextInt(maxRange - minRange + 1) + minRange;
  
-        Location newloc = currentLocation.clone().add(offsetX * velocity,offsetY * velocity, offsetZ * velocity); 
+        Location newloc = currentLocation.clone().add(offsetX, offsetY , offsetZ); 
 
         BotLogger.info("🎲 Random coords genereated to travel from "+BotStringUtils.formatLocation(currentLocation) + " to offset "+BotStringUtils.formatLocation(newloc));
        
@@ -56,7 +54,7 @@ public class BotNavigationUtils {
 
         while(true) {
 
-            nav_loc = getRandomLocationV1(bot.getNPCCurrentLocation(), minRange, maxRange);
+            nav_loc = getRandomLocationV2(bot.getNPCCurrentLocation(), minRange, maxRange);
 
             if(bot.getNPCNavigator().canNavigateTo(nav_loc)) {
                 BotLogger.info("✅ Random coords are navgable: "+BotStringUtils.formatLocation(nav_loc));       
