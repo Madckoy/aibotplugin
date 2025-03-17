@@ -26,12 +26,6 @@ public class BotTaskPatrol extends BotTask {
 
         if (this.isPaused) return;
 
-        if (shouldExitPatrol()) {
-            BotLogger.debug("👀 " + bot.getId() + " Has finished patrolling." +  " [ID: " + uuid + "]");
-            isDone = true; // ✅ Теперь `PATROL` корректно завершает себя
-            return;
-        }
-
         BotLogger.debug("👀 " + bot.getId() + " Patrolling with radius: " + patrolRadius + " [ID: " + uuid + "]");
 
         //Location newPatrolTarget;
@@ -49,11 +43,18 @@ public class BotTaskPatrol extends BotTask {
             return;
         }
 
+        if (shouldExitPatrol()) {
+            BotLogger.debug("👀 " + bot.getId() + " Has finished patrolling." +  " [ID: " + uuid + "]");
+            isDone = true; // ✅ Теперь `PATROL` корректно завершает себя
+            return;
+        }
+
+        
+
         BotLogger.debug("🚶 " + bot.getId() + " Moving to patrol point: " + BotStringUtils.formatLocation(this.targetLocation) + " [Task ID: " + uuid + "]");
 
         BotNavigation.navigateTo(bot, this.targetLocation, 10); //via a new MoVeTask()
 
-        isDone = shouldExitPatrol();
     }
 
     private boolean shouldExitPatrol() {
