@@ -34,12 +34,14 @@ public class BotLogger {
     }
 
     public static void warn(String message) {
-        logger.severe("[WARN] " + message);
+        if (logLevel.intValue() <= Level.WARNING.intValue()) {
+            logger.severe("[WARN] " + message);
+        }
     }
 
     public static void error(String message) {
-        logger.severe("[ERROR] " + message);
+        if (logLevel.intValue() <= Level.SEVERE.intValue()) {
+            logger.severe("[ERROR] " + message);
+        }
     }
-
-
 }

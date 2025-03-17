@@ -1,0 +1,12 @@
+logging:
+  level: OFF
+
+   # Level.FINE
+   # Level.INFO
+   # Level.OFF
+   # Level.SEVERE
+   # Level.WARNING
+
+server:
+  web_host: 192.168.3.33  # Хост веб-сервера
+  map_host: 192.168.3.33  # Хост карты (BlueMap)

@@ -4,6 +4,7 @@ import net.citizensnpcs.api.CitizensAPI;
 import net.citizensnpcs.api.npc.NPC;
 import org.bukkit.Bukkit;
 import com.devone.aibot.AIBotPlugin;
+import com.devone.aibot.utils.BotConstants;
 import com.devone.aibot.utils.BotLogger;
 import com.devone.aibot.utils.bluemap.BlueMapMarkers;
 
@@ -74,7 +75,7 @@ public class BotManager {
     private void loadExistingBots() {
         BotLogger.info("🔄 Загружаем существующих NPC ботов...");
 
-        File file = new File(plugin.getDataFolder(), "bots.yml");
+        File file = new File(BotConstants.PLUGIN_PATH_CONFIGS, "bots.yml");
         FileConfiguration config = YamlConfiguration.loadConfiguration(file);
 
         for (NPC npc : CitizensAPI.getNPCRegistry()) {

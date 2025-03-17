@@ -5,6 +5,7 @@ import org.bukkit.Location;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.configuration.file.YamlConfiguration;
 import com.devone.aibot.AIBotPlugin;
+import com.devone.aibot.utils.BotConstants;
 import com.devone.aibot.utils.BotLogger;
 import java.io.File;
 import java.io.IOException;
@@ -30,7 +31,7 @@ public class BotZoneManager {
             pluginFolder.mkdirs();
         }
 
-        zonesFile = new File(pluginFolder, "zones.yml");
+        zonesFile = new File(BotConstants.PLUGIN_PATH_CONFIGS, "zones.yml");
         config = YamlConfiguration.loadConfiguration(zonesFile);
         loadZones();
 
