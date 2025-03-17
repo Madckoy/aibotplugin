@@ -14,32 +14,41 @@ public class BotTaskMove extends BotTask {
     @Override
     public void configure(Object... params) {
         super.configure(params);
-
         if (params.length == 1 && params[0] instanceof Location) {
             this.targetLocation = (Location) params[0];
+        } else {
+            BotLogger.error(bot.getId() + " ❌ Некорректные параметры для `BotTaskMove`!");
+            isDone = true; // Завершаем задачу, если переданы неправильные параметры
         }
     }
 
     @Override
     public void executeTask() {
-        
+
         if (isDone ||
                 isPaused ||
                 targetLocation == null
 
         )
-            return;
+        
+        bot.getNPCNavigator().setTarget(targetLocation);
 
-        // Проверяем, достиг ли бот цели
-        if (BotNavigation.hasReachedTarget(bot, targetLocation, 4.0)) {
+        if(bot.getNPCNavigator().isNavigating()) {
+            return; //let him finish his movement
+        } else {
+            // Проверяем, достиг ли бот цели
+            if (BotNavigation.hasReachedTarget(bot, targetLocation, 4.0)) {
 
-            bot.resetTargetLocation();
+                bot.resetTargetLocation();
 
-            isDone = true;
-            return;
-        } else { 
-            handleStuck();
+                isDone = true;
+                return;
+            } else {
+                BotNavigation.navigateTo(bot, targetLocation, 8); 
+            }
+
         }
+
     }
 
 }

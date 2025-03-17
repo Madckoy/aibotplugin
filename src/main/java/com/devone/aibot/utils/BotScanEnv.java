@@ -47,7 +47,7 @@ public class BotScanEnv {
         }
 
         // Логируем результат
-        BotLogger.debug(scanResult.toString());
+        // BotLogger.debug(scanResult.toString());
 
         return scannedBlocks;
     }
