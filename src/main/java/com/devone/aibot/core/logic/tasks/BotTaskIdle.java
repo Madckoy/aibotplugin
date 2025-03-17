@@ -51,7 +51,7 @@ public class BotTaskIdle extends BotTask {
             Location drop_off_loc = Bot.getFallbackLocation();
             moveTask.configure(drop_off_loc);
             bot.getLifeCycle().getTaskStackManager().pushTask(moveTask);
-            BotLogger.info("⛏ " + bot.getId() + " Goes to drop off location: " + BotStringUtils.formatLocation(drop_off_loc));
+            BotLogger.debug("⛏ " + bot.getId() + " Goes to drop off location: " + BotStringUtils.formatLocation(drop_off_loc));
 
             return;
         }
@@ -74,7 +74,7 @@ public class BotTaskIdle extends BotTask {
 
         } else {
             // 💤 30% шанс остаться в IDLE
-            BotLogger.info("⭕ " + bot.getId() + " Остаётся в IDLE.");
+            BotLogger.debug("⭕ " + bot.getId() + " Остаётся в IDLE.");
         }
 
     }

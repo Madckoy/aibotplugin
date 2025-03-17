@@ -3,7 +3,7 @@ package com.devone.aibot.core.logic.tasks;
 import com.devone.aibot.utils.*;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
-
+import org.bukkit.scheduler.BukkitTask;
 import com.devone.aibot.AIBotPlugin;
 import com.devone.aibot.core.Bot;
 import org.bukkit.Material;
@@ -14,6 +14,7 @@ import java.util.stream.Collectors;
 public class BotTaskMove extends BotTask {
 
     private Location targetLocation;
+    private BukkitTask taskHandle; // 🟢 Сохраняем ссылку на таймер, чтобы его остановить
 
     public BotTaskMove(Bot bot) {
         super(bot, "MOVE");
@@ -26,17 +27,33 @@ public class BotTaskMove extends BotTask {
             this.targetLocation = (Location) params[0];
         } else {
             BotLogger.error(bot.getId() + " ❌ Некорректные параметры для `BotTaskMove`!");
-            isDone = true; // Завершаем задачу, если переданы неправильные параметры
+            isDone = true;
         }
     }
 
     @Override
     public void executeTask() {
-        if (isDone || isPaused || targetLocation == null) {
+
+        BotLogger.debug(bot.getId() + " 🚦 Состояние семафоров: "+ isDone + isPaused + BotStringUtils.formatLocation(targetLocation) + " [Task ID: " + taskId + "]");
+
+        if (isDone || isPaused || targetLocation == null) { // ✅ Фикс условия
+            return;
+        }
+        if (taskHandle != null && !taskHandle.isCancelled()) {
+            BotLogger.debug(bot.getId() + " ⏳ Таймер уже запущен, жду... [Task ID: " + taskId + "]");
             return;
         }
 
-        Bukkit.getScheduler().runTaskTimer(AIBotPlugin.getInstance(), () -> {
+        // 🟢 Запускаем таймер и сохраняем его в `taskHandle`
+        taskHandle = Bukkit.getScheduler().runTaskTimer(AIBotPlugin.getInstance(), () -> {
+            if (isDone) {
+                if (taskHandle != null) {
+                    taskHandle.cancel(); // ✅ Останавливаем таймер
+                    BotLogger.debug(bot.getId() + " 🛑 Move task завершён, таймер остановлен. [Task ID: " + taskId + "]");
+                }
+                return;
+            }
+
             // 1. Если бот уже движется, ждём следующего цикла
             if (bot.getNPCNavigator().isNavigating()) {
                 return;
@@ -45,8 +62,8 @@ public class BotTaskMove extends BotTask {
             // 2. Проверяем, достиг ли бот цели
             if (BotNavigation.hasReachedTarget(bot, targetLocation, 1.5)) {
                 bot.resetTargetLocation();
-                isDone = true;
-                BotLogger.info(bot.getId() + " 🎯 Достиг цели!");
+                isDone = true; // ✅ Теперь это действительно завершает задачу!
+                BotLogger.debug(bot.getId() + " 🎯 Достиг цели! Реальная позиция: " + bot.getNPCEntity().getLocation() + " [Task ID: " + taskId + "]");
                 return;
             }
 
@@ -58,8 +75,8 @@ public class BotTaskMove extends BotTask {
                 .collect(Collectors.toList());
 
             if (validPoints.isEmpty()) {
-                BotLogger.warn(bot.getId() + " ⚠️ Нет доступных точек для движения! Пробуем снова...");
-                return; // Остаёмся в цикле, пока маршрут не появится
+                BotLogger.debug(bot.getId() + " ⚠️ Нет доступных точек для движения! Пробуем снова..." + " [Task ID: " + taskId + "]");
+                return;
             }
 
             // 4. Выбираем ближайшую точку
@@ -69,13 +86,13 @@ public class BotTaskMove extends BotTask {
 
             // 5. Проверяем, может ли бот туда пройти
             if (!bot.getNPCNavigator().canNavigateTo(nextNavLoc)) {
-                BotLogger.warn(bot.getId() + " ❌ Не могу найти путь, пробую пересканировать...");
+                BotLogger.debug(bot.getId() + " ❌ Не могу найти путь, пробую пересканировать..." + " [Task ID: " + taskId + "]");
                 return;
             }
 
             // 6. Двигаемся к следующей точке
             bot.getNPCNavigator().setTarget(nextNavLoc);
-            BotLogger.debug(bot.getId() + " 🚶 Двигаюсь в " + BotStringUtils.formatLocation(nextNavLoc));
+            BotLogger.debug(bot.getId() + " 🚶 Двигаюсь в " + BotStringUtils.formatLocation(nextNavLoc) + " [Task ID: " + taskId + "]");
 
         }, 0L, 20L); // ✅ Запускаем обновление навигации каждые 20 тиков (1 секунда)
     }

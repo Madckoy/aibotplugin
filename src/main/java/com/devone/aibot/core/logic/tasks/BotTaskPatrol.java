@@ -4,50 +4,64 @@ import com.devone.aibot.core.Bot;
 import com.devone.aibot.core.logic.tasks.configs.BotTaskPatrolConfig;
 import com.devone.aibot.utils.BotLogger;
 import com.devone.aibot.utils.BotNavigation;
+import com.devone.aibot.utils.BotStringUtils;
+
 import org.bukkit.Location;
+
 
 public class BotTaskPatrol extends BotTask {
   
-    private Location patrolTarget;
     private int patrolRadius = 10;
     private BotTaskPatrolConfig config;
 
     public BotTaskPatrol(Bot bot) {
-
         super(bot, "PATROL");
-
         this.config = new BotTaskPatrolConfig();
-
         this.patrolRadius = config.getPatrolRadius();
     }
 
     public void executeTask() {
 
+        BotLogger.debug(bot.getId() + " 🚦 Состояние семафоров: "+ isDone + isPaused + BotStringUtils.formatLocation(targetLocation) + " [Task ID: " + taskId + "]");
+
         if (isPaused) return;
 
         if (shouldExitPatrol()) {
-            BotLogger.info("👀 "+bot.getId() + " Has finished patrolling.");
+            BotLogger.debug("👀 " + bot.getId() + " Has finished patrolling." +  " [Task ID: " + taskId + "]");
+            isDone = true; // ✅ Теперь `PATROL` корректно завершает себя
             return;
         }
 
-        BotLogger.info("👀 "+bot.getId() + " Patrolling with radius:  " + patrolRadius);
+        BotLogger.debug("👀 " + bot.getId() + " Patrolling with radius: " + patrolRadius + " [Task ID: " + taskId + "]");
 
-        patrolTarget = BotNavigation.getRandomPatrolPoint(bot, patrolRadius);
+        //Location newPatrolTarget;
+        int attempts = 0;
 
- 
-        BotNavigation.navigateTo(bot, patrolTarget, 10);
+        // 🛑 Не выбираем точку слишком близко!
+        do {
+            targetLocation = BotNavigation.getRandomPatrolPoint(bot, patrolRadius);
+            attempts++;
+        } while (targetLocation.distanceSquared(bot.getNPCEntity().getLocation()) < 4.0 && attempts < 5);
 
+        // ✅ Если бот уже идёт — не даём ему новую команду
+        if (bot.getNPCNavigator().isNavigating()) {
+            BotLogger.debug("👀 " + bot.getId() + " Already moving, skipping patrol update."+ " [Task ID: " + taskId + "]");
+            return;
+        }
+
+        BotLogger.debug("🚶 " + bot.getId() + " Moving to patrol point: " + BotStringUtils.formatLocation(targetLocation) + " [Task ID: " + taskId + "]");
+        BotNavigation.navigateTo(bot, targetLocation, 10);
     }
 
     private boolean shouldExitPatrol() {
-        
-        if ( patrolTarget == null ) return false;
-        
-        if(BotNavigation.hasReachedTarget(bot, patrolTarget, 4.0)) {
+
+        if (targetLocation == null) return true;
+
+        if (BotNavigation.hasReachedTarget(bot, targetLocation, 2.0)) { // 🔧 Уменьшен tolerance, чтобы патруль не завершался сразу
+            isDone = true;
             return true;
-        } else {
-            return false;
         }
+        return false;
     }
 
     @Override
@@ -57,7 +71,6 @@ public class BotTaskPatrol extends BotTask {
 
     @Override
     public Location getTargetLocation() {
-        return patrolTarget != null ? patrolTarget : bot.getNPCCurrentLocation();
+        return targetLocation != null ? targetLocation : bot.getNPCCurrentLocation();
     }
-
 }

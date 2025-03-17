@@ -2,21 +2,27 @@ package com.devone.aibot.utils;
 
 import org.bukkit.configuration.file.FileConfiguration;
 import com.devone.aibot.AIBotPlugin;
+import java.util.logging.ConsoleHandler;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
 public class BotLogger {
-    private static Logger  logger;
-    private static Level   logLevel = Level.INFO;
-    private static boolean loggingEnabled = false;
+    private static final Logger logger = Logger.getLogger("AIBotPlugin"); // 🆕 Создаём отдельный логгер
+    private static Level logLevel = Level.INFO;
+    private static boolean loggingEnabled = true;
+
+    static {
+        logger.setUseParentHandlers(false); // 🛑 Отключаем наследование от глобального PaperMC логгера
+        ConsoleHandler consoleHandler = new ConsoleHandler();
+        consoleHandler.setLevel(Level.ALL);
+        logger.addHandler(consoleHandler);
+        logger.setLevel(logLevel);
+    }
 
     public static void init(AIBotPlugin plugin) {
-        
-        logger = Logger.getLogger(AIBotPlugin.class.getName());
-
         FileConfiguration config = plugin.getConfig();
 
-        loggingEnabled = config.getBoolean("logging.enable", true); // По умолчанию логирование включено
+        loggingEnabled = config.getBoolean("logging.enable", true);
 
         if (!loggingEnabled) {
             logLevel = Level.OFF;
@@ -26,15 +32,12 @@ public class BotLogger {
         String levelStr = config.getString("logging.level", "SEVERE").toUpperCase();
 
         try {
-            
             logLevel = Level.parse(levelStr);
-
-            System.out.println(logLevel);
-
+            logger.setLevel(logLevel); // 🆕 Теперь логгер использует этот уровень
+            info("🔧 Установлен уровень логирования: " + logLevel.getName());
         } catch (IllegalArgumentException e) {
-            
             logLevel = Level.SEVERE;
-            error("Некорректный уровень логирования в config.yml, используется SEVERE.");
+            error("❌ Некорректный уровень логирования в config.yml, используется SEVERE.");
         }
     }
 
@@ -61,5 +64,4 @@ public class BotLogger {
             logger.severe("🚨 " + message);
         }
     }
-
 }

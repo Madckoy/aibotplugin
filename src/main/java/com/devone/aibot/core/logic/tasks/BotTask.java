@@ -6,6 +6,10 @@ import org.bukkit.entity.Player;
 import com.devone.aibot.core.Bot;
 import com.devone.aibot.utils.BotLogger;
 
+
+import java.util.UUID; // Добавляем для генерации уникального ID
+
+
 public abstract class BotTask implements IBotTask{
 
     protected Bot bot;
@@ -16,25 +20,30 @@ public abstract class BotTask implements IBotTask{
     protected boolean isDone = false;
     protected Location targetLocation;
     protected boolean isEnabled = true;
+    protected final String taskId; // 🆕 Уникальный ID задачи
 
     public BotTask(Bot bot) {
         this.bot = bot;
+        this.taskId = UUID.randomUUID().toString(); // 🆕 Генерируем ID
     }
 
     public BotTask(Bot bot, String name) {
         this.bot = bot;
         this.name = name;
+        this.taskId = UUID.randomUUID().toString(); // 🆕 Генерируем ID
     }
 
     public BotTask(Bot bot, Player player, String name) {
         this.bot = bot;
         this.player = player;
         this.name = name;
+        this.taskId = UUID.randomUUID().toString(); // 🆕 Генерируем ID
     }
 
     @Override
     public void update() {
-        BotLogger.debug("✨ " + bot.getId() + " Running task: " + name);
+
+        BotLogger.debug("✨ " + bot.getId() + " Running task: " + name + " [ID: " + taskId + "]");
         
         if (isPaused) return;
 
@@ -43,10 +52,14 @@ public abstract class BotTask implements IBotTask{
             return;
         }
 
-        if(isEnabled ) { executeTask(); }
+        if( isEnabled ) { executeTask(); }
     }
 
     public abstract void executeTask();
+
+    public String getTaskId() {
+        return taskId;
+    }
 
     @Override
     public boolean isDone() {
@@ -61,7 +74,7 @@ public abstract class BotTask implements IBotTask{
     public void setPaused(boolean paused) {
         this.isPaused = paused;
         String status = isPaused ? "⏳ Pausing..." : "▶️ Resuming...";
-        BotLogger.info(status + bot.getId());
+        BotLogger.debug(status + bot.getId());
     }
 
     @Override
@@ -104,7 +117,7 @@ public abstract class BotTask implements IBotTask{
     }
 
     private void handlePlayerDisconnect() {
-        BotLogger.info("🚨 Игрок " + player.getName() + " вышел! Бот " + bot.getId() + " переходит в автономный режим.");
+        BotLogger.warn("🚨 Игрок " + player.getName() + " вышел! Бот " + bot.getId() + " переходит в автономный режим.");
         this.bot.getLifeCycle().getTaskStackManager().clearTasks();
         this.bot.getLifeCycle().getTaskStackManager().pushTask( new BotTaskIdle(bot) );
         isDone = true;

@@ -69,14 +69,14 @@ public class BotTaskBreakBlock extends BotTask {
     public void executeTask() {
 
         if(!BotInventory.hasFreeInventorySpace(bot, targetMaterials)) {
-            BotLogger.info("🔄 " +bot.getId() + " No free space in Inventory! Exiting...");
+            BotLogger.debug("🔄 " +bot.getId() + " No free space in Inventory! Exiting...");
             isDone = true;
             return;
         }
 
         //
         if (BotInventory.hasEnoughBlocks(bot, targetMaterials, maxBlocks)){
-            BotLogger.info("🔄 " + bot.getId() + " Collected enough materials! Exiting...");
+            BotLogger.debug("🔄 " + bot.getId() + " Collected enough materials! Exiting...");
             isDone = true;
             return;
         }
@@ -87,7 +87,7 @@ public class BotTaskBreakBlock extends BotTask {
         if (targetLocation == null) {
             if (!pendingBlocks.isEmpty()) {
                 targetLocation = pendingBlocks.poll(); // Берем следующий блок из очереди
-                BotLogger.info(" 🔄 " + bot.getId() + " Переход к следующему блоку " + BotStringUtils.formatLocation(targetLocation));
+                BotLogger.debug(" 🔄 " + bot.getId() + " Переход к следующему блоку " + BotStringUtils.formatLocation(targetLocation));
             } else {
                 // Получаем карту блоков в радиусе поиска
                 Map<Location, Material> scannedBlocks = BotScanEnv.scan3D(bot.getNPCCurrentLocation(), searchRadius);
@@ -95,7 +95,7 @@ public class BotTaskBreakBlock extends BotTask {
                 targetLocation = findNearestTargetBlock(scannedBlocks);
 
                 if (targetLocation == null) {
-                    BotLogger.info("❌ " + bot.getId() + " Нет доступных блоков для добычи! Перемещаемся к новой цели.");
+                    BotLogger.debug("❌ " + bot.getId() + " Нет доступных блоков для добычи! Перемещаемся к новой цели.");
                                                
                         Location newLocation = findNearestTargetBlock(scannedBlocks);
 

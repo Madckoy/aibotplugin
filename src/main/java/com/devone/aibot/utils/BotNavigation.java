@@ -23,20 +23,21 @@ public class BotNavigation {
     public static Location getRandomPatrolPoint(Bot bot, int scanRadius) {
         Location currentLocation = bot.getNPCEntity().getLocation();
         Map<Location, Material> scannedBlocks = BotScanEnv.scan3D(currentLocation, scanRadius);
-
+    
         List<Location> validPoints = scannedBlocks.entrySet().stream()
             .filter(entry -> isSuitableForNavigation(entry.getKey(), entry.getValue()))
             .map(Map.Entry::getKey)
+            .filter(loc -> loc.distanceSquared(currentLocation) > 4.0) // ✅ Отсекаем слишком близкие точки (дальше 2 блоков)
             .collect(Collectors.toList());
-
+    
         if (validPoints.isEmpty()) {
-            return currentLocation; // Если нет доступных точек, остаёмся на месте
+            BotLogger.debug(bot.getId() + " ⚠️ Не найдено подходящих точек патрулирования, увеличиваю радиус...");
+            return getRandomPatrolPoint(bot, Math.min(scanRadius + 5, 30)); // ✅ Увеличиваем радиус до 30 (если нужно)
         }
-
-        return validPoints.stream()
-            .min(Comparator.comparingDouble(loc -> loc.distanceSquared(currentLocation)))
-            .orElse(currentLocation);
+    
+        return validPoints.get(new Random().nextInt(validPoints.size())); // ✅ Теперь выбираем случайную точку
     }
+    
 
     public static boolean hasReachedTarget(Bot bot, Location target, double tolerance) {
         Location current = bot.getNPCCurrentLocation();
@@ -55,7 +56,7 @@ public class BotNavigation {
         double yDifference = Math.abs(current.getY() - target.getY());
 
         if (distanceSquared <= tolerance * tolerance && yDifference < 2.0) {
-            BotLogger.info(bot.getId()+ " Бот достиг цели! " + BotStringUtils.formatLocation(current));
+            BotLogger.debug(bot.getId()+ " Бот достиг цели! " + BotStringUtils.formatLocation(current));
             return true;
         }
 

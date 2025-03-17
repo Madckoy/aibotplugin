@@ -29,7 +29,7 @@ public class BotTaskStackManager {
 
             BotLifecycleLogCsv.write(this.bot);
 
-            BotLogger.info("➖ Удалена задача: " + taskStack.peek().getClass().getSimpleName());
+            BotLogger.debug("➖ Удалена задача: " + taskStack.peek().getClass().getSimpleName());
             taskStack.pop();
 
             // ✅ Если осталась активность, снимаем с неё паузу
@@ -47,23 +47,8 @@ public class BotTaskStackManager {
         }
     }
 
-    public void updateActiveTask() {
-        if (!taskStack.isEmpty()) {
-            BotTask currentTask = taskStack.peek();
-            if (currentTask.isDone()) {
-                popTask();
-            } else {
-                currentTask.update();
-            }
-        }
-    }
-
     public boolean isEmpty() {
         return taskStack.isEmpty();
-    }
-
-    public void clearTasks() {
-        taskStack.clear();   
     }
 
     public boolean isTaskActive(Class<? extends BotTask> taskClass) {
@@ -77,6 +62,35 @@ public class BotTaskStackManager {
 
     public Stack<BotTask> getTaskStack() {
         return taskStack;
+    }
+
+
+    public void updateActiveTask() {
+        if (!taskStack.isEmpty()) {
+
+            BotTask currentTask = taskStack.peek();
+    
+            // 🛑 Если у бота нет NPCEntity, удаляем ВСЕ задачи
+            //if (bot.getNPCEntity() == null) {
+            //    BotLogger.error(bot.getId() + " ❌ Ошибка: NPCEntity == null! Очищаю задачи...");
+            //    clearTasks();
+            //    return;
+            //}
+    
+            if (currentTask.isDone()) {
+                popTask();
+            } else {
+                currentTask.update();
+            }
+        }
+    }
+    
+    // ✅ Функция для удаления всех задач с логированием
+    public void clearTasks() {
+        while (!taskStack.isEmpty()) {
+            BotTask removedTask = taskStack.pop();
+            BotLogger.debug("❌ Удалена задача: " + removedTask.getClass().getSimpleName());
+        }
     }
 
 }

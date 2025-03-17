@@ -48,7 +48,7 @@ public class BotTaskIdleConfig {
             config.save(file);
             BotLogger.info("✅ Конфигурация сохранена: " + file.getName());
         } catch (IOException e) {
-            BotLogger.info("❌ Ошибка сохранения конфига для: " + file.getName());
+            BotLogger.error("❌ Ошибка сохранения конфига для: " + file.getName());
         }
     }
 }
