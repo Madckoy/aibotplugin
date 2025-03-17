@@ -16,8 +16,8 @@ public class BotLogger {
         try {
             logLevel = Level.parse(config.getString("logging.level", "OFF").toUpperCase());
         } catch (IllegalArgumentException e) {
-            logLevel = Level.INFO;
-            warn("Некорректный уровень логирования в config.yml, используется OFF.");
+            logLevel = Level.SEVERE;
+            error("Некорректный уровень логирования в config.yml, используется OFF.");
             logLevel = Level.OFF;
         }
     }

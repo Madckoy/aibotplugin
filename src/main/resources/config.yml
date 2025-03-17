@@ -1,5 +1,6 @@
 logging:
-  level: OFF
+  enable: false
+  level: INFO
 
    # Level.FINE
    # Level.INFO
