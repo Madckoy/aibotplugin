@@ -36,7 +36,7 @@ public class BotNavigationUtils {
 
         int offsetX = random.nextInt(maxRange - minRange + 1) + minRange;
         int offsetZ = random.nextInt(maxRange - minRange + 1) + minRange;
-        int offsetY = currentLocation.getBlockY();//random.nextInt(maxRange - minRange + 1) + minRange;
+        int offsetY = 0;//random.nextInt(maxRange - minRange + 1) + minRange;
  
         Location newloc = currentLocation.clone().add(offsetX, offsetY , offsetZ); 
 
@@ -66,6 +66,9 @@ public class BotNavigationUtils {
             if( elapsedTime >= 60000 ) { //one minute
                 return null;
             }
+
+
+            
 
         }
 
