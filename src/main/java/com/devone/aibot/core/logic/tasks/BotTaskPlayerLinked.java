@@ -22,7 +22,7 @@ public abstract class BotTaskPlayerLinked implements BotTask {
 
         BotLogger.info("✨ " + bot.getId() + " Running task: " + name);
 
-        if (!isPlayerOnline()) {
+        if (this.player!=null && !isPlayerOnline()) {
             handlePlayerDisconnect();
             return;
         }

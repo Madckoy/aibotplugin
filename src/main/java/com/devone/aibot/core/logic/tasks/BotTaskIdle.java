@@ -55,12 +55,21 @@ public class BotTaskIdle implements BotTask {
 
         // Check if bot needs to clean up the inventory
         if(!BotInventory.hasFreeInventorySpace(bot, dirtTypes) || BotInventory.hasEnoughBlocks(bot, dirtTypes, maxDirtToCollect)) {
+
             bot.setAutoPickupEnabled(false);
+
+            BotTaskDropAll drop_task = new BotTaskDropAll(bot, null);
+            drop_task.setPaused(true);
+            bot.getLifeCycle().getTaskStackManager().pushTask(drop_task);
+            
+            
+            // go to the drop point
             BotTaskMove moveTask = new BotTaskMove(bot);
-            Location drop_off_loc = new Location(Bukkit.getWorld("world"), 0.0, -60.0, 0.0);
+            Location drop_off_loc = Bot.getFallbackLocation();
             moveTask.configure(drop_off_loc);
             bot.getLifeCycle().getTaskStackManager().pushTask(moveTask);
             BotLogger.info("⛏ " + bot.getId() + " Goes to drop off location: " + BotStringUtils.formatLocation(drop_off_loc));
+
             return;
         }
 
