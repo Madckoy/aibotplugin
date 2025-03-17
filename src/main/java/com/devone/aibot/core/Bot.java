@@ -120,7 +120,7 @@ public class Bot {
     }
 
     public BotTask getCurrentTask() {
-        return getLifeCycle().getTaskStackManager().getCurrentTask();
+        return getLifeCycle().getTaskStackManager().getActiveTask();
     }
 
     public static Location getFallbackLocation() {
@@ -201,6 +201,9 @@ public class Bot {
 
         getLifeCycle().getTaskStackManager().pushTask(mv_task);
     }
-    
+
+    public BotTask getActiveTask() {
+       return this.getLifeCycle().getTaskStackManager().getActiveTask();
+    }    
 
 }

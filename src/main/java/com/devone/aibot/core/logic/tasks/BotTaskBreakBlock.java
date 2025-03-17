@@ -13,31 +13,30 @@ import com.devone.aibot.utils.BotLogger;
 import com.devone.aibot.utils.BotScanEnv;
 import com.devone.aibot.AIBotPlugin;
 
-public class BotTaskBreakBlock implements BotTask {
+public class BotTaskBreakBlock extends BotTask {
 
-    private final Bot bot;
-    private Location targetLocation;
-    private long startTime = System.currentTimeMillis();
-    private final String name = "BREAK";
     private int maxBlocks;
     private int searchRadius;
     private int breakProgress = 0;
     private Set<Material> targetMaterials = null;
-    private boolean isDone;
+
     private Map<Location, Material> scannedBlocks;
+
     private boolean shouldPickup = true;
-    private boolean isPaused;
-    
+
     private Queue<Location> pendingBlocks = new LinkedList<>(); // Очередь блоков рядом
 
     private static final Map<Material, Integer> BREAK_TIME_PER_BLOCK = new HashMap<>();
     
     public BotTaskBreakBlock(Bot bot) {
+        super(bot, "BREAK");
         this.bot = bot;
     }
     
     @Override
     public void configure(Object... params) {
+        super.configure(params);
+
         if (params.length >= 1 && params[0] instanceof Set) {
             targetMaterials = (Set<Material>) params[0];
             if (targetMaterials.isEmpty()) targetMaterials = null;
@@ -54,7 +53,6 @@ public class BotTaskBreakBlock implements BotTask {
         if (params.length >= 4 && params[3] instanceof Integer) {
             this.shouldPickup = (boolean) params[3];
         }
-        startTime = System.currentTimeMillis();
 
         bot.setAutoPickupEnabled(shouldPickup);
 
@@ -62,40 +60,7 @@ public class BotTaskBreakBlock implements BotTask {
     }
     
     @Override
-    public boolean isDone() {
-        return isDone;
-    }
-    
-    @Override
-    public void setPaused(boolean paused) {
-        this.isPaused = paused;
-        if (isPaused) {
-            BotLogger.info("⏳ " + bot.getId() + " Pausing...");
-        } else {
-            BotLogger.info("▶️ " + bot.getId() + " Resuming...");
-        }
-    }
-    
-    @Override
-    public String getName() {
-        return name;
-    }
-    
-    public Location getTargetLocation() {
-        return targetLocation;
-    }
-    
-    @Override
-    public long getElapsedTime() {
-        return System.currentTimeMillis() - startTime;
-    }
-
-    @Override
-    public void update() {
-
-        BotLogger.info("✨ " + bot.getId() + " Running task: " + name);
-
-        if (isDone) return;
+    public void executeTask() {
 
         if(!BotInventory.hasFreeInventorySpace(bot, targetMaterials)) {
             BotLogger.info("🔄 " +bot.getId() + " No free space in Inventory! Exiting...");
@@ -228,4 +193,5 @@ public class BotTaskBreakBlock implements BotTask {
             }
         }
     }
+
 }

@@ -16,15 +16,15 @@ public class BotTaskStackManager {
 
     public void pushTask(BotTask task) {
         if (!taskStack.isEmpty()) {
-            BotTask currentActivity = taskStack.peek();
-            currentActivity.setPaused(true); // ✅ Ставим текущую активность на паузу
+            BotTask currentTask = taskStack.peek();
+            currentTask.setPaused(true); // ✅ Ставим текущую активность на паузу
         }
 
         taskStack.push(task);
         BotLogger.info("✚ Добавлена задача: " + task.getClass().getSimpleName());
     }
 
-    public void popActivity() {
+    public void popTask() {
         if (!taskStack.isEmpty()) {
 
             BotLifecycleLogCsv.write(this.bot);
@@ -39,7 +39,7 @@ public class BotTaskStackManager {
         }
     }
 
-    public BotTask getCurrentTask() {
+    public BotTask getActiveTask() {
         if (!taskStack.isEmpty()) {
             return  taskStack.peek();
         } else {
@@ -47,11 +47,11 @@ public class BotTaskStackManager {
         }
     }
 
-    public void updateCurrentTask() {
+    public void updateActiveTask() {
         if (!taskStack.isEmpty()) {
             BotTask currentTask = taskStack.peek();
             if (currentTask.isDone()) {
-                popActivity();
+                popTask();
             } else {
                 currentTask.update();
             }

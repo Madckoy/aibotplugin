@@ -1,12 +1,10 @@
 package com.devone.aibot.core.logic.tasks;
 
 import com.devone.aibot.core.logic.tasks.configs.BotCfgTaskIdle;
-import com.devone.aibot.core.logic.tasks.configs.BotCfgTaskPatrol;
 
 import java.util.Set;
 
 import com.devone.aibot.utils.BotStringUtils;
-import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.Material;
 
@@ -14,32 +12,17 @@ import com.devone.aibot.core.Bot;
 import com.devone.aibot.core.BotInventory;
 import com.devone.aibot.utils.BotLogger;
 
-public class BotTaskIdle implements BotTask {
-    private final Bot bot;
-    private boolean isPaused = false;
-    private final String name = "IDLE";
-    private final BotCfgTaskIdle config;
-    private final BotCfgTaskPatrol patrolConfig;
-    private long startTime = System.currentTimeMillis();
+public class BotTaskIdle extends BotTask {
 
     public BotTaskIdle(Bot bot) {
+        super(bot, "IDLE");
         this.bot = bot;
-        this.config = new BotCfgTaskIdle();
-        this.patrolConfig = new BotCfgTaskPatrol();
+        new BotCfgTaskIdle();
     }
 
     @Override
-    public void configure(Object... params) {
-        startTime = System.currentTimeMillis();
-        // Читаем конфиг, если нужно что-то обновить динамически
-    }
-
-    @Override
-    public void update() {
-        BotLogger.info("✨ " + bot.getId() + " Running task: " + name);
-
-        if (isPaused) return;
-    
+    public void executeTask() {
+  
         double rand = Math.random();
 
         Set<Material> dirtTypes = Set.of(
@@ -73,7 +56,6 @@ public class BotTaskIdle implements BotTask {
             return;
         }
 
-        
         if (rand < 0.4) {
             // 📌 40% шанс начать патрулирование
             BotLogger.info("👀 " + bot.getId() + " Starts Patrolling");
@@ -91,35 +73,6 @@ public class BotTaskIdle implements BotTask {
             // 💤 30% шанс остаться в IDLE
             BotLogger.info("⭕ " + bot.getId() + " Остаётся в IDLE.");
         }
-    }
 
-    @Override
-    public boolean isDone() {
-        return false;
-    }
-
-    @Override
-    public void setPaused(boolean paused) {
-        this.isPaused = paused;
-        if (isPaused) {
-            BotLogger.info("⏳ " + bot.getId() + " Pausing...");
-        } else {
-            BotLogger.info("▶️ " + bot.getId() + " Resuming...");
-        }
-    }
-
-    @Override
-    public String getName() {
-        return name;
-    }
-
-    @Override
-    public Location getTargetLocation() {
-        return bot.getNPCCurrentLocation();
-    }
-
-    @Override
-    public long getElapsedTime() {
-        return System.currentTimeMillis() - startTime;
     }
 }

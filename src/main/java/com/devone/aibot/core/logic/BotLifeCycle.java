@@ -35,7 +35,7 @@ public class BotLifeCycle {
 
         if (!taskStackManager.isEmpty()) {
             idleAdded = false; // ✅ Если есть активность, сбрасываем флаг
-            taskStackManager.updateCurrentTask();
+            taskStackManager.updateActiveTask();
         } else {
             if (!idleAdded) {
                 BotLogger.info("😴 Бот " + bot.getId() + " Без задач. Добавляем IdleTask.");

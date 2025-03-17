@@ -3,35 +3,25 @@ package com.devone.aibot.core.logic.tasks;
 import com.devone.aibot.core.Bot;
 import com.devone.aibot.core.logic.tasks.configs.BotCfgTaskPatrol;
 import com.devone.aibot.utils.BotLogger;
-import com.devone.aibot.utils.BotNavigationUtils;
-
+import com.devone.aibot.utils.BotNavigation;
 import org.bukkit.Location;
 
-public class BotTaskPatrol implements BotTask {
-    private final Bot bot;
-    private final BotCfgTaskPatrol config;
-    private boolean isPaused = false;
-    private final String name = "PATROL";
+public class BotTaskPatrol extends BotTask {
+  
     private Location patrolTarget;
-    private long startTime = System.currentTimeMillis();
-    private  int patrolRadius = 10;
+    private int patrolRadius = 10;
+    private BotCfgTaskPatrol config;
 
     public BotTaskPatrol(Bot bot) {
-        this.bot = bot;
+
+        super(bot, "PATROL");
+
         this.config = new BotCfgTaskPatrol();
 
         this.patrolRadius = config.getPatrolRadius();
     }
 
-    @Override
-    public void configure(Object... params) {
-        startTime = System.currentTimeMillis();
-        // Можно использовать параметры для динамической настройки патрулирования
-    }
-
-    @Override
-    public void update() {
-        BotLogger.info("✨ "+bot.getId() + " Running task: " + name);
+    public void executeTask() {
 
         if (isPaused) return;
 
@@ -40,23 +30,18 @@ public class BotTaskPatrol implements BotTask {
             return;
         }
 
-        patrolRadius = config.getPatrolRadius();
         BotLogger.info("👀 "+bot.getId() + " Patrolling with radius:  " + patrolRadius);
 
-        patrolTarget = BotNavigationUtils.createNavigableLocation(bot, -patrolRadius, patrolRadius);
+        patrolTarget = BotNavigation.getRandomPatrolPoint(bot,patrolRadius);
 
-        BotTaskMove moveTask = new BotTaskMove(bot);
-        moveTask.configure(patrolTarget);
-
-        bot.getLifeCycle().getTaskStackManager().pushTask(moveTask);
+        BotNavigation.navigateTo(bot, patrolTarget, patrolRadius);
     }
 
     private boolean shouldExitPatrol() {
         
         if ( patrolTarget == null ) return false;
         
-        if(BotNavigationUtils.hasReachedTarget(bot, patrolTarget, 4.0)) {
-            patrolTarget = BotNavigationUtils.createNavigableLocation(bot, -patrolRadius, patrolRadius);
+        if(BotNavigation.hasReachedTarget(bot, patrolTarget, 4.0)) {
             return true;
         } else {
             return false;
@@ -69,27 +54,8 @@ public class BotTaskPatrol implements BotTask {
     }
 
     @Override
-    public void setPaused(boolean paused) {
-        this.isPaused = paused;
-        if (isPaused) {
-            BotLogger.info("⏳ " + bot.getId() + " Pausing...");
-        } else {
-            BotLogger.info("▶️ " + bot.getId() + " Resuming...");
-        }
-    }
-
-    @Override
-    public String getName() {
-        return name;
-    }
-
-    @Override
     public Location getTargetLocation() {
         return patrolTarget != null ? patrolTarget : bot.getNPCCurrentLocation();
     }
 
-    @Override
-    public long getElapsedTime() {
-        return System.currentTimeMillis() - startTime;
-    }
 }
