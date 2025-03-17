@@ -1,14 +1,10 @@
 package com.devone.aibot.core.logic.tasks;
 
-import com.devone.aibot.AIBotPlugin;
 import com.devone.aibot.utils.*;
-import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import com.devone.aibot.core.Bot;
 
 public class BotTaskMove extends BotTask {
-
-    private Location lastTargetLocation = null;
 
     public BotTaskMove(Bot bot) {
         super(bot, "MOVE");
@@ -21,7 +17,6 @@ public class BotTaskMove extends BotTask {
 
         if (params.length == 1 && params[0] instanceof Location) {
             this.targetLocation = (Location) params[0];
-            lastTargetLocation = null;
         }
     }
 
