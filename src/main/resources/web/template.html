@@ -75,11 +75,11 @@
     <h1>Monitoring</h1>
     <table id="botTable">
         <tr>
-            <th>📷Id</th>
-            <th>📍Position</th>
-            <th>✔️Task</th>
-            <th>🎯Target</th>
-            <th>⌚Elapsed Time</th>
+            <th>Id</th>
+            <th>Position</th>
+            <th>Task</th>
+            <th>Target</th>
+            <th>Elapsed Time</th>
             <th>ᯓ Queue</th>
         </tr>
     </table>
@@ -106,7 +106,7 @@
             const data = await response.json();
 
             let table = document.getElementById("botTable");
-            table.innerHTML = "<tr><th>Id</th><th>Position</th><th>Task</th><th>Target</th><th>Elapsed Time</th><th class='queue-column'>Queue</th></tr>";
+            table.innerHTML = "<tr><th>📷 Id</th><th>📍 Position</th><th>✔️ Task</th><th>🎯 Target</th><th>⌚ Elapsed Time</th><th class='queue-column'>ᯓ Queue</th></tr>";
 
             data.bots.forEach(bot => {
                 let row = table.insertRow();
