@@ -44,14 +44,13 @@ public class BotEvents implements Listener {
 
             // Проверяем, застрял ли бот
             if (currentLocation.equals(lastLocation) && (System.currentTimeMillis() - lastMoveTime > STUCK_TIME)) {
-                BotLogger.info("🚶🏻‍♂️[onBotMove]: "+ event.getEntity().getName() + " ⚠️ Бот застрял!");
+                BotLogger.debug("🚶🏻‍♂️[onBotMove]: "+ event.getEntity().getName() + " ⚠️ Бот застрял!");
 
                 // Получаем последнюю активную задачу бота
-                BotTask activeTask = botManager.getBot(botId.toString()).getCurrentTask();
+                BotTask activeTask = botManager.getBot(botId.toString()).getActiveTask();
+
+                activeTask.handleStuck(); // Сообщаем задаче, что бот застрял
                 
-                if (activeTask instanceof BotTaskMove moveTask) {
-                    moveTask.handleStuck(); // Сообщаем задаче, что бот застрял
-                }
             }
         }
 

@@ -51,6 +51,8 @@ public class BotTaskPatrol extends BotTask {
 
         BotLogger.debug("🚶 " + bot.getId() + " Moving to patrol point: " + BotStringUtils.formatLocation(targetLocation) + " [Task ID: " + taskId + "]");
         BotNavigation.navigateTo(bot, targetLocation, 10);
+
+        isDone = shouldExitPatrol();
     }
 
     private boolean shouldExitPatrol() {
@@ -66,11 +68,11 @@ public class BotTaskPatrol extends BotTask {
 
     @Override
     public boolean isDone() {
-        return shouldExitPatrol();
+        return isDone();
     }
 
     @Override
     public Location getTargetLocation() {
-        return targetLocation != null ? targetLocation : bot.getNPCCurrentLocation();
+        return targetLocation;
     }
 }
