@@ -1,11 +1,18 @@
 package com.devone.aibot.core.logic.tasks;
 
+import com.devone.aibot.core.Bot;
 import com.devone.aibot.utils.BotLogger;
+import com.devone.aibot.utils.BotLifecycleLogCsv;
 
 import java.util.Stack;
 
 public class BotTaskStackManager {
     private final Stack<BotTask> taskStack = new Stack<>();
+    private final Bot bot;
+
+    public BotTaskStackManager(Bot bot) {
+        this.bot = bot;
+    }
 
     public void pushTask(BotTask task) {
         if (!taskStack.isEmpty()) {
@@ -19,6 +26,9 @@ public class BotTaskStackManager {
 
     public void popActivity() {
         if (!taskStack.isEmpty()) {
+
+            BotLifecycleLogCsv.write(this.bot);
+
             BotLogger.info("➖ Удалена задача: " + taskStack.peek().getClass().getSimpleName());
             taskStack.pop();
 

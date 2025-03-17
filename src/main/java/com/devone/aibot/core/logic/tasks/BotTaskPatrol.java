@@ -43,9 +43,7 @@ public class BotTaskPatrol implements BotTask {
         patrolRadius = config.getPatrolRadius();
         BotLogger.info("👀 "+bot.getId() + " Patrolling with radius:  " + patrolRadius);
 
-        patrolTarget = BotNavigationUtils.getRandomWalkLocation(bot.getNPCCurrentLocation(), -patrolRadius, patrolRadius);
-
-        patrolTarget = BotNavigationUtils.findNearestNavigableLocation(bot.getNPCCurrentLocation(), patrolTarget, patrolRadius);
+        patrolTarget = BotNavigationUtils.createNavigableLocation(bot, -patrolRadius, patrolRadius);
 
         BotTaskMove moveTask = new BotTaskMove(bot);
         moveTask.configure(patrolTarget);
@@ -58,7 +56,7 @@ public class BotTaskPatrol implements BotTask {
         if ( patrolTarget == null ) return false;
         
         if(BotNavigationUtils.hasReachedTarget(bot, patrolTarget, 4.0)) {
-            patrolTarget = BotNavigationUtils.getRandomWalkLocation(bot.getNPCCurrentLocation(), -patrolRadius, patrolRadius);
+            patrolTarget = BotNavigationUtils.createNavigableLocation(bot, -patrolRadius, patrolRadius);
             return true;
         } else {
             return false;

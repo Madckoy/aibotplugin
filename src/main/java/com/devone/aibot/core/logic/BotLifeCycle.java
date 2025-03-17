@@ -15,7 +15,7 @@ public class BotLifeCycle {
 
     public BotLifeCycle(Bot bot) {
         this.bot = bot;
-        this.taskStackManager = new BotTaskStackManager();
+        this.taskStackManager = new BotTaskStackManager(bot);
 
         startLifeCycle();
     }

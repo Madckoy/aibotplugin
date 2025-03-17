@@ -11,39 +11,67 @@ import java.util.Random;
 public class BotNavigationUtils {
     private static final Random random = new Random();
 
-    public static Location getRandomWalkLocation(Location currentLocation, int minRange, int maxRange) {
+    
+    /**
+     * Генерирует случайную точку в заданном радиусе вокруг текущей позиции
+     */
+    private static Location getRandomLocationV1(Location currentLocation, int radiusXZ, int radiusY) {
+        if (currentLocation == null) {
+            throw new IllegalArgumentException("Базовая локация не может быть null");
+        }
+
+        int xOffset = random.nextInt(radiusXZ * 2 + 1) - radiusXZ;
+        int yOffset = random.nextInt(radiusY * 2 + 1) - radiusY;
+        int zOffset = random.nextInt(radiusXZ * 2 + 1) - radiusXZ;
+
+        Location newloc =  currentLocation.clone().add(xOffset, yOffset, zOffset);
+
+        
+        BotLogger.info("🎲 Random coords genereated to travel from "+BotStringUtils.formatLocation(currentLocation) + " to offset "+BotStringUtils.formatLocation(newloc));
+       
+        return newloc;
+    }
+
+    private static Location getRandomLocationV2(Location currentLocation, int minRange, int maxRange) {
+
+        double velocity = 1.0; // movement speed change here
+
         int offsetX = random.nextInt(maxRange - minRange + 1) + minRange;
         int offsetZ = random.nextInt(maxRange - minRange + 1) + minRange;
-        int offsetY = 0;//random.nextInt(maxRange - minRange + 1) + minRange;
+        int offsetY = random.nextInt(maxRange - minRange + 1) + minRange;
+ 
+        Location newloc = currentLocation.clone().add(offsetX * velocity,offsetY * velocity, offsetZ * velocity); 
 
-        return currentLocation.clone().add(offsetX * 1,offsetY*1, offsetZ * 1);
+        BotLogger.info("🎲 Random coords genereated to travel from "+BotStringUtils.formatLocation(currentLocation) + " to offset "+BotStringUtils.formatLocation(newloc));
+       
+        return newloc;
     }
 
-    public static Location findNearestNavigableLocation(Location current, Location target, int radius) {
-        World world = target.getWorld();
+    // loop until navigation pint is confirmed as vavigable
+    public static Location createNavigableLocation(Bot bot, int minRange, int maxRange) {
 
-        // Если цель уже проходимая, возвращаем её
-        if (isNavigable(target)) {
-            return target;
-        }
+        long startTime = System.currentTimeMillis();
 
-        // Проверяем блоки вокруг в указанном радиусе
-        for (int dx = -radius; dx <= radius; dx++) {
-            for (int dz = -radius; dz <= radius; dz++) {
-                Location newTarget = target.clone().add(dx, 0, dz);
-                if (isNavigable(newTarget)) {
-                    return newTarget;
-                }
+        Location nav_loc = bot.getNPCCurrentLocation();
+
+        while(true) {
+
+            nav_loc = getRandomLocationV1(bot.getNPCCurrentLocation(), minRange, maxRange);
+
+            if(bot.getNPCNavigator().canNavigateTo(nav_loc)) {
+                BotLogger.info("✅ Random coords are navgable: "+BotStringUtils.formatLocation(nav_loc));       
+                break;
+            } 
+
+            // if not found in 1 minute then return null
+            long elapsedTime = System.currentTimeMillis() - startTime;
+            if( elapsedTime >= 60000 ) { //one minute
+                return null;
             }
+
         }
 
-        return null; // Нет доступных точек
-    }
-
-    // Проверяем, можно ли пройти через этот блок
-    private static boolean isNavigable(Location location) {
-        Block block = location.getBlock();
-        return block.getType().isAir() || block.getType() == Material.WATER; // Можно доработать
+        return nav_loc;
     }
 
     public static boolean hasReachedTarget(Bot bot, Location target, double tolerance) {
@@ -74,21 +102,6 @@ public class BotNavigationUtils {
         }
 
         return false;
-    }
-
-    /**
-     * Генерирует случайную точку в заданном радиусе вокруг текущей позиции
-     */
-    public static Location getRandomNearbyLocation(Location base, int radiusXZ, int radiusY) {
-        if (base == null) {
-            throw new IllegalArgumentException("Базовая локация не может быть null");
-        }
-
-        int xOffset = random.nextInt(radiusXZ * 2 + 1) - radiusXZ;
-        int yOffset = random.nextInt(radiusY * 2 + 1) - radiusY;
-        int zOffset = random.nextInt(radiusXZ * 2 + 1) - radiusXZ;
-
-        return base.clone().add(xOffset, yOffset, zOffset);
     }
 
 }

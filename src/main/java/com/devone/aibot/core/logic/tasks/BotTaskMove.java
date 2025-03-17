@@ -80,6 +80,7 @@ public class BotTaskMove implements BotTask {
             // Навигация в основном потоке
             Bukkit.getScheduler().runTask(AIBotPlugin.getInstance(), () -> {
                 bot.getNPCNavigator().setTarget(targetLocation);
+                bot.getNPC().setMoveDestination(targetLocation);
             });
 
         } else {
@@ -128,7 +129,8 @@ public class BotTaskMove implements BotTask {
         BotLogger.info("🔄 " + bot.getId() + " Застрял! Пересчитываем маршрут...");
 
         // Пытаемся найти ближайшую доступную точку
-        Location newTarget = BotNavigationUtils.findNearestNavigableLocation(bot.getNPCCurrentLocation(), targetLocation, 30);
+        Location newTarget = BotNavigationUtils.createNavigableLocation(bot, 1, 10);
+
         try {
             if (newTarget != null) {
                 targetLocation = newTarget;

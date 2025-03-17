@@ -76,8 +76,6 @@ public class BlueMapMarkers {
 
                 hasChanges = true;
 
-                BotMovementLogger.logBotMovement(bot);
-
                 BotLogger.info("📍 " +bot.getId() + "Обновлён маркер бота : " + BotStringUtils.formatLocation(loc));
 
             } else {

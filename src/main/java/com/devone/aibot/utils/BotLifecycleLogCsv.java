@@ -1,6 +1,8 @@
 package com.devone.aibot.utils;
 
 import com.devone.aibot.core.Bot;
+import com.devone.aibot.core.logic.tasks.BotTask;
+
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 
@@ -10,12 +12,12 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 
-public class BotMovementLogger {
-    private static final String LOG_FOLDER = "plugins/AIBotPlugin/logs/";
+public class BotLifecycleLogCsv {
+    private static final String LOG_FOLDER = BotConstants.PLUGIN_PATH_LOGS;//"plugins/AIBotPlugin/logs/";
     private static final Map<String, Location> lastLoggedLocations = new HashMap<>();
     private static final String SESSION_ID = generateSessionId();
 
-    public static void logBotMovement(Bot bot) {
+    public static void write(Bot bot) {
         Location loc = bot.getNPCCurrentLocation();
         if (loc == null) return;
 
@@ -38,9 +40,19 @@ public class BotMovementLogger {
         try (FileWriter writer = new FileWriter(filename, true);
              BufferedWriter bw = new BufferedWriter(writer)) {
 
-            String logEntry = String.format("%s,%s,%s,%d,%d,%d",
+            BotTask task = bot.getCurrentTask();
+
+            String t_name = "N/A";
+            String e_time = "N/A";
+
+            if(task!=null) {
+                t_name = task.getName();
+                e_time = BotStringUtils.formatTime(task.getElapsedTime());
+            }
+
+            String logEntry = String.format("%s,%s,%s,%d,%d,%d,%s,%s",
                     getCurrentTimestamp(), botName, loc.getWorld().getName(),
-                    loc.getBlockX(), loc.getBlockY(), loc.getBlockZ());
+                    loc.getBlockX(), loc.getBlockY(), loc.getBlockZ(), t_name, e_time);
 
             bw.write(logEntry);
             bw.newLine();
