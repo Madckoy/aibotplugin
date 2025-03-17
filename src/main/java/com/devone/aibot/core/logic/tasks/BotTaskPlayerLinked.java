@@ -19,7 +19,9 @@ public abstract class BotTaskPlayerLinked implements BotTask {
 
     @Override
     public void update() {
-        BotLogger.info(bot.getId() + " Running task: " + name);
+
+        BotLogger.info("✨ " + bot.getId() + " Running task: " + name);
+        
         if (!isPlayerOnline()) {
             handlePlayerDisconnect();
             return;
@@ -51,9 +53,9 @@ public abstract class BotTaskPlayerLinked implements BotTask {
     public void setPaused(boolean paused) {
         this.isPaused = paused;
         if (isPaused) {
-            BotLogger.info("⏯ " + bot.getId() + " ꩜ Pausing...");
+            BotLogger.info("ℹ️ " + bot.getId() + " ꩜ Pausing...");
         } else {
-            BotLogger.info("⏯ " + bot.getId() + " ꩜ Resuming...");
+            BotLogger.info("ℹ️ " + bot.getId() + " ꩜ Resuming...");
         }
     }
 }

@@ -138,7 +138,7 @@ public class Bot {
 
                 Location currLoc = npc.getStoredLocation();
                 
-                BotLogger.debug("Bot/NPC " + id + " Current Location: " + BotStringUtils.formatLocation(currLoc));
+                BotLogger.info("📌 " + id + " Current Location: " + BotStringUtils.formatLocation(currLoc));
                 lastKnownLocation = currLoc;
             return currLoc;
         } else {

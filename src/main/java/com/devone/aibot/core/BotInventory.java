@@ -217,7 +217,7 @@ public class BotInventory {
         }
 
         // Вывод в логи
-        BotLogger.debug(bot.getId() + "Инвентарь:");
+        BotLogger.debug("🎁 " + bot.getId() + "Инвентарь:");
         for (String r : rows) {
             BotLogger.debug(r);
         }

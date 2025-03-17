@@ -28,11 +28,11 @@ public class BotManager {
 
         // ✅ Теперь вызываем `loadExistingBots()` напрямую в единственном `runTaskLater`
         Bukkit.getScheduler().runTaskLater(plugin, () -> {
-            BotLogger.debug("Загружаем ботов...");
+            BotLogger.info("Загружаем ботов...");
 
             loadExistingBots(); // ✅ Загружаем ботов из CitizensAPI и `bots.yml`
 
-            BotLogger.debug("✅ Все боты загружены.");
+            BotLogger.info("✅ Все боты загружены.");
             
         }, 600L);
     }
@@ -111,10 +111,10 @@ public class BotManager {
             }
         }
 
-        BotLogger.debug("✅ Загружено NPC ботов: " + botsMap.size());
+        BotLogger.info("✅ Загружено NPC ботов: " + botsMap.size());
 
         // ✅ После загрузки сразу обновляем маркеры
-        BotLogger.debug("✅ Обновляем карту: " );
+        BotLogger.info("✅ Обновляем карту: " );
 
          bm_markers= new BlueMapMarkers(this);
          bm_markers.scheduleMarkerUpdate();

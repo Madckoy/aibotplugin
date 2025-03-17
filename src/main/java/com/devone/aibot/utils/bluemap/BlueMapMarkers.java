@@ -32,7 +32,7 @@ public class BlueMapMarkers {
 
             //scheduleMarkerUpdate();
 
-            BotLogger.info("BlueMapAPI detected! Initializing marker system...");
+            BotLogger.info("💡 BlueMapAPI detected! Initializing marker system...");
 
         });
     }
@@ -56,11 +56,11 @@ public class BlueMapMarkers {
                 Location lastLocation = lastKnownLocations.get(botId);
 
                 if (lastLocation != null) {
-                    BotLogger.info("[BlueMapMarkers]" + bot.getId() + " 📍Last known location on map: " + BotStringUtils.formatLocation(lastLocation));
+                    BotLogger.info("💡 " + bot.getId() + " 📍Last known location on map: " + BotStringUtils.formatLocation(lastLocation));
 
                     // Если позиция не изменилась – пропускаем обновление
                     if (lastLocation.equals(loc)) {
-                        BotLogger.info("[BlueMapMarkers]" + bot.getId() + " 📍 Locations are the same! ");
+                        BotLogger.info("💡 " + bot.getId() + " 📍 Locations are the same! ");
                         continue;
                     }
                 }
@@ -140,7 +140,7 @@ public class BlueMapMarkers {
             return;
         }
 
-        boolean updateTriggered = false;
+        //boolean updateTriggered = false;
 
         for (Bot bot : bots) {
 

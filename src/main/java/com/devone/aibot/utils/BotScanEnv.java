@@ -60,18 +60,18 @@ public class BotScanEnv {
         List<Entity> nearbyEntities = BotScanEnv.scanNearbyNatural(bot, radius);
     
         if (nearbyEntities.isEmpty()) {
-            BotLogger.info(bot.getId()+" В радиусе " + radius + " блоков нет НИЧЕГО.");
+            BotLogger.info("💡 " + bot.getId()+" В радиусе " + radius + " блоков нет НИЧЕГО.");
             return;
         }
     
-        BotLogger.info(bot.getId()+" В радиусе " + radius + " блоков есть:");
+        BotLogger.info("💡 "+ bot.getId()+" В радиусе " + radius + " блоков есть:");
 
         for (Entity entity : nearbyEntities) {
             if (entity instanceof Item) {
                 ItemStack item = ((Item) entity).getItemStack();
-                 BotLogger.debug(bot.getId() + " - 🎁 " + item.getAmount() + "x " + item.getType());
+                BotLogger.info("🎁 " + bot.getId() +" " + item.getAmount() + "x " + item.getType());
             } else {
-                BotLogger.debug(bot.getId() + " - 🔹 " + entity.getType() + " (" + entity.getName() + ")");
+                BotLogger.info("🔹 " + bot.getId() + " " + entity.getType() + " (" + entity.getName() + ")");
             }
         }
     }

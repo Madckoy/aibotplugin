@@ -66,7 +66,7 @@ public class BotNavigationUtils {
 
         double distanceSquared = current.distanceSquared(target);
 
-        BotLogger.debug("📏 Квадрат расстояния: " + distanceSquared);
+        BotLogger.info("📏 Квадрат расстояния: " + distanceSquared);
 
         if (distanceSquared <= tolerance * tolerance) {
             BotLogger.info("✅ " + bot.getId()+ " Бот достиг цели! " + BotStringUtils.formatLocation(current));

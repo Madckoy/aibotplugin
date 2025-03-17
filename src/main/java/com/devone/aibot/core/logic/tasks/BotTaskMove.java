@@ -38,7 +38,7 @@ public class BotTaskMove implements BotTask {
     @Override
     public void update() {
 
-        BotLogger.info("update(): "+bot.getId() + " Running task: " + name);
+        BotLogger.info("✨ " + bot.getId() + " Running task: " + name);
 
         if (Bukkit.getServer().isStopping()) {
             BotLogger.info("⚠️ " + bot.getId() + " Сервер выключается, отменяем обновление BotMoveTask.");
@@ -102,9 +102,9 @@ public class BotTaskMove implements BotTask {
     public void setPaused(boolean paused) {
         this.isPaused = paused;
         if (isPaused) {
-            BotLogger.info("꩜ " + bot.getId() + " ꩜ Pausing...");
+            BotLogger.info("ℹ️ " + bot.getId() + " ꩜ Pausing...");
         } else {
-            BotLogger.info("▶️ " + bot.getId() + " ꩜ Resuming...");
+            BotLogger.info("ℹ️ " + bot.getId() + " ꩜ Resuming...");
         }
     }
 
@@ -157,7 +157,7 @@ public class BotTaskMove implements BotTask {
             }
 
         } catch (Exception ex) {
-            BotLogger.error("⚠ " + bot.getId() + ex.getMessage());
+            BotLogger.error("❌ " + bot.getId() + ex.getMessage());
             return_state = true; // stop doing the active task
         }
         return return_state;

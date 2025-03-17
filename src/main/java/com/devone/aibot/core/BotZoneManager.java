@@ -47,10 +47,10 @@ public class BotZoneManager {
                 double z = config.getDouble("zones." + zoneName + ".z");
                 int radius = config.getInt("zones." + zoneName + ".radius");
                 protectedZones.put(zoneName, new BotProtectedZone(x, y, z, radius));
-                BotLogger.debug("Loaded zone: " + zoneName + " at (" + x + ", " + y + ", " + z + ") with radius " + radius);
+                BotLogger.info("━ Loaded zone: " + zoneName + " at (" + x + ", " + y + ", " + z + ") with radius " + radius);
             }
         }
-        BotLogger.debug("Total zones loaded: " + protectedZones.size());
+        BotLogger.info("☰ Total zones loaded: " + protectedZones.size());
     }
 
     public void saveZones() {
@@ -65,20 +65,21 @@ public class BotZoneManager {
         }
         try {
             config.save(zonesFile);
-            BotLogger.debug("Zones saved successfully.");
+            BotLogger.info("🗺️ Zones saved succesfully.");
+
         } catch (IOException e) {
-            BotLogger.debug("Failed to save zones: " + e.getMessage());
+            BotLogger.error("❌ Failed to save zones: " + e.getMessage());
         }
     }    
 
     public void addZone(String name, Location center, int radius) {
         protectedZones.put(name, new BotProtectedZone(center.getX(), center.getY(), center.getZ(), radius));
-        BotLogger.debug("Added new zone: " + name + " at " + center.toString() + " with radius " + radius);
+        BotLogger.info("➕ Added new zone: " + name + " at " + center.toString() + " with radius " + radius);
     }
 
     public boolean removeZone(String name) {
         if (protectedZones.remove(name) != null) {
-            BotLogger.debug("Removed zone: " + name);
+            BotLogger.info("➖ Removed zone: " + name);
             return true;
         }
         return false;
