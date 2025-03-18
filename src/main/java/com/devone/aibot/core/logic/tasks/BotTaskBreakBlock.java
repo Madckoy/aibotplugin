@@ -4,15 +4,16 @@ import com.devone.aibot.core.BotInventory;
 import java.util.*;
 
 import com.devone.aibot.utils.BotStringUtils;
+import com.devone.aibot.utils.EnvironmentScanner;
+
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import com.devone.aibot.core.Bot;
 import com.devone.aibot.core.BotZoneManager;
 import com.devone.aibot.core.logic.tasks.configs.BotTaskBreakBlockConfig;
-import com.devone.aibot.core.logic.tasks.configs.BotTaskPatrolConfig;
+
 import com.devone.aibot.utils.BotLogger;
-import com.devone.aibot.utils.BotScanEnv;
 import com.devone.aibot.AIBotPlugin;
 
 public class BotTaskBreakBlock extends BotTask {
@@ -90,7 +91,7 @@ public class BotTaskBreakBlock extends BotTask {
                 BotLogger.debug(" 🔄 " + bot.getId() + " Переход к следующему блоку " + BotStringUtils.formatLocation(targetLocation));
             } else {
                 // Получаем карту блоков в радиусе поиска
-                Map<Location, Material> scannedBlocks = BotScanEnv.scan3D(bot.getNPCCurrentLocation(), searchRadius);
+                Map<Location, Material> scannedBlocks = EnvironmentScanner.scan3D(bot.getNPCCurrentLocation(), searchRadius);
 
                 targetLocation = findNearestTargetBlock(scannedBlocks);
 

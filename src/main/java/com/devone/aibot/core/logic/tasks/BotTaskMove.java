@@ -13,7 +13,6 @@ import java.util.stream.Collectors;
 
 public class BotTaskMove extends BotTask {
 
-    private Location targetLocation;
     private BukkitTask taskHandle; // 🟢 Сохраняем ссылку на таймер, чтобы его остановить
 
     public BotTaskMove(Bot bot) {
@@ -70,7 +69,7 @@ public class BotTaskMove extends BotTask {
             }
 
             // 3. Получаем список доступных точек вокруг
-            Map<Location, Material> scannedBlocks = BotScanEnv.scan3D(bot.getNPCEntity().getLocation(), 10);
+            Map<Location, Material> scannedBlocks = EnvironmentScanner.scan3D(bot.getNPCEntity().getLocation(), 10);
             List<Location> validPoints = scannedBlocks.entrySet().stream()
                 .filter(entry -> BotNavigation.isSuitableForNavigation(entry.getKey(), entry.getValue()))
                 .map(Map.Entry::getKey)
@@ -94,6 +93,7 @@ public class BotTaskMove extends BotTask {
 
             // 6. Двигаемся к следующей точке
             bot.getNPCNavigator().setTarget(nextNavLoc);
+            // 
             BotLogger.debug(bot.getId() + " 🚶 Двигаюсь в " + BotStringUtils.formatLocation(nextNavLoc) + " [ID: " + uuid + "]");
 
         }, 0L, 20L); // ✅ Запускаем обновление навигации каждые 20 тиков (1 секунда)

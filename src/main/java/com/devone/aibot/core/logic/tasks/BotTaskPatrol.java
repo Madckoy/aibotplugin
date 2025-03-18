@@ -5,13 +5,17 @@ import com.devone.aibot.core.logic.tasks.configs.BotTaskPatrolConfig;
 import com.devone.aibot.utils.BotLogger;
 import com.devone.aibot.utils.BotNavigation;
 import com.devone.aibot.utils.BotStringUtils;
+import com.devone.aibot.utils.EnvironmentScanner;
+
+import java.util.Map;
 
 import org.bukkit.Location;
+import org.bukkit.Material;
 
 
 public class BotTaskPatrol extends BotTask {
   
-    private int patrolRadius = 10;
+    private int patrolRadius = 15;
     private BotTaskPatrolConfig config;
 
     public BotTaskPatrol(Bot bot) {
@@ -30,14 +34,7 @@ public class BotTaskPatrol extends BotTask {
 
         BotLogger.debug("👀 " + bot.getId() + " Patrolling with radius: " + patrolRadius + " [ID: " + uuid + "]");
 
-        //Location newPatrolTarget;
-        int attempts = 0;
-
-        // 🛑 Не выбираем точку слишком близко!
-        do {
-            this.targetLocation = BotNavigation.getRandomPatrolPoint(bot, patrolRadius);
-            attempts++;
-        } while (this.targetLocation.distanceSquared(bot.getNPCEntity().getLocation()) < 4.0 && attempts < 5);
+        targetLocation = BotNavigation.getRandomPatrolPoint(bot, patrolRadius);
 
         // ✅ Если бот уже идёт — не даём ему новую команду
         if (bot.getNPCNavigator().isNavigating()) {
@@ -55,9 +52,9 @@ public class BotTaskPatrol extends BotTask {
 
         BotLogger.debug("🚶 " + bot.getId() + " Moving to patrol point: " + BotStringUtils.formatLocation(this.targetLocation) + " [Task ID: " + uuid + "]");
 
-        //BotNavigation.navigateTo(bot, this.targetLocation, 10); //via a new MoVeTask()
+        BotNavigation.navigateTo(bot, targetLocation, 15); //via a new MoVeTask()
 
-        this.isDone = true;
+        this.isDone = false;
 
     }
 

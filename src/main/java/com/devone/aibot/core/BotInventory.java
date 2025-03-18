@@ -14,7 +14,6 @@ import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.InventoryHolder;
 import org.bukkit.inventory.ItemStack;
 
-import com.devone.aibot.utils.BotScanEnv;
 import com.devone.aibot.utils.BotLogger;
 
 public class BotInventory {
@@ -84,7 +83,7 @@ public class BotInventory {
 
         BotLogger.debug("🛒 " + bot.getId()+" Будет подобирать материал! Параметры подбора: " + shouldPickup + " | " + autoPickupEnabled );
 
-        BotScanEnv.logScanNatural(bot, 20.0);
+        //BotScanEnv.logScanNatural(bot, 20.0);
 
         if(autoPickupEnabled) {
             pullAllItemsinRadius(2.0);
