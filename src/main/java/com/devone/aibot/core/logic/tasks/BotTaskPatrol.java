@@ -22,7 +22,9 @@ public class BotTaskPatrol extends BotTask {
 
     public void executeTask() {
 
-        BotLogger.debug("🚦 " + bot.getId() +  " Состояние семафоров: "+ this.isDone + this.isPaused + BotStringUtils.formatLocation(this.targetLocation) + " [ID: " + this.uuid + "]");
+        BotLogger.debug("🚦 " + bot.getId() + " " + this.name +" Status: "+ this.isDone +" | " +this.isPaused +
+        " 📍 xyz: " +BotStringUtils.formatLocation(bot.getNPCCurrentLocation())+
+        " 🎯 xyz: " +BotStringUtils.formatLocation(this.targetLocation) + " [ID: " + this.uuid + "]");
 
         if (this.isPaused) return;
 
@@ -53,7 +55,9 @@ public class BotTaskPatrol extends BotTask {
 
         BotLogger.debug("🚶 " + bot.getId() + " Moving to patrol point: " + BotStringUtils.formatLocation(this.targetLocation) + " [Task ID: " + uuid + "]");
 
-        BotNavigation.navigateTo(bot, this.targetLocation, 10); //via a new MoVeTask()
+        //BotNavigation.navigateTo(bot, this.targetLocation, 10); //via a new MoVeTask()
+
+        this.isDone = true;
 
     }
 
