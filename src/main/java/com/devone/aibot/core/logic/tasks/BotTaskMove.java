@@ -68,33 +68,15 @@ public class BotTaskMove extends BotTask {
                 return;
             }
 
-            // 3. Получаем список доступных точек вокруг
-            Map<Location, Material> scannedBlocks = EnvironmentScanner.scan3D(bot.getNPCEntity().getLocation(), 10);
-            List<Location> validPoints = scannedBlocks.entrySet().stream()
-                .filter(entry -> BotNavigation.isSuitableForNavigation(entry.getKey(), entry.getValue()))
-                .map(Map.Entry::getKey)
-                .collect(Collectors.toList());
-
-            if (validPoints.isEmpty()) {
-                BotLogger.debug(bot.getId() + " ⚠️ Нет доступных точек для движения! Пробуем снова..." + " [ID: " + uuid + "]");
-                return;
-            }
-
-            // 4. Выбираем ближайшую точку
-            Location nextNavLoc = validPoints.stream()
-                .min((loc1, loc2) -> Double.compare(loc1.distanceSquared(targetLocation), loc2.distanceSquared(targetLocation)))
-                .orElse(targetLocation);
-
             // 5. Проверяем, может ли бот туда пройти
-            if (!bot.getNPCNavigator().canNavigateTo(nextNavLoc)) {
-                BotLogger.debug(bot.getId() + " ❌ Не могу найти путь, пробую пересканировать..." + " [ID: " + uuid + "]");
+            if (!bot.getNPCNavigator().canNavigateTo(targetLocation)) {
+                BotLogger.debug(bot.getId() + " ❌ Не могу найти путь, Stopping here..." + " [ID: " + uuid + "]");
+                isDone = true;
                 return;
+            } else {
+                BotLogger.debug(bot.getId() + " 🚶 Двигаюсь в " + BotStringUtils.formatLocation(targetLocation) + " [ID: " + uuid + "]");
+                bot.getNPCNavigator().setTarget(targetLocation);
             }
-
-            // 6. Двигаемся к следующей точке
-            bot.getNPCNavigator().setTarget(nextNavLoc);
-            // 
-            BotLogger.debug(bot.getId() + " 🚶 Двигаюсь в " + BotStringUtils.formatLocation(nextNavLoc) + " [ID: " + uuid + "]");
 
         }, 0L, 20L); // ✅ Запускаем обновление навигации каждые 20 тиков (1 секунда)
     }
