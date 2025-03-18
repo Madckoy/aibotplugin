@@ -68,6 +68,9 @@ public class BotTaskBreakBlock extends BotTask {
     
     @Override
     public void executeTask() {
+        BotLogger.debug("🚦 " + bot.getId() + " " + name +" Status: "+ isDone +" | " +isPaused +
+        " 📍 xyz: " +BotStringUtils.formatLocation(bot.getNPCCurrentLocation())+
+        " 🎯 xyz: " +BotStringUtils.formatLocation(targetLocation) + " [ID: " + uuid + "]");
 
         if(!BotInventory.hasFreeInventorySpace(bot, targetMaterials)) {
             BotLogger.debug("🔄 " +bot.getId() + " No free space in Inventory! Exiting...");
@@ -104,7 +107,6 @@ public class BotTaskBreakBlock extends BotTask {
 
                             BotTaskMove moveTask = new BotTaskMove(bot);
                             moveTask.configure(newLocation);
-                      
                             bot.getLifeCycle().getTaskStackManager().pushTask(moveTask); // Перемещаем бота через новый таск в стеке
 
                            return;
@@ -149,7 +151,9 @@ public class BotTaskBreakBlock extends BotTask {
 
         Bukkit.getScheduler().runTask(AIBotPlugin.getInstance(), () -> {
             if (targetLocation != null && targetLocation.getBlock().getType() != Material.AIR) {
+
                 targetLocation.getBlock().breakNaturally();
+
                 BotLogger.info("✅ Блок разрушен на " + BotStringUtils.formatLocation(targetLocation));
 
                 // check inventory here
