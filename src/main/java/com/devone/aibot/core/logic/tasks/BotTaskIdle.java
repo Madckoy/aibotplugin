@@ -34,7 +34,7 @@ public class BotTaskIdle extends BotTask {
                 Material.ROOTED_DIRT
         );
 
-        int maxDirtToCollect = 64;
+        int maxDirtToCollect = 128;
 
         // Check if bot needs to clean up the inventory
         if(!BotInventory.hasFreeInventorySpace(bot, dirtTypes) || BotInventory.hasEnoughBlocks(bot, dirtTypes, maxDirtToCollect)) {
