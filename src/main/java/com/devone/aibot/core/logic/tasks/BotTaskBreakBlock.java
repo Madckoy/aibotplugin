@@ -34,7 +34,7 @@ public class BotTaskBreakBlock extends BotTask {
     private static final Map<Material, Integer> BREAK_TIME_PER_BLOCK = new HashMap<>();
     
     public BotTaskBreakBlock(Bot bot) {
-        super(bot, "⛏");
+        super(bot, "⛏️");
         this.bot = bot;
         this.config = new BotTaskBreakBlockConfig();
         isEnabled = config.isEnabled();
