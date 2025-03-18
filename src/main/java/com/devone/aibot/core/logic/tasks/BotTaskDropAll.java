@@ -8,7 +8,7 @@ import com.devone.aibot.core.BotInventory;
 public class BotTaskDropAll extends BotTaskPlayerLinked {
 
     public BotTaskDropAll(Bot bot, Player player) {
-        super(bot, player, "DROP-ALL");
+        super(bot, player, "🎁");
     }
 
     @Override

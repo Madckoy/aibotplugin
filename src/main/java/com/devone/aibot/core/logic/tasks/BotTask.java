@@ -15,7 +15,7 @@ public abstract class BotTask implements IBotTask{
     protected Bot bot;
     protected Player player = null;
     protected long startTime = System.currentTimeMillis();
-    protected String name = "N/A";
+    protected String name = "☑️";
     protected boolean isPaused  = false;
     protected boolean isDone = false;
     protected Location targetLocation;

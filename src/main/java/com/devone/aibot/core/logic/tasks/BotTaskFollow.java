@@ -8,7 +8,7 @@ public class BotTaskFollow extends BotTaskPlayerLinked {
 
 
     public BotTaskFollow(Bot bot, Player player) {
-        super(bot, player, "FOLLOW");
+        super(bot, player, "👯");
     }
 
 

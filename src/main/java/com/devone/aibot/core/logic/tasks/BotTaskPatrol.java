@@ -19,7 +19,7 @@ public class BotTaskPatrol extends BotTask {
     private BotTaskPatrolConfig config;
 
     public BotTaskPatrol(Bot bot) {
-        super(bot, "👮‍♀️");
+        super(bot, "🌊");
         this.config = new BotTaskPatrolConfig();
         this.patrolRadius = config.getPatrolRadius();
     }

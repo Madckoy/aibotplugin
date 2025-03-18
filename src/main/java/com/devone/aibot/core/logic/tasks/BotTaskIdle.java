@@ -15,7 +15,7 @@ import com.devone.aibot.utils.BotLogger;
 public class BotTaskIdle extends BotTask {
 
     public BotTaskIdle(Bot bot) {
-        super(bot, "🌀");
+        super(bot, "💤");
         this.bot = bot;
         new BotTaskIdleConfig();
     }
@@ -74,7 +74,7 @@ public class BotTaskIdle extends BotTask {
 
         } else {
             // 💤 30% шанс остаться в IDLE
-            BotLogger.debug("🌀 " + bot.getId() + " Остаётся в IDLE.");
+            BotLogger.debug("💤 " + bot.getId() + " Остаётся в IDLE.");
         }
 
     }
