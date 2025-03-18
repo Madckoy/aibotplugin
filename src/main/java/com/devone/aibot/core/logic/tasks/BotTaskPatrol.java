@@ -51,10 +51,11 @@ public class BotTaskPatrol extends BotTask {
         double rand = Math.random();
         if (rand < 0.3) {
             // 📌 30% шанс выйти из патрулирования
+            BotLogger.debug("🚶 " + bot.getId() + " Moving out of patroling: " + BotStringUtils.formatLocation(targetLocation) + " [Task ID: " + uuid + "]");
             targetLocation = null;
             isDone = true;
         } else {
-            BotLogger.debug("🚶 " + bot.getId() + " Moving to patrol point: " + BotStringUtils.formatLocation(this.targetLocation) + " [Task ID: " + uuid + "]");
+            BotLogger.debug("🚶 " + bot.getId() + " Moving to patrol point: " + BotStringUtils.formatLocation(targetLocation) + " [Task ID: " + uuid + "]");
 
             BotNavigation.navigateTo(bot, targetLocation, 15); //via a new MoVeTask()
             isDone = false;
