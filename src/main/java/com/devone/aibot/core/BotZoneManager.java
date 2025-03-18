@@ -66,7 +66,7 @@ public class BotZoneManager {
         }
         try {
             config.save(zonesFile);
-            BotLogger.info("🗺️ Zones saved succesfully.");
+            BotLogger.debug("🗺️ Zones saved succesfully.");
 
         } catch (IOException e) {
             BotLogger.error("❌ Failed to save zones: " + e.getMessage());
@@ -75,12 +75,12 @@ public class BotZoneManager {
 
     public void addZone(String name, Location center, int radius) {
         protectedZones.put(name, new BotProtectedZone(center.getX(), center.getY(), center.getZ(), radius));
-        BotLogger.info("➕ Added new zone: " + name + " at " + center.toString() + " with radius " + radius);
+        BotLogger.debug("➕ Added new zone: " + name + " at " + center.toString() + " with radius " + radius);
     }
 
     public boolean removeZone(String name) {
         if (protectedZones.remove(name) != null) {
-            BotLogger.info("➖ Removed zone: " + name);
+            BotLogger.debug("➖ Removed zone: " + name);
             return true;
         }
         return false;

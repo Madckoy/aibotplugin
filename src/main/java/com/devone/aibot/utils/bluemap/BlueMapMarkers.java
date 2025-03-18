@@ -101,7 +101,7 @@ public class BlueMapMarkers {
     public void scheduleMarkerUpdate() {
 
         Bukkit.getScheduler().runTaskTimer(AIBotPlugin.getInstance(), () -> {
-            BotLogger.info("✅ Обновление маркеров запущено.");
+            BotLogger.debug("✅ Обновление маркеров запущено.");
 
             updateAllMarkers();
 
@@ -176,7 +176,7 @@ public class BlueMapMarkers {
 
             mSet.put(botId, marker);
 
-            BotLogger.info("🔄 Updating BlueMap Markers for bot: " + botId + " at " + BotStringUtils.formatLocation(loc));
+            BotLogger.debug("🔄 Updating BlueMap Markers for bot: " + botId + " at " + BotStringUtils.formatLocation(loc));
 
         }
     }

@@ -58,13 +58,13 @@ public class BotTaskIdle extends BotTask {
 
         if (rand < 0.4) {
             // 📌 40% шанс начать патрулирование
-            BotLogger.info("👀 " + bot.getId() + " Starts Patrolling");
+            BotLogger.debug("👀 " + bot.getId() + " Starts Patrolling");
             BotTaskPatrol patrolTask = new BotTaskPatrol(bot);
             bot.getLifeCycle().getTaskStackManager().pushTask(patrolTask);
 
         } else if (rand < 0.7) {
             // ⛏ 30% шанс начать добычу
-            BotLogger.info("⛏ " + bot.getId() + " Starts Breaking the blocks");
+            BotLogger.debug("⛏ " + bot.getId() + " Starts Breaking the blocks");
             BotTaskBreakBlock breakTask = new BotTaskBreakBlock(bot);
             
             if(breakTask.isEnabled) {
