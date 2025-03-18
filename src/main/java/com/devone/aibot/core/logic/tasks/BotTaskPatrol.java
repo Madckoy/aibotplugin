@@ -15,7 +15,7 @@ import org.bukkit.Material;
 
 public class BotTaskPatrol extends BotTask {
   
-    private int patrolRadius = 5;
+    private int patrolRadius = 10;
     private BotTaskPatrolConfig config;
 
     public BotTaskPatrol(Bot bot) {
