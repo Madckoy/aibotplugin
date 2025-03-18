@@ -16,7 +16,7 @@ public class BotTaskMove extends BotTask {
     private BukkitTask taskHandle; // 🟢 Сохраняем ссылку на таймер, чтобы его остановить
 
     public BotTaskMove(Bot bot) {
-        super(bot, "MOVE");
+        super(bot, "🏃");
     }
 
     @Override
@@ -33,7 +33,9 @@ public class BotTaskMove extends BotTask {
     @Override
     public void executeTask() {
 
-        BotLogger.debug(bot.getId() + " 🚦 Состояние семафоров: "+ isDone + isPaused + BotStringUtils.formatLocation(targetLocation) + " [Task ID: " + uuid + "]");
+        BotLogger.debug("🚦 " + bot.getId() + " " + this.name +" Status: "+ this.isDone +" | " +this.isPaused +
+        " 📍 xyz: " +BotStringUtils.formatLocation(bot.getNPCCurrentLocation())+
+        " 🎯 xyz: " +BotStringUtils.formatLocation(this.targetLocation) + " [ID: " + this.uuid + "]");
 
         if (taskHandle != null && !taskHandle.isCancelled()) {
             BotLogger.debug(bot.getId() + " ⏳ Таймер уже запущен, жду... [ID: " + uuid + "]");

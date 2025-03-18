@@ -19,7 +19,7 @@ public class BotTaskPatrol extends BotTask {
     private BotTaskPatrolConfig config;
 
     public BotTaskPatrol(Bot bot) {
-        super(bot, "PATROL");
+        super(bot, "👮‍♀️");
         this.config = new BotTaskPatrolConfig();
         this.patrolRadius = config.getPatrolRadius();
     }
@@ -54,7 +54,14 @@ public class BotTaskPatrol extends BotTask {
 
         BotNavigation.navigateTo(bot, targetLocation, 15); //via a new MoVeTask()
 
-        this.isDone = false;
+
+        double rand = Math.random();
+        if (rand < 0.3) {
+            // 📌 30% шанс выйти из патрулирования
+            this.isDone = true;
+        } else {
+            this.isDone = false;
+        }
 
     }
 
