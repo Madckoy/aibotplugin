@@ -57,7 +57,7 @@ public class BotTaskPatrol extends BotTask {
         } else {
             BotLogger.debug("🚶 " + bot.getId() + " Moving to patrol point: " + BotStringUtils.formatLocation(targetLocation) + " [Task ID: " + uuid + "]");
 
-            BotNavigation.navigateTo(bot, targetLocation, 15); //via a new MoVeTask()
+            BotNavigation.navigateTo(bot, targetLocation, patrolRadius); //via a new MoVeTask()
             isDone = false;
         }
 
