@@ -63,11 +63,11 @@ public class BlueMapMarkers {
                 Location lastLocation = lastKnownLocations.get(botId);
 
                 if (lastLocation != null) {
-                    BotLogger.info("💡 " + bot.getId() + " 📍Last known location on map: " + BotStringUtils.formatLocation(lastLocation));
+                    BotLogger.debug("💡 " + bot.getId() + " 📍Last known location on map: " + BotStringUtils.formatLocation(lastLocation));
 
                     // Если позиция не изменилась – пропускаем обновление
                     if (lastLocation.equals(loc)) {
-                        BotLogger.info("💡 " + bot.getId() + " 📍 Locations are the same! ");
+                        BotLogger.debug("💡 " + bot.getId() + " 📍 Locations are the same! ");
                         continue;
                     }
                 }
@@ -76,10 +76,10 @@ public class BlueMapMarkers {
 
                 hasChanges = true;
 
-                BotLogger.info("📍 " +bot.getId() + "Обновлён маркер бота : " + BotStringUtils.formatLocation(loc));
+                BotLogger.debug("📍 " +bot.getId() + "Обновлён маркер бота : " + BotStringUtils.formatLocation(loc));
 
             } else {
-                BotLogger.info("📍 " + bot.getId() + "All Locations are unknown. Skip update.");
+                BotLogger.debug("📍 " + bot.getId() + "All Locations are unknown. Skip update.");
             }
 
         }
@@ -136,12 +136,12 @@ public class BlueMapMarkers {
     public void updateBlueMapMarkers(List<Bot> bots,  Map<String, Location> lastKnownLocations) {
 
         if (mSet == null) {
-            BotLogger.info("❌ MarkerSet set is not initialized yet!");
+            BotLogger.debug("❌ MarkerSet set is not initialized yet!");
             return;
         }
 
         if (bots.isEmpty()) {
-            BotLogger.info("❌ No bots on the Map, skipping update.");
+            BotLogger.debug("❌ No bots on the Map, skipping update.");
             return;
         }
 

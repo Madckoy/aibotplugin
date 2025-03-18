@@ -15,7 +15,7 @@ import org.bukkit.Material;
 
 public class BotTaskPatrol extends BotTask {
   
-    private int patrolRadius = 15;
+    private int patrolRadius = 5;
     private BotTaskPatrolConfig config;
 
     public BotTaskPatrol(Bot bot) {
@@ -26,11 +26,11 @@ public class BotTaskPatrol extends BotTask {
 
     public void executeTask() {
 
-        BotLogger.debug("🚦 " + bot.getId() + " " + this.name +" Status: "+ this.isDone +" | " +this.isPaused +
+        BotLogger.debug("🚦 " + bot.getId() + " " + name +" Status: "+ isDone +" | " +isPaused +
         " 📍 xyz: " +BotStringUtils.formatLocation(bot.getNPCCurrentLocation())+
-        " 🎯 xyz: " +BotStringUtils.formatLocation(this.targetLocation) + " [ID: " + this.uuid + "]");
+        " 🎯 xyz: " +BotStringUtils.formatLocation(targetLocation) + " [ID: " + uuid + "]");
 
-        if (this.isPaused) return;
+        if (isPaused) return;
 
         BotLogger.debug("👀 " + bot.getId() + " Patrolling with radius: " + patrolRadius + " [ID: " + uuid + "]");
 
@@ -42,37 +42,24 @@ public class BotTaskPatrol extends BotTask {
             return;
         }
 
-        if (shouldExitPatrol()) {
+        if (targetLocation == null) {
             BotLogger.debug("👀 " + bot.getId() + " Has finished patrolling." +  " [ID: " + uuid + "]");
             isDone = true; // ✅ Теперь `PATROL` корректно завершает себя
             return;
         }
 
-        
-
-        BotLogger.debug("🚶 " + bot.getId() + " Moving to patrol point: " + BotStringUtils.formatLocation(this.targetLocation) + " [Task ID: " + uuid + "]");
-
-        BotNavigation.navigateTo(bot, targetLocation, 15); //via a new MoVeTask()
-
-
         double rand = Math.random();
         if (rand < 0.3) {
             // 📌 30% шанс выйти из патрулирования
-            this.isDone = true;
+            targetLocation = null;
+            isDone = true;
         } else {
-            this.isDone = false;
+            BotLogger.debug("🚶 " + bot.getId() + " Moving to patrol point: " + BotStringUtils.formatLocation(this.targetLocation) + " [Task ID: " + uuid + "]");
+
+            BotNavigation.navigateTo(bot, targetLocation, 15); //via a new MoVeTask()
+            isDone = false;
         }
 
     }
 
-    private boolean shouldExitPatrol() {
-
-        if (this.targetLocation == null) return true;
-
-        if (BotNavigation.hasReachedTarget(bot, this.targetLocation, 2.0)) { // 🔧 Уменьшен tolerance, чтобы патруль не завершался сразу
-            this.isDone = true;
-            return true;
-        }
-        return false;
-    }
 }

@@ -34,7 +34,7 @@ public class BotTaskBreakBlock extends BotTask {
     private static final Map<Material, Integer> BREAK_TIME_PER_BLOCK = new HashMap<>();
     
     public BotTaskBreakBlock(Bot bot) {
-        super(bot, "BREAK");
+        super(bot, "🔨");
         this.bot = bot;
         this.config = new BotTaskBreakBlockConfig();
         isEnabled = config.isEnabled();
@@ -127,13 +127,13 @@ public class BotTaskBreakBlock extends BotTask {
         }
 
         if (targetLocation.getBlock().getType() == Material.AIR) {
-            BotLogger.info("⚠️ " + bot.getId() + " Бот пытается ломать воздух! Меняем цель...");
+            BotLogger.debug("⚠️ " + bot.getId() + " Бот пытается ломать воздух! Меняем цель...");
             targetLocation = null;
             return;
         }
 
         if (BotZoneManager.getInstance().isInProtectedZone(targetLocation)) {
-            BotLogger.info("⛔ " + bot.getId() + " в запретной зоне, НЕ будет разрушать блок: " + BotStringUtils.formatLocation(targetLocation));
+            BotLogger.debug("⛔ " + bot.getId() + " в запретной зоне, НЕ будет разрушать блок: " + BotStringUtils.formatLocation(targetLocation));
             isDone = true;
             return;
         }
@@ -143,7 +143,7 @@ public class BotTaskBreakBlock extends BotTask {
         if (breakProgress < breakTime) {
             breakProgress += 1; // ⚡ Ускоряем в 1 раз
             bot.getNPCEntity().getWorld().playEffect(targetLocation, org.bukkit.Effect.STEP_SOUND, targetLocation.getBlock().getType());
-            BotLogger.info("⏳ "+ bot.getId() + " Ломает " + targetLocation.getBlock().getType() + " [" + breakProgress + "/" + breakTime + "]");
+            BotLogger.debug("⏳ "+ bot.getId() + " Ломает " + targetLocation.getBlock().getType() + " [" + breakProgress + "/" + breakTime + "]");
             return;
         }
 
