@@ -77,7 +77,16 @@ public class BotTaskMove extends BotTask {
                 return;
             } else {
                 BotLogger.debug(bot.getId() + " 🚶 Двигаюсь в " + BotStringUtils.formatLocation(targetLocation) + " [ID: " + uuid + "]");
-                bot.getNPCNavigator().setTarget(targetLocation);
+                if(bot.getNPCEntity() ==null) {
+
+                    BotLogger.debug(bot.getId() + " 👻 Проблема с сущьностью! В задаче ID: " + uuid + "]");
+                    
+                    taskHandle.cancel(); // ✅ Останавливаем таймер
+                    isDone = true; // останавливаем  задачу
+
+                } else {
+                   bot.getNPCNavigator().setTarget(targetLocation);
+                }
             }
 
         }, 0L, 20L); // ✅ Запускаем обновление навигации каждые 20 тиков (1 секунда)

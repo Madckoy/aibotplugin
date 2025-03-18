@@ -52,7 +52,7 @@ public class BotLifecycleLogCsv {
 
             String logEntry = String.format("%s,%s,%s,%d,%d,%d,%s,%s",
                     getCurrentTimestamp(), botName, loc.getWorld().getName(),
-                    loc.getBlockX(), loc.getBlockY(), loc.getBlockZ(), t_name, e_time);
+                    loc.getBlockX(), loc.getBlockY(), loc.getBlockZ(),"'"+t_name+"'", e_time);
 
             bw.write(logEntry);
             bw.newLine();
@@ -69,7 +69,7 @@ public class BotLifecycleLogCsv {
         try (FileWriter writer = new FileWriter(file, true);
              BufferedWriter bw = new BufferedWriter(writer)) {
 
-            bw.write("timestamp,bot_id,world,x,y,z");
+            bw.write("timestamp,bot_id,world,x,y,z,action,duration");
             bw.newLine();
 
         } catch (IOException e) {
