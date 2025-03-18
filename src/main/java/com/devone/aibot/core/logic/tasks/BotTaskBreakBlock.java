@@ -63,14 +63,11 @@ public class BotTaskBreakBlock extends BotTask {
 
         bot.setAutoPickupEnabled(shouldPickup);
 
-        BotLogger.info("🔨 BreakBlockTask сконфигурирована: " + (targetMaterials == null ? "ВСЕ БЛОКИ" : targetMaterials));
+        BotLogger.info("⚙️ BreakBlockTask сконфигурирована: " + (targetMaterials == null ? "ВСЕ БЛОКИ" : targetMaterials));
     }
     
     @Override
     public void executeTask() {
-        BotLogger.debug("🚦 " + bot.getId() + " " + name +" Status: "+ isDone +" | " +isPaused +
-        " 📍 xyz: " +BotStringUtils.formatLocation(bot.getNPCCurrentLocation())+
-        " 🎯 xyz: " +BotStringUtils.formatLocation(targetLocation) + " [ID: " + uuid + "]");
 
         if(!BotInventory.hasFreeInventorySpace(bot, targetMaterials)) {
             BotLogger.debug("🔄 " +bot.getId() + " No free space in Inventory! Exiting...");
@@ -154,7 +151,7 @@ public class BotTaskBreakBlock extends BotTask {
 
                 targetLocation.getBlock().breakNaturally();
 
-                BotLogger.info("✅ Блок разрушен на " + BotStringUtils.formatLocation(targetLocation));
+                BotLogger.debug("✅ Блок разрушен на " + BotStringUtils.formatLocation(targetLocation));
 
                 // check inventory here
 
@@ -200,7 +197,7 @@ public class BotTaskBreakBlock extends BotTask {
         for (Location loc : neighbors) {
             if (targetMaterials == null || targetMaterials.contains(loc.getBlock().getType())) {
                 pendingBlocks.add(loc);
-                BotLogger.info("➕ Добавили соседний блок в очередь " + BotStringUtils.formatLocation(loc));
+                BotLogger.debug("➕ Добавили соседний блок в очередь " + BotStringUtils.formatLocation(loc));
             }
         }
     }

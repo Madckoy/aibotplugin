@@ -198,7 +198,7 @@ public class BotWebService {
 
                     // Формируем отображение стека задач
                     String taskStackText = taskStack.isEmpty() ? "N/A"
-                        : taskStack.stream().map(BotTask::getName).collect(Collectors.joining(" → "));
+                        : taskStack.stream().map(BotTask::getName).collect(Collectors.joining(" • "));
 
                     botJson.addProperty("queue", taskStackText);
 

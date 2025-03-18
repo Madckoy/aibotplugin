@@ -26,10 +26,6 @@ public class BotTaskPatrol extends BotTask {
 
     public void executeTask() {
 
-        BotLogger.debug("🚦 " + bot.getId() + " " + name +" Status: "+ isDone +" | " +isPaused +
-        " 📍 xyz: " +BotStringUtils.formatLocation(bot.getNPCCurrentLocation())+
-        " 🎯 xyz: " +BotStringUtils.formatLocation(targetLocation) + " [ID: " + uuid + "]");
-
         if (isPaused) return;
 
         BotLogger.debug("👀 " + bot.getId() + " Patrolling with radius: " + patrolRadius + " [ID: " + uuid + "]");

@@ -8,7 +8,7 @@ import org.bukkit.entity.Player;
 public class BotTaskProtect extends BotTaskPlayerLinked {
 
     public BotTaskProtect(Bot bot, Player player) {
-        super(bot, player, "PROTECT");
+        super(bot, player, "🛡️");
     }
 
     @Override

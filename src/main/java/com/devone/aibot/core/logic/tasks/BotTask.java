@@ -5,7 +5,7 @@ import org.bukkit.entity.Player;
 
 import com.devone.aibot.core.Bot;
 import com.devone.aibot.utils.BotLogger;
-
+import com.devone.aibot.utils.BotStringUtils;
 
 import java.util.UUID; // Добавляем для генерации уникального ID
 
@@ -43,13 +43,16 @@ public abstract class BotTask implements IBotTask{
     @Override
     public void update() {
 
-        BotLogger.debug("✨ " + bot.getId() + " Running task: " + name + " [ID: " + uuid + "]");
+        //BotLogger.debug("✨ " + bot.getId() + " Running task: " + name + " [ID: " + uuid + "]");
+
+        BotLogger.debug("🚦 " + bot.getId() + " " + name +" Status: "+ isDone +" | " +isPaused +
+        " 📍 xyz: " +BotStringUtils.formatLocation(bot.getNPCCurrentLocation())+
+        " 🎯 xyz: " +BotStringUtils.formatLocation(targetLocation) + " [ID: " + uuid + "]");
         
         if (isPaused) return;
 
         if (this.player!=null && !isPlayerOnline()) {
             handlePlayerDisconnect();
-            return;
         }
 
         if( isEnabled ) { executeTask(); }
@@ -73,7 +76,7 @@ public abstract class BotTask implements IBotTask{
     @Override
     public void setPaused(boolean paused) {
         this.isPaused = paused;
-        String status = isPaused ? "⏳ Pausing..." : "▶️ Resuming...";
+        String status = isPaused ? "⏸️ Pausing..." : "▶️ Resuming...";
         BotLogger.debug(status + bot.getId() + " [ID: " + uuid + "]");
     }
 
