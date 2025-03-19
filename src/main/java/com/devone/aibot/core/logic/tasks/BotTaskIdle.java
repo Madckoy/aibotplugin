@@ -45,10 +45,10 @@ public class BotTaskIdle extends BotTask {
             drop_task.setPaused(true);
             bot.getLifeCycle().getTaskStackManager().pushTask(drop_task);
             
+            Location drop_off_loc = drop_task.getTargetLocation();
             
             // go to the drop point
             BotTaskMove moveTask = new BotTaskMove(bot);
-            Location drop_off_loc = Bot.getFallbackLocation();
             moveTask.configure(drop_off_loc);
             bot.getLifeCycle().getTaskStackManager().pushTask(moveTask);
             BotLogger.debug("⛏ " + bot.getId() + " Goes to drop off location: " + BotStringUtils.formatLocation(drop_off_loc));

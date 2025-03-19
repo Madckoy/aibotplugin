@@ -15,22 +15,22 @@ import org.bukkit.Material;
 
 public class BotTaskPatrol extends BotTask {
   
-    private int patrolRadius = 10;
+    private int scanRadius = 10;
     private BotTaskPatrolConfig config;
 
     public BotTaskPatrol(Bot bot) {
         super(bot, "🌊");
         this.config = new BotTaskPatrolConfig();
-        this.patrolRadius = config.getPatrolRadius();
+        this.scanRadius = config.getScanRadius();
     }
 
     public void executeTask() {
 
         if (isPaused) return;
 
-        BotLogger.debug("👀 " + bot.getId() + " Patrolling with radius: " + patrolRadius + " [ID: " + uuid + "]");
+        BotLogger.debug("👀 " + bot.getId() + " Patrolling with radius: " + scanRadius + " [ID: " + uuid + "]");
 
-        targetLocation = BotNavigation.getRandomPatrolPoint(bot, patrolRadius);
+        targetLocation = BotNavigation.getRandomPatrolPoint(bot, scanRadius);
 
         // ✅ Если бот уже идёт — не даём ему новую команду
         if (bot.getNPCNavigator().isNavigating()) {
@@ -53,7 +53,7 @@ public class BotTaskPatrol extends BotTask {
         } else {
             BotLogger.debug("🚶 " + bot.getId() + " Moving to patrol point: " + BotStringUtils.formatLocation(targetLocation) + " [Task ID: " + uuid + "]");
 
-            BotNavigation.navigateTo(bot, targetLocation, patrolRadius); //via a new MoVeTask()
+            BotNavigation.navigateTo(bot, targetLocation, scanRadius); //via a new MoVeTask()
             isDone = false;
         }
 
