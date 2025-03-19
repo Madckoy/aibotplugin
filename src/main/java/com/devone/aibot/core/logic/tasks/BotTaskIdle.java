@@ -53,7 +53,7 @@ public class BotTaskIdle extends BotTask {
             moveTask.configure(drop_off_loc);
             bot.addTaskToQueue(moveTask);
 
-            BotLogger.debug("⛏ " + bot.getId() + " Goes to drop off location: " + BotStringUtils.formatLocation(drop_off_loc));
+            BotLogger.debug("📦 " + bot.getId() + " Goes to drop off location: " + BotStringUtils.formatLocation(drop_off_loc));
 
             return;
         }
