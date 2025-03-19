@@ -93,6 +93,14 @@ public class BotTaskBreakBlock extends BotTask {
                 // Получаем карту блоков в радиусе поиска
                 Map<Location, Material> scannedBlocks = EnvironmentScanner.scan3D(bot.getNPCCurrentLocation(), searchRadius);
 
+                if(scannedBlocks==null) { // stuck
+                   
+                    handleStuck();
+
+                    isDone = true;
+                    return;
+                }
+
                 targetLocation = findNearestTargetBlock(scannedBlocks);
 
                 if (targetLocation == null) {

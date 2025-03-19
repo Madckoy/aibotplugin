@@ -106,13 +106,16 @@ public abstract class BotTask implements IBotTask{
         return System.currentTimeMillis() - startTime;
     }
 
-    public boolean handleStuck() {
-        if( targetLocation!= null ) {
-            bot.getNPCEntity().teleport(targetLocation);
-        } else {
-            bot.getNPCEntity().teleport(Bot.getFallbackLocation());
-        }
-        return true; //do teleport maybe?
+    public void handleStuck() {
+            if( targetLocation!= null ) {
+                if(bot.getNPCEntity()!=null) {
+                    bot.getNPCEntity().teleport(targetLocation);
+                }
+            } else {
+                if(bot.getNPCEntity()!=null) {
+                   bot.getNPCEntity().teleport(Bot.getFallbackLocation());
+                }
+            }
     }
 
     private boolean isPlayerOnline() {
