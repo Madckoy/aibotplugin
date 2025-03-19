@@ -34,10 +34,10 @@ public class BotTaskIdle extends BotTask {
                 Material.ROOTED_DIRT
         );
 
-        int maxDirtToCollect = 128;
+        int maxToCollect = 128;
 
         // Check if bot needs to clean up the inventory
-        if(!BotInventory.hasFreeInventorySpace(bot, dirtTypes) || BotInventory.hasEnoughBlocks(bot, dirtTypes, maxDirtToCollect)) {
+        if(!BotInventory.hasFreeInventorySpace(bot, dirtTypes) || BotInventory.hasEnoughBlocks(bot, dirtTypes, maxToCollect)) {
 
             bot.setAutoPickupEnabled(false);
 
@@ -58,25 +58,48 @@ public class BotTaskIdle extends BotTask {
             return;
         }
 
-        if (rand <= 0.8) {
-            // 📌 60% шанс начать патрулирование
-            BotLogger.debug("👀 " + bot.getId() + " Starts Patrolling");
+        if (rand >= 0.8) {
+            // 📌 начать патрулирование
+            BotLogger.debug("👮🏻‍♂️ " + bot.getId() + " Starts Patrolling");
+
             BotTaskPatrol patrolTask = new BotTaskPatrol(bot);
             bot.addTaskToQueue(patrolTask);
 
-        } else if (rand <= 0.2) {
-            // ⛏ 20% шанс начать добычу
+            return;
+        }
+
+        if (rand < 0.8 && rand >= 0.5) {
+           // ⛏ 30% шанс начать добычу земли
+           BotTaskBreakBlock breakTask = new BotTaskBreakBlock(bot);
+
+           if(breakTask.isEnabled) {
+               breakTask.configure(dirtTypes, maxToCollect, 10, true); //ломаем все, включая кабины (тестовый режим) и лутаем!!!
+               bot.addTaskToQueue(breakTask);
+
+           }
+               
+           return;
+
+        }
+        
+        if (rand < 0.5 && rand >= 2.0) {
+             // ⛏ 30% шанс начать добычу всего подряд
             BotTaskBreakBlock breakTask = new BotTaskBreakBlock(bot);
 
             if(breakTask.isEnabled) {
-                breakTask.configure(dirtTypes, maxDirtToCollect, 10, true); //ломаем все, включая кабины (тестовый режим) и лутаем!!!
+                breakTask.configure(null, maxToCollect, 10, true); //ломаем все, включая кабины (тестовый режим) и лутаем!!!
                 bot.addTaskToQueue(breakTask);
+            }    
+                
+            return;
 
-            }
-
-        } else {
+        } 
+        
+        if (rand < 0.2) {
             // 💤 20% шанс остаться в IDLE
             BotLogger.debug("💤 " + bot.getId() + " Остаётся в IDLE.");
+                
+            return;
         }
 
     }
