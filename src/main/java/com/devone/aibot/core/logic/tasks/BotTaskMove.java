@@ -24,7 +24,7 @@ public class BotTaskMove extends BotTask {
             this.targetLocation = (Location) params[0];
 
         } else {
-            
+
             BotLogger.error(bot.getId() + " ❌ Некорректные параметры для `BotTaskMove`!");
             isDone = true;
         }
@@ -71,23 +71,25 @@ public class BotTaskMove extends BotTask {
                     isDone = true;
                     return;
                 } else {
-                    BotLogger.trace(bot.getId() + " 🚶 Двигаюсь в " + BotStringUtils.formatLocation(targetLocation) + " [ID: " + uuid + "]");
+                   
                     if(bot.getNPCEntity() ==null) {
 
-                    BotLogger.trace(bot.getId() + " 👻 Проблема с сущьностью! В задаче ID: " + uuid + "]");
+                        BotLogger.trace(bot.getId() + " 👻 Проблема с сущьностью! В задаче ID: " + uuid + "]");
                     
-                    taskHandle.cancel(); // ✅ Останавливаем таймер
-                    isDone = true; // останавливаем  задачу
+                        taskHandle.cancel(); // ✅ Останавливаем таймер
+                        isDone = true; // останавливаем  задачу
 
                     } else {
+                        
+                        BotLogger.trace(bot.getId() + " 🚶 Двигаюсь в " + BotStringUtils.formatLocation(targetLocation) + " [ID: " + uuid + "]");
 
-                        BotTaskMove moveTask = new BotTaskMove(bot);
-                        moveTask.configure(targetLocation);
-                        bot.addTaskToQueue(moveTask);
+                        bot.getNPCCurrentLocation().setDirection(targetLocation.toVector().subtract(bot.getNPCCurrentLocation().toVector()));
+
+                        bot.getNPCNavigator().setTarget(targetLocation);
                         
                     }
-                }
             }
+        }
 
         }, 0L, 100L); // ✅ Запускаем обновление навигации каждые 20 тиков (1 секунда)
     }
