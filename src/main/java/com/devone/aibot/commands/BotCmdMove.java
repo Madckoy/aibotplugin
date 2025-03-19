@@ -4,6 +4,7 @@ import com.devone.aibot.core.Bot;
 import com.devone.aibot.core.BotManager;
 import com.devone.aibot.core.logic.tasks.BotTaskMove;
 import com.devone.aibot.utils.BotLogger;
+import com.devone.aibot.utils.BotStringUtils;
 
 import org.bukkit.Location;
 import org.bukkit.World;
@@ -48,15 +49,15 @@ public class BotCmdMove implements CommandExecutor {
             World world = player.getWorld();
             Location targetLocation = new Location(world, x, y, z);
 
-            BotLogger.debug("📌 /bot-move: Бот " + bot.getId() + " идет к " + formatLocation(targetLocation));
+            BotLogger.debug("📌 /bot-move: Бот " + bot.getId() + " идет к " + BotStringUtils.formatLocation(targetLocation));
 
 
             // ✅ Добавляем задачу на перемещение
             BotTaskMove moveTask = new BotTaskMove(bot);
             moveTask.configure(targetLocation);
-            bot.getLifeCycle().getTaskStackManager().pushTask(moveTask);
+            bot.addTaskToQueue(moveTask);
 
-            player.sendMessage("§aБот " + bot.getId() + " идет к " + formatLocation(targetLocation));
+            player.sendMessage("§aБот " + bot.getId() + " идет к " + BotStringUtils.formatLocation(targetLocation));
 
         } catch (NumberFormatException e) {
             player.sendMessage("§cОшибка: координаты должны быть числами.");
@@ -65,7 +66,4 @@ public class BotCmdMove implements CommandExecutor {
         return true;
     }
 
-    private String formatLocation(Location loc) {
-        return "(" + loc.getBlockX() + ", " + loc.getBlockY() + ", " + loc.getBlockZ() + ")";
-    }
 }

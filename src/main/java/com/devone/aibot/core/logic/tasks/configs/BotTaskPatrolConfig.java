@@ -1,6 +1,6 @@
 package com.devone.aibot.core.logic.tasks.configs;
 
-public class BotTaskPatrolConfig extends BotConfig{
+public class BotTaskPatrolConfig extends BotAbstractConfig{
 
 
     public BotTaskPatrolConfig() {

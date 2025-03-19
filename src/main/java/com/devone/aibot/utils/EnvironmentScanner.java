@@ -22,8 +22,8 @@ public class EnvironmentScanner {
         int centerY = center.getBlockY();
         int centerZ = center.getBlockZ();
 
-        int minHeight = centerY - 4; // Верхняя граница Y (-4 от бота) // Ограничение по глубине Y (-4) // Теперь Z правильно ограничен
-        int maxHeight = centerY + 4; // Нижняя граница Y (+4 от бота) // Ограничение по глубине Y (+4) // Теперь Z правильно ограничен
+        int minHeight = centerY - 10; // Верхняя граница Y (-4 от бота) // Ограничение по глубине Y (-4) // Теперь Z правильно ограничен
+        int maxHeight = centerY + 10; // Нижняя граница Y (+4 от бота) // Ограничение по глубине Y (+4) // Теперь Z правильно ограничен
 
         Map<Location, Material> scannedBlocks = new HashMap<>();
         JSONArray blockArray = new JSONArray();
@@ -34,9 +34,10 @@ public class EnvironmentScanner {
                     Location loc = new Location(world, centerX + x, y, centerZ + z);
                     Material material = world.getBlockAt(loc).getType();
                     // Исключаем листву и деревья из сканирования
-                    if (material == Material.OAK_LEAVES || material == Material.OAK_LOG || material == Material.SPRUCE_LEAVES || material == Material.SPRUCE_LOG || material == Material.BIRCH_LEAVES || material == Material.BIRCH_LOG || material == Material.JUNGLE_LEAVES || material == Material.JUNGLE_LOG || material == Material.ACACIA_LEAVES || material == Material.ACACIA_LOG || material == Material.DARK_OAK_LEAVES || material == Material.DARK_OAK_LOG) {
-                        continue;
-                    }
+                    // if (material == Material.OAK_LEAVES || material == Material.OAK_LOG || material == Material.SPRUCE_LEAVES || material == Material.SPRUCE_LOG || material == Material.BIRCH_LEAVES || material == Material.BIRCH_LOG || material == Material.JUNGLE_LEAVES || material == Material.JUNGLE_LOG || material == Material.ACACIA_LEAVES || material == Material.ACACIA_LOG || material == Material.DARK_OAK_LEAVES || material == Material.DARK_OAK_LOG) {
+                    //    continue;
+                    //}
+                    
                     scannedBlocks.put(loc, material);
 
                     JSONObject blockData = new JSONObject();

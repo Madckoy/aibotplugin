@@ -34,8 +34,7 @@ public class BotCmdStop implements CommandExecutor {
 
         // ✅ Добавляем задачу на ожидание 5 минут
         BotTaskIdle idleTask = new BotTaskIdle(bot);
-
-        bot.getLifeCycle().getTaskStackManager().pushTask(idleTask);
+        bot.addTaskToQueue(idleTask);
 
         player.sendMessage("§aБот " + bot.getId() + " Остановился и ждет!");
 

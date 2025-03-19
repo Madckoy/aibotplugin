@@ -4,6 +4,7 @@ import com.devone.aibot.core.Bot;
 import com.devone.aibot.core.BotManager;
 import com.devone.aibot.core.logic.tasks.BotTaskMove;
 import com.devone.aibot.utils.BotLogger;
+import com.devone.aibot.utils.BotStringUtils;
 
 import org.bukkit.Location;
 import org.bukkit.command.Command;
@@ -36,19 +37,16 @@ public class BotCmdHere implements CommandExecutor {
 
         Location targetLocation = player.getLocation();
 
-        BotLogger.info("📌 /bot-here: Бот " + bot.getId() + " идет к " + formatLocation(targetLocation));
+        BotLogger.info("📌 /bot-here: Бот " + bot.getId() + " Идет в точку " + BotStringUtils.formatLocation(targetLocation));
 
         // ✅ Добавляем задачу на перемещение
         BotTaskMove moveTask = new BotTaskMove(bot);
         moveTask.configure(targetLocation);
-        bot.getLifeCycle().getTaskStackManager().pushTask(moveTask);
+        bot.addTaskToQueue(moveTask);
 
-        player.sendMessage("§aБот " + bot.getId() + " идет к вам!");
+        player.sendMessage("§aБот " + bot.getId() + " Идет к игроку!");
 
         return true;
     }
 
-    private String formatLocation(Location loc) {
-        return "(" + loc.getBlockX() + ", " + loc.getBlockY() + ", " + loc.getBlockZ() + ")";
-    }
 }

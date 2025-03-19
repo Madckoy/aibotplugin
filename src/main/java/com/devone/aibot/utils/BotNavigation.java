@@ -1,20 +1,13 @@
 package com.devone.aibot.utils;
-import org.bukkit.Bukkit;
+
 import org.bukkit.Location;
 import org.bukkit.Material;
-import org.bukkit.World;
-import org.json.simple.JSONArray;
-import org.json.simple.JSONObject;
 
-import com.devone.aibot.AIBotPlugin;
 import com.devone.aibot.core.Bot;
 import com.devone.aibot.core.logic.tasks.BotTaskMove;
 
-import java.io.File;
-import java.io.FileWriter;
-import java.io.IOException;
 import java.util.*;
-import java.util.stream.Collectors;
+
 
 public class BotNavigation {
     
@@ -23,7 +16,7 @@ public class BotNavigation {
     public static void navigateTo(Bot bot, Location target, int scanRadius) {
         BotTaskMove moveTask = new BotTaskMove(bot);
         moveTask.configure(target);
-        bot.getLifeCycle().getTaskStackManager().pushTask(moveTask);
+        bot.addTaskToQueue(moveTask);
     }
 
     public static Location getRandomPatrolPoint(Bot bot, int scanRadius) {

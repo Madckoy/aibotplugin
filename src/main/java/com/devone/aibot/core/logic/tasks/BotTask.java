@@ -112,21 +112,27 @@ public abstract class BotTask implements IBotTask{
                 if(bot.getNPCEntity()!=null) {
                     BotLogger.trace("✨ " + bot.getId() + " Застрял! Телепортируемся в "+BotStringUtils.formatLocation(targetLocation));
                     
-                    bot.getNPCEntity().teleport(targetLocation);
+                    BotTaskTeleport tp = new BotTaskTeleport(bot, player);
+                    tp.configure(targetLocation);
+
+                    bot.addTaskToQueue(tp);
                 }
                 else {
                     // ??? уничтожать бота?
-                    BotLogger.trace("✨ " + bot.getId() + " Застрял! А так же нет  NPC Entity !");
+                    BotLogger.error("✨ " + bot.getId() + " Застрял! Нет Taget Location и нет NPC Entity!");
                 }
             } else {
                 if(bot.getNPCEntity()!=null) {
                   
-                    BotLogger.trace("✨ " + bot.getId() + " Застрял и нет Taget Location! Телепортируемся в точку респавна!");
- 
-                    bot.getNPCEntity().teleport(Bot.getFallbackLocation());
+                    BotLogger.trace("✨ " + bot.getId() + " Застрял! Нет Taget Location! Телепортируемся в точку респавна!");
+
+                    BotTaskTeleport tp = new BotTaskTeleport(bot, player);
+                    tp.configure(Bot.getFallbackLocation());
+                    bot.addTaskToQueue(tp);
+
                 } else {
                     // ??? уничтожать бота?
-                    BotLogger.trace("✨ " + bot.getId() + " Застрял ! А так же нет Taget Location и нет NPC Entity!");
+                    BotLogger.error("✨ " + bot.getId() + " Застрял! Нет Taget Location и нет NPC Entity!");
                 }
             }
     }
@@ -138,7 +144,8 @@ public abstract class BotTask implements IBotTask{
     private void handlePlayerDisconnect() {
         BotLogger.warn("🚨 Игрок " + player.getName() + " вышел! Бот " + bot.getId() + " переходит в автономный режим.");
         this.bot.getLifeCycle().getTaskStackManager().clearTasks();
-        this.bot.getLifeCycle().getTaskStackManager().pushTask( new BotTaskIdle(bot) );
+
+        bot.addTaskToQueue(new BotTaskIdle(bot));
         isDone = true;
     }
 

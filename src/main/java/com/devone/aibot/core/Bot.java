@@ -176,6 +176,10 @@ public class Bot {
 
     }
 
+    public void addTaskToQueue(BotTask task) {
+      getLifeCycle().getTaskStackManager().pushTask(task);
+    }
+
     public void setAutoPickupEnabled(boolean enabled) {
             this.autoPickupEnabled = enabled;
     }
@@ -199,8 +203,7 @@ public class Bot {
        
         BotTaskMove mv_task = new BotTaskMove(this);
         mv_task.configure(lastBrokenBlock);
-
-        getLifeCycle().getTaskStackManager().pushTask(mv_task);
+        addTaskToQueue(mv_task);
     }
 
     public BotTask getActiveTask() {

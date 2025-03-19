@@ -113,7 +113,7 @@ public class BotTaskBreakBlock extends BotTask {
 
                             BotTaskMove moveTask = new BotTaskMove(bot);
                             moveTask.configure(newLocation);
-                            bot.getLifeCycle().getTaskStackManager().pushTask(moveTask); // Перемещаем бота через новый таск в стеке
+                            bot.addTaskToQueue(moveTask);
 
                            return;
 

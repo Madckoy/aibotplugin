@@ -43,14 +43,16 @@ public class BotTaskIdle extends BotTask {
 
             BotTaskDropAll drop_task = new BotTaskDropAll(bot, null);
             drop_task.setPaused(true);
-            bot.getLifeCycle().getTaskStackManager().pushTask(drop_task);
+            bot.addTaskToQueue(drop_task);
             
             Location drop_off_loc = drop_task.getTargetLocation();
             
             // go to the drop point
             BotTaskMove moveTask = new BotTaskMove(bot);
+
             moveTask.configure(drop_off_loc);
-            bot.getLifeCycle().getTaskStackManager().pushTask(moveTask);
+            bot.addTaskToQueue(moveTask);
+
             BotLogger.debug("⛏ " + bot.getId() + " Goes to drop off location: " + BotStringUtils.formatLocation(drop_off_loc));
 
             return;
@@ -60,16 +62,16 @@ public class BotTaskIdle extends BotTask {
             // 📌 40% шанс начать патрулирование
             BotLogger.debug("👀 " + bot.getId() + " Starts Patrolling");
             BotTaskPatrol patrolTask = new BotTaskPatrol(bot);
-            bot.getLifeCycle().getTaskStackManager().pushTask(patrolTask);
+            bot.addTaskToQueue(patrolTask);
 
         } else if (rand < 0.7) {
             // ⛏ 30% шанс начать добычу
-            BotLogger.debug("⛏ " + bot.getId() + " Starts Breaking the blocks");
             BotTaskBreakBlock breakTask = new BotTaskBreakBlock(bot);
-            
+
             if(breakTask.isEnabled) {
-                breakTask.configure(dirtTypes, maxDirtToCollect, 5, true); //ломаем все, включая кабины (тестовый режим) и лутаем!!!
-                bot.getLifeCycle().getTaskStackManager().pushTask(breakTask);
+                breakTask.configure(dirtTypes, maxDirtToCollect, 10, true); //ломаем все, включая кабины (тестовый режим) и лутаем!!!
+                bot.addTaskToQueue(breakTask);
+
             }
 
         } else {
