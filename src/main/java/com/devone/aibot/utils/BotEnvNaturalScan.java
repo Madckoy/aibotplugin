@@ -8,14 +8,14 @@ import org.bukkit.inventory.ItemStack;
 
 import com.devone.aibot.core.Bot;
 
-public class EnvironmentScannerNatural {
+public class BotEnvNaturalScan {
 
 public static List<Entity> scanNearbyNatural(Bot bot, double radius) {
         return bot.getNPCEntity().getNearbyEntities(radius, radius, radius);
     }
 
     public static void logScanNatural(Bot bot, double radius) {
-        List<Entity> nearbyEntities = EnvironmentScannerNatural.scanNearbyNatural(bot, radius);
+        List<Entity> nearbyEntities = BotEnvNaturalScan.scanNearbyNatural(bot, radius);
     
         if (nearbyEntities.isEmpty()) {
             BotLogger.trace("💡 " + bot.getId()+" В радиусе " + radius + " блоков нет НИЧЕГО.");

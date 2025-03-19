@@ -1,11 +1,12 @@
 package com.devone.aibot.core;
 
 import java.util.List;
+import java.util.Map;
 import java.util.UUID;
 
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
-
+import org.bukkit.Material;
 import org.bukkit.World;
 import org.bukkit.entity.Entity;
 
@@ -210,4 +211,9 @@ public class Bot {
        return this.getLifeCycle().getTaskStackManager().getActiveTask();
     }    
 
+    public static void navigateTo(Bot bot, Location target) {
+        BotTaskMove moveTask = new BotTaskMove(bot);
+        moveTask.configure(target);
+        bot.addTaskToQueue(moveTask);
+    }
 }

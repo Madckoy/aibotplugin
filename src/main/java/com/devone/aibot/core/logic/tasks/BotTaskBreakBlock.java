@@ -4,7 +4,7 @@ import com.devone.aibot.core.BotInventory;
 import java.util.*;
 
 import com.devone.aibot.utils.BotStringUtils;
-import com.devone.aibot.utils.EnvironmentScanner;
+import com.devone.aibot.utils.BotEnv3DScan;
 
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
@@ -91,7 +91,7 @@ public class BotTaskBreakBlock extends BotTask {
                 BotLogger.trace(" 🔄 " + bot.getId() + " Переход к следующему блоку " + BotStringUtils.formatLocation(targetLocation));
             } else {
                 // Получаем карту блоков в радиусе поиска
-                Map<Location, Material> scannedBlocks = EnvironmentScanner.scan3D(bot.getNPCCurrentLocation(), searchRadius);
+                Map<Location, Material> scannedBlocks = BotEnv3DScan.scan3D(bot, searchRadius);
 
                 if(scannedBlocks.size()==0) { // stuck
                     BotLogger.trace("❌ " + bot.getId() + " Застрял и Нет доступных блоков для добычи! Перемещаемся к точке респавна.");
@@ -115,11 +115,13 @@ public class BotTaskBreakBlock extends BotTask {
                             moveTask.configure(newLocation);
                             bot.addTaskToQueue(moveTask);
 
-                           return;
+                            return;
 
                         } else {
                             //  Stop Task and exit
                             handleStuck();
+                            
+                            setEnvMap(null);
                             
                             isDone = true;
                             return;

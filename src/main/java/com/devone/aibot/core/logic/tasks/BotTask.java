@@ -1,6 +1,7 @@
 package com.devone.aibot.core.logic.tasks;
 
 import org.bukkit.Location;
+import org.bukkit.Material;
 import org.bukkit.entity.Player;
 
 import com.devone.aibot.core.Bot;
@@ -8,6 +9,7 @@ import com.devone.aibot.core.BotManager;
 import com.devone.aibot.utils.BotLogger;
 import com.devone.aibot.utils.BotStringUtils;
 
+import java.util.Map;
 import java.util.UUID; // Добавляем для генерации уникального ID
 
 
@@ -22,6 +24,7 @@ public abstract class BotTask implements IBotTask{
     protected Location targetLocation;
     protected boolean isEnabled = true;
     protected final String uuid; // 🆕 Уникальный ID задачи
+    Map<Location, Material> envMap;
 
     public BotTask(Bot bot) {
         this.bot = bot;
@@ -39,6 +42,14 @@ public abstract class BotTask implements IBotTask{
         this.player = player;
         this.name = name;
         this.uuid = UUID.randomUUID().toString(); // 🆕 Генерируем ID
+    }
+
+    public void setEnvMap(Map<Location, Material> env_map){
+        envMap = env_map;
+    }
+
+    public Map<Location, Material> getEnvMap(){
+        return envMap;
     }
 
     @Override

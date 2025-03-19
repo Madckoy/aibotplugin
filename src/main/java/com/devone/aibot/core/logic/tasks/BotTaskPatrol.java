@@ -3,15 +3,9 @@ package com.devone.aibot.core.logic.tasks;
 import com.devone.aibot.core.Bot;
 import com.devone.aibot.core.logic.tasks.configs.BotTaskPatrolConfig;
 import com.devone.aibot.utils.BotLogger;
-import com.devone.aibot.utils.BotNavigation;
+import com.devone.aibot.utils.BotNavigationUtils;
 import com.devone.aibot.utils.BotStringUtils;
-import com.devone.aibot.utils.EnvironmentScanner;
-
-import java.util.Map;
-
-import org.bukkit.Location;
-import org.bukkit.Material;
-
+import com.devone.aibot.utils.BotEnv3DScan;
 
 public class BotTaskPatrol extends BotTask {
   
@@ -29,18 +23,31 @@ public class BotTaskPatrol extends BotTask {
         if (isPaused) return;
 
         BotLogger.debug("👮🏻‍♂️ " + bot.getId() + " Patrolling with radius: " + scanRadius + " [ID: " + uuid + "]");
+        
+        if(getEnvMap()==null) {
+            BotTaskSonar3D sonar = new BotTaskSonar3D(bot, this);
+            bot.addTaskToQueue(sonar);
+            isDone = false;
+            return;
+        }  
 
-        targetLocation = BotNavigation.getRandomPatrolPoint(bot, scanRadius);
+        if (targetLocation == null) {
+            
+            targetLocation = BotEnv3DScan.getRandomEdgeBlock(getEnvMap());
+
+            Bot.navigateTo(bot, targetLocation);
+        } 
+
+        if (targetLocation == null) {
+            BotLogger.debug("👮🏻‍♂️ " + bot.getId() + " Has finished patrolling." +  " [ID: " + uuid + "]");
+            isDone = true; // ✅ Теперь `PATROL` корректно завершает себя
+            setEnvMap(null);// reset env map to force rescan
+            return;
+        }
 
         // ✅ Если бот уже идёт — не даём ему новую команду
         if (bot.getNPCNavigator().isNavigating()) {
             BotLogger.debug("👮🏻‍♂️ " + bot.getId() + " Already moving, skipping patrol update."+ " [ID: " + uuid + "]");
-            return;
-        }
-
-        if (targetLocation == null) {
-            BotLogger.debug("👀 " + bot.getId() + " Has finished patrolling." +  " [ID: " + uuid + "]");
-            isDone = true; // ✅ Теперь `PATROL` корректно завершает себя
             return;
         }
 
@@ -53,7 +60,8 @@ public class BotTaskPatrol extends BotTask {
         } else {
             BotLogger.debug("🚶 " + bot.getId() + " Moving to patrol point: " + BotStringUtils.formatLocation(targetLocation) + " [Task ID: " + uuid + "]");
 
-            BotNavigation.navigateTo(bot, targetLocation, scanRadius); //via a new MoVeTask()
+            Bot.navigateTo(bot, targetLocation); // via a new MoVeTask()
+
             isDone = false;
         }
 

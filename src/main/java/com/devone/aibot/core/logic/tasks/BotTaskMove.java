@@ -59,7 +59,7 @@ public class BotTaskMove extends BotTask {
             }
 
             // 2. Проверяем, достиг ли бот цели
-            if (BotNavigation.hasReachedTarget(bot, targetLocation, 8)) {
+            if (BotNavigationUtils.hasReachedTarget(bot, targetLocation, 10)) {
                 bot.resetTargetLocation();
                 isDone = true; // ✅ Теперь это действительно завершает задачу!
                 BotLogger.debug(bot.getId() + " 🎯 Достиг цели! Реальная позиция: " + bot.getNPCEntity().getLocation() + " [ID: " + uuid + "]");
@@ -68,14 +68,14 @@ public class BotTaskMove extends BotTask {
 
             // 5. Проверяем, может ли бот туда пройти
             if (!bot.getNPCNavigator().canNavigateTo(targetLocation)) {
-                BotLogger.debug(bot.getId() + " ❌ Не могу найти путь, Stopping here..." + " [ID: " + uuid + "]");
+                BotLogger.trace(bot.getId() + " ❌ Не могу найти путь, Stopping here..." + " [ID: " + uuid + "]");
                 isDone = true;
                 return;
             } else {
-                BotLogger.debug(bot.getId() + " 🚶 Двигаюсь в " + BotStringUtils.formatLocation(targetLocation) + " [ID: " + uuid + "]");
+                BotLogger.trace(bot.getId() + " 🚶 Двигаюсь в " + BotStringUtils.formatLocation(targetLocation) + " [ID: " + uuid + "]");
                 if(bot.getNPCEntity() ==null) {
 
-                    BotLogger.debug(bot.getId() + " 👻 Проблема с сущьностью! В задаче ID: " + uuid + "]");
+                    BotLogger.trace(bot.getId() + " 👻 Проблема с сущьностью! В задаче ID: " + uuid + "]");
                     
                     taskHandle.cancel(); // ✅ Останавливаем таймер
                     isDone = true; // останавливаем  задачу

@@ -1,4 +1,5 @@
 package com.devone.aibot.utils;
+import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.World;
@@ -14,16 +15,20 @@ import java.util.Random;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 
-public class EnvironmentScanner {
+import com.devone.aibot.core.Bot;
 
-    public static Map<Location, Material> scan3D(Location center, int scanRadius) { // Один радиус применяется к X и Z
-        World world = center.getWorld();
-        int centerX = center.getBlockX();
-        int centerY = center.getBlockY();
-        int centerZ = center.getBlockZ();
+public class BotEnv3DScan {
 
-        int minHeight = centerY - 10; // Верхняя граница Y (-4 от бота) // Ограничение по глубине Y (-4) // Теперь Z правильно ограничен
-        int maxHeight = centerY + 10; // Нижняя граница Y (+4 от бота) // Ограничение по глубине Y (+4) // Теперь Z правильно ограничен
+    public static Map<Location, Material> scan3D(Bot bot, int scanRadius) { // Один радиус применяется к X и Z
+        
+        World world = Bukkit.getWorlds().get(0);
+
+        int centerX = bot.getNPCCurrentLocation().getBlockX();
+        int centerY = bot.getNPCCurrentLocation().getBlockY();
+        int centerZ = bot.getNPCCurrentLocation().getBlockZ();
+
+        int minHeight = centerY - scanRadius; // Верхняя граница Y (-4 от бота) // Ограничение по глубине Y (-4) // Теперь Z правильно ограничен
+        int maxHeight = centerY + scanRadius; // Нижняя граница Y (+4 от бота) // Ограничение по глубине Y (+4) // Теперь Z правильно ограничен
 
         Map<Location, Material> scannedBlocks = new HashMap<>();
         JSONArray blockArray = new JSONArray();
@@ -34,10 +39,11 @@ public class EnvironmentScanner {
                     Location loc = new Location(world, centerX + x, y, centerZ + z);
                     Material material = world.getBlockAt(loc).getType();
                     // Исключаем листву и деревья из сканирования
+                    
                     // if (material == Material.OAK_LEAVES || material == Material.OAK_LOG || material == Material.SPRUCE_LEAVES || material == Material.SPRUCE_LOG || material == Material.BIRCH_LEAVES || material == Material.BIRCH_LOG || material == Material.JUNGLE_LEAVES || material == Material.JUNGLE_LOG || material == Material.ACACIA_LEAVES || material == Material.ACACIA_LOG || material == Material.DARK_OAK_LEAVES || material == Material.DARK_OAK_LOG) {
                     //    continue;
                     //}
-                    
+
                     scannedBlocks.put(loc, material);
 
                     JSONObject blockData = new JSONObject();
@@ -63,17 +69,23 @@ public class EnvironmentScanner {
         }
 
         // Запись в JSON файл
-        // saveScanResultToFile(blockArray, centerX, centerZ, centerY);
+        saveScanResultToFile(bot, blockArray);
 
         return scannedBlocks;
     }
 
-    private static void saveScanResultToFile(JSONArray scanData, int centerX, int centerZ, int centerY) {
-        File scanFile = new File(BotConstants.PLUGIN_TMP, "scan_result_" + System.currentTimeMillis() + ".json"); // Добавляем timestamp
+    private static void saveScanResultToFile(Bot bot, JSONArray scanData) {
+        //File scanFile = new File(BotConstants.PLUGIN_TMP, bot.getId()+"3d_vision" + System.currentTimeMillis() + ".json"); // Добавляем timestamp
+        File scanFile = new File(BotConstants.PLUGIN_TMP, bot.getId()+"vision_log.json"); // Добавляем timestamp
+
+        int centerX = bot.getNPCCurrentLocation().blockX();
+        int centerY = bot.getNPCCurrentLocation().blockY();
+        int centerZ = bot.getNPCCurrentLocation().blockZ();
+
         try (FileWriter file = new FileWriter(scanFile)) {
             JSONObject root = new JSONObject();
             if (BotConstants.FLIP_COORDS) {
-                    root.put("bot_position", new JSONObject(Map.of("x", centerX, "y", centerZ, "z", centerY)));
+                root.put("bot_position", new JSONObject(Map.of("x", centerX, "y", centerZ, "z", centerY)));
             } else {
                 root.put("bot_position", new JSONObject(Map.of("x", centerX, "y", centerY, "z", centerZ)));
             }
@@ -89,7 +101,7 @@ public class EnvironmentScanner {
         JSONArray edgeBlocks = new JSONArray();
         for (Location loc : scannedBlocks.keySet()) {
             Material material = scannedBlocks.get(loc);
-            if (material != Material.GRASS_BLOCK && material != Material.SAND) continue;
+            //if (material != Material.GRASS_BLOCK && material != Material.SAND) continue;
             boolean isEdge = false;
             for (int dx = -1; dx <= 1; dx++) {
                 for (int dz = -1; dz <= 1; dz++) {
@@ -118,7 +130,7 @@ public class EnvironmentScanner {
         List<Location> edgeLocations = new ArrayList<>();
         for (Location loc : scannedBlocks.keySet()) {
             Material material = scannedBlocks.get(loc);
-            if (material != Material.GRASS_BLOCK && material != Material.SAND) continue;
+            //if (material != Material.GRASS_BLOCK && material != Material.SAND) continue;
             boolean isEdge = false;
             for (int dx = -1; dx <= 1; dx++) {
                 for (int dz = -1; dz <= 1; dz++) {
