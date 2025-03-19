@@ -4,6 +4,7 @@ import org.bukkit.Location;
 import org.bukkit.entity.Player;
 
 import com.devone.aibot.core.Bot;
+import com.devone.aibot.core.BotManager;
 import com.devone.aibot.utils.BotLogger;
 import com.devone.aibot.utils.BotStringUtils;
 
@@ -109,11 +110,21 @@ public abstract class BotTask implements IBotTask{
     public void handleStuck() {
             if( targetLocation!= null ) {
                 if(bot.getNPCEntity()!=null) {
+                    BotLogger.debug("✨ " + bot.getId() + " Застрял и Нет доступных блоков для добычи! Телепортируемя в "+BotStringUtils.formatLocation(targetLocation));
+                    
                     bot.getNPCEntity().teleport(targetLocation);
+                }
+                else {
+                    // ??? уничтожать бота?
                 }
             } else {
                 if(bot.getNPCEntity()!=null) {
-                   bot.getNPCEntity().teleport(Bot.getFallbackLocation());
+                  
+                    BotLogger.debug("✨ " + bot.getId() + " Застрял и Нет доступных блоков для добычи! Телепортируемся в точку респавна!";
+ 
+                    bot.getNPCEntity().teleport(Bot.getFallbackLocation());
+                } else {
+                    // ??? уничтожать бота?
                 }
             }
     }

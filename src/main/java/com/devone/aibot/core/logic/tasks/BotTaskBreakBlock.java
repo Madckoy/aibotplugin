@@ -94,7 +94,8 @@ public class BotTaskBreakBlock extends BotTask {
                 Map<Location, Material> scannedBlocks = EnvironmentScanner.scan3D(bot.getNPCCurrentLocation(), searchRadius);
 
                 if(scannedBlocks==null) { // stuck
-                   
+                    BotLogger.debug("❌ " + bot.getId() + " Застрял и Нет доступных блоков для добычи! Перемещаемся к точке респавна.");
+                    
                     handleStuck();
 
                     isDone = true;
