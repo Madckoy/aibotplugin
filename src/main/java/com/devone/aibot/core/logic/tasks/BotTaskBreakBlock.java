@@ -63,7 +63,7 @@ public class BotTaskBreakBlock extends BotTask {
 
         bot.setAutoPickupEnabled(shouldPickup);
 
-        BotLogger.info("⚙️ BreakBlockTask сконфигурирована: " + (targetMaterials == null ? "ВСЕ БЛОКИ" : targetMaterials));
+        BotLogger.debug("⚙️ BreakBlockTask сконфигурирована: " + (targetMaterials == null ? "ВСЕ БЛОКИ" : targetMaterials));
     }
     
     @Override
@@ -115,7 +115,7 @@ public class BotTaskBreakBlock extends BotTask {
                         }
                 }
 
-                BotLogger.info("🛠️ " + bot.getId() + " Нашел " + targetLocation.getBlock().getType() + " на " + BotStringUtils.formatLocation(targetLocation));
+                BotLogger.debug("🛠️ " + bot.getId() + " Нашел " + targetLocation.getBlock().getType() + " на " + BotStringUtils.formatLocation(targetLocation));
 
                 // Телепортация в основном потоке
                 Bukkit.getScheduler().runTask(AIBotPlugin.getInstance(), () -> {
