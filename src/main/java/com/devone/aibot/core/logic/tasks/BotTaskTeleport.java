@@ -18,7 +18,7 @@ public class BotTaskTeleport extends BotTask {
     private BotTaskTeleportConfig config;
 
     public BotTaskTeleport(Bot bot, Player player) {
-        super(bot, player, "👯");
+        super(bot, player, "જ⁀➴");
 
         config = new BotTaskTeleportConfig();
     }
