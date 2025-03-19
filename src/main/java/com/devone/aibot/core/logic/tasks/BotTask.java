@@ -110,21 +110,23 @@ public abstract class BotTask implements IBotTask{
     public void handleStuck() {
             if( targetLocation!= null ) {
                 if(bot.getNPCEntity()!=null) {
-                    BotLogger.debug("✨ " + bot.getId() + " Застрял и Нет доступных блоков для добычи! Телепортируемся в "+BotStringUtils.formatLocation(targetLocation));
+                    BotLogger.trace("✨ " + bot.getId() + " Застрял! Телепортируемся в "+BotStringUtils.formatLocation(targetLocation));
                     
                     bot.getNPCEntity().teleport(targetLocation);
                 }
                 else {
                     // ??? уничтожать бота?
+                    BotLogger.trace("✨ " + bot.getId() + " Застрял! А так же нет  NPC Entity !");
                 }
             } else {
                 if(bot.getNPCEntity()!=null) {
                   
-                    BotLogger.debug("✨ " + bot.getId() + " Застрял и нет доступных блоков для добычи! Телепортируемся в точку респавна!");
+                    BotLogger.trace("✨ " + bot.getId() + " Застрял и нет Taget Location! Телепортируемся в точку респавна!");
  
                     bot.getNPCEntity().teleport(Bot.getFallbackLocation());
                 } else {
                     // ??? уничтожать бота?
+                    BotLogger.trace("✨ " + bot.getId() + " Застрял ! А так же нет Taget Location и нет NPC Entity!");
                 }
             }
     }

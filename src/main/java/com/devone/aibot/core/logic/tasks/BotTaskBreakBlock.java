@@ -119,6 +119,8 @@ public class BotTaskBreakBlock extends BotTask {
 
                         } else {
                             //  Stop Task and exit
+                            handleStuck();
+                            
                             isDone = true;
                             return;
                         }
