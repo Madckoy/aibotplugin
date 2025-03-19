@@ -58,14 +58,14 @@ public class BotTaskIdle extends BotTask {
             return;
         }
 
-        if (rand < 0.4) {
-            // 📌 40% шанс начать патрулирование
+        if (rand <= 0.8) {
+            // 📌 60% шанс начать патрулирование
             BotLogger.debug("👀 " + bot.getId() + " Starts Patrolling");
             BotTaskPatrol patrolTask = new BotTaskPatrol(bot);
             bot.addTaskToQueue(patrolTask);
 
-        } else if (rand < 0.7) {
-            // ⛏ 30% шанс начать добычу
+        } else if (rand <= 0.2) {
+            // ⛏ 20% шанс начать добычу
             BotTaskBreakBlock breakTask = new BotTaskBreakBlock(bot);
 
             if(breakTask.isEnabled) {
@@ -75,7 +75,7 @@ public class BotTaskIdle extends BotTask {
             }
 
         } else {
-            // 💤 30% шанс остаться в IDLE
+            // 💤 20% шанс остаться в IDLE
             BotLogger.debug("💤 " + bot.getId() + " Остаётся в IDLE.");
         }
 
