@@ -110,7 +110,7 @@ public abstract class BotTask implements IBotTask{
     public void handleStuck() {
             if( targetLocation!= null ) {
                 if(bot.getNPCEntity()!=null) {
-                    BotLogger.debug("✨ " + bot.getId() + " Застрял и Нет доступных блоков для добычи! Телепортируемя в "+BotStringUtils.formatLocation(targetLocation));
+                    BotLogger.debug("✨ " + bot.getId() + " Застрял и Нет доступных блоков для добычи! Телепортируемся в "+BotStringUtils.formatLocation(targetLocation));
                     
                     bot.getNPCEntity().teleport(targetLocation);
                 }
@@ -120,7 +120,7 @@ public abstract class BotTask implements IBotTask{
             } else {
                 if(bot.getNPCEntity()!=null) {
                   
-                    BotLogger.debug("✨ " + bot.getId() + " Застрял и Нет доступных блоков для добычи! Телепортируемся в точку респавна!";
+                    BotLogger.debug("✨ " + bot.getId() + " Застрял и нет доступных блоков для добычи! Телепортируемся в точку респавна!";
  
                     bot.getNPCEntity().teleport(Bot.getFallbackLocation());
                 } else {
