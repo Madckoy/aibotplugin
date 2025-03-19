@@ -33,8 +33,6 @@ public class BotTaskPatrol extends BotTask {
         if (targetLocation == null) {
             
             targetLocation = BotEnv3DScan.getRandomEdgeBlock(getEnvMap());
-
-            Bot.navigateTo(bot, targetLocation);
         } 
 
         if (targetLocation == null) {
@@ -57,13 +55,13 @@ public class BotTaskPatrol extends BotTask {
             BotLogger.debug("🚶 " + bot.getId() + " Moving out of patroling: " + BotStringUtils.formatLocation(targetLocation) + " [Task ID: " + uuid + "]");
             targetLocation = null;
             isDone = true;
-            
+
         } else {
             BotLogger.debug("🚶 " + bot.getId() + " Moving to patrol point: " + BotStringUtils.formatLocation(targetLocation) + " [Task ID: " + uuid + "]");
 
             Bot.navigateTo(bot, targetLocation); // via a new MoVeTask()
 
-            isDone = false;
+            isDone = true;
         }
 
     }
