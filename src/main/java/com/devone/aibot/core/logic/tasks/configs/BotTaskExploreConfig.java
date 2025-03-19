@@ -1,10 +1,10 @@
 package com.devone.aibot.core.logic.tasks.configs;
 
-public class BotTaskPatrolConfig extends BotAbstractConfig{
+public class BotTaskExploreConfig extends BotAbstractConfig{
 
 
-    public BotTaskPatrolConfig() {
-        super("BotTaskPatrol.yml");
+    public BotTaskExploreConfig() {
+        super("BotTaskExplore.yml");
     }
 
     public void generateDefaultConfig() {

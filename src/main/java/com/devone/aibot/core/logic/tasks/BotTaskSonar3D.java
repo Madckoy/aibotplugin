@@ -17,7 +17,7 @@ public class BotTaskSonar3D extends BotTask {
     private int height;
 
     public BotTaskSonar3D(Bot bot, BotTask caller, int radius, int height) {
-        super(bot, "ᯤ");
+        super(bot, "🛜"); // ᯤ
         parent = caller;
         this.radius = radius;
         this.height = height;

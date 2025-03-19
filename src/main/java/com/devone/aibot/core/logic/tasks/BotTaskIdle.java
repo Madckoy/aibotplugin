@@ -59,10 +59,10 @@ public class BotTaskIdle extends BotTask {
         }
 
         if (rand >= 0.8) {
-            // 📌 начать патрулирование
-            BotLogger.debug("👮🏻‍♂️ " + bot.getId() + " Starts Patrolling");
+            // 📌 начать exploration
+            BotLogger.debug("🌐 " + bot.getId() + " Starts Patrolling");
 
-            BotTaskPatrol patrolTask = new BotTaskPatrol(bot);
+            BotTaskExplore patrolTask = new BotTaskExplore(bot);
             bot.addTaskToQueue(patrolTask);
 
             return;
@@ -73,7 +73,7 @@ public class BotTaskIdle extends BotTask {
            BotTaskBreakBlock breakTask = new BotTaskBreakBlock(bot);
 
            if(breakTask.isEnabled) {
-               breakTask.configure(dirtTypes, maxToCollect, 10, true); //ломаем все, включая кабины (тестовый режим) и лутаем!!!
+               breakTask.configure(dirtTypes, maxToCollect, 10, true); //ломаем землю и лутаем!!!
                bot.addTaskToQueue(breakTask);
 
            }
@@ -82,20 +82,20 @@ public class BotTaskIdle extends BotTask {
 
         }
         
-        if (rand < 0.5 && rand >= 2.0) {
+        if (rand < 0.5 && rand >= 1.0) {
              // ⛏ 30% шанс начать добычу всего подряд
-            BotTaskBreakBlock breakTask = new BotTaskBreakBlock(bot);
+            BotTaskBreakBlockAny breakAnyTask = new BotTaskBreakBlockAny(bot);
 
-            if(breakTask.isEnabled) {
-                breakTask.configure(null, maxToCollect, 10, true); //ломаем все, включая кабины (тестовый режим) и лутаем!!!
-                bot.addTaskToQueue(breakTask);
+            if(breakAnyTask.isEnabled) {
+                breakAnyTask.configure(null, maxToCollect, 10, true); //ломаем все, включая кабины (тестовый режим) и лутаем!!!
+                bot.addTaskToQueue(breakAnyTask);
             }    
                 
             return;
 
         } 
         
-        if (rand < 0.2) {
+        if (rand < 0.1) {
             // 💤 20% шанс остаться в IDLE
             BotLogger.debug("💤 " + bot.getId() + " Остаётся в IDLE.");
                 
