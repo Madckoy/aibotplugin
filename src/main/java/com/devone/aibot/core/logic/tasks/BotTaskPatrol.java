@@ -29,11 +29,8 @@ public class BotTaskPatrol extends BotTask {
             isDone = false;
             return;
         }  
-
-        if (targetLocation == null) {
-            
-            targetLocation = BotEnv3DScan.getRandomEdgeBlock(getEnvMap());
-        } 
+    
+        targetLocation = BotEnv3DScan.getRandomEdgeBlock(getEnvMap()); 
 
         if (targetLocation == null) {
             BotLogger.debug("👮🏻‍♂️ " + bot.getId() + " Has finished patrolling." +  " [ID: " + uuid + "]");
@@ -50,20 +47,20 @@ public class BotTaskPatrol extends BotTask {
 
         double rand = Math.random();
 
-        if (rand < 0.3) {
+        if (rand < 0.4) {
             // 📌 30% шанс выйти из патрулирования
-            BotLogger.debug("🚶 " + bot.getId() + " Moving out of patroling: " + BotStringUtils.formatLocation(targetLocation) + " [Task ID: " + uuid + "]");
+            BotLogger.debug("👮🏻‍♂️ " + bot.getId() + " Moving out of patroling: " + BotStringUtils.formatLocation(targetLocation) + " [Task ID: " + uuid + "]");
             targetLocation = null;
             isDone = true;
 
         } else {
-            BotLogger.debug("🚶 " + bot.getId() + " Moving to patrol point: " + BotStringUtils.formatLocation(targetLocation) + " [Task ID: " + uuid + "]");
+            BotLogger.debug("👮🏻‍♂️ " + bot.getId() + " Moving to patrol point: " + BotStringUtils.formatLocation(targetLocation) + " [Task ID: " + uuid + "]");
 
             Bot.navigateTo(bot, targetLocation); // via a new MoVeTask()
-
-            isDone = true;
+            isDone = false;
         }
-
+        
+        setEnvMap(null);
     }
 
 }

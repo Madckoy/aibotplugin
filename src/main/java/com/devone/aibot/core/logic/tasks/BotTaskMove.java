@@ -12,7 +12,7 @@ public class BotTaskMove extends BotTask {
     private BukkitTask taskHandle; // 🟢 Сохраняем ссылку на таймер, чтобы его остановить
 
     public BotTaskMove(Bot bot) {
-        super(bot, "🏃‍♂️");
+        super(bot, "🏃‍➡️");
     }
 
     @Override
