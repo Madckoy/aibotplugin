@@ -20,12 +20,12 @@ public class BotNavigationUtils {
         int tx = target.getBlockX(), ty = target.getBlockY(), tz = target.getBlockZ();
     
         double distanceXZ = Math.sqrt(Math.pow(cx - tx, 2) + Math.pow(cz - tz, 2)); // 🔥 Только XZ
-        double yDifference = Math.abs(cy - ty);
+        double yDifference = Math.abs(cy - ty); 
  
         BotLogger.trace("✅ " + bot.getId() + " ZX  " + distanceXZ+ "  Y " + yDifference);
 
         // ✅ Если бот рядом по XZ и высота ±2 блока, считаем, что он дошёл
-        if (distanceXZ <= tolerance && yDifference <= tolerance) {
+        if (distanceXZ <= tolerance && yDifference <= (tolerance*2)) { // цель либо глубоко либо высоко, все равно считаем что пришли
             BotLogger.trace("✅ " + bot.getId() + " Бот достиг цели! " + BotStringUtils.formatLocation(current));
             return true;
         }
