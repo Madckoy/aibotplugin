@@ -120,7 +120,7 @@ public abstract class BotTask implements IBotTask{
             } else {
                 if(bot.getNPCEntity()!=null) {
                   
-                    BotLogger.debug("✨ " + bot.getId() + " Застрял и нет доступных блоков для добычи! Телепортируемся в точку респавна!";
+                    BotLogger.debug("✨ " + bot.getId() + " Застрял и нет доступных блоков для добычи! Телепортируемся в точку респавна!");
  
                     bot.getNPCEntity().teleport(Bot.getFallbackLocation());
                 } else {

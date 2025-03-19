@@ -19,7 +19,7 @@ public class BotTaskPatrol extends BotTask {
     private BotTaskPatrolConfig config;
 
     public BotTaskPatrol(Bot bot) {
-        super(bot, "🌊");
+        super(bot, "👮🏻‍♂️");
         this.config = new BotTaskPatrolConfig();
         this.scanRadius = config.getScanRadius();
     }
@@ -28,13 +28,13 @@ public class BotTaskPatrol extends BotTask {
 
         if (isPaused) return;
 
-        BotLogger.debug("👀 " + bot.getId() + " Patrolling with radius: " + scanRadius + " [ID: " + uuid + "]");
+        BotLogger.debug("👮🏻‍♂️ " + bot.getId() + " Patrolling with radius: " + scanRadius + " [ID: " + uuid + "]");
 
         targetLocation = BotNavigation.getRandomPatrolPoint(bot, scanRadius);
 
         // ✅ Если бот уже идёт — не даём ему новую команду
         if (bot.getNPCNavigator().isNavigating()) {
-            BotLogger.debug("👀 " + bot.getId() + " Already moving, skipping patrol update."+ " [ID: " + uuid + "]");
+            BotLogger.debug("👮🏻‍♂️ " + bot.getId() + " Already moving, skipping patrol update."+ " [ID: " + uuid + "]");
             return;
         }
 
