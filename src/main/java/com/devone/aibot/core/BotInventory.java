@@ -110,7 +110,7 @@ public class BotInventory {
             }
             
         } catch (Exception e) {
-            BotLogger.debug("🛒 " + bot.getId() +  " "+e.getMessage();
+            BotLogger.debug("🛒 " + bot.getId() +  " "+e.getMessage());
         }
 
     }
