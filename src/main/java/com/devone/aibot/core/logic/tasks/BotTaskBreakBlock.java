@@ -88,13 +88,13 @@ public class BotTaskBreakBlock extends BotTask {
         if (targetLocation == null) {
             if (!pendingBlocks.isEmpty()) {
                 targetLocation = pendingBlocks.poll(); // Берем следующий блок из очереди
-                BotLogger.debug(" 🔄 " + bot.getId() + " Переход к следующему блоку " + BotStringUtils.formatLocation(targetLocation));
+                BotLogger.trace(" 🔄 " + bot.getId() + " Переход к следующему блоку " + BotStringUtils.formatLocation(targetLocation));
             } else {
                 // Получаем карту блоков в радиусе поиска
                 Map<Location, Material> scannedBlocks = EnvironmentScanner.scan3D(bot.getNPCCurrentLocation(), searchRadius);
 
                 if(scannedBlocks.size()==0) { // stuck
-                    BotLogger.debug("❌ " + bot.getId() + " Застрял и Нет доступных блоков для добычи! Перемещаемся к точке респавна.");
+                    BotLogger.trace("❌ " + bot.getId() + " Застрял и Нет доступных блоков для добычи! Перемещаемся к точке респавна.");
 
                     handleStuck();
 
@@ -105,7 +105,7 @@ public class BotTaskBreakBlock extends BotTask {
                 targetLocation = findNearestTargetBlock(scannedBlocks);
 
                 if (targetLocation == null) {
-                    BotLogger.debug("❌ " + bot.getId() + " Нет доступных блоков для добычи! Перемещаемся к новой цели.");
+                    BotLogger.trace("❌ " + bot.getId() + " Нет доступных блоков для добычи! Перемещаемся к новой цели.");
                                                
                         Location newLocation = findNearestTargetBlock(scannedBlocks);
 
