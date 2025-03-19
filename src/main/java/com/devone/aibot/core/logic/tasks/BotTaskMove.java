@@ -18,9 +18,13 @@ public class BotTaskMove extends BotTask {
     @Override
     public void configure(Object... params) {
         super.configure(params);
+
         if (params.length == 1 && params[0] instanceof Location) {
+
             this.targetLocation = (Location) params[0];
+
         } else {
+            
             BotLogger.error(bot.getId() + " ❌ Некорректные параметры для `BotTaskMove`!");
             isDone = true;
         }
@@ -55,33 +59,33 @@ public class BotTaskMove extends BotTask {
             }
 
             // 2. Проверяем, достиг ли бот цели
-            if (BotNavigationUtils.hasReachedTarget(bot, targetLocation, 10)) {
+            if (BotNavigationUtils.hasReachedTarget(bot, targetLocation, 4)) {
                 bot.resetTargetLocation();
                 isDone = true; // ✅ Теперь это действительно завершает задачу!
                 BotLogger.debug(bot.getId() + " 🎯 Достиг цели! Реальная позиция: " + bot.getNPCEntity().getLocation() + " [ID: " + uuid + "]");
                 return;
-            }
-
-            // 5. Проверяем, может ли бот туда пройти
-            if (!bot.getNPCNavigator().canNavigateTo(targetLocation)) {
-                BotLogger.trace(bot.getId() + " ❌ Не могу найти путь, Stopping here..." + " [ID: " + uuid + "]");
-                isDone = true;
-                return;
             } else {
-                BotLogger.trace(bot.getId() + " 🚶 Двигаюсь в " + BotStringUtils.formatLocation(targetLocation) + " [ID: " + uuid + "]");
-                if(bot.getNPCEntity() ==null) {
+                // 5. Проверяем, может ли бот туда пройти
+                if (!bot.getNPCNavigator().canNavigateTo(targetLocation)) {
+                    BotLogger.trace(bot.getId() + " ❌ Не могу найти путь, Stopping here..." + " [ID: " + uuid + "]");
+                    isDone = true;
+                    return;
+                } else {
+                    BotLogger.trace(bot.getId() + " 🚶 Двигаюсь в " + BotStringUtils.formatLocation(targetLocation) + " [ID: " + uuid + "]");
+                    if(bot.getNPCEntity() ==null) {
 
                     BotLogger.trace(bot.getId() + " 👻 Проблема с сущьностью! В задаче ID: " + uuid + "]");
                     
                     taskHandle.cancel(); // ✅ Останавливаем таймер
                     isDone = true; // останавливаем  задачу
 
-                } else {
+                    } else {
 
-                   BotTaskMove moveTask = new BotTaskMove(bot);
-                   moveTask.configure(targetLocation);
-                   bot.addTaskToQueue(moveTask);
-
+                        BotTaskMove moveTask = new BotTaskMove(bot);
+                        moveTask.configure(targetLocation);
+                        bot.addTaskToQueue(moveTask);
+                        
+                    }
                 }
             }
 

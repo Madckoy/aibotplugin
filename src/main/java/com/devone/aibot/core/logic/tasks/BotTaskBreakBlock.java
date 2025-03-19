@@ -118,6 +118,7 @@ public class BotTaskBreakBlock extends BotTask {
                             return;
 
                         } else {
+                            
                             //  Stop Task and exit
                             handleStuck();
 
@@ -130,11 +131,6 @@ public class BotTaskBreakBlock extends BotTask {
 
                 BotLogger.debug("🛠️ " + bot.getId() + " Нашел " + targetLocation.getBlock().getType() + " на " + BotStringUtils.formatLocation(targetLocation));
 
-                // Телепортация в основном потоке
-                Bukkit.getScheduler().runTask(AIBotPlugin.getInstance(), () -> {
-                    bot.getNPCEntity().teleport(bot.getNPCCurrentLocation().setDirection(
-                        targetLocation.toVector().subtract(bot.getNPCCurrentLocation().toVector())));
-                });
             }
         }
 
