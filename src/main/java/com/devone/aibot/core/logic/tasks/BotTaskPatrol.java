@@ -3,7 +3,6 @@ package com.devone.aibot.core.logic.tasks;
 import com.devone.aibot.core.Bot;
 import com.devone.aibot.core.logic.tasks.configs.BotTaskPatrolConfig;
 import com.devone.aibot.utils.BotLogger;
-import com.devone.aibot.utils.BotNavigationUtils;
 import com.devone.aibot.utils.BotStringUtils;
 import com.devone.aibot.utils.BotEnv3DScan;
 
@@ -25,7 +24,7 @@ public class BotTaskPatrol extends BotTask {
         BotLogger.debug("👮🏻‍♂️ " + bot.getId() + " Patrolling with radius: " + scanRadius + " [ID: " + uuid + "]");
         
         if(getEnvMap()==null) {
-            BotTaskSonar3D sonar = new BotTaskSonar3D(bot, this);
+            BotTaskSonar3D sonar = new BotTaskSonar3D(bot, this, scanRadius);
             bot.addTaskToQueue(sonar);
             isDone = false;
             return;

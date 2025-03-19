@@ -6,10 +6,6 @@ import org.bukkit.Location;
 import org.bukkit.scheduler.BukkitTask;
 import com.devone.aibot.AIBotPlugin;
 import com.devone.aibot.core.Bot;
-import org.bukkit.Material;
-import java.util.List;
-import java.util.Map;
-import java.util.stream.Collectors;
 
 public class BotTaskMove extends BotTask {
 
@@ -81,7 +77,11 @@ public class BotTaskMove extends BotTask {
                     isDone = true; // останавливаем  задачу
 
                 } else {
-                   bot.getNPCNavigator().setTarget(targetLocation);
+
+                   BotTaskMove moveTask = new BotTaskMove(bot);
+                   moveTask.configure(targetLocation);
+                   bot.addTaskToQueue(moveTask);
+
                 }
             }
 
