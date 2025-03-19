@@ -59,7 +59,7 @@ public class BotTaskMove extends BotTask {
             }
 
             // 2. Проверяем, достиг ли бот цели
-            if (BotNavigationUtils.hasReachedTarget(bot, targetLocation, 4)) {
+            if (BotNavigationUtils.hasReachedTarget(bot, targetLocation, 10)) {
                 bot.resetTargetLocation();
                 isDone = true; // ✅ Теперь это действительно завершает задачу!
                 BotLogger.debug(bot.getId() + " 🎯 Достиг цели! Реальная позиция: " + bot.getNPCEntity().getLocation() + " [ID: " + uuid + "]");
@@ -80,7 +80,7 @@ public class BotTaskMove extends BotTask {
                         isDone = true; // останавливаем  задачу
 
                     } else {
-                        
+
                         BotLogger.trace(bot.getId() + " 🚶 Двигаюсь в " + BotStringUtils.formatLocation(targetLocation) + " [ID: " + uuid + "]");
 
                         bot.getNPCCurrentLocation().setDirection(targetLocation.toVector().subtract(bot.getNPCCurrentLocation().toVector()));
