@@ -91,7 +91,7 @@ public class BotTaskBreakBlock extends BotTask {
                 BotLogger.trace(" 🔄 " + bot.getId() + " Переход к следующему блоку " + BotStringUtils.formatLocation(targetLocation));
             } else {
                 // Получаем карту блоков в радиусе поиска
-                Map<Location, Material> scannedBlocks = BotEnv3DScan.scan3D(bot, searchRadius);
+                Map<Location, Material> scannedBlocks = BotEnv3DScan.scan3D(bot, searchRadius / 2);
 
                 if(scannedBlocks.size()==0) { // stuck
                     BotLogger.trace("❌ " + bot.getId() + " Застрял и Нет доступных блоков для добычи! Перемещаемся к точке респавна.");
@@ -120,7 +120,7 @@ public class BotTaskBreakBlock extends BotTask {
                         } else {
                             //  Stop Task and exit
                             handleStuck();
-                            
+
                             setEnvMap(null);
                             
                             isDone = true;

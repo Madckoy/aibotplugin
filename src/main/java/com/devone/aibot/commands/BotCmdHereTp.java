@@ -40,6 +40,10 @@ public class BotCmdHereTp implements CommandExecutor {
 
         BotLogger.info("📌 /bot-here-tp: Бот " + bot.getId() + " Телепортируется в точку игрока" + BotStringUtils.formatLocation(targetLocation));
 
+
+        // ✅ Очищаем стек задач
+        bot.getLifeCycle().getTaskStackManager().clearTasks();
+        
         // ✅ Добавляем задачу на мгновенное перемещение
         BotTaskTeleport task = new BotTaskTeleport(bot, player);
         task.configure(targetLocation);

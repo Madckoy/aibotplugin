@@ -39,6 +39,10 @@ public class BotCmdHere implements CommandExecutor {
 
         BotLogger.info("📌 /bot-here: Бот " + bot.getId() + " Идет в точку " + BotStringUtils.formatLocation(targetLocation));
 
+
+        // ✅ Очищаем стек задач
+        bot.getLifeCycle().getTaskStackManager().clearTasks();
+
         // ✅ Добавляем задачу на перемещение
         BotTaskMove moveTask = new BotTaskMove(bot);
         moveTask.configure(targetLocation);

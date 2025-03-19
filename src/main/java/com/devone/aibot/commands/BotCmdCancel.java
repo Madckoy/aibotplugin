@@ -33,6 +33,8 @@ public class BotCmdCancel implements CommandExecutor {
 
         // ✅ Очищаем стек задач
         bot.getLifeCycle().getTaskStackManager().clearTasks();
+
+    
         player.sendMessage("§aВсе задачи бота " + bot.getId() + " отменены!");
 
         BotLogger.info("🛑 /bot-cancel: Очищен стек задач бота " + bot.getId());

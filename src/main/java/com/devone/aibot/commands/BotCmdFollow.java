@@ -35,6 +35,8 @@ public class BotCmdFollow implements CommandExecutor {
 
         BotLogger.info("📌 /bot-follow: Бот " + bot.getId() + " следует за " + player.getName());
 
+        // ✅ Очищаем стек задач
+        bot.getLifeCycle().getTaskStackManager().clearTasks();
         // ✅ Добавляем задачу на следование
         BotTaskFollow followTask = new BotTaskFollow(bot, player);
         bot.addTaskToQueue(followTask);

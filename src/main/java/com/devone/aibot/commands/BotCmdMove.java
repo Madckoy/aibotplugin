@@ -51,7 +51,6 @@ public class BotCmdMove implements CommandExecutor {
 
             BotLogger.debug("📌 /bot-move: Бот " + bot.getId() + " идет к " + BotStringUtils.formatLocation(targetLocation));
 
-
             // ✅ Добавляем задачу на перемещение
             BotTaskMove moveTask = new BotTaskMove(bot);
             moveTask.configure(targetLocation);
