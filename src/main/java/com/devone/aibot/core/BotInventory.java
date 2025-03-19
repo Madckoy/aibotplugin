@@ -89,22 +89,30 @@ public class BotInventory {
             pullAllItemsinRadius(2.0);
         }
 
-        Location botLocation = bot.getNPCCurrentLocation();
-        List<Entity> nearbyEntities = botLocation.getWorld().getEntities();
-        for (Entity entity : nearbyEntities) {
-            if (entity instanceof Item) {
-                Item item = (Item) entity;
-                if (botLocation.distance(item.getLocation()) < 2.0) {
-                    Material material = item.getItemStack().getType();
-                    int amount = item.getItemStack().getAmount();
+        try {
+            Location botLocation = bot.getNPCCurrentLocation();
+        
+            List<Entity> nearbyEntities = botLocation.getWorld().getEntities();
+
+            for (Entity entity : nearbyEntities) {
+                if (entity instanceof Item) {
+                    Item item = (Item) entity;
+                    if (botLocation.distance(item.getLocation()) < 2.0) {
+                        Material material = item.getItemStack().getType();
+                        int amount = item.getItemStack().getAmount();
                     
-                    addItem(material, amount); // Передаём два параметра в инвентарь
+                        addItem(material, amount); // Передаём два параметра в инвентарь
                     
-                    item.remove(); // Удаляем предмет с земли
-                    BotLogger.debug("🛒 " + bot.getId() +  " Подобрал " + amount + " x " + material);
+                        item.remove(); // Удаляем предмет с земли
+                        BotLogger.debug("🛒 " + bot.getId() +  " Подобрал " + amount + " x " + material);
+                    }
                 }
             }
+            
+        } catch (Exception e) {
+            BotLogger.debug("🛒 " + bot.getId() +  " "+e.getMessage();
         }
+
     }
     
     public static boolean hasEnoughBlocks(Bot bot, Set<Material> targetMaterials, int maxBlocksPerMaterial) {
