@@ -19,7 +19,7 @@ import com.devone.aibot.core.Bot;
 
 public class BotEnv3DScan {
 
-    public static Map<Location, Material> scan3D(Bot bot, int scanRadius) { // Один радиус применяется к X и Z
+    public static Map<Location, Material> scan3D(Bot bot, int scanRadius, int height) { // Один радиус применяется к X и Z
         
         World world = Bukkit.getWorlds().get(0);
 
@@ -27,8 +27,8 @@ public class BotEnv3DScan {
         int centerY = bot.getNPCCurrentLocation().getBlockY();
         int centerZ = bot.getNPCCurrentLocation().getBlockZ();
 
-        int minHeight = centerY - scanRadius; // Верхняя граница Y (-4 от бота) // Ограничение по глубине Y (-4) // Теперь Z правильно ограничен
-        int maxHeight = centerY + scanRadius; // Нижняя граница Y (+4 от бота) // Ограничение по глубине Y (+4) // Теперь Z правильно ограничен
+        int minHeight = centerY - height; // Нижняя граница  Y (-4 от бота) // Ограничение по глубине Y (-4) // Теперь Y правильно ограничен
+        int maxHeight = centerY + height; // Верхняя граница Y (+4 от бота) // Ограничение по глубине Y (+4) // Теперь Y правильно ограничен
 
         Map<Location, Material> scannedBlocks = new HashMap<>();
         JSONArray blockArray = new JSONArray();
@@ -39,7 +39,7 @@ public class BotEnv3DScan {
                     Location loc = new Location(world, centerX + x, y, centerZ + z);
                     Material material = world.getBlockAt(loc).getType();
                     // Исключаем листву и деревья из сканирования
-                    
+
                     // if (material == Material.OAK_LEAVES || material == Material.OAK_LOG || material == Material.SPRUCE_LEAVES || material == Material.SPRUCE_LOG || material == Material.BIRCH_LEAVES || material == Material.BIRCH_LOG || material == Material.JUNGLE_LEAVES || material == Material.JUNGLE_LOG || material == Material.ACACIA_LEAVES || material == Material.ACACIA_LOG || material == Material.DARK_OAK_LEAVES || material == Material.DARK_OAK_LOG) {
                     //    continue;
                     //}

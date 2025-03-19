@@ -24,7 +24,7 @@ public class BotTaskPatrol extends BotTask {
         BotLogger.debug("👮🏻‍♂️ " + bot.getId() + " Patrolling with radius: " + scanRadius + " [ID: " + uuid + "]");
         
         if(getEnvMap()==null) {
-            BotTaskSonar3D sonar = new BotTaskSonar3D(bot, this, scanRadius);
+            BotTaskSonar3D sonar = new BotTaskSonar3D(bot, this, scanRadius, 4);
             bot.addTaskToQueue(sonar);
             isDone = false;
             return;
@@ -51,11 +51,13 @@ public class BotTaskPatrol extends BotTask {
         }
 
         double rand = Math.random();
+
         if (rand < 0.3) {
             // 📌 30% шанс выйти из патрулирования
             BotLogger.debug("🚶 " + bot.getId() + " Moving out of patroling: " + BotStringUtils.formatLocation(targetLocation) + " [Task ID: " + uuid + "]");
             targetLocation = null;
             isDone = true;
+            
         } else {
             BotLogger.debug("🚶 " + bot.getId() + " Moving to patrol point: " + BotStringUtils.formatLocation(targetLocation) + " [Task ID: " + uuid + "]");
 
