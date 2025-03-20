@@ -11,9 +11,12 @@ public class BotTaskBreakBlockAny extends BotTaskBreakBlock {
     
     public BotTaskBreakBlockAny(Bot bot) {
         super(bot);
+        
         setName("🪓");
 
         setTargetMaterials(null);
+
+        setTargetLocation(bot.getNPCCurrentLocation());
 
     }
  

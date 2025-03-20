@@ -124,7 +124,11 @@ public abstract class BotTask implements IBotTask{
                     BotLogger.trace("✨ " + bot.getId() + " Застрял! Телепортируемся в "+BotStringUtils.formatLocation(targetLocation));
                     
                     BotTaskTeleport tp = new BotTaskTeleport(bot, player);
-                    tp.configure(targetLocation);
+                    if(player!=null) {
+                        tp.configure(player.getLocation());
+                    } else {
+                        tp.configure(targetLocation);
+                    }
 
                     bot.addTaskToQueue(tp);
                 }
@@ -138,7 +142,13 @@ public abstract class BotTask implements IBotTask{
                     BotLogger.trace("✨ " + bot.getId() + " Застрял! Нет Taget Location! Телепортируемся в точку респавна!");
 
                     BotTaskTeleport tp = new BotTaskTeleport(bot, player);
-                    tp.configure(Bot.getFallbackLocation());
+
+                    if(player!=null) {
+                        tp.configure(player.getLocation());
+                    } else {
+                        tp.configure(Bot.getFallbackLocation());
+                    }
+                    
                     bot.addTaskToQueue(tp);
 
                 } else {

@@ -101,10 +101,10 @@ public class BotTaskBreakBlock extends BotTask {
                 if(scannedBlocks.size()==0) { // stuck
                     BotLogger.trace("❌ " + bot.getId() + " Застрял и Нет доступных блоков для добычи! Перемещаемся к точке респавна.");
 
-                    // handleStuck();
+                    handleStuck();
 
-                    BotTaskBreakBlockAny bb = new BotTaskBreakBlockAny(bot);
-                    bot.addTaskToQueue(bb);
+                    //BotTaskBreakBlockAny bb = new BotTaskBreakBlockAny(bot);
+                    //bot.addTaskToQueue(bb);
 
                     isDone = false;
                     return;
@@ -137,6 +137,7 @@ public class BotTaskBreakBlock extends BotTask {
                             BotLogger.trace("ℹ️ " + bot.getId() + " Не найден целевой блок, пробуем разрушить любой рядом!");
 
                             BotTaskBreakBlockAny bb = new BotTaskBreakBlockAny(bot);
+                            bb.configure(null, 128, 10, true);
                             bot.addTaskToQueue(bb);
                             
                             isDone = false;
