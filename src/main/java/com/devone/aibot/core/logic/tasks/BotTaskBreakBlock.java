@@ -9,10 +9,13 @@ import com.devone.aibot.utils.BotEnv3DScan;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.Material;
+import org.bukkit.entity.Player;
+import org.bukkit.inventory.EquipmentSlot;
+import org.bukkit.util.Vector;
+
 import com.devone.aibot.core.Bot;
 import com.devone.aibot.core.BotZoneManager;
 import com.devone.aibot.core.logic.tasks.configs.BotTaskBreakBlockConfig;
-
 import com.devone.aibot.utils.BotLogger;
 import com.devone.aibot.AIBotPlugin;
 
@@ -93,6 +96,7 @@ public class BotTaskBreakBlock extends BotTask {
                 return;
             }
             BotLogger.trace("🛠️ Целевой блок найден: " + BotStringUtils.formatLocation(targetLocation));
+            turnToBlock(targetLocation);
             destroyBlock(targetLocation);
         } else {
             handleNoTargetFound();
@@ -101,7 +105,7 @@ public class BotTaskBreakBlock extends BotTask {
 
     private Location findNextTargetBlock() {
         Location target = null;
-        for (int i = 0; i < 10; i++) { // Попытки найти нужный блок
+        for (int i = 0; i < 10; i++) {
             Location candidate = BotEnv3DScan.getRandomNearbyDestructibleBlock(getEnvMap(), bot.getNPCCurrentLocation());
             if (candidate != null && candidate.getBlock().getType() != Material.AIR && (targetMaterials == null || targetMaterials.contains(candidate.getBlock().getType()))) {
                 target = candidate;
@@ -115,12 +119,13 @@ public class BotTaskBreakBlock extends BotTask {
     private void destroyBlock(Location target) {
         Bukkit.getScheduler().runTask(AIBotPlugin.getInstance(), () -> {
             if (target.getBlock().getType() != Material.AIR) {
+                animateHand();
                 target.getBlock().breakNaturally();
                 BotLogger.debug("✅ Блок разрушен на " + BotStringUtils.formatLocation(target));
                 isDone = false;
             } else {
                 BotLogger.trace("⚠️ Бот пытался разрушить воздух, пропускаем");
-                handleNoTargetFound(); // Попробовать найти новый блок
+                handleNoTargetFound();
             }
         });
     }
@@ -154,5 +159,19 @@ public class BotTaskBreakBlock extends BotTask {
             BotLogger.trace("🛑 Блок в запретной зоне, разрушение запрещено.");
         }
         return protectedZone;
+    }
+
+    private void turnToBlock(Location target) {
+        Vector direction = target.toVector().subtract(bot.getNPCCurrentLocation().toVector()).normalize();
+        bot.getNPCEntity().setRotation((float) Math.toDegrees(Math.atan2(-direction.getX(), direction.getZ())), 0);
+        BotLogger.trace("🔄 Бот повернулся к блоку: " + BotStringUtils.formatLocation(target));
+    }
+
+    private void animateHand() {
+        if (bot.getNPCEntity() instanceof Player) {
+            Player playerBot = (Player) bot.getNPCEntity();
+            playerBot.swingMainHand();
+            BotLogger.trace("🤚 Анимация руки выполнена");
+        }
     }
 }
