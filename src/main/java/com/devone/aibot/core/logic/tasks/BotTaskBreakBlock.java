@@ -57,15 +57,20 @@ public class BotTaskBreakBlock extends BotTask {
 
     public void setTargetMaterials(Set<Material> materials) {
         this.targetMaterials = materials;
+        BotLogger.trace("🎯 Установлены целевые блоки: " + materials);
     }
 
     public Set<Material> getTargetMaterials() {
+        BotLogger.trace("📜 Получены целевые блоки: " + targetMaterials);
         return this.targetMaterials;
     }
 
     @Override
     public void executeTask() {
+        BotLogger.trace("🚀 Запуск задачи разрушения блоков для бота " + bot.getId());
+
         if (isInventoryFull() || isEnoughBlocksCollected()) {
+            BotLogger.trace("⛔ Задача завершена: инвентарь полон или ресурсов достаточно");
             isDone = true;
             return;
         }
@@ -73,6 +78,7 @@ public class BotTaskBreakBlock extends BotTask {
         bot.pickupNearbyItems(shouldPickup);
 
         if (getEnvMap() == null) {
+            BotLogger.trace("🔍 Запускаем 3D-сканирование окружающей среды.");
             bot.addTaskToQueue(new BotTaskSonar3D(bot, this, searchRadius, 4));
             isDone = false;
             return;
@@ -86,6 +92,7 @@ public class BotTaskBreakBlock extends BotTask {
                 isDone = true;
                 return;
             }
+            BotLogger.trace("🛠️ Целевой блок найден: " + BotStringUtils.formatLocation(targetLocation));
             destroyBlock(targetLocation);
         } else {
             handleNoTargetFound();
@@ -93,15 +100,28 @@ public class BotTaskBreakBlock extends BotTask {
     }
 
     private boolean isInventoryFull() {
-        return !BotInventory.hasFreeInventorySpace(bot, targetMaterials);
+        boolean full = !BotInventory.hasFreeInventorySpace(bot, targetMaterials);
+        BotLogger.trace("📦 Проверка инвентаря: " + (full ? "полон" : "есть место"));
+        return full;
     }
 
     private boolean isEnoughBlocksCollected() {
-        return BotInventory.hasEnoughBlocks(bot, targetMaterials, maxBlocks);
+        boolean enough = BotInventory.hasEnoughBlocks(bot, targetMaterials, maxBlocks);
+        BotLogger.trace("📊 Проверка количества блоков: " + (enough ? "достаточно" : "нужно больше"));
+        return enough;
     }
 
     private Location findNextTargetBlock() {
-        return BotEnv3DScan.getRandomNearbyDestructibleBlock(getEnvMap(), bot.getNPCCurrentLocation());
+        Location target = null;
+        for (int i = 0; i < 10; i++) { // Попытки найти нужный блок
+            Location candidate = BotEnv3DScan.getRandomNearbyDestructibleBlock(getEnvMap(), bot.getNPCCurrentLocation());
+            if (candidate != null && (targetMaterials == null || targetMaterials.contains(candidate.getBlock().getType()))) {
+                target = candidate;
+                break;
+            }
+        }
+        BotLogger.trace("🔎 Поиск целевого блока: " + (target != null ? "найден" : "не найден"));
+        return target;
     }
 
     private void destroyBlock(Location target) {
@@ -110,6 +130,8 @@ public class BotTaskBreakBlock extends BotTask {
                 target.getBlock().breakNaturally();
                 BotLogger.debug("✅ Блок разрушен на " + BotStringUtils.formatLocation(target));
                 isDone = false;
+            } else {
+                BotLogger.trace("⚠️ Бот пытался разрушить воздух, пропускаем");
             }
         });
     }
@@ -126,6 +148,10 @@ public class BotTaskBreakBlock extends BotTask {
     }
 
     private boolean isInProtectedZone(Location location) {
-        return BotZoneManager.getInstance().isInProtectedZone(location);
+        boolean protectedZone = BotZoneManager.getInstance().isInProtectedZone(location);
+        if (protectedZone) {
+            BotLogger.trace("🛑 Блок в запретной зоне, разрушение запрещено.");
+        }
+        return protectedZone;
     }
 }
