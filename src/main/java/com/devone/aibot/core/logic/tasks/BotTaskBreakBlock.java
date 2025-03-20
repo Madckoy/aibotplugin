@@ -98,7 +98,10 @@ public class BotTaskBreakBlock extends BotTask {
 
                     handleStuck();
 
-                    isDone = true;
+                    BotTaskBreakBlockAny bb = new BotTaskBreakBlockAny(bot);
+                    bot.addTaskToQueue(bb);
+
+                    isDone = false;
                     return;
                 }
 
@@ -120,11 +123,14 @@ public class BotTaskBreakBlock extends BotTask {
                         } else {
 
                             //  Stop Task and exit
-                            handleStuck();
+                            // handleStuck();
 
-                            setEnvMap(null);
+                            //setEnvMap(null);
+
+                            BotTaskBreakBlockAny bb = new BotTaskBreakBlockAny(bot);
+                            bot.addTaskToQueue(bb);
                             
-                            isDone = true;
+                            isDone = false;
                             return;
                         }
                 }
