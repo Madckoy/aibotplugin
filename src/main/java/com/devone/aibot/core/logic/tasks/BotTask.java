@@ -6,6 +6,7 @@ import org.bukkit.entity.Player;
 
 import com.devone.aibot.core.Bot;
 import com.devone.aibot.core.BotManager;
+import com.devone.aibot.core.logic.tasks.configs.BotAbstractConfig;
 import com.devone.aibot.utils.BotLogger;
 import com.devone.aibot.utils.BotStringUtils;
 
@@ -25,10 +26,12 @@ public abstract class BotTask implements IBotTask{
     protected boolean isEnabled = true;
     protected final String uuid; // 🆕 Уникальный ID задачи
     Map<Location, Material> envMap;
+    protected BotAbstractConfig config;
 
     public BotTask(Bot bot) {
         this.bot = bot;
         this.uuid = UUID.randomUUID().toString(); // 🆕 Генерируем ID
+        this.config = new BotAbstractConfig(null);
     }
 
     public BotTask(Bot bot, String name) {
@@ -96,6 +99,10 @@ public abstract class BotTask implements IBotTask{
     public BotTask configure(Object... params) {
         startTime = System.currentTimeMillis();
         return this;
+    }
+
+    public BotAbstractConfig getConfig() {
+        return config;
     }
 
     @Override

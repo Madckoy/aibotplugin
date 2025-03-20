@@ -2,6 +2,7 @@ package com.devone.aibot.core.logic.tasks;
 
 import com.devone.aibot.core.Bot;
 import com.devone.aibot.core.BotInventory;
+import com.devone.aibot.core.logic.tasks.configs.BotTaskExploreConfig;
 import com.devone.aibot.core.logic.tasks.configs.BotTaskHuntConfig;
 import com.devone.aibot.utils.BotLogger;
 import com.devone.aibot.AIBotPlugin;
@@ -22,17 +23,16 @@ public class BotTaskHuntMobs extends BotTask {
     private boolean shouldPickupLoot = true;
     private int searchRadius = 15; // Радиус поиска мобов
     private Set<EntityType> targetMobs = null; // Целевые мобы
-    private BotTaskHuntConfig config;
 
     public BotTaskHuntMobs(Bot bot) {
         super(bot, "⚔️");
-        this.config = new BotTaskHuntConfig();
+        config = new BotTaskHuntConfig();
 
-    // Загружаем параметры из конфига
-    if (config.isEnabled()) {
-        this.searchRadius = config.getSearchRadius();
-        this.shouldPickupLoot = config.shouldPickupLoot();
-        this.targetMobs = config.getTargetMobs();
+        // Загружаем параметры из конфига
+        if (config.isEnabled()) {
+            searchRadius = ((BotTaskExploreConfig) config).getScanRadius();
+            shouldPickupLoot = ((BotTaskHuntConfig) config).shouldPickupLoot();
+            targetMobs = ((BotTaskHuntConfig) config).getTargetAgressiveMobs();
     }
     }
 

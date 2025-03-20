@@ -15,7 +15,7 @@ import org.bukkit.entity.Player;
 
 public class BotTaskTeleport extends BotTask {
     
-    private BotTaskTeleportConfig config;
+    //private BotTaskTeleportConfig config;
 
     public BotTaskTeleport(Bot bot, Player player) {
         super(bot, player, "જ⁀➴");

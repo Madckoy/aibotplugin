@@ -6,6 +6,16 @@ public class BotAbstractLocationConfig extends BotAbstractConfig{
     public BotAbstractLocationConfig(String f_name) {
         super(f_name);
     }
+
+    public void generateDefaultConfig() {
+
+            config.set("X", 10);
+            config.set("Y", 10);
+            config.set("Z", 10);
+
+        super.generateDefaultConfig();
+    }
+
     
     public int getX(){
         return getConfig().getInt("X",10);

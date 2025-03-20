@@ -1,5 +1,6 @@
 package com.devone.aibot.core.logic.tasks;
 
+import com.devone.aibot.core.logic.tasks.configs.BotTaskHuntConfig;
 import com.devone.aibot.core.logic.tasks.configs.BotTaskIdleConfig;
 
 import java.util.Set;
@@ -20,7 +21,7 @@ public class BotTaskIdle extends BotTask {
     public BotTaskIdle(Bot bot) {
         super(bot, "🌀");
         this.bot = bot;
-        new BotTaskIdleConfig();
+        config = new BotTaskIdleConfig();
     }
 
     @Override
@@ -67,8 +68,18 @@ public class BotTaskIdle extends BotTask {
 
         if (rand < huntChance) {
             // ⚔️ Охота
-            BotLogger.debug("⚔️ " + bot.getId() + " начинает охоту! (Вероятность: " + huntChance * 100 + "%)");
-            bot.addTaskToQueue(new BotTaskHuntMobs(bot).configure(Set.of(EntityType.ZOMBIE, EntityType.SKELETON), 20, true));
+            BotLogger.debug("⚔️ " + bot.getId() + " Собирается на охоту! (Вероятность: " + huntChance * 100 + "%)");
+           
+            BotTaskHuntMobs hunt_task = new BotTaskHuntMobs(bot);
+            //BotTaskHuntMobs config  = hunt_task.getConfig();
+            Set<EntityType> a_targets = ((BotTaskHuntConfig) hunt_task.getConfig()).getTargetAgressiveMobs();
+            Set<EntityType> p_targets = ((BotTaskHuntConfig) hunt_task.getConfig()).getTargetPassiveMobs();
+            Set<EntityType> targets = isNight ? a_targets : p_targets;
+            
+            hunt_task.configure(targets, 20, true);
+            bot.addTaskToQueue(hunt_task);
+            BotLogger.debug("⚔️ " + bot.getId() + " Начинает охоту на " + (isNight ? "агрессивных мобов" : "животных") + "!");
+            
             return;
         }
 

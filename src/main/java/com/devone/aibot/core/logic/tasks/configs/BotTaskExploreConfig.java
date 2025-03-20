@@ -7,6 +7,10 @@ public class BotTaskExploreConfig extends BotAbstractConfig{
         super("BotTaskExplore.yml");
     }
 
+    public BotTaskExploreConfig(String name) {
+        super(name);
+    }
+
     public void generateDefaultConfig() {
 
         config.set("scan_radius", 10);

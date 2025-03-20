@@ -26,13 +26,12 @@ public class BotTaskBreakBlock extends BotTask {
     private boolean shouldPickup = true;
     private boolean destroyAllIfNoTarget = false;
     private Set<Material> targetMaterials = null;
-    private BotTaskBreakBlockConfig config;
+    //private BotTaskBreakBlockConfig config;
     private Location targetLocation;
 
     public BotTaskBreakBlock(Bot bot) {
         super(bot, "⛏️");
-        this.config = new BotTaskBreakBlockConfig();
-        isEnabled = config.isEnabled();
+        config = new BotTaskBreakBlockConfig();
     }
 
     @Override

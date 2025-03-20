@@ -13,8 +13,8 @@ public class BotTaskExplore extends BotTask {
 
     public BotTaskExplore(Bot bot) {
         super(bot, "🗺️");
-        this.config = new BotTaskExploreConfig();
-        this.scanRadius = config.getScanRadius();
+        config = new BotTaskExploreConfig();
+        scanRadius = config.getScanRadius();
     }
 
     public void executeTask() {
