@@ -57,7 +57,7 @@ public abstract class BotTask implements IBotTask{
 
         //BotLogger.debug("✨ " + bot.getId() + " Running task: " + name + " [ID: " + uuid + "]");
 
-        BotLogger.debug("🚦 " + bot.getId() + " " + name +" Status: "+ isDone +" | " +isPaused +
+        BotLogger.trace("🚦 " + bot.getId() + " " + name +" Status: "+ isDone +" | " +isPaused +
         " 📍 xyz: " +BotStringUtils.formatLocation(bot.getNPCCurrentLocation())+
         " 🎯 xyz: " +BotStringUtils.formatLocation(targetLocation) + " [ID: " + uuid + "]");
         
