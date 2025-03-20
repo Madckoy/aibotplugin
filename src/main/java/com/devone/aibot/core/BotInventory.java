@@ -155,10 +155,15 @@ public class BotInventory {
             if (item == null || item.getType() == Material.AIR) {
                 return true; // Есть свободный слот
             }
-    
-            // Проверяем, есть ли место в существующем стаке для любого из целевых материалов
-            if (targetMaterials.contains(item.getType()) && item.getAmount() < item.getMaxStackSize()) {
-                return true; // В этом слоте можно добавить ещё
+            if (targetMaterials!=null) {
+                // Проверяем, есть ли место в существующем стаке для любого из целевых материалов
+                if (targetMaterials.contains(item.getType()) && item.getAmount() < item.getMaxStackSize()) {
+                    return true; // В этом слоте можно добавить ещё
+                }
+            } else {
+                if (item.getAmount() < item.getMaxStackSize()) {
+                    return true; // В этом слоте можно добавить ещё
+                }
             }
         }
         return false; // Нет места ни в одном слоте
