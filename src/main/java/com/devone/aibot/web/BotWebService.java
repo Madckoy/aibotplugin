@@ -3,14 +3,20 @@ package com.devone.aibot.web;
 import com.devone.aibot.core.Bot;
 import com.devone.aibot.core.BotManager;
 import com.devone.aibot.core.logic.tasks.BotTask;
+import com.devone.aibot.core.logic.tasks.BotTaskBreakBlock;
+import com.devone.aibot.core.logic.tasks.BotTaskFollowTarget;
 import com.devone.aibot.utils.BotConstants;
 import com.devone.aibot.utils.BotLogger;
 import com.devone.aibot.utils.BotStringUtils;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.configuration.file.YamlConfiguration;
+import org.bukkit.entity.LivingEntity;
+import org.bukkit.entity.Player;
+
 import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
 import org.bukkit.Location;
+import org.bukkit.Material;
 import org.eclipse.jetty.server.Server;
 import org.eclipse.jetty.servlet.ServletContextHandler;
 import org.eclipse.jetty.servlet.ServletHolder;
@@ -26,7 +32,7 @@ import java.nio.file.StandardCopyOption;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
-
+import java.util.Set;
 import java.util.stream.Collectors;
 
 public class BotWebService {
@@ -66,6 +72,7 @@ public class BotWebService {
     public static String getMapHost() {
         return MAP_HOST;
     }
+
 /**
      * ✅ Метод копирования ресурсов (CSS и JS) в plugins/AIBotPlugin/web/assets/
      */
@@ -161,6 +168,7 @@ public class BotWebService {
         public BotStatusServlet(BotManager botManager) {
             this.botManager = botManager;
         }
+    
 
         @Override
         protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
@@ -181,35 +189,53 @@ public class BotWebService {
                     botJson.addProperty("id", bot.getId());
                     botJson.addProperty("position", BotStringUtils.formatLocation(loc));
                     botJson.addProperty("task", bot.getCurrentTask().getName());
-                    
+                    // ✅ Добавляем новую колонку "object" (моб, блок, игрок или "—")
+                    botJson.addProperty("object", getCurrentObject(bot));
+                    // ✅ Возвращаем старую колонку "target" (координаты цели)
                     Location tg_loc = bot.getCurrentTask().getTargetLocation();
                     String targetLoc = BotStringUtils.formatLocation(tg_loc);
                     botJson.addProperty("target", targetLoc);
-                    // ✅ Добавлено время выполнения таска
                     botJson.addProperty("elapsedTime", BotStringUtils.formatTime(bot.getCurrentTask().getElapsedTime()));
 
-                    // Получаем TaskStack (очередь задач) и конвертируем в List
+                    // Получаем TaskStack (очередь задач)
                     List<BotTask> taskStack = (bot.getLifeCycle() != null
-                        && bot.getLifeCycle().getTaskStackManager() != null)
-                                ? new ArrayList<>(bot.getLifeCycle().getTaskStackManager().getTaskStack()) // Преобразуем
-                                                                                                           // Stack в
-                                                                                                           // List
-                                : new ArrayList<>();
+                            && bot.getLifeCycle().getTaskStackManager() != null)
+                            ? new ArrayList<>(bot.getLifeCycle().getTaskStackManager().getTaskStack())
+                            : new ArrayList<>();
 
-                    // Формируем отображение стека задач
                     String taskStackText = taskStack.isEmpty() ? "N/A"
-                        : taskStack.stream().map(BotTask::getName).collect(Collectors.joining(" • "));
+                            : taskStack.stream().map(BotTask::getName).collect(Collectors.joining(" • "));
 
                     botJson.addProperty("queue", taskStackText);
-
                     botsArray.add(botJson);
-
                 }
             }
 
             result.add("bots", botsArray);
             resp.getWriter().write(result.toString());
         }
+    }
+
+    /**
+     * ✅ Получает текущий объект, с которым взаимодействует бот (моб, блок, игрок или отсутствует)
+     */
+    private static String getCurrentObject(Bot bot) {
+        BotTask currentTask = bot.getCurrentTask();
+        if (currentTask == null) return "—";
+
+        if (currentTask instanceof BotTaskBreakBlock) {
+            Set<Material> targetMaterials = ((BotTaskBreakBlock) currentTask).getTargetMaterials();
+            return targetMaterials != null ? "Добыча: " + targetMaterials.toString() : "Добыча: все блоки";
+        }
+
+        if (currentTask instanceof BotTaskFollowTarget) {
+            LivingEntity target = ((BotTaskFollowTarget) currentTask).getFollowingObject();
+            if (target != null) {
+                return target instanceof Player ? "Следует за: " + target.getName() : "Цель: " + target.getType();
+            }
+        }
+
+        return "";
     }
 
     /**

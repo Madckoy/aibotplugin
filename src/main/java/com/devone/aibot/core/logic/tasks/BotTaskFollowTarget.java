@@ -42,6 +42,9 @@ public class BotTaskFollowTarget extends BotTask {
         }
     }
 
+    public LivingEntity getFollowingObject() {
+        return this.target;
+    }
     /**
      * Логика следования за игроком без атаки.
      */
