@@ -67,7 +67,7 @@ public class BotTaskBreakBlock extends BotTask {
 
     @Override
     public void executeTask() {
-        BotLogger.trace("🚀 Запуск задачи разрушения блоков для бота " + bot.getId());
+        BotLogger.trace("🚀 Запуск задачи разрушения блоков для бота " + bot.getId() + " (Целевые блоки: " + (targetMaterials == null ? "ВСЕ" : targetMaterials) + ")");
 
         if (isInventoryFull() || isEnoughBlocksCollected()) {
             BotLogger.trace("⛔ Задача завершена: инвентарь полон или ресурсов достаточно");
@@ -92,7 +92,7 @@ public class BotTaskBreakBlock extends BotTask {
                 isDone = true;
                 return;
             }
-            BotLogger.trace("🛠️ Целевой блок найден: " + BotStringUtils.formatLocation(targetLocation));
+            BotLogger.trace("🛠️ Целевой блок найден: " + BotStringUtils.formatLocation(targetLocation)+" (Целевые блоки: " + (targetMaterials == null ? "ВСЕ" : targetMaterials) + ")");
             destroyBlock(targetLocation);
         } else {
             handleNoTargetFound();
