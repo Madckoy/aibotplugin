@@ -5,8 +5,11 @@ import com.devone.aibot.core.logic.tasks.configs.BotTaskIdleConfig;
 import java.util.Set;
 
 import com.devone.aibot.utils.BotStringUtils;
+import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.Material;
+import org.bukkit.World;
+import org.bukkit.entity.EntityType;
 
 import com.devone.aibot.core.Bot;
 import com.devone.aibot.core.BotInventory;
@@ -36,9 +39,8 @@ public class BotTaskIdle extends BotTask {
 
         int maxToCollect = 128;
 
-        // Check if bot needs to clean up the inventory
-        if(!BotInventory.hasFreeInventorySpace(bot, dirtTypes) || BotInventory.hasEnoughBlocks(bot, dirtTypes, maxToCollect)) {
-
+        // Проверяем, нужно ли очистить инвентарь
+        if (!BotInventory.hasFreeInventorySpace(bot, dirtTypes) || BotInventory.hasEnoughBlocks(bot, dirtTypes, maxToCollect)) {
             bot.setAutoPickupEnabled(false);
 
             BotTaskDropAll drop_task = new BotTaskDropAll(bot, null);
@@ -47,55 +49,64 @@ public class BotTaskIdle extends BotTask {
             
             Location drop_off_loc = drop_task.getTargetLocation();
             
-            // go to the drop point
+            // Перемещение к точке сброса
             BotTaskMove moveTask = new BotTaskMove(bot);
-
             moveTask.configure(drop_off_loc);
             bot.addTaskToQueue(moveTask);
 
-            BotLogger.debug("📦 " + bot.getId() + " Goes to drop off location: " + BotStringUtils.formatLocation(drop_off_loc));
+            BotLogger.debug("📦 " + bot.getId() + " Идёт к точке сброса: " + BotStringUtils.formatLocation(drop_off_loc));
+            return;
+        }
 
+        // Определяем, день или ночь
+        World world = bot.getNPCEntity().getWorld();
+        long time = world.getTime();
+        boolean isNight = (time >= 13000 && time <= 23000); // Примерно 13000 - закат, 23000 - рассвет
+
+        double huntChance = isNight ? 0.9 : 0.2; // 90% ночью, 20% днем
+
+        if (rand < huntChance) {
+            // ⚔️ Охота
+            BotLogger.debug("⚔️ " + bot.getId() + " начинает охоту! (Вероятность: " + huntChance * 100 + "%)");
+            bot.addTaskToQueue(new BotTaskHuntMobs(bot).configure(Set.of(EntityType.ZOMBIE, EntityType.SKELETON), 20, true));
             return;
         }
 
         if (rand >= 0.8) {
-            // 📌 начать exploration (20% вероятность)
-            BotLogger.debug("🌐 " + bot.getId() + " Starts Patrolling");
-        
+            // 📌 Начать патрулирование (20% вероятность)
+            BotLogger.debug("🌐 " + bot.getId() + " начинает патрулирование.");
             BotTaskExplore patrolTask = new BotTaskExplore(bot);
             bot.addTaskToQueue(patrolTask);
+            return;
+        }
+
+        if (rand < 0.8 && rand >= 0.5) {
+            // ⛏ 30% шанс начать добычу земли
+            BotTaskBreakBlock breakTask = new BotTaskBreakBlock(bot);
+        
+            if (breakTask.isEnabled) {
+                breakTask.configure(dirtTypes, maxToCollect, 10, true);
+                bot.addTaskToQueue(breakTask);
+            }
         
             return;
         }
-        
-        if (rand < 0.8 && rand >= 0.5) {
-           // ⛏ 30% шанс начать добычу земли
-           BotTaskBreakBlock breakTask = new BotTaskBreakBlock(bot);
-        
-           if (breakTask.isEnabled) {
-               breakTask.configure(dirtTypes, maxToCollect, 10, true); // ломаем землю и лутаем!!!
-               bot.addTaskToQueue(breakTask);
-           }
-        
-           return;
-        }
-        
+
         if (rand < 0.5 && rand >= 0.2) {  
-             // ⛏ 30% шанс начать добычу всего подряд (раньше эта ветка не выполнялась)
+            // ⛏ 30% шанс начать добычу всего подряд
             BotTaskBreakBlockAny breakAnyTask = new BotTaskBreakBlockAny(bot);
         
             if (breakAnyTask.isEnabled) {
-                breakAnyTask.configure(null, maxToCollect, 10, true); // ломаем все и лутаем!!!
+                breakAnyTask.configure(null, maxToCollect, 10, true);
                 bot.addTaskToQueue(breakAnyTask);
             }    
         
             return;
         }
-        
+
         if (rand < 0.2) {
             // 💤 20% шанс остаться в IDLE
-            BotLogger.debug("💤 " + bot.getId() + " Остаётся в IDLE.");
-        
+            BotLogger.debug("💤 " + bot.getId() + " остаётся в IDLE.");
             return;
         }
     }

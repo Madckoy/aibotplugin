@@ -23,7 +23,7 @@ public class BotTaskTeleport extends BotTask {
         config = new BotTaskTeleportConfig();
     }
 
-     public void configure(Object... params) {
+     public BotTask configure(Object... params) {
         super.configure(params);
 
         if (params.length >= 1 && params[0] instanceof Location) {
@@ -31,6 +31,8 @@ public class BotTaskTeleport extends BotTask {
         }
 
         BotLogger.debug("⚙️ BotTaskTeleport сконфигурирована: " + BotStringUtils.formatLocation(targetLocation));
+
+        return this;
     }
 
     @Override

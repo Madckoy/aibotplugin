@@ -16,7 +16,7 @@ public class BotTaskMove extends BotTask {
     }
 
     @Override
-    public void configure(Object... params) {
+    public BotTask configure(Object... params) {
         super.configure(params);
 
         if (params.length == 1 && params[0] instanceof Location) {
@@ -28,6 +28,8 @@ public class BotTaskMove extends BotTask {
             BotLogger.error(bot.getId() + " ❌ Некорректные параметры для `BotTaskMove`!");
             isDone = true;
         }
+
+        return this;
     }
 
     @Override

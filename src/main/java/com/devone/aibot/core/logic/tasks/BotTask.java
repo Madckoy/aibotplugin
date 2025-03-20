@@ -93,8 +93,9 @@ public abstract class BotTask implements IBotTask{
     }
 
     @Override
-    public void configure(Object... params) {
+    public BotTask configure(Object... params) {
         startTime = System.currentTimeMillis();
+        return this;
     }
 
     @Override

@@ -36,7 +36,7 @@ public class BotTaskBreakBlock extends BotTask {
     }
 
     @Override
-    public void configure(Object... params) {
+    public BotTask configure(Object... params) {
         super.configure(params);
         if (params.length >= 1 && params[0] instanceof Set) {
             targetMaterials = (Set<Material>) params[0];
@@ -55,7 +55,8 @@ public class BotTaskBreakBlock extends BotTask {
             this.destroyAllIfNoTarget = (Boolean) params[4];
         }
         bot.setAutoPickupEnabled(shouldPickup);
-        BotLogger.debug("⚙️ BreakBlockTask настроена: " + (targetMaterials == null ? "ВСЕ БЛОКИ" : targetMaterials));
+        BotLogger.debug("⚙️ BotTaskBreakBlock настроена: " + (targetMaterials == null ? "ВСЕ БЛОКИ" : targetMaterials));
+        return this;
     }
 
     public void setTargetMaterials(Set<Material> materials) {
