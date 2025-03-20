@@ -6,7 +6,7 @@ public class BotTaskBreakBlockAny extends BotTaskBreakBlock {
     
     public BotTaskBreakBlockAny(Bot bot) {
         super(bot);
-        setName("🧹");
+        setName("🪓");
     }
  
 
