@@ -150,7 +150,7 @@ public class BotEnv3DScan {
     }
 
 
-    public static Location getRandomNearbyDestructibleBlock(Map<Location, Material> scannedBlocks, Location botLocation) {
+    private static Location getRandomNearbyDestructibleBlock_depricated(Map<Location, Material> scannedBlocks, Location botLocation) {
         List<Location> nearbyBlocks = new ArrayList<>();
         Random random = new Random();
         double minDistance = Double.MAX_VALUE;
@@ -194,5 +194,51 @@ public class BotEnv3DScan {
         // Возвращаем случайный блок из ближайших
         return closestBlocks.get(random.nextInt(closestBlocks.size()));
     }
+
+    public static Location getRandomNearbyDestructibleBlock(Map<Location, Material> scannedBlocks, Location botLocation) {
+        List<Location> nearbyBlocks = new ArrayList<>();
+        Random random = new Random();
+        double minDistance = Double.MAX_VALUE;
     
+        // Получаем координаты бота
+        int botX = botLocation.getBlockX();
+        int botY = botLocation.getBlockY();
+        int botZ = botLocation.getBlockZ();
+    
+        // Карта для хранения ближайших блоков
+        List<Location> closestBlocks = new ArrayList<>();
+    
+        // Проходим по всем блокам
+        for (Location loc : scannedBlocks.keySet()) {
+            Material material = scannedBlocks.get(loc);
+            
+            // Исключаем воздух и потенциально другие нежелательные блоки
+            if (material == Material.AIR) continue;
+    
+            int x = loc.getBlockX();
+            int y = loc.getBlockY();
+            int z = loc.getBlockZ();
+    
+            // Проверяем, что блок не является "столбиком безопасности" (не под ботом и не над ним)
+            if (y != botY - 1 && y != botY + 2) {  
+                double distance = Math.sqrt(Math.pow(x - botX, 2) + Math.pow(z - botZ, 2));
+                
+                if (distance < minDistance) {
+                    minDistance = distance;
+                    closestBlocks.clear();
+                    closestBlocks.add(loc);
+                } else if (distance == minDistance) {
+                    closestBlocks.add(loc);
+                }
+            }
+        }
+    
+        // Если список пуст, значит подходящих блоков нет
+        if (closestBlocks.isEmpty()) return null;
+    
+        // Возвращаем случайный блок из ближайших
+        return closestBlocks.get(random.nextInt(closestBlocks.size()));
+    }
+    
+
 }
