@@ -123,21 +123,31 @@ public class BotInventory {
         } //not yet created
 
         Map<Material, Integer> collectedCounts = new HashMap<>();
-
-        // Считаем количество каждого целевого материала в инвентаре
-        for (ItemStack item : bot.getInventory().getNPCInventory().getContents()) {
-            if (item != null && targetMaterials.contains(item.getType())) {
-                collectedCounts.put(item.getType(), collectedCounts.getOrDefault(item.getType(), 0) + item.getAmount());
+        
+        if(targetMaterials!=null) {
+            // Считаем количество каждого целевого материала в инвентаре
+            for (ItemStack item : bot.getInventory().getNPCInventory().getContents()) {
+                if (item != null && targetMaterials.contains(item.getType())) {
+                    collectedCounts.put(item.getType(), collectedCounts.getOrDefault(item.getType(), 0) + item.getAmount());
+                }
+            }
+        } else {
+            // Считаем количество каждого материала в инвентаре
+            for (ItemStack item : bot.getInventory().getNPCInventory().getContents()) {
+                if (item != null) {
+                    collectedCounts.put(item.getType(), collectedCounts.getOrDefault(item.getType(), 0) + item.getAmount());
+                }
             }
         }
+        if (targetMaterials!=null) {
+            // Проверяем, достигнуто ли нужное количество для любого из целевых материалов
+            for (Material material : targetMaterials) {
+                int count = collectedCounts.getOrDefault(material, 0);
+                BotLogger.debug("📦 " + bot.getId() + " | " + material + ": ( " + count + "/" + maxBlocksPerMaterial+")");
 
-        // Проверяем, достигнуто ли нужное количество для любого из целевых материалов
-        for (Material material : targetMaterials) {
-            int count = collectedCounts.getOrDefault(material, 0);
-            BotLogger.debug("📦 " + bot.getId() + " | " + material + ": ( " + count + "/" + maxBlocksPerMaterial+")");
-
-            if (count >= maxBlocksPerMaterial) {
-                return true; // Достигнута цель по какому-то материалу → завершаем задачу
+                if (count >= maxBlocksPerMaterial) {
+                    return true; // Достигнута цель по какому-то материалу → завершаем задачу
+                }
             }
         }
 

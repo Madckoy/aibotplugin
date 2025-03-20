@@ -66,18 +66,23 @@ public class BotTaskBreakBlock extends BotTask {
         BotLogger.debug("⚙️ BreakBlockTask сконфигурирована: " + (targetMaterials == null ? "ВСЕ БЛОКИ" : targetMaterials));
     }
     
+
+    public void setTargetMaterials(Set<Material> materials) {
+        targetMaterials = materials;
+    }
+
     @Override
     public void executeTask() {
 
         if(!BotInventory.hasFreeInventorySpace(bot, targetMaterials)) {
-            BotLogger.debug("🔄 " +bot.getId() + " No free space in Inventory! Exiting...");
+            BotLogger.trace("🔄 " +bot.getId() + " No free space in Inventory! Exiting...");
             isDone = true;
             return;
         }
 
         //
         if (BotInventory.hasEnoughBlocks(bot, targetMaterials, maxBlocks)){
-            BotLogger.debug("🔄 " + bot.getId() + " Collected enough materials! Exiting...");
+            BotLogger.trace("🔄 " + bot.getId() + " Collected enough materials! Exiting...");
             isDone = true;
             return;
         }
@@ -96,7 +101,7 @@ public class BotTaskBreakBlock extends BotTask {
                 if(scannedBlocks.size()==0) { // stuck
                     BotLogger.trace("❌ " + bot.getId() + " Застрял и Нет доступных блоков для добычи! Перемещаемся к точке респавна.");
 
-                    handleStuck();
+                    // handleStuck();
 
                     BotTaskBreakBlockAny bb = new BotTaskBreakBlockAny(bot);
                     bot.addTaskToQueue(bb);
@@ -113,11 +118,14 @@ public class BotTaskBreakBlock extends BotTask {
                         Location newLocation = findNearestTargetBlock(scannedBlocks);
 
                         if(newLocation!=null) {
+                            
+                            BotLogger.trace("ℹ️ " + bot.getId() + " Найден блок, пробуем разрушить!");
 
                             BotTaskMove moveTask = new BotTaskMove(bot);
                             moveTask.configure(newLocation);
                             bot.addTaskToQueue(moveTask);
 
+                            isDone = false;
                             return;
 
                         } else {
@@ -126,6 +134,7 @@ public class BotTaskBreakBlock extends BotTask {
                             // handleStuck();
 
                             //setEnvMap(null);
+                            BotLogger.trace("ℹ️ " + bot.getId() + " Не найден целевой блок, пробуем разрушить любой рядом!");
 
                             BotTaskBreakBlockAny bb = new BotTaskBreakBlockAny(bot);
                             bot.addTaskToQueue(bb);
