@@ -221,11 +221,11 @@ public class BotWebService {
      */
     private static String getCurrentObject(Bot bot) {
         BotTask currentTask = bot.getCurrentTask();
-        if (currentTask == null) return "—";
+        if (currentTask == null) return "";
 
         if (currentTask instanceof BotTaskBreakBlock) {
             Set<Material> targetMaterials = ((BotTaskBreakBlock) currentTask).getTargetMaterials();
-            return targetMaterials != null ? "Добыча: " + targetMaterials.toString() : "Добыча: все блоки";
+            return targetMaterials != null ? targetMaterials.toString() : "Добыча: все блоки";
         }
 
         if (currentTask instanceof BotTaskFollowTarget) {
