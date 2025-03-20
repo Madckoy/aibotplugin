@@ -16,7 +16,7 @@ import com.devone.aibot.core.logic.tasks.configs.BotTaskBreakBlockConfig;
 import com.devone.aibot.utils.BotLogger;
 import com.devone.aibot.AIBotPlugin;
 
-ppublic class BotTaskBreakBlock extends BotTask {
+public class BotTaskBreakBlock extends BotTask {
 
     private int maxBlocks;
     private int searchRadius;
@@ -134,6 +134,18 @@ ppublic class BotTaskBreakBlock extends BotTask {
             BotLogger.trace("❌ " + bot.getId() + " Нет подходящих блоков. Завершаем.");
             isDone = true;
         }
+    }
+
+    private boolean isInventoryFull() {
+        boolean full = !BotInventory.hasFreeInventorySpace(bot, targetMaterials);
+        BotLogger.trace("📦 Проверка инвентаря: " + (full ? "полон" : "есть место"));
+        return full;
+    }
+
+    private boolean isEnoughBlocksCollected() {
+        boolean enough = BotInventory.hasEnoughBlocks(bot, targetMaterials, maxBlocks);
+        BotLogger.trace("📊 Проверка количества блоков: " + (enough ? "достаточно" : "нужно больше"));
+        return enough;
     }
 
     private boolean isInProtectedZone(Location location) {
