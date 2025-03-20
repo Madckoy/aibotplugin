@@ -107,25 +107,67 @@
             const data = await response.json();
 
             let table = document.getElementById("botTable");
-            table.innerHTML = "<tr><th>📷 Id</th><th>📍 Position</th><th>✔️ Task</th><th>🫧 Object</th><th>🎯 Target</th><th>⌚ Elapsed Time</th><th class='queue-column'>ᯓ Queue</th></tr>";
 
+            // ✅ Устанавливаем фиксированную структуру таблицы
+            table.style.tableLayout = "fixed";  
+            table.style.width = "100%";  
+            table.style.borderSpacing = "0";  
+
+            // ✅ Проверяем, есть ли <thead>, если нет — создаем
+            if (!table.querySelector("thead")) {
+                table.insertAdjacentHTML("afterbegin", `
+                    <thead>
+                        <tr>
+                            <th style="width: 200px; min-width: 200px; padding: 6px;">📷 Id</th>
+                            <th style="width: 200px; min-width: 200px; padding: 6px;">📍 Position</th>
+                            <th style="width: 200px; min-width: 200px; padding: 6px;">✔️ Task</th>
+                            <th style="width: 200px; min-width: 200px; padding: 6px;">📌 Target</th>
+                            <th style="width: auto;  min-width: 200px; padding: 6px;">🫧 Object</th>
+                            <th style="width: 200px; min-width: 200px; padding: 6px;">⌚ Elapsed Time</th>
+                            <th style="width: auto; padding: 6px;">ᯓ Queue</th>
+                        </tr>
+                    </thead>
+                `);
+            }
+
+            // ✅ Очищаем только <tbody>
+            let tbody = table.querySelector("tbody");
+            if (tbody) {
+                tbody.remove();
+            }
+            tbody = document.createElement("tbody");
+            table.appendChild(tbody);
+
+            // ✅ Добавляем всех ботов
             data.bots.forEach(bot => {
-                let row = table.insertRow();
+                let row = tbody.insertRow();
+                row.style.height = "30px";  // ✅ Уменьшаем высоту строки
+
                 let botCell = row.insertCell(0);
-                botCell.innerHTML = "<img src="+bot.skin+" width='24' height='24' style='border-radius: 4px; margin-right: 8px;'> "+bot.id;
+                botCell.innerHTML = "<img src=" + bot.skin + " width='20' height='20' style='border-radius: 4px; margin-right: 5px;'> " + bot.id;
+                botCell.style.padding = "6px";
+
                 row.insertCell(1).innerText = bot.position;
                 row.insertCell(2).innerText = bot.task;
-                row.insertCell(3).innerText = bot.object;
-                row.insertCell(4).innerText = bot.target;
+                row.insertCell(3).innerText = bot.target;
+                row.insertCell(4).innerText = bot.object;
                 row.insertCell(5).innerText = bot.elapsedTime;
-                row.insertCell(6).innerText = bot.queue;
-                queueCell.style.width = "100%"; // ✅ Растягиваем колонку
-                queueCell.style.whiteSpace = "nowrap"; // ✅ Запрещаем перенос строк
+
+                let queueCell = row.insertCell(6);
+                queueCell.innerText = bot.queue;
+                //queueCell.style.width = "100%";  // ✅ Растягиваем последнюю колонку
+                queueCell.style.whiteSpace = "nowrap";  // ✅ Без переноса строк
+                queueCell.style.textAlign = "left";  // ✅ Выравнивание влево
+                queueCell.style.paddingLeft = "6px";  // ✅ Отступ слева
+                queueCell.style.padding = "6px";  // ✅ Уменьшаем padding
             });
+
         } catch (error) {
             console.error("Error fetching bot data:", error);
         }
     }
+
+
 
     window.onload = function() {
         loadBlueMap();
