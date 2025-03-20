@@ -66,6 +66,13 @@ public class BotTaskIdle extends BotTask {
 
         double huntChance = isNight ? 0.9 : 0.2; // 90% ночью, 20% днем
 
+        if (rand < 0.1) { // 10% шанс сказать что-то про окружающий мир
+            BotLogger.debug("🤖 " + bot.getId() + " Комментирует обстановку.");
+            bot.addTaskToQueue(new BotTaskTalk(bot, null, BotTaskTalk.TalkType.ENVIRONMENT_COMMENT));
+            return;
+        }
+
+
         if (rand < huntChance) {
             // ⚔️ Охота
             BotLogger.debug("⚔️ " + bot.getId() + " Собирается на охоту! (Вероятность: " + huntChance * 100 + "%)");
@@ -79,7 +86,7 @@ public class BotTaskIdle extends BotTask {
             hunt_task.configure(targets, 20, true);
             bot.addTaskToQueue(hunt_task);
             BotLogger.debug("⚔️ " + bot.getId() + " Начинает охоту на " + (isNight ? "агрессивных мобов" : "животных") + "!");
-            
+
             return;
         }
 

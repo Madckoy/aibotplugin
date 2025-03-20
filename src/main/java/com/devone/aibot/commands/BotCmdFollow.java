@@ -2,7 +2,7 @@ package com.devone.aibot.commands;
 
 import com.devone.aibot.core.Bot;
 import com.devone.aibot.core.BotManager;
-import com.devone.aibot.core.logic.tasks.BotTaskFollow;
+import com.devone.aibot.core.logic.tasks.BotTaskFollowTarget;
 import com.devone.aibot.utils.BotLogger;
 
 import org.bukkit.command.Command;
@@ -39,7 +39,7 @@ public class BotCmdFollow implements CommandExecutor {
         bot.getLifeCycle().getTaskStackManager().clearTasks();
         
         // ✅ Добавляем задачу на следование
-        BotTaskFollow followTask = new BotTaskFollow(bot, player);
+        BotTaskFollowTarget followTask = new BotTaskFollowTarget(bot, player);
         bot.addTaskToQueue(followTask);
 
         player.sendMessage("§aБот " + bot.getId() + " теперь следует за вами!");
