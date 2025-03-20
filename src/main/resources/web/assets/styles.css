@@ -1,0 +1,49 @@
+
+/* ✅ Общий стиль таблицы */
+table {
+    width: 100%;
+    border-collapse: collapse;
+    table-layout: fixed;
+    background: #2b2b2b;
+    color: #e0e0e0;
+    font-size: 14px;
+    font-family: "Inter", "Roboto", Arial, sans-serif;
+}
+
+/* ✅ Заголовки (thead) */
+th {
+    background: #3a3a3a;
+    color: #fff;
+    padding: 8px;
+    text-align: left;
+    border-bottom: 2px solid #555;
+    font-size: 15px;
+    font-weight: 600;  /* ✅ Делаем чуть жирнее */
+    letter-spacing: 0.5px; /* ✅ Улучшаем читаемость */
+}
+
+/* ✅ Обычные ячейки (td) */
+td {
+    padding: 6px;
+    border-bottom: 1px solid #444;
+    text-align: left;
+    white-space: nowrap;
+    font-size: 14px;
+    letter-spacing: 0.3px;
+}
+
+/* ✅ Подсветка строки при наведении */
+tr:hover {
+    background: #404040;
+}
+
+
+/* ✅ Настройка ширины колонок */
+th:nth-child(1), td:nth-child(1) { width: 80px; }  /* ID */
+th:nth-child(2), td:nth-child(2) { width: 145px; } /* Position */
+th:nth-child(3), td:nth-child(3) { width: 80px; }  /* Task */
+th:nth-child(4), td:nth-child(4) { width: 145px; } /* Target */
+th:nth-child(5), td:nth-child(5) { width: 300px; } /* Object */
+th:nth-child(6), td:nth-child(6) { width: 100px; } /* Duration */
+th:nth-child(7), td:nth-child(7) { width: auto; }  /* Queue (растягивается) */
+
