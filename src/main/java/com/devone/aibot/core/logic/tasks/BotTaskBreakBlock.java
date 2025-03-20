@@ -21,6 +21,7 @@ public class BotTaskBreakBlock extends BotTask {
     private int maxBlocks;
     private int searchRadius;
     private boolean shouldPickup = true;
+    private boolean destroyAllIfNoTarget = false;
     private Set<Material> targetMaterials = null;
     private BotTaskBreakBlockConfig config;
     private Location targetLocation;
@@ -47,12 +48,19 @@ public class BotTaskBreakBlock extends BotTask {
         if (params.length >= 4 && params[3] instanceof Boolean) {
             this.shouldPickup = (Boolean) params[3];
         }
+        if (params.length >= 5 && params[4] instanceof Boolean) {
+            this.destroyAllIfNoTarget = (Boolean) params[4];
+        }
         bot.setAutoPickupEnabled(shouldPickup);
         BotLogger.debug("⚙️ BreakBlockTask настроена: " + (targetMaterials == null ? "ВСЕ БЛОКИ" : targetMaterials));
     }
 
     public void setTargetMaterials(Set<Material> materials) {
-        targetMaterials = materials;
+        this.targetMaterials = materials;
+    }
+
+    public Set<Material> getTargetMaterials() {
+        return this.targetMaterials;
     }
 
     @Override
@@ -85,22 +93,11 @@ public class BotTaskBreakBlock extends BotTask {
     }
 
     private boolean isInventoryFull() {
-        if (!BotInventory.hasFreeInventorySpace(bot, targetMaterials)) {
-            BotLogger.trace("🔄 " + bot.getId() + " Инвентарь полон! Завершаем...");
-            return true;
-        }
-        return false;
+        return !BotInventory.hasFreeInventorySpace(bot, targetMaterials);
     }
 
     private boolean isEnoughBlocksCollected() {
-        if (BotInventory.hasEnoughBlocks(bot, targetMaterials, maxBlocks)) {
-            BotLogger.trace("🔄 " + bot.getId() + " Достаточно блоков собрано! Завершаем...");
-            return true;
-        }
-        return false;
-    }
-    private boolean isInProtectedZone(Location location) {
-        return BotZoneManager.getInstance().isInProtectedZone(location);
+        return BotInventory.hasEnoughBlocks(bot, targetMaterials, maxBlocks);
     }
 
     private Location findNextTargetBlock() {
@@ -118,9 +115,17 @@ public class BotTaskBreakBlock extends BotTask {
     }
 
     private void handleNoTargetFound() {
-        BotLogger.trace("❌ " + bot.getId() + " Нет подходящих блоков. Завершаем.");
-        targetLocation = null;
-        envMap = null;
-        isDone = true;
+        if (destroyAllIfNoTarget) {
+            BotLogger.trace("🔄 " + bot.getId() + " Целевых блоков нет! Запускаем полное разрушение.");
+            bot.addTaskToQueue(new BotTaskBreakBlockAny(bot));
+            isDone = false;
+        } else {
+            BotLogger.trace("❌ " + bot.getId() + " Нет подходящих блоков. Завершаем.");
+            isDone = true;
+        }
+    }
+
+    private boolean isInProtectedZone(Location location) {
+        return BotZoneManager.getInstance().isInProtectedZone(location);
     }
 }
