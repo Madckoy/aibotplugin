@@ -16,7 +16,7 @@ import com.devone.aibot.core.logic.tasks.configs.BotTaskBreakBlockConfig;
 import com.devone.aibot.utils.BotLogger;
 import com.devone.aibot.AIBotPlugin;
 
-public class BotTaskBreakBlock extends BotTask {
+ppublic class BotTaskBreakBlock extends BotTask {
 
     private int maxBlocks;
     private int searchRadius;
@@ -86,36 +86,24 @@ public class BotTaskBreakBlock extends BotTask {
 
         targetLocation = findNextTargetBlock();
 
-        if (targetLocation != null) {
+        if (targetLocation != null && targetLocation.getBlock().getType() != Material.AIR) {
             if (isInProtectedZone(targetLocation)) {
                 BotLogger.debug("⛔ " + bot.getId() + " в запретной зоне, НЕ будет разрушать блок: " + BotStringUtils.formatLocation(targetLocation));
                 isDone = true;
                 return;
             }
-            BotLogger.trace("🛠️ Целевой блок найден: " + BotStringUtils.formatLocation(targetLocation)+" (Целевые блоки: " + (targetMaterials == null ? "ВСЕ" : targetMaterials) + ")");
+            BotLogger.trace("🛠️ Целевой блок найден: " + BotStringUtils.formatLocation(targetLocation));
             destroyBlock(targetLocation);
         } else {
             handleNoTargetFound();
         }
     }
 
-    private boolean isInventoryFull() {
-        boolean full = !BotInventory.hasFreeInventorySpace(bot, targetMaterials);
-        BotLogger.trace("📦 Проверка инвентаря: " + (full ? "полон" : "есть место"));
-        return full;
-    }
-
-    private boolean isEnoughBlocksCollected() {
-        boolean enough = BotInventory.hasEnoughBlocks(bot, targetMaterials, maxBlocks);
-        BotLogger.trace("📊 Проверка количества блоков: " + (enough ? "достаточно" : "нужно больше"));
-        return enough;
-    }
-
     private Location findNextTargetBlock() {
         Location target = null;
         for (int i = 0; i < 10; i++) { // Попытки найти нужный блок
             Location candidate = BotEnv3DScan.getRandomNearbyDestructibleBlock(getEnvMap(), bot.getNPCCurrentLocation());
-            if (candidate != null && (targetMaterials == null || targetMaterials.contains(candidate.getBlock().getType()))) {
+            if (candidate != null && candidate.getBlock().getType() != Material.AIR && (targetMaterials == null || targetMaterials.contains(candidate.getBlock().getType()))) {
                 target = candidate;
                 break;
             }
@@ -132,6 +120,7 @@ public class BotTaskBreakBlock extends BotTask {
                 isDone = false;
             } else {
                 BotLogger.trace("⚠️ Бот пытался разрушить воздух, пропускаем");
+                handleNoTargetFound(); // Попробовать найти новый блок
             }
         });
     }

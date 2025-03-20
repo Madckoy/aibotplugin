@@ -59,48 +59,44 @@ public class BotTaskIdle extends BotTask {
         }
 
         if (rand >= 0.8) {
-            // 📌 начать exploration
+            // 📌 начать exploration (20% вероятность)
             BotLogger.debug("🌐 " + bot.getId() + " Starts Patrolling");
-
+        
             BotTaskExplore patrolTask = new BotTaskExplore(bot);
             bot.addTaskToQueue(patrolTask);
-
+        
             return;
         }
-
+        
         if (rand < 0.8 && rand >= 0.5) {
            // ⛏ 30% шанс начать добычу земли
            BotTaskBreakBlock breakTask = new BotTaskBreakBlock(bot);
-
-           if(breakTask.isEnabled) {
-               breakTask.configure(dirtTypes, maxToCollect, 10, true); //ломаем землю и лутаем!!!
+        
+           if (breakTask.isEnabled) {
+               breakTask.configure(dirtTypes, maxToCollect, 10, true); // ломаем землю и лутаем!!!
                bot.addTaskToQueue(breakTask);
-
            }
-               
+        
            return;
-
         }
         
-        if (rand < 0.5 && rand >= 1.0) {
-             // ⛏ 30% шанс начать добычу всего подряд
+        if (rand < 0.5 && rand >= 0.2) {  
+             // ⛏ 30% шанс начать добычу всего подряд (раньше эта ветка не выполнялась)
             BotTaskBreakBlockAny breakAnyTask = new BotTaskBreakBlockAny(bot);
-
-            if(breakAnyTask.isEnabled) {
-                breakAnyTask.configure(null, maxToCollect, 10, true); //ломаем все, включая кабины (тестовый режим) и лутаем!!!
+        
+            if (breakAnyTask.isEnabled) {
+                breakAnyTask.configure(null, maxToCollect, 10, true); // ломаем все и лутаем!!!
                 bot.addTaskToQueue(breakAnyTask);
             }    
-                
-            return;
-
-        } 
         
-        if (rand < 0.1) {
-            // 💤 20% шанс остаться в IDLE
-            BotLogger.debug("💤 " + bot.getId() + " Остаётся в IDLE.");
-                
             return;
         }
-
+        
+        if (rand < 0.2) {
+            // 💤 20% шанс остаться в IDLE
+            BotLogger.debug("💤 " + bot.getId() + " Остаётся в IDLE.");
+        
+            return;
+        }
     }
 }
