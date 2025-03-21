@@ -226,12 +226,12 @@ public class BotWebService {
 
         if (currentTask instanceof BotTaskMove) {
             Set<Material> targetMaterials = ((BotTaskBreakBlock) currentTask).getTargetMaterials();
-            return targetMaterials != null ? "Наступит на: " + targetMaterials.toString() : "N/A";
+            return targetMaterials != null ? "Наступит на: " + targetMaterials.toString() : "";
         }
 
         if (currentTask instanceof BotTaskBreakBlock) {
             Set<Material> targetMaterials = ((BotTaskBreakBlock) currentTask).getTargetMaterials();
-            return targetMaterials != null ? targetMaterials.toString() : "Добыча: все блоки";
+            return targetMaterials != null ? targetMaterials.toString() : "Разрушит: любой блок";
         }
 
         if (currentTask instanceof BotTaskFollowTarget) {
@@ -241,7 +241,7 @@ public class BotWebService {
             }
         }
 
-        return "N/A";
+        return "";
     }
 
     /**
