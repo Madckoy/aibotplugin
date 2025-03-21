@@ -20,7 +20,7 @@ public class BotTaskTalk extends BotTask {
 
     public enum TalkType {
         COMPLIMENT, INSULT_MOB, ENVIRONMENT_COMMENT,
-        INVENTORY_REPORT, HELP_REQUEST, SELF_TALK
+        INVENTORY_REPORT, HELP_REQUEST, TOOL_REQUEST, SELF_TALK
     }
 
     public BotTaskTalk(Bot bot, Player player, TalkType type) {
@@ -58,7 +58,7 @@ public class BotTaskTalk extends BotTask {
 
     private boolean shouldBroadcastToAll(TalkType type) {
         return switch (type) {
-            case ENVIRONMENT_COMMENT, INVENTORY_REPORT, HELP_REQUEST -> true;
+            case ENVIRONMENT_COMMENT, INVENTORY_REPORT, HELP_REQUEST, TOOL_REQUEST -> true;
             default -> false;
         };
     }
@@ -73,6 +73,7 @@ public class BotTaskTalk extends BotTask {
                 yield raw.replace("{count}", String.valueOf(BotInventory.getTotalItemCount(bot)));
             }
             case HELP_REQUEST -> getRandomMessage(config.getHelpRequests());
+            case TOOL_REQUEST -> getRandomMessage(config.getToolRequests());
             case SELF_TALK -> getRandomMessage(config.getSelfTalks());
         };
     }

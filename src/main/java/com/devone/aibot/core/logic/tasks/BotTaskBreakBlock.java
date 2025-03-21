@@ -104,6 +104,15 @@ public class BotTaskBreakBlock extends BotTask {
 
             setObjective("Разрушение блока: " + BotUtils.getBlockName(targetLocation.getBlock()));
    
+            Material requiredTool = BotUtils.getRequiredTool(targetLocation.getBlock().getType());
+
+            if (requiredTool != Material.AIR && !bot.getInventory().getNPCInventory().contains(requiredTool)) {
+                bot.addTaskToQueue(new BotTaskTalk(bot, null, BotTaskTalk.TalkType.TOOL_REQUEST));
+                BotLogger.debug("⛏️ I need " + requiredTool + " to break " + targetLocation.getBlock().getType() + "! Skipping...");
+                envMap.remove(targetLocation); // Удаляем блок из сканирования
+                return;
+            }
+
 
             BotLogger.trace("🚧 " + bot.getId() + " Разрушение блока: " + targetLocation.getBlock().toString());
         
@@ -118,51 +127,32 @@ public class BotTaskBreakBlock extends BotTask {
     }
 
     private Location findNextTargetBlock() {
-        Map<Location, Material> envMap = getEnvMap();
-    
-        if (envMap == null || envMap.isEmpty()) {
-            BotLogger.trace("🔄 EnvMap пустая, перезапускаем сканер...");
-            bot.addTaskToQueue(new BotTaskSonar3D(bot, this, searchRadius, searchRadius));
-            return null;
-        }
-    
         Location botLoc = bot.getNPCCurrentLocation();
         int botY = botLoc.getBlockY();
+        Random random = new Random();
     
-        Location target = null;
-        Iterator<Map.Entry<Location, Material>> iterator = envMap.entrySet().iterator();
+        List<Location> sortedTargets = envMap.keySet().stream()
+            .filter(loc -> loc.getBlockY() >= botY - 1 && loc.getBlockY() <= botY + 1) // Только ±1 уровень
+            .filter(this::isBlockExposed) // Только видимые блоки
+            .sorted(Comparator.comparingDouble(loc -> loc.distance(botLoc))) // Сортируем по расстоянию
+            .toList();
     
-        // 🔥 1. Сначала ищем блоки на своём уровне (приоритетный уровень)
-        while (iterator.hasNext()) {
-            Map.Entry<Location, Material> entry = iterator.next();
-            Location candidate = entry.getKey();
-            Material blockType = entry.getValue();
+        for (Location candidate : sortedTargets) {
+            if (targetMaterials == null || targetMaterials.contains(candidate.getBlock().getType())) {
+                envMap.remove(candidate); // Удаляем из списка сканирования
+                
+                // 🌀 Добавляем небольшой случайный шум в выбор блока
+                int offsetX = random.nextInt(3) - 1; // -1, 0 или +1
+                int offsetZ = random.nextInt(3) - 1;
     
-            if (candidate.getBlockY() == botY) { // 🔹 Проверяем только блоки на текущем уровне
-                if (isValidTargetBlock(blockType)) {
-                    target = candidate;
-                    iterator.remove();
-                    return target;
-                }
+                // 🔄 15% шанс скорректировать высоту (копать вверх или вниз)
+                int offsetY = (random.nextDouble() < 0.15) ? (random.nextBoolean() ? 1 : -1) : 0;
+    
+                return candidate.clone().add(offsetX, offsetY, offsetZ);
             }
         }
     
-        // 🔥 2. Если не нашли, ищем выше и ниже
-        iterator = envMap.entrySet().iterator();
-        while (iterator.hasNext()) {
-            Map.Entry<Location, Material> entry = iterator.next();
-            Location candidate = entry.getKey();
-            Material blockType = entry.getValue();
-    
-            if (isValidTargetBlock(blockType)) {
-                target = candidate;
-                iterator.remove();
-                return target;
-            }
-        }
-    
-        BotLogger.trace("🔎 Поиск целевого блока: " + (target != null ? "найден" : "не найден"));
-        return target;
+        return null; // Если ничего не нашли
     }
     
     private boolean isValidTargetBlock(Material blockType) {
@@ -204,4 +194,22 @@ public class BotTaskBreakBlock extends BotTask {
         return protectedZone;
     }
 
+    private boolean isBlockExposed(Location loc) {
+        for (int dx = -1; dx <= 1; dx++) {
+            for (int dy = -1; dy <= 1; dy++) {
+                for (int dz = -1; dz <= 1; dz++) {
+                    if (dx == 0 && dy == 0 && dz == 0) continue; // Сам блок не трогаем
+                    
+                    Location neighbor = loc.clone().add(dx, dy, dz);
+                    Material type = neighbor.getBlock().getType();
+    
+                    if (type == Material.AIR || type == Material.WATER || type == Material.LAVA) {
+                        return true; // Блок видимый, если рядом воздух, вода или лава
+                    }
+                }
+            }
+        }
+        return false; // Блок полностью окружён твёрдыми блоками
+    }
+    
 }

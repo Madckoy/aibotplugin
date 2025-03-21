@@ -49,6 +49,11 @@ public class BotTaskTalkConfig extends BotTaskConfig {
             "Okay… this is bad. HELP!"
         ));
 
+
+        config.set("talk.need_tool", List.of(
+            "I need a poroper tool to break this block!"
+        ));
+
         config.set("talk.self_talk", List.of(
             "I wonder… who am I, really? 🤖",
             "If I had emotions, I’d… dig deeper.",
@@ -66,4 +71,5 @@ public class BotTaskTalkConfig extends BotTaskConfig {
     public List<String> getInventoryReports() { return getConfig().getStringList("talk.inventory"); }
     public List<String> getHelpRequests() { return getConfig().getStringList("talk.help"); }
     public List<String> getSelfTalks() { return getConfig().getStringList("talk.self_talk"); }
+    public List<String> getToolRequests() { return getConfig().getStringList("talk.need_tool"); }
 }
