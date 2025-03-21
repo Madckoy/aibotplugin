@@ -216,4 +216,10 @@ public class Bot {
         moveTask.configure(target);
         bot.addTaskToQueue(moveTask);
     }
+
+    public static void navigateTo(Bot bot, Location target, double multiplier) {
+        BotTaskMove moveTask = new BotTaskMove(bot);
+        moveTask.configure(target, multiplier);
+        bot.addTaskToQueue(moveTask);
+    }
 }

@@ -3,7 +3,7 @@ package com.devone.aibot.core.logic.tasks.configs;
 import org.bukkit.configuration.file.FileConfiguration;
 import java.util.List;
 
-public class BotTaskTalkConfig extends BotAbstractLocationConfig {
+public class BotTaskTalkConfig extends BotTaskConfig {
 
     public BotTaskTalkConfig() {
         super("BotTaskTalk.yml");

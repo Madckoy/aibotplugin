@@ -5,7 +5,7 @@ import org.bukkit.Material;
 import org.bukkit.entity.Player;
 
 import com.devone.aibot.core.Bot;
-import com.devone.aibot.core.logic.tasks.configs.BotAbstractConfig;
+import com.devone.aibot.core.logic.tasks.configs.BotTaskConfig;
 import com.devone.aibot.utils.BotLogger;
 import com.devone.aibot.utils.BotStringUtils;
 
@@ -27,12 +27,12 @@ public abstract class BotTask implements IBotTask{
     Map<Location, Material> envMap;
     protected String objective;
 
-    protected BotAbstractConfig config;
+    protected BotTaskConfig config;
 
     public BotTask(Bot bot) {
         this.bot = bot;
         this.uuid = UUID.randomUUID().toString(); // 🆕 Генерируем ID
-        this.config = new BotAbstractConfig(null);
+        this.config = new BotTaskConfig(null);
         objective = "";
     }
 
@@ -115,7 +115,7 @@ public abstract class BotTask implements IBotTask{
         return this;
     }
 
-    public BotAbstractConfig getConfig() {
+    public BotTaskConfig getConfig() {
         return config;
     }
 

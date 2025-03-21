@@ -10,14 +10,14 @@ import java.io.IOException;
 import com.devone.aibot.utils.BotLogger;
 
 
-public class BotAbstractConfig {
+public class BotTaskConfig {
     
     protected File file;
     protected FileConfiguration config;
     protected String fileName=null;
 
 
-    public BotAbstractConfig(String f_name) {
+    public BotTaskConfig(String f_name) {
 
         fileName = f_name;
 

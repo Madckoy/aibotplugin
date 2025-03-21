@@ -121,11 +121,8 @@ public class BotTaskBreakBlock extends BotTask {
         Location target = null;
         for (int i = 0; i < 10; i++) {
             Location candidate = BotEnv3DScan.getRandomNearbyDestructibleBlock(getEnvMap(), bot.getNPCCurrentLocation());
-            if (candidate != null && candidate.getBlock().getType() != Material.AIR && 
-                                     candidate.getBlock().getType() != Material.WATER &&
-                                     candidate.getBlock().getType() != Material.LAVA &&
-                                     candidate.getBlock().getType() != Material.VOID_AIR &&
-                                    (targetMaterials == null || targetMaterials.contains(candidate.getBlock().getType()))) {
+            if (candidate != null && candidate.getBlock().getType() != Material.AIR &&  
+               (targetMaterials == null || targetMaterials.contains(candidate.getBlock().getType()))) {
 
                 target = candidate;
 

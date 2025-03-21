@@ -4,6 +4,9 @@ import com.devone.aibot.core.Bot;
 import com.devone.aibot.core.logic.tasks.configs.BotTaskExploreConfig;
 import com.devone.aibot.core.logic.tasks.configs.BotTaskHuntConfig;
 import com.devone.aibot.utils.BotLogger;
+import com.devone.aibot.utils.BotStringUtils;
+
+import org.bukkit.Location;
 import org.bukkit.entity.*;
 
 import java.util.List;
@@ -17,8 +20,9 @@ public class BotTaskHuntMobs extends BotTask {
 
     public BotTaskHuntMobs(Bot bot) {
         super(bot, "👁️");
-        config = new BotTaskHuntConfig();
-        scanRadius = ((BotTaskExploreConfig)config).getScanRadius();
+        this.config = new BotTaskHuntConfig();
+
+        this.scanRadius = ((BotTaskHuntConfig)this.config).getScanRadius();
         envMap = null;
     }
 
@@ -32,7 +36,7 @@ public class BotTaskHuntMobs extends BotTask {
         // 🔍 Проверяем, есть ли у нас актуальная карта местности
         if (getEnvMap() == null) {
             BotLogger.trace("🔍 Запускаем 3D-сканирование окружающей среды.");
-            bot.addTaskToQueue(new BotTaskSonar3D(bot, this, scanRadius, 2));
+            bot.addTaskToQueue(new BotTaskSonar3D(bot, this, scanRadius, 4));
             isDone = false;
             return;
         }
@@ -43,9 +47,11 @@ public class BotTaskHuntMobs extends BotTask {
 
         if (targetMob != null) {
 
-            bot.addTaskToQueue(new BotTaskFollowTarget(bot, targetMob));
-            BotLogger.debug("🎯 Бот начинает преследование " + targetMob.getType());
-            
+            Location mobLocation = targetMob.getLocation(); // ✅ Берём позицию цели
+            BotLogger.debug("🎯 Бот начинает преследование " + targetMob.getType() + " на " + BotStringUtils.formatLocation(mobLocation));
+
+            bot.addTaskToQueue(new BotTaskFollowTarget(bot, targetMob)); // ✅ Передаём координаты
+
             isDone = true;
             return;
         }

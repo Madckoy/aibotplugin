@@ -15,5 +15,9 @@ public class BotTaskBreakBlockAny extends BotTaskBreakBlock {
 
     }
  
+    @Override
+    public void executeTask() {
+        super.executeTask();
+    }
 
 }

@@ -1,10 +1,14 @@
 package com.devone.aibot.core.logic.tasks;
 
+import com.devone.aibot.AIBotPlugin;
 import com.devone.aibot.core.Bot;
 import com.devone.aibot.core.logic.tasks.configs.BotTaskFollowConfig;
 import com.devone.aibot.utils.BotLogger;
+import org.bukkit.Bukkit;
+import org.bukkit.Location;
 import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
+
 import java.util.Random;
 
 public class BotTaskFollowTarget extends BotTask {
@@ -14,16 +18,19 @@ public class BotTaskFollowTarget extends BotTask {
     private static final BotTaskFollowConfig config = new BotTaskFollowConfig();
     private final double followDistance = config.getFollowDistance();
     private final double attackRange = config.getAttackRange();
-    //private final long chatCooldown = config.getChatCooldown();
-    //private final double insultChance = config.getInsultChance();
+
+    private final int updateIntervalTicks = 10; // каждые 0.5 сек
+    private final double relocateThreshold = 1.5; // если цель сместилась на это расстояние — обновим маршрут
 
     private long lastChatTime = 0;
     private final Random random = new Random();
+    private Location lastKnownLocation;
 
     public BotTaskFollowTarget(Bot bot, LivingEntity target) {
         super(bot, "🎯");
         this.target = target;
-        targetLocation = target.getLocation();
+        this.targetLocation = target.getLocation();   
+        this.lastKnownLocation = target.getLocation();
     }
 
     @Override
@@ -35,87 +42,72 @@ public class BotTaskFollowTarget extends BotTask {
         }
 
         setObjective("Chasing the target: " + target.getType());
+        updateFollowLogic();
 
-        double distance = bot.getNPCCurrentLocation().distance(target.getLocation());
+        // Повторим проверку через заданный интервал
+        Bukkit.getScheduler().runTaskLater(AIBotPlugin.getInstance(), this::executeTask, updateIntervalTicks);
 
-        if (target instanceof Player) {
-
-            followPlayer((Player) target, distance);
-
-        } else {
-
-            followAndAttack(distance);
-        }
-
-        if (getElapsedTime()>120000) {
+        // Защита от вечного цикла
+        if (getElapsedTime() > 120000) {
             BotLogger.debug("💀 Не могу добраться до цели. Завершаю преследование.");
             isDone = true;
-            return;
         }
-
     }
 
-    public LivingEntity getFollowingObject() {
-        return this.target;
+    private void updateFollowLogic() {
+        double distance = bot.getNPCCurrentLocation().distance(target.getLocation());
+
+        if (target instanceof Player player) {
+            followPlayer(player, distance);
+        } else {
+            followAndAttack(distance);
+        }
     }
-    /**
-     * Логика следования за игроком без атаки.
-     */
+
     private void followPlayer(Player player, double distance) {
-
         if (distance > followDistance) {
-            Bot.navigateTo(bot, player.getLocation());
+            updateNavigationIfNeeded(player.getLocation());
             BotLogger.debug("🏃 Бот следует за игроком " + player.getName());
         }
 
-        // Иногда бот может сказать что-то игроку
-        if (System.currentTimeMillis() - lastChatTime > 10000) { // Раз в 10 секунд
+        if (System.currentTimeMillis() - lastChatTime > 10000) {
             bot.addTaskToQueue(new BotTaskTalk(bot, player, BotTaskTalk.TalkType.COMPLIMENT));
             lastChatTime = System.currentTimeMillis();
         }
     }
 
-    /**
-     * Логика преследования и атаки мобов.
-     */
     private void followAndAttack(double distance) {
         if (distance > attackRange) {
-            Bot.navigateTo(bot, target.getLocation());
+            updateNavigationIfNeeded(target.getLocation());
             BotLogger.debug("🏃 Преследуем " + target.getType() + " (расстояние: " + distance + ")");
         } else {
             attackTarget();
+            isDone = true; // Завершаем после атаки — задача выполнена
         }
     }
 
-    /**
-     * Логика атаки.
-     */
+    private void updateNavigationIfNeeded(Location newTargetLocation) {
+        if (lastKnownLocation.distanceSquared(newTargetLocation) > relocateThreshold * relocateThreshold) {
+            lastKnownLocation = newTargetLocation;
+            Bot.navigateTo(bot, lastKnownLocation, 2.5);
+            BotLogger.trace("🔄 Обновляем маршрут к новой позиции цели.");
+        }
+    }
+
     private void attackTarget() {
         if (target == null || target.isDead()) return;
 
         double distance = bot.getNPCCurrentLocation().distance(target.getLocation());
 
         if (distance <= attackRange) {
-
             BotTaskUseHand hand_task = new BotTaskUseHand(bot);
-            hand_task.configure(targetLocation, target, 10);
+            hand_task.configure(target.getLocation(), target, 10);
             bot.addTaskToQueue(hand_task);
-
             BotLogger.debug("⚔️ Бот атакует " + target.getType() + "!");
-
-            // 30% шанс поругаться на моба
-            if (random.nextDouble() < 0.3) {
-                bot.addTaskToQueue(new BotTaskTalk(bot, null, BotTaskTalk.TalkType.INSULT_MOB));
-            }
         }
     }
 
-    /**
-     * Анимация атаки.
-     */
-    private void animateHand() {
-        if (bot.getNPCEntity() instanceof org.bukkit.entity.Player) {
-            ((org.bukkit.entity.Player) bot.getNPCEntity()).swingMainHand();
-        }
+    public LivingEntity getFollowingObject() {
+        return this.target;
     }
 }

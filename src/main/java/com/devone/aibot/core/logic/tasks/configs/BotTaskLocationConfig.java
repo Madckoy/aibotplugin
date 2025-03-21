@@ -1,9 +1,9 @@
 package com.devone.aibot.core.logic.tasks.configs;
 
-public class BotAbstractLocationConfig extends BotAbstractConfig{
+public class BotTaskLocationConfig extends BotTaskConfig{
 
 
-    public BotAbstractLocationConfig(String f_name) {
+    public BotTaskLocationConfig(String f_name) {
         super(f_name);
     }
 

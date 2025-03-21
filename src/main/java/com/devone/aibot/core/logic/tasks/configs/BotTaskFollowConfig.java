@@ -2,7 +2,7 @@ package com.devone.aibot.core.logic.tasks.configs;
 
 import org.bukkit.configuration.file.FileConfiguration;
 
-public class BotTaskFollowConfig extends BotAbstractLocationConfig {
+public class BotTaskFollowConfig extends BotTaskLocationConfig {
 
     public BotTaskFollowConfig() {
         super("BotTaskFollow.yml");

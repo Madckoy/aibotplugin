@@ -3,6 +3,7 @@ package com.devone.aibot.utils;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.format.NamedTextColor;
 
+import org.bukkit.Location;
 import org.bukkit.block.Block;
 import org.bukkit.entity.Player;
 
@@ -56,5 +57,18 @@ public class BotUtils {
         }
 
         return result; 
+    }
+
+    public static void playBreakEffect(Location location) {
+        if (location == null || location.getWorld() == null) return;
+    
+        location.getWorld().spawnParticle(
+            org.bukkit.Particle.BLOCK_CRACK,
+            location.clone().add(0.5, 0.5, 0.5), // Центр блока
+            20, // Кол-во частиц
+            0.25, 0.25, 0.25, // Разброс
+            location.getBlock().getBlockData() // Тип блока для эффекта
+        );
+        BotLogger.trace("🎇 Эффект разрушения воспроизведён на " + BotStringUtils.formatLocation(location));
     }
 }
