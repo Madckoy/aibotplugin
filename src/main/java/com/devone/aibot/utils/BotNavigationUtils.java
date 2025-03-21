@@ -8,7 +8,7 @@ import com.devone.aibot.core.Bot;
 
 public class BotNavigationUtils {
     
-    public static boolean hasReachedTarget(Bot bot, Location target, double tolerance) {
+    public static boolean _hasReachedTarget_(Bot bot, Location target, double tolerance) {
         if (bot.getNPCEntity() == null) return false;
     
         Location current = bot.getNPCEntity().getLocation();
@@ -40,6 +40,14 @@ public class BotNavigationUtils {
         return false;
     }
     
+    public static boolean hasReachedTargetFlex(Location botLoc, Location targetLoc, double horizontalTolerance, double verticalTolerance) {
+        double dx = Math.abs(botLoc.getX() - targetLoc.getX());
+        double dz = Math.abs(botLoc.getZ() - targetLoc.getZ());
+        double dy = Math.abs(botLoc.getY() - targetLoc.getY());
+    
+        return dx <= horizontalTolerance && dz <= horizontalTolerance && dy <= verticalTolerance;
+    }
+
     public static boolean isSuitableForNavigation(Location location, Material material) {
         return material.isSolid() && location.clone().add(0, 1, 0).getBlock().getType() == Material.AIR
             && material != Material.LAVA && material != Material.WATER;

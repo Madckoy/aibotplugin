@@ -67,7 +67,7 @@ public class BotTaskMove extends BotTask {
                 return;
             }
 
-            if (BotNavigationUtils.hasReachedTarget(bot, targetLocation, 10)) {
+            if (BotNavigationUtils.hasReachedTargetFlex(bot.getNPCCurrentLocation(), targetLocation, 1.5, 1.5)) {
                 bot.resetTargetLocation();
                 isDone = true;
                 BotLogger.debug(bot.getId() + " 🎯 Достиг цели! Реальная позиция: " + bot.getNPCEntity().getLocation() + " [ID: " + uuid + "]");
