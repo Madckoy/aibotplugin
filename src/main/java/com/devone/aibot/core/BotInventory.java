@@ -245,6 +245,18 @@ public class BotInventory {
         //}
     }
 
+    public static int getTotalItemCount(Bot bot) {
+        Inventory inv = bot.getInventory().getNPCInventory();
+        if (inv == null) return 0;
+    
+        int total = 0;
+        for (ItemStack item : inv.getContents()) {
+            if (item != null && item.getType() != Material.AIR) {
+                total += item.getAmount();
+            }
+        }
+        return total;
+    }
 
 }
 
