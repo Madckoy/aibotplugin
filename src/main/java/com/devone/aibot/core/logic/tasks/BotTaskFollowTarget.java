@@ -23,8 +23,6 @@ public class BotTaskFollowTarget extends BotTask {
     public BotTaskFollowTarget(Bot bot, LivingEntity target) {
         super(bot, "🎯");
         this.target = target;
-        
-        setObjective("Following the target: " + target.getType());
     }
 
     @Override
@@ -34,17 +32,20 @@ public class BotTaskFollowTarget extends BotTask {
             isDone = true;
             return;
         }
+        
+        setObjective("Following the target: " + target.getType());
 
         double distance = bot.getNPCCurrentLocation().distance(target.getLocation());
 
         if (target instanceof Player) {
+            
             followPlayer((Player) target, distance);
         } else {
             followAndAttack(distance);
         }
 
         if (getElapsedTime()>60000) {
-            BotLogger.debug("💀 Не могу добраться до цели. Заверше преследование.");
+            BotLogger.debug("💀 Не могу добраться до цели. Завершаю преследование.");
             isDone = true;
             return;
         }
@@ -57,6 +58,7 @@ public class BotTaskFollowTarget extends BotTask {
      * Логика следования за игроком без атаки.
      */
     private void followPlayer(Player player, double distance) {
+
         if (distance > followDistance) {
             Bot.navigateTo(bot, player.getLocation());
             BotLogger.debug("🏃 Бот следует за игроком " + player.getName());

@@ -21,14 +21,14 @@ public class BotTaskHuntMobs extends BotTask {
         config = new BotTaskHuntConfig();
 
         scanRadius = ((BotTaskExploreConfig)config).getScanRadius();
-
-        setObjective("Looking for the hostile targets");
     }
 
     @Override
     public void executeTask() {
         
         BotLogger.trace("🚀 Запуск задачи охоты для бота " + bot.getId());
+        
+        setObjective("Looking for the hostile targets");
 
         // 🔍 Проверяем, есть ли у нас актуальная карта местности
         if (getEnvMap() == null) {
@@ -45,12 +45,9 @@ public class BotTaskHuntMobs extends BotTask {
         if (targetMob != null) {
             bot.addTaskToQueue(new BotTaskFollowTarget(bot, targetMob));
             BotLogger.debug("🎯 Бот начинает преследование " + targetMob.getType());
-            isDone = true;
-        } else {
-            BotLogger.debug("❌ Целей нет, переходим в патрулирование.");
-            bot.addTaskToQueue(new BotTaskExplore(bot));
-            isDone = true;
+            isDone = false;
         }
+        isDone = true;
     }
 
     private void findTarget() {
