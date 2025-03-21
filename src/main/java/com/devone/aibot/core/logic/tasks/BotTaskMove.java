@@ -58,6 +58,7 @@ public class BotTaskMove extends BotTask {
         if(bot.getNPCNavigator().canNavigateTo(getTargetLocation()) == false) {
             BotLogger.trace(bot.getId() + " 🛑 Target Location is not reachable. Stopping here...[ID: " + uuid + "]");
             handleStuck();
+            isDone = true;
             return;
         }
 
@@ -86,6 +87,9 @@ public class BotTaskMove extends BotTask {
                 if (!bot.getNPCNavigator().canNavigateTo(targetLocation)) {
                     BotLogger.trace(bot.getId() + " ❌ Не могу найти путь, Stopping here..." + " [ID: " + uuid + "]");
 
+                    taskHandle.cancel(); // ✅ Останавливаем таймер
+                    
+                    isDone = true; // останавливаем  задачу
                     handleStuck();
 
                     return;
