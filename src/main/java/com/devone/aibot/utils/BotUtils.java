@@ -4,6 +4,7 @@ import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.format.NamedTextColor;
 
 import org.bukkit.Location;
+import org.bukkit.Material;
 import org.bukkit.block.Block;
 import org.bukkit.entity.Player;
 
@@ -59,8 +60,16 @@ public class BotUtils {
         return result; 
     }
 
-    public static void playBreakEffect(Location location) {
+    public static void playBlockBreakEffect(Location location) {
         if (location == null || location.getWorld() == null) return;
+    
+        Material blockType = location.getBlock().getType();
+    
+        // ✅ Проверяем, что блок не AIR (иначе эффект не сработает)
+        if (blockType == Material.AIR) {
+            BotLogger.trace("⚠️ Эффект разрушения отменён: блок уже AIR " + BotStringUtils.formatLocation(location));
+            return;
+        }
     
         location.getWorld().spawnParticle(
             org.bukkit.Particle.BLOCK_CRACK,
@@ -69,6 +78,7 @@ public class BotUtils {
             0.25, 0.25, 0.25, // Разброс
             location.getBlock().getBlockData() // Тип блока для эффекта
         );
+    
         BotLogger.trace("🎇 Эффект разрушения воспроизведён на " + BotStringUtils.formatLocation(location));
     }
 }

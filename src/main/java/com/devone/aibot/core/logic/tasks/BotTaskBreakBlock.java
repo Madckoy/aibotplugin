@@ -119,19 +119,30 @@ public class BotTaskBreakBlock extends BotTask {
 
     private Location findNextTargetBlock() {
         Location target = null;
+    
         for (int i = 0; i < 10; i++) {
             Location candidate = BotEnv3DScan.getRandomNearbyDestructibleBlock(getEnvMap(), bot.getNPCCurrentLocation());
-            if (candidate != null && candidate.getBlock().getType() != Material.AIR &&  
-               (targetMaterials == null || targetMaterials.contains(candidate.getBlock().getType()))) {
-
-                target = candidate;
-
-                break;
+    
+            if (candidate != null) {
+                Material blockType = candidate.getBlock().getType();
+    
+                // ✅ Игнорируем воздух, воду и лаву
+                if (blockType == Material.AIR || blockType == Material.WATER || blockType == Material.LAVA) {
+                    BotLogger.trace("🚫 Пропускаем неподходящий блок: " + blockType + " " + BotStringUtils.formatLocation(candidate));
+                    continue;
+                }
+    
+                if (targetMaterials == null || targetMaterials.contains(blockType)) {
+                    target = candidate;
+                    break;
+                }
             }
         }
+    
         BotLogger.trace("🔎 Поиск целевого блока: " + (target != null ? "найден" : "не найден"));
         return target;
     }
+    
 
     private void handleNoTargetFound() {
         if (destroyAllIfNoTarget) {

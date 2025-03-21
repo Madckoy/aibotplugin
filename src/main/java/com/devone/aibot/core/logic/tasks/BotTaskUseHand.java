@@ -61,7 +61,7 @@ public class BotTaskUseHand extends BotTask {
             return;
         }
     
-        // ✅ Проверяем смерть только если это атака (target != null)
+        // ✅ Проверяем, если цель уже мертва — выходим (для атаки)
         if (target != null && target.isDead()) {
             BotLogger.debug(bot.getId() + " ☠️ Цель уже мертва. Завершаем атаку.");
             isDone = true;
@@ -76,17 +76,13 @@ public class BotTaskUseHand extends BotTask {
         Bukkit.getScheduler().runTask(AIBotPlugin.getInstance(), () -> {
             animateHand();
     
-            // 🔥 Если это атака, проверяем ещё раз (цель могла умереть за задержку)
-            if (target != null) {
-                if (!target.isDead()) {
-                    target.damage(damage);
-                    BotLogger.debug(bot.getId() + " 👊 Нанесён урон существу: " + target.getName());
-                } else {
-                    BotLogger.debug(bot.getId() + " ☠️ Цель умерла в процессе атаки. Завершаем.");
-                }
-            } 
-            // 🛠️ Если это добыча, просто ломаем блок
-            else if (targetLocation != null && targetLocation.getBlock().getType() != Material.AIR) {
+            if (target != null && !target.isDead()) {
+                target.damage(damage);
+                BotLogger.debug(bot.getId() + " 👊 Нанесён урон существу: " + target.getName());
+            } else if (targetLocation != null && targetLocation.getBlock().getType() != Material.AIR) {
+                // ✅ Добавляем эффект разрушения перед ломанием блока
+                BotUtils.playBlockBreakEffect(targetLocation);
+    
                 targetLocation.getBlock().breakNaturally();
                 BotLogger.debug(bot.getId() + " ✅ Блок разрушен на " + BotStringUtils.formatLocation(targetLocation));
             } else {
