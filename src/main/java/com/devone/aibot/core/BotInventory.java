@@ -258,6 +258,31 @@ public class BotInventory {
         return total;
     }
 
+    public static boolean hasToolFor(Bot bot, Material blockType) {
+        Inventory inv = bot.getInventory().getNPCInventory();
+        if (inv == null) return false; // Если инвентаря нет – инструмента точно нет!
+    
+        Material requiredTool = getRequiredTool(blockType);
+        if (requiredTool == null) return true; // Если инструмент не нужен – всё норм, можно ломать
+    
+        // Проверяем, есть ли нужный инструмент в инвентаре
+        for (ItemStack item : inv.getContents()) {
+            if (item != null && item.getType() == requiredTool) {
+                return true; // Инструмент найден
+            }
+        }
+    
+        return false; // Инструмента нет
+    }
+
+    private static Material getRequiredTool(Material blockType) {
+        return switch (blockType) {
+            case STONE, COBBLESTONE, IRON_ORE, GOLD_ORE, DIAMOND_ORE, DEEPSLATE -> Material.WOODEN_PICKAXE; // ❗ Минимально нужна деревянная кирка
+            case OBSIDIAN -> Material.DIAMOND_PICKAXE; // ❗ Только алмазная кирка!
+            default -> null; // ❗ Если `null`, значит, инструмент не нужен (можно ломать руками)
+        };
+    }
+    
 }
 
 

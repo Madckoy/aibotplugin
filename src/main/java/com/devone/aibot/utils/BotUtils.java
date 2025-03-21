@@ -82,12 +82,10 @@ public class BotUtils {
         BotLogger.trace("🎇 Эффект разрушения воспроизведён на " + BotStringUtils.formatLocation(location));
     }
 
-    public static Material getRequiredTool(Material blockType) {
+    public static boolean requiresTool(Material blockType) {
         return switch (blockType) {
-            case STONE, COBBLESTONE, IRON_ORE, GOLD_ORE, DIAMOND_ORE, OBSIDIAN -> Material.IRON_PICKAXE;
-            case OAK_LOG, SPRUCE_LOG, BIRCH_LOG, JUNGLE_LOG, ACACIA_LOG, DARK_OAK_LOG -> Material.WOODEN_AXE;
-            case DIRT, GRASS_BLOCK, SAND, GRAVEL, CLAY -> Material.WOODEN_SHOVEL;
-            default -> Material.AIR; // Можно ломать руками
+            case IRON_ORE, GOLD_ORE, DIAMOND_ORE, DEEPSLATE, OBSIDIAN -> true; // ❗ Только эти блоки требуют инструмент
+            default -> false; // Всё остальное можно ломать руками
         };
     }
 }

@@ -69,7 +69,7 @@ public class BotTaskUseHand extends BotTask {
         }
     
         Location faceTarget = (target != null) ? target.getLocation() : targetLocation;
-        setObjective("Target hit by hand: " + BotStringUtils.formatLocation(faceTarget));
+        setObjective("Target hit by hand: " + BotStringUtils.formatLocation(faceTarget)+" "+BotUtils.getBlockName(faceTarget.getBlock()));
     
         turnToBlock(faceTarget);
     
@@ -84,6 +84,7 @@ public class BotTaskUseHand extends BotTask {
                 BotUtils.playBlockBreakEffect(targetLocation);
     
                 targetLocation.getBlock().breakNaturally();
+
                 BotLogger.debug(bot.getId() + " ✅ Блок разрушен на " + BotStringUtils.formatLocation(targetLocation));
             } else {
                 BotLogger.warn(bot.getId() + " ⚠️ Нечего разрушать");
@@ -92,12 +93,19 @@ public class BotTaskUseHand extends BotTask {
             isDone = true;
         });
     }
-    
 
     private void turnToBlock(Location target) {
         Vector direction = target.toVector().subtract(bot.getNPCCurrentLocation().toVector()).normalize();
-        bot.getNPCEntity().setRotation((float) Math.toDegrees(Math.atan2(-direction.getX(), direction.getZ())), 0);
-        BotLogger.trace("🔄 Бот повернулся к цели: " + BotStringUtils.formatLocation(target));
+        float yaw = (float) Math.toDegrees(Math.atan2(-direction.getX(), direction.getZ()));
+
+        bot.getNPCEntity().setRotation(yaw, 0);
+        
+        // ✅ Принудительно обновляем положение, если поворот сбрасывается
+        Bukkit.getScheduler().runTaskLater(AIBotPlugin.getInstance(), () -> {
+            bot.getNPCEntity().teleport(bot.getNPCCurrentLocation());
+        }, 1L); // ✅ Через тик, чтобы дать время на обновление
+
+        BotLogger.debug("🔄 TURNING: " + bot.getId() + " | Yaw: " + yaw + " | Target: " + BotStringUtils.formatLocation(target));
     }
 
     private void animateHand() {

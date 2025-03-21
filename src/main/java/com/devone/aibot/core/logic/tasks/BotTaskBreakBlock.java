@@ -104,16 +104,6 @@ public class BotTaskBreakBlock extends BotTask {
 
             setObjective("Разрушение блока: " + BotUtils.getBlockName(targetLocation.getBlock()));
    
-            Material requiredTool = BotUtils.getRequiredTool(targetLocation.getBlock().getType());
-
-            if (requiredTool != Material.AIR && !bot.getInventory().getNPCInventory().contains(requiredTool)) {
-                bot.addTaskToQueue(new BotTaskTalk(bot, null, BotTaskTalk.TalkType.TOOL_REQUEST));
-                BotLogger.debug("⛏️ I need " + requiredTool + " to break " + targetLocation.getBlock().getType() + "! Skipping...");
-                envMap.remove(targetLocation); // Удаляем блок из сканирования
-                return;
-            }
-
-
             BotLogger.trace("🚧 " + bot.getId() + " Разрушение блока: " + targetLocation.getBlock().toString());
         
             BotTaskUseHand hand_task = new BotTaskUseHand(bot);
@@ -134,18 +124,28 @@ public class BotTaskBreakBlock extends BotTask {
         List<Location> sortedTargets = envMap.keySet().stream()
             .filter(loc -> loc.getBlockY() >= botY - 1 && loc.getBlockY() <= botY + 1) // Только ±1 уровень
             .filter(loc -> isBlockExposed(loc) && isValidTargetBlock(loc.getBlock().getType())) // Проверка видимости и валидности
-            .sorted(Comparator.comparingDouble(loc -> loc.distance(botLoc))) // Сортируем по расстоянию
+            .sorted(Comparator.comparingInt(loc -> -loc.getBlockY())) // ❗ Теперь копаем сверху вниз
             .toList();
     
         for (Location candidate : sortedTargets) {
-            envMap.remove(candidate); // Удаляем из списка сканирования
+            Material blockType = candidate.getBlock().getType();
+    
+            // ❗ Проверяем, не зависает ли блок в воздухе
+            if (gravityCheck(candidate)) continue; // ❌ Пропускаем висящие блоки
+    
+            // ❗ Проверка инструмента
+            if (BotUtils.requiresTool(blockType) && !BotInventory.hasToolFor(bot, blockType)) {
+                envMap.remove(candidate); // 🔥 Убираем, чтобы бот не пытался снова
+                BotUtils.sendMessageToPlayer(null, bot.getId(), "I need a proper tool to break " + blockType + "!");
+                return null; // Пропускаем этот блок
+            }
+    
+            envMap.remove(candidate); // ✅ Удаляем из списка сканирования
             
-            // 🌀 Добавляем небольшой случайный шум в выбор блока
+            // 🌀 Добавляем случайный шум
             int offsetX = random.nextInt(3) - 1; // -1, 0 или +1
             int offsetZ = random.nextInt(3) - 1;
-    
-            // 🔄 15% шанс скорректировать высоту (копать вверх или вниз)
-            int offsetY = (random.nextDouble() < 0.15) ? (random.nextBoolean() ? 1 : -1) : 0;
+            int offsetY = (random.nextDouble() < 0.15) ? (random.nextBoolean() ? 1 : -1) : 0; // 🔄 15% шанс скорректировать высоту
     
             return candidate.clone().add(offsetX, offsetY, offsetZ);
         }
@@ -153,11 +153,16 @@ public class BotTaskBreakBlock extends BotTask {
         return null; // Если ничего не нашли
     }
     
+    
     private boolean isValidTargetBlock(Material blockType) {
         return blockType != Material.AIR && blockType != Material.WATER && blockType != Material.LAVA &&
                (targetMaterials == null || targetMaterials.contains(blockType));
     }
     
+    private boolean gravityCheck(Location loc) {
+        Location above = loc.clone().add(0, 1, 0);
+        return above.getBlock().getType() == Material.AIR; // Если сверху воздух – не трогаем
+    }
     
 
     private void handleNoTargetFound() {
