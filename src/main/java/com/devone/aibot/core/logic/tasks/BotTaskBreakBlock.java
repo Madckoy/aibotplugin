@@ -4,6 +4,7 @@ import com.devone.aibot.core.BotInventory;
 import java.util.*;
 
 import com.devone.aibot.utils.BotStringUtils;
+import com.devone.aibot.utils.BotUtils;
 import com.devone.aibot.utils.BotEnv3DScan;
 
 import org.bukkit.Bukkit;
@@ -101,8 +102,9 @@ public class BotTaskBreakBlock extends BotTask {
             BotLogger.trace("🛠️ Целевой блок найден: " + BotStringUtils.formatLocation(targetLocation));
 
             Set<Material> targetMaterials = getTargetMaterials();
-           
-            setObjective("Разрушение блока: " + targetLocation.getBlock().toString());
+
+            setObjective("Разрушение блока: " + BotUtils.getBlockName(targetLocation.getBlock()));
+   
 
             BotLogger.trace("🚧 " + bot.getId() + " Разрушение блока: " + targetLocation.getBlock().toString());
         

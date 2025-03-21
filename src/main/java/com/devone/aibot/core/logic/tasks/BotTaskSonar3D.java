@@ -21,7 +21,7 @@ public class BotTaskSonar3D extends BotTask {
         parent = caller;
         this.radius = radius;
         this.height = height;
-        setObjective("Сканирую пространство");
+        setObjective("Сканирую пространство вокруг");
     }
 
     @Override

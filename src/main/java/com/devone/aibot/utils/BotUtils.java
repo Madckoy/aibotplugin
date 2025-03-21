@@ -2,6 +2,8 @@ package com.devone.aibot.utils;
 
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.format.NamedTextColor;
+
+import org.bukkit.block.Block;
 import org.bukkit.entity.Player;
 
 import java.awt.Graphics2D;
@@ -13,7 +15,8 @@ import java.io.IOException;
 import java.net.URL;
 import java.util.Random;
 import java.util.UUID;
-
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 import javax.imageio.ImageIO;
 
@@ -84,5 +87,27 @@ public class BotUtils {
         }
 
         to.sendMessage(chatMessage);
+    }
+
+    public static String getBlockName(Block bl) {
+
+        String text = bl.toString();
+
+        String result = "";
+        // Regular expression to capture the value of type
+        String pattern = "type=([A-Za-z0-9_]+)";
+
+        // Create a Pattern object
+        Pattern r = Pattern.compile(pattern);
+
+        // Create a matcher object
+        Matcher m = r.matcher(text);
+
+        // Check if the pattern is found
+        if (m.find()) {
+            result = m.group(1);
+        }
+
+        return result; 
     }
 }

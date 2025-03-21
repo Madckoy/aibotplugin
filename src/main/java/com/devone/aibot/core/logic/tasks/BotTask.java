@@ -63,10 +63,10 @@ public abstract class BotTask implements IBotTask{
     }
 
     public void setObjective(String objctv){
-        
+
         objective = objctv;
 
-        BotLogger.trace("🔎 " + bot.getId() + " " + objctv);
+        BotLogger.trace("🚩 " + bot.getId() + "  Set Objective: " + objctv);
     }
 
 
