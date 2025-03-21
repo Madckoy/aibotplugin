@@ -21,6 +21,7 @@ public class BotTaskTeleport extends BotTask {
         super(bot, player, "જ⁀➴");
 
         config = new BotTaskTeleportConfig();
+        setObjective("Телепортируюсь");
     }
 
      public BotTask configure(Object... params) {

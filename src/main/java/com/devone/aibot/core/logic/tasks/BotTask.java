@@ -26,12 +26,15 @@ public abstract class BotTask implements IBotTask{
     protected boolean isEnabled = true;
     protected final String uuid; // 🆕 Уникальный ID задачи
     Map<Location, Material> envMap;
+    protected String objective;
+
     protected BotAbstractConfig config;
 
     public BotTask(Bot bot) {
         this.bot = bot;
         this.uuid = UUID.randomUUID().toString(); // 🆕 Генерируем ID
         this.config = new BotAbstractConfig(null);
+        objective = "";
     }
 
     public BotTask(Bot bot, String name) {
@@ -54,6 +57,15 @@ public abstract class BotTask implements IBotTask{
     public Map<Location, Material> getEnvMap(){
         return envMap;
     }
+
+    public String getObjective() {
+        return objective;
+    }
+
+    public void setObjective(String objctv){
+        objective = objctv;
+    }
+
 
     @Override
     public void update() {

@@ -27,6 +27,7 @@ public class BotTaskSonar3D extends BotTask {
     public void executeTask() {
         
         Map<Location, Material> env_map = BotEnv3DScan.scan3D(bot, radius, height);
+        setObjective("Сканирую пространство");
 
         parent.setEnvMap(env_map);
 

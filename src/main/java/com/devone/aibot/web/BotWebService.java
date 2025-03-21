@@ -191,7 +191,7 @@ public class BotWebService {
                     botJson.addProperty("position", BotStringUtils.formatLocation(loc));
                     botJson.addProperty("task", bot.getCurrentTask().getName());
                     // ✅ Добавляем новую колонку "object" (моб, блок, игрок или "—")
-                    botJson.addProperty("object", getCurrentObject(bot));
+                    botJson.addProperty("object", getCurrentObjective(bot));
                     // ✅ Возвращаем старую колонку "target" (координаты цели)
                     Location tg_loc = bot.getCurrentTask().getTargetLocation();
                     String targetLoc = BotStringUtils.formatLocation(tg_loc);
@@ -220,28 +220,12 @@ public class BotWebService {
     /**
      * ✅ Получает текущий объект, с которым взаимодействует бот (моб, блок, игрок или отсутствует)
      */
-    private static String getCurrentObject(Bot bot) {
+    private static String getCurrentObjective(Bot bot) {
         BotTask currentTask = bot.getCurrentTask();
         if (currentTask == null) return "";
 
-        if (currentTask instanceof BotTaskMove) {
-            Set<Material> targetMaterials = ((BotTaskBreakBlock) currentTask).getTargetMaterials();
-            return targetMaterials != null ? "Наступит на: " + targetMaterials.toString() : "";
-        }
+        return currentTask.getObjective();
 
-        if (currentTask instanceof BotTaskBreakBlock) {
-            Set<Material> targetMaterials = ((BotTaskBreakBlock) currentTask).getTargetMaterials();
-            return targetMaterials != null ? targetMaterials.toString() : "Разрушит: любой блок";
-        }
-
-        if (currentTask instanceof BotTaskFollowTarget) {
-            LivingEntity target = ((BotTaskFollowTarget) currentTask).getFollowingObject();
-            if (target != null) {
-                return target instanceof Player ? "Следует за: " + target.getName() : "Цель: " + target.getType();
-            }
-        }
-
-        return "";
     }
 
     /**

@@ -22,6 +22,7 @@ public class BotTaskIdle extends BotTask {
         super(bot, "◉");
         this.bot = bot;
         config = new BotTaskIdleConfig();
+        setObjective("Having the rest");
     }
 
     @Override

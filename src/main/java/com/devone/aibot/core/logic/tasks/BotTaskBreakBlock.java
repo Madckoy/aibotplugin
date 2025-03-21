@@ -72,6 +72,8 @@ public class BotTaskBreakBlock extends BotTask {
     public void executeTask() {
         BotLogger.trace("🚀 Запуск задачи разрушения блоков для бота " + bot.getId() + " (Целевые блоки: " + (targetMaterials == null ? "ВСЕ" : targetMaterials) + ")");
 
+        setObjective(targetMaterials.toString());
+
         if (isInventoryFull() || isEnoughBlocksCollected()) {
             BotLogger.trace("⛔ Задача завершена: инвентарь полон или ресурсов достаточно");
             isDone = true;

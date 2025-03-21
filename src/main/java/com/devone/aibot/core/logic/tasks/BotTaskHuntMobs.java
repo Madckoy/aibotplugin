@@ -16,6 +16,7 @@ public class BotTaskHuntMobs extends BotTask {
 
     public BotTaskHuntMobs(Bot bot) {
         super(bot, "⚔️");
+        setObjective("Attacking the hostiles");
     }
 
     @Override

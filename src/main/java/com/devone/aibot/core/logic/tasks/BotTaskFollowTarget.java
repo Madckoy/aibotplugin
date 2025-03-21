@@ -23,6 +23,7 @@ public class BotTaskFollowTarget extends BotTask {
     public BotTaskFollowTarget(Bot bot, LivingEntity target) {
         super(bot, "🎯");
         this.target = target;
+        setObjective("Following the target: " + target.getType());
     }
 
     @Override

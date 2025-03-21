@@ -13,6 +13,7 @@ public class BotTaskMove extends BotTask {
 
     public BotTaskMove(Bot bot) {
         super(bot, "🏃🏽‍♂️‍➡️");
+        setObjective("Moving on ");
     }
 
     @Override

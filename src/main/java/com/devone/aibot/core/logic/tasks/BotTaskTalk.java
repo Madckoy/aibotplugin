@@ -26,6 +26,9 @@ public class BotTaskTalk extends BotTask {
 
     @Override
     public void executeTask() {
+
+        setObjective("Говорю глупости");
+
         if (player == null) {
             isDone = true;
             return;
