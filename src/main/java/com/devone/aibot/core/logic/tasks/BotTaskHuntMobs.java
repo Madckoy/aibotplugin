@@ -33,7 +33,7 @@ public class BotTaskHuntMobs extends BotTask {
         // 🔍 Проверяем, есть ли у нас актуальная карта местности
         if (getEnvMap() == null) {
             BotLogger.trace("🔍 Запускаем 3D-сканирование окружающей среды.");
-            bot.addTaskToQueue(new BotTaskSonar3D(bot, this, scanRadius, 4));
+            bot.addTaskToQueue(new BotTaskSonar3D(bot, this, scanRadius, 2));
             isDone = false;
             return;
         }

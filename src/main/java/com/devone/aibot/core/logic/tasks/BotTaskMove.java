@@ -39,28 +39,31 @@ public class BotTaskMove extends BotTask {
             BotLogger.debug(bot.getId() + " ⏳ Таймер уже запущен, жду... [ID: " + uuid + "]");
         } else {
 
-            if (isDone || isPaused || targetLocation == null) { // ✅ Фикс условия
+            if (isDone || isPaused ) { // ✅ Фикс условия
                 return;
             }
 
         }
+        
+        if (targetLocation == null) {
+            isDone = true;
+            return;
+        }
 
-        if(getTargetLocation()!=null) {
-            if(bot.getNPCNavigator().canNavigateTo(getTargetLocation()) == false) {
-                BotLogger.trace(bot.getId() + " 🛑 Target Location is not reachable. Stopping here...[ID: " + uuid + "]");
-                // TP maybe ? ;)
-                // ✅ Добавляем задачу на мгновенное перемещение
-                BotTaskTeleport task = new BotTaskTeleport(bot, player);
-                task.configure(targetLocation);
-                bot.addTaskToQueue(task);
+        // 1. Если бот уже движется, ждём следующего цикла
+        if (bot.getNPCNavigator().isNavigating()) {
+            return;
+        }
 
-                isDone = true;
-            }
+        if(bot.getNPCNavigator().canNavigateTo(getTargetLocation()) == false) {
+            BotLogger.trace(bot.getId() + " 🛑 Target Location is not reachable. Stopping here...[ID: " + uuid + "]");
+            handleStuck();
+            return;
         }
 
         String block_name  = BotUtils.getBlockName(getTargetLocation().getBlock());
 
-        setObjective("Moving on " +  block_name);
+        setObjective("Moving on ... " +  block_name);
 
         // 🟢 Запускаем таймер и сохраняем его в `taskHandle`
         taskHandle = Bukkit.getScheduler().runTaskTimer(AIBotPlugin.getInstance(), () -> {
@@ -69,11 +72,6 @@ public class BotTaskMove extends BotTask {
                     taskHandle.cancel(); // ✅ Останавливаем таймер
                     BotLogger.debug(bot.getId() + " 🛑 Move task завершён, таймер остановлен. [ID: " + uuid + "]");
                 }
-                return;
-            }
-
-            // 1. Если бот уже движется, ждём следующего цикла
-            if (bot.getNPCNavigator().isNavigating()) {
                 return;
             }
 
@@ -87,15 +85,11 @@ public class BotTaskMove extends BotTask {
                 // 5. Проверяем, может ли бот туда пройти
                 if (!bot.getNPCNavigator().canNavigateTo(targetLocation)) {
                     BotLogger.trace(bot.getId() + " ❌ Не могу найти путь, Stopping here..." + " [ID: " + uuid + "]");
-                    // TP maybe ? ;)
-                    // ✅ Добавляем задачу на мгновенное перемещение
-                    BotTaskTeleport task = new BotTaskTeleport(bot, player);
-                    task.configure(targetLocation);
-                    bot.addTaskToQueue(task);
 
-                    isDone = true;
-                    
+                    handleStuck();
+
                     return;
+                
                 } else {
                    
                     if(bot.getNPCEntity() ==null) {
