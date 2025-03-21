@@ -83,7 +83,7 @@ public class BotTaskBreakBlock extends BotTask {
 
         if (getEnvMap() == null) {
             BotLogger.trace("🔍 Запускаем 3D-сканирование окружающей среды.");
-            bot.addTaskToQueue(new BotTaskSonar3D(bot, this, searchRadius, 4));
+            bot.addTaskToQueue(new BotTaskSonar3D(bot, this, searchRadius, searchRadius));
             isDone = false;
             return;
         }
@@ -118,30 +118,38 @@ public class BotTaskBreakBlock extends BotTask {
     }
 
     private Location findNextTargetBlock() {
+        Set<Location> envMap = getEnvMap(); // ✅ Получаем карту только один раз
+    
+        if (envMap == null || envMap.isEmpty()) {
+            BotLogger.trace("🔄 EnvMap пустая, перезапускаем сканер...");
+            bot.addTaskToQueue(new BotTaskSonar3D(bot, this, searchRadius, searchRadius));
+            return null;
+        }
+    
         Location target = null;
+        Iterator<Location> iterator = envMap.iterator();
     
-        for (int i = 0; i < 10; i++) {
-            Location candidate = BotEnv3DScan.getRandomNearbyDestructibleBlock(getEnvMap(), bot.getNPCCurrentLocation());
+        while (iterator.hasNext()) {
+            Location candidate = iterator.next();
+            Material blockType = candidate.getBlock().getType();
     
-            if (candidate != null) {
-                Material blockType = candidate.getBlock().getType();
+            // ✅ Игнорируем ненужные блоки
+            if (blockType == Material.AIR || blockType == Material.WATER || blockType == Material.LAVA) {
+                iterator.remove(); // 🔥 Удаляем сразу из EnvMap, чтобы не проверять снова
+                continue;
+            }
     
-                // ✅ Игнорируем воздух, воду и лаву
-                if (blockType == Material.AIR || blockType == Material.WATER || blockType == Material.LAVA) {
-                    BotLogger.trace("🚫 Пропускаем неподходящий блок: " + blockType + " " + BotStringUtils.formatLocation(candidate));
-                    continue;
-                }
-    
-                if (targetMaterials == null || targetMaterials.contains(blockType)) {
-                    target = candidate;
-                    break;
-                }
+            if (targetMaterials == null || targetMaterials.contains(blockType)) {
+                target = candidate;
+                iterator.remove(); // 🔥 Убираем найденный блок из EnvMap
+                break;
             }
         }
     
         BotLogger.trace("🔎 Поиск целевого блока: " + (target != null ? "найден" : "не найден"));
         return target;
     }
+    
     
 
     private void handleNoTargetFound() {
