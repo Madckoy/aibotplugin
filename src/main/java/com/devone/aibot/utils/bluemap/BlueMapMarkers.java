@@ -21,6 +21,8 @@ import de.bluecolored.bluemap.api.markers.POIMarker;
 import de.bluecolored.bluemap.api.markers.POIMarker;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
+import org.checkerframework.checker.units.qual.m;
+
 import java.util.*;
 
 public class BlueMapMarkers {
@@ -49,6 +51,8 @@ public class BlueMapMarkers {
     }
 
     public void updateAllMarkers() {
+
+        mSet.remove(MARKERS_SET_ID);
 
         boolean hasChanges = false;
 
@@ -178,6 +182,12 @@ public class BlueMapMarkers {
 
             BotLogger.debug("🔄 Updating BlueMap Markers for bot: " + botId + " at " + BotStringUtils.formatLocation(loc));
 
+        }
+    }
+
+    public void removeMarker(String bId) {
+        if (mSet!=null) {
+            mSet.remove(bId);
         }
     }
 }

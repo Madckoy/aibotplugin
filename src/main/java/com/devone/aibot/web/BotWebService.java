@@ -5,6 +5,7 @@ import com.devone.aibot.core.BotManager;
 import com.devone.aibot.core.logic.tasks.BotTask;
 import com.devone.aibot.core.logic.tasks.BotTaskBreakBlock;
 import com.devone.aibot.core.logic.tasks.BotTaskFollowTarget;
+import com.devone.aibot.core.logic.tasks.BotTaskMove;
 import com.devone.aibot.utils.BotConstants;
 import com.devone.aibot.utils.BotLogger;
 import com.devone.aibot.utils.BotStringUtils;
@@ -204,7 +205,7 @@ public class BotWebService {
                             : new ArrayList<>();
 
                     String taskStackText = taskStack.isEmpty() ? "N/A"
-                            : taskStack.stream().map(BotTask::getName).collect(Collectors.joining(" • "));
+                            : taskStack.stream().map(BotTask::getName).collect(Collectors.joining(" ➠ "));
 
                     botJson.addProperty("queue", taskStackText);
                     botsArray.add(botJson);
@@ -223,6 +224,11 @@ public class BotWebService {
         BotTask currentTask = bot.getCurrentTask();
         if (currentTask == null) return "";
 
+        if (currentTask instanceof BotTaskMove) {
+            Set<Material> targetMaterials = ((BotTaskBreakBlock) currentTask).getTargetMaterials();
+            return targetMaterials != null ? "Наступит на: " + targetMaterials.toString() : "N/A";
+        }
+
         if (currentTask instanceof BotTaskBreakBlock) {
             Set<Material> targetMaterials = ((BotTaskBreakBlock) currentTask).getTargetMaterials();
             return targetMaterials != null ? targetMaterials.toString() : "Добыча: все блоки";
@@ -235,7 +241,7 @@ public class BotWebService {
             }
         }
 
-        return "";
+        return "N/A";
     }
 
     /**

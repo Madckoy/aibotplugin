@@ -1,3 +1,30 @@
+/* ✅ Общий стиль страницы */
+body {
+    font-family: "Inter", "Roboto", Arial, sans-serif;
+    background-color: #1e1e1e;  /* Темный фон */
+    color: #e0e0e0;  /* Светло-серый текст */
+    margin: 0;
+    padding: 20px;
+}
+
+/* ✅ Контейнер центрируем */
+.container {
+    max-width: 1200px;
+    margin: auto;
+}
+
+/* ✅ Настраиваем стиль заголовка Monitoring */
+h1 {
+    text-align: center;
+    font-size: 32px;
+    font-weight: 700;
+    color: #f1f1f1;
+    text-transform: uppercase;
+    letter-spacing: 1.5px;
+    margin-bottom: 20px;
+    border-bottom: 2px solid #444; /* Разделитель */
+    padding-bottom: 10px;
+}
 
 /* ✅ Общий стиль таблицы */
 table {
@@ -7,7 +34,9 @@ table {
     background: #2b2b2b;
     color: #e0e0e0;
     font-size: 14px;
-    font-family: "Inter", "Roboto", Arial, sans-serif;
+    border-radius: 6px;  /* Скругленные углы */
+    overflow: hidden;
+    box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.3);
 }
 
 /* ✅ Заголовки (thead) */
@@ -15,18 +44,17 @@ th {
     background: #3a3a3a;
     color: #fff;
     padding: 8px;
-    text-align: left;
+    text-align: center;
     border-bottom: 2px solid #555;
     font-size: 15px;
-    font-weight: 600;  /* ✅ Делаем чуть жирнее */
-    letter-spacing: 0.5px; /* ✅ Улучшаем читаемость */
+    font-weight: 600;
+    letter-spacing: 0.5px;
 }
 
 /* ✅ Обычные ячейки (td) */
 td {
     padding: 6px;
     border-bottom: 1px solid #444;
-    text-align: left;
     white-space: nowrap;
     font-size: 14px;
     letter-spacing: 0.3px;
@@ -37,13 +65,50 @@ tr:hover {
     background: #404040;
 }
 
+/* 🎯 Специальные стили для колонок */
 
-/* ✅ Настройка ширины колонок */
-th:nth-child(1), td:nth-child(1) { width: 80px; }  /* ID */
-th:nth-child(2), td:nth-child(2) { width: 145px; } /* Position */
-th:nth-child(3), td:nth-child(3) { width: 80px; }  /* Task */
-th:nth-child(4), td:nth-child(4) { width: 145px; } /* Target */
-th:nth-child(5), td:nth-child(5) { width: 300px; } /* Object */
-th:nth-child(6), td:nth-child(6) { width: 100px; } /* Duration */
-th:nth-child(7), td:nth-child(7) { width: auto; }  /* Queue (растягивается) */
+/* ID - выравниваем по центру */
+th:nth-child(1), td:nth-child(1) { 
+    text-align: center; 
+    width: 80px; 
+}
+
+/* Position - выравниваем по левому краю */
+th:nth-child(2), td:nth-child(2) { 
+    text-align: left; 
+    width: 120px; 
+}
+
+/* Task - выравниваем по центру */
+th:nth-child(3), td:nth-child(3) { 
+    text-align: center; 
+    width: 100px; 
+}
+
+/* Target - выравниваем по левому краю */
+th:nth-child(4), td:nth-child(4) { 
+    text-align: left; 
+    width: 150px; 
+}
+
+/* Object - центрируем */
+th:nth-child(5), td:nth-child(5) { 
+    text-align: center; 
+    width: 500px;
+    text-overflow: ellipsis;, overflow: hidden; и white-space: nowrap;
+}
+
+/* Duration - центрируем */
+th:nth-child(6), td:nth-child(6) { 
+    text-align: center; 
+    width: 100px; 
+}
+
+/* Queue - растягиваем и выравниваем по левому краю */
+th:nth-child(7), td:nth-child(7) { 
+    text-align: left; 
+    width: auto; 
+}
+
+
 

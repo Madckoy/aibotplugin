@@ -60,7 +60,7 @@ public class BotManager {
             // update Map Markers
             botsMap.remove(name); // Удаляем из списка маркероа
             // refresh map markers
-            bm_markers.updateAllMarkers();
+            bm_markers.removeMarker(name);
         }
     }
 

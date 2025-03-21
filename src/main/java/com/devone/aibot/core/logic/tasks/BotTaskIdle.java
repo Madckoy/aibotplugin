@@ -19,7 +19,7 @@ import com.devone.aibot.utils.BotLogger;
 public class BotTaskIdle extends BotTask {
 
     public BotTaskIdle(Bot bot) {
-        super(bot, "🌀");
+        super(bot, "◉");
         this.bot = bot;
         config = new BotTaskIdleConfig();
     }
