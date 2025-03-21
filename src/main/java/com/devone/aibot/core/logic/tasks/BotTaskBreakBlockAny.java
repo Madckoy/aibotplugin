@@ -18,15 +18,6 @@ public class BotTaskBreakBlockAny extends BotTaskBreakBlock {
 
         setTargetLocation(bot.getNPCCurrentLocation());
 
-        Set<Material> targetMaterials = getTargetMaterials();
-        
-        if (targetMaterials != null ) {
-
-            setObjective(targetMaterials.toString());
-
-        } else { 
-            setObjective("Разрушение блока: " + getTargetLocation().getBlock().getType()); 
-        };
     }
  
 

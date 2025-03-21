@@ -1,7 +1,9 @@
 package com.devone.aibot.core.logic.tasks;
 
 import com.devone.aibot.core.Bot;
+import com.devone.aibot.core.logic.tasks.configs.BotTaskExploreConfig;
 import com.devone.aibot.core.logic.tasks.configs.BotTaskFollowConfig;
+import com.devone.aibot.core.logic.tasks.configs.BotTaskHuntConfig;
 import com.devone.aibot.utils.BotLogger;
 import org.bukkit.entity.*;
 
@@ -9,24 +11,29 @@ import java.util.List;
 
 public class BotTaskHuntMobs extends BotTask {
 
+    private int scanRadius;
+    private boolean shouldFollowPlayer = false;
+
     private LivingEntity targetMob = null;
-    private static final BotTaskFollowConfig config = new BotTaskFollowConfig();
-    private final int searchRadius = (int) config.getFollowDistance() * 10; // Динамический радиус поиска мобов
-    private final boolean shouldFollowPlayer = true; // Можно вынести в конфиг
 
     public BotTaskHuntMobs(Bot bot) {
         super(bot, "⚔️");
-        setObjective("Attacking the hostiles");
+        config = new BotTaskHuntConfig();
+
+        scanRadius = ((BotTaskExploreConfig)config).getScanRadius();
+
+        setObjective("Looking for the hostile targets");
     }
 
     @Override
     public void executeTask() {
+        
         BotLogger.trace("🚀 Запуск задачи охоты для бота " + bot.getId());
 
         // 🔍 Проверяем, есть ли у нас актуальная карта местности
         if (getEnvMap() == null) {
             BotLogger.trace("🔍 Запускаем 3D-сканирование окружающей среды.");
-            bot.addTaskToQueue(new BotTaskSonar3D(bot, this, searchRadius, 4));
+            bot.addTaskToQueue(new BotTaskSonar3D(bot, this, scanRadius, 4));
             isDone = false;
             return;
         }
@@ -47,7 +54,7 @@ public class BotTaskHuntMobs extends BotTask {
     }
 
     private void findTarget() {
-        List<Entity> nearbyEntities = bot.getNPCEntity().getNearbyEntities(searchRadius, searchRadius, searchRadius);
+        List<Entity> nearbyEntities = bot.getNPCEntity().getNearbyEntities(scanRadius, scanRadius, scanRadius);
 
         // Ищем мобов
         for (Entity entity : nearbyEntities) {

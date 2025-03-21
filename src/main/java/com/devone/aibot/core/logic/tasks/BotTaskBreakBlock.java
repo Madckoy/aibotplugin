@@ -72,7 +72,6 @@ public class BotTaskBreakBlock extends BotTask {
     public void executeTask() {
         BotLogger.trace("🚀 Запуск задачи разрушения блоков для бота " + bot.getId() + " (Целевые блоки: " + (targetMaterials == null ? "ВСЕ" : targetMaterials) + ")");
 
-        setObjective(targetMaterials.toString());
 
         if (isInventoryFull() || isEnoughBlocksCollected()) {
             BotLogger.trace("⛔ Задача завершена: инвентарь полон или ресурсов достаточно");
@@ -91,16 +90,28 @@ public class BotTaskBreakBlock extends BotTask {
 
         targetLocation = findNextTargetBlock();
 
-        if (targetLocation != null && targetLocation.getBlock().getType() != Material.AIR) {
+        if (targetLocation != null) {
+ 
             if (isInProtectedZone(targetLocation)) {
                 BotLogger.debug("⛔ " + bot.getId() + " в запретной зоне, НЕ будет разрушать блок: " + BotStringUtils.formatLocation(targetLocation));
                 isDone = true;
                 return;
             }
+
             BotLogger.trace("🛠️ Целевой блок найден: " + BotStringUtils.formatLocation(targetLocation));
+
+            Set<Material> targetMaterials = getTargetMaterials();
+           
+            setObjective("Разрушение блока: " + targetLocation.getBlock().toString());
+
+            BotLogger.trace("🚧 " + bot.getId() + " Разрушение блока: " + targetLocation.getBlock().toString());
+        
             turnToBlock(targetLocation);
+
             destroyBlock(targetLocation);
+
         } else {
+
             handleNoTargetFound();
         }
     }
@@ -109,8 +120,13 @@ public class BotTaskBreakBlock extends BotTask {
         Location target = null;
         for (int i = 0; i < 10; i++) {
             Location candidate = BotEnv3DScan.getRandomNearbyDestructibleBlock(getEnvMap(), bot.getNPCCurrentLocation());
-            if (candidate != null && candidate.getBlock().getType() != Material.AIR && (targetMaterials == null || targetMaterials.contains(candidate.getBlock().getType()))) {
+            if (candidate != null && candidate.getBlock().getType() != Material.AIR && 
+                                     candidate.getBlock().getType() != Material.WATER &&
+                                     candidate.getBlock().getType() != Material.LAVA &&
+                                    (targetMaterials == null || targetMaterials.contains(candidate.getBlock().getType()))) {
+
                 target = candidate;
+
                 break;
             }
         }
@@ -138,6 +154,7 @@ public class BotTaskBreakBlock extends BotTask {
             bot.addTaskToQueue(new BotTaskBreakBlockAny(bot));
             isDone = false;
         } else {
+            setObjective("");  
             BotLogger.trace("❌ " + bot.getId() + " Нет подходящих блоков. Завершаем.");
             isDone = true;
         }
