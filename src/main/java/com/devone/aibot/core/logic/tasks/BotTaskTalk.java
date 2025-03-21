@@ -31,6 +31,7 @@ public class BotTaskTalk extends BotTask {
 
     @Override
     public void executeTask() {
+
         String message = generateMessage();
 
         if (message.isEmpty()) {

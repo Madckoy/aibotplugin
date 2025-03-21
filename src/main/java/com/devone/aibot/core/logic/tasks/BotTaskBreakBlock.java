@@ -133,23 +133,21 @@ public class BotTaskBreakBlock extends BotTask {
     
         List<Location> sortedTargets = envMap.keySet().stream()
             .filter(loc -> loc.getBlockY() >= botY - 1 && loc.getBlockY() <= botY + 1) // Только ±1 уровень
-            .filter(this::isBlockExposed) // Только видимые блоки
+            .filter(loc -> isBlockExposed(loc) && isValidTargetBlock(loc.getBlock().getType())) // Проверка видимости и валидности
             .sorted(Comparator.comparingDouble(loc -> loc.distance(botLoc))) // Сортируем по расстоянию
             .toList();
     
         for (Location candidate : sortedTargets) {
-            if (targetMaterials == null || targetMaterials.contains(candidate.getBlock().getType())) {
-                envMap.remove(candidate); // Удаляем из списка сканирования
-                
-                // 🌀 Добавляем небольшой случайный шум в выбор блока
-                int offsetX = random.nextInt(3) - 1; // -1, 0 или +1
-                int offsetZ = random.nextInt(3) - 1;
+            envMap.remove(candidate); // Удаляем из списка сканирования
+            
+            // 🌀 Добавляем небольшой случайный шум в выбор блока
+            int offsetX = random.nextInt(3) - 1; // -1, 0 или +1
+            int offsetZ = random.nextInt(3) - 1;
     
-                // 🔄 15% шанс скорректировать высоту (копать вверх или вниз)
-                int offsetY = (random.nextDouble() < 0.15) ? (random.nextBoolean() ? 1 : -1) : 0;
+            // 🔄 15% шанс скорректировать высоту (копать вверх или вниз)
+            int offsetY = (random.nextDouble() < 0.15) ? (random.nextBoolean() ? 1 : -1) : 0;
     
-                return candidate.clone().add(offsetX, offsetY, offsetZ);
-            }
+            return candidate.clone().add(offsetX, offsetY, offsetZ);
         }
     
         return null; // Если ничего не нашли
@@ -211,5 +209,5 @@ public class BotTaskBreakBlock extends BotTask {
         }
         return false; // Блок полностью окружён твёрдыми блоками
     }
-    
+
 }
