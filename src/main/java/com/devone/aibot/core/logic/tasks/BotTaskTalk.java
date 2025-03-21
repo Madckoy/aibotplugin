@@ -27,21 +27,21 @@ public class BotTaskTalk extends BotTask {
     @Override
     public void executeTask() {
         
+        String message = generateMessage();
+        
         if (player == null) {
+            message = "Игрок отсутствует!";
+            setObjective("Говорит: "+message);
             isDone = true;
             return;
         }
-        
-        String message = generateMessage();
-        if(!message.isEmpty()) {
-            setObjective("Собираюсь сказать глупость: "+message);
-        }
 
         if (!message.isEmpty()) {
+            setObjective("Собираюсь сказать глупость: "+message);
             player.sendMessage("🤖 " + bot.getId() + ": " + message);
             BotLogger.debug("💬 Бот сказал в чат: " + message);
         }
-
+        
         isDone = true;
     }
 

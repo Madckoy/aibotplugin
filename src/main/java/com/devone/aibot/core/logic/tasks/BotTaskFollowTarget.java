@@ -23,6 +23,7 @@ public class BotTaskFollowTarget extends BotTask {
     public BotTaskFollowTarget(Bot bot, LivingEntity target) {
         super(bot, "🎯");
         this.target = target;
+        targetLocation = target.getLocation();
     }
 
     @Override
@@ -32,7 +33,7 @@ public class BotTaskFollowTarget extends BotTask {
             isDone = true;
             return;
         }
-        
+
         setObjective("Chasing the target: " + target.getType());
 
         double distance = bot.getNPCCurrentLocation().distance(target.getLocation());
@@ -40,7 +41,9 @@ public class BotTaskFollowTarget extends BotTask {
         if (target instanceof Player) {
 
             followPlayer((Player) target, distance);
+
         } else {
+
             followAndAttack(distance);
         }
 
