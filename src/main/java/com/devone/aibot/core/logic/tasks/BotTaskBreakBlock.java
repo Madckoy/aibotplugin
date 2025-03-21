@@ -107,9 +107,9 @@ public class BotTaskBreakBlock extends BotTask {
 
             BotLogger.trace("🚧 " + bot.getId() + " Разрушение блока: " + targetLocation.getBlock().toString());
         
-            turnToBlock(targetLocation);
-
-            destroyBlock(targetLocation);
+            BotTaskUseHand hand_task = new BotTaskUseHand(bot);
+            hand_task.configure(targetLocation);
+            bot.addTaskToQueue(hand_task);
 
         } else {
 
@@ -134,20 +134,6 @@ public class BotTaskBreakBlock extends BotTask {
         }
         BotLogger.trace("🔎 Поиск целевого блока: " + (target != null ? "найден" : "не найден"));
         return target;
-    }
-
-    private void destroyBlock(Location target) {
-        Bukkit.getScheduler().runTask(AIBotPlugin.getInstance(), () -> {
-            if (target.getBlock().getType() != Material.AIR) {
-                animateHand();
-                target.getBlock().breakNaturally();
-                BotLogger.debug("✅ Блок разрушен на " + BotStringUtils.formatLocation(target));
-                isDone = false;
-            } else {
-                BotLogger.trace("⚠️ Бот пытался разрушить воздух, пропускаем");
-                handleNoTargetFound();
-            }
-        });
     }
 
     private void handleNoTargetFound() {
@@ -182,17 +168,4 @@ public class BotTaskBreakBlock extends BotTask {
         return protectedZone;
     }
 
-    private void turnToBlock(Location target) {
-        Vector direction = target.toVector().subtract(bot.getNPCCurrentLocation().toVector()).normalize();
-        bot.getNPCEntity().setRotation((float) Math.toDegrees(Math.atan2(-direction.getX(), direction.getZ())), 0);
-        BotLogger.trace("🔄 Бот повернулся к блоку: " + BotStringUtils.formatLocation(target));
-    }
-
-    private void animateHand() {
-        if (bot.getNPCEntity() instanceof Player) {
-            Player playerBot = (Player) bot.getNPCEntity();
-            playerBot.swingMainHand();
-            BotLogger.trace("🤚 Анимация руки выполнена");
-        }
-    }
 }

@@ -47,11 +47,12 @@ public class BotTaskFollowTarget extends BotTask {
             followAndAttack(distance);
         }
 
-        if (getElapsedTime()>60000) {
+        if (getElapsedTime()>120000) {
             BotLogger.debug("💀 Не могу добраться до цели. Завершаю преследование.");
             isDone = true;
             return;
         }
+
     }
 
     public LivingEntity getFollowingObject() {
@@ -95,8 +96,11 @@ public class BotTaskFollowTarget extends BotTask {
         double distance = bot.getNPCCurrentLocation().distance(target.getLocation());
 
         if (distance <= attackRange) {
-            target.damage(5);
-            animateHand();
+
+            BotTaskUseHand hand_task = new BotTaskUseHand(bot);
+            hand_task.configure(targetLocation, target, 10);
+            bot.addTaskToQueue(hand_task);
+
             BotLogger.debug("⚔️ Бот атакует " + target.getType() + "!");
 
             // 30% шанс поругаться на моба

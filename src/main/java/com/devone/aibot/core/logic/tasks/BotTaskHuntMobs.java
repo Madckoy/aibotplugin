@@ -16,7 +16,7 @@ public class BotTaskHuntMobs extends BotTask {
     private LivingEntity targetMob = null;
 
     public BotTaskHuntMobs(Bot bot) {
-        super(bot, "⚔️");
+        super(bot, "👁️");
         config = new BotTaskHuntConfig();
 
         scanRadius = ((BotTaskExploreConfig)config).getScanRadius();
@@ -45,8 +45,15 @@ public class BotTaskHuntMobs extends BotTask {
             bot.addTaskToQueue(new BotTaskFollowTarget(bot, targetMob));
             BotLogger.debug("🎯 Бот начинает преследование " + targetMob.getType());
             isDone = false;
+            return;
         }
-        isDone = true;
+
+        if (getElapsedTime()>180000) {
+            BotLogger.debug(" Устал, охота утомляет.");
+            isDone = true;
+            return;
+        }
+
     }
 
     private void findTarget() {
@@ -74,5 +81,6 @@ public class BotTaskHuntMobs extends BotTask {
 
         BotLogger.debug("❌ Ни одного моба или игрока не найдено.");
         isDone = true;
+        return;
     }
 }
