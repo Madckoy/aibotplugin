@@ -18,8 +18,8 @@ public class BotTaskHuntMobs extends BotTask {
     public BotTaskHuntMobs(Bot bot) {
         super(bot, "👁️");
         config = new BotTaskHuntConfig();
-
         scanRadius = ((BotTaskExploreConfig)config).getScanRadius();
+        envMap = null;
     }
 
     @Override
@@ -42,9 +42,11 @@ public class BotTaskHuntMobs extends BotTask {
         }
 
         if (targetMob != null) {
+
             bot.addTaskToQueue(new BotTaskFollowTarget(bot, targetMob));
             BotLogger.debug("🎯 Бот начинает преследование " + targetMob.getType());
-            isDone = false;
+            
+            isDone = true;
             return;
         }
 
@@ -54,6 +56,7 @@ public class BotTaskHuntMobs extends BotTask {
             return;
         }
 
+        setEnvMap(null);
     }
 
     private void findTarget() {

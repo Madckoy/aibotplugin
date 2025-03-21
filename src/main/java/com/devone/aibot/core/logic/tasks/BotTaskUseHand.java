@@ -21,7 +21,7 @@ public class BotTaskUseHand extends BotTask {
 
     public BotTaskUseHand(Bot bot) {
         super(bot, "👊");
-        setObjective("Kick the target");
+        setObjective("Hitting the target");
     }
 
 @Override
@@ -58,6 +58,9 @@ public class BotTaskUseHand extends BotTask {
         turnToBlock(targetLocation);
 
         destroyBlock(targetLocation);
+        
+        isDone = true;
+
     }
 
     private void turnToBlock(Location target) {
@@ -79,10 +82,11 @@ public class BotTaskUseHand extends BotTask {
         Bukkit.getScheduler().runTask(AIBotPlugin.getInstance(), () -> {
             if (target.getBlock().getType() != Material.AIR &&
                 target.getBlock().getType() != Material.WATER && 
-                target.getBlock().getType() != Material.LAVA ) {
+                target.getBlock().getType() != Material.LAVA &&
+                target.getBlock().getType() != Material.VOID_AIR ) {
 
                 animateHand();
-                
+
                 if(target instanceof LivingEntity) {
                     ((LivingEntity)target).damage(damage);
                 } else {
