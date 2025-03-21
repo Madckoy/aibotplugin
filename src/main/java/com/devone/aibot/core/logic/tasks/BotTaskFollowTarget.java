@@ -33,12 +33,12 @@ public class BotTaskFollowTarget extends BotTask {
             return;
         }
         
-        setObjective("Following the target: " + target.getType());
+        setObjective("Chasing the target: " + target.getType());
 
         double distance = bot.getNPCCurrentLocation().distance(target.getLocation());
 
         if (target instanceof Player) {
-            
+
             followPlayer((Player) target, distance);
         } else {
             followAndAttack(distance);

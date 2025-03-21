@@ -74,5 +74,6 @@ public class BotTaskHuntMobs extends BotTask {
         }
 
         BotLogger.debug("❌ Ни одного моба или игрока не найдено.");
+        isDone = true;
     }
 }
