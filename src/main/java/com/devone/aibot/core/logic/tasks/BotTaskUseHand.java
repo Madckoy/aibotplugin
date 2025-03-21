@@ -71,11 +71,13 @@ public class BotTaskUseHand extends BotTask {
 
     
     private void animateHand() {
+        
         if (bot.getNPCEntity() instanceof Player) {
             Player playerBot = (Player) bot.getNPCEntity();
             playerBot.swingMainHand();
             BotLogger.trace("🤚 Анимация руки выполнена");
         }
+
     }
 
     private void destroyBlock(Location target) {

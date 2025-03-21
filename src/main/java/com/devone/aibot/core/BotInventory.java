@@ -240,9 +240,9 @@ public class BotInventory {
 
         // Вывод в логи
         //BotLogger.trace("📝 " + bot.getId() + " Инвентарь:");
-        for (String r : rows) {
+        //for (String r : rows) {
             // BotLogger.trace(r);
-        }
+        //}
     }
 
 
