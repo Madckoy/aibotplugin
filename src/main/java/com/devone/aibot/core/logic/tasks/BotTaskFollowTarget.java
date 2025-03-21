@@ -42,6 +42,12 @@ public class BotTaskFollowTarget extends BotTask {
         } else {
             followAndAttack(distance);
         }
+
+        if (getElapsedTime()>60000) {
+            BotLogger.debug("💀 Не могу добраться до цели. Заверше преследование.");
+            isDone = true;
+            return;
+        }
     }
 
     public LivingEntity getFollowingObject() {
