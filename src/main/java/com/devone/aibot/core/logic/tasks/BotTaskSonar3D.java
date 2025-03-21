@@ -21,13 +21,13 @@ public class BotTaskSonar3D extends BotTask {
         parent = caller;
         this.radius = radius;
         this.height = height;
+        setObjective("Сканирую пространство");
     }
 
     @Override
     public void executeTask() {
         
         Map<Location, Material> env_map = BotEnv3DScan.scan3D(bot, radius, height);
-        setObjective("Сканирую пространство");
 
         parent.setEnvMap(env_map);
 

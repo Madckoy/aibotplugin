@@ -13,7 +13,6 @@ public class BotTaskMove extends BotTask {
 
     public BotTaskMove(Bot bot) {
         super(bot, "🏃🏽‍♂️‍➡️");
-        setObjective("Moving on ");
     }
 
     @Override
@@ -45,6 +44,8 @@ public class BotTaskMove extends BotTask {
             }
 
         }
+        
+        setObjective("Moving on " +  getTargetLocation().getBlock().toString());
 
         // 🟢 Запускаем таймер и сохраняем его в `taskHandle`
         taskHandle = Bukkit.getScheduler().runTaskTimer(AIBotPlugin.getInstance(), () -> {
