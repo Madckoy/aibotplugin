@@ -59,7 +59,7 @@ public class BotTaskTalk extends BotTask {
     }
 
     private String getRandomMessage(List<String> messages) {
-        if (messages.isEmpty()) return "";
+        if (messages.isEmpty()) return "🙄";
         return messages.get(random.nextInt(messages.size()));
     }
 }
