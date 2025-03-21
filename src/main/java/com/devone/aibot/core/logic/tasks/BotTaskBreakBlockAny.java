@@ -25,7 +25,7 @@ public class BotTaskBreakBlockAny extends BotTaskBreakBlock {
             setObjective(targetMaterials.toString());
 
         } else { 
-            setObjective("Разрушает блок: " + getTargetLocation().getBlock().getType()); 
+            setObjective("Разрушение блока: " + getTargetLocation().getBlock().getType()); 
         };
     }
  
