@@ -44,6 +44,20 @@ public class BotTaskMove extends BotTask {
             }
 
         }
+
+        if(getTargetLocation()!=null) {
+            if(bot.getNPCNavigator().canNavigateTo(getTargetLocation()) == false) {
+                BotLogger.trace(bot.getId() + " 🛑 Target Location is not reachable. Stopping here...[ID: " + uuid + "]");
+                // TP maybe ? ;)
+                // ✅ Добавляем задачу на мгновенное перемещение
+                BotTaskTeleport task = new BotTaskTeleport(bot, player);
+                task.configure(targetLocation);
+                bot.addTaskToQueue(task);
+
+                isDone = true;
+            }
+        }
+
         String block_name  = BotUtils.getBlockName(getTargetLocation().getBlock());
 
         setObjective("Moving on " +  block_name);
@@ -73,7 +87,14 @@ public class BotTaskMove extends BotTask {
                 // 5. Проверяем, может ли бот туда пройти
                 if (!bot.getNPCNavigator().canNavigateTo(targetLocation)) {
                     BotLogger.trace(bot.getId() + " ❌ Не могу найти путь, Stopping here..." + " [ID: " + uuid + "]");
+                    // TP maybe ? ;)
+                    // ✅ Добавляем задачу на мгновенное перемещение
+                    BotTaskTeleport task = new BotTaskTeleport(bot, player);
+                    task.configure(targetLocation);
+                    bot.addTaskToQueue(task);
+
                     isDone = true;
+                    
                     return;
                 } else {
                    

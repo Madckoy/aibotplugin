@@ -125,6 +125,7 @@ public class BotTaskBreakBlock extends BotTask {
             if (candidate != null && candidate.getBlock().getType() != Material.AIR && 
                                      candidate.getBlock().getType() != Material.WATER &&
                                      candidate.getBlock().getType() != Material.LAVA &&
+                                     candidate.getBlock().getType() != Material.VOID_AIR &&
                                     (targetMaterials == null || targetMaterials.contains(candidate.getBlock().getType()))) {
 
                 target = candidate;
