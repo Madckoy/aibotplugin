@@ -2,7 +2,6 @@ package com.devone.aibot.core.logic.tasks;
 
 import com.devone.aibot.core.Bot;
 import com.devone.aibot.core.logic.tasks.configs.BotTaskExploreConfig;
-import com.devone.aibot.core.logic.tasks.configs.BotTaskFollowConfig;
 import com.devone.aibot.core.logic.tasks.configs.BotTaskHuntConfig;
 import com.devone.aibot.utils.BotLogger;
 import org.bukkit.entity.*;

@@ -2,7 +2,7 @@ package com.devone.aibot.commands;
 
 import com.devone.aibot.core.Bot;
 import com.devone.aibot.core.BotManager;
-import com.devone.aibot.core.logic.tasks.BotTaskMove;
+
 import com.devone.aibot.core.logic.tasks.BotTaskTeleport;
 import com.devone.aibot.utils.BotLogger;
 import com.devone.aibot.utils.BotStringUtils;

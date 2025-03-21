@@ -5,7 +5,6 @@ import org.bukkit.Material;
 import org.bukkit.entity.Player;
 
 import com.devone.aibot.core.Bot;
-import com.devone.aibot.core.BotManager;
 import com.devone.aibot.core.logic.tasks.configs.BotAbstractConfig;
 import com.devone.aibot.utils.BotLogger;
 import com.devone.aibot.utils.BotStringUtils;

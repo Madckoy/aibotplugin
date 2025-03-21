@@ -3,21 +3,18 @@ package com.devone.aibot.web;
 import com.devone.aibot.core.Bot;
 import com.devone.aibot.core.BotManager;
 import com.devone.aibot.core.logic.tasks.BotTask;
-import com.devone.aibot.core.logic.tasks.BotTaskBreakBlock;
-import com.devone.aibot.core.logic.tasks.BotTaskFollowTarget;
-import com.devone.aibot.core.logic.tasks.BotTaskMove;
+
 import com.devone.aibot.utils.BotConstants;
 import com.devone.aibot.utils.BotLogger;
 import com.devone.aibot.utils.BotStringUtils;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.configuration.file.YamlConfiguration;
-import org.bukkit.entity.LivingEntity;
-import org.bukkit.entity.Player;
+
 
 import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
 import org.bukkit.Location;
-import org.bukkit.Material;
+
 import org.eclipse.jetty.server.Server;
 import org.eclipse.jetty.servlet.ServletContextHandler;
 import org.eclipse.jetty.servlet.ServletHolder;
@@ -33,7 +30,7 @@ import java.nio.file.StandardCopyOption;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
-import java.util.Set;
+
 import java.util.stream.Collectors;
 
 public class BotWebService {

@@ -2,7 +2,6 @@ package com.devone.aibot.core.events;
 
 import com.devone.aibot.core.Bot;
 import com.devone.aibot.core.BotManager;
-import com.devone.aibot.core.logic.tasks.BotTaskMove;
 import com.devone.aibot.core.logic.tasks.BotTask;
 import com.devone.aibot.utils.BotLogger;
 

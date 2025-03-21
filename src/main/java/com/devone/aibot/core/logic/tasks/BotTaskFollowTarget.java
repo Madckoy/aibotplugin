@@ -14,8 +14,8 @@ public class BotTaskFollowTarget extends BotTask {
     private static final BotTaskFollowConfig config = new BotTaskFollowConfig();
     private final double followDistance = config.getFollowDistance();
     private final double attackRange = config.getAttackRange();
-    private final long chatCooldown = config.getChatCooldown();
-    private final double insultChance = config.getInsultChance();
+    //private final long chatCooldown = config.getChatCooldown();
+    //private final double insultChance = config.getInsultChance();
 
     private long lastChatTime = 0;
     private final Random random = new Random();
