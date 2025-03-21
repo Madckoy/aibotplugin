@@ -57,10 +57,10 @@ commands:
     usage: /bot-here
     permission: aibotplugin.bot.here
 
-  bot-here-tp:
+  bot-tp-here:
     description: Makes the selected bot teleport to the player.
-    usage: /bot-here-tp
-    permission: aibotplugin.bot.here.tp
+    usage: /bot-tp-here
+    permission: aibotplugin.bot.tp.here
 
   bot-move:
     description: Moves the bot to the specified coordinates.

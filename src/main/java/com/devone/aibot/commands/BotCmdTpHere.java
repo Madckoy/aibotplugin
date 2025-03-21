@@ -13,11 +13,11 @@ import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
-public class BotCmdHereTp implements CommandExecutor {
+public class BotCmdTpHere implements CommandExecutor {
 
     private final BotManager botManager;
 
-    public BotCmdHereTp(BotManager botManager) {
+    public BotCmdTpHere(BotManager botManager) {
         this.botManager = botManager;
     }
 
@@ -38,7 +38,7 @@ public class BotCmdHereTp implements CommandExecutor {
 
         Location targetLocation = player.getLocation();
 
-        BotLogger.info("📌 /bot-here-tp: Бот " + bot.getId() + " Телепортируется в точку игрока" + BotStringUtils.formatLocation(targetLocation));
+        BotLogger.info("📌 /bot-tp-here: Бот " + bot.getId() + " Телепортируется в точку игрока" + BotStringUtils.formatLocation(targetLocation));
 
         // ✅ Очищаем стек задач
         bot.getLifeCycle().getTaskStackManager().clearTasks();
