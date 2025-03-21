@@ -165,7 +165,7 @@ public class BlueMapMarkers {
             int z = loc.getBlockZ();
 
             // ✅ Get or download the bot’s skin icon
-            String skinFilePath = BotUtils.getSkinFile(botUUID);
+            String skinFilePath = BotImageUtils.getSkinFile(botUUID);
 
             POIMarker marker = new POIMarker(botId,  new Vector3d(x, y, z));
 

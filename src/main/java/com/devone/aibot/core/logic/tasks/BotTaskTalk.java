@@ -26,15 +26,17 @@ public class BotTaskTalk extends BotTask {
 
     @Override
     public void executeTask() {
-
-        setObjective("Говорю глупости");
-
+        
         if (player == null) {
             isDone = true;
             return;
         }
-
+        
         String message = generateMessage();
+        if(!message.isEmpty()) {
+            setObjective("Собираюсь сказать глупость: "+message);
+        }
+
         if (!message.isEmpty()) {
             player.sendMessage("🤖 " + bot.getId() + ": " + message);
             BotLogger.debug("💬 Бот сказал в чат: " + message);
