@@ -11,11 +11,16 @@ import com.devone.aibot.core.logic.tasks.configs.BotTaskMoveConfig;
 public class BotTaskMove extends BotTask {
 
     private BukkitTask taskHandle;
-    private static final BotTaskMoveConfig config = new BotTaskMoveConfig(); // ✅ Конфиг движения
-    private final float speedMultiplier = config.getSpeedMultiplier(); // ✅ Используем множитель скорости
+    private static final BotTaskMoveConfig config = new BotTaskMoveConfig();
+    private final float speedMultiplier = config.getSpeedMultiplier();
+
+    private Location lastPosition; // 🆕 Запоминаем прошлую позицию
+    private long lastMoveTime; // 🆕 Время последнего движения
 
     public BotTaskMove(Bot bot) {
         super(bot, "🏃🏽‍♂️‍➡️");
+        this.lastPosition = bot.getNPCCurrentLocation();
+        this.lastMoveTime = System.currentTimeMillis();
     }
 
     @Override
@@ -67,6 +72,21 @@ public class BotTaskMove extends BotTask {
                 return;
             }
 
+            // 🆕 Проверяем, двигается ли бот или застрял
+            if (bot.getNPCCurrentLocation().distanceSquared(lastPosition) < 0.5) {
+                // Если прошло > 10 сек и координаты не изменились → бот застрял
+                if (System.currentTimeMillis() - lastMoveTime > 10_000) {
+                    BotLogger.warn(bot.getId() + " ⚠️ Бот застрял! Пересчитываем путь...");
+                    taskHandle.cancel();
+                    isDone = true;
+                    return;
+                }
+            } else {
+                // Если бот сдвинулся — обновляем позицию и сбрасываем таймер
+                lastPosition = bot.getNPCCurrentLocation();
+                lastMoveTime = System.currentTimeMillis();
+            }
+
             if (BotNavigationUtils.hasReachedTargetFlex(bot.getNPCCurrentLocation(), targetLocation, 1.5, 1.5)) {
                 bot.resetTargetLocation();
                 isDone = true;
@@ -86,7 +106,6 @@ public class BotTaskMove extends BotTask {
                     } else {
                         BotLogger.trace(bot.getId() + " 🚶 Двигаюсь в " + BotStringUtils.formatLocation(targetLocation) + " [ID: " + uuid + "]");
 
-                        // ✅ Используем конфиг вместо фиксированного значения
                         bot.getNPCNavigator().getDefaultParameters().speedModifier(speedMultiplier);
 
                         bot.getNPCCurrentLocation().setDirection(targetLocation.toVector().subtract(bot.getNPCCurrentLocation().toVector()));

@@ -4,7 +4,7 @@ import com.devone.aibot.core.Bot;
 import com.devone.aibot.core.logic.tasks.configs.BotTaskExploreConfig;
 import com.devone.aibot.utils.BotLogger;
 import com.devone.aibot.utils.BotStringUtils;
-import com.devone.aibot.utils.BotEnv3DScan;
+import com.devone.aibot.utils.BotGeo3DScan;
 
 public class BotTaskExplore extends BotTask {
   
@@ -31,7 +31,7 @@ public class BotTaskExplore extends BotTask {
             return;
         }  
     
-        targetLocation = BotEnv3DScan.getRandomEdgeBlock(getEnvMap()); 
+        targetLocation = BotGeo3DScan.getRandomEdgeBlock(getEnvMap()); 
 
         if (targetLocation == null) {
             BotLogger.debug("🗺️ " + bot.getId() + " Has finished exploration." +  " [ID: " + uuid + "]");

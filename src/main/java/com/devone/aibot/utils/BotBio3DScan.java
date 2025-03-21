@@ -1,4 +1,4 @@
-package com.devone.aibot.core.utils;
+package com.devone.aibot.utils;
 
 import com.devone.aibot.core.Bot;
 import org.bukkit.Location;

@@ -17,7 +17,7 @@ import org.json.simple.JSONObject;
 
 import com.devone.aibot.core.Bot;
 
-public class BotEnv3DScan {
+public class BotGeo3DScan {
 
     public static Map<Location, Material> scan3D(Bot bot, int scanRadius, int height) { // Один радиус применяется к X и Z
         

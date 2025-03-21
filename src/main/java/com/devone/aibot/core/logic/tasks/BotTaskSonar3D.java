@@ -1,13 +1,16 @@
 package com.devone.aibot.core.logic.tasks;
 
+import java.util.List;
 import java.util.Map;
 
 import org.bukkit.Location;
 import org.bukkit.Material;
+import org.bukkit.entity.LivingEntity;
 
 import com.devone.aibot.core.Bot;
-
-import com.devone.aibot.utils.BotEnv3DScan;
+import com.devone.aibot.utils.BotBio3DScan;
+import com.devone.aibot.utils.BotGeo3DScan;
+import com.devone.aibot.utils.BotLogger;
 
 
 public class BotTaskSonar3D extends BotTask {
@@ -26,11 +29,18 @@ public class BotTaskSonar3D extends BotTask {
 
     @Override
     public void executeTask() {
-        
-        Map<Location, Material> env_map = BotEnv3DScan.scan3D(bot, radius, height);
-
-        parent.setEnvMap(env_map);
-
+        if (parent instanceof BotTaskExplore || parent instanceof BotTaskBreakBlock) {
+            Map<Location, Material> geo = BotGeo3DScan.scan3D(bot, radius, height);
+            parent.setGeoMap(geo);
+            BotLogger.debug("🛰️ Geo scan complete. Blocks: " + geo.size());
+        }
+    
+        if (parent instanceof BotTaskHuntMobs) {
+            List<LivingEntity> bio = BotBio3DScan.scan3D(bot, radius);
+            parent.setBioEntities(bio);
+            BotLogger.debug("🧬 Bio scan complete. Entities: " + bio.size());
+        }
+    
         isDone = true;
     }
 

@@ -31,31 +31,39 @@ public class BotTaskTalk extends BotTask {
 
     @Override
     public void executeTask() {
-
         String message = generateMessage();
-
+    
         if (message.isEmpty()) {
             isDone = true;
             return;
         }
-
+    
+        // ✅ Показываем в мониторинге всегда, даже если бот молчит
         setObjective("Размышляет: " + message);
-
-        // 🎯 Есть игрок — говорим персонально
+    
+        // 🤐 Бот занят рукой? Не говорим в чат, но оставляем в Objective
+        if (bot.getActiveTask() instanceof BotTaskUseHand) {
+            BotLogger.debug(bot.getId() + " 🤐 Занят рукой, не говорит: " + message);
+            isDone = true;
+            return;
+        }
+    
+        // 🎯 Если есть игрок — говорим персонально
         if (player != null) {
             player.sendMessage("🤖 " + bot.getId() + ": " + message);
         }
-        // 📣 Нет игрока — говорим в общий чат (если нужно)
+        // 📣 Если нужно вещать в общий чат
         else if (shouldBroadcastToAll(type)) {
-            Bukkit.broadcastMessage("🤖 " + bot.getId() + ": " + message);
+            Bukkit.getServer().broadcast("🤖 " + bot.getId() + ": " + message, "minecraft.broadcast.say");
         }
-        // 🤫 Или просто бурчим себе под нос (в лог)
+        // 🤫 Иначе просто бурчим себе под нос (логируем)
         else {
             BotLogger.debug(bot.getId() + " бурчит себе под нос: " + message);
         }
-
+    
         isDone = true;
     }
+
 
     private boolean shouldBroadcastToAll(TalkType type) {
         return switch (type) {

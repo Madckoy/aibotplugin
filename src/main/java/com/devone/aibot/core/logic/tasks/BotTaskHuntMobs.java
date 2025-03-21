@@ -4,14 +4,15 @@ import com.devone.aibot.core.Bot;
 import com.devone.aibot.core.logic.tasks.configs.BotTaskExploreConfig;
 import com.devone.aibot.core.logic.tasks.configs.BotTaskHuntConfig;
 import com.devone.aibot.utils.BotLogger;
-import com.devone.aibot.utils.BotStringUtils;
-
-import org.bukkit.Location;
-import org.bukkit.entity.*;
+import com.devone.aibot.utils.EntityUtils;
+import org.bukkit.entity.LivingEntity;
+import org.bukkit.entity.Player;
 
 import java.util.List;
 
 public class BotTaskHuntMobs extends BotTask {
+
+    private BotTaskHuntConfig config; // 👈 Храним с нужным типом
 
     private int scanRadius;
     private boolean shouldFollowPlayer = false;
@@ -20,23 +21,21 @@ public class BotTaskHuntMobs extends BotTask {
 
     public BotTaskHuntMobs(Bot bot) {
         super(bot, "👁️");
+        
         this.config = new BotTaskHuntConfig();
-
-        this.scanRadius = ((BotTaskHuntConfig)this.config).getScanRadius();
-        envMap = null;
+        scanRadius = config.getScanRadius(); // ✅ Теперь всё работает
+        geoMap = null;
+        bioEntities = null;
     }
 
     @Override
     public void executeTask() {
-        
         BotLogger.trace("🚀 Запуск задачи охоты для бота " + bot.getId());
-        
-        setObjective("Looking for the hostile targets");
+        setObjective("Looking for hostile targets");
 
-        // 🔍 Проверяем, есть ли у нас актуальная карта местности
-        if (getEnvMap() == null) {
-            BotLogger.trace("🔍 Запускаем 3D-сканирование окружающей среды.");
-            bot.addTaskToQueue(new BotTaskSonar3D(bot, this, scanRadius, scanRadius));
+        if (getBioEntities() == null) {
+            BotLogger.trace("🔍 Запускаем 3D-сканирование живых целей.");
+            bot.addTaskToQueue(new BotTaskSonar3D(bot, this, scanRadius, 4));
             isDone = false;
             return;
         }
@@ -46,50 +45,43 @@ public class BotTaskHuntMobs extends BotTask {
         }
 
         if (targetMob != null) {
-
-            Location mobLocation = targetMob.getLocation(); // ✅ Берём позицию цели
-            BotLogger.debug("🎯 Бот начинает преследование " + targetMob.getType() + " на " + BotStringUtils.formatLocation(mobLocation));
-
-            bot.addTaskToQueue(new BotTaskFollowTarget(bot, targetMob)); // ✅ Передаём координаты
-
+            bot.addTaskToQueue(new BotTaskFollowTarget(bot, targetMob));
+            BotLogger.debug("🎯 Бот начинает преследование " + targetMob.getType());
             isDone = true;
             return;
         }
 
-        if (getElapsedTime()>180000) {
-            BotLogger.debug(" Устал, охота утомляет.");
+        if (getElapsedTime() > 180000) {
+            BotLogger.debug("😴 Устал, охота утомляет.");
             isDone = true;
             return;
         }
 
-        setEnvMap(null);
+        setBioEntities(null);
     }
 
     private void findTarget() {
-        List<Entity> nearbyEntities = bot.getNPCEntity().getNearbyEntities(scanRadius, scanRadius, scanRadius);
+        List<LivingEntity> nearbyEntities = getBioEntities();
 
-        // Ищем мобов
-        for (Entity entity : nearbyEntities) {
-            if (entity instanceof Monster) {
-                targetMob = (LivingEntity) entity;
-                BotLogger.debug("🎯 Найдена цель: " + targetMob.getType());
+        for (LivingEntity entity : nearbyEntities) {
+            if (EntityUtils.isHostileMob(entity)) {
+                targetMob = entity;
+                BotLogger.debug("🎯 Найдена враждебная цель: " + targetMob.getType());
                 return;
             }
         }
 
-        // Если мобов нет, попробуем следовать за игроком (если включено)
         if (shouldFollowPlayer) {
-            for (Entity entity : nearbyEntities) {
+            for (LivingEntity entity : nearbyEntities) {
                 if (entity instanceof Player) {
-                    targetMob = (LivingEntity) entity;
+                    targetMob = entity;
                     BotLogger.debug("🎯 Найден игрок! Начинаем следование.");
                     return;
                 }
             }
         }
 
-        BotLogger.debug("❌ Ни одного моба или игрока не найдено.");
+        BotLogger.debug("❌ Ни одной подходящей цели не найдено.");
         isDone = true;
-        return;
     }
 }
