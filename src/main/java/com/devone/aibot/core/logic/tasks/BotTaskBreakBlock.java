@@ -100,7 +100,7 @@ public class BotTaskBreakBlock extends BotTask {
 
             BotLogger.trace("🛠️ Целевой блок найден: " + BotStringUtils.formatLocation(targetLocation));
 
-            Set<Material> targetMaterials = getTargetMaterials();
+            // Set<Material> targetMaterials = getTargetMaterials();
 
             setObjective("Разрушение блока: " + BotUtils.getBlockName(targetLocation.getBlock()));
    

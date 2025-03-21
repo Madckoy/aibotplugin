@@ -1,6 +1,5 @@
 package com.devone.aibot.core.logic.tasks.configs;
 
-import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.entity.EntityType;
 
 import java.util.HashSet;
