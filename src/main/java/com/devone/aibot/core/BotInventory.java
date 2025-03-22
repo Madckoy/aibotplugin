@@ -90,7 +90,7 @@ public class BotInventory {
         }
 
         try {
-            Location botLocation = bot.getNPCCurrentLocation();
+            Location botLocation = bot.getRuntimeStatus().getCurrentLocation();
         
             List<Entity> nearbyEntities = botLocation.getWorld().getEntities();
 

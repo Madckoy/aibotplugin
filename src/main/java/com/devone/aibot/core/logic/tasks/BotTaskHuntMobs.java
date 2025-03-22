@@ -1,7 +1,6 @@
 package com.devone.aibot.core.logic.tasks;
 
 import com.devone.aibot.core.Bot;
-import com.devone.aibot.core.logic.tasks.configs.BotTaskExploreConfig;
 import com.devone.aibot.core.logic.tasks.configs.BotTaskHuntConfig;
 import com.devone.aibot.utils.BotLogger;
 import com.devone.aibot.utils.EntityUtils;
@@ -21,7 +20,7 @@ public class BotTaskHuntMobs extends BotTask {
 
     public BotTaskHuntMobs(Bot bot) {
         super(bot, "👁️");
-        
+
         this.config = new BotTaskHuntConfig();
         scanRadius = config.getScanRadius(); // ✅ Теперь всё работает
         geoMap = null;

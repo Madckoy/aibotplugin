@@ -6,6 +6,7 @@ import org.bukkit.Bukkit;
 import com.devone.aibot.AIBotPlugin;
 import com.devone.aibot.utils.BotConstants;
 import com.devone.aibot.utils.BotLogger;
+import com.devone.aibot.utils.BotUtils;
 import com.devone.aibot.utils.bluemap.BlueMapMarkers;
 
 import org.bukkit.configuration.file.FileConfiguration;
@@ -89,7 +90,7 @@ public class BotManager {
                 continue;
 
             // Set defaults
-            Location storedLocation = Bot.getFallbackLocation();
+            Location storedLocation = BotUtils.getFallbackLocation();
 
             // Загружаем координаты, если они сохранены
             if (config.contains("bots." + botName)) {
@@ -136,7 +137,7 @@ public class BotManager {
             String path = "bots." + bot.getId();
             config.set(path + ".uuid", bot.getUuid().toString());
 
-            Location loc = bot.getNPCCurrentLocation();
+            Location loc = bot.getRuntimeStatus().getCurrentLocation();
 
             // Сохраняем координаты в bots.yml
             config.set("bots." + bot.getId() + ".x", loc.getBlockX());

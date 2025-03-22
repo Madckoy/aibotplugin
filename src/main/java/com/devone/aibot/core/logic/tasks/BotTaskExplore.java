@@ -3,6 +3,7 @@ package com.devone.aibot.core.logic.tasks;
 import com.devone.aibot.core.Bot;
 import com.devone.aibot.core.logic.tasks.configs.BotTaskExploreConfig;
 import com.devone.aibot.utils.BotLogger;
+import com.devone.aibot.utils.BotNavigationUtils;
 import com.devone.aibot.utils.BotStringUtils;
 import com.devone.aibot.utils.BotGeo3DScan;
 
@@ -57,7 +58,8 @@ public class BotTaskExplore extends BotTask {
         } else {
             BotLogger.debug("🗺️ " + bot.getId() + " Moving to exploration point: " + BotStringUtils.formatLocation(targetLocation) + " [Task ID: " + uuid + "]");
 
-            Bot.navigateTo(bot, targetLocation); // via a new MoVeTask()
+            BotNavigationUtils.navigateTo(bot, targetLocation); // via a new MoVeTask()
+            
             isDone = false;
         }
 

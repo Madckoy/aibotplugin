@@ -180,7 +180,7 @@ public class BotWebService {
             Collection<Bot> bots = botManager.getAllBots();
             for (Bot bot : bots) {
                 JsonObject botJson = new JsonObject();
-                Location loc = bot.getNPCCurrentLocation();
+                Location loc = bot.getRuntimeStatus().getCurrentLocation();
 
                 if (loc != null) {
                     botJson.addProperty("skin", "http://" + getServerHost() + ":3000/skins/" + bot.getUuid() + ".png");

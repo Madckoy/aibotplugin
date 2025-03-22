@@ -29,7 +29,7 @@ public class BotCmdList implements CommandExecutor {
         player.sendMessage("§aActive Bots:");
 
         for (Bot bot : botManager.getAllBots()) {
-            Location loc = bot.getNPCCurrentLocation();
+            Location loc = bot.getRuntimeStatus().getCurrentLocation();
             String locationText = BotStringUtils.formatLocation(loc);
             player.sendMessage(bot.getId() + " " + locationText );
         }

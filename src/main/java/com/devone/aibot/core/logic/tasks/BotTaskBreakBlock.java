@@ -5,19 +5,12 @@ import java.util.*;
 
 import com.devone.aibot.utils.BotStringUtils;
 import com.devone.aibot.utils.BotUtils;
-import com.devone.aibot.utils.BotGeo3DScan;
-
-import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.Material;
-import org.bukkit.entity.Player;
-import org.bukkit.util.Vector;
-
 import com.devone.aibot.core.Bot;
 import com.devone.aibot.core.BotZoneManager;
 import com.devone.aibot.core.logic.tasks.configs.BotTaskBreakBlockConfig;
 import com.devone.aibot.utils.BotLogger;
-import com.devone.aibot.AIBotPlugin;
 
 public class BotTaskBreakBlock extends BotTask {
 
@@ -33,6 +26,7 @@ public class BotTaskBreakBlock extends BotTask {
         config = new BotTaskBreakBlockConfig();
     }
 
+    @SuppressWarnings("unchecked")
     @Override
     public BotTask configure(Object... params) {
         super.configure(params);
@@ -112,7 +106,7 @@ public class BotTaskBreakBlock extends BotTask {
     }
 
     private Location findNextTargetBlock() {
-        Location botLoc = bot.getNPCCurrentLocation();
+        Location botLoc = bot.getRuntimeStatus().getCurrentLocation();
         int botY = botLoc.getBlockY();
         
         List<Location> sortedTargets = getGeoMap().keySet().stream()

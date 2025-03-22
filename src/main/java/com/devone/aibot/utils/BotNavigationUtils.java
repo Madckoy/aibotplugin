@@ -4,6 +4,7 @@ import org.bukkit.Location;
 import org.bukkit.Material;
 
 import com.devone.aibot.core.Bot;
+import com.devone.aibot.core.logic.tasks.BotTaskMove;
 
 
 public class BotNavigationUtils {
@@ -51,5 +52,17 @@ public class BotNavigationUtils {
     public static boolean isSuitableForNavigation(Location location, Material material) {
         return material.isSolid() && location.clone().add(0, 1, 0).getBlock().getType() == Material.AIR
             && material != Material.LAVA && material != Material.WATER;
+    }
+
+        public static void navigateTo(Bot bot, Location target) {
+        BotTaskMove moveTask = new BotTaskMove(bot);
+        moveTask.configure(target);
+        bot.addTaskToQueue(moveTask);
+    }
+
+    public static void navigateTo(Bot bot, Location target, double multiplier) {
+        BotTaskMove moveTask = new BotTaskMove(bot);
+        moveTask.configure(target, multiplier);
+        bot.addTaskToQueue(moveTask);
     }
 }

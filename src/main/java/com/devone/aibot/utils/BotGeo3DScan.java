@@ -19,13 +19,14 @@ import com.devone.aibot.core.Bot;
 
 public class BotGeo3DScan {
 
+    @SuppressWarnings("unchecked")
     public static Map<Location, Material> scan3D(Bot bot, int scanRadius, int height) { // Один радиус применяется к X и Z
         
         World world = Bukkit.getWorlds().get(0);
 
-        int centerX = bot.getNPCCurrentLocation().getBlockX();
-        int centerY = bot.getNPCCurrentLocation().getBlockY();
-        int centerZ = bot.getNPCCurrentLocation().getBlockZ();
+        int centerX = bot.getRuntimeStatus().getCurrentLocation().getBlockX();
+        int centerY = bot.getRuntimeStatus().getCurrentLocation().getBlockY();
+        int centerZ = bot.getRuntimeStatus().getCurrentLocation().getBlockZ();
 
         int minHeight = centerY - height; // Нижняя граница  Y (-4 от бота) // Ограничение по глубине Y (-4) // Теперь Y правильно ограничен
         int maxHeight = centerY + height; // Верхняя граница Y (+4 от бота) // Ограничение по глубине Y (+4) // Теперь Y правильно ограничен
@@ -74,13 +75,14 @@ public class BotGeo3DScan {
         return scannedBlocks;
     }
 
+    @SuppressWarnings("unchecked")
     private static void saveScanResultToFile(Bot bot, JSONArray scanData) {
         //File scanFile = new File(BotConstants.PLUGIN_TMP, bot.getId()+"3d_vision" + System.currentTimeMillis() + ".json"); // Добавляем timestamp
         File scanFile = new File(BotConstants.PLUGIN_TMP, bot.getId()+"_vision_log.json"); // Добавляем timestamp
 
-        int centerX = bot.getNPCCurrentLocation().blockX();
-        int centerY = bot.getNPCCurrentLocation().blockY();
-        int centerZ = bot.getNPCCurrentLocation().blockZ();
+        int centerX = bot.getRuntimeStatus().getCurrentLocation().blockX();
+        int centerY = bot.getRuntimeStatus().getCurrentLocation().blockY();
+        int centerZ = bot.getRuntimeStatus().getCurrentLocation().blockZ();
 
         try (FileWriter file = new FileWriter(scanFile)) {
             JSONObject root = new JSONObject();
@@ -97,6 +99,7 @@ public class BotGeo3DScan {
         }
     }
 
+    @SuppressWarnings("unchecked")
     public static JSONArray findEdgeBlocks(Map<Location, Material> scannedBlocks) {
         JSONArray edgeBlocks = new JSONArray();
         for (Location loc : scannedBlocks.keySet()) {
@@ -129,7 +132,6 @@ public class BotGeo3DScan {
     public static Location getRandomEdgeBlock(Map<Location, Material> scannedBlocks) {
         List<Location> edgeLocations = new ArrayList<>();
         for (Location loc : scannedBlocks.keySet()) {
-            Material material = scannedBlocks.get(loc);
             //if (material != Material.GRASS_BLOCK && material != Material.SAND) continue;
             boolean isEdge = false;
             for (int dx = -1; dx <= 1; dx++) {
@@ -150,53 +152,7 @@ public class BotGeo3DScan {
     }
 
 
-    private static Location getRandomNearbyDestructibleBlock_depricated(Map<Location, Material> scannedBlocks, Location botLocation) {
-        List<Location> nearbyBlocks = new ArrayList<>();
-        Random random = new Random();
-        double minDistance = Double.MAX_VALUE;
-    
-        // Получаем координаты бота
-        int botX = botLocation.getBlockX();
-        int botY = botLocation.getBlockY();
-        int botZ = botLocation.getBlockZ();
-    
-        // Карта для хранения ближайших блоков
-        List<Location> closestBlocks = new ArrayList<>();
-    
-        // Проходим по всем блокам
-        for (Location loc : scannedBlocks.keySet()) {
-            Material material = scannedBlocks.get(loc);
-            
-            // Исключаем воздух и потенциально другие нежелательные блоки
-            if (material == Material.AIR) continue;
-    
-            int x = loc.getBlockX();
-            int y = loc.getBlockY();
-            int z = loc.getBlockZ();
-    
-            // Проверяем, что блок не является "столбиком безопасности" (не прямо под и не прямо над ботом)
-            if (y != botY - 1 && y != botY + 1) {
-                double distance = Math.sqrt(Math.pow(x - botX, 2) + Math.pow(z - botZ, 2));
-                
-                if (distance < minDistance) {
-                    minDistance = distance;
-                    closestBlocks.clear();
-                    closestBlocks.add(loc);
-                } else if (distance == minDistance) {
-                    closestBlocks.add(loc);
-                }
-            }
-        }
-    
-        // Если список пуст, значит подходящих блоков нет
-        if (closestBlocks.isEmpty()) return null;
-    
-        // Возвращаем случайный блок из ближайших
-        return closestBlocks.get(random.nextInt(closestBlocks.size()));
-    }
-
     public static Location getRandomNearbyDestructibleBlock(Map<Location, Material> scannedBlocks, Location botLocation) {
-        List<Location> nearbyBlocks = new ArrayList<>();
         Random random = new Random();
         double minDistance = Double.MAX_VALUE;
     

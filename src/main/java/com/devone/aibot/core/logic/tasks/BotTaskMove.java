@@ -19,7 +19,7 @@ public class BotTaskMove extends BotTask {
 
     public BotTaskMove(Bot bot) {
         super(bot, "🏃🏽‍♂️‍➡️");
-        this.lastPosition = bot.getNPCCurrentLocation();
+        this.lastPosition = bot.getRuntimeStatus().getCurrentLocation();
         this.lastMoveTime = System.currentTimeMillis();
     }
 
@@ -73,7 +73,7 @@ public class BotTaskMove extends BotTask {
             }
 
             // 🆕 Проверяем, двигается ли бот или застрял
-            if (bot.getNPCCurrentLocation().distanceSquared(lastPosition) < 0.5) {
+            if (bot.getRuntimeStatus().getCurrentLocation().distanceSquared(lastPosition) < 0.5) {
                 // Если прошло > 10 сек и координаты не изменились → бот застрял
                 if (System.currentTimeMillis() - lastMoveTime > 10_000) {
                     BotLogger.warn(bot.getId() + " ⚠️ Бот застрял! Пересчитываем путь...");
@@ -83,12 +83,14 @@ public class BotTaskMove extends BotTask {
                 }
             } else {
                 // Если бот сдвинулся — обновляем позицию и сбрасываем таймер
-                lastPosition = bot.getNPCCurrentLocation();
+                lastPosition = bot.getRuntimeStatus().getCurrentLocation();
                 lastMoveTime = System.currentTimeMillis();
             }
 
-            if (BotNavigationUtils.hasReachedTargetFlex(bot.getNPCCurrentLocation(), targetLocation, 1.5, 1.5)) {
-                bot.resetTargetLocation();
+            if (BotNavigationUtils.hasReachedTargetFlex(bot.getRuntimeStatus().getCurrentLocation(), targetLocation, 1.5, 1.5)) {
+                
+                bot.getRuntimeStatus().setTargetLocation(null);
+
                 isDone = true;
                 BotLogger.debug(bot.getId() + " 🎯 Достиг цели! Реальная позиция: " + bot.getNPCEntity().getLocation() + " [ID: " + uuid + "]");
                 return;
@@ -108,7 +110,7 @@ public class BotTaskMove extends BotTask {
 
                         bot.getNPCNavigator().getDefaultParameters().speedModifier(speedMultiplier);
 
-                        bot.getNPCCurrentLocation().setDirection(targetLocation.toVector().subtract(bot.getNPCCurrentLocation().toVector()));
+                        bot.getRuntimeStatus().getCurrentLocation().setDirection(targetLocation.toVector().subtract(bot.getRuntimeStatus().getCurrentLocation().toVector()));
                         bot.getNPCNavigator().setTarget(targetLocation);
                     }
                 }

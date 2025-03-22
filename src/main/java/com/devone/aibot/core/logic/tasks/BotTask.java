@@ -9,6 +9,7 @@ import com.devone.aibot.core.Bot;
 import com.devone.aibot.core.logic.tasks.configs.BotTaskConfig;
 import com.devone.aibot.utils.BotLogger;
 import com.devone.aibot.utils.BotStringUtils;
+import com.devone.aibot.utils.BotUtils;
 
 import java.util.List;
 import java.util.Map;
@@ -87,7 +88,7 @@ public abstract class BotTask implements IBotTask {
     @Override
     public void update() {
         BotLogger.trace("🚦 " + bot.getId() + " " + name + " Status: " + isDone + " | " + isPaused +
-                " 📍 xyz: " + BotStringUtils.formatLocation(bot.getNPCCurrentLocation()) +
+                " 📍 xyz: " + BotStringUtils.formatLocation(bot.getRuntimeStatus().getCurrentLocation()) +
                 " 🎯 xyz: " + BotStringUtils.formatLocation(targetLocation) + " [ID: " + uuid + "]");
 
         if (isPaused) return;
@@ -179,7 +180,7 @@ public abstract class BotTask implements IBotTask {
                 if (player != null) {
                     tp.configure(player.getLocation());
                 } else {
-                    tp.configure(Bot.getFallbackLocation());
+                    tp.configure(BotUtils.getFallbackLocation());
                 }
 
                 bot.addTaskToQueue(tp);

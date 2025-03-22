@@ -11,7 +11,7 @@ public class BotTaskBreakBlockAny extends BotTaskBreakBlock {
 
         setTargetMaterials(null);
 
-        setTargetLocation(bot.getNPCCurrentLocation());
+        setTargetLocation(bot.getRuntimeStatus().getCurrentLocation());
 
     }
  

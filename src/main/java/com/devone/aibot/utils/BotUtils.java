@@ -3,8 +3,10 @@ package com.devone.aibot.utils;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.format.NamedTextColor;
 
+import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.Material;
+import org.bukkit.World;
 import org.bukkit.block.Block;
 import org.bukkit.entity.Player;
 
@@ -88,4 +90,10 @@ public class BotUtils {
             default -> false; // Всё остальное можно ломать руками
         };
     }
+    
+    public static Location getFallbackLocation() {
+        World world = Bukkit.getWorlds().get(0);
+        return world.getSpawnLocation();
+    }
+
 }
