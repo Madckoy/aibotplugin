@@ -6,20 +6,54 @@
     <title>StatusDashboard</title>
     <link rel="stylesheet" href="/assets/styles.css">
     <script src="/assets/scripts.js"></script>
+    <style>
+        .inv-bar {
+            display: grid;
+            grid-template-columns: repeat(9, 1fr); /* 9 слотов в ряд */
+            grid-auto-rows: 10px; /* Уменьшаем высоту */
+            gap: 2px; /* Меньший отступ */
+            background: #333;
+            border-radius: 5px;
+            padding: 3px;
+            width: fit-content;
+            margin: 0 auto;
+        }
+        
+        .inv-slot {
+            width: 10px; /* Уже */
+            height: 10px; /* Ниже */
+            background-color: #555;
+            border-radius: 2px;
+        }
+        
+        .inv-slot.filled {
+            background-color: #00bfff;
+        }
+        td.inventory-cell {
+            text-align: center;
+            vertical-align: top; /* 👈 Добавлено */
+            padding-top: 4px;
+            padding-bottom: 4px;
+        }
+    </style>
 </head>
 <body>
 <div class="stats">
     <h1>Monitoring</h1>
     <table id="botTable">
-        <tr>
-            <th>Name</th>
-            <th>Position</th>
-            <th>Task</th>
-            <th>Target</th>
-            <th>Objective</thth>
-            <th>Duration</th>
-            <th>Queue</th>
-        </tr>
+        <thead>
+            <tr>
+                <th style="width: 120px; min-width: 120px; padding: 6px;">📷 Name</th>
+                <th style="width: 145px; min-width: 145px; padding: 6px;">📍 Position</th>
+                <th style="width: 80px;  min-width: 80px;  padding: 6px;">✔️ Task</th>
+                <th style="width: 145px; min-width: 145px; padding: 6px;">🎯 Target</th>
+                <th style="width: auto;  min-width: 145px; padding: 6px;">🫧 Objective</th>
+                <th style="width: 140px; min-width: 140px; padding: 6px;">⌚ Duration</th>
+                <th style="width: 120px; padding: 6px;">📦 Inventory</th>
+                <th style="width: auto; padding: 6px;">ᯓ Queue</th>
+            </tr>
+        </thead>
+        <tbody></tbody>
     </table>
 </div>
 
@@ -45,40 +79,14 @@
 
             let table = document.getElementById("botTable");
 
-            // ✅ Устанавливаем фиксированную структуру таблицы
-            table.style.tableLayout = "fixed";  
-            table.style.width = "100%";  
-            table.style.borderSpacing = "0";  
-
-            // ✅ Проверяем, есть ли <thead>, если нет — создаем
-            if (!table.querySelector("thead")) {
-                table.insertAdjacentHTML("afterbegin", `
-                    <thead>
-                        <tr>
-                            <th style="width: 120px; min-width: 120px; padding: 6px;">📷 Name</th>
-                            <th style="width: 145px; min-width: 145px; padding: 6px;">📍 Position</th>
-                            <th style="width: 80px;  min-width: 80px;  padding: 6px;">✔️ Task</th>
-                            <th style="width: 145px; min-width: 145px; padding: 6px;">🎯 Target</th>
-                            <th style="width: auto;  min-width: 145px; padding: 6px;">🫧 Objective</th>
-                            <th style="width: 140px; min-width: 140px; padding: 6px;">⌚ Duration</th>
-                            <th style="width: auto; padding: 6px;">ᯓ Queue</th>
-                        </tr>
-                    </thead>
-                `);
-            }
-
-            // ✅ Очищаем только <tbody>
             let tbody = table.querySelector("tbody");
-            if (tbody) {
-                tbody.remove();
-            }
+            if (tbody) tbody.remove();
             tbody = document.createElement("tbody");
             table.appendChild(tbody);
 
-            // ✅ Добавляем всех ботов
             data.bots.forEach(bot => {
                 let row = tbody.insertRow();
-                row.style.height = "30px";  // ✅ Уменьшаем высоту строки
+                row.style.height = "30px";
 
                 let botCell = row.insertCell(0);
                 botCell.innerHTML = "<img src=" + bot.skin + " width='20' height='20' style='border-radius: 4px; margin-right: 5px;'> " + bot.id;
@@ -90,13 +98,17 @@
                 row.insertCell(4).innerText = bot.object;
                 row.insertCell(5).innerText = bot.elapsedTime;
 
-                let queueCell = row.insertCell(6);
+                let invCell = row.insertCell(6);
+                invCell.className = "inventory-cell";
+                invCell.title = `Items: ${bot.inventoryCount} / ${bot.inventoryMax}`;
+                invCell.innerHTML = generateInventoryBar(bot.inventorySlotsFilled);
+
+                let queueCell = row.insertCell(7);
                 queueCell.innerText = bot.queue;
-                //queueCell.style.width = "100%";  // ✅ Растягиваем последнюю колонку
-                queueCell.style.whiteSpace = "nowrap";  // ✅ Без переноса строк
-                queueCell.style.textAlign = "left";  // ✅ Выравнивание влево
-                queueCell.style.paddingLeft = "6px";  // ✅ Отступ слева
-                queueCell.style.padding = "6px";  // ✅ Уменьшаем padding
+                queueCell.style.whiteSpace = "nowrap";
+                queueCell.style.textAlign = "left";
+                queueCell.style.paddingLeft = "6px";
+                queueCell.style.padding = "6px";
             });
 
         } catch (error) {
@@ -104,7 +116,15 @@
         }
     }
 
-
+function generateInventoryBar(slotsFilled) {
+    const maxSlots = 36; // Теперь 4 ряда по 9
+    let html = '<div class="inv-bar">';
+    for (let i = 0; i < maxSlots; i++) {
+        html += `<div class='inv-slot ${i < slotsFilled ? "filled" : ""}'></div>`;
+    }
+    html += '</div>';
+    return html;
+}
 
     window.onload = function() {
         loadBlueMap();
