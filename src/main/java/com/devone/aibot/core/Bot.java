@@ -4,15 +4,21 @@ import java.util.List;
 
 import java.util.UUID;
 
+import org.bukkit.Bukkit;
 import org.bukkit.Location;
 
+import org.bukkit.World;
 import org.bukkit.entity.Entity;
+
+import org.bukkit.entity.Player;
 
 import com.devone.aibot.core.comms.BotCommunicator;
 import com.devone.aibot.core.logic.BotLifeCycle;
 import com.devone.aibot.core.logic.tasks.BotTaskMove;
 import com.devone.aibot.core.logic.tasks.BotTask;
 import com.devone.aibot.utils.BotLogger;
+import com.devone.aibot.utils.BotStringUtils;
+
 import net.citizensnpcs.api.ai.Navigator;
 import net.citizensnpcs.api.npc.NPC;
 
@@ -104,7 +110,19 @@ public class Bot {
         return npc.isSpawned();
     }
 
-    
+    @SuppressWarnings("unused")
+    private String getNPCDetails(NPC npc) {
+        String npc_props = npc.getName()+"|"+
+                           npc.isSpawned()+"|"+
+                           npc.getEntity()+"|"+
+                           npc.getStoredLocation()+"|"+
+                           npc.getNavigator().isNavigating()+"|"+
+                           npc.getNavigator().isPaused();
+  
+
+        return npc_props;
+
+    }
 
     public void addTaskToQueue(BotTask task) {
       getLifeCycle().getTaskStackManager().pushTask(task);

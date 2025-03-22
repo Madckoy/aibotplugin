@@ -23,7 +23,6 @@ public abstract class BotTask implements IBotTask {
     protected String name = "☑️";
     protected boolean isPaused = false;
     protected boolean isDone = false;
-    protected Location targetLocation;
     protected boolean isEnabled = true;
     protected final String uuid;
     protected Map<Location, Material> geoMap;
@@ -89,7 +88,7 @@ public abstract class BotTask implements IBotTask {
     public void update() {
         BotLogger.trace("🚦 " + bot.getId() + " " + name + " Status: " + isDone + " | " + isPaused +
                 " 📍 xyz: " + BotStringUtils.formatLocation(bot.getRuntimeStatus().getCurrentLocation()) +
-                " 🎯 xyz: " + BotStringUtils.formatLocation(targetLocation) + " [ID: " + uuid + "]");
+                " 🎯 xyz: " + BotStringUtils.formatLocation(bot.getRuntimeStatus().getTargetLocation()) + " [ID: " + uuid + "]");
 
         if (isPaused) return;
 
@@ -143,28 +142,20 @@ public abstract class BotTask implements IBotTask {
         this.name = name;
     }
 
-    public Location getTargetLocation() {
-        return targetLocation;
-    }
-
-    public void setTargetLocation(Location loc) {
-        this.targetLocation = loc;
-    }
-
     public long getElapsedTime() {
         return System.currentTimeMillis() - startTime;
     }
 
     public void handleStuck() {
-        if (targetLocation != null) {
+        if (bot.getRuntimeStatus().getTargetLocation() != null) {
             if (bot.getNPCEntity() != null) {
-                BotLogger.trace("✨ " + bot.getId() + " Застрял! Телепортируемся в " + BotStringUtils.formatLocation(targetLocation));
+                BotLogger.trace("✨ " + bot.getId() + " Застрял! Телепортируемся в " + BotStringUtils.formatLocation(bot.getRuntimeStatus().getTargetLocation()));
 
                 BotTaskTeleport tp = new BotTaskTeleport(bot, player);
                 if (player != null) {
                     tp.configure(player.getLocation());
                 } else {
-                    tp.configure(targetLocation);
+                    tp.configure(bot.getRuntimeStatus().getTargetLocation());
                 }
 
                 bot.addTaskToQueue(tp);

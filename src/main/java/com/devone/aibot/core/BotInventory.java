@@ -25,6 +25,9 @@ public class BotInventory {
     }
 
     public Inventory getNPCInventory() {
+        
+        if(this.bot.getNPCEntity()==null) {return null;}
+
         if (this.bot.getNPCEntity() instanceof InventoryHolder) {
             return ((InventoryHolder) this.bot.getNPCEntity()).getInventory();
         }

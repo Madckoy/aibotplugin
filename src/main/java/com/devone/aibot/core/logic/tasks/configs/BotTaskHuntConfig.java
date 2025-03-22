@@ -15,8 +15,8 @@ public class BotTaskHuntConfig extends BotTaskExploreConfig {
     public void generateDefaultConfig() {
         config.set("hunt.pickup_loot", true);
 
-        List<String> defaultAgressiveMobs = List.of("ZOMBIE", "SKELETON");
-        config.set("hunt.agressive_mobs", defaultAgressiveMobs);
+        List<String> defaultAggressiveMobs = List.of("ZOMBIE", "SKELETON");
+        config.set("hunt.aggressive_mobs", defaultAggressiveMobs);
 
         List<String> defaultPassiveMobs = List.of("COW", "PIG", "CHICKEN", "SHEEP");
         config.set("hunt.passive_mobs", defaultPassiveMobs);
@@ -28,8 +28,8 @@ public class BotTaskHuntConfig extends BotTaskExploreConfig {
         return config.getBoolean("hunt.pickup_loot", true);
     }
 
-    public Set<EntityType> getTargetAgressiveMobs() {
-        List<String> mobNames = getConfig().getStringList("hunt.agressive_mobs");
+    public Set<EntityType> getTargetAggressiveMobs() {
+        List<String> mobNames = getConfig().getStringList("hunt.aggressive_mobs");
         Set<EntityType> targetMobs = new HashSet<>();
 
         for (String name : mobNames) {

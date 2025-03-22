@@ -1,5 +1,7 @@
 package com.devone.aibot.core.logic.tasks;
 
+import org.bukkit.Location;
+
 import com.devone.aibot.core.Bot;
 import com.devone.aibot.core.logic.tasks.configs.BotTaskExploreConfig;
 import com.devone.aibot.utils.BotLogger;
@@ -32,9 +34,9 @@ public class BotTaskExplore extends BotTask {
             return;
         }  
     
-        targetLocation = BotGeo3DScan.getRandomEdgeBlock(getEnvMap()); 
+        bot.getRuntimeStatus().setTargetLocation( BotGeo3DScan.getRandomEdgeBlock(getEnvMap())); 
 
-        if (targetLocation == null) {
+        if (bot.getRuntimeStatus().getTargetLocation() == null) {
             BotLogger.debug("🗺️ " + bot.getId() + " Has finished exploration." +  " [ID: " + uuid + "]");
             isDone = true; // ✅ Теперь `PATROL` корректно завершает себя
             setEnvMap(null);// reset env map to force rescan
@@ -51,15 +53,15 @@ public class BotTaskExplore extends BotTask {
 
         if (rand < 0.4) {
             // 📌 30% шанс выйти из патрулирования
-            BotLogger.debug("🗺️ " + bot.getId() + " Moving out of exploration: " + BotStringUtils.formatLocation(targetLocation) + " [Task ID: " + uuid + "]");
-            targetLocation = null;
+            BotLogger.debug("🗺️ " + bot.getId() + " Moving out of exploration: " + BotStringUtils.formatLocation(bot.getRuntimeStatus().getTargetLocation()) + " [Task ID: " + uuid + "]");
+            bot.getRuntimeStatus().setTargetLocation(null);
             isDone = true;
 
         } else {
-            BotLogger.debug("🗺️ " + bot.getId() + " Moving to exploration point: " + BotStringUtils.formatLocation(targetLocation) + " [Task ID: " + uuid + "]");
+            BotLogger.debug("🗺️ " + bot.getId() + " Moving to exploration point: " + BotStringUtils.formatLocation(bot.getRuntimeStatus().getTargetLocation()) + " [Task ID: " + uuid + "]");
 
-            BotNavigationUtils.navigateTo(bot, targetLocation); // via a new MoVeTask()
-            
+            BotNavigationUtils.navigateTo(bot, bot.getRuntimeStatus().getTargetLocation()); // via a new MoVeTask()
+
             isDone = false;
         }
 

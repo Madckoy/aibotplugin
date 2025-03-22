@@ -16,9 +16,9 @@ public class BotTaskDropAll extends BotTaskPlayerLinked {
         
         BotTaskDropAllConfig config = new BotTaskDropAllConfig();
 
-        targetLocation = new Location (Bukkit.getWorlds().get(0), config.getX(),
+        bot.getRuntimeStatus().setTargetLocation(new Location (Bukkit.getWorlds().get(0), config.getX(),
                                                                   config.getY(), 
-                                                                  config.getZ());
+                                                                  config.getZ()));
 
         setObjective("Droping off the loot");
 

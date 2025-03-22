@@ -31,7 +31,7 @@ public class BotTaskUseHand extends BotTask {
         boolean hasParams = false;
 
         if (params.length > 0 && params[0] instanceof Location loc) {
-            this.targetLocation = loc;
+            bot.getRuntimeStatus().setTargetLocation(loc);
             hasParams = true;
         }
 
@@ -55,7 +55,7 @@ public class BotTaskUseHand extends BotTask {
 
     @Override
     public void executeTask() {
-        if (targetLocation == null && target == null) {
+        if (bot.getRuntimeStatus().getTargetLocation() == null && target == null) {
             BotLogger.error(bot.getId() + " ❌ Нет цели или координат для удара");
             isDone = true;
             return;
@@ -68,7 +68,7 @@ public class BotTaskUseHand extends BotTask {
             return;
         }
     
-        Location faceTarget = (target != null) ? target.getLocation() : targetLocation;
+        Location faceTarget = (target != null) ? target.getLocation() : bot.getRuntimeStatus().getTargetLocation();
         setObjective("Target hit by hand: " + BotStringUtils.formatLocation(faceTarget)+" "+BotUtils.getBlockName(faceTarget.getBlock()));
     
         turnToBlock(faceTarget);
@@ -79,13 +79,13 @@ public class BotTaskUseHand extends BotTask {
             if (target != null && !target.isDead()) {
                 target.damage(damage);
                 BotLogger.debug(bot.getId() + " 👊 Нанесён урон существу: " + target.getName());
-            } else if (targetLocation != null && targetLocation.getBlock().getType() != Material.AIR) {
+            } else if (bot.getRuntimeStatus().getTargetLocation() != null && bot.getRuntimeStatus().getTargetLocation().getBlock().getType() != Material.AIR) {
                 // ✅ Добавляем эффект разрушения перед ломанием блока
-                BotUtils.playBlockBreakEffect(targetLocation);
+                BotUtils.playBlockBreakEffect(bot.getRuntimeStatus().getTargetLocation());
     
-                targetLocation.getBlock().breakNaturally();
+                bot.getRuntimeStatus().getTargetLocation().getBlock().breakNaturally();
 
-                BotLogger.debug(bot.getId() + " ✅ Блок разрушен на " + BotStringUtils.formatLocation(targetLocation));
+                BotLogger.debug(bot.getId() + " ✅ Блок разрушен на " + BotStringUtils.formatLocation(bot.getRuntimeStatus().getTargetLocation()));
             } else {
                 BotLogger.warn(bot.getId() + " ⚠️ Нечего разрушать");
             }

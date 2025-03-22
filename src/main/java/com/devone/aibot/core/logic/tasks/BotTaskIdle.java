@@ -49,7 +49,7 @@ public class BotTaskIdle extends BotTask {
             drop_task.setPaused(true);
             bot.addTaskToQueue(drop_task);
             
-            Location drop_off_loc = drop_task.getTargetLocation();
+            Location drop_off_loc = bot.getRuntimeStatus().getTargetLocation();
             
             // Перемещение к точке сброса
             BotTaskMove moveTask = new BotTaskMove(bot);
@@ -80,7 +80,7 @@ public class BotTaskIdle extends BotTask {
            
             BotTaskHuntMobs hunt_task = new BotTaskHuntMobs(bot);
             //BotTaskHuntMobs config  = hunt_task.getConfig();
-            Set<EntityType> a_targets = ((BotTaskHuntConfig) hunt_task.getConfig()).getTargetAgressiveMobs();
+            Set<EntityType> a_targets = ((BotTaskHuntConfig) hunt_task.getConfig()).getTargetAggressiveMobs();
             Set<EntityType> p_targets = ((BotTaskHuntConfig) hunt_task.getConfig()).getTargetPassiveMobs();
             Set<EntityType> targets = isNight ? a_targets : p_targets;
             

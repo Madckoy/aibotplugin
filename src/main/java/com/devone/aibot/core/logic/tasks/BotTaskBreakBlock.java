@@ -1,16 +1,21 @@
 package com.devone.aibot.core.logic.tasks;
 
+import com.devone.aibot.core.Bot;
 import com.devone.aibot.core.BotInventory;
-import java.util.*;
-
+import com.devone.aibot.core.BotZoneManager;
+import com.devone.aibot.core.logic.patterns.BotBreakLayeredCubePattern;
+import com.devone.aibot.core.logic.patterns.BotBreakSpiral3DPatternDown;
+import com.devone.aibot.core.logic.patterns.BotBreakSpiralStairDownPattern;
+import com.devone.aibot.core.logic.patterns.BotBreakSpiralStairDownPatternWithParams;
+import com.devone.aibot.core.logic.patterns.IBotBreakPattern;
+import com.devone.aibot.core.logic.tasks.configs.BotTaskBreakBlockConfig;
+import com.devone.aibot.utils.BotLogger;
 import com.devone.aibot.utils.BotStringUtils;
 import com.devone.aibot.utils.BotUtils;
 import org.bukkit.Location;
 import org.bukkit.Material;
-import com.devone.aibot.core.Bot;
-import com.devone.aibot.core.BotZoneManager;
-import com.devone.aibot.core.logic.tasks.configs.BotTaskBreakBlockConfig;
-import com.devone.aibot.utils.BotLogger;
+
+import java.util.*;
 
 public class BotTaskBreakBlock extends BotTask {
 
@@ -19,7 +24,7 @@ public class BotTaskBreakBlock extends BotTask {
     private boolean shouldPickup = true;
     private boolean destroyAllIfNoTarget = false;
     private Set<Material> targetMaterials = null;
-    private Location targetLocation;
+    private IBotBreakPattern breakPattern;
 
     public BotTaskBreakBlock(Bot bot) {
         super(bot, "⛏️");
@@ -46,6 +51,16 @@ public class BotTaskBreakBlock extends BotTask {
         if (params.length >= 5 && params[4] instanceof Boolean) {
             this.destroyAllIfNoTarget = (Boolean) params[4];
         }
+
+        int patternRadius = (this.searchRadius > 0) ? this.searchRadius : 5;
+
+
+        //this.breakPattern = new BotBreakSpiral3DPatternDown(patternRadius);
+        //this.breakPattern = new BotBreakLayeredCubePattern(patternRadius);
+
+        //this.breakPattern = new BotBreakSpiralStairDownPattern(patternRadius);
+        this.breakPattern = new BotBreakSpiralStairDownPatternWithParams(patternRadius, true);
+        
         bot.setAutoPickupEnabled(shouldPickup);
         BotLogger.debug("⚙️ BotTaskBreakBlock настроена: " + (targetMaterials == null ? "ВСЕ БЛОКИ" : targetMaterials));
         return this;
@@ -68,6 +83,7 @@ public class BotTaskBreakBlock extends BotTask {
         if (isInventoryFull() || isEnoughBlocksCollected()) {
             BotLogger.trace("⛔ Задача завершена: инвентарь полон или ресурсов достаточно");
             isDone = true;
+            bot.getRuntimeStatus().setTargetLocation(null);
             return;
         }
 
@@ -80,20 +96,19 @@ public class BotTaskBreakBlock extends BotTask {
             return;
         }
 
-        targetLocation = findNextTargetBlock();
+        Location targetLocation = breakPattern.findNextBlock(bot, getGeoMap(), targetMaterials);
+        bot.getRuntimeStatus().setTargetLocation(targetLocation);
 
         if (targetLocation != null) {
-
             if (isInProtectedZone(targetLocation)) {
                 BotLogger.debug("⛔ " + bot.getId() + " в запретной зоне, НЕ будет разрушать блок: " + BotStringUtils.formatLocation(targetLocation));
                 isDone = true;
+                bot.getRuntimeStatus().setTargetLocation(null);
                 return;
             }
 
             BotLogger.trace("🛠️ Целевой блок найден: " + BotStringUtils.formatLocation(targetLocation));
-
             setObjective("Разрушение блока: " + BotUtils.getBlockName(targetLocation.getBlock()));
-
             BotLogger.trace("🚧 " + bot.getId() + " Разрушение блока: " + targetLocation.getBlock().toString());
 
             BotTaskUseHand hand_task = new BotTaskUseHand(bot);
@@ -105,50 +120,9 @@ public class BotTaskBreakBlock extends BotTask {
         }
     }
 
-    private Location findNextTargetBlock() {
-        Location botLoc = bot.getRuntimeStatus().getCurrentLocation();
-        int botY = botLoc.getBlockY();
-        
-        List<Location> sortedTargets = getGeoMap().keySet().stream()
-            .filter(loc -> loc.getBlockY() >= botY - 1 && loc.getBlockY() <= botY + 1) // Только ±1 уровень
-            .filter(loc -> isBlockExposed(loc) && isValidTargetBlock(loc.getBlock().getType()))
-            .sorted(Comparator.comparingDouble(loc -> loc.distance(botLoc))) // Копаем от центра к краям
-            .toList();
-    
-        for (Location candidate : sortedTargets) {
-            Material blockType = candidate.getBlock().getType();
-    
-            // Проверяем, не висит ли блок в воздухе
-            if (gravityCheck(candidate)) continue;
-    
-            // Проверяем, есть ли нужный инструмент
-            if (BotUtils.requiresTool(blockType) && !BotInventory.hasToolFor(bot, blockType)) {
-                getGeoMap().remove(candidate);
-                BotUtils.sendMessageToPlayer(null, bot.getId(), "I need a proper tool to break " + blockType + "!");
-                return null;
-            }
-    
-            getGeoMap().remove(candidate); // Удаляем из списка сканирования
-    
-            // 🚀 Теперь БЕЗ случайных отклонений, копаем строго по слоям!
-            return candidate;
-        }
-    
-        return null;
-    }
-    
-
-    private boolean isValidTargetBlock(Material blockType) {
-        return blockType != Material.AIR && blockType != Material.WATER && blockType != Material.LAVA &&
-               (targetMaterials == null || targetMaterials.contains(blockType));
-    }
-
-    private boolean gravityCheck(Location loc) {
-        Location above = loc.clone().add(0, 1, 0);
-        return above.getBlock().getType() == Material.AIR;
-    }
-
     private void handleNoTargetFound() {
+        bot.getRuntimeStatus().setTargetLocation(null);
+
         if (destroyAllIfNoTarget) {
             BotLogger.trace("🔄 " + bot.getId() + " Целевых блоков нет! Запускаем полное разрушение.");
             bot.addTaskToQueue(new BotTaskBreakBlockAny(bot));
@@ -178,23 +152,5 @@ public class BotTaskBreakBlock extends BotTask {
             BotLogger.trace("🛑 Блок в запретной зоне, разрушение запрещено.");
         }
         return protectedZone;
-    }
-
-    private boolean isBlockExposed(Location loc) {
-        for (int dx = -1; dx <= 1; dx++) {
-            for (int dy = -1; dy <= 1; dy++) {
-                for (int dz = -1; dz <= 1; dz++) {
-                    if (dx == 0 && dy == 0 && dz == 0) continue;
-
-                    Location neighbor = loc.clone().add(dx, dy, dz);
-                    Material type = neighbor.getBlock().getType();
-
-                    if (type == Material.AIR || type == Material.WATER || type == Material.LAVA) {
-                        return true;
-                    }
-                }
-            }
-        }
-        return false;
     }
 }

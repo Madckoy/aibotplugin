@@ -190,7 +190,7 @@ public class BotWebService {
                     // ✅ Добавляем новую колонку "object" (моб, блок, игрок или "—")
                     botJson.addProperty("object", getCurrentObjective(bot));
                     // ✅ Возвращаем старую колонку "target" (координаты цели)
-                    Location tg_loc = bot.getCurrentTask().getTargetLocation();
+                    Location tg_loc = bot.getRuntimeStatus().getTargetLocation();
                     String targetLoc = BotStringUtils.formatLocation(tg_loc);
                     botJson.addProperty("target", targetLoc);
                     botJson.addProperty("elapsedTime", BotStringUtils.formatTime(bot.getCurrentTask().getElapsedTime()));

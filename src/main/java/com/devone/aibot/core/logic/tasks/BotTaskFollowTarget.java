@@ -28,7 +28,7 @@ public class BotTaskFollowTarget extends BotTask {
     public BotTaskFollowTarget(Bot bot, LivingEntity target) {
         super(bot, "🎯");
         this.target = target;
-        this.targetLocation = target.getLocation();   
+        bot.getRuntimeStatus().setTargetLocation(target.getLocation());   
         this.lastKnownLocation = target.getLocation();
     }
 
