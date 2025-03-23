@@ -30,7 +30,7 @@ public class BotTaskSonar3D extends BotTask {
         this.height = height;
         this.scanMode = BotGeo3DScan.ScanMode.FULL;
 
-        setObjective("Scanning Geo - Signatures...");
+        setObjective("Scanning Geo Signatures");
     }
 
     // Метод конфигурации для установки ScanMode
@@ -49,6 +49,9 @@ public class BotTaskSonar3D extends BotTask {
 
     @Override
     public void executeTask() {
+
+        setObjective("Scanning Geo Signatures");
+        
         if (parent instanceof BotTaskExplore || parent instanceof BotTaskBreakBlock) {
             Map<Location, Material> geo = BotGeo3DScan.scan3D(bot, radius, height, scanMode);
             parent.setGeoMap(geo);

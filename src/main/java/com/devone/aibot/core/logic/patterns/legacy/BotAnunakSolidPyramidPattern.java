@@ -1,11 +1,12 @@
-package com.devone.aibot.core.logic.patterns.destruction;
+package com.devone.aibot.core.logic.patterns.legacy;
 
 import com.devone.aibot.core.Bot;
+
 import org.bukkit.Location;
 
 import java.util.Map;
 
-public class BotBreakInversePyramidPattern extends AbstractBotBreakPattern {
+public class BotAnunakSolidPyramidPattern extends BotBreakAbstractPattern {
 
     @Override
     public Location findNextBlock(Bot bot, Map<Location, ?> geoMap) {
@@ -23,24 +24,23 @@ public class BotBreakInversePyramidPattern extends AbstractBotBreakPattern {
         int centerY = center.getBlockY();
         int centerZ = center.getBlockZ();
 
-        int y = centerY;
+        int fullSize = radius * 2 + 1;
 
-        for (int r = radius; r >= 0; r--) {
-            int minX = centerX - r;
-            int maxX = centerX + r;
-            int minZ = centerZ - r;
-            int maxZ = centerZ + r;
+        for (int y = centerY - radius; y <= centerY; y++) {
+            int layer = centerY - y;
+            int pyramidHalf = layer;
 
-            for (int x = minX; x <= maxX; x++) {
-                for (int z = minZ; z <= maxZ; z++) {
-                    // Исключаем центральную колонну
-                    if (x == centerX && z == centerZ) continue;
+            for (int x = centerX - radius; x <= centerX + radius; x++) {
+                for (int z = centerZ - radius; z <= centerZ + radius; z++) {
+
+                    // Пропускаем блоки, находящиеся внутри объема пирамиды
+                    if (Math.abs(x - centerX) <= pyramidHalf && Math.abs(z - centerZ) <= pyramidHalf) {
+                        continue;
+                    }
 
                     blocksToBreak.add(new Location(center.getWorld(), x, y, z));
                 }
             }
-
-            y--; // следующий уровень вниз
         }
     }
 
@@ -51,6 +51,6 @@ public class BotBreakInversePyramidPattern extends AbstractBotBreakPattern {
 
     @Override
     public String getName() {
-        return "InversePyramidPattern";
+        return "BotAnunakSolidPyramidPattern";
     }
 }

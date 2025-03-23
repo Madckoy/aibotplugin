@@ -1,12 +1,13 @@
-package com.devone.aibot.core.logic.patterns.destruction;
+package com.devone.aibot.core.logic.patterns.legacy;
 
 import com.devone.aibot.core.Bot;
+
 import org.bukkit.Location;
 
 import java.util.*;
 import java.util.stream.Collectors;
 
-public class BotBreakLayeredCubePattern extends AbstractBotBreakPattern {
+public class BotBreakLayeredCubePattern extends BotBreakAbstractPattern {
 
     @Override
     public Location findNextBlock(Bot bot, Map<Location, ?> geoMap) {

@@ -4,8 +4,6 @@ import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.World;
-import org.bukkit.util.Vector;
-
 import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
@@ -23,13 +21,12 @@ public class BotGeo3DScan {
         DOWNWARD,
         UPWARD,
         HORIZONTAL_SLICE,
-        FORWARD_HEMISPHERE,
-        VERTICAL_SLICE,
-        VERTICAL_SLICE_LOOK
+        VERTICAL_SLICE
     }
 
     @SuppressWarnings("unchecked")
     public static Map<Location, Material> scan3D(Bot bot, int scanRadius, int height, ScanMode scanMode) {
+
         World world = Bukkit.getWorlds().get(0);
 
         int centerX = bot.getRuntimeStatus().getCurrentLocation().getBlockX();
@@ -42,30 +39,19 @@ public class BotGeo3DScan {
         Map<Location, Material> scannedBlocks = new HashMap<>();
         JSONArray blockArray = new JSONArray();
 
-        Vector direction = bot.getPlayer().getLocation().getDirection().normalize();
-        boolean verticalLook = (scanMode == ScanMode.VERTICAL_SLICE_LOOK);
-
         for (int y = maxY; y >= minY; y--) {
-            if (scanMode == ScanMode.DOWNWARD && y > centerY) continue;
-            if (scanMode == ScanMode.UPWARD && y < centerY) continue;
+            if (scanMode == ScanMode.DOWNWARD && y > centerY)
+                continue;
+            if (scanMode == ScanMode.UPWARD && y < centerY)
+                continue;
 
             for (int x = -scanRadius; x <= scanRadius; x++) {
                 for (int z = -scanRadius; z <= scanRadius; z++) {
 
-                    if (scanMode == ScanMode.HORIZONTAL_SLICE && y != centerY) continue;
-                    if (scanMode == ScanMode.VERTICAL_SLICE && x != 0) continue;
-                    if (verticalLook) {
-                        double angle = Math.abs(direction.angle(new Vector(1, 0, 0)) - Math.PI / 2);
-                        boolean lookAlongZ = angle < (Math.PI / 4);
-                        if (lookAlongZ && x != 0) continue;
-                        if (!lookAlongZ && z != 0) continue;
-                    }
-
-                    if (scanMode == ScanMode.FORWARD_HEMISPHERE) {
-                        Vector toBlock = new Vector(x, y - centerY, z).normalize();
-                        double dot = direction.dot(toBlock);
-                        if (dot < 0) continue;
-                    }
+                    if (scanMode == ScanMode.HORIZONTAL_SLICE && y != centerY)
+                        continue;
+                    if (scanMode == ScanMode.VERTICAL_SLICE && x != 0)
+                        continue;
 
                     Location loc = new Location(world, centerX + x, y, centerZ + z);
                     Material material = world.getBlockAt(loc).getType();
@@ -127,14 +113,17 @@ public class BotGeo3DScan {
             boolean isEdge = false;
             for (int dx = -1; dx <= 1; dx++) {
                 for (int dz = -1; dz <= 1; dz++) {
-                    if (dx == 0 && dz == 0) continue;
-                    Location neighborLoc = new Location(loc.getWorld(), loc.getBlockX() + dx, loc.getBlockY(), loc.getBlockZ() + dz);
+                    if (dx == 0 && dz == 0)
+                        continue;
+                    Location neighborLoc = new Location(loc.getWorld(), loc.getBlockX() + dx, loc.getBlockY(),
+                            loc.getBlockZ() + dz);
                     if (!scannedBlocks.containsKey(neighborLoc)) {
                         isEdge = true;
                         break;
                     }
                 }
-                if (isEdge) break;
+                if (isEdge)
+                    break;
             }
             if (isEdge) {
                 JSONObject blockData = new JSONObject();
@@ -154,22 +143,28 @@ public class BotGeo3DScan {
             boolean isEdge = false;
             for (int dx = -1; dx <= 1; dx++) {
                 for (int dz = -1; dz <= 1; dz++) {
-                    if (dx == 0 && dz == 0) continue;
-                    Location neighborLoc = new Location(loc.getWorld(), loc.getBlockX() + dx, loc.getBlockY(), loc.getBlockZ() + dz);
+                    if (dx == 0 && dz == 0)
+                        continue;
+                    Location neighborLoc = new Location(loc.getWorld(), loc.getBlockX() + dx, loc.getBlockY(),
+                            loc.getBlockZ() + dz);
                     if (!scannedBlocks.containsKey(neighborLoc)) {
                         isEdge = true;
                         break;
                     }
                 }
-                if (isEdge) break;
+                if (isEdge)
+                    break;
             }
-            if (isEdge) edgeLocations.add(loc);
+            if (isEdge)
+                edgeLocations.add(loc);
         }
-        if (edgeLocations.isEmpty()) return null;
+        if (edgeLocations.isEmpty())
+            return null;
         return edgeLocations.get(new Random().nextInt(edgeLocations.size()));
     }
 
-    public static Location getRandomNearbyDestructibleBlock(Map<Location, Material> scannedBlocks, Location botLocation) {
+    public static Location getRandomNearbyDestructibleBlock(Map<Location, Material> scannedBlocks,
+            Location botLocation) {
         Random random = new Random();
         double minDistance = Double.MAX_VALUE;
         List<Location> closestBlocks = new ArrayList<>();
@@ -180,7 +175,8 @@ public class BotGeo3DScan {
 
         for (Location loc : scannedBlocks.keySet()) {
             Material material = scannedBlocks.get(loc);
-            if (material == Material.AIR) continue;
+            if (material == Material.AIR)
+                continue;
 
             int x = loc.getBlockX();
             int y = loc.getBlockY();
@@ -199,7 +195,8 @@ public class BotGeo3DScan {
             }
         }
 
-        if (closestBlocks.isEmpty()) return null;
+        if (closestBlocks.isEmpty())
+            return null;
         return closestBlocks.get(random.nextInt(closestBlocks.size()));
     }
 }

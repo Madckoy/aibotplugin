@@ -10,7 +10,6 @@ import com.devone.aibot.utils.BotStringUtils;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.configuration.file.YamlConfiguration;
 
-
 import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
 import org.bukkit.Location;
@@ -40,7 +39,6 @@ public class BotWebService {
     public static final String SERVER_HOST;
     private static final String MAP_HOST;
 
-
     static {
         File configFile = new File(CONFIG_PATH);
         FileConfiguration config = YamlConfiguration.loadConfiguration(configFile);
@@ -58,7 +56,7 @@ public class BotWebService {
         context.addServlet(new ServletHolder(new MainPageServlet()), "/");
         context.addServlet(new ServletHolder(new BotStatusServlet(botManager)), "/status");
         context.addServlet(new ServletHolder(new SkinServlet()), "/skins/*");
-        context.addServlet(new ServletHolder(new StaticFileServlet()),"/assets/*");
+        context.addServlet(new ServletHolder(new StaticFileServlet()), "/assets/*");
 
         copyResourceFiles();
     }
@@ -71,12 +69,12 @@ public class BotWebService {
         return MAP_HOST;
     }
 
-/**
+    /**
      * ✅ Метод копирования ресурсов (CSS и JS) в plugins/AIBotPlugin/web/assets/
      */
     private void copyResourceFiles() {
-        String[] resourceFiles = {"web/assets/styles.css", "web/assets/scripts.js"};
-        for (String resource : resourceFiles) {
+        String[] resourceFilesWeb = { "web/assets/styles.css", "web/assets/scripts.js" };
+        for (String resource : resourceFilesWeb) {
             try (InputStream in = getClass().getClassLoader().getResourceAsStream(resource)) {
                 if (in == null) {
                     BotLogger.error("❌ Resource not found: " + resource);
@@ -90,6 +88,31 @@ public class BotWebService {
                 BotLogger.error("❌ Failed to copy " + resource + ": " + e.getMessage());
             }
         }
+
+        String[] resourceFilesPatterns = { 
+                "patterns/break/default.yml",
+                "patterns/break/cube.yml",
+                "patterns/break/untested-cube.yml",
+                "patterns/break/untested_pyramid.yml" };
+
+        for (String resource : resourceFilesPatterns) {
+            try (InputStream in = getClass().getClassLoader().getResourceAsStream(resource)) {
+                if (in == null) {
+                    BotLogger.error("❌ Resource not found: " + resource);
+                    continue;
+                }
+
+                String relativePath = resource.substring(BotConstants.RESOURCE_PATH_PATTERNS_BREAK.length());
+                File targetFile = new File(BotConstants.PLUGIN_PATH_PATTERNS_BREAK, relativePath);
+
+                targetFile.getParentFile().mkdirs();
+                Files.copy(in, targetFile.toPath(), StandardCopyOption.REPLACE_EXISTING);
+                BotLogger.info("✅ Copied: " + resource + " → " + targetFile.getPath());
+            } catch (IOException e) {
+                BotLogger.error("❌ Failed to copy " + resource + ": " + e.getMessage());
+            }
+        }
+
     }
 
     public void start() throws Exception {
@@ -100,11 +123,10 @@ public class BotWebService {
         server.stop();
     }
 
-
     private static class StaticFileServlet extends HttpServlet {
 
         private static final String ASSETS_PATH = BotConstants.PLUGIN_PATH + "/web/assets/";
-    
+
         @Override
         protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
             String path = req.getPathInfo();
@@ -112,19 +134,19 @@ public class BotWebService {
                 resp.sendError(HttpServletResponse.SC_BAD_REQUEST, "Invalid asset request");
                 return;
             }
-    
+
             File assetFile = new File(ASSETS_PATH + path.substring(1));
             if (!assetFile.exists()) {
                 resp.sendError(HttpServletResponse.SC_NOT_FOUND, "File not found");
                 return;
             }
-    
+
             if (path.endsWith(".css")) {
                 resp.setContentType("text/css");
             } else if (path.endsWith(".js")) {
                 resp.setContentType("application/javascript");
             }
-    
+
             try (OutputStream os = resp.getOutputStream()) {
                 Files.copy(assetFile.toPath(), os);
             } catch (IOException e) {
@@ -166,7 +188,6 @@ public class BotWebService {
         public BotStatusServlet(BotManager botManager) {
             this.botManager = botManager;
         }
-    
 
         @Override
         protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
@@ -193,13 +214,14 @@ public class BotWebService {
                     Location tg_loc = bot.getRuntimeStatus().getTargetLocation();
                     String targetLoc = BotStringUtils.formatLocation(tg_loc);
                     botJson.addProperty("target", targetLoc);
-                    botJson.addProperty("elapsedTime", BotStringUtils.formatTime(bot.getCurrentTask().getElapsedTime()));
+                    botJson.addProperty("elapsedTime",
+                            BotStringUtils.formatTime(bot.getCurrentTask().getElapsedTime()));
 
                     // Получаем TaskStack (очередь задач)
                     List<BotTask> taskStack = (bot.getLifeCycle() != null
                             && bot.getLifeCycle().getTaskStackManager() != null)
-                            ? new ArrayList<>(bot.getLifeCycle().getTaskStackManager().getTaskStack())
-                            : new ArrayList<>();
+                                    ? new ArrayList<>(bot.getLifeCycle().getTaskStackManager().getTaskStack())
+                                    : new ArrayList<>();
 
                     String taskStackText = taskStack.isEmpty() ? "N/A"
                             : taskStack.stream().map(BotTask::getName).collect(Collectors.joining(" ➠ "));
@@ -215,11 +237,13 @@ public class BotWebService {
     }
 
     /**
-     * ✅ Получает текущий объект, с которым взаимодействует бот (моб, блок, игрок или отсутствует)
+     * ✅ Получает текущий объект, с которым взаимодействует бот (моб, блок, игрок
+     * или отсутствует)
      */
     private static String getCurrentObjective(Bot bot) {
         BotTask currentTask = bot.getCurrentTask();
-        if (currentTask == null) return "";
+        if (currentTask == null)
+            return "";
 
         return currentTask.getObjective();
 

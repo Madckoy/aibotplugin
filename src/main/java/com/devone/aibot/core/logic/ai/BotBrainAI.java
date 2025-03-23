@@ -5,10 +5,6 @@ import com.devone.aibot.core.logic.tasks.*;
 import com.devone.aibot.core.logic.tasks.destruction.BotTaskBreakBlock;
 import com.devone.aibot.utils.BotLogger;
 
-import java.io.*;
-import java.net.HttpURLConnection;
-import java.net.URL;
-
 public class BotBrainAI {
 
     private static final String AI_SERVER_URL = "http://localhost:5000/decide";
@@ -30,27 +26,6 @@ public class BotBrainAI {
 
         } catch (Exception e) {
             BotLogger.error("❌ Ошибка в BotBrainAI: " + e.getMessage());
-        }
-    }
-
-    private static String sendRequest(String json) throws IOException {
-        URL url = new URL(AI_SERVER_URL);
-        HttpURLConnection conn = (HttpURLConnection) url.openConnection();
-        conn.setRequestMethod("POST");
-        conn.setRequestProperty("Content-Type", "application/json");
-        conn.setDoOutput(true);
-
-        try (OutputStream os = conn.getOutputStream()) {
-            os.write(json.getBytes());
-        }
-
-        try (BufferedReader br = new BufferedReader(new InputStreamReader(conn.getInputStream()))) {
-            StringBuilder response = new StringBuilder();
-            String line;
-            while ((line = br.readLine()) != null) {
-                response.append(line);
-            }
-            return response.toString();
         }
     }
 

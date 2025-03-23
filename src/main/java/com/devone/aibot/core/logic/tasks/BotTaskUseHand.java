@@ -69,7 +69,8 @@ public class BotTaskUseHand extends BotTask {
         }
     
         Location faceTarget = (target != null) ? target.getLocation() : bot.getRuntimeStatus().getTargetLocation();
-        setObjective("Target hit by hand: " + BotStringUtils.formatLocation(faceTarget)+" "+BotUtils.getBlockName(faceTarget.getBlock()));
+
+        setObjective("I'm hitting the : " + BotStringUtils.formatLocation(faceTarget)+" "+BotUtils.getBlockName(faceTarget.getBlock()));
     
         turnToBlock(faceTarget);
     

@@ -1,4 +1,4 @@
-package com.devone.aibot.core.logic.patterns.destruction;
+package com.devone.aibot.core.logic.patterns.legacy;
 
 import com.devone.aibot.core.Bot;
 import org.bukkit.Location;
@@ -11,7 +11,7 @@ import java.util.Queue;
  * Абстрактная реализация базового паттерна разрушения,
  * предоставляющая базовую реализацию конфигурации.
  */
-public abstract class AbstractBotBreakPattern implements IBotBreakPattern {
+public abstract class BotBreakAbstractPattern implements IBotBreakPattern {
 
     public boolean initialized = false;
 

@@ -1,0 +1,10 @@
+# plugins/AIBotPlugin/patterns/break/default.yml
+
+filters:
+  - "abs(x - cx) <= r"
+  - "abs(y - cy) <= r"
+  - "abs(z - cz) <= r"
+
+sort:
+  - "-(y - cy)"           # сверху вниз
+  - "abs(x - cx) + abs(z - cz)"  # от центра к краям
