@@ -7,7 +7,6 @@ import java.io.File;
 
 import java.io.IOException;
 import java.net.URL;
-import java.util.Random;
 import java.util.UUID;
 
 import javax.imageio.ImageIO;

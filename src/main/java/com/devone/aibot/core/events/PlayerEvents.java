@@ -1,6 +1,7 @@
 package com.devone.aibot.core.events;
 
 import com.devone.aibot.core.BotManager;
+import com.devone.aibot.core.comms.BotCommunicator;
 import com.devone.aibot.utils.BotUtils;
 
 import org.bukkit.entity.Player;
@@ -33,7 +34,7 @@ public class PlayerEvents implements Listener {
     public void onPlayerJoin(PlayerJoinEvent event) {
         Player player = event.getPlayer();
 
-		BotUtils.sendMessageToPlayer(player, null, "Добро пожаловать, " + player.getName() + "!");
+		BotCommunicator.sendMessageToPlayer(player, null, "Добро пожаловать, " + player.getName() + "!");
     
         // Можно добавить восстановление состояния, если нужно
 		// ...

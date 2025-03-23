@@ -7,8 +7,10 @@ import org.bukkit.entity.Player;
 
 import com.devone.aibot.core.Bot;
 import com.devone.aibot.core.logic.tasks.configs.BotTaskConfig;
+import com.devone.aibot.utils.BotGeo3DScan.ScanMode;
 import com.devone.aibot.utils.BotLogger;
 import com.devone.aibot.utils.BotStringUtils;
+import com.devone.aibot.utils.BotUtils;
 
 import java.util.List;
 import java.util.Map;
@@ -22,12 +24,12 @@ public abstract class BotTask implements IBotTask {
     protected String name = "☑️";
     protected boolean isPaused = false;
     protected boolean isDone = false;
-    protected Location targetLocation;
     protected boolean isEnabled = true;
     protected final String uuid;
     protected Map<Location, Material> geoMap;
     protected List<LivingEntity> bioEntities;
     protected String objective;
+    protected ScanMode scanMode = com.devone.aibot.utils.BotGeo3DScan.ScanMode.FULL;
 
     protected BotTaskConfig config;
 
@@ -49,6 +51,10 @@ public abstract class BotTask implements IBotTask {
         this.player = player;
         this.name = name;
         this.uuid = UUID.randomUUID().toString();
+    }
+
+    public void setScanMode(ScanMode scm) {
+        this.scanMode = scm;
     }
 
     public void setEnvMap(Map<Location, Material> env_map) {
@@ -87,8 +93,8 @@ public abstract class BotTask implements IBotTask {
     @Override
     public void update() {
         BotLogger.trace("🚦 " + bot.getId() + " " + name + " Status: " + isDone + " | " + isPaused +
-                " 📍 xyz: " + BotStringUtils.formatLocation(bot.getNPCCurrentLocation()) +
-                " 🎯 xyz: " + BotStringUtils.formatLocation(targetLocation) + " [ID: " + uuid + "]");
+                " 📍 xyz: " + BotStringUtils.formatLocation(bot.getRuntimeStatus().getCurrentLocation()) +
+                " 🎯 xyz: " + BotStringUtils.formatLocation(bot.getRuntimeStatus().getTargetLocation()) + " [ID: " + uuid + "]");
 
         if (isPaused) return;
 
@@ -142,28 +148,20 @@ public abstract class BotTask implements IBotTask {
         this.name = name;
     }
 
-    public Location getTargetLocation() {
-        return targetLocation;
-    }
-
-    public void setTargetLocation(Location loc) {
-        this.targetLocation = loc;
-    }
-
     public long getElapsedTime() {
         return System.currentTimeMillis() - startTime;
     }
 
     public void handleStuck() {
-        if (targetLocation != null) {
+        if (bot.getRuntimeStatus().getTargetLocation() != null) {
             if (bot.getNPCEntity() != null) {
-                BotLogger.trace("✨ " + bot.getId() + " Застрял! Телепортируемся в " + BotStringUtils.formatLocation(targetLocation));
+                BotLogger.trace("✨ " + bot.getId() + " Застрял! Телепортируемся в " + BotStringUtils.formatLocation(bot.getRuntimeStatus().getTargetLocation()));
 
                 BotTaskTeleport tp = new BotTaskTeleport(bot, player);
                 if (player != null) {
                     tp.configure(player.getLocation());
                 } else {
-                    tp.configure(targetLocation);
+                    tp.configure(bot.getRuntimeStatus().getTargetLocation());
                 }
 
                 bot.addTaskToQueue(tp);
@@ -179,7 +177,7 @@ public abstract class BotTask implements IBotTask {
                 if (player != null) {
                     tp.configure(player.getLocation());
                 } else {
-                    tp.configure(Bot.getFallbackLocation());
+                    tp.configure(BotUtils.getFallbackLocation());
                 }
 
                 bot.addTaskToQueue(tp);

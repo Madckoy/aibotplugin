@@ -2,10 +2,9 @@ package com.devone.aibot.core.logic.tasks;
 
 import com.devone.aibot.core.Bot;
 import com.devone.aibot.core.BotInventory;
+import com.devone.aibot.core.comms.BotCommunicator;
 import com.devone.aibot.core.logic.tasks.configs.BotTaskTalkConfig;
 import com.devone.aibot.utils.BotLogger;
-import com.devone.aibot.utils.BotStringUtils;
-import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 
 import java.util.List;
@@ -18,6 +17,8 @@ public class BotTaskTalk extends BotTask {
     private final Random random = new Random();
     private static final BotTaskTalkConfig config = new BotTaskTalkConfig();
 
+    private BotCommunicator communicator; // Ссылка на BotCommunicator
+
     public enum TalkType {
         COMPLIMENT, INSULT_MOB, ENVIRONMENT_COMMENT,
         INVENTORY_REPORT, HELP_REQUEST, TOOL_REQUEST, SELF_TALK
@@ -27,6 +28,7 @@ public class BotTaskTalk extends BotTask {
         super(bot, "💬");
         this.player = player;
         this.type = type;
+        this.communicator = new BotCommunicator(bot); // Инициализация BotCommunicator
     }
 
     @Override
@@ -50,11 +52,11 @@ public class BotTaskTalk extends BotTask {
     
         // 🎯 Если есть игрок — говорим персонально
         if (player != null) {
-            player.sendMessage("🤖 " + bot.getId() + ": " + message);
+            communicator.sendMessageToPlayer(message);  // Используем BotCommunicator
         }
         // 📣 Если нужно вещать в общий чат
         else if (shouldBroadcastToAll(type)) {
-            Bukkit.getServer().broadcast("🤖 " + bot.getId() + ": " + message, "minecraft.broadcast.say");
+            communicator.broadcastMessage(message);  // Используем BotCommunicator
         }
         // 🤫 Иначе просто бурчим себе под нос (логируем)
         else {
@@ -63,7 +65,6 @@ public class BotTaskTalk extends BotTask {
     
         isDone = true;
     }
-
 
     private boolean shouldBroadcastToAll(TalkType type) {
         return switch (type) {
@@ -86,7 +87,6 @@ public class BotTaskTalk extends BotTask {
             case SELF_TALK -> getRandomMessage(config.getSelfTalks());
         };
     }
-    
 
     private String getRandomMessage(List<String> messages) {
         if (messages == null || messages.isEmpty()) return "🤖 ...";

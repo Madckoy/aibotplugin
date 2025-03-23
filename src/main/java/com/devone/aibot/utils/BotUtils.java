@@ -3,8 +3,10 @@ package com.devone.aibot.utils;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.format.NamedTextColor;
 
+import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.Material;
+import org.bukkit.World;
 import org.bukkit.block.Block;
 import org.bukkit.entity.Player;
 
@@ -15,28 +17,6 @@ import java.util.regex.Pattern;
 
 
 public class BotUtils {
-
-    public static void sendMessageToPlayer(Player to, String from, String message) {
-        Component chatMessage;
-
-        if (from == null) {
-            // Сообщение от системы
-            chatMessage = Component.text("[System] ", NamedTextColor.YELLOW)
-                    .append(Component.text(message, NamedTextColor.WHITE));
-        } else if (from.contains("Bot")) { 
-            // Сообщение от бота (если в имени есть "Bot")
-            chatMessage = Component.text("[", NamedTextColor.GRAY)
-                    .append(Component.text(from, NamedTextColor.AQUA)) // Имя бота – голубым
-                    .append(Component.text("] ", NamedTextColor.GRAY))
-                    .append(Component.text(message, NamedTextColor.WHITE));
-        } else {
-            // Сообщение от игрока или другого отправителя
-            chatMessage = Component.text(from + ": ", NamedTextColor.GREEN)
-                    .append(Component.text(message, NamedTextColor.WHITE));
-        }
-
-        to.sendMessage(chatMessage);
-    }
 
     public static String getBlockName(Block bl) {
 
@@ -88,4 +68,25 @@ public class BotUtils {
             default -> false; // Всё остальное можно ломать руками
         };
     }
+    
+    public static Location getFallbackLocation() {
+        World world = Bukkit.getWorlds().get(0);
+        return world.getSpawnLocation();
+    }
+    public static boolean isBreakableBlock(Location location) {
+        if (location == null || location.getWorld() == null) return false;
+    
+        Material type = location.getBlock().getType();
+    
+        return switch (type) {
+            case AIR, CAVE_AIR, VOID_AIR,
+                 BEDROCK, BARRIER,
+                 END_PORTAL, END_PORTAL_FRAME,
+                 STRUCTURE_BLOCK, STRUCTURE_VOID,
+                 COMMAND_BLOCK, CHAIN_COMMAND_BLOCK, REPEATING_COMMAND_BLOCK -> false;
+            default -> true;
+        };
+    }
+    
+
 }

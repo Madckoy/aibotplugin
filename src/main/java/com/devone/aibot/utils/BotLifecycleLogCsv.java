@@ -13,12 +13,13 @@ import java.util.HashMap;
 import java.util.Map;
 
 public class BotLifecycleLogCsv {
-    private static final String LOG_FOLDER = BotConstants.PLUGIN_PATH_LOGS;//"plugins/AIBotPlugin/logs/";
+    private static final String LOG_FOLDER = BotConstants.PLUGIN_TMP; // Путь к логам
     private static final Map<String, Location> lastLoggedLocations = new HashMap<>();
     private static final String SESSION_ID = generateSessionId();
 
     public static void write(Bot bot) {
-        Location loc = bot.getNPCCurrentLocation();
+        // Получаем текущую локацию через BotRuntimeStatus
+        Location loc = bot.getRuntimeStatus().getCurrentLocation();
         if (loc == null) return;
 
         String botName = bot.getId();
@@ -45,14 +46,14 @@ public class BotLifecycleLogCsv {
             String t_name = "N/A";
             String e_time = "N/A";
 
-            if(task!=null) {
+            if (task != null) {
                 t_name = task.getName();
                 e_time = BotStringUtils.formatTime(task.getElapsedTime());
             }
 
             String logEntry = String.format("%s,%s,%s,%d,%d,%d,%s,%s",
                     getCurrentTimestamp(), botName, loc.getWorld().getName(),
-                    loc.getBlockX(), loc.getBlockY(), loc.getBlockZ(),"'"+t_name+"'", e_time);
+                    loc.getBlockX(), loc.getBlockY(), loc.getBlockZ(), "'" + t_name + "'", e_time);
 
             bw.write(logEntry);
             bw.newLine();

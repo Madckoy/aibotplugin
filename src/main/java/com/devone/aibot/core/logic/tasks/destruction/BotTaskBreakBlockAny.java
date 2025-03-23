@@ -1,6 +1,7 @@
-package com.devone.aibot.core.logic.tasks;
+package com.devone.aibot.core.logic.tasks.destruction;
 
 import com.devone.aibot.core.Bot;
+import com.devone.aibot.utils.BotGeo3DScan.ScanMode;
 
 public class BotTaskBreakBlockAny extends BotTaskBreakBlock {
     
@@ -11,8 +12,9 @@ public class BotTaskBreakBlockAny extends BotTaskBreakBlock {
 
         setTargetMaterials(null);
 
-        setTargetLocation(bot.getNPCCurrentLocation());
-
+        bot.getRuntimeStatus().setTargetLocation(bot.getRuntimeStatus().getCurrentLocation());
+        
+        setScanMode(ScanMode.FULL);
     }
  
     @Override

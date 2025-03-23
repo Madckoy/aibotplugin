@@ -12,7 +12,7 @@ import java.util.stream.Collectors;
 public class BotBio3DScan {
 
     public static List<LivingEntity> scan3D(Bot bot, int radius) {
-        Location botLoc = bot.getNPCCurrentLocation();
+        Location botLoc = bot.getRuntimeStatus().getCurrentLocation();
 
         return bot.getNPCEntity().getWorld().getLivingEntities().stream()
             .filter(e -> e instanceof Monster)

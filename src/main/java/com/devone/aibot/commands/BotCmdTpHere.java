@@ -36,17 +36,16 @@ public class BotCmdTpHere implements CommandExecutor {
             return true;
         }
 
-        Location targetLocation = player.getLocation();
-
-        BotLogger.info("📌 /bot-tp-here: Бот " + bot.getId() + " Телепортируется в точку игрока" + BotStringUtils.formatLocation(targetLocation));
-
         // ✅ Очищаем стек задач
         bot.getLifeCycle().getTaskStackManager().clearTasks();
 
         // ✅ Добавляем задачу на мгновенное перемещение
         BotTaskTeleport task = new BotTaskTeleport(bot, player);
-        task.configure(targetLocation);
+        task.configure(player.getLocation());
         bot.addTaskToQueue(task);
+
+        BotLogger.info("📌 /bot-tp-here: Бот " + bot.getId() + " Телепортируется в точку игрока" + 
+                                                  BotStringUtils.formatLocation(bot.getRuntimeStatus().getTargetLocation()));
 
         player.sendMessage("§aБот " + bot.getId() + " Телепортируется к игроку!");
 

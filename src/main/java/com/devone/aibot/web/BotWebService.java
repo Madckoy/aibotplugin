@@ -180,7 +180,7 @@ public class BotWebService {
             Collection<Bot> bots = botManager.getAllBots();
             for (Bot bot : bots) {
                 JsonObject botJson = new JsonObject();
-                Location loc = bot.getNPCCurrentLocation();
+                Location loc = bot.getRuntimeStatus().getCurrentLocation();
 
                 if (loc != null) {
                     botJson.addProperty("skin", "http://" + getServerHost() + ":3000/skins/" + bot.getUuid() + ".png");
@@ -190,7 +190,7 @@ public class BotWebService {
                     // ✅ Добавляем новую колонку "object" (моб, блок, игрок или "—")
                     botJson.addProperty("object", getCurrentObjective(bot));
                     // ✅ Возвращаем старую колонку "target" (координаты цели)
-                    Location tg_loc = bot.getCurrentTask().getTargetLocation();
+                    Location tg_loc = bot.getRuntimeStatus().getTargetLocation();
                     String targetLoc = BotStringUtils.formatLocation(tg_loc);
                     botJson.addProperty("target", targetLoc);
                     botJson.addProperty("elapsedTime", BotStringUtils.formatTime(bot.getCurrentTask().getElapsedTime()));

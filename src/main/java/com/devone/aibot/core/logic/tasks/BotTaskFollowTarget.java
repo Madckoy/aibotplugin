@@ -4,12 +4,12 @@ import com.devone.aibot.AIBotPlugin;
 import com.devone.aibot.core.Bot;
 import com.devone.aibot.core.logic.tasks.configs.BotTaskFollowConfig;
 import com.devone.aibot.utils.BotLogger;
+import com.devone.aibot.utils.BotNavigationUtils;
+
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
-
-import java.util.Random;
 
 public class BotTaskFollowTarget extends BotTask {
 
@@ -23,13 +23,12 @@ public class BotTaskFollowTarget extends BotTask {
     private final double relocateThreshold = 1.5; // если цель сместилась на это расстояние — обновим маршрут
 
     private long lastChatTime = 0;
-    private final Random random = new Random();
     private Location lastKnownLocation;
 
     public BotTaskFollowTarget(Bot bot, LivingEntity target) {
         super(bot, "🎯");
         this.target = target;
-        this.targetLocation = target.getLocation();   
+        bot.getRuntimeStatus().setTargetLocation(target.getLocation());   
         this.lastKnownLocation = target.getLocation();
     }
 
@@ -55,7 +54,7 @@ public class BotTaskFollowTarget extends BotTask {
     }
 
     private void updateFollowLogic() {
-        double distance = bot.getNPCCurrentLocation().distance(target.getLocation());
+        double distance = bot.getRuntimeStatus().getCurrentLocation().distance(target.getLocation());
 
         if (target instanceof Player player) {
             followPlayer(player, distance);
@@ -89,7 +88,9 @@ public class BotTaskFollowTarget extends BotTask {
     private void updateNavigationIfNeeded(Location newTargetLocation) {
         if (lastKnownLocation.distanceSquared(newTargetLocation) > relocateThreshold * relocateThreshold) {
             lastKnownLocation = newTargetLocation;
-            Bot.navigateTo(bot, lastKnownLocation, 2.5);
+
+            BotNavigationUtils.navigateTo(bot, lastKnownLocation, 2.5);
+            
             BotLogger.trace("🔄 Обновляем маршрут к новой позиции цели.");
         }
     }
@@ -97,7 +98,7 @@ public class BotTaskFollowTarget extends BotTask {
     private void attackTarget() {
         if (target == null || target.isDead()) return;
 
-        double distance = bot.getNPCCurrentLocation().distance(target.getLocation());
+        double distance = bot.getRuntimeStatus().getCurrentLocation().distance(target.getLocation());
 
         if (distance <= attackRange) {
             BotTaskUseHand hand_task = new BotTaskUseHand(bot);

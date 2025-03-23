@@ -12,8 +12,6 @@ import org.bukkit.Location;
 import org.bukkit.entity.Player;
 
 public class BotTaskTeleport extends BotTask {
-    
-    //private BotTaskTeleportConfig config;
 
     public BotTaskTeleport(Bot bot, Player player) {
         super(bot, player, "જ⁀➴");
@@ -26,10 +24,11 @@ public class BotTaskTeleport extends BotTask {
         super.configure(params);
 
         if (params.length >= 1 && params[0] instanceof Location) {
-            targetLocation = (Location) params[0];
+            Location loc  = (Location) params[0];
+            bot.getRuntimeStatus().setTargetLocation(loc);
         }
 
-        BotLogger.debug("⚙️ BotTaskTeleport сконфигурирована: " + BotStringUtils.formatLocation(targetLocation));
+        BotLogger.debug("⚙️ BotTaskTeleport сконфигурирована: " + BotStringUtils.formatLocation(bot.getRuntimeStatus().getTargetLocation()));
 
         return this;
     }
@@ -40,7 +39,7 @@ public class BotTaskTeleport extends BotTask {
                 // Телепортация в основном потоке
                 Bukkit.getScheduler().runTask(AIBotPlugin.getInstance(), () -> {
                     
-                    bot.getNPCEntity().teleport(targetLocation);
+                    bot.getNPCEntity().teleport(bot.getRuntimeStatus().getTargetLocation());
 
                     //bot.getNPCEntity().teleport();
                 });

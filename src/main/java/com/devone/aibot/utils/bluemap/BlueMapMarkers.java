@@ -60,7 +60,7 @@ public class BlueMapMarkers {
 
         for (Bot bot : bots) {
 
-            Location loc = bot.getNPCCurrentLocation();
+            Location loc = bot.getRuntimeStatus().getCurrentLocation();
 
             if (loc != null) {
                 String botId = bot.getId();
@@ -154,7 +154,7 @@ public class BlueMapMarkers {
         for (Bot bot : bots) {
 
             String botId = bot.getId();
-            Location loc = bot.getNPCCurrentLocation();
+            Location loc = bot.getRuntimeStatus().getCurrentLocation();
             UUID botUUID = bot.getUuid();
 
             // -----------------------------------------------------------------------------------

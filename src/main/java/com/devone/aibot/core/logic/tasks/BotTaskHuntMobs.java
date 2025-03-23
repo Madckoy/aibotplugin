@@ -1,7 +1,6 @@
 package com.devone.aibot.core.logic.tasks;
 
 import com.devone.aibot.core.Bot;
-import com.devone.aibot.core.logic.tasks.configs.BotTaskExploreConfig;
 import com.devone.aibot.core.logic.tasks.configs.BotTaskHuntConfig;
 import com.devone.aibot.utils.BotLogger;
 import com.devone.aibot.utils.EntityUtils;
@@ -12,20 +11,14 @@ import java.util.List;
 
 public class BotTaskHuntMobs extends BotTask {
 
-    private BotTaskHuntConfig config; // 👈 Храним с нужным типом
-
     private int scanRadius;
     private boolean shouldFollowPlayer = false;
-
     private LivingEntity targetMob = null;
 
     public BotTaskHuntMobs(Bot bot) {
-        super(bot, "👁️");
-        
-        this.config = new BotTaskHuntConfig();
-        scanRadius = config.getScanRadius(); // ✅ Теперь всё работает
-        geoMap = null;
-        bioEntities = null;
+        super(bot, "⚔️");
+        this.config = new BotTaskHuntConfig(); // ✅ инициализируем родительское поле
+        this.scanRadius = ((BotTaskHuntConfig) config).getScanRadius();
     }
 
     @Override
@@ -57,17 +50,20 @@ public class BotTaskHuntMobs extends BotTask {
             return;
         }
 
-        setBioEntities(null);
+        setBioEntities(null); // попробовать ещё раз в следующий такт
     }
 
     private void findTarget() {
         List<LivingEntity> nearbyEntities = getBioEntities();
+        BotTaskHuntConfig huntConfig = (BotTaskHuntConfig) config;
 
         for (LivingEntity entity : nearbyEntities) {
             if (EntityUtils.isHostileMob(entity)) {
-                targetMob = entity;
-                BotLogger.debug("🎯 Найдена враждебная цель: " + targetMob.getType());
-                return;
+                if (huntConfig.getTargetAggressiveMobs().contains(entity.getType())) {
+                    targetMob = entity;
+                    BotLogger.debug("🎯 Найдена враждебная цель: " + targetMob.getType());
+                    return;
+                }
             }
         }
 
