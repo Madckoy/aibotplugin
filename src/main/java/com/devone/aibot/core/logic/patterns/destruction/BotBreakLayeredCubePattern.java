@@ -8,10 +8,6 @@ import java.util.stream.Collectors;
 
 public class BotBreakLayeredCubePattern extends AbstractBotBreakPattern {
 
-    public BotBreakLayeredCubePattern(int radius) {
-        this.radius = radius;
-    }
-
     @Override
     public Location findNextBlock(Bot bot, Map<Location, ?> geoMap) {
         if (!initialized) {

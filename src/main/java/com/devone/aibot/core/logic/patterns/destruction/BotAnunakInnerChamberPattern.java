@@ -25,12 +25,7 @@ public class BotAnunakInnerChamberPattern extends AbstractBotBreakPattern {
         int centerY = center.getBlockY();
         int centerZ = center.getBlockZ();
 
-        // Добавляем вершину пирамиды (под ботом 3 блока вниз)
-        for (int i = 1; i <= 3; i++) {
-            blocksToBreak.add(new Location(world, centerX, centerY - i, centerZ));
-        }
-
-        int tipY = centerY - 3; // Новая вершина пирамиды
+        int tipY = centerY; // Бот стоит на вершине пирамиды
         int height = radius;
 
         // Наружная оболочка пирамиды
@@ -40,12 +35,9 @@ public class BotAnunakInnerChamberPattern extends AbstractBotBreakPattern {
 
             for (int x = -layerRadius; x <= layerRadius; x++) {
                 for (int z = -layerRadius; z <= layerRadius; z++) {
-
-                    // Только края слоя: если x или z — на границе квадрата
-                    if (Math.abs(x) == layerRadius || Math.abs(z) == layerRadius) {
-                        int blockX = centerX + x;
-                        int blockZ = centerZ + z;
-                        blocksToBreak.add(new Location(world, blockX, currentY, blockZ));
+                    boolean isShellBlock = Math.abs(x) == layerRadius || Math.abs(z) == layerRadius;
+                    if (isShellBlock) {
+                        blocksToBreak.add(new Location(world, centerX + x, currentY, centerZ + z));
                     }
                 }
             }
