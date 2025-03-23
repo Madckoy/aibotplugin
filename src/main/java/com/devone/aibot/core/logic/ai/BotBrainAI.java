@@ -2,6 +2,7 @@ package com.devone.aibot.core.logic.ai;
 
 import com.devone.aibot.core.Bot;
 import com.devone.aibot.core.logic.tasks.*;
+import com.devone.aibot.core.logic.tasks.destruction.BotTaskBreakBlock;
 import com.devone.aibot.utils.BotLogger;
 
 import java.io.*;

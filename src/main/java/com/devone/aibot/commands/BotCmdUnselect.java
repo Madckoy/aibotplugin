@@ -1,6 +1,7 @@
 package com.devone.aibot.commands;
 
 import com.devone.aibot.core.BotManager;
+import com.devone.aibot.core.comms.BotCommunicator;
 import com.devone.aibot.utils.BotUtils;
 
 import org.bukkit.command.Command;
@@ -19,13 +20,13 @@ public class BotCmdUnselect implements CommandExecutor {
     @Override
     public boolean onCommand(CommandSender sender, Command command, String label, String[] args) {
         if (!(sender instanceof Player)) {
-            BotUtils.sendMessageToPlayer((Player)sender, null, "Эту команду может использовать только игрок.");
+            BotCommunicator.sendMessageToPlayer((Player)sender, null, "Эту команду может использовать только игрок.");
             return true;
         }
 
         Player player = (Player) sender;
         if (!botManager.unselectBot(player.getUniqueId())) {
-            BotUtils.sendMessageToPlayer(player, null, "Бот больше не выбран.");
+            BotCommunicator.sendMessageToPlayer(player, null, "Бот больше не выбран.");
             return true;
         }
         

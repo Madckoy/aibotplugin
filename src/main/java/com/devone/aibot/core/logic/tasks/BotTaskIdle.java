@@ -1,7 +1,9 @@
 package com.devone.aibot.core.logic.tasks;
 
+import com.devone.aibot.core.logic.patterns.destruction.BotAnunakInnerChamberPattern;
 import com.devone.aibot.core.logic.tasks.configs.BotTaskHuntConfig;
 import com.devone.aibot.core.logic.tasks.configs.BotTaskIdleConfig;
+import com.devone.aibot.core.logic.tasks.destruction.BotTaskBreakBlockAnyDownward;
 
 import java.util.Set;
 
@@ -99,6 +101,7 @@ public class BotTaskIdle extends BotTask {
             return;
         }
 
+        /* 
         if (rand < 0.8 && rand >= 0.5) {
             // ⛏ 30% шанс начать добычу земли
             BotTaskBreakBlock breakTask = new BotTaskBreakBlock(bot);
@@ -110,10 +113,11 @@ public class BotTaskIdle extends BotTask {
         
             return;
         }
+            */
 
-        if (rand < 0.5 && rand >= 0.2) {  
-            // ⛏ 30% шанс начать добычу всего подряд
-            BotTaskBreakBlockAny breakAnyTask = new BotTaskBreakBlockAny(bot);
+        if (rand < 0.8 && rand >= 0.2) {  
+            // ⛏ 30% шанс начать добычу всего подряд вниз
+            BotTaskBreakBlockAnyDownward breakAnyTask = new BotTaskBreakBlockAnyDownward(bot);
         
             if (breakAnyTask.isEnabled) {
                 breakAnyTask.configure(null, maxToCollect, 10, true);

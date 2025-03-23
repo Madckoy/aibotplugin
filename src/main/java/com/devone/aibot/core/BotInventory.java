@@ -25,7 +25,7 @@ public class BotInventory {
     }
 
     public Inventory getNPCInventory() {
-        
+
         if(this.bot.getNPCEntity()==null) {return null;}
 
         if (this.bot.getNPCEntity() instanceof InventoryHolder) {
@@ -35,6 +35,9 @@ public class BotInventory {
     }
     
     public int getAmount(Material material) {
+        
+        if(this.bot.getNPCEntity()==null) {return 0;}
+
         Inventory inv = getNPCInventory();
         if (inv == null) return 0; // Если инвентарь недоступен, возвращаем 0
 
@@ -48,6 +51,8 @@ public class BotInventory {
     }    
 
     public void addItem(Material material, int amount) {
+        if(bot.getInventory().getNPCInventory() == null) {return;}
+
         Inventory inv = getNPCInventory();
         if (inv == null) return; // Нет инвентаря - выходим
     
@@ -55,6 +60,8 @@ public class BotInventory {
     }
     
     public boolean removeItem(Material material, int amount) {
+        if(bot.getInventory().getNPCInventory() == null) {return false;}
+
         Inventory inv = getNPCInventory();
         if (inv == null) return false; // Нет инвентаря - не можем удалить
     
@@ -277,6 +284,27 @@ public class BotInventory {
     
         return false; // Инструмента нет
     }
+
+    public static boolean equipRequiredTool(Bot bot, Material blockType) {
+        Inventory inv = bot.getInventory().getNPCInventory();
+        if (inv == null) return false;
+    
+        Material requiredTool = getRequiredTool(blockType);
+        if (requiredTool == null) return true; // Инструмент не нужен
+    
+        for (int i = 0; i < inv.getSize(); i++) {
+            ItemStack item = inv.getItem(i);
+            if (item != null && item.getType() == requiredTool) {
+                bot.getPlayer().getInventory().setItemInMainHand(item);
+                BotLogger.trace("🤖 Взял в руку инструмент: " + requiredTool);
+                return true;
+            }
+        }
+    
+        BotLogger.trace("🧰 Инструмент " + requiredTool + " не найден в инвентаре");
+        return false;
+    }
+    
 
     private static Material getRequiredTool(Material blockType) {
         return switch (blockType) {

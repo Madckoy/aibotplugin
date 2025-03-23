@@ -51,6 +51,16 @@ public class Bot {
     public NPC getNPC() {
         return npc;
     }
+    
+    public Player getPlayer() {
+        if (this.npc != null && this.npc.isSpawned()) {
+            Entity entity = this.npc.getEntity();
+            if (entity instanceof Player player) {
+                return player;
+            }
+        }
+        return null;
+    }
 
     public UUID getUuid() {
         if (npc != null) {

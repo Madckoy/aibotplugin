@@ -13,7 +13,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 public class BotLifecycleLogCsv {
-    private static final String LOG_FOLDER = BotConstants.PLUGIN_PATH_LOGS; // Путь к логам
+    private static final String LOG_FOLDER = BotConstants.PLUGIN_TMP; // Путь к логам
     private static final Map<String, Location> lastLoggedLocations = new HashMap<>();
     private static final String SESSION_ID = generateSessionId();
 

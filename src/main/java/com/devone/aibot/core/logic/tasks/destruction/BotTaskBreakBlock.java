@@ -1,17 +1,23 @@
-package com.devone.aibot.core.logic.tasks;
+package com.devone.aibot.core.logic.tasks.destruction;
 
 import com.devone.aibot.core.Bot;
 import com.devone.aibot.core.BotInventory;
 import com.devone.aibot.core.BotZoneManager;
-import com.devone.aibot.core.logic.patterns.BotBreakLayeredCubePattern;
-import com.devone.aibot.core.logic.patterns.BotBreakSpiral3DPatternDown;
-import com.devone.aibot.core.logic.patterns.BotBreakSpiralStairDownPattern;
-import com.devone.aibot.core.logic.patterns.BotBreakSpiralStairDownPatternWithParams;
-import com.devone.aibot.core.logic.patterns.IBotBreakPattern;
+import com.devone.aibot.core.logic.patterns.destruction.BotAnunakSolidPyramidPattern;
+import com.devone.aibot.core.logic.patterns.destruction.BotBreakDefaultPattern;
+import com.devone.aibot.core.logic.patterns.destruction.BotBreakInversePyramidPattern;
+import com.devone.aibot.core.logic.patterns.destruction.BotBreakRegularHollowPyramidPattern;
+import com.devone.aibot.core.logic.patterns.destruction.BotBreakSpiral3DPatternDown;
+import com.devone.aibot.core.logic.patterns.destruction.IBotBreakPattern;
+import com.devone.aibot.core.logic.tasks.BotTask;
+import com.devone.aibot.core.logic.tasks.BotTaskSonar3D;
+import com.devone.aibot.core.logic.tasks.BotTaskUseHand;
 import com.devone.aibot.core.logic.tasks.configs.BotTaskBreakBlockConfig;
 import com.devone.aibot.utils.BotLogger;
 import com.devone.aibot.utils.BotStringUtils;
 import com.devone.aibot.utils.BotUtils;
+import com.devone.aibot.utils.BotGeo3DScan.ScanMode;
+
 import org.bukkit.Location;
 import org.bukkit.Material;
 
@@ -24,7 +30,7 @@ public class BotTaskBreakBlock extends BotTask {
     private boolean shouldPickup = true;
     private boolean destroyAllIfNoTarget = false;
     private Set<Material> targetMaterials = null;
-    private IBotBreakPattern breakPattern;
+    private IBotBreakPattern breakPattern = null;
 
     public BotTaskBreakBlock(Bot bot) {
         super(bot, "⛏️");
@@ -52,16 +58,17 @@ public class BotTaskBreakBlock extends BotTask {
             this.destroyAllIfNoTarget = (Boolean) params[4];
         }
 
-        int patternRadius = (this.searchRadius > 0) ? this.searchRadius : 5;
+        if (params.length >= 6 && params[5] instanceof IBotBreakPattern) {
+            this.breakPattern = (IBotBreakPattern) params[5];
+        }
+        // this.breakPattern = new BotBreakSpiral3DPatternDown(patternRadius);
+        // this.breakPattern = new BotBreakLayeredCubePattern(patternRadius);        
+        // this.breakPattern = new BotBreakInversePyramidPattern(this.searchRadius); // TESTED OK
+        // this.breakPattern = new BotBreakRegularHollowPyramidPattern(this.searchRadius); // TESTED OK
+        // this.breakPattern = new BotAnunakSolidPyramidPattern(this.searchRadius); //TESTD OK
 
-
-        //this.breakPattern = new BotBreakSpiral3DPatternDown(patternRadius);
-        //this.breakPattern = new BotBreakLayeredCubePattern(patternRadius);
-
-        //this.breakPattern = new BotBreakSpiralStairDownPattern(patternRadius);
-        this.breakPattern = new BotBreakSpiralStairDownPatternWithParams(patternRadius, true);
-        
         bot.setAutoPickupEnabled(shouldPickup);
+
         BotLogger.debug("⚙️ BotTaskBreakBlock настроена: " + (targetMaterials == null ? "ВСЕ БЛОКИ" : targetMaterials));
         return this;
     }
@@ -69,6 +76,10 @@ public class BotTaskBreakBlock extends BotTask {
     public void setTargetMaterials(Set<Material> materials) {
         this.targetMaterials = materials;
         BotLogger.trace("🎯 Установлены целевые блоки: " + materials);
+    }
+
+    public void setBreakPattern(IBotBreakPattern ptrn) {
+        breakPattern = ptrn;
     }
 
     public Set<Material> getTargetMaterials() {
@@ -79,6 +90,11 @@ public class BotTaskBreakBlock extends BotTask {
     @Override
     public void executeTask() {
         BotLogger.trace("🚀 Запуск задачи разрушения блоков для бота " + bot.getId() + " (Целевые блоки: " + (targetMaterials == null ? "ВСЕ" : targetMaterials) + ")");
+
+        if (this.breakPattern == null) {
+            this.breakPattern = new BotBreakDefaultPattern();
+        }
+        this.breakPattern.configure(searchRadius);
 
         if (isInventoryFull() || isEnoughBlocksCollected()) {
             BotLogger.trace("⛔ Задача завершена: инвентарь полон или ресурсов достаточно");
@@ -91,15 +107,25 @@ public class BotTaskBreakBlock extends BotTask {
 
         if (getGeoMap() == null) {
             BotLogger.trace("🔍 Запускаем 3D-сканирование окружающей среды.");
-            bot.addTaskToQueue(new BotTaskSonar3D(bot, this, searchRadius, searchRadius));
+            BotTaskSonar3D scan_task = new BotTaskSonar3D(bot, this, searchRadius, searchRadius);
+            scan_task.configure(scanMode);
+            bot.addTaskToQueue(scan_task);
             isDone = false;
             return;
         }
 
-        Location targetLocation = breakPattern.findNextBlock(bot, getGeoMap(), targetMaterials);
+        if(breakPattern.isFinished()) {
+            BotLogger.trace("🏁 Все блоки по паттерну обработаны. Завершаем задачу.");
+            isDone = true;
+            return;
+        }
+
+        Location targetLocation = breakPattern.findNextBlock(bot, getGeoMap());
+
         bot.getRuntimeStatus().setTargetLocation(targetLocation);
 
         if (targetLocation != null) {
+
             if (isInProtectedZone(targetLocation)) {
                 BotLogger.debug("⛔ " + bot.getId() + " в запретной зоне, НЕ будет разрушать блок: " + BotStringUtils.formatLocation(targetLocation));
                 isDone = true;
@@ -108,6 +134,28 @@ public class BotTaskBreakBlock extends BotTask {
             }
 
             BotLogger.trace("🛠️ Целевой блок найден: " + BotStringUtils.formatLocation(targetLocation));
+
+            // Проверим, можно ли разрушить в принципе
+
+            if (!BotUtils.isBreakableBlock(targetLocation)) {
+                BotLogger.trace("⛔ Неразрушаемый блок: " + BotStringUtils.formatLocation(targetLocation));
+                bot.getRuntimeStatus().setTargetLocation(null);
+                return;
+            }
+            
+            Material mat = bot.getRuntimeStatus().getTargetLocation().getBlock().getType();
+
+            if(BotUtils.requiresTool(mat)) {
+
+                // Проверить есть ли он у у бота в руке, если нет, то пропускать блок
+                if (!BotInventory.equipRequiredTool(bot, mat)) {
+                    BotLogger.trace("🙈 Не удалось взять инструмент в руку. Пропускаем.");
+                    bot.getRuntimeStatus().setTargetLocation(null);
+                    return;
+                }
+
+            }
+
             setObjective("Разрушение блока: " + BotUtils.getBlockName(targetLocation.getBlock()));
             BotLogger.trace("🚧 " + bot.getId() + " Разрушение блока: " + targetLocation.getBlock().toString());
 

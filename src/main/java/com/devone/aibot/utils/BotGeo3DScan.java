@@ -1,16 +1,15 @@
 package com.devone.aibot.utils;
+
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.World;
+import org.bukkit.util.Vector;
+
 import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.Random;
+import java.util.*;
 
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
@@ -19,37 +18,63 @@ import com.devone.aibot.core.Bot;
 
 public class BotGeo3DScan {
 
+    public static enum ScanMode {
+        FULL,
+        DOWNWARD,
+        UPWARD,
+        HORIZONTAL_SLICE,
+        FORWARD_HEMISPHERE,
+        VERTICAL_SLICE,
+        VERTICAL_SLICE_LOOK
+    }
+
     @SuppressWarnings("unchecked")
-    public static Map<Location, Material> scan3D(Bot bot, int scanRadius, int height) { // Один радиус применяется к X и Z
-        
+    public static Map<Location, Material> scan3D(Bot bot, int scanRadius, int height, ScanMode scanMode) {
         World world = Bukkit.getWorlds().get(0);
 
         int centerX = bot.getRuntimeStatus().getCurrentLocation().getBlockX();
         int centerY = bot.getRuntimeStatus().getCurrentLocation().getBlockY();
         int centerZ = bot.getRuntimeStatus().getCurrentLocation().getBlockZ();
 
-        int minHeight = centerY - height; // Нижняя граница  Y (-4 от бота) // Ограничение по глубине Y (-4) // Теперь Y правильно ограничен
-        int maxHeight = centerY + height; // Верхняя граница Y (+4 от бота) // Ограничение по глубине Y (+4) // Теперь Y правильно ограничен
+        int minY = centerY - height;
+        int maxY = centerY + height;
 
         Map<Location, Material> scannedBlocks = new HashMap<>();
         JSONArray blockArray = new JSONArray();
 
-        for (int y = maxHeight; y >= minHeight; y--) { // Сканируем сверху вниз { // Правильная ось Y { // Ограничение по высоте
-            for (int x = -scanRadius; x <= scanRadius; x++) { // Радиус по X { // Один радиус X и Z {
-                for (int z = -scanRadius; z <= scanRadius; z++) { // Радиус по Z { // Один радиус X и Z {
+        Vector direction = bot.getPlayer().getLocation().getDirection().normalize();
+        boolean verticalLook = (scanMode == ScanMode.VERTICAL_SLICE_LOOK);
+
+        for (int y = maxY; y >= minY; y--) {
+            if (scanMode == ScanMode.DOWNWARD && y > centerY) continue;
+            if (scanMode == ScanMode.UPWARD && y < centerY) continue;
+
+            for (int x = -scanRadius; x <= scanRadius; x++) {
+                for (int z = -scanRadius; z <= scanRadius; z++) {
+
+                    if (scanMode == ScanMode.HORIZONTAL_SLICE && y != centerY) continue;
+                    if (scanMode == ScanMode.VERTICAL_SLICE && x != 0) continue;
+                    if (verticalLook) {
+                        double angle = Math.abs(direction.angle(new Vector(1, 0, 0)) - Math.PI / 2);
+                        boolean lookAlongZ = angle < (Math.PI / 4);
+                        if (lookAlongZ && x != 0) continue;
+                        if (!lookAlongZ && z != 0) continue;
+                    }
+
+                    if (scanMode == ScanMode.FORWARD_HEMISPHERE) {
+                        Vector toBlock = new Vector(x, y - centerY, z).normalize();
+                        double dot = direction.dot(toBlock);
+                        if (dot < 0) continue;
+                    }
+
                     Location loc = new Location(world, centerX + x, y, centerZ + z);
                     Material material = world.getBlockAt(loc).getType();
-                    // Исключаем листву и деревья из сканирования
-
-                    // if (material == Material.OAK_LEAVES || material == Material.OAK_LOG || material == Material.SPRUCE_LEAVES || material == Material.SPRUCE_LOG || material == Material.BIRCH_LEAVES || material == Material.BIRCH_LOG || material == Material.JUNGLE_LEAVES || material == Material.JUNGLE_LOG || material == Material.ACACIA_LEAVES || material == Material.ACACIA_LOG || material == Material.DARK_OAK_LEAVES || material == Material.DARK_OAK_LOG) {
-                    //    continue;
-                    //}
 
                     scannedBlocks.put(loc, material);
 
                     JSONObject blockData = new JSONObject();
                     blockData.put("x", centerX + x);
-                  
+
                     if (BotConstants.FLIP_COORDS) {
                         blockData.put("y", centerZ + z);
                         blockData.put("z", y);
@@ -61,7 +86,7 @@ public class BotGeo3DScan {
                     blockData.put("type", material.name());
 
                     if (x == 0 && y == centerY && z == 0) {
-                        blockData.put("bot", true); // Отмечаем позицию бота
+                        blockData.put("bot", true);
                     }
 
                     blockArray.add(blockData);
@@ -69,16 +94,12 @@ public class BotGeo3DScan {
             }
         }
 
-        // Запись в JSON файл
         saveScanResultToFile(bot, blockArray);
-
         return scannedBlocks;
     }
 
-    @SuppressWarnings("unchecked")
     private static void saveScanResultToFile(Bot bot, JSONArray scanData) {
-        //File scanFile = new File(BotConstants.PLUGIN_TMP, bot.getId()+"3d_vision" + System.currentTimeMillis() + ".json"); // Добавляем timestamp
-        File scanFile = new File(BotConstants.PLUGIN_TMP, bot.getId()+"_vision_log.json"); // Добавляем timestamp
+        File scanFile = new File(BotConstants.PLUGIN_TMP, bot.getId() + "_vision_log.json");
 
         int centerX = bot.getRuntimeStatus().getCurrentLocation().blockX();
         int centerY = bot.getRuntimeStatus().getCurrentLocation().blockY();
@@ -99,12 +120,10 @@ public class BotGeo3DScan {
         }
     }
 
-    @SuppressWarnings("unchecked")
     public static JSONArray findEdgeBlocks(Map<Location, Material> scannedBlocks) {
         JSONArray edgeBlocks = new JSONArray();
         for (Location loc : scannedBlocks.keySet()) {
             Material material = scannedBlocks.get(loc);
-            //if (material != Material.GRASS_BLOCK && material != Material.SAND) continue;
             boolean isEdge = false;
             for (int dx = -1; dx <= 1; dx++) {
                 for (int dz = -1; dz <= 1; dz++) {
@@ -132,7 +151,6 @@ public class BotGeo3DScan {
     public static Location getRandomEdgeBlock(Map<Location, Material> scannedBlocks) {
         List<Location> edgeLocations = new ArrayList<>();
         for (Location loc : scannedBlocks.keySet()) {
-            //if (material != Material.GRASS_BLOCK && material != Material.SAND) continue;
             boolean isEdge = false;
             for (int dx = -1; dx <= 1; dx++) {
                 for (int dz = -1; dz <= 1; dz++) {
@@ -151,34 +169,26 @@ public class BotGeo3DScan {
         return edgeLocations.get(new Random().nextInt(edgeLocations.size()));
     }
 
-
     public static Location getRandomNearbyDestructibleBlock(Map<Location, Material> scannedBlocks, Location botLocation) {
         Random random = new Random();
         double minDistance = Double.MAX_VALUE;
-    
-        // Получаем координаты бота
+        List<Location> closestBlocks = new ArrayList<>();
+
         int botX = botLocation.getBlockX();
         int botY = botLocation.getBlockY();
         int botZ = botLocation.getBlockZ();
-    
-        // Карта для хранения ближайших блоков
-        List<Location> closestBlocks = new ArrayList<>();
-    
-        // Проходим по всем блокам
+
         for (Location loc : scannedBlocks.keySet()) {
             Material material = scannedBlocks.get(loc);
-            
-            // Исключаем воздух и потенциально другие нежелательные блоки
             if (material == Material.AIR) continue;
-    
+
             int x = loc.getBlockX();
             int y = loc.getBlockY();
             int z = loc.getBlockZ();
-    
-            // Проверяем, что блок не является "столбиком безопасности" (не под ботом и не над ним)
-            if (y != botY - 1 && y != botY + 2) {  
+
+            if (y != botY - 1 && y != botY + 2) {
                 double distance = Math.sqrt(Math.pow(x - botX, 2) + Math.pow(z - botZ, 2));
-                
+
                 if (distance < minDistance) {
                     minDistance = distance;
                     closestBlocks.clear();
@@ -188,13 +198,8 @@ public class BotGeo3DScan {
                 }
             }
         }
-    
-        // Если список пуст, значит подходящих блоков нет
+
         if (closestBlocks.isEmpty()) return null;
-    
-        // Возвращаем случайный блок из ближайших
         return closestBlocks.get(random.nextInt(closestBlocks.size()));
     }
-    
-
 }

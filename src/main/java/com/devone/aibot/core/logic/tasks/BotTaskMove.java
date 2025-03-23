@@ -31,7 +31,7 @@ public class BotTaskMove extends BotTask {
             Location loc = (Location) params[0];
             
             bot.getRuntimeStatus().setTargetLocation(loc);
-            
+
         } else {
             BotLogger.error(bot.getId() + " ❌ Некорректные параметры для `BotTaskMove`!");
             isDone = true;
@@ -70,7 +70,7 @@ public class BotTaskMove extends BotTask {
             if (isDone) {
                 if (taskHandle != null) {
                     taskHandle.cancel();
-                    BotLogger.debug(bot.getId() + " 🛑 Move task завершён, таймер остановлен. [ID: " + uuid + "]");
+                    //BotLogger.trace(bot.getId() + " 🛑 Move task завершён, таймер остановлен. [ID: " + uuid + "]");
                 }
                 return;
             }
