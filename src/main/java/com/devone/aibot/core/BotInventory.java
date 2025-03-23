@@ -19,6 +19,7 @@ import com.devone.aibot.utils.BotLogger;
 public class BotInventory {
 
     private final Bot bot;
+
     public BotInventory(Bot bot) {
         this.bot = bot;
         getNPCInventory();
@@ -26,20 +27,25 @@ public class BotInventory {
 
     public Inventory getNPCInventory() {
 
-        if(this.bot.getNPCEntity()==null) {return null;}
+        if (this.bot.getNPCEntity() == null) {
+            return null;
+        }
 
         if (this.bot.getNPCEntity() instanceof InventoryHolder) {
             return ((InventoryHolder) this.bot.getNPCEntity()).getInventory();
         }
         return null; // NPC не имеет инвентаря
     }
-    
+
     public int getAmount(Material material) {
-        
-        if(this.bot.getNPCEntity()==null) {return 0;}
+
+        if (this.bot.getNPCEntity() == null) {
+            return 0;
+        }
 
         Inventory inv = getNPCInventory();
-        if (inv == null) return 0; // Если инвентарь недоступен, возвращаем 0
+        if (inv == null)
+            return 0; // Если инвентарь недоступен, возвращаем 0
 
         int total = 0;
         for (ItemStack item : inv.getContents()) {
@@ -48,23 +54,29 @@ public class BotInventory {
             }
         }
         return total;
-    }    
+    }
 
     public void addItem(Material material, int amount) {
-        if(bot.getInventory().getNPCInventory() == null) {return;}
+        if (bot.getInventory().getNPCInventory() == null) {
+            return;
+        }
 
         Inventory inv = getNPCInventory();
-        if (inv == null) return; // Нет инвентаря - выходим
-    
+        if (inv == null)
+            return; // Нет инвентаря - выходим
+
         inv.addItem(new ItemStack(material, amount));
     }
-    
+
     public boolean removeItem(Material material, int amount) {
-        if(bot.getInventory().getNPCInventory() == null) {return false;}
+        if (bot.getInventory().getNPCInventory() == null) {
+            return false;
+        }
 
         Inventory inv = getNPCInventory();
-        if (inv == null) return false; // Нет инвентаря - не можем удалить
-    
+        if (inv == null)
+            return false; // Нет инвентаря - не можем удалить
+
         for (ItemStack item : inv.getContents()) {
             if (item != null && item.getType() == material) {
                 int itemAmount = item.getAmount();
@@ -74,34 +86,36 @@ public class BotInventory {
                 } else {
                     inv.remove(item);
                     amount -= itemAmount;
-                    if (amount <= 0) return true;
+                    if (amount <= 0)
+                        return true;
                 }
             }
         }
         return false;
     }
 
-           
     public void pickupAll(Boolean shouldPickup, Boolean autoPickupEnabled) {
 
         logInventory();
 
         if (!shouldPickup || !autoPickupEnabled || !bot.isNPCSpawned() || bot.getNPC() == null) {
-            BotLogger.debug("🛒 " + bot.getId()+" Не будет подбирать материал! Параметры подбора: " + shouldPickup + " | " + autoPickupEnabled );
+            BotLogger.debug("🛒 " + bot.getId() + " Не будет подбирать материал! Параметры подбора: " + shouldPickup
+                    + " | " + autoPickupEnabled);
             return;
         }
 
-        BotLogger.debug("🛒 " + bot.getId()+" Будет подобирать материал! Параметры подбора: " + shouldPickup + " | " + autoPickupEnabled );
+        BotLogger.debug("🛒 " + bot.getId() + " Будет подобирать материал! Параметры подбора: " + shouldPickup + " | "
+                + autoPickupEnabled);
 
-        //BotScanEnv.logScanNatural(bot, 20.0);
+        // BotScanEnv.logScanNatural(bot, 20.0);
 
-        if(autoPickupEnabled) {
+        if (autoPickupEnabled) {
             pullAllItemsinRadius(2.0);
         }
 
         try {
             Location botLocation = bot.getRuntimeStatus().getCurrentLocation();
-        
+
             List<Entity> nearbyEntities = botLocation.getWorld().getEntities();
 
             for (Entity entity : nearbyEntities) {
@@ -110,50 +124,53 @@ public class BotInventory {
                     if (botLocation.distance(item.getLocation()) < 2.0) {
                         Material material = item.getItemStack().getType();
                         int amount = item.getItemStack().getAmount();
-                    
+
                         addItem(material, amount); // Передаём два параметра в инвентарь
-                    
+
                         item.remove(); // Удаляем предмет с земли
-                        BotLogger.debug("🛒 " + bot.getId() +  " Подобрал " + amount + " x " + material);
+                        BotLogger.debug("🛒 " + bot.getId() + " Подобрал " + amount + " x " + material);
                     }
                 }
             }
-            
+
         } catch (Exception e) {
-            BotLogger.debug("🛒 " + bot.getId() +  " "+e.getMessage());
+            BotLogger.debug("🛒 " + bot.getId() + " " + e.getMessage());
         }
 
     }
-    
+
     public static boolean hasEnoughBlocks(Bot bot, Set<Material> targetMaterials, int maxBlocksPerMaterial) {
 
-        if(bot.getInventory().getNPCInventory() == null) {
-            BotLogger.debug("🛒 " + bot.getId()+" Has no inventory yet!");
+        if (bot.getInventory().getNPCInventory() == null) {
+            BotLogger.debug("🛒 " + bot.getId() + " Has no inventory yet!");
             return true;
-        } //not yet created
+        } // not yet created
 
         Map<Material, Integer> collectedCounts = new HashMap<>();
-        
-        if(targetMaterials!=null) {
+
+        if (targetMaterials != null) {
             // Считаем количество каждого целевого материала в инвентаре
             for (ItemStack item : bot.getInventory().getNPCInventory().getContents()) {
                 if (item != null && targetMaterials.contains(item.getType())) {
-                    collectedCounts.put(item.getType(), collectedCounts.getOrDefault(item.getType(), 0) + item.getAmount());
+                    collectedCounts.put(item.getType(),
+                            collectedCounts.getOrDefault(item.getType(), 0) + item.getAmount());
                 }
             }
         } else {
             // Считаем количество каждого материала в инвентаре
             for (ItemStack item : bot.getInventory().getNPCInventory().getContents()) {
                 if (item != null) {
-                    collectedCounts.put(item.getType(), collectedCounts.getOrDefault(item.getType(), 0) + item.getAmount());
+                    collectedCounts.put(item.getType(),
+                            collectedCounts.getOrDefault(item.getType(), 0) + item.getAmount());
                 }
             }
         }
-        if (targetMaterials!=null) {
+        if (targetMaterials != null) {
             // Проверяем, достигнуто ли нужное количество для любого из целевых материалов
             for (Material material : targetMaterials) {
                 int count = collectedCounts.getOrDefault(material, 0);
-                BotLogger.debug("📦 " + bot.getId() + " | " + material + ": ( " + count + "/" + maxBlocksPerMaterial+")");
+                BotLogger.debug(
+                        "📦 " + bot.getId() + " | " + material + ": ( " + count + "/" + maxBlocksPerMaterial + ")");
 
                 if (count >= maxBlocksPerMaterial) {
                     return true; // Достигнута цель по какому-то материалу → завершаем задачу
@@ -166,17 +183,18 @@ public class BotInventory {
 
     public static boolean hasFreeInventorySpace(Bot bot, Set<Material> targetMaterials) {
 
-        if(bot.getInventory().getNPCInventory() == null) {
-            BotLogger.debug("🛒 " + bot.getId()+" Has no inventory yet!");
+        if (bot.getInventory().getNPCInventory() == null) {
+            BotLogger.debug("🛒 " + bot.getId() + " Has no inventory yet!");
             return true;
-        } //not yet created
+        } // not yet created
 
         for (ItemStack item : bot.getInventory().getNPCInventory().getContents()) {
             if (item == null || item.getType() == Material.AIR) {
                 return true; // Есть свободный слот
             }
-            if (targetMaterials!=null) {
-                // Проверяем, есть ли место в существующем стаке для любого из целевых материалов
+            if (targetMaterials != null) {
+                // Проверяем, есть ли место в существующем стаке для любого из целевых
+                // материалов
                 if (targetMaterials.contains(item.getType()) && item.getAmount() < item.getMaxStackSize()) {
                     return true; // В этом слоте можно добавить ещё
                 }
@@ -188,38 +206,44 @@ public class BotInventory {
         }
         return false; // Нет места ни в одном слоте
     }
-    
+
     public static void dropAllItems(Bot bot) {
-        Inventory inventory = bot.getInventory().getNPCInventory();
-        if( inventory == null) {
-            BotLogger.debug("🛒 " + bot.getId()+" Has no inventory yet!");
+
+        Inventory inv = bot.getInventory().getNPCInventory();
+        if (inv == null) {
             return;
-        } //not yet created
-        
+        } // Если инвентарь недоступен, возвращаем 0
+
+        Inventory inventory = bot.getInventory().getNPCInventory();
+        if (inventory == null) {
+            BotLogger.debug("🛒 " + bot.getId() + " Has no inventory yet!");
+            return;
+        } // not yet created
+
         for (ItemStack item : inventory.getContents()) {
             if (item != null && item.getType() != Material.AIR) {
                 bot.getNPCEntity().getWorld().dropItemNaturally(bot.getNPCEntity().getLocation(), item);
             }
         }
-        
+
         inventory.clear(); // Полностью очищаем инвентарь после выброса
         BotLogger.debug("🚮 " + bot.getId() + " Выбросил все предметы из инвентаря!");
     }
 
     public void pullAllItemsinRadius(double radius) {
         List<Entity> nearbyItems = bot.getNPCEntity().getNearbyEntities(radius, radius, radius);
-        
+
         for (Entity entity : nearbyItems) {
             if (entity instanceof Item) {
-                    entity.teleport(bot.getNPCEntity().getLocation()); // Притягиваем предмет
-                    BotLogger.debug("🛒 " + bot.getId()+" Pulled up a near item!");
+                entity.teleport(bot.getNPCEntity().getLocation()); // Притягиваем предмет
+                BotLogger.debug("🛒 " + bot.getId() + " Pulled up a near item!");
             }
         }
     }
 
     public void logInventory() {
         Inventory inventory = getNPCInventory();
-        
+
         if (inventory == null) {
             return;
         }
@@ -249,16 +273,17 @@ public class BotInventory {
         }
 
         // Вывод в логи
-        //BotLogger.trace("📝 " + bot.getId() + " Инвентарь:");
-        //for (String r : rows) {
-            // BotLogger.trace(r);
-        //}
+        // BotLogger.trace("📝 " + bot.getId() + " Инвентарь:");
+        // for (String r : rows) {
+        // BotLogger.trace(r);
+        // }
     }
 
     public static int getTotalItemCount(Bot bot) {
         Inventory inv = bot.getInventory().getNPCInventory();
-        if (inv == null) return 0;
-    
+        if (inv == null)
+            return 0;
+
         int total = 0;
         for (ItemStack item : inv.getContents()) {
             if (item != null && item.getType() != Material.AIR) {
@@ -270,28 +295,32 @@ public class BotInventory {
 
     public static boolean hasToolFor(Bot bot, Material blockType) {
         Inventory inv = bot.getInventory().getNPCInventory();
-        if (inv == null) return false; // Если инвентаря нет – инструмента точно нет!
-    
+        if (inv == null)
+            return false; // Если инвентаря нет – инструмента точно нет!
+
         Material requiredTool = getRequiredTool(blockType);
-        if (requiredTool == null) return true; // Если инструмент не нужен – всё норм, можно ломать
-    
+        if (requiredTool == null)
+            return true; // Если инструмент не нужен – всё норм, можно ломать
+
         // Проверяем, есть ли нужный инструмент в инвентаре
         for (ItemStack item : inv.getContents()) {
             if (item != null && item.getType() == requiredTool) {
                 return true; // Инструмент найден
             }
         }
-    
+
         return false; // Инструмента нет
     }
 
     public static boolean equipRequiredTool(Bot bot, Material blockType) {
         Inventory inv = bot.getInventory().getNPCInventory();
-        if (inv == null) return false;
-    
+        if (inv == null)
+            return false;
+
         Material requiredTool = getRequiredTool(blockType);
-        if (requiredTool == null) return true; // Инструмент не нужен
-    
+        if (requiredTool == null)
+            return true; // Инструмент не нужен
+
         for (int i = 0; i < inv.getSize(); i++) {
             ItemStack item = inv.getItem(i);
             if (item != null && item.getType() == requiredTool) {
@@ -300,21 +329,21 @@ public class BotInventory {
                 return true;
             }
         }
-    
+
         BotLogger.trace("🧰 Инструмент " + requiredTool + " не найден в инвентаре");
         return false;
     }
-    
 
     private static Material getRequiredTool(Material blockType) {
         return switch (blockType) {
-            case STONE, COBBLESTONE, IRON_ORE, GOLD_ORE, DIAMOND_ORE, DEEPSLATE -> Material.WOODEN_PICKAXE; // ❗ Минимально нужна деревянная кирка
+            case STONE, COBBLESTONE, IRON_ORE, GOLD_ORE, DIAMOND_ORE, DEEPSLATE -> Material.WOODEN_PICKAXE; // ❗
+                                                                                                            // Минимально
+                                                                                                            // нужна
+                                                                                                            // деревянная
+                                                                                                            // кирка
             case OBSIDIAN -> Material.DIAMOND_PICKAXE; // ❗ Только алмазная кирка!
             default -> null; // ❗ Если `null`, значит, инструмент не нужен (можно ломать руками)
         };
     }
-    
+
 }
-
-
-

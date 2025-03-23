@@ -3,8 +3,6 @@ package com.devone.aibot.commands;
 import com.devone.aibot.core.Bot;
 import com.devone.aibot.core.BotManager;
 import com.devone.aibot.core.comms.BotCommunicator;
-import com.devone.aibot.utils.BotUtils;
-
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;

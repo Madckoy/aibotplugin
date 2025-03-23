@@ -34,36 +34,35 @@ public class BotTaskTalk extends BotTask {
     @Override
     public void executeTask() {
         String message = generateMessage();
-    
-        if (message.isEmpty()) {
-            isDone = true;
-            return;
-        }
-    
         // ✅ Показываем в мониторинге всегда, даже если бот молчит
         setObjective("Размышляет: " + message);
-    
-        // 🤐 Бот занят рукой? Не говорим в чат, но оставляем в Objective
-        if (bot.getActiveTask() instanceof BotTaskUseHand) {
-            BotLogger.debug(bot.getId() + " 🤐 Занят рукой, не говорит: " + message);
-            isDone = true;
-            return;
-        }
-    
-        // 🎯 Если есть игрок — говорим персонально
-        if (player != null) {
-            communicator.sendMessageToPlayer(message);  // Используем BotCommunicator
-        }
-        // 📣 Если нужно вещать в общий чат
-        else if (shouldBroadcastToAll(type)) {
-            communicator.broadcastMessage(message);  // Используем BotCommunicator
-        }
-        // 🤫 Иначе просто бурчим себе под нос (логируем)
-        else {
-            BotLogger.debug(bot.getId() + " бурчит себе под нос: " + message);
-        }
-    
+
         isDone = true;
+        return;
+
+        /*****
+         * // 🤐 Бот занят рукой? Не говорим в чат, но оставляем в Objective
+         * if (bot.getActiveTask() instanceof BotTaskUseHand) {
+         * BotLogger.debug(bot.getId() + " 🤐 Занят рукой, не говорит: " + message);
+         * isDone = true;
+         * return;
+         * }
+         * 
+         * // 🎯 Если есть игрок — говорим персонально
+         * if (player != null) {
+         * communicator.sendMessageToPlayer(message); // Используем BotCommunicator
+         * }
+         * // 📣 Если нужно вещать в общий чат
+         * else if (shouldBroadcastToAll(type)) {
+         * communicator.broadcastMessage(message); // Используем BotCommunicator
+         * }
+         * // 🤫 Иначе просто бурчим себе под нос (логируем)
+         * else {
+         * BotLogger.debug(bot.getId() + " бурчит себе под нос: " + message);
+         * }
+         * 
+         * isDone = true;
+         ****/
     }
 
     private boolean shouldBroadcastToAll(TalkType type) {
@@ -89,7 +88,8 @@ public class BotTaskTalk extends BotTask {
     }
 
     private String getRandomMessage(List<String> messages) {
-        if (messages == null || messages.isEmpty()) return "🤖 ...";
+        if (messages == null || messages.isEmpty())
+            return "🤖 ...";
         return messages.get(random.nextInt(messages.size()));
     }
 }

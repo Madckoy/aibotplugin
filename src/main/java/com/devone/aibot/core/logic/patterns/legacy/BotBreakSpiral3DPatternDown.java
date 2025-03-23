@@ -1,12 +1,13 @@
-package com.devone.aibot.core.logic.patterns.destruction;
+package com.devone.aibot.core.logic.patterns.legacy;
 
 import com.devone.aibot.core.Bot;
+
 import org.bukkit.Location;
 
 import java.util.*;
 import java.util.stream.Collectors;
 
-public class BotBreakSpiral3DPatternDownUp extends AbstractBotBreakPattern {
+public class BotBreakSpiral3DPatternDown extends BotBreakAbstractPattern {
 
     @Override
     public Location findNextBlock(Bot bot, Map<Location, ?> geoMap) {
@@ -31,11 +32,9 @@ public class BotBreakSpiral3DPatternDownUp extends AbstractBotBreakPattern {
                 int dy = loc.getBlockY() - centerY;
                 int dz = loc.getBlockZ() - centerZ;
 
-                if (Math.abs(dx) > radius || Math.abs(dy) > radius || Math.abs(dz) > radius)
-                    return false;
+                if (Math.abs(dx) > radius || Math.abs(dy) > radius || Math.abs(dz) > radius) return false;
 
-                // ❗ Исключаем только строго центральную колонну
-                return !(dx == 0 && dz == 0);
+                return !(dx == 0 && dz == 0); // исключаем центральную колонну
             })
             .sorted(Comparator.comparingDouble(loc -> spiralPriority(center, loc)))
             .collect(Collectors.toList());
@@ -48,8 +47,8 @@ public class BotBreakSpiral3DPatternDownUp extends AbstractBotBreakPattern {
         int dy = loc.getBlockY() - center.getBlockY();
         int dz = loc.getBlockZ() - center.getBlockZ();
 
-        double horizontal = Math.sqrt(dx * dx + dz * dz);
-        return horizontal + Math.abs(dy) * 0.25;
+        double horizontalDistance = Math.sqrt(dx * dx + dz * dz);
+        return horizontalDistance + Math.abs(dy) * 0.25;
     }
 
     @Override
@@ -59,6 +58,6 @@ public class BotBreakSpiral3DPatternDownUp extends AbstractBotBreakPattern {
 
     @Override
     public String getName() {
-        return "BotBreakSpiral3DPatternDownUp";
+        return "BotBreakSpiral3DPatternDown";
     }
 }
