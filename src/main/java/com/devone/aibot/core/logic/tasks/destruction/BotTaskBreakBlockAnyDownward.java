@@ -1,7 +1,7 @@
 package com.devone.aibot.core.logic.tasks.destruction;
 
 import com.devone.aibot.core.Bot;
-import com.devone.aibot.core.logic.patterns.destruction.BotAnunakInnerChamberPattern;
+import com.devone.aibot.core.logic.patterns.destruction.BotBreakDefaultPattern;
 import com.devone.aibot.core.logic.patterns.destruction.BotBreakSpiral3DPatternDown;
 import com.devone.aibot.utils.BotGeo3DScan.ScanMode;
 
@@ -19,7 +19,7 @@ public class BotTaskBreakBlockAnyDownward extends BotTaskBreakBlock {
          
         setScanMode(ScanMode.DOWNWARD);
         
-        setBreakPattern(new BotAnunakInnerChamberPattern());
+        setBreakPattern(new BotBreakDefaultPattern());
 
     }
  

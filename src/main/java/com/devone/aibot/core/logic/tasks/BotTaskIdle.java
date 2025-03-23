@@ -1,6 +1,5 @@
 package com.devone.aibot.core.logic.tasks;
 
-import com.devone.aibot.core.logic.patterns.destruction.BotAnunakInnerChamberPattern;
 import com.devone.aibot.core.logic.tasks.configs.BotTaskHuntConfig;
 import com.devone.aibot.core.logic.tasks.configs.BotTaskIdleConfig;
 import com.devone.aibot.core.logic.tasks.destruction.BotTaskBreakBlockAnyDownward;
