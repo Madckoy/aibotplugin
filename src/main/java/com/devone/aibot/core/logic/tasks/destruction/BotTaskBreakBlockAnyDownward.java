@@ -14,6 +14,6 @@ public class BotTaskBreakBlockAnyDownward extends BotTaskBreakBlock {
         bot.getRuntimeStatus().setTargetLocation(bot.getRuntimeStatus().getCurrentLocation());
 
         // Передай в configure строку с именем yaml-файла
-        this.configure(null, 0, 10, true, false, null, "safe_cube.yml");
+        this.configure(null, 0, 10, true, false, null, "cube.yml");
     }
 }

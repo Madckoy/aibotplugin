@@ -89,9 +89,11 @@ public class BotWebService {
             }
         }
 
-        String[] resourceFilesPatterns = { "patterns/break/default.yml",
-                "patterns/break/safe_cube.yml",
-                "patterns/break/safe_pyramid.yml" };
+        String[] resourceFilesPatterns = { 
+                "patterns/break/default.yml",
+                "patterns/break/cube.yml",
+                "patterns/break/untested-cube.yml",
+                "patterns/break/untested_pyramid.yml" };
 
         for (String resource : resourceFilesPatterns) {
             try (InputStream in = getClass().getClassLoader().getResourceAsStream(resource)) {

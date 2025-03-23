@@ -134,9 +134,12 @@ public class BotTaskBreakBlock extends BotTask {
         }
 
         Location targetLocation = breakPattern.findNextBlock(bot);
+
         bot.getRuntimeStatus().setTargetLocation(targetLocation);
 
-        if (targetLocation != null) {
+        if (bot.getRuntimeStatus().getTargetLocation() != null) {
+
+            setObjective("Probing the block: " + BotUtils.getBlockName(bot.getRuntimeStatus().getTargetLocation().getBlock()));
 
             if (isInProtectedZone(targetLocation)) {
                 BotLogger.debug("⛔ " + bot.getId() + " в запретной зоне, НЕ будет разрушать блок: " +
@@ -145,8 +148,6 @@ public class BotTaskBreakBlock extends BotTask {
                 bot.getRuntimeStatus().setTargetLocation(null);
                 return;
             }
-
-            BotLogger.trace("🛠️ Целевой блок найден: " + BotStringUtils.formatLocation(targetLocation));
 
             if (!BotUtils.isBreakableBlock(targetLocation)) {
                 BotLogger.trace("⛔ Неразрушаемый блок: " + BotStringUtils.formatLocation(targetLocation));
@@ -164,15 +165,18 @@ public class BotTaskBreakBlock extends BotTask {
                 }
             }
 
-            setObjective("Разрушение блока: " + BotUtils.getBlockName(targetLocation.getBlock()));
+            setObjective("Breaking the block: " + BotUtils.getBlockName(targetLocation.getBlock()));
 
-            BotLogger.trace("🚧 " + bot.getId() + " Разрушение блока: " + targetLocation.getBlock().toString());
+            // BotLogger.trace("🚧 " + bot.getId() + " Разрушение блока: " + targetLocation.getBlock().toString());
 
             BotTaskUseHand handTask = new BotTaskUseHand(bot);
             handTask.configure(targetLocation);
             bot.addTaskToQueue(handTask);
 
         } else {
+
+            setObjective("The block is not found. ");
+
             handleNoTargetFound();
         }
     }

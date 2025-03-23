@@ -4,6 +4,8 @@ package com.devone.aibot.core.logic.patterns.destruction;
 
 import org.bukkit.Location;
 
+import com.devone.aibot.AIBotPlugin;
+
 import java.util.*;
 
 import net.objecthunter.exp4j.Expression;
@@ -47,7 +49,7 @@ public class BotBreakInterpretedPattern {
             for (int y = context.cy - context.radius; y <= context.cy + context.radius; y++) {
                 for (int z = context.cz - context.radius; z <= context.cz + context.radius; z++) {
                     if (passesFilters(x, y, z, context)) {
-                        result.add(new Location(null, x, y, z)); // TODO: world будет подставляться отдельно
+                        result.add(new Location(AIBotPlugin.getInstance().getServer().getWorlds().get(0), x, y, z)); // TODO: world будет подставляться отдельно
                     }
                 }
             }
