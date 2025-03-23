@@ -41,6 +41,7 @@ public class BotTaskFollowTarget extends BotTask {
         }
 
         setObjective("Chasing the target: " + target.getType());
+        
         updateFollowLogic();
 
         // Повторим проверку через заданный интервал

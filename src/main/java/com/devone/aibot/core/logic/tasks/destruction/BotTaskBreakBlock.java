@@ -139,23 +139,23 @@ public class BotTaskBreakBlock extends BotTask {
 
         if (bot.getRuntimeStatus().getTargetLocation() != null) {
 
-            setObjective("Probing the block: " + BotUtils.getBlockName(bot.getRuntimeStatus().getTargetLocation().getBlock()));
+            setObjective("Probing the target: " + BotUtils.getBlockName(bot.getRuntimeStatus().getTargetLocation().getBlock()));
 
-            if (isInProtectedZone(targetLocation)) {
+            if (isInProtectedZone(bot.getRuntimeStatus().getTargetLocation())) {
                 BotLogger.debug("⛔ " + bot.getId() + " в запретной зоне, НЕ будет разрушать блок: " +
-                        BotStringUtils.formatLocation(targetLocation));
+                        BotStringUtils.formatLocation(bot.getRuntimeStatus().getTargetLocation()));
                 isDone = true;
                 bot.getRuntimeStatus().setTargetLocation(null);
                 return;
             }
 
-            if (!BotUtils.isBreakableBlock(targetLocation)) {
-                BotLogger.trace("⛔ Неразрушаемый блок: " + BotStringUtils.formatLocation(targetLocation));
+            if (!BotUtils.isBreakableBlock(bot.getRuntimeStatus().getTargetLocation())) {
+                BotLogger.trace("⛔ Неразрушаемый блок: " + BotStringUtils.formatLocation(bot.getRuntimeStatus().getTargetLocation()));
                 bot.getRuntimeStatus().setTargetLocation(null);
                 return;
             }
 
-            Material mat = targetLocation.getBlock().getType();
+            Material mat = bot.getRuntimeStatus().getTargetLocation().getBlock().getType();
 
             if (BotUtils.requiresTool(mat)) {
                 if (!BotInventory.equipRequiredTool(bot, mat)) {
@@ -165,7 +165,7 @@ public class BotTaskBreakBlock extends BotTask {
                 }
             }
 
-            setObjective("Breaking the block: " + BotUtils.getBlockName(targetLocation.getBlock()));
+            setObjective("Breaking the block: " + BotUtils.getBlockName(bot.getRuntimeStatus().getTargetLocation().getBlock()));
 
             // BotLogger.trace("🚧 " + bot.getId() + " Разрушение блока: " + targetLocation.getBlock().toString());
 
