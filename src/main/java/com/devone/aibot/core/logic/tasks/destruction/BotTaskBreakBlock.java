@@ -93,6 +93,7 @@ public class BotTaskBreakBlock extends BotTask {
 
         if (this.breakPattern == null) {
             this.breakPattern = new BotBreakDefaultPattern();
+            this.breakPattern.configure(searchRadius);
         }
         this.breakPattern.configure(searchRadius);
 

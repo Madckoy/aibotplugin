@@ -7,10 +7,6 @@ import java.util.Map;
 
 public class BotBreakInversePyramidPattern extends AbstractBotBreakPattern {
 
-    public BotBreakInversePyramidPattern(int radius) {
-        this.radius = radius;
-    }
-
     @Override
     public Location findNextBlock(Bot bot, Map<Location, ?> geoMap) {
         if (!initialized) {

@@ -15,14 +15,18 @@ public abstract class AbstractBotBreakPattern implements IBotBreakPattern {
 
     public boolean initialized = false;
 
-    protected int radius = 5; // Значение по умолчанию, может быть переопределено
+    protected int radius = 0; // Значение по умолчанию, может быть переопределено
 
     public final Queue<Location> blocksToBreak = new LinkedList<>();
 
     @Override
     public IBotBreakPattern configure(int radius) {
-        this.radius = radius;
+        setRadius(radius) ;
         return this;
+    }
+
+    public void setRadius(int rds) {
+        radius = rds;
     }
 
     @Override

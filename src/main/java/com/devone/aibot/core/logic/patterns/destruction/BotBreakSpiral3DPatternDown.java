@@ -7,11 +7,7 @@ import java.util.*;
 import java.util.stream.Collectors;
 
 public class BotBreakSpiral3DPatternDown extends AbstractBotBreakPattern {
-
-    public BotBreakSpiral3DPatternDown(int radius) {
-        this.radius = radius;
-    }
-
+    
     @Override
     public Location findNextBlock(Bot bot, Map<Location, ?> geoMap) {
         if (!initialized) {
