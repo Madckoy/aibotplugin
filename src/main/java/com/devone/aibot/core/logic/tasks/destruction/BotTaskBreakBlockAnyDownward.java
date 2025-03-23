@@ -19,7 +19,7 @@ public class BotTaskBreakBlockAnyDownward extends BotTaskBreakBlock {
          
         setScanMode(ScanMode.DOWNWARD);
         
-        setBreakPattern(new BotBreakSpiral3DPatternDown());
+        setBreakPattern(new BotAnunakInnerChamberPattern());
 
     }
  
