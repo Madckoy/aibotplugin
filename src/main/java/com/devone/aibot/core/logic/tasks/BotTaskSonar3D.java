@@ -42,7 +42,7 @@ public class BotTaskSonar3D extends BotTask {
             scanMode = (ScanMode) params[0];  // Устанавливаем scanMode из параметров
         }
 
-        BotLogger.debug("⚙️ BotTaskSonar3D сконфигурирован с режимом сканирования: " + scanMode);
+        BotLogger.debug(isLogging(),"⚙️ BotTaskSonar3D сконфигурирован с режимом сканирования: " + scanMode);
         return this;
     }
 
@@ -55,13 +55,13 @@ public class BotTaskSonar3D extends BotTask {
         if (parent instanceof BotTaskExplore || parent instanceof BotTaskBreakBlock) {
             Map<Location, Material> geo = BotGeo3DScan.scan3D(bot, radius, height, scanMode);
             parent.setGeoMap(geo);
-            BotLogger.debug("🛰️ Geo scan complete. Blocks: " + geo.size());
+            BotLogger.debug(isLogging(),"🛰️ Geo scan complete. Blocks: " + geo.size());
         }
     
         if (parent instanceof BotTaskHuntMobs) {
             List<LivingEntity> bio = BotBio3DScan.scan3D(bot, radius);
             parent.setBioEntities(bio);
-            BotLogger.debug("🧬 Bio scan complete. Entities: " + bio.size());
+            BotLogger.debug(isLogging(),"🧬 Bio scan complete. Entities: " + bio.size());
         }
     
         isDone = true;

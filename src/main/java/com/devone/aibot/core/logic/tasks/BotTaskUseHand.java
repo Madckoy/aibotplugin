@@ -24,6 +24,11 @@ public class BotTaskUseHand extends BotTask {
         setObjective("Hit the target");
     }
 
+    public BotTaskUseHand(Bot bot, String name) {
+        super(bot,name);
+        setObjective("Hit the target");
+    }
+
     @Override
     public BotTask configure(Object... params) {
         super.configure(params);
@@ -46,7 +51,7 @@ public class BotTaskUseHand extends BotTask {
         }
 
         if (!hasParams) {
-            BotLogger.error(bot.getId() + " ❌ Некорректные параметры для `BotTaskUseHand`: " + Arrays.toString(params));
+            BotLogger.error(isLogging(), bot.getId() + " ❌ Некорректные параметры для `BotTaskUseHand`: " + Arrays.toString(params));
             isDone = true;
         }
 
@@ -56,14 +61,14 @@ public class BotTaskUseHand extends BotTask {
     @Override
     public void executeTask() {
         if (bot.getRuntimeStatus().getTargetLocation() == null && target == null) {
-            BotLogger.error(bot.getId() + " ❌ Нет цели или координат для удара");
+            BotLogger.error(isLogging(), bot.getId() + " ❌ Нет цели или координат для удара");
             isDone = true;
             return;
         }
     
         // ✅ Проверяем, если цель уже мертва — выходим (для атаки)
         if (target != null && target.isDead()) {
-            BotLogger.debug(bot.getId() + " ☠️ Цель уже мертва. Завершаем атаку.");
+            BotLogger.debug(isLogging(), bot.getId() + " ☠️ Цель уже мертва. Завершаем атаку.");
             isDone = true;
             return;
         }
@@ -79,16 +84,16 @@ public class BotTaskUseHand extends BotTask {
     
             if (target != null && !target.isDead()) {
                 target.damage(damage);
-                BotLogger.debug(bot.getId() + " ✋🏻 Нанесён урон существу: " + target.getName());
+                BotLogger.debug(isLogging(), bot.getId() + " ✋🏻 Нанесён урон существу: " + target.getName());
             } else if (bot.getRuntimeStatus().getTargetLocation() != null && bot.getRuntimeStatus().getTargetLocation().getBlock().getType() != Material.AIR) {
                 // ✅ Добавляем эффект разрушения перед ломанием блока
                 BotUtils.playBlockBreakEffect(bot.getRuntimeStatus().getTargetLocation());
     
                 bot.getRuntimeStatus().getTargetLocation().getBlock().breakNaturally();
 
-                BotLogger.debug(bot.getId() + " ✅ Блок разрушен на " + BotStringUtils.formatLocation(bot.getRuntimeStatus().getTargetLocation()));
+                BotLogger.debug(isLogging(), bot.getId() + " ✅ Блок разрушен на " + BotStringUtils.formatLocation(bot.getRuntimeStatus().getTargetLocation()));
             } else {
-                BotLogger.warn(bot.getId() + " ⚠️ Нечего разрушать");
+                BotLogger.warn(isLogging(), bot.getId() + " ⚠️ Нечего разрушать");
             }
     
             isDone = true;
@@ -106,15 +111,15 @@ public class BotTaskUseHand extends BotTask {
             bot.getNPCEntity().teleport(bot.getRuntimeStatus().getCurrentLocation());
         }, 1L); // ✅ Через тик, чтобы дать время на обновление
 
-        BotLogger.debug("🔄 TURNING: " + bot.getId() + " | Yaw: " + yaw + " | Target: " + BotStringUtils.formatLocation(target));
+        BotLogger.debug(isLogging(), "🔄 TURNING: " + bot.getId() + " | Yaw: " + yaw + " | Target: " + BotStringUtils.formatLocation(target));
     }
 
     private void animateHand() {
         if (bot.getNPCEntity() instanceof Player playerBot) {
             playerBot.swingMainHand();
-            BotLogger.trace("🤚 Анимация руки выполнена");
+            BotLogger.trace(isLogging(), "✋🏻 Анимация руки выполнена");
         } else {
-            BotLogger.trace("🤚 Анимация не выполнена: бот — не игрок");
+            BotLogger.trace(isLogging(), "✋🏻 Анимация не выполнена: бот — не игрок");
         }
     }
 }

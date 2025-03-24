@@ -30,11 +30,11 @@ public class BotManager {
 
         // ✅ Теперь вызываем `loadExistingBots()` напрямую в единственном `runTaskLater`
         Bukkit.getScheduler().runTaskLater(plugin, () -> {
-            BotLogger.info("💡 Загружаем ботов...");
+            BotLogger.info(true, "💡 Загружаем ботов...");
 
             loadExistingBots(); // ✅ Загружаем ботов из CitizensAPI и `bots.yml`
 
-            BotLogger.info("✅ Все боты загружены.");
+            BotLogger.info(true, "✅ Все боты загружены.");
             
         }, 600L);
     }
@@ -54,7 +54,7 @@ public class BotManager {
 
             bot.despawnNPC();  // Деспавн и очистка стека задач вызывается из самого бота
 
-            BotLogger.debug("➖" + name + " был удалён.");
+            BotLogger.debug(true, "➖" + name + " был удалён.");
 
             saveBots(); // Сохраняем список после удаления одного бота
 
@@ -74,7 +74,7 @@ public class BotManager {
     }
 
     private void loadExistingBots() {
-        BotLogger.info("🔄 Загружаем существующих NPC ботов...");
+        BotLogger.info(true, "🔄 Загружаем существующих NPC ботов...");
 
         File file = new File(BotConstants.PLUGIN_PATH_CONFIGS, "bots.yml");
         FileConfiguration config = YamlConfiguration.loadConfiguration(file);
@@ -103,25 +103,25 @@ public class BotManager {
                 storedLocation = new Location(Bukkit.getWorlds().get(0), x, y, z);
             }
 
-            BotLogger.info("♻️ " + botName + " Has been loaded.");
+            BotLogger.info(true, "♻️ " + botName + " Has been loaded.");
 
             if (!npc.isSpawned()) {
 
                 npc.spawn(storedLocation);
 
-                BotLogger.info("✅ " + botName + " a new NPC has been spawned.");
+                BotLogger.info(true, "✅ " + botName + " a new NPC has been spawned.");
             }    
             
             Bot bot = new Bot(botName, npc, this);
             botsMap.put(botName, bot);
-            BotLogger.info("✅" + bot.getId() + " Added to the Map!");
+            BotLogger.info(true, "✅" + bot.getId() + " Added to the Map!");
             
         }
 
-        BotLogger.info("✅ Загружено NPC ботов: " + botsMap.size());
+        BotLogger.info(true, "✅ Загружено NPC ботов: " + botsMap.size());
 
         // ✅ После загрузки сразу обновляем маркеры
-        BotLogger.info("✅ Обновляем карту: " );
+        BotLogger.info(true, "✅ Обновляем карту: " );
 
          bm_markers= new BlueMapMarkers(this);
          bm_markers.scheduleMarkerUpdate();
@@ -149,10 +149,10 @@ public class BotManager {
         try {
             config.save(file);
 
-            BotLogger.info("✅ Боты сохранены в bots.yml.");
+            BotLogger.info(true, "✅ Боты сохранены в bots.yml.");
 
         } catch (IOException e) {
-            BotLogger.error("⚠️ Ошибка сохранения bots.yml: " + e.getMessage());
+            BotLogger.error(true, "⚠️ Ошибка сохранения bots.yml: " + e.getMessage());
         }
     }
 
@@ -161,7 +161,7 @@ public class BotManager {
 
             removeBot(botId); // Вызываем стандартный метод удаления
         }
-        BotLogger.info("✅ Все боты удалены.");
+        BotLogger.info(true, "✅ Все боты удалены.");
     }
 
     public void selectBot(UUID playerUUID, Bot bot) {

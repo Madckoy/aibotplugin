@@ -36,7 +36,7 @@ public class Bot {
         this.lifeCycle = new BotLifeCycle(this);
         this.rStatus = new BotRuntimeStatus(this); // Инициализация рантайм статуса
         this.communicator = new BotCommunicator(this); // Инициализация BotCommunicator
-        BotLogger.info("➕ " + id + " Has been CREATED AND SPAWNED!");
+        BotLogger.info(true, "➕ " + id + " Has been CREATED AND SPAWNED!");
     }
 
     // Getter для общения
@@ -73,15 +73,15 @@ public class Bot {
     public void despawnNPC() {
         if (npc != null) {
             //stop all tasks!
-            BotLogger.info("➖ "+ id + " Stopping ALL Tasks!");
+            BotLogger.info(true, "➖ "+ id + " Stopping ALL Tasks!");
             getLifeCycle().getTaskStackManager().clearTasks();
 
-            BotLogger.info("➖ "+ id + " Despawning and Destroying NPC");
+            BotLogger.info(true, "➖ "+ id + " Despawning and Destroying NPC");
             npc.despawn();
             npc.destroy();
             npc = null;
         }
-        BotLogger.info("➖ "+ id + " Has been DESPAWNED and DESTROYED!");
+        BotLogger.info(true, "➖ "+ id + " Has been DESPAWNED and DESTROYED!");
     }  
 
     public BotInventory getInventory() {
@@ -116,8 +116,6 @@ public class Bot {
         return npc.isSpawned();
     }
 
-    
-
     public void addTaskToQueue(BotTask task) {
       getLifeCycle().getTaskStackManager().pushTask(task);
     }
@@ -136,12 +134,12 @@ public class Bot {
     
         // Если есть дроп в радиусе 2 блоков — бот остается на месте
         if (!nearbyItems.isEmpty()) {
-            BotLogger.debug("✅ "+ getId() +"В радиусе " + pickupRadius + " блоков есть предметы, остаюсь на месте.");
+            BotLogger.debug(true, "✅ "+ getId() +"В радиусе " + pickupRadius + " блоков есть предметы, остаюсь на месте.");
             return;
         }
     
         // Если предметов рядом нет, двигаем бота к последнему разрушенному блоку
-        BotLogger.debug("✅ "+getId() +" Дроп подобран, двигаюсь к последнему разрушенному блоку " + lastBrokenBlock);
+        BotLogger.debug(true, "✅ "+getId() +" Дроп подобран, двигаюсь к последнему разрушенному блоку " + lastBrokenBlock);
         
         BotTaskMove mv_task = new BotTaskMove(this);
         mv_task.configure(lastBrokenBlock);

@@ -15,15 +15,17 @@ import org.bukkit.entity.EntityType;
 
 import com.devone.aibot.core.Bot;
 import com.devone.aibot.core.BotInventory;
+import com.devone.aibot.utils.BotConstants;
 import com.devone.aibot.utils.BotLogger;
 
 public class BotTaskIdle extends BotTask {
 
     public BotTaskIdle(Bot bot) {
-        super(bot, "🎲");
+        super(bot, "𖦹");
         this.bot = bot;
         config = new BotTaskIdleConfig();
-        setObjective("Roll a dice");
+
+        setObjective("Idle");
     }
 
     @Override
@@ -57,7 +59,7 @@ public class BotTaskIdle extends BotTask {
             moveTask.configure(drop_off_loc);
             bot.addTaskToQueue(moveTask);
 
-            BotLogger.debug("📦 " + bot.getId() + " Идёт к точке сброса: " + BotStringUtils.formatLocation(drop_off_loc));
+            BotLogger.debug(isLogging(),"📦 " + bot.getId() + " Идёт к точке сброса: " + BotStringUtils.formatLocation(drop_off_loc));
             return;
         }
 
@@ -69,7 +71,7 @@ public class BotTaskIdle extends BotTask {
         double huntChance = isNight ? 0.9 : 0.2; // 90% ночью, 20% днем
 
         if (rand < 0.1) { // 10% шанс сказать что-то про окружающий мир
-            BotLogger.debug("🤖 " + bot.getId() + " Комментирует обстановку.");
+            BotLogger.debug(isLogging(),"🤖 " + bot.getId() + " Комментирует обстановку.");
             bot.addTaskToQueue(new BotTaskTalk(bot, null, BotTaskTalk.TalkType.ENVIRONMENT_COMMENT));
             return;
         }
@@ -77,7 +79,7 @@ public class BotTaskIdle extends BotTask {
 
         if (rand < huntChance) {
             // ⚔️ Охота
-            BotLogger.debug("⚔️ " + bot.getId() + " Собирается на охоту! (Вероятность: " + huntChance * 100 + "%)");
+            BotLogger.debug(isLogging(),"⚔️ " + bot.getId() + " Собирается на охоту! (Вероятность: " + huntChance * 100 + "%)");
            
             BotTaskHuntMobs hunt_task = new BotTaskHuntMobs(bot);
             //BotTaskHuntMobs config  = hunt_task.getConfig();
@@ -87,14 +89,14 @@ public class BotTaskIdle extends BotTask {
             
             hunt_task.configure(targets, 20, true);
             bot.addTaskToQueue(hunt_task);
-            BotLogger.debug("⚔️ " + bot.getId() + " Начинает охоту на " + (isNight ? "агрессивных мобов" : "животных") + "!");
+            BotLogger.debug(isLogging(), "⚔️ " + bot.getId() + " Начинает охоту на " + (isNight ? "агрессивных мобов" : "животных") + "!");
 
             return;
         }
 
         if (rand >= 0.8) {
             // 📌 Начать патрулирование (20% вероятность)
-            BotLogger.debug("🌐 " + bot.getId() + " начинает патрулирование.");
+            BotLogger.debug(isLogging(), "🌐 " + bot.getId() + " начинает патрулирование.");
             BotTaskExplore patrolTask = new BotTaskExplore(bot);
             bot.addTaskToQueue(patrolTask);
             return;
@@ -106,7 +108,7 @@ public class BotTaskIdle extends BotTask {
             BotTaskBreakBlock breakTask = new BotTaskBreakBlock(bot);
         
             if (breakTask.isEnabled) {
-                breakTask.configure(dirtTypes, maxToCollect, 10, true);
+                breakTask.configure(dirtTypes, maxToCollect, BotConstants.DEFAULT_SCAN_RANGE, true);
                 bot.addTaskToQueue(breakTask);
             }
         
@@ -119,7 +121,7 @@ public class BotTaskIdle extends BotTask {
             BotTaskBreakBlockAnyDownward breakAnyTask = new BotTaskBreakBlockAnyDownward(bot);
         
             if (breakAnyTask.isEnabled) {
-                breakAnyTask.configure(null, maxToCollect, 10, true);
+                breakAnyTask.configure(null, maxToCollect, BotConstants.DEFAULT_SCAN_RANGE, true);
                 bot.addTaskToQueue(breakAnyTask);
             }    
         
@@ -128,7 +130,7 @@ public class BotTaskIdle extends BotTask {
 
         if (rand < 0.2) {
             // 💤 20% шанс остаться в IDLE
-            BotLogger.debug("🔀" + bot.getId() + " остаётся в IDLE.");
+            BotLogger.debug(isLogging(),"🔀" + bot.getId() + " остаётся в IDLE.");
             return;
         }
     }

@@ -8,7 +8,7 @@ public class BotTaskBreakBlockAnyUpward extends BotTaskBreakBlock {
     public BotTaskBreakBlockAnyUpward(Bot bot) {
         super(bot);
 
-        setName("⛏");
+        setName("🧑‍🔧");
         setTargetMaterials(null);
         setScanMode(ScanMode.UPWARD);
         bot.getRuntimeStatus().setTargetLocation(bot.getRuntimeStatus().getCurrentLocation());

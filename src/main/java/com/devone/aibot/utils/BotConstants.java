@@ -11,4 +11,8 @@ public class BotConstants {
     public static final boolean FLIP_COORDS                  = true;
     public static final String  PLUGIN_PATH_PATTERNS_BREAK   = PLUGIN_PATH + "/patterns/break/";
     public static final String  RESOURCE_PATH_PATTERNS_BREAK = "patterns/break/";
+
+
+    public static int DEFAULT_SCAN_RANGE = 5;
+    public static final String  DEFAULT_PATTERN_BREAK = "default.yml";
 }

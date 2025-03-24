@@ -43,7 +43,7 @@ public class BotCmdTpHere implements CommandExecutor {
         task.configure(player.getLocation());
         bot.addTaskToQueue(task);
 
-        BotLogger.info("📌 /bot-tp-here: Бот " + bot.getId() + " Телепортируется в точку игрока" + 
+        BotLogger.info(true,"📌 /bot-tp-here: Бот " + bot.getId() + " Телепортируется в точку игрока" + 
                                                   BotStringUtils.formatLocation(bot.getRuntimeStatus().getTargetLocation()));
 
         player.sendMessage("§aБот " + bot.getId() + " Телепортируется к игроку!");

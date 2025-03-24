@@ -26,7 +26,7 @@ public class BotTaskFollowTarget extends BotTask {
     private Location lastKnownLocation;
 
     public BotTaskFollowTarget(Bot bot, LivingEntity target) {
-        super(bot, "🎯");
+        super(bot, "𖣠");
         this.target = target;
         bot.getRuntimeStatus().setTargetLocation(target.getLocation());   
         this.lastKnownLocation = target.getLocation();
@@ -35,7 +35,7 @@ public class BotTaskFollowTarget extends BotTask {
     @Override
     public void executeTask() {
         if (target == null || target.isDead()) {
-            BotLogger.debug("💀 Цель исчезла. Завершаем преследование.");
+            BotLogger.debug(isLogging(),"💀 Цель исчезла. Завершаем преследование.");
             isDone = true;
             return;
         }
@@ -49,7 +49,7 @@ public class BotTaskFollowTarget extends BotTask {
 
         // Защита от вечного цикла
         if (getElapsedTime() > 120000) {
-            BotLogger.debug("💀 Не могу добраться до цели. Завершаю преследование.");
+            BotLogger.debug(isLogging(),"💀 Не могу добраться до цели. Завершаю преследование.");
             isDone = true;
         }
     }
@@ -67,7 +67,7 @@ public class BotTaskFollowTarget extends BotTask {
     private void followPlayer(Player player, double distance) {
         if (distance > followDistance) {
             updateNavigationIfNeeded(player.getLocation());
-            BotLogger.debug("🏃 Бот следует за игроком " + player.getName());
+            BotLogger.debug(isLogging(),"🏃 Бот следует за игроком " + player.getName());
         }
 
         if (System.currentTimeMillis() - lastChatTime > 10000) {
@@ -79,7 +79,7 @@ public class BotTaskFollowTarget extends BotTask {
     private void followAndAttack(double distance) {
         if (distance > attackRange) {
             updateNavigationIfNeeded(target.getLocation());
-            BotLogger.debug("🏃 Преследуем " + target.getType() + " (расстояние: " + distance + ")");
+            BotLogger.debug(isLogging(),"🏃 Преследуем " + target.getType() + " (расстояние: " + distance + ")");
         } else {
             attackTarget();
             isDone = true; // Завершаем после атаки — задача выполнена
@@ -92,7 +92,7 @@ public class BotTaskFollowTarget extends BotTask {
 
             BotNavigationUtils.navigateTo(bot, lastKnownLocation, 2.5);
             
-            BotLogger.trace("🔄 Обновляем маршрут к новой позиции цели.");
+            BotLogger.trace(isLogging(),"🔄 Обновляем маршрут к новой позиции цели.");
         }
     }
 
@@ -102,10 +102,10 @@ public class BotTaskFollowTarget extends BotTask {
         double distance = bot.getRuntimeStatus().getCurrentLocation().distance(target.getLocation());
 
         if (distance <= attackRange) {
-            BotTaskUseHand hand_task = new BotTaskUseHand(bot);
+            BotTaskUseHand hand_task = new BotTaskUseHand(bot, "⚔️");
             hand_task.configure(target.getLocation(), target, 10);
             bot.addTaskToQueue(hand_task);
-            BotLogger.debug("⚔️ Бот атакует " + target.getType() + "!");
+            BotLogger.debug(isLogging(),"⚔️ Бот атакует " + target.getType() + "!");
         }
     }
 

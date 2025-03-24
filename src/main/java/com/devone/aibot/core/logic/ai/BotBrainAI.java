@@ -11,7 +11,7 @@ public class BotBrainAI {
 
     public static void processDecision(Bot bot) {
         try {
-            BotLogger.info("🧠 Нейронные связи активированны!");
+            BotLogger.info(true, "🧠 Нейронные связи активированны!");
             //JSONObject botState = new JSONObject();
             //botState.put("inventoryFull", bot.isInventoryFull());
             //botState.put("mobNearby", bot.isMobNearby());
@@ -25,7 +25,7 @@ public class BotBrainAI {
             //executeAction(bot, action);
 
         } catch (Exception e) {
-            BotLogger.error("❌ Ошибка в BotBrainAI: " + e.getMessage());
+            BotLogger.error(true,"❌ Ошибка в BotBrainAI: " + e.getMessage());
         }
     }
 
@@ -47,6 +47,6 @@ public class BotBrainAI {
                 bot.addTaskToQueue(new BotTaskIdle(bot));
                 break;
         }
-        BotLogger.debug("🤖 BotBrainAI выбрал действие: " + action);
+        BotLogger.debug(true, "🤖 BotBrainAI выбрал действие: " + action);
     }
 }
