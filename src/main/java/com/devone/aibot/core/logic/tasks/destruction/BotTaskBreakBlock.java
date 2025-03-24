@@ -24,7 +24,7 @@ import java.util.*;
 public class BotTaskBreakBlock extends BotTask {
 
     private int maxBlocks;
-    private int searchRadius = 5;
+    private int searchRadius = BotConstants.DEFAULT_SCAN_RANGE;
     private boolean shouldPickup = true;
     private boolean destroyAllIfNoTarget = false;
     private Set<Material> targetMaterials = null;
@@ -33,7 +33,7 @@ public class BotTaskBreakBlock extends BotTask {
 
     public BotTaskBreakBlock(Bot bot) {
 
-        super(bot, "🪨❗🧑‍🔧");
+        super(bot, "🪨👁🧑‍🔧");
 
         config = new BotTaskBreakBlockConfig();
 
