@@ -12,7 +12,7 @@ public class BotTaskDropAll extends BotTaskPlayerLinked {
 
 
     public BotTaskDropAll(Bot bot, Player player) {
-        super(bot, player, " 📦↴ ");
+        super(bot, player, "📦↴");
         
         BotTaskDropAllConfig config = new BotTaskDropAllConfig();
 

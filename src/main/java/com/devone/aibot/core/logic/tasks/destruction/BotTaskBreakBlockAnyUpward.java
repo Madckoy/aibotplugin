@@ -9,7 +9,7 @@ public class BotTaskBreakBlockAnyUpward extends BotTaskBreakBlock {
     public BotTaskBreakBlockAnyUpward(Bot bot) {
         super(bot);
 
-        setName(getName()+"▲");
+        setName(getName()+"(▲)");
 
         setTargetMaterials(null);
         setScanMode(ScanMode.UPWARD);

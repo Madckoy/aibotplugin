@@ -9,7 +9,7 @@ public class BotTaskBreakBlockAnyDownward extends BotTaskBreakBlock {
     public BotTaskBreakBlockAnyDownward(Bot bot) {
         super(bot);
         
-        setName(getName()+"▼");
+        setName(getName()+"(▼)");
 
         setTargetMaterials(null);
 

@@ -20,7 +20,7 @@ public class BotTaskUseHand extends BotTask {
     private int damage = 1;
 
     public BotTaskUseHand(Bot bot) {
-        super(bot, " ✋🏻 ");
+        super(bot, "✋🏻");
         setObjective("Hit the target");
     }
 

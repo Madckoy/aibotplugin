@@ -33,7 +33,7 @@ public class BotTaskBreakBlock extends BotTask {
 
     public BotTaskBreakBlock(Bot bot) {
 
-        super(bot, " 🪨👁🧑‍🔧 ");
+        super(bot, "🪨👁🧑‍🔧");
 
         this.config = new BotTaskBreakBlockConfig();
 

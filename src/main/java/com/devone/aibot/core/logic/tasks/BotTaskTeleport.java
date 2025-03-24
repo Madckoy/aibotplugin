@@ -14,7 +14,7 @@ import org.bukkit.entity.Player;
 public class BotTaskTeleport extends BotTask {
 
     public BotTaskTeleport(Bot bot, Player player) {
-        super(bot, player, " 💫 ");
+        super(bot, player, "💫");
 
         config = new BotTaskTeleportConfig();
         setObjective("Teleport");
