@@ -183,7 +183,7 @@ public class BotTaskBreakBlock extends BotTask {
 
             // BotLogger.trace("🚧 " + bot.getId() + " Разрушение блока: " + targetLocation.getBlock().toString());
 
-            BotTaskUseHand handTask = new BotTaskUseHand(bot, " [🪨⛏🧑‍🔧] ");
+            BotTaskUseHand handTask = new BotTaskUseHand(bot, "🪨⛏🧑‍🔧");
             handTask.configure(targetLocation);
             bot.addTaskToQueue(handTask);
 
