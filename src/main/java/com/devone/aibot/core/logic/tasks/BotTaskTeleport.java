@@ -17,7 +17,7 @@ public class BotTaskTeleport extends BotTask {
         super(bot, player, "જ⁀➴");
 
         config = new BotTaskTeleportConfig();
-        setObjective("Телепорт");
+        setObjective("Teleport");
     }
 
      public BotTask configure(Object... params) {
@@ -28,13 +28,15 @@ public class BotTaskTeleport extends BotTask {
             bot.getRuntimeStatus().setTargetLocation(loc);
         }
 
-        BotLogger.debug("⚙️ BotTaskTeleport сконфигурирована: " + BotStringUtils.formatLocation(bot.getRuntimeStatus().getTargetLocation()));
+        BotLogger.debug(isLogging(), "⚙️ BotTaskTeleport is configured: " + BotStringUtils.formatLocation(bot.getRuntimeStatus().getTargetLocation()));
 
         return this;
     }
 
     @Override
     public void executeTask() {
+        setObjective("Teleporting");
+        
        //do nothing
                 // Телепортация в основном потоке
                 Bukkit.getScheduler().runTask(AIBotPlugin.getInstance(), () -> {

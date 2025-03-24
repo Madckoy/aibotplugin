@@ -34,7 +34,7 @@ public class BotTaskMove extends BotTask {
             bot.getRuntimeStatus().setTargetLocation(loc);
 
         } else {
-            BotLogger.error(bot.getId() + " ❌ Некорректные параметры для `BotTaskMove`!");
+            BotLogger.error(isLogging(),bot.getId() + " ❌ Некорректные параметры для `BotTaskMove`!");
             isDone = true;
         }
 
@@ -81,7 +81,7 @@ public class BotTaskMove extends BotTask {
             if (bot.getRuntimeStatus().getCurrentLocation().distanceSquared(lastPosition) < 0.5) {
                 // Если прошло > 10 сек и координаты не изменились → бот застрял
                 if (System.currentTimeMillis() - lastMoveTime > 10_000) {
-                    BotLogger.warn(bot.getId() + " ⚠️ Бот застрял! Пересчитываем путь...");
+                    BotLogger.warn(isLogging(),bot.getId() + " ⚠️ Бот застрял! Пересчитываем путь...");
                     taskHandle.cancel();
                     isDone = true;
                     return;

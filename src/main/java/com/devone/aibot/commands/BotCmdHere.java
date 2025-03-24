@@ -37,7 +37,7 @@ public class BotCmdHere implements CommandExecutor {
 
         Location targetLocation = player.getLocation();
 
-        BotLogger.info("📌 /bot-here: Бот " + bot.getId() + " Идет в точку " + BotStringUtils.formatLocation(targetLocation));
+        BotLogger.info(true,"📌 /bot-here: Бот " + bot.getId() + " Идет в точку " + BotStringUtils.formatLocation(targetLocation));
 
 
         // ✅ Очищаем стек задач

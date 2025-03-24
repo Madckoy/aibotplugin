@@ -16,19 +16,19 @@ public class BotTaskHuntMobs extends BotTask {
     private LivingEntity targetMob = null;
 
     public BotTaskHuntMobs(Bot bot) {
-        super(bot, "⚔️");
+        super(bot, "👮‍♂️");
         this.config = new BotTaskHuntConfig(); // ✅ инициализируем родительское поле
         this.scanRadius = ((BotTaskHuntConfig) config).getScanRadius();
     }
 
     @Override
     public void executeTask() {
-        BotLogger.trace("🚀 Запуск задачи охоты для бота " + bot.getId());
+        BotLogger.trace(isLogging(),"🚀 Запуск задачи охоты для бота " + bot.getId());
 
         setObjective("Look for hostile targets");
 
         if (getBioEntities() == null) {
-            BotLogger.trace("🔍 Запускаем 3D-сканирование живых целей.");
+            BotLogger.trace(isLogging(),"🔍 Запускаем 3D-сканирование живых целей.");
             bot.addTaskToQueue(new BotTaskSonar3D(bot, this, scanRadius, 4));
             isDone = false;
             return;
@@ -40,13 +40,13 @@ public class BotTaskHuntMobs extends BotTask {
 
         if (targetMob != null) {
             bot.addTaskToQueue(new BotTaskFollowTarget(bot, targetMob));
-            BotLogger.debug("🎯 Бот начинает преследование " + targetMob.getType());
+            BotLogger.debug(isLogging(),"🎯 Бот начинает преследование " + targetMob.getType());
             isDone = true;
             return;
         }
 
         if (getElapsedTime() > 180000) {
-            BotLogger.debug("😴 Устал, охота утомляет.");
+            BotLogger.debug(isLogging(),"😴 Устал, охота утомляет.");
             isDone = true;
             return;
         }
@@ -62,7 +62,7 @@ public class BotTaskHuntMobs extends BotTask {
             if (EntityUtils.isHostileMob(entity)) {
                 if (huntConfig.getTargetAggressiveMobs().contains(entity.getType())) {
                     targetMob = entity;
-                    BotLogger.debug("🎯 Найдена враждебная цель: " + targetMob.getType());
+                    BotLogger.debug(isLogging(),"🎯 Найдена враждебная цель: " + targetMob.getType());
                     return;
                 }
             }
@@ -72,13 +72,13 @@ public class BotTaskHuntMobs extends BotTask {
             for (LivingEntity entity : nearbyEntities) {
                 if (entity instanceof Player) {
                     targetMob = entity;
-                    BotLogger.debug("🎯 Найден игрок! Начинаем следование.");
+                    BotLogger.debug(isLogging(),"🎯 Найден игрок! Начинаем следование.");
                     return;
                 }
             }
         }
 
-        BotLogger.debug("❌ Ни одной подходящей цели не найдено.");
+        BotLogger.debug(isLogging(),"❌ Ни одной подходящей цели не найдено.");
         isDone = true;
     }
 }

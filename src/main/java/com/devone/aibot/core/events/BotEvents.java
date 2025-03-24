@@ -43,7 +43,7 @@ public class BotEvents implements Listener {
 
             // Проверяем, застрял ли бот
             if (currentLocation.equals(lastLocation) && (System.currentTimeMillis() - lastMoveTime > STUCK_TIME)) {
-                BotLogger.debug("📣 [onBotMove]: "+ event.getEntity().getName() + " ⚠️ Бот застрял!");
+                BotLogger.debug(true, "📣 [onBotMove]: "+ event.getEntity().getName() + " ⚠️ Бот застрял!");
 
                 // Получаем последнюю активную задачу бота
                 BotTask activeTask = botManager.getBot(botId.toString()).getActiveTask();

@@ -24,12 +24,19 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 
 import java.io.*;
+import java.net.URL;
+import java.net.URLDecoder;
+import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.nio.file.StandardCopyOption;
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Enumeration;
 import java.util.List;
-
+import java.util.jar.JarEntry;
+import java.util.jar.JarFile;
 import java.util.stream.Collectors;
 
 public class BotWebService {
@@ -58,7 +65,8 @@ public class BotWebService {
         context.addServlet(new ServletHolder(new SkinServlet()), "/skins/*");
         context.addServlet(new ServletHolder(new StaticFileServlet()), "/assets/*");
 
-        copyResourceFiles();
+        copyEntireResourcesToPluginFolder();
+
     }
 
     public static String getServerHost() {
@@ -69,6 +77,61 @@ public class BotWebService {
         return MAP_HOST;
     }
 
+public void copyEntireResourcesToPluginFolder() {
+    copyResourcesRecursively("web", BotConstants.PLUGIN_PATH + "/web");
+    copyResourcesRecursively("patterns", BotConstants.PLUGIN_PATH + "/patterns");
+}
+
+private void copyResourcesRecursively(String resourceSubPath, String targetDirPath) {
+    try {
+        ClassLoader classLoader = getClass().getClassLoader();
+        
+        URL resourceURL = classLoader.getResource(resourceSubPath.isEmpty() ? "." : resourceSubPath);
+
+        if (resourceURL == null) {
+            BotLogger.error(true, "❌ Resource path not found: " + resourceSubPath);
+            return;
+        }
+
+        if (resourceURL.getProtocol().equals("jar")) {
+            String jarPath = resourceURL.getPath().substring(5, resourceURL.getPath().indexOf("!"));
+            try (JarFile jar = new JarFile(URLDecoder.decode(jarPath, StandardCharsets.UTF_8))) {
+                Enumeration<JarEntry> entries = jar.entries();
+                while (entries.hasMoreElements()) {
+                    JarEntry entry = entries.nextElement();
+                    String name = entry.getName();
+                    if (name.startsWith(resourceSubPath) && !entry.isDirectory()) {
+                        try (InputStream in = jar.getInputStream(entry)) {
+                            String relativePath = name.substring(resourceSubPath.length()).replaceFirst("^/", "");
+                            File targetFile = new File(targetDirPath, relativePath);
+                            targetFile.getParentFile().mkdirs();
+                            Files.copy(in, targetFile.toPath(), StandardCopyOption.REPLACE_EXISTING);
+                            BotLogger.info(true, "✅ Copied: " + name + " → " + targetFile.getPath());
+                        }
+                    }
+                }
+            }
+        } else {
+            Path sourcePath = Paths.get(resourceURL.toURI());
+            Files.walk(sourcePath)
+                .filter(Files::isRegularFile)
+                .forEach(sourceFile -> {
+                    try (InputStream in = Files.newInputStream(sourceFile)) {
+                        Path relativePath = sourcePath.relativize(sourceFile);
+                        File targetFile = new File(targetDirPath, relativePath.toString());
+                        targetFile.getParentFile().mkdirs();
+                        Files.copy(in, targetFile.toPath(), StandardCopyOption.REPLACE_EXISTING);
+                        BotLogger.info(true, "✅ Copied: " + sourceFile + " → " + targetFile.getPath());
+                    } catch (IOException e) {
+                        BotLogger.error(true, "❌ Failed to copy file: " + e.getMessage());
+                    }
+                });
+        }
+
+    } catch (Exception e) {
+        BotLogger.error(true, "❌ Error during resource copying: " + e.getMessage());
+    }
+}
     /**
      * ✅ Метод копирования ресурсов (CSS и JS) в plugins/AIBotPlugin/web/assets/
      */
@@ -77,15 +140,15 @@ public class BotWebService {
         for (String resource : resourceFilesWeb) {
             try (InputStream in = getClass().getClassLoader().getResourceAsStream(resource)) {
                 if (in == null) {
-                    BotLogger.error("❌ Resource not found: " + resource);
+                    BotLogger.error(true, "❌ Resource not found: " + resource);
                     continue;
                 }
                 File targetFile = new File(BotConstants.PLUGIN_PATH_WEB_ASSETS + new File(resource).getName());
                 targetFile.getParentFile().mkdirs();
                 Files.copy(in, targetFile.toPath(), StandardCopyOption.REPLACE_EXISTING);
-                BotLogger.info("✅ Copied: " + resource + " → " + targetFile.getPath());
+                BotLogger.info(true, "✅ Copied: " + resource + " → " + targetFile.getPath());
             } catch (IOException e) {
-                BotLogger.error("❌ Failed to copy " + resource + ": " + e.getMessage());
+                BotLogger.error(true, "❌ Failed to copy " + resource + ": " + e.getMessage());
             }
         }
 
@@ -98,7 +161,7 @@ public class BotWebService {
         for (String resource : resourceFilesPatterns) {
             try (InputStream in = getClass().getClassLoader().getResourceAsStream(resource)) {
                 if (in == null) {
-                    BotLogger.error("❌ Resource not found: " + resource);
+                    BotLogger.error(true, "❌ Resource not found: " + resource);
                     continue;
                 }
 
@@ -107,9 +170,9 @@ public class BotWebService {
 
                 targetFile.getParentFile().mkdirs();
                 Files.copy(in, targetFile.toPath(), StandardCopyOption.REPLACE_EXISTING);
-                BotLogger.info("✅ Copied: " + resource + " → " + targetFile.getPath());
+                BotLogger.info(true, "✅ Copied: " + resource + " → " + targetFile.getPath());
             } catch (IOException e) {
-                BotLogger.error("❌ Failed to copy " + resource + ": " + e.getMessage());
+                BotLogger.error(true, "❌ Failed to copy " + resource + ": " + e.getMessage());
             }
         }
 

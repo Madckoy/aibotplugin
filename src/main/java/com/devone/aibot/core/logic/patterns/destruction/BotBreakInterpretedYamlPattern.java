@@ -31,17 +31,17 @@ public class BotBreakInterpretedYamlPattern implements IBotDestructionPattern {
     @Override    
     public IBotDestructionPattern configure(int radius) {
         this.radius = radius;
-        BotLogger.trace("🛠️ Начинаем загрузку YAML-паттерна: " + yamlPath);
+        BotLogger.trace(true, "🛠️ Начинаем загрузку YAML-паттерна: " + yamlPath);
 
         try (InputStream inputStream = Files.newInputStream(yamlPath)) {
             this.pattern = BotBreakPatternLoader.loadFromYaml(inputStream);
             if (this.pattern != null) {
-                BotLogger.info("✅ Паттерн успешно загружен из YAML: " + yamlPath.getFileName());
+                BotLogger.info(true, "✅ Паттерн успешно загружен из YAML: " + yamlPath.getFileName());
             } else {
-                BotLogger.error("❌ loadFromYaml() вернул null для файла: " + yamlPath);
+                BotLogger.error(true, "❌ loadFromYaml() вернул null для файла: " + yamlPath);
             }
         } catch (IOException e) {
-            BotLogger.error("❌ Ошибка при открытии YAML-файла: " + yamlPath + " — " + e.getMessage());
+            BotLogger.error(true, "❌ Ошибка при открытии YAML-файла: " + yamlPath + " — " + e.getMessage());
         }
 
         return this;
@@ -50,12 +50,12 @@ public class BotBreakInterpretedYamlPattern implements IBotDestructionPattern {
 
     public Location findNextBlock(Bot bot) {
         if (this.pattern == null) {
-            BotLogger.error("🚨 ❌ Паттерн не инициализирован! YAML: " + yamlPath);
+            BotLogger.error(true, "🚨 ❌ Паттерн не инициализирован! YAML: " + yamlPath);
             return null;
         }
 
         if (!initialized) {
-            BotLogger.trace("🔁 Генерация точек по паттерну...");
+            BotLogger.trace(true, "🔁 Генерация точек по паттерну...");
             List<Location> points = pattern.generate(
                     new BotBreakInterpretedPattern.PatternContext(
                             bot.getRuntimeStatus().getCurrentLocation(),
@@ -63,9 +63,9 @@ public class BotBreakInterpretedYamlPattern implements IBotDestructionPattern {
 
             if (points != null && !points.isEmpty()) {
                 blocksToBreak.addAll(points);
-                BotLogger.trace("✅ Добавлено " + points.size() + " точек для разрушения");
+                BotLogger.trace(true, "✅ Добавлено " + points.size() + " точек для разрушения");
             } else {
-                BotLogger.warn("⚠️ Паттерн YAML не вернул ни одной точки для разрушения.");
+                BotLogger.warn(true, "⚠️ Паттерн YAML не вернул ни одной точки для разрушения.");
             }
 
             initialized = true;
@@ -73,7 +73,7 @@ public class BotBreakInterpretedYamlPattern implements IBotDestructionPattern {
 
         Location next = blocksToBreak.poll();
         if (next != null) {
-            BotLogger.trace("🎯 Следующий блок: " + next.getBlockX() + ", " + next.getBlockY() + ", " + next.getBlockZ());
+            BotLogger.trace(true, "🎯 Следующий блок: " + next.getBlockX() + ", " + next.getBlockY() + ", " + next.getBlockZ());
         }
         return next;
     }

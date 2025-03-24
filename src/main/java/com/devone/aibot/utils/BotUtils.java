@@ -8,9 +8,6 @@ import org.bukkit.block.Block;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-
-
-
 public class BotUtils {
 
     public static String getBlockName(Block bl) {
@@ -42,7 +39,7 @@ public class BotUtils {
     
         // ✅ Проверяем, что блок не AIR (иначе эффект не сработает)
         if (blockType == Material.AIR) {
-            BotLogger.trace("⚠️ Эффект разрушения отменён: блок уже AIR " + BotStringUtils.formatLocation(location));
+            BotLogger.trace(true, "⚠️ Эффект разрушения отменён: блок уже AIR " + BotStringUtils.formatLocation(location));
             return;
         }
     
@@ -54,7 +51,7 @@ public class BotUtils {
             location.getBlock().getBlockData() // Тип блока для эффекта
         );
     
-        BotLogger.trace("🎇 Эффект разрушения воспроизведён на " + BotStringUtils.formatLocation(location));
+        BotLogger.trace(true, "🎇 Эффект разрушения воспроизведён на " + BotStringUtils.formatLocation(location));
     }
 
     public static boolean requiresTool(Material blockType) {

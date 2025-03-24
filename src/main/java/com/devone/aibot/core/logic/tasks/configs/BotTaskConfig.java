@@ -37,15 +37,19 @@ public class BotTaskConfig {
 
     public void generateDefaultConfig() {
         config.set("enabled", true);
+        config.set("logging", true);
         config.set("priority", 1);
         save();
-        BotLogger.debug("✅ Создан новый конфигурационный файл: " + file.getName());
+        BotLogger.debug(isLogging(),"✅ Создан новый конфигурационный файл: " + file.getName());
     }
 
     public boolean isEnabled() {
         return config.getBoolean("enabled", true);
     }
 
+    public boolean isLogging() {
+        return config.getBoolean("logging", true);
+    }
 
     public FileConfiguration getConfig() {
         return config;
@@ -59,9 +63,9 @@ public class BotTaskConfig {
     public void save() {
         try {
             config.save(file);
-            BotLogger.debug("✅ Конфигурация сохранена: " + file.getName());
+            BotLogger.debug(this.isLogging(),"✅ Configuration has been saved: " + file.getName());
         } catch (IOException e) {
-            BotLogger.error("❌ Ошибка сохранения конфига для: " + file.getName());
+            BotLogger.error(this.isLogging(),"❌ Error saving configuration for: " + file.getName());
         }
     }
 }

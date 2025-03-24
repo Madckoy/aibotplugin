@@ -33,7 +33,7 @@ public class BotCmdFollow implements CommandExecutor {
             return true;
         }
 
-        BotLogger.info("📌 /bot-follow: Бот " + bot.getId() + " следует за " + player.getName());
+        BotLogger.info(true,"📌 /bot-follow: Бот " + bot.getId() + " следует за " + player.getName());
 
         // ✅ Очищаем стек задач
         bot.getLifeCycle().getTaskStackManager().clearTasks();

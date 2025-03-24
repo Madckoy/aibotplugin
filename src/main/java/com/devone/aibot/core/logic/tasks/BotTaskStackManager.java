@@ -21,7 +21,7 @@ public class BotTaskStackManager {
         }
 
         taskStack.push(task);
-        BotLogger.debug("✚ Добавлена задача: " + task.getClass().getSimpleName() + "[ " + task.getUUID()+" ]");
+        BotLogger.debug(true, "✚ Добавлена задача: " + task.getClass().getSimpleName() + "[ " + task.getUUID()+" ]");
     }
 
     public void popTask() {
@@ -29,7 +29,7 @@ public class BotTaskStackManager {
 
             BotLifecycleLogCsv.write(this.bot);
 
-            BotLogger.debug("➖ Удалена задача: " + taskStack.peek().getClass().getSimpleName());
+            BotLogger.debug(true, "➖ Удалена задача: " + taskStack.peek().getClass().getSimpleName());
             taskStack.pop();
 
             // ✅ Если осталась активность, снимаем с неё паузу
@@ -71,7 +71,7 @@ public class BotTaskStackManager {
 
             BotTask currentTask = taskStack.peek();
 
-            BotLogger.debug("✨ Active task: " + currentTask.getClass().getSimpleName() + " [" +currentTask.getUUID() +"]");
+            BotLogger.debug(true, "✨ Active task: " + currentTask.getClass().getSimpleName() + " [" +currentTask.getUUID() +"]");
     
             // 🛑 Если у бота нет NPCEntity, удаляем ВСЕ задачи
             //if (bot.getNPCEntity() == null) {
@@ -92,7 +92,7 @@ public class BotTaskStackManager {
     public void clearTasks() {
         while (!taskStack.isEmpty()) {
             BotTask removedTask = taskStack.pop();
-            BotLogger.debug("❌ Удалена задача: " + removedTask.getClass().getSimpleName());
+            BotLogger.debug(true, "❌ Удалена задача: " + removedTask.getClass().getSimpleName());
         }
     }
 

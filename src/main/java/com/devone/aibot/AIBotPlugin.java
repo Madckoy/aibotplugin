@@ -33,57 +33,57 @@ public class AIBotPlugin extends JavaPlugin {
 
         reloadPlugin(); // ✅ Now `onEnable()` only calls `reloadPlugin()`
 
-        BotLogger.info("✅ AI Bot Plugin has been enabled successfully!");
+        BotLogger.info(true, "✅ AI Bot Plugin has been enabled successfully!");
     }
 
     @Override
     public void onDisable() {
-        BotLogger.info("♻️ AI Bot Plugin is shutting down...");
+        BotLogger.info(true, "♻️ AI Bot Plugin is shutting down...");
 
         // Остановка HTTP сервера
         if (web_service!= null) {
             try {
                 web_service.stop();
-                BotLogger.info("🛑 HTTP WEB server stopped.");
+                BotLogger.info(true, "🛑 HTTP WEB server stopped.");
             } catch (Exception e) {
-                BotLogger.error("❌ HTTP WEB server could not be stopped." + e.getMessage());
+                BotLogger.error(true, "❌ HTTP WEB server could not be stopped." + e.getMessage());
             }
         }
 
-        BotLogger.info("✅ AI Bot Plugin has been disabled.");
+        BotLogger.info(true, "✅ AI Bot Plugin has been disabled.");
         Bukkit.getScheduler().cancelTasks(this);
     }
 
     public void reloadPlugin() {
         BotLogger.init(this); // ✅ Log initialization first
-        BotLogger.info("🔧 Логирование перезапущено.");
+        BotLogger.info(true, "🔧 Логирование перезапущено.");
 
-        BotLogger.info("♻️ Перезагрузка AI Bot Plugin...");
+        BotLogger.info(true, "♻️ Перезагрузка AI Bot Plugin...");
 
         reloadConfig();
-        BotLogger.info("🔄 Конфигурация загружена заново.");
+        BotLogger.info(true, "🔄 Конфигурация загружена заново.");
 
         botManager = new BotManager(this);
         zoneManager = new BotZoneManager(this, getDataFolder());
         new BotCmdDispatcher(this, botManager, zoneManager);
 
-        BotLogger.info("✅ Менеджеры перезапущены!");
+        BotLogger.info(true, "✅ Менеджеры перезапущены!");
 
         // ✅ Restart HTTP server properly
         if (web_service != null) {
             try {
                 web_service.stop();
             } catch (Exception e) {
-                BotLogger.error("❌ Ошибка: " + e.getMessage());
+                BotLogger.error(true, "❌ Ошибка: " + e.getMessage());
             }
         }
 
         web_service = new BotWebService(3000, botManager);
         try {
             web_service.start();
-            BotLogger.info("🌐 HTTP WEB Server started on port 3000.");
+            BotLogger.info(true, "🌐 HTTP WEB Server started on port 3000.");
         } catch (Exception e) {
-            BotLogger.error("❌ Ошибка: " + e.getMessage());
+            BotLogger.error(true, "❌ Ошибка: " + e.getMessage());
         }
 
         // тут зарегаем ивенты
@@ -91,7 +91,7 @@ public class AIBotPlugin extends JavaPlugin {
         //
         getServer().getPluginManager().registerEvents(new BotEvents(botManager), this);
 
-        BotLogger.info("✅ AI Bot Plugin перезагружен успешно!");
+        BotLogger.info(true, "✅ AI Bot Plugin перезагружен успешно!");
 
     }
 
@@ -110,18 +110,18 @@ public class AIBotPlugin extends JavaPlugin {
 
             try {
                 config.save(configFile);
-                BotLogger.info("✅ Создан config.yml с уровнем логирования INFO.");
+                BotLogger.info(true, "✅ Создан config.yml с уровнем логирования INFO.");
             } catch (IOException e) {
-                BotLogger.error("❌ Ошибка при создании config.yml: " + e.getMessage());
+                BotLogger.error(true, "❌ Ошибка при создании config.yml: " + e.getMessage());
             }
         }
     }
 
     private void ensureDataFolderExists() {
         if (!getDataFolder().exists() && getDataFolder().mkdirs()) {
-            BotLogger.info("📁 Created plugin data folder: " + getDataFolder().getAbsolutePath());
+            BotLogger.info(true, "📁 Created plugin data folder: " + getDataFolder().getAbsolutePath());
         } else if (!getDataFolder().exists()) {
-            BotLogger.error("❌ Failed to create plugin data folder!");
+            BotLogger.error(true, "❌ Failed to create plugin data folder!");
         }
     }
 

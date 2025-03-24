@@ -48,10 +48,10 @@ public class BotZoneManager {
                 double z = config.getDouble("zones." + zoneName + ".z");
                 int radius = config.getInt("zones." + zoneName + ".radius");
                 protectedZones.put(zoneName, new BotProtectedZone(x, y, z, radius));
-                BotLogger.info("━ Loaded zone: " + zoneName + " at (" + x + ", " + y + ", " + z + ") with radius " + radius);
+                BotLogger.info(true, "━ Loaded zone: " + zoneName + " at (" + x + ", " + y + ", " + z + ") with radius " + radius);
             }
         }
-        BotLogger.info("☰ Total zones loaded: " + protectedZones.size());
+        BotLogger.info(true, "☰ Total zones loaded: " + protectedZones.size());
     }
 
     public void saveZones() {
@@ -66,21 +66,21 @@ public class BotZoneManager {
         }
         try {
             config.save(zonesFile);
-            BotLogger.debug("🗺️ Zones saved succesfully.");
+            BotLogger.debug(true, "🗺️ Zones saved succesfully.");
 
         } catch (IOException e) {
-            BotLogger.error("❌ Failed to save zones: " + e.getMessage());
+            BotLogger.error(true, "❌ Failed to save zones: " + e.getMessage());
         }
     }    
 
     public void addZone(String name, Location center, int radius) {
         protectedZones.put(name, new BotProtectedZone(center.getX(), center.getY(), center.getZ(), radius));
-        BotLogger.debug("➕ Added new zone: " + name + " at " + center.toString() + " with radius " + radius);
+        BotLogger.debug(true, "➕ Added new zone: " + name + " at " + center.toString() + " with radius " + radius);
     }
 
     public boolean removeZone(String name) {
         if (protectedZones.remove(name) != null) {
-            BotLogger.debug("➖ Removed zone: " + name);
+            BotLogger.debug(true, "➖ Removed zone: " + name);
             return true;
         }
         return false;
@@ -111,7 +111,7 @@ public class BotZoneManager {
     // ✅ Статический метод для проверки зоны
     public static boolean isLocationInProtectedZone(Location location) {
         if (instance == null) {
-            BotLogger.error("❌ ZoneManager не инициализирован! Невозможно проверить зону.");
+            BotLogger.error(true, "❌ ZoneManager не инициализирован! Невозможно проверить зону.");
             return false;
         }
         return instance.isInProtectedZone(location);

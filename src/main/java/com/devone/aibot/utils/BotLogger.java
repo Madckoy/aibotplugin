@@ -43,40 +43,52 @@ public class BotLogger {
             logLevel = Level.parse(levelStr);
             logger.setLevel(logLevel); 
             fileHandler.setLevel(logLevel);
-            info("🔧 Установлен уровень логирования: " + logLevel.getName());
+            info(true, "🔧 Установлен уровень логирования: " + logLevel.getName());
         } catch (IllegalArgumentException e) {
             logLevel = Level.SEVERE;
             logger.setLevel(Level.SEVERE);
             fileHandler.setLevel(Level.SEVERE);
-            error("❌ Некорректный уровень логирования в config.yml, используется SEVERE.");
+            error(true, "❌ Некорректный уровень логирования в config.yml, используется SEVERE.");
         }
     }
 
-    public static void debug(String message) {
+    public static void debug(boolean enabled, String message) {
+        if (!enabled) {return;}
+
         if (loggingEnabled && logLevel.intValue() <= Level.FINE.intValue()) {
             logger.fine("🟡 " + message);
         }
     }
 
-    public static void info(String message) {
+    public static void info(boolean enabled, String message) {
+        if (!enabled) {return;}
+
+    
         if (loggingEnabled && logLevel.intValue() <= Level.INFO.intValue()) {
             logger.info("ℹ️ " + message);
         }
     }
 
-    public static void warn(String message) {
+    public static void warn(boolean enabled, String message) {
+        
+        if (!enabled) {return;}
+
         if (loggingEnabled && logLevel.intValue() <= Level.WARNING.intValue()) {
             logger.warning("⚠️ " + message);
         }
     }
 
-    public static void error(String message) {
+    public static void error(boolean enabled, String message) {
+        if (!enabled) {return;}
+
         if (loggingEnabled && logLevel.intValue() <= Level.SEVERE.intValue()) {
             logger.severe("🚨 " + message);
         }
     }
 
-    public static void trace(String message) {
+    public static void trace(boolean enabled, String message) {
+        if (!enabled) {return;}
+
         if (loggingEnabled && logLevel.intValue() <= Level.FINER.intValue()) {
             logger.finer("📃 " + message);
         }
