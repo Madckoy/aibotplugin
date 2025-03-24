@@ -25,7 +25,7 @@ public class BotTaskTalk extends BotTask {
     }
 
     public BotTaskTalk(Bot bot, Player player, TalkType type) {
-        super(bot, "💬");
+        super(bot, "  💬 ");
         this.player = player;
         this.type = type;
         this.communicator = new BotCommunicator(bot); // Инициализация BotCommunicator

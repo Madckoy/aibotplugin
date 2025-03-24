@@ -24,7 +24,7 @@ import java.util.*;
 public class BotTaskBreakBlock extends BotTask {
 
     private int maxBlocks;
-    private int searchRadius = BotConstants.DEFAULT_SCAN_RANGE;
+    private int breakRadius = BotConstants.DEFAULT_SCAN_RANGE;
     private boolean shouldPickup = true;
     private boolean destroyAllIfNoTarget = false;
     private Set<Material> targetMaterials = null;
@@ -35,13 +35,15 @@ public class BotTaskBreakBlock extends BotTask {
 
         super(bot, "🪨👁🧑‍🔧");
 
-        config = new BotTaskBreakBlockConfig();
+        this.config = new BotTaskBreakBlockConfig();
+
+        breakRadius = this.config.getBreakRadius();
 
         this.patternName = ((BotTaskBreakBlockConfig)config).getPattern();
 
         Path path = Paths.get(BotConstants.PLUGIN_PATH_PATTERNS_BREAK, patternName);
 
-        this.breakPattern = new BotBreakInterpretedYamlPattern(path).configure(searchRadius);
+        this.breakPattern = new BotBreakInterpretedYamlPattern(path).configure(breakRadius);
     }
 
     @SuppressWarnings("unchecked")
@@ -57,7 +59,7 @@ public class BotTaskBreakBlock extends BotTask {
             this.maxBlocks = (Integer) params[1];
         }
         if (params.length >= 3 && params[2] instanceof Integer) {
-            this.searchRadius = (Integer) params[2];
+            this.breakRadius = (Integer) params[2];
         }
         if (params.length >= 4 && params[3] instanceof Boolean) {
             this.shouldPickup = (Boolean) params[3];
@@ -71,7 +73,7 @@ public class BotTaskBreakBlock extends BotTask {
 
             Path path = Paths.get(BotConstants.PLUGIN_PATH_PATTERNS_BREAK, patternFile);
 
-            this.breakPattern = new BotBreakInterpretedYamlPattern(path).configure(searchRadius);
+            this.breakPattern = new BotBreakInterpretedYamlPattern(path).configure(breakRadius);
 
             BotLogger.info(isLogging(),"ℹ️ 📐 Загружен YAML-паттерн: " + patternFile);
         }
@@ -79,7 +81,7 @@ public class BotTaskBreakBlock extends BotTask {
         // Если не задано — fallback на default.yml
         if (this.breakPattern == null) {
             Path fallbackPath = Paths.get(BotConstants.PLUGIN_PATH_PATTERNS_BREAK, BotConstants.DEFAULT_PATTERN_BREAK);
-            this.breakPattern = new BotBreakInterpretedYamlPattern(fallbackPath).configure(searchRadius);
+            this.breakPattern = new BotBreakInterpretedYamlPattern(fallbackPath).configure(breakRadius);
             BotLogger.info(isLogging(),"ℹ️ 📐 Используется дефолтный YAML-паттерн: " + BotConstants.DEFAULT_PATTERN_BREAK);
         }
 
@@ -91,8 +93,8 @@ public class BotTaskBreakBlock extends BotTask {
         return this;
     }
 
-    public int getSearchRadius() {
-        return searchRadius;
+    public int getBreakRadius() {
+        return breakRadius;
     }
 
     public void setTargetMaterials(Set<Material> materials) {
@@ -117,7 +119,7 @@ public class BotTaskBreakBlock extends BotTask {
 
         if (breakPattern == null) {
             Path fallbackPath = Paths.get(BotConstants.PLUGIN_PATH_PATTERNS_BREAK, BotConstants.DEFAULT_PATTERN_BREAK);
-            this.breakPattern = new BotBreakInterpretedYamlPattern(fallbackPath).configure(searchRadius);
+            this.breakPattern = new BotBreakInterpretedYamlPattern(fallbackPath).configure(breakRadius);
             BotLogger.info(isLogging(),"ℹ️ 📐 Используется дефолтный YAML-паттерн: " + BotConstants.DEFAULT_PATTERN_BREAK);
         }
 
@@ -132,7 +134,7 @@ public class BotTaskBreakBlock extends BotTask {
 
         if (getGeoMap() == null) {
             BotLogger.trace(isLogging(),"🔍 Запускаем 3D-сканирование окружающей среды.");
-            BotTaskSonar3D scanTask = new BotTaskSonar3D(bot, this, searchRadius, searchRadius);
+            BotTaskSonar3D scanTask = new BotTaskSonar3D(bot, this, breakRadius, breakRadius);
             scanTask.configure(scanMode);
             bot.addTaskToQueue(scanTask);
             isDone = false;

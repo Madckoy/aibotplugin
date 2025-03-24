@@ -9,7 +9,7 @@ public class BotTaskBreakBlockAnyUpward extends BotTaskBreakBlock {
     public BotTaskBreakBlockAnyUpward(Bot bot) {
         super(bot);
 
-        setName(getName()+"▲");
+        setName(getName()+"(▲)");
 
         setTargetMaterials(null);
         setScanMode(ScanMode.UPWARD);
@@ -17,7 +17,7 @@ public class BotTaskBreakBlockAnyUpward extends BotTaskBreakBlock {
 
         BotTaskBreakBlockConfig config = new BotTaskBreakBlockConfig("BotTaskBreakBlockAnyUpwards.yml");
         // Передай в configure строку с именем yaml-файла
-        this.configure(null, 0, getSearchRadius(), true, false, null, config.getPattern());
+        this.configure(null, 0, getBreakRadius(), true, false, null, config.getPattern());
     }
 
     @Override

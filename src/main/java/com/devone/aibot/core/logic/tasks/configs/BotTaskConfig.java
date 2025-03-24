@@ -68,4 +68,8 @@ public class BotTaskConfig {
             BotLogger.error(this.isLogging(),"❌ Error saving configuration for: " + file.getName());
         }
     }
+
+    public int getBreakRadius() {
+        return BotConstants.DEFAULT_SCAN_RANGE;
+    }
 }
