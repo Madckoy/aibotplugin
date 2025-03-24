@@ -20,8 +20,8 @@ public class BotTaskUseHand extends BotTask {
     private int damage = 1;
 
     public BotTaskUseHand(Bot bot) {
-        super(bot, "👊");
-        setObjective("Hitting the target");
+        super(bot, "✋🏻");
+        setObjective("Hit the target");
     }
 
     @Override
@@ -70,7 +70,7 @@ public class BotTaskUseHand extends BotTask {
     
         Location faceTarget = (target != null) ? target.getLocation() : bot.getRuntimeStatus().getTargetLocation();
 
-        setObjective("I'm hitting the : " + BotStringUtils.formatLocation(faceTarget)+" "+BotUtils.getBlockName(faceTarget.getBlock()));
+        setObjective("Hitting: " + BotUtils.getBlockName(faceTarget.getBlock())+" at "+BotStringUtils.formatLocation(faceTarget));
     
         turnToBlock(faceTarget);
     
@@ -79,7 +79,7 @@ public class BotTaskUseHand extends BotTask {
     
             if (target != null && !target.isDead()) {
                 target.damage(damage);
-                BotLogger.debug(bot.getId() + " 👊 Нанесён урон существу: " + target.getName());
+                BotLogger.debug(bot.getId() + " ✋🏻 Нанесён урон существу: " + target.getName());
             } else if (bot.getRuntimeStatus().getTargetLocation() != null && bot.getRuntimeStatus().getTargetLocation().getBlock().getType() != Material.AIR) {
                 // ✅ Добавляем эффект разрушения перед ломанием блока
                 BotUtils.playBlockBreakEffect(bot.getRuntimeStatus().getTargetLocation());

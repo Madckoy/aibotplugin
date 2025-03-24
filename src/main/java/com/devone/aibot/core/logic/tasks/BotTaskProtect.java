@@ -9,7 +9,7 @@ public class BotTaskProtect extends BotTaskPlayerLinked {
 
     public BotTaskProtect(Bot bot, Player player) {
         super(bot, player, "🛡️");
-        setObjective("Protecting");
+        setObjective("Protect");
     }
 
     @Override

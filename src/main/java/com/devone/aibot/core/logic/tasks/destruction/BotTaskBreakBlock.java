@@ -24,7 +24,7 @@ import java.util.*;
 public class BotTaskBreakBlock extends BotTask {
 
     private int maxBlocks;
-    private int searchRadius = 10;
+    private int searchRadius = 5;
     private boolean shouldPickup = true;
     private boolean destroyAllIfNoTarget = false;
     private Set<Material> targetMaterials = null;
@@ -139,7 +139,7 @@ public class BotTaskBreakBlock extends BotTask {
 
         if (bot.getRuntimeStatus().getTargetLocation() != null) {
 
-            setObjective("Probing the target: " + BotUtils.getBlockName(bot.getRuntimeStatus().getTargetLocation().getBlock()));
+            setObjective("Probing: " + BotUtils.getBlockName(bot.getRuntimeStatus().getTargetLocation().getBlock()) + " at "+BotStringUtils.formatLocation(bot.getRuntimeStatus().getTargetLocation()));
 
             if (isInProtectedZone(bot.getRuntimeStatus().getTargetLocation())) {
                 BotLogger.debug("⛔ " + bot.getId() + " в запретной зоне, НЕ будет разрушать блок: " +
@@ -165,7 +165,7 @@ public class BotTaskBreakBlock extends BotTask {
                 }
             }
 
-            setObjective("Breaking the block: " + BotUtils.getBlockName(bot.getRuntimeStatus().getTargetLocation().getBlock()));
+            setObjective("Breaking: " + BotUtils.getBlockName(bot.getRuntimeStatus().getTargetLocation().getBlock()));
 
             // BotLogger.trace("🚧 " + bot.getId() + " Разрушение блока: " + targetLocation.getBlock().toString());
 
