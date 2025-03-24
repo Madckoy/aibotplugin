@@ -8,6 +8,10 @@ public class BotTaskBreakBlockConfig extends BotTaskConfig{
         super( "BotTaskBreakBlock.yml");
     }
 
+    public BotTaskBreakBlockConfig(String name) {
+        super( name);
+    }
+
     public void generateDefaultConfig() {
 
         config.set("pattern", BotConstants.DEFAULT_PATTERN_BREAK);

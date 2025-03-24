@@ -32,7 +32,9 @@ public class BotTaskBreakBlock extends BotTask {
     private IBotDestructionPattern  breakPattern = null;
 
     public BotTaskBreakBlock(Bot bot) {
-        super(bot, "🪨🧑‍🔧");
+
+        super(bot, "🪨❗🧑‍🔧");
+
         config = new BotTaskBreakBlockConfig();
 
         this.patternName = ((BotTaskBreakBlockConfig)config).getPattern();
@@ -74,7 +76,7 @@ public class BotTaskBreakBlock extends BotTask {
             BotLogger.info(isLogging(),"ℹ️ 📐 Загружен YAML-паттерн: " + patternFile);
         }
 
-        // Если не задано — fallback на safe_cube.yml
+        // Если не задано — fallback на default.yml
         if (this.breakPattern == null) {
             Path fallbackPath = Paths.get(BotConstants.PLUGIN_PATH_PATTERNS_BREAK, BotConstants.DEFAULT_PATTERN_BREAK);
             this.breakPattern = new BotBreakInterpretedYamlPattern(fallbackPath).configure(searchRadius);
@@ -179,7 +181,7 @@ public class BotTaskBreakBlock extends BotTask {
 
             // BotLogger.trace("🚧 " + bot.getId() + " Разрушение блока: " + targetLocation.getBlock().toString());
 
-            BotTaskUseHand handTask = new BotTaskUseHand(bot, "🪨⛏");
+            BotTaskUseHand handTask = new BotTaskUseHand(bot, "🪨⛏🧑‍🔧");
             handTask.configure(targetLocation);
             bot.addTaskToQueue(handTask);
 
