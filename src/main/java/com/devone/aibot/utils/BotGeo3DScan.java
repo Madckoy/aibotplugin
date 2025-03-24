@@ -19,9 +19,7 @@ public class BotGeo3DScan {
     public static enum ScanMode {
         FULL,
         DOWNWARD,
-        UPWARD,
-        HORIZONTAL_SLICE,
-        VERTICAL_SLICE
+        UPWARD
     }
 
     @SuppressWarnings("unchecked")
@@ -47,11 +45,6 @@ public class BotGeo3DScan {
 
             for (int x = -scanRadius; x <= scanRadius; x++) {
                 for (int z = -scanRadius; z <= scanRadius; z++) {
-
-                    if (scanMode == ScanMode.HORIZONTAL_SLICE && y != centerY)
-                        continue;
-                    if (scanMode == ScanMode.VERTICAL_SLICE && x != 0)
-                        continue;
 
                     Location loc = new Location(world, centerX + x, y, centerZ + z);
                     Material material = world.getBlockAt(loc).getType();

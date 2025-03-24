@@ -29,13 +29,14 @@ public class BotTaskTalk extends BotTask {
         this.player = player;
         this.type = type;
         this.communicator = new BotCommunicator(bot); // Инициализация BotCommunicator
+        setObjective("Say");
     }
 
     @Override
     public void executeTask() {
         String message = generateMessage();
         // ✅ Показываем в мониторинге всегда, даже если бот молчит
-        setObjective("Размышляет: " + message);
+        setObjective("Saying: " + message);
 
         isDone = true;
         return;

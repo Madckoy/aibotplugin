@@ -20,10 +20,10 @@ import com.devone.aibot.utils.BotLogger;
 public class BotTaskIdle extends BotTask {
 
     public BotTaskIdle(Bot bot) {
-        super(bot, "◉");
+        super(bot, "🎲");
         this.bot = bot;
         config = new BotTaskIdleConfig();
-        setObjective("Having the rest");
+        setObjective("Roll a dice");
     }
 
     @Override
@@ -128,7 +128,7 @@ public class BotTaskIdle extends BotTask {
 
         if (rand < 0.2) {
             // 💤 20% шанс остаться в IDLE
-            BotLogger.debug("💤 " + bot.getId() + " остаётся в IDLE.");
+            BotLogger.debug("🔀" + bot.getId() + " остаётся в IDLE.");
             return;
         }
     }

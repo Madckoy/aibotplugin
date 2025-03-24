@@ -24,7 +24,8 @@ public class BotTaskHuntMobs extends BotTask {
     @Override
     public void executeTask() {
         BotLogger.trace("🚀 Запуск задачи охоты для бота " + bot.getId());
-        setObjective("Looking for hostile targets");
+
+        setObjective("Look for hostile targets");
 
         if (getBioEntities() == null) {
             BotLogger.trace("🔍 Запускаем 3D-сканирование живых целей.");

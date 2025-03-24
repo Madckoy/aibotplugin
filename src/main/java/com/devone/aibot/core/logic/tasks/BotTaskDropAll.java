@@ -20,7 +20,7 @@ public class BotTaskDropAll extends BotTaskPlayerLinked {
                                                                   config.getY(), 
                                                                   config.getZ()));
 
-        setObjective("Droping off the loot");
+        setObjective("Drop off the loot");
 
         
     }

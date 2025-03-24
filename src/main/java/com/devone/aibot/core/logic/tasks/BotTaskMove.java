@@ -21,6 +21,7 @@ public class BotTaskMove extends BotTask {
         super(bot, "🏃🏽‍♂️‍➡️");
         this.lastPosition = bot.getRuntimeStatus().getCurrentLocation();
         this.lastMoveTime = System.currentTimeMillis();
+        setObjective("Move" );
     }
 
     @Override
