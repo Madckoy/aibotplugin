@@ -16,7 +16,7 @@ public class BotTaskExplore extends BotTask {
     private BotTaskExploreConfig config;
 
     public BotTaskExplore(Bot bot) {
-        super(bot, "🏞");
+        super(bot, " [🏞] ");
         config = new BotTaskExploreConfig();
         scanRadius = config.getScanRadius();
         setObjective("Explore the area");

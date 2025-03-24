@@ -14,7 +14,7 @@ import org.bukkit.entity.Player;
 public class BotTaskTeleport extends BotTask {
 
     public BotTaskTeleport(Bot bot, Player player) {
-        super(bot, player, "જ⁀➴");
+        super(bot, player, " [💫] ");
 
         config = new BotTaskTeleportConfig();
         setObjective("Teleport");
@@ -36,7 +36,7 @@ public class BotTaskTeleport extends BotTask {
     @Override
     public void executeTask() {
         setObjective("Teleporting");
-        
+
        //do nothing
                 // Телепортация в основном потоке
                 Bukkit.getScheduler().runTask(AIBotPlugin.getInstance(), () -> {

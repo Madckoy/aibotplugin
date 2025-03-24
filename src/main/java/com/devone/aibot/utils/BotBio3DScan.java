@@ -5,6 +5,7 @@ import org.bukkit.Location;
 import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Monster;
 
+import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -12,6 +13,9 @@ import java.util.stream.Collectors;
 public class BotBio3DScan {
 
     public static List<LivingEntity> scan3D(Bot bot, int radius) {
+
+        if(bot.getNPCEntity()==null) {return new ArrayList<LivingEntity>();}
+
         Location botLoc = bot.getRuntimeStatus().getCurrentLocation();
 
         return bot.getNPCEntity().getWorld().getLivingEntities().stream()

@@ -19,7 +19,7 @@ public class BotTaskBreakBlockAny extends BotTaskBreakBlock {
 
         BotTaskBreakBlockConfig config = new BotTaskBreakBlockConfig("BotTaskBreakBlockAny.yml");
         // Передай в configure строку с именем yaml-файла
-        this.configure(null, 0, getSearchRadius(), true, false, null, config.getPattern());
+        this.configure(null, 0, getBreakRadius(), true, false, null, config.getPattern());
     }
  
     @Override
