@@ -30,6 +30,8 @@ public class BotTaskIdle extends BotTask {
 
     @Override
     public void executeTask() {
+        
+        setObjective("Rolling a dice" );
   
         double rand = Math.random();
 
