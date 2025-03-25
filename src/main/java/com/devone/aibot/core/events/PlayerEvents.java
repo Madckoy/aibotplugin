@@ -2,7 +2,6 @@ package com.devone.aibot.core.events;
 
 import com.devone.aibot.core.BotManager;
 import com.devone.aibot.core.comms.BotCommunicator;
-import com.devone.aibot.utils.BotUtils;
 
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;

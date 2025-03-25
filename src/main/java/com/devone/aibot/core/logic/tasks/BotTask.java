@@ -163,7 +163,7 @@ public abstract class BotTask implements IBotTask {
             if (bot.getNPCEntity() != null) {
                 BotLogger.trace(isLogging(), "✨ " + bot.getId() + " Застрял! Телепортируемся в " + BotStringUtils.formatLocation(bot.getRuntimeStatus().getTargetLocation()));
 
-                BotTaskTeleport tp = new BotTaskTeleport(bot, player);
+                BotTeleportTask tp = new BotTeleportTask(bot, player);
                 if (player != null) {
                     tp.configure(player.getLocation());
                 } else {
@@ -178,7 +178,7 @@ public abstract class BotTask implements IBotTask {
             if (bot.getNPCEntity() != null) {
                 BotLogger.trace(isLogging(), "✨ " + bot.getId() + " Застрял! Нет Taget Location! Телепортируемся в точку респавна!");
 
-                BotTaskTeleport tp = new BotTaskTeleport(bot, player);
+                BotTeleportTask tp = new BotTeleportTask(bot, player);
 
                 if (player != null) {
                     tp.configure(player.getLocation());
@@ -201,7 +201,7 @@ public abstract class BotTask implements IBotTask {
         BotLogger.warn(isLogging(), "🚨 Игрок " + player.getName() + " вышел! Бот " + bot.getId() + " переходит в автономный режим.");
         this.bot.getLifeCycle().getTaskStackManager().clearTasks();
 
-        bot.addTaskToQueue(new BotTaskIdle(bot));
+        bot.addTaskToQueue(new BotIdleTask(bot));
         isDone = true;
     }
 }

@@ -4,7 +4,7 @@ import org.bukkit.Location;
 import org.bukkit.Material;
 
 import com.devone.aibot.core.Bot;
-import com.devone.aibot.core.logic.tasks.BotTaskMove;
+import com.devone.aibot.core.logic.tasks.BotMoveTask;
 
 
 public class BotNavigationUtils {
@@ -55,13 +55,13 @@ public class BotNavigationUtils {
     }
 
         public static void navigateTo(Bot bot, Location target) {
-        BotTaskMove moveTask = new BotTaskMove(bot);
+        BotMoveTask moveTask = new BotMoveTask(bot);
         moveTask.configure(target);
         bot.addTaskToQueue(moveTask);
     }
 
     public static void navigateTo(Bot bot, Location target, double multiplier) {
-        BotTaskMove moveTask = new BotTaskMove(bot);
+        BotMoveTask moveTask = new BotMoveTask(bot);
         moveTask.configure(target, multiplier);
         bot.addTaskToQueue(moveTask);
     }

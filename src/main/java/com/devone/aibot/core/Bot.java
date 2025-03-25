@@ -12,7 +12,7 @@ import org.bukkit.entity.Player;
 
 import com.devone.aibot.core.comms.BotCommunicator;
 import com.devone.aibot.core.logic.BotLifeCycle;
-import com.devone.aibot.core.logic.tasks.BotTaskMove;
+import com.devone.aibot.core.logic.tasks.BotMoveTask;
 import com.devone.aibot.core.logic.tasks.BotTask;
 import com.devone.aibot.utils.BotLogger;
 import net.citizensnpcs.api.ai.Navigator;
@@ -141,7 +141,7 @@ public class Bot {
         // Если предметов рядом нет, двигаем бота к последнему разрушенному блоку
         BotLogger.debug(true, "✅ "+getId() +" Дроп подобран, двигаюсь к последнему разрушенному блоку " + lastBrokenBlock);
         
-        BotTaskMove mv_task = new BotTaskMove(this);
+        BotMoveTask mv_task = new BotMoveTask(this);
         mv_task.configure(lastBrokenBlock);
         addTaskToQueue(mv_task);
     }
