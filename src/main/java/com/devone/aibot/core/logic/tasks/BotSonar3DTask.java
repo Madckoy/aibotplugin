@@ -9,9 +9,9 @@ import org.bukkit.entity.LivingEntity;
 
 import com.devone.aibot.core.Bot;
 import com.devone.aibot.core.logic.tasks.destruction.BotBreakTask;
-import com.devone.aibot.utils.BotBio3DScan;
-import com.devone.aibot.utils.BotGeo3DScan;
-import com.devone.aibot.utils.BotGeo3DScan.ScanMode;
+import com.devone.aibot.utils.Bot3DBioScan;
+import com.devone.aibot.utils.Bot3DGeoScan;
+import com.devone.aibot.utils.Bot3DGeoScan.ScanMode;
 import com.devone.aibot.utils.BotLogger;
 
 
@@ -28,7 +28,7 @@ public class BotSonar3DTask extends BotTask {
         parent = caller;
         this.radius = radius;
         this.height = height;
-        this.scanMode = BotGeo3DScan.ScanMode.FULL;
+        this.scanMode = Bot3DGeoScan.ScanMode.FULL;
 
         setObjective("Scan Signatures");
     }
@@ -53,13 +53,13 @@ public class BotSonar3DTask extends BotTask {
         setObjective("Scanning Signatures");
         
         if (parent instanceof BotExploreTask || parent instanceof BotBreakTask) {
-            Map<Location, Material> geo = BotGeo3DScan.scan3D(bot, radius, height, scanMode);
+            Map<Location, Material> geo = Bot3DGeoScan.scan3D(bot, radius, height, scanMode);
             parent.setGeoMap(geo);
             BotLogger.debug(isLogging(),"🛰️ Geo scan complete. Blocks: " + geo.size());
         }
     
         if (parent instanceof BotHuntMobsTask) {
-            List<LivingEntity> bio = BotBio3DScan.scan3D(bot, radius);
+            List<LivingEntity> bio = Bot3DBioScan.scan3D(bot, radius);
             parent.setBioEntities(bio);
             BotLogger.debug(isLogging(),"🧬 Bio scan complete. Entities: " + bio.size());
         }

@@ -14,7 +14,7 @@ import org.json.simple.JSONObject;
 
 import com.devone.aibot.core.Bot;
 
-public class BotGeo3DScan {
+public class Bot3DGeoScan {
 
     public static enum ScanMode {
         FULL,

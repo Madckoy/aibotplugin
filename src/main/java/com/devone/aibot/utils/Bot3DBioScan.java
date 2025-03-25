@@ -10,7 +10,7 @@ import java.util.Comparator;
 import java.util.List;
 import java.util.stream.Collectors;
 
-public class BotBio3DScan {
+public class Bot3DBioScan {
 
     public static List<LivingEntity> scan3D(Bot bot, int radius) {
 

@@ -1,9 +1,8 @@
-# plugins/AIBotPlugin/patterns/break/default.yml
+# cube
 
 filters:
-  - "abs(x - cx) <= r"
-  - "abs(y - cy) <= r"
-  - "abs(z - cz) <= r"
+  - "x >= cx - r && x <= cx + r"
+  - "y >= cy - r && y <= cy + r"
+  - "z >= cz - r && z <= cz + r"
 sort:
-  - "-(y - cy)"           # сверху вниз
-  - "abs(x - cx) + abs(z - cz)"  # от центра к краям
+  - "y"

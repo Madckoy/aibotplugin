@@ -1,8 +1,8 @@
-# cube
-
+# pyramid
 filters:
   - "x >= cx - r && x <= cx + r"
   - "y >= cy - r && y <= cy + r"
   - "z >= cz - r && z <= cz + r"
+  - "!(((x - cx >= 0 ? x - cx : cx - x) + (z - cz >= 0 ? z - cz : cz - z)) <= (y - cy) && y >= cy)"
 sort:
   - "y"
