@@ -42,7 +42,7 @@ import java.util.stream.Collectors;
 public class BotWebService {
     private final Server server;
     private static final String SKIN_PATH = BotConstants.PLUGIN_PATH + "/web/skins/";
-    private static final String CONFIG_PATH = BotConstants.PLUGIN_PATH + "/AIBotPlugin.yml";
+    private static final String CONFIG_PATH = BotConstants.PLUGIN_PATH + "/cfg/AIBotPlugin.yml";
     public static final String SERVER_HOST;
     private static final String MAP_HOST;
 
@@ -65,7 +65,7 @@ public class BotWebService {
         context.addServlet(new ServletHolder(new SkinServlet()), "/skins/*");
         context.addServlet(new ServletHolder(new StaticFileServlet()), "/assets/*");
 
-        copyEntireResourcesToPluginFolder();
+        // copyEntireResourcesToPluginFolder();
 
     }
 
@@ -75,107 +75,6 @@ public class BotWebService {
 
     public static String getMapHost() {
         return MAP_HOST;
-    }
-
-public void copyEntireResourcesToPluginFolder() {
-    copyResourcesRecursively("web", BotConstants.PLUGIN_PATH + "/web");
-    copyResourcesRecursively("patterns", BotConstants.PLUGIN_PATH + "/patterns");
-}
-
-private void copyResourcesRecursively(String resourceSubPath, String targetDirPath) {
-    try {
-        ClassLoader classLoader = getClass().getClassLoader();
-        
-        URL resourceURL = classLoader.getResource(resourceSubPath.isEmpty() ? "." : resourceSubPath);
-
-        if (resourceURL == null) {
-            BotLogger.error(true, "❌ Resource path not found: " + resourceSubPath);
-            return;
-        }
-
-        if (resourceURL.getProtocol().equals("jar")) {
-            String jarPath = resourceURL.getPath().substring(5, resourceURL.getPath().indexOf("!"));
-            try (JarFile jar = new JarFile(URLDecoder.decode(jarPath, StandardCharsets.UTF_8))) {
-                Enumeration<JarEntry> entries = jar.entries();
-                while (entries.hasMoreElements()) {
-                    JarEntry entry = entries.nextElement();
-                    String name = entry.getName();
-                    if (name.startsWith(resourceSubPath) && !entry.isDirectory()) {
-                        try (InputStream in = jar.getInputStream(entry)) {
-                            String relativePath = name.substring(resourceSubPath.length()).replaceFirst("^/", "");
-                            File targetFile = new File(targetDirPath, relativePath);
-                            targetFile.getParentFile().mkdirs();
-                            Files.copy(in, targetFile.toPath(), StandardCopyOption.REPLACE_EXISTING);
-                            BotLogger.info(true, "✅ Copied: " + name + " → " + targetFile.getPath());
-                        }
-                    }
-                }
-            }
-        } else {
-            Path sourcePath = Paths.get(resourceURL.toURI());
-            Files.walk(sourcePath)
-                .filter(Files::isRegularFile)
-                .forEach(sourceFile -> {
-                    try (InputStream in = Files.newInputStream(sourceFile)) {
-                        Path relativePath = sourcePath.relativize(sourceFile);
-                        File targetFile = new File(targetDirPath, relativePath.toString());
-                        targetFile.getParentFile().mkdirs();
-                        Files.copy(in, targetFile.toPath(), StandardCopyOption.REPLACE_EXISTING);
-                        BotLogger.info(true, "✅ Copied: " + sourceFile + " → " + targetFile.getPath());
-                    } catch (IOException e) {
-                        BotLogger.error(true, "❌ Failed to copy file: " + e.getMessage());
-                    }
-                });
-        }
-
-    } catch (Exception e) {
-        BotLogger.error(true, "❌ Error during resource copying: " + e.getMessage());
-    }
-}
-    /**
-     * ✅ Метод копирования ресурсов (CSS и JS) в plugins/AIBotPlugin/web/assets/
-     */
-    private void copyResourceFiles() {
-        String[] resourceFilesWeb = { "web/assets/styles.css", "web/assets/scripts.js" };
-        for (String resource : resourceFilesWeb) {
-            try (InputStream in = getClass().getClassLoader().getResourceAsStream(resource)) {
-                if (in == null) {
-                    BotLogger.error(true, "❌ Resource not found: " + resource);
-                    continue;
-                }
-                File targetFile = new File(BotConstants.PLUGIN_PATH_WEB_ASSETS + new File(resource).getName());
-                targetFile.getParentFile().mkdirs();
-                Files.copy(in, targetFile.toPath(), StandardCopyOption.REPLACE_EXISTING);
-                BotLogger.info(true, "✅ Copied: " + resource + " → " + targetFile.getPath());
-            } catch (IOException e) {
-                BotLogger.error(true, "❌ Failed to copy " + resource + ": " + e.getMessage());
-            }
-        }
-
-        String[] resourceFilesPatterns = { 
-                "patterns/break/default.yml",
-                "patterns/break/cube.yml",
-                "patterns/break/untested-cube.yml",
-                "patterns/break/untested_pyramid.yml" };
-
-        for (String resource : resourceFilesPatterns) {
-            try (InputStream in = getClass().getClassLoader().getResourceAsStream(resource)) {
-                if (in == null) {
-                    BotLogger.error(true, "❌ Resource not found: " + resource);
-                    continue;
-                }
-
-                String relativePath = resource.substring(BotConstants.RESOURCE_PATH_PATTERNS_BREAK.length());
-                File targetFile = new File(BotConstants.PLUGIN_PATH_PATTERNS_BREAK, relativePath);
-
-                targetFile.getParentFile().mkdirs();
-                Files.copy(in, targetFile.toPath(), StandardCopyOption.REPLACE_EXISTING);
-                BotLogger.info(true, "✅ Copied: " + resource + " → " + targetFile.getPath());
-            } catch (IOException e) {
-                BotLogger.error(true, "❌ Failed to copy " + resource + ": " + e.getMessage());
-            }
-        }
-
     }
 
     public void start() throws Exception {

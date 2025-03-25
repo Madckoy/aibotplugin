@@ -2,6 +2,17 @@ package com.devone.aibot;
 
 import java.io.File;
 import java.io.IOException;
+import java.io.InputStream;
+import java.net.URL;
+import java.net.URLDecoder;
+import java.nio.charset.StandardCharsets;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
+import java.nio.file.StandardCopyOption;
+import java.util.Enumeration;
+import java.util.jar.JarEntry;
+import java.util.jar.JarFile;
 
 import org.bukkit.Bukkit;
 import org.bukkit.configuration.file.FileConfiguration;
@@ -13,6 +24,7 @@ import com.devone.aibot.core.BotCmdDispatcher;
 import com.devone.aibot.core.BotZoneManager;
 import com.devone.aibot.core.events.BotEvents;
 import com.devone.aibot.core.events.PlayerEvents;
+import com.devone.aibot.utils.BotConstants;
 import com.devone.aibot.utils.BotLogger;
 import com.devone.aibot.web.BotWebService;
 
@@ -29,6 +41,8 @@ public class AIBotPlugin extends JavaPlugin {
 
         ensureDataFolderExists();
 
+        copyEntireResourcesToPluginFolder();
+
         setupConfig();
 
         reloadPlugin(); // ✅ Now `onEnable()` only calls `reloadPlugin()`
@@ -41,7 +55,7 @@ public class AIBotPlugin extends JavaPlugin {
         BotLogger.info(true, "♻️ AI Bot Plugin is shutting down...");
 
         // Остановка HTTP сервера
-        if (web_service!= null) {
+        if (web_service != null) {
             try {
                 web_service.stop();
                 BotLogger.info(true, "🛑 HTTP WEB server stopped.");
@@ -96,7 +110,7 @@ public class AIBotPlugin extends JavaPlugin {
     }
 
     private void setupConfig() {
-        File configFile = new File(getDataFolder(), "AIBotPlugin.yml");
+        File configFile = new File(BotConstants.PLUGIN_PATH_CONFIGS, "AIBotPlugin.yml");
 
         if (!configFile.exists()) {
             getLogger().warning("⚠ Файл AIBotPlugin.yml не найден, создаем новый...");
@@ -114,6 +128,68 @@ public class AIBotPlugin extends JavaPlugin {
             } catch (IOException e) {
                 BotLogger.error(true, "❌ Ошибка при создании AIBotPlugin.yml: " + e.getMessage());
             }
+        }
+    }
+
+    private void copyEntireResourcesToPluginFolder() {
+
+        copyResourcesRecursively("web", BotConstants.PLUGIN_PATH + "/web");
+        copyResourcesRecursively("patterns", BotConstants.PLUGIN_PATH + "/patterns");
+        copyResourcesRecursively("cfg", BotConstants.PLUGIN_PATH + "/cfg");
+        copyResourcesRecursively("logs", BotConstants.PLUGIN_PATH + "/logs");
+        copyResourcesRecursively("tmp", BotConstants.PLUGIN_PATH + "/tmp");
+    }
+
+    private void copyResourcesRecursively(String resourceSubPath, String targetDirPath) {
+        try {
+            ClassLoader classLoader = getClass().getClassLoader();
+
+            URL resourceURL = classLoader.getResource(resourceSubPath.isEmpty() ? "." : resourceSubPath);
+
+            if (resourceURL == null) {
+                BotLogger.error(true, "❌ Resource path not found: " + resourceSubPath);
+                return;
+            }
+
+            if (resourceURL.getProtocol().equals("jar")) {
+                String jarPath = resourceURL.getPath().substring(5, resourceURL.getPath().indexOf("!"));
+                try (JarFile jar = new JarFile(URLDecoder.decode(jarPath, StandardCharsets.UTF_8))) {
+                    Enumeration<JarEntry> entries = jar.entries();
+                    while (entries.hasMoreElements()) {
+                        JarEntry entry = entries.nextElement();
+                        String name = entry.getName();
+                        if (name.startsWith(resourceSubPath) && !entry.isDirectory()) {
+                            try (InputStream in = jar.getInputStream(entry)) {
+                                String relativePath = name.substring(resourceSubPath.length()).replaceFirst("^/", "");
+                                File targetFile = new File(targetDirPath, relativePath);
+                                if (!targetFile.exists()) {
+                                    targetFile.getParentFile().mkdirs();
+                                    Files.copy(in, targetFile.toPath(), StandardCopyOption.REPLACE_EXISTING);
+                                    BotLogger.info(true, "✅ Copied: " + name + " → " + targetFile.getPath());
+                                }
+                            }
+                        }
+                    }
+                }
+            } else {
+                Path sourcePath = Paths.get(resourceURL.toURI());
+                Files.walk(sourcePath)
+                        .filter(Files::isRegularFile)
+                        .forEach(sourceFile -> {
+                            try (InputStream in = Files.newInputStream(sourceFile)) {
+                                Path relativePath = sourcePath.relativize(sourceFile);
+                                File targetFile = new File(targetDirPath, relativePath.toString());
+                                targetFile.getParentFile().mkdirs();
+                                Files.copy(in, targetFile.toPath(), StandardCopyOption.REPLACE_EXISTING);
+                                BotLogger.info(true, "✅ Copied: " + sourceFile + " → " + targetFile.getPath());
+                            } catch (IOException e) {
+                                BotLogger.error(true, "❌ Failed to copy file: " + e.getMessage());
+                            }
+                        });
+            }
+
+        } catch (Exception e) {
+            BotLogger.error(true, "❌ Error during resource copying: " + e.getMessage());
         }
     }
 
