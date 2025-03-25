@@ -75,6 +75,7 @@ public class AIBotPlugin extends JavaPlugin {
         BotLogger.info(true, "♻️ Перезагрузка AI Bot Plugin...");
 
         reloadConfig();
+
         BotLogger.info(true, "🔄 Конфигурация загружена заново.");
 
         botManager = new BotManager(this);
@@ -110,10 +111,10 @@ public class AIBotPlugin extends JavaPlugin {
     }
 
     private void setupConfig() {
-        File configFile = new File(BotConstants.PLUGIN_PATH_CONFIGS, "AIBotPlugin.yml");
+        File configFile = new File(BotConstants.PLUGIN_PATH, "config.yml");
 
         if (!configFile.exists()) {
-            getLogger().warning("⚠ Файл AIBotPlugin.yml не найден, создаем новый...");
+            getLogger().warning("⚠ Файл config.yml не найден, создаем новый...");
 
             if (!getDataFolder().exists()) {
                 getDataFolder().mkdirs();
@@ -124,9 +125,9 @@ public class AIBotPlugin extends JavaPlugin {
 
             try {
                 config.save(configFile);
-                BotLogger.info(true, "✅ Создан AIBotPlugin.yml с уровнем логирования INFO.");
+                BotLogger.info(true, "✅ Создан config.yml с уровнем логирования INFO.");
             } catch (IOException e) {
-                BotLogger.error(true, "❌ Ошибка при создании AIBotPlugin.yml: " + e.getMessage());
+                BotLogger.error(true, "❌ Ошибка при создании config.yml: " + e.getMessage());
             }
         }
     }
