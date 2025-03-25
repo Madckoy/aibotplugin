@@ -9,10 +9,13 @@ import com.devone.aibot.core.logic.tasks.BotTask;
 import com.devone.aibot.core.logic.tasks.BotSonar3DTask;
 import com.devone.aibot.core.logic.tasks.BotUseHandTask;
 import com.devone.aibot.core.logic.tasks.configs.BotBreakBlockTaskConfig;
+import com.devone.aibot.utils.Bot3DCoordinate;
 import com.devone.aibot.utils.BotConstants;
 import com.devone.aibot.utils.BotLogger;
 import com.devone.aibot.utils.BotStringUtils;
 import com.devone.aibot.utils.BotUtils;
+
+import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.Material;
 
@@ -146,7 +149,9 @@ public class BotBreakTask extends BotTask {
             return;
         }
 
-        Location targetLocation = breakPattern.findNextBlock(bot);
+        Bot3DCoordinate coordinate = breakPattern.findNextBlock(bot);
+
+        Location targetLocation = new Location(Bukkit.getWorlds().get(0), coordinate.x, coordinate.y, coordinate.z);
 
         bot.getRuntimeStatus().setTargetLocation(targetLocation);
 

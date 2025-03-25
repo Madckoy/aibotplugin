@@ -1,8 +1,9 @@
 package com.devone.aibot.core.logic.patterns.destruction;
 
 import com.devone.aibot.core.Bot;
+import com.devone.aibot.core.logic.patterns.BotCoordinatesGenerator;
+import com.devone.aibot.utils.Bot3DCoordinate;
 import com.devone.aibot.utils.BotLogger;
-import org.bukkit.Location;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -17,12 +18,13 @@ import java.util.*;
 public class BotBreakInterpretedYamlPattern implements IBotDestructionPattern {
 
     private final Path yamlPath;
-    private BotBreakInterpretedPattern pattern;
+
+    private BotCoordinatesGenerator pattern;
 
     private boolean initialized = false;
     private int radius = 0;
 
-    private final Queue<Location> blocksToBreak = new LinkedList<>();
+    private final Queue<Bot3DCoordinate> blocksToBreak = new LinkedList<>();
 
     public BotBreakInterpretedYamlPattern(Path path) {
         this.yamlPath = path;
@@ -34,7 +36,7 @@ public class BotBreakInterpretedYamlPattern implements IBotDestructionPattern {
         BotLogger.trace(true, "🛠️ Начинаем загрузку YAML-паттерна: " + yamlPath);
 
         try (InputStream inputStream = Files.newInputStream(yamlPath)) {
-            this.pattern = BotBreakPatternLoader.loadFromYaml(inputStream);
+            this.pattern = BotCoordinatesGenerator.loadYamlFromStream(inputStream);
             if (this.pattern != null) {
                 BotLogger.info(true, "✅ Паттерн успешно загружен из YAML: " + yamlPath.getFileName());
             } else {
@@ -48,7 +50,7 @@ public class BotBreakInterpretedYamlPattern implements IBotDestructionPattern {
     }
 
 
-    public Location findNextBlock(Bot bot) {
+    public Bot3DCoordinate findNextBlock(Bot bot) {
         if (this.pattern == null) {
             BotLogger.error(true, "🚨 ❌ Паттерн не инициализирован! YAML: " + yamlPath);
             return null;
@@ -56,14 +58,22 @@ public class BotBreakInterpretedYamlPattern implements IBotDestructionPattern {
 
         if (!initialized) {
             BotLogger.trace(true, "🔁 Генерация точек по паттерну...");
-            List<Location> points = pattern.generate(
-                    new BotBreakInterpretedPattern.PatternContext(
-                            bot.getRuntimeStatus().getCurrentLocation(),
-                            radius));
+            
+            Bot3DCoordinate center = new Bot3DCoordinate(bot.getRuntimeStatus().getCurrentLocation().getBlockX(), 
+                                                                   bot.getRuntimeStatus().getCurrentLocation().getBlockY(), 
+                                                                   bot.getRuntimeStatus().getCurrentLocation().getBlockZ()); 
+            
+            List<Bot3DCoordinate> all = pattern.generateFullCube(center.x, center.y, center.z, radius);
 
-            if (points != null && !points.isEmpty()) {
-                blocksToBreak.addAll(points);
-                BotLogger.trace(true, "✅ Добавлено " + points.size() + " точек для разрушения");
+            List<Bot3DCoordinate> kept = pattern.generate(center.x, center.y, center.z, radius, radius, radius);
+
+            List<Bot3DCoordinate> toBeRemoved = new ArrayList<>(all);
+                                  
+            toBeRemoved.removeAll(kept);
+
+            if (toBeRemoved != null && !toBeRemoved.isEmpty()) {
+                blocksToBreak.addAll(toBeRemoved);
+                BotLogger.trace(true, "✅ Added " + blocksToBreak.size() + " coordinates");
             } else {
                 BotLogger.warn(true, "⚠️ Паттерн YAML не вернул ни одной точки для разрушения.");
             }
@@ -71,9 +81,10 @@ public class BotBreakInterpretedYamlPattern implements IBotDestructionPattern {
             initialized = true;
         }
 
-        Location next = blocksToBreak.poll();
+        Bot3DCoordinate next = blocksToBreak.poll();
+
         if (next != null) {
-            BotLogger.trace(true, "🎯 Следующий блок: " + next.getBlockX() + ", " + next.getBlockY() + ", " + next.getBlockZ());
+            BotLogger.trace(true, "🎯 Next coordinate: " + next.x + ", " + next.y + ", " + next.z);
         }
         return next;
     }
@@ -89,7 +100,7 @@ public class BotBreakInterpretedYamlPattern implements IBotDestructionPattern {
     }
 
 
-    public List<Location> getAllPlannedBlocks() {
+    public List<Bot3DCoordinate> getAllPlannedBlocks() {
         return new ArrayList<>(blocksToBreak);
     }
 

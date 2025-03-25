@@ -3,7 +3,7 @@ package com.devone.aibot.core.logic.tasks;
 import com.devone.aibot.core.Bot;
 import com.devone.aibot.core.logic.tasks.configs.BotHuntTaskConfig;
 import com.devone.aibot.utils.BotLogger;
-import com.devone.aibot.utils.EntityUtils;
+import com.devone.aibot.utils.BotEntityUtils;
 import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
 
@@ -59,7 +59,7 @@ public class BotHuntMobsTask extends BotTask {
         BotHuntTaskConfig huntConfig = (BotHuntTaskConfig) config;
 
         for (LivingEntity entity : nearbyEntities) {
-            if (EntityUtils.isHostileMob(entity)) {
+            if (BotEntityUtils.isHostileMob(entity)) {
                 if (huntConfig.getTargetAggressiveMobs().contains(entity.getType())) {
                     targetMob = entity;
                     BotLogger.debug(isLogging(),"🎯 Найдена враждебная цель: " + targetMob.getType());

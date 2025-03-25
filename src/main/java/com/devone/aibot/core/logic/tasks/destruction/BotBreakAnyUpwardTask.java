@@ -2,7 +2,7 @@ package com.devone.aibot.core.logic.tasks.destruction;
 
 import com.devone.aibot.core.Bot;
 import com.devone.aibot.core.logic.tasks.configs.BotBreakBlockTaskConfig;
-import com.devone.aibot.utils.BotGeo3DScan.ScanMode;
+import com.devone.aibot.utils.Bot3DGeoScan.ScanMode;
 
 public class BotBreakAnyUpwardTask extends BotBreakTask {
 

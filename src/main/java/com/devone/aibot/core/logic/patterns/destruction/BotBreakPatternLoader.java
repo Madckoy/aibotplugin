@@ -2,6 +2,8 @@ package com.devone.aibot.core.logic.patterns.destruction;
 
 import org.yaml.snakeyaml.Yaml;
 
+import com.devone.aibot.core.logic.patterns.BotCoordinatesGenerator;
+
 import java.io.InputStream;
 import java.nio.file.Files;
 import java.nio.file.Path;
@@ -10,21 +12,22 @@ import java.util.Map;
 
 public class BotBreakPatternLoader {
 
-    public static BotBreakInterpretedPattern loadFromYaml(Path path) {
+    public static BotCoordinatesGenerator loadFromYaml(Path path) {
         try (InputStream in = Files.newInputStream(path)) {
-            return loadFromYaml(in);
+
+            return loadYmlFromStream(in);
+
         } catch (Exception e) {
             System.err.println("❌ Ошибка загрузки YAML паттерна из файла " + path + ": " + e.getMessage());
             return null;
         }
     }
 
-    public static BotBreakInterpretedPattern loadFromYaml(InputStream inputStream) {
+    public static BotCoordinatesGenerator loadYmlFromStream(InputStream inputStream) {
         try {
-            Yaml yaml = new Yaml();
-            Map<String, Object> raw = yaml.load(inputStream);
     
-            return BotBreakInterpretedPattern.fromYaml(raw); // ✅ Используем встроенный разбор
+            return BotCoordinatesGenerator.loadYamlFromStream(inputStream); // ✅ Используем встроенный разбор
+
         } catch (Exception e) {
             System.err.println("❌ Ошибка парсинга YAML паттерна: " + e.getMessage());
             return null;

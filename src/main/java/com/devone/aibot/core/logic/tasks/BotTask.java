@@ -7,7 +7,7 @@ import org.bukkit.entity.Player;
 
 import com.devone.aibot.core.Bot;
 import com.devone.aibot.core.logic.tasks.configs.BotTaskConfig;
-import com.devone.aibot.utils.BotGeo3DScan.ScanMode;
+import com.devone.aibot.utils.Bot3DGeoScan.ScanMode;
 import com.devone.aibot.utils.BotLogger;
 import com.devone.aibot.utils.BotStringUtils;
 import com.devone.aibot.utils.BotUtils;
@@ -29,7 +29,7 @@ public abstract class BotTask implements IBotTask {
     protected Map<Location, Material> geoMap;
     protected List<LivingEntity> bioEntities;
     protected String objective;
-    protected ScanMode scanMode = com.devone.aibot.utils.BotGeo3DScan.ScanMode.FULL;
+    protected ScanMode scanMode = com.devone.aibot.utils.Bot3DGeoScan.ScanMode.FULL;
     protected boolean logging;
 
     protected BotTaskConfig config;
@@ -201,7 +201,7 @@ public abstract class BotTask implements IBotTask {
         BotLogger.warn(isLogging(), "🚨 Игрок " + player.getName() + " вышел! Бот " + bot.getId() + " переходит в автономный режим.");
         this.bot.getLifeCycle().getTaskStackManager().clearTasks();
 
-        bot.addTaskToQueue(new BotIdleTask(bot));
+        bot.addTaskToQueue(new BotMakeDecisionTask(bot));
         isDone = true;
     }
 }

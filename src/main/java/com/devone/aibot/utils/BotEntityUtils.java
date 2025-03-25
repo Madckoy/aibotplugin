@@ -6,7 +6,7 @@ import org.bukkit.entity.LivingEntity;
 import java.util.EnumSet;
 import java.util.Set;
 
-public class EntityUtils {
+public class BotEntityUtils {
 
     private static final Set<EntityType> HOSTILE_MOBS = EnumSet.of(
         EntityType.ZOMBIE,
