@@ -31,7 +31,7 @@ public class BotZoneManager {
             pluginFolder.mkdirs();
         }
 
-        zonesFile = new File(BotConstants.PLUGIN_PATH_CONFIGS, "zones.yml");
+        zonesFile = new File(BotConstants.PLUGIN_PATH_CONFIGS, "BotZoneManager.yml");
         config = YamlConfiguration.loadConfiguration(zonesFile);
         loadZones();
 

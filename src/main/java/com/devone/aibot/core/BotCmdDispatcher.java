@@ -24,26 +24,26 @@ public class BotCmdDispatcher implements CommandExecutor {
 
     // ✅ Регистрируем все команды
     private void registerCommands(AIBotPlugin plugin, BotManager botManager, BotZoneManager zoneManager) {
-        registerCommand("bot-reload-plugin", new BotCmdReloadPlugin(plugin));
+        registerCommand("bot-reload-plugin", new BotReloadPluginCmd(plugin));
 
-        registerCommand("bot-add", new BotCmdAdd(botManager));
-        registerCommand("bot-select", new BotCmdSelect(botManager));
-        registerCommand("bot-unselect", new BotCmdUnselect(botManager));
-        registerCommand("bot-list", new BotCmdList(botManager));
-        registerCommand("bot-remove", new BotCmdRemove(botManager));
-        registerCommand("bot-remove-all", new BotCmdRemoveAll(botManager));
+        registerCommand("bot-add", new BotAddCmd(botManager));
+        registerCommand("bot-select", new BotSelectCmd(botManager));
+        registerCommand("bot-unselect", new BotUnselectCmd(botManager));
+        registerCommand("bot-list", new BotListCmd(botManager));
+        registerCommand("bot-remove", new BotRemoveCmd(botManager));
+        registerCommand("bot-remove-all", new BotRemoveAllCmd(botManager));
 
-        registerCommand("bot-here", new BotCmdHere(botManager));
-        registerCommand("bot-tp-here", new BotCmdTpHere(botManager));
-        registerCommand("bot-move", new BotCmdMove(botManager));
-        registerCommand("bot-stop", new BotCmdStop(botManager));
-        registerCommand("bot-follow", new BotCmdFollow(botManager));
-        registerCommand("bot-protect", new BotCmdProtect(botManager));
-        registerCommand("bot-cancel", new BotCmdCancel(botManager));
+        registerCommand("bot-here", new BotHereCmd(botManager));
+        registerCommand("bot-tp-here", new BotTpHereCmd(botManager));
+        registerCommand("bot-move", new BotMoveCmd(botManager));
+        registerCommand("bot-stop", new BotStopCmd(botManager));
+        registerCommand("bot-follow", new BotFollowCmd(botManager));
+        registerCommand("bot-protect", new BotProtectCmd(botManager));
+        registerCommand("bot-cancel", new BotCancelCmd(botManager));
 
-        registerCommand("zone-add", new BotCmdZoneAdd(zoneManager));
-        registerCommand("zone-remove", new BotCmdZoneRemove(zoneManager));
-        registerCommand("zone-list", new BotCmdZoneList(zoneManager));
+        registerCommand("zone-add", new BotZoneAddCmd(zoneManager));
+        registerCommand("zone-remove", new BotZoneRemoveCmd(zoneManager));
+        registerCommand("zone-list", new BotZoneListCmd(zoneManager));
 
         BotLogger.info(true, "✅ Все команды зарегистрированы: " + commandExecutors.keySet());
     }

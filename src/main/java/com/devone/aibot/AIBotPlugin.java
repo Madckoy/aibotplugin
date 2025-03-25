@@ -96,10 +96,10 @@ public class AIBotPlugin extends JavaPlugin {
     }
 
     private void setupConfig() {
-        File configFile = new File(getDataFolder(), "config.yml");
+        File configFile = new File(getDataFolder(), "AIBotPlugin.yml");
 
         if (!configFile.exists()) {
-            getLogger().warning("⚠ Файл config.yml не найден, создаем новый...");
+            getLogger().warning("⚠ Файл AIBotPlugin.yml не найден, создаем новый...");
 
             if (!getDataFolder().exists()) {
                 getDataFolder().mkdirs();

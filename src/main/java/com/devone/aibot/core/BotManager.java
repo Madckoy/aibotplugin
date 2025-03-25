@@ -76,7 +76,7 @@ public class BotManager {
     private void loadExistingBots() {
         BotLogger.info(true, "🔄 Загружаем существующих NPC ботов...");
 
-        File file = new File(BotConstants.PLUGIN_PATH_CONFIGS, "bots.yml");
+        File file = new File(BotConstants.PLUGIN_PATH_CONFIGS, "BotManager.yml");
         FileConfiguration config = YamlConfiguration.loadConfiguration(file);
 
         for (NPC npc : CitizensAPI.getNPCRegistry()) {
@@ -130,7 +130,7 @@ public class BotManager {
 
     public void saveBots() {
 
-        File file = new File(BotConstants.PLUGIN_PATH_CONFIGS, "bots.yml");
+        File file = new File(BotConstants.PLUGIN_PATH_CONFIGS, "BotManager.yml");
         FileConfiguration config = new YamlConfiguration();
 
         for (Bot bot : botsMap.values()) {
@@ -139,7 +139,7 @@ public class BotManager {
 
             Location loc = bot.getRuntimeStatus().getCurrentLocation();
 
-            // Сохраняем координаты в bots.yml
+            // Сохраняем координаты в BotManager.yml
             config.set("bots." + bot.getId() + ".x", loc.getBlockX());
             config.set("bots." + bot.getId() + ".y", loc.getBlockY());
             config.set("bots." + bot.getId() + ".z", loc.getBlockZ());
@@ -149,10 +149,10 @@ public class BotManager {
         try {
             config.save(file);
 
-            BotLogger.info(true, "✅ Боты сохранены в bots.yml.");
+            BotLogger.info(true, "✅ Боты сохранены в BotManager.yml.");
 
         } catch (IOException e) {
-            BotLogger.error(true, "⚠️ Ошибка сохранения bots.yml: " + e.getMessage());
+            BotLogger.error(true, "⚠️ Ошибка сохранения BotManager.yml: " + e.getMessage());
         }
     }
 

@@ -2,7 +2,7 @@ package com.devone.aibot.core.logic.ai;
 
 import com.devone.aibot.core.Bot;
 import com.devone.aibot.core.logic.tasks.*;
-import com.devone.aibot.core.logic.tasks.destruction.BotTaskBreakBlock;
+import com.devone.aibot.core.logic.tasks.destruction.BotBreakTask;
 import com.devone.aibot.utils.BotLogger;
 
 public class BotBrainAI {
@@ -32,19 +32,19 @@ public class BotBrainAI {
     private static void executeAction(Bot bot, String action) {
         switch (action) {
             case "hunt_mob":
-                bot.addTaskToQueue(new BotTaskHuntMobs(bot));
+                bot.addTaskToQueue(new BotHuntMobsTask(bot));
                 break;
             case "break_block":
-                bot.addTaskToQueue(new BotTaskBreakBlock(bot));
+                bot.addTaskToQueue(new BotBreakTask(bot));
                 break;
             case "drop_off":
-                bot.addTaskToQueue(new BotTaskDropAll(bot, null));
+                bot.addTaskToQueue(new BotDropAllTask(bot, null));
                 break;
             case "explore":
-                bot.addTaskToQueue(new BotTaskExplore(bot));
+                bot.addTaskToQueue(new BotExploreTask(bot));
                 break;
             default:
-                bot.addTaskToQueue(new BotTaskIdle(bot));
+                bot.addTaskToQueue(new BotIdleTask(bot));
                 break;
         }
         BotLogger.debug(true, "🤖 BotBrainAI выбрал действие: " + action);
