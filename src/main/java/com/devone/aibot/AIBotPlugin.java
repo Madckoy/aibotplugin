@@ -110,9 +110,9 @@ public class AIBotPlugin extends JavaPlugin {
 
             try {
                 config.save(configFile);
-                BotLogger.info(true, "✅ Создан config.yml с уровнем логирования INFO.");
+                BotLogger.info(true, "✅ Создан AIBotPlugin.yml с уровнем логирования INFO.");
             } catch (IOException e) {
-                BotLogger.error(true, "❌ Ошибка при создании config.yml: " + e.getMessage());
+                BotLogger.error(true, "❌ Ошибка при создании AIBotPlugin.yml: " + e.getMessage());
             }
         }
     }

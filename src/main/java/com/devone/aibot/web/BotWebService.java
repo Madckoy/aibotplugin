@@ -42,7 +42,7 @@ import java.util.stream.Collectors;
 public class BotWebService {
     private final Server server;
     private static final String SKIN_PATH = BotConstants.PLUGIN_PATH + "/web/skins/";
-    private static final String CONFIG_PATH = BotConstants.PLUGIN_PATH + "/config.yml";
+    private static final String CONFIG_PATH = BotConstants.PLUGIN_PATH + "/AIBotPlugin.yml";
     public static final String SERVER_HOST;
     private static final String MAP_HOST;
 
