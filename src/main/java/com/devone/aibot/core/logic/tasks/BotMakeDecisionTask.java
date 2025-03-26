@@ -11,7 +11,6 @@ import com.devone.aibot.utils.BotStringUtils;
 import com.devone.aibot.utils.BotMaterialUtils;
 
 import org.bukkit.Location;
-import org.bukkit.Material;
 import org.bukkit.World;
 import org.bukkit.entity.EntityType;
 

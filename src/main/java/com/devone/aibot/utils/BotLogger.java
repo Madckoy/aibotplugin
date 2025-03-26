@@ -1,7 +1,11 @@
 package com.devone.aibot.utils;
 
 import org.bukkit.configuration.file.FileConfiguration;
+import org.bukkit.configuration.file.YamlConfiguration;
+
 import com.devone.aibot.AIBotPlugin;
+
+import java.io.File;
 import java.io.IOException;
 import java.util.logging.*;
 
@@ -26,8 +30,12 @@ public class BotLogger {
         }
     }
 
+
+ 
     public static void init(AIBotPlugin plugin) {
+
         FileConfiguration config = plugin.getConfig();
+
         loggingEnabled = config.getBoolean("logging.enable", true);
 
         if (!loggingEnabled) {
