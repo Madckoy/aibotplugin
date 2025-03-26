@@ -24,9 +24,11 @@ import com.devone.aibot.core.BotCmdDispatcher;
 import com.devone.aibot.core.BotZoneManager;
 import com.devone.aibot.core.events.BotEvents;
 import com.devone.aibot.core.events.PlayerEvents;
+import com.devone.aibot.core.math.BotMathMaxFunction;
 import com.devone.aibot.utils.BotConstants;
 import com.devone.aibot.utils.BotLogger;
 import com.devone.aibot.web.BotWebService;
+import com.googlecode.aviator.AviatorEvaluator;
 
 public class AIBotPlugin extends JavaPlugin {
     private static AIBotPlugin instance;
@@ -34,6 +36,14 @@ public class AIBotPlugin extends JavaPlugin {
     private BotZoneManager zoneManager;
     private BotManager botManager;
     private BotWebService web_service;
+
+    public AIBotPlugin() {
+        
+            super();
+
+            AviatorEvaluator.addFunction(new com.googlecode.aviator.runtime.function.math.MathAbsFunction());
+            AviatorEvaluator.addFunction(new BotMathMaxFunction());
+    }
 
     @Override
     public void onEnable() {

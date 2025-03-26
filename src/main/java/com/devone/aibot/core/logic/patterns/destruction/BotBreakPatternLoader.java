@@ -12,7 +12,7 @@ import java.util.Map;
 
 public class BotBreakPatternLoader {
 
-    public static BotCoordinatesGenerator loadFromYaml(Path path) {
+    public static BotCoordinatesGenerator loadYamlFile(Path path) {
         try (InputStream in = Files.newInputStream(path)) {
 
             return loadYmlFromStream(in);
@@ -26,7 +26,7 @@ public class BotBreakPatternLoader {
     public static BotCoordinatesGenerator loadYmlFromStream(InputStream inputStream) {
         try {
     
-            return BotCoordinatesGenerator.loadYamlFromStream(inputStream); // ✅ Используем встроенный разбор
+            return BotCoordinatesGenerator.loadYmlFromStream(inputStream); // ✅ Используем встроенный разбор
 
         } catch (Exception e) {
             System.err.println("❌ Ошибка парсинга YAML паттерна: " + e.getMessage());

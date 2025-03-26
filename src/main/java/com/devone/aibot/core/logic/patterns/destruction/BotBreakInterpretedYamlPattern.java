@@ -3,6 +3,7 @@ package com.devone.aibot.core.logic.patterns.destruction;
 import com.devone.aibot.core.Bot;
 import com.devone.aibot.core.logic.patterns.BotCoordinatesGenerator;
 import com.devone.aibot.utils.Bot3DCoordinate;
+import com.devone.aibot.utils.BotAxisDirection.AxisDirection;
 import com.devone.aibot.utils.BotLogger;
 
 import java.io.IOException;
@@ -19,25 +20,29 @@ public class BotBreakInterpretedYamlPattern implements IBotDestructionPattern {
 
     private final Path yamlPath;
 
-    private BotCoordinatesGenerator pattern;
+    private BotCoordinatesGenerator generator;
 
     private boolean initialized = false;
     private int radius = 0;
 
+    private AxisDirection direction = null;
+
     private final Queue<Bot3DCoordinate> blocksToBreak = new LinkedList<>();
-
-    public BotBreakInterpretedYamlPattern(Path path) {
-        this.yamlPath = path;
-    }
- 
-    @Override    
-    public IBotDestructionPattern configure(int radius) {
-        this.radius = radius;
-        BotLogger.trace(true, "🛠️ Начинаем загрузку YAML-паттерна: " + yamlPath);
-
-        try (InputStream inputStream = Files.newInputStream(yamlPath)) {
-            this.pattern = BotCoordinatesGenerator.loadYamlFromStream(inputStream);
-            if (this.pattern != null) {
+    
+        public BotBreakInterpretedYamlPattern(Path path) {
+            this.yamlPath = path;
+        }
+     
+        @Override    
+        public IBotDestructionPattern configure(int radius, AxisDirection direction) {
+            this.radius = radius;
+            this.direction = direction;
+    
+            BotLogger.trace(true, "🛠️ Начинаем загрузку YAML-паттерна: " + yamlPath);
+    
+            try (InputStream inputStream = Files.newInputStream(yamlPath)) {
+                this.generator = BotCoordinatesGenerator.loadYmlFromStream(inputStream);
+            if (this.generator != null) {
                 BotLogger.info(true, "✅ Паттерн успешно загружен из YAML: " + yamlPath.getFileName());
             } else {
                 BotLogger.error(true, "❌ loadFromYaml() вернул null для файла: " + yamlPath);
@@ -50,8 +55,8 @@ public class BotBreakInterpretedYamlPattern implements IBotDestructionPattern {
     }
 
 
-    public Bot3DCoordinate findNextBlock(Bot bot) {
-        if (this.pattern == null) {
+    public Bot3DCoordinate findNextBlock(Bot bot ) {
+        if (this.generator == null) {
             BotLogger.error(true, "🚨 ❌ Паттерн не инициализирован! YAML: " + yamlPath);
             return null;
         }
@@ -62,10 +67,10 @@ public class BotBreakInterpretedYamlPattern implements IBotDestructionPattern {
             Bot3DCoordinate center = new Bot3DCoordinate(bot.getRuntimeStatus().getCurrentLocation().getBlockX(), 
                                                                    bot.getRuntimeStatus().getCurrentLocation().getBlockY(), 
                                                                    bot.getRuntimeStatus().getCurrentLocation().getBlockZ()); 
-            
-            List<Bot3DCoordinate> all = pattern.generateFullCube(center.x, center.y, center.z, radius);
+        
+            List<Bot3DCoordinate> kept = generator.generateInnerPointsFromObserver(center.x, center.y, center.z, radius, direction, radius, null);
+            List<Bot3DCoordinate> all =  generator.generateOuterPointsFromObserver(center.x, center.y, center.z, radius, direction, null);
 
-            List<Bot3DCoordinate> kept = pattern.generate(center.x, center.y, center.z, radius, radius, radius);
 
             List<Bot3DCoordinate> toBeRemoved = new ArrayList<>(all);
                                   
