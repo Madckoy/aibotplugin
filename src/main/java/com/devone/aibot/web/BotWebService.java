@@ -127,7 +127,7 @@ public class BotWebService {
                 String html = Files.readString(file.toPath(), StandardCharsets.UTF_8)
                                    .replace("{{MAP_HOST}}", BotWebService.getInstance().MAP_HOST);
 
-                BotLogger.info(true, html);                   
+                //BotLogger.info(true, html);                   
 
                 resp.getWriter().println(html);
 
