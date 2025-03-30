@@ -17,6 +17,8 @@ import de.bluecolored.bluemap.api.markers.MarkerSet;
 import de.bluecolored.bluemap.api.markers.MarkerSet;
 import de.bluecolored.bluemap.api.markers.MarkerSet;
 import de.bluecolored.bluemap.api.markers.MarkerSet;
+import de.bluecolored.bluemap.api.markers.MarkerSet;
+import de.bluecolored.bluemap.api.markers.MarkerSet;
 import de.bluecolored.bluemap.api.markers.POIMarker;
 import de.bluecolored.bluemap.api.markers.POIMarker;
 import org.bukkit.Bukkit;
@@ -51,6 +53,11 @@ public class BlueMapMarkers {
     }
 
     public void updateAllMarkers() {
+
+        if (mSet == null) {
+            BotLogger.warn(true, "⚠️ Маркер-сет ещё не инициализирован — пропускаем обновление.");
+            return;
+        }
 
         mSet.remove(MARKERS_SET_ID);
 
@@ -172,7 +179,7 @@ public class BlueMapMarkers {
             marker.setLabel(botId);
 
             // ✅ Генерируем абсолютный URL к скину, который хостит AIBotPlugin
-            String iconPath = "http://" + BotWebService.SERVER_HOST + ":3000/skins/" + botUUID + ".png";
+            String iconPath = "http://" + BotWebService.getInstance().SERVER_HOST + ":3000/skins/" + botUUID + ".png";
 
 
             marker.setIcon(iconPath, 0,0);
