@@ -121,23 +121,27 @@ public class AIBotPlugin extends JavaPlugin {
     }
 
     private void setupConfig() {
-        File configFile = new File(BotConstants.PLUGIN_PATH, "config.yml");
-
+        File configFile = new File(getDataFolder(), "config.yml");
+    
         if (!configFile.exists()) {
-            getLogger().warning("⚠ Файл config.yml не найден, создаем новый...");
-
-            if (!getDataFolder().exists()) {
-                getDataFolder().mkdirs();
+            getLogger().warning("⚠ Файл config.yml не найден, копируем из ресурсов...");
+    
+            // Убедимся, что папка существует
+            if (!getDataFolder().exists() && !getDataFolder().mkdirs()) {
+                BotLogger.error(true, "❌ Не удалось создать папку плагина: " + getDataFolder());
+                return;
             }
-
-            FileConfiguration config = new YamlConfiguration();
-            config.set("logging.level", "INFO");
-
-            try {
-                config.save(configFile);
-                BotLogger.info(true, "✅ Создан config.yml с уровнем логирования INFO.");
+    
+            // Копируем config.yml из resources
+            try (InputStream in = getResource("config.yml")) {
+                if (in == null) {
+                    BotLogger.error(true, "❌ config.yml не найден в resources!");
+                    return;
+                }
+                Files.copy(in, configFile.toPath());
+                BotLogger.info(true, "✅ Скопирован config.yml из ресурсов.");
             } catch (IOException e) {
-                BotLogger.error(true, "❌ Ошибка при создании config.yml: " + e.getMessage());
+                BotLogger.error(true, "❌ Ошибка при копировании config.yml: " + e.getMessage());
             }
         }
     }

@@ -5,7 +5,7 @@ PLUGIN_NAME="AIBotPlugin-1.1-SNAPSHOT.jar"
 LOCAL_PATH="target/$PLUGIN_NAME"
 REMOTE_HOST="192.168.3.33"
 REMOTE_USER="serge"  # Change this if needed
-REMOTE_PATH="/opt/apps/minecraft/paper/plugins"
+REMOTE_PATH="/opt/apps/minecraft/spigot/plugins"
 LOG_FILE="deploy.log"
 
 # Check if the file exists
