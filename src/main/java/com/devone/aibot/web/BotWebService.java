@@ -24,13 +24,9 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 
 import java.io.*;
-import java.net.URL;
-import java.net.URLDecoder;
+
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
-import java.nio.file.Path;
-import java.nio.file.Paths;
-import java.nio.file.StandardCopyOption;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Enumeration;
@@ -118,19 +114,26 @@ public class BotWebService {
             resp.setCharacterEncoding("UTF-8");
     
             File file = new File(BotConstants.PLUGIN_PATH + "/web/template.html");
+
             if (!file.exists()) {
-                BotLogger.warn(true, "⚠ template.html not found on disk: " + file.getAbsolutePath());
+                BotLogger.info(true, "⚠ template.html not found on disk: " + file.getAbsolutePath());
                 resp.getWriter().println("Error: template.html not found on disk.");
                 return;
+            } else {
+                BotLogger.info(true, "⚠ template.html was found on disk: " + file.getAbsolutePath());
             }
     
             try {
                 String html = Files.readString(file.toPath(), StandardCharsets.UTF_8)
                                    .replace("{{MAP_HOST}}", BotWebService.getInstance().MAP_HOST);
 
+                BotLogger.info(true, html);                   
+
                 resp.getWriter().println(html);
+
+
             } catch (IOException e) {
-                BotLogger.error(true, "❌ Error reading template.html: " + e.getMessage());
+                BotLogger.info(true, "❌ Error reading template.html: " + e.getMessage());
                 resp.getWriter().println("Error reading template.html: " + e.getMessage());
             }
         }

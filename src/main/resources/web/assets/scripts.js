@@ -1,6 +1,3 @@
-const BLUE_MAP_URL = "http://{{MAP_HOST}}:8100";
-const BOT_STATUS_URL = "/status";
-
 function loadBlueMap() {
     const iframe = document.createElement("iframe");
     iframe.src = `${BLUE_MAP_URL}`;
