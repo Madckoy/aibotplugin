@@ -11,3 +11,4 @@ logging:
 server:
   web_host: 192.168.3.33  # Хост веб-сервера
   map_host: 192.168.3.33  # Хост карты (BlueMap)
+  map_port: 8100  # Порт Хоста карты (BlueMap)
