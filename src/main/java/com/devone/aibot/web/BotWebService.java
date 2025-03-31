@@ -24,7 +24,8 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 
 import java.io.*;
-
+import java.net.HttpURLConnection;
+import java.net.URL;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.util.ArrayList;
@@ -42,6 +43,9 @@ public class BotWebService {
 
     public String SERVER_HOST = "localhost";
     public String MAP_HOST = "localhost";
+    public String MAP_PORT = "8100";
+
+    private String bluemapBaseUrl = "http://localhost:8100"; // по умолчанию
 
     private static BotWebService instance = null;
 
@@ -53,6 +57,10 @@ public class BotWebService {
             FileConfiguration config = YamlConfiguration.loadConfiguration(configFile);
             SERVER_HOST = config.getString("server.web_host", "localhost");
             MAP_HOST = config.getString("server.map_host", "localhost");
+            MAP_PORT = config.getString("server.map_port", "8100"); 
+            
+            bluemapBaseUrl = "http://" + MAP_HOST + ":" + MAP_PORT;
+            BotLogger.info(true, "🧭 BlueMap Proxy Target: " + bluemapBaseUrl);
 
         } else {
             BotLogger.warn(true, "⚠️ Конфиг не найден, MAP_HOST = localhost");
@@ -60,6 +68,8 @@ public class BotWebService {
 
         BotLogger.info(true, "🌐 SERVER_HOST: " + SERVER_HOST);
         BotLogger.info(true, "🌐 MAP_HOST: " + MAP_HOST);
+        BotLogger.info(true, "🌐 MAP_PORT: " + MAP_PORT);
+        
 
         this.server = new Server(port);
 
@@ -71,7 +81,8 @@ public class BotWebService {
         context.addServlet(new ServletHolder(new BotStatusServlet(botManager)), "/status");
         context.addServlet(new ServletHolder(new SkinServlet()), "/skins/*");
         context.addServlet(new ServletHolder(new StaticFileServlet()), "/assets/*");
-        
+        context.addServlet(new ServletHolder(new BlueMapProxyServlet(bluemapBaseUrl)), "/bluemap/*");
+
         instance = this;
     }
 
@@ -124,8 +135,8 @@ public class BotWebService {
             }
     
             try {
-                String html = Files.readString(file.toPath(), StandardCharsets.UTF_8)
-                                   .replace("{{MAP_HOST}}", BotWebService.getInstance().MAP_HOST);
+                String html = Files.readString(file.toPath(), StandardCharsets.UTF_8);
+                                   //.replace("{{MAP_HOST}}", BotWebService.getInstance().MAP_HOST);
 
                 //BotLogger.info(true, html);                   
 
@@ -199,4 +210,54 @@ public class BotWebService {
             }
         }
     }
+
+    private class BlueMapProxyServlet extends HttpServlet {
+        private String bluemapBaseUrl;
+
+        public BlueMapProxyServlet(String bluemapBaseUrl) {
+            this.bluemapBaseUrl = bluemapBaseUrl;
+        }
+
+    @Override
+    protected void service(HttpServletRequest req, HttpServletResponse resp) throws IOException {
+        String path = req.getRequestURI().replaceFirst("/bluemap", "");
+        String query = req.getQueryString();
+        String url = bluemapBaseUrl + path + (query != null ? "?" + query : "");
+
+        HttpURLConnection conn = (HttpURLConnection) new URL(url).openConnection();
+        conn.setRequestMethod(req.getMethod());
+
+        conn.setDoInput(true);
+        conn.setDoOutput(false);
+
+        // Копируем заголовки запроса
+        Enumeration<String> headerNames = req.getHeaderNames();
+        while (headerNames.hasMoreElements()) {
+            String header = headerNames.nextElement();
+            if ("host".equalsIgnoreCase(header)) continue;
+            conn.setRequestProperty(header, req.getHeader(header));
+        }
+
+        int status = conn.getResponseCode();
+        resp.setStatus(status);
+
+        // Копируем заголовки ответа
+        conn.getHeaderFields().forEach((key, values) -> {
+            if (key != null) {
+                for (String v : values) {
+                    resp.addHeader(key, v);
+                }
+            }
+        });
+
+        // Пересылаем тело ответа
+        try (InputStream in = conn.getInputStream();
+             OutputStream out = resp.getOutputStream()) {
+            in.transferTo(out);
+        } catch (IOException e) {
+            // Может быть тело отсутствует (например, 304 Not Modified)
+            resp.setStatus(HttpServletResponse.SC_NO_CONTENT);
+        }
+    }
+}
 }
