@@ -102,17 +102,17 @@ public class BotUseHandTask extends BotTask {
     }
 
     private void turnToBlock(Location target) {
-        Vector direction = target.toVector().subtract(bot.getRuntimeStatus().getCurrentLocation().toVector()).normalize();
-        float yaw = (float) Math.toDegrees(Math.atan2(-direction.getX(), direction.getZ()));
+        //Vector direction = target.toVector().subtract(bot.getRuntimeStatus().getCurrentLocation().toVector()).normalize();
+        //float yaw = (float) Math.toDegrees(Math.atan2(-direction.getX(), direction.getZ()));
 
-        bot.getNPCEntity().setRotation(yaw, 0);
+        BotUtils.lookAt(bot, target);
         
         // ✅ Принудительно обновляем положение, если поворот сбрасывается
         Bukkit.getScheduler().runTaskLater(AIBotPlugin.getInstance(), () -> {
             bot.getNPCEntity().teleport(bot.getRuntimeStatus().getCurrentLocation());
         }, 1L); // ✅ Через тик, чтобы дать время на обновление
 
-        BotLogger.info(isLogging(), "🔄 TURNING: " + bot.getId() + " | Yaw: " + yaw + " | Target: " + BotStringUtils.formatLocation(target));
+        BotLogger.info(isLogging(), "🔄 TURNING: " + bot.getId() + " to look at the target: " + BotStringUtils.formatLocation(target));
     }
 
     private void animateHand() {

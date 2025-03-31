@@ -62,25 +62,31 @@ public class BotBreakInterpretedYamlPattern implements IBotDestructionPattern {
         }
 
         if (!initialized) {
-            BotLogger.info(true, "🔁 Генерация точек по паттерну...");
+            BotLogger.info(true, "🔁 Генерация точек по паттерну: " + yamlPath);
             
-            Bot3DCoordinate center = new Bot3DCoordinate(bot.getRuntimeStatus().getCurrentLocation().getBlockX(), 
+            Bot3DCoordinate observer = new Bot3DCoordinate(bot.getRuntimeStatus().getCurrentLocation().getBlockX(), 
                                                                    bot.getRuntimeStatus().getCurrentLocation().getBlockY(), 
                                                                    bot.getRuntimeStatus().getCurrentLocation().getBlockZ()); 
+            
+            BotLogger.info(true, "🔁 Позиция строителя: " + observer.toString());
         
-            List<Bot3DCoordinate> kept = generator.generateInnerPointsFromObserver(center.x, center.y, center.z, radius, direction, radius, null);
-            List<Bot3DCoordinate> all =  generator.generateOuterPointsFromObserver(center.x, center.y, center.z, radius, direction, null);
+            List<Bot3DCoordinate> inner_points = generator.generateInnerPointsFromObserver(observer.x, observer.y, observer.z, radius, direction, radius, null);
+            //List<Bot3DCoordinate> all =  generator.generateOuterPointsFromObserver(observer.x, observer.y, observer.z, radius, direction, null);
 
 
-            List<Bot3DCoordinate> toBeRemoved = new ArrayList<>(all);
+            List<Bot3DCoordinate> toBeRemoved = new ArrayList<>(inner_points);
                                   
-            toBeRemoved.removeAll(kept);
+            //toBeRemoved.removeAll(kept);
 
             if (toBeRemoved != null && !toBeRemoved.isEmpty()) {
+
                 blocksToBreak.addAll(toBeRemoved);
+                
                 BotLogger.info(true, "✅ Added " + blocksToBreak.size() + " coordinates");
             } else {
-                BotLogger.warn(true, "⚠️ Паттерн YAML не вернул ни одной точки для разрушения.");
+                
+                BotLogger.info(true, "⚠️ Паттерн YAML не вернул ни одной точки для разрушения.");
+
             }
 
             initialized = true;
