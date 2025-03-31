@@ -35,7 +35,7 @@ async function fetchBotData() {
             let invCell = row.insertCell(6);
             invCell.className = "inventory-cell";
             invCell.title = `Items: ${bot.inventoryCount} / ${bot.inventoryMax}`;
-            invCell.innerHTML = generateInventoryBar(bot.inventorySlotsFilled);
+            invCell.innerHTML = generateInventoryGrid(bot.inventorySlots); // 🔧 Вставка грида
 
             let queueCell = row.insertCell(7);
             queueCell.innerText = bot.queue;
@@ -50,15 +50,28 @@ async function fetchBotData() {
     }
 }
 
-function generateInventoryBar(slotsFilled) {
+function generateInventoryGrid(slots) {
     const maxSlots = 36;
+    slots = Array.isArray(slots) ? slots : [];
+
     let html = '<div class="inv-bar">';
     for (let i = 0; i < maxSlots; i++) {
-        html += `<div class='inv-slot ${i < slotsFilled ? "filled" : ""}'></div>`;
+        const slot = slots[i];
+        let className = "inv-slot";
+
+        if (slot && slot.amount >= 64) {
+            className += " full";
+        } else if (slot && slot.amount > 0) {
+            className += " partial";
+        }
+
+        const tooltip = slot ? `${slot.amount}× ${slot.type}` : 'Empty';
+        html += `<div class="${className}" title="${tooltip}"></div>`;
     }
     html += '</div>';
     return html;
 }
+
 
 window.onload = function () {
     loadBlueMap();
