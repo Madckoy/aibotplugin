@@ -17,6 +17,8 @@ public class BotTeleportTask extends BotTask {
         super(bot, player, "💫");
 
         config = new BotTeleportTaskConfig();
+        logging = config.isLogging();
+        
         setObjective("Teleport");
     }
 
@@ -28,7 +30,7 @@ public class BotTeleportTask extends BotTask {
             bot.getRuntimeStatus().setTargetLocation(loc);
         }
 
-        BotLogger.debug(isLogging(), "⚙️ BotTaskTeleport is configured: " + BotStringUtils.formatLocation(bot.getRuntimeStatus().getTargetLocation()));
+        BotLogger.info(isLogging(), "⚙️ BotTaskTeleport is configured: " + BotStringUtils.formatLocation(bot.getRuntimeStatus().getTargetLocation()));
 
         return this;
     }

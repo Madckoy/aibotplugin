@@ -36,7 +36,7 @@ public class BotImageUtils {
     
             BotLogger.info(true, "✅ Скачан и уменьшен скин для " + botUUID);
         } catch (IOException e) {
-            BotLogger.error(true, "❌ Ошибка скачивания скина: " + e.getMessage());
+            BotLogger.info(true, "❌ Ошибка скачивания скина: " + e.getMessage());
             return "/skins/default-bot.png"; // ✅ Запасной скин
         }
     

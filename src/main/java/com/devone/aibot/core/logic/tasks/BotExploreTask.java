@@ -18,15 +18,18 @@ public class BotExploreTask extends BotTask {
     public BotExploreTask(Bot bot) {
         super(bot, "🏞️");
         config = new BotExploreTaskConfig();
+        logging = config.isLogging();
+        
         scanRadius = config.getScanRadius();
         setObjective("Explore the area");
+
     }
 
     public void executeTask() {
 
         if (isPaused) return;
 
-        BotLogger.debug(isLogging(), "🏞 " + bot.getId() + " Patrolling with radius: " + scanRadius + " [ID: " + uuid + "]");
+        BotLogger.info(isLogging(), "🏞 " + bot.getId() + " Patrolling with radius: " + scanRadius + " [ID: " + uuid + "]");
         
         if(getEnvMap()==null) {
             BotSonar3DTask sonar = new BotSonar3DTask(bot, this, scanRadius, 4);
@@ -38,7 +41,7 @@ public class BotExploreTask extends BotTask {
         bot.getRuntimeStatus().setTargetLocation( Bot3DGeoScan.getRandomEdgeBlock(getEnvMap())); 
 
         if (bot.getRuntimeStatus().getTargetLocation() == null) {
-            BotLogger.debug(isLogging(), "🏞 " + bot.getId() + " Has finished exploration." +  " [ID: " + uuid + "]");
+            BotLogger.info(isLogging(), "🏞 " + bot.getId() + " Has finished exploration." +  " [ID: " + uuid + "]");
             isDone = true; // ✅ Теперь `PATROL` корректно завершает себя
             setEnvMap(null);// reset env map to force rescan
             return;
@@ -46,7 +49,7 @@ public class BotExploreTask extends BotTask {
 
         // ✅ Если бот уже идёт — не даём ему новую команду
         if (bot.getNPCNavigator().isNavigating()) {
-            BotLogger.debug(isLogging(), "🏞 " + bot.getId() + " Already moving, skipping exploration update."+ " [ID: " + uuid + "]");
+            BotLogger.info(isLogging(), "🏞 " + bot.getId() + " Already moving, skipping exploration update."+ " [ID: " + uuid + "]");
             return;
         }
 
@@ -54,12 +57,12 @@ public class BotExploreTask extends BotTask {
 
         if (rand < 0.4) {
             // 📌 30% шанс выйти из патрулирования
-            BotLogger.debug(isLogging(), "🏞 " + bot.getId() + " Moving out of exploration: " + BotStringUtils.formatLocation(bot.getRuntimeStatus().getTargetLocation()) + " [Task ID: " + uuid + "]");
+            BotLogger.info(isLogging(), "🏞 " + bot.getId() + " Moving out of exploration: " + BotStringUtils.formatLocation(bot.getRuntimeStatus().getTargetLocation()) + " [Task ID: " + uuid + "]");
             bot.getRuntimeStatus().setTargetLocation(null);
             isDone = true;
 
         } else {
-            BotLogger.debug(isLogging(), "🏞 " + bot.getId() + " Moving to exploration point: " + BotStringUtils.formatLocation(bot.getRuntimeStatus().getTargetLocation()) + " [Task ID: " + uuid + "]");
+            BotLogger.info(isLogging(), "🏞 " + bot.getId() + " Moving to exploration point: " + BotStringUtils.formatLocation(bot.getRuntimeStatus().getTargetLocation()) + " [Task ID: " + uuid + "]");
 
             BotNavigationUtils.navigateTo(bot, bot.getRuntimeStatus().getTargetLocation()); // via a new MoVeTask()
 

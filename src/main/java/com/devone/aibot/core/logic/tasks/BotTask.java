@@ -30,7 +30,7 @@ public abstract class BotTask implements IBotTask {
     protected List<LivingEntity> bioEntities;
     protected String objective;
     protected ScanMode scanMode = com.devone.aibot.utils.Bot3DGeoScan.ScanMode.FULL;
-    protected boolean logging;
+    public boolean logging;
 
     protected BotTaskConfig config;
 
@@ -89,12 +89,12 @@ public abstract class BotTask implements IBotTask {
 
     public void setObjective(String objctv) {
         objective = objctv;
-        BotLogger.trace(isLogging(), "🚩 " + bot.getId() + "  Set Objective: " + objctv);
+        BotLogger.info(isLogging(), "🚩 " + bot.getId() + "  Set Objective: " + objctv);
     }
 
     @Override
     public void update() {
-        BotLogger.trace(isLogging(), "🚦 " + bot.getId() + " " + name + " Status: " + isDone + " | " + isPaused +
+        BotLogger.info(isLogging(), "🚦 " + bot.getId() + " " + name + " Status: " + isDone + " | " + isPaused +
                 " 📍 xyz: " + BotStringUtils.formatLocation(bot.getRuntimeStatus().getCurrentLocation()) +
                 " 🎯 xyz: " + BotStringUtils.formatLocation(bot.getRuntimeStatus().getTargetLocation()) + " [ID: " + uuid + "]");
 
@@ -132,7 +132,7 @@ public abstract class BotTask implements IBotTask {
     public void setPaused(boolean paused) {
         this.isPaused = paused;
         String status = isPaused ? "⏸️ Pausing..." : "▶️ Resuming...";
-        BotLogger.debug(isLogging(), status + bot.getId() + " [ID: " + uuid + "]");
+        BotLogger.info(isLogging(), status + bot.getId() + " [ID: " + uuid + "]");
     }
 
     @Override
@@ -161,7 +161,7 @@ public abstract class BotTask implements IBotTask {
     public void handleStuck() {
         if (bot.getRuntimeStatus().getTargetLocation() != null) {
             if (bot.getNPCEntity() != null) {
-                BotLogger.trace(isLogging(), "✨ " + bot.getId() + " Застрял! Телепортируемся в " + BotStringUtils.formatLocation(bot.getRuntimeStatus().getTargetLocation()));
+                BotLogger.info(isLogging(), "✨ " + bot.getId() + " Застрял! Телепортируемся в " + BotStringUtils.formatLocation(bot.getRuntimeStatus().getTargetLocation()));
 
                 BotTeleportTask tp = new BotTeleportTask(bot, player);
                 if (player != null) {
@@ -172,11 +172,11 @@ public abstract class BotTask implements IBotTask {
 
                 bot.addTaskToQueue(tp);
             } else {
-                BotLogger.error(isLogging(), "✨ " + bot.getId() + " Застрял! Нет Taget Location и нет NPC Entity!");
+                BotLogger.info(isLogging(), "✨ " + bot.getId() + " Застрял! Нет Taget Location и нет NPC Entity!");
             }
         } else {
             if (bot.getNPCEntity() != null) {
-                BotLogger.trace(isLogging(), "✨ " + bot.getId() + " Застрял! Нет Taget Location! Телепортируемся в точку респавна!");
+                BotLogger.info(isLogging(), "✨ " + bot.getId() + " Застрял! Нет Taget Location! Телепортируемся в точку респавна!");
 
                 BotTeleportTask tp = new BotTeleportTask(bot, player);
 
@@ -188,7 +188,7 @@ public abstract class BotTask implements IBotTask {
 
                 bot.addTaskToQueue(tp);
             } else {
-                BotLogger.error(isLogging(), "✨ " + bot.getId() + " Застрял! Нет Taget Location и нет NPC Entity!");
+                BotLogger.info(isLogging(), "✨ " + bot.getId() + " Застрял! Нет Taget Location и нет NPC Entity!");
             }
         }
     }
@@ -198,7 +198,7 @@ public abstract class BotTask implements IBotTask {
     }
 
     private void handlePlayerDisconnect() {
-        BotLogger.warn(isLogging(), "🚨 Игрок " + player.getName() + " вышел! Бот " + bot.getId() + " переходит в автономный режим.");
+        BotLogger.info(isLogging(), "🚨 Игрок " + player.getName() + " вышел! Бот " + bot.getId() + " переходит в автономный режим.");
         this.bot.getLifeCycle().getTaskStackManager().clearTasks();
 
         bot.addTaskToQueue(new BotMakeDecisionTask(bot));

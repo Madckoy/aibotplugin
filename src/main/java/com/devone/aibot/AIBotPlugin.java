@@ -27,6 +27,7 @@ import com.devone.aibot.core.events.PlayerEvents;
 import com.devone.aibot.core.math.BotMathMaxFunction;
 import com.devone.aibot.utils.BotConstants;
 import com.devone.aibot.utils.BotLogger;
+import com.devone.aibot.utils.ServerUtils;
 import com.devone.aibot.web.BotWebService;
 import com.googlecode.aviator.AviatorEvaluator;
 
@@ -64,13 +65,15 @@ public class AIBotPlugin extends JavaPlugin {
     public void onDisable() {
         BotLogger.info(true, "♻️ AI Bot Plugin is shutting down...");
 
+        ServerUtils.onDisable();
+
         // Остановка HTTP сервера
         if (web_service != null) {
             try {
                 web_service.stop();
                 BotLogger.info(true, "🛑 HTTP WEB server stopped.");
             } catch (Exception e) {
-                BotLogger.error(true, "❌ HTTP WEB server could not be stopped." + e.getMessage());
+                BotLogger.info(true, "❌ HTTP WEB server could not be stopped." + e.getMessage());
             }
         }
 
@@ -99,7 +102,7 @@ public class AIBotPlugin extends JavaPlugin {
             try {
                 web_service.stop();
             } catch (Exception e) {
-                BotLogger.error(true, "❌ Ошибка: " + e.getMessage());
+                BotLogger.info(true, "❌ Ошибка: " + e.getMessage());
             }
         }
 
@@ -108,7 +111,7 @@ public class AIBotPlugin extends JavaPlugin {
             web_service.start();
             BotLogger.info(true, "🌐 HTTP WEB Server started on port 3000.");
         } catch (Exception e) {
-            BotLogger.error(true, "❌ Ошибка: " + e.getMessage());
+            BotLogger.info(true, "❌ Ошибка: " + e.getMessage());
         }
 
         // тут зарегаем ивенты
@@ -128,20 +131,20 @@ public class AIBotPlugin extends JavaPlugin {
     
             // Убедимся, что папка существует
             if (!getDataFolder().exists() && !getDataFolder().mkdirs()) {
-                BotLogger.error(true, "❌ Не удалось создать папку плагина: " + getDataFolder());
+                BotLogger.info(true, "❌ Не удалось создать папку плагина: " + getDataFolder());
                 return;
             }
     
             // Копируем config.yml из resources
             try (InputStream in = getResource("config.yml")) {
                 if (in == null) {
-                    BotLogger.error(true, "❌ config.yml не найден в resources!");
+                    BotLogger.info(true, "❌ config.yml не найден в resources!");
                     return;
                 }
                 Files.copy(in, configFile.toPath());
                 BotLogger.info(true, "✅ Скопирован config.yml из ресурсов.");
             } catch (IOException e) {
-                BotLogger.error(true, "❌ Ошибка при копировании config.yml: " + e.getMessage());
+                BotLogger.info(true, "❌ Ошибка при копировании config.yml: " + e.getMessage());
             }
         }
     }
@@ -162,7 +165,7 @@ public class AIBotPlugin extends JavaPlugin {
             URL resourceURL = classLoader.getResource(resourceSubPath.isEmpty() ? "." : resourceSubPath);
 
             if (resourceURL == null) {
-                BotLogger.error(true, "❌ Resource path not found: " + resourceSubPath);
+                BotLogger.info(true, "❌ Resource path not found: " + resourceSubPath);
                 return;
             }
 
@@ -198,13 +201,13 @@ public class AIBotPlugin extends JavaPlugin {
                                 Files.copy(in, targetFile.toPath(), StandardCopyOption.REPLACE_EXISTING);
                                 BotLogger.info(true, "✅ Copied: " + sourceFile + " → " + targetFile.getPath());
                             } catch (IOException e) {
-                                BotLogger.error(true, "❌ Failed to copy file: " + e.getMessage());
+                                BotLogger.info(true, "❌ Failed to copy file: " + e.getMessage());
                             }
                         });
             }
 
         } catch (Exception e) {
-            BotLogger.error(true, "❌ Error during resource copying: " + e.getMessage());
+            BotLogger.info(true, "❌ Error during resource copying: " + e.getMessage());
         }
     }
 
@@ -212,7 +215,7 @@ public class AIBotPlugin extends JavaPlugin {
         if (!getDataFolder().exists() && getDataFolder().mkdirs()) {
             BotLogger.info(true, "📁 Created plugin data folder: " + getDataFolder().getAbsolutePath());
         } else if (!getDataFolder().exists()) {
-            BotLogger.error(true, "❌ Failed to create plugin data folder!");
+            BotLogger.info(true, "❌ Failed to create plugin data folder!");
         }
     }
 

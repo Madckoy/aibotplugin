@@ -66,21 +66,21 @@ public class BotZoneManager {
         }
         try {
             config.save(zonesFile);
-            BotLogger.debug(true, "🗺️ Zones saved succesfully.");
+            BotLogger.info(true, "🗺️ Zones saved succesfully.");
 
         } catch (IOException e) {
-            BotLogger.error(true, "❌ Failed to save zones: " + e.getMessage());
+            BotLogger.info(true, "❌ Failed to save zones: " + e.getMessage());
         }
     }    
 
     public void addZone(String name, Location center, int radius) {
         protectedZones.put(name, new BotProtectedZone(center.getX(), center.getY(), center.getZ(), radius));
-        BotLogger.debug(true, "➕ Added new zone: " + name + " at " + center.toString() + " with radius " + radius);
+        BotLogger.info(true, "➕ Added new zone: " + name + " at " + center.toString() + " with radius " + radius);
     }
 
     public boolean removeZone(String name) {
         if (protectedZones.remove(name) != null) {
-            BotLogger.debug(true, "➖ Removed zone: " + name);
+            BotLogger.info(true, "➖ Removed zone: " + name);
             return true;
         }
         return false;
@@ -111,7 +111,7 @@ public class BotZoneManager {
     // ✅ Статический метод для проверки зоны
     public static boolean isLocationInProtectedZone(Location location) {
         if (instance == null) {
-            BotLogger.error(true, "❌ ZoneManager не инициализирован! Невозможно проверить зону.");
+            BotLogger.info(true, "❌ ZoneManager не инициализирован! Невозможно проверить зону.");
             return false;
         }
         return instance.isInProtectedZone(location);

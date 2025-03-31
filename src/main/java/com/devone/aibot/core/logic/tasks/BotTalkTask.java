@@ -44,7 +44,7 @@ public class BotTalkTask extends BotTask {
         /*****
          * // 🤐 Бот занят рукой? Не говорим в чат, но оставляем в Objective
          * if (bot.getActiveTask() instanceof BotTaskUseHand) {
-         * BotLogger.debug(bot.getId() + " 🤐 Занят рукой, не говорит: " + message);
+         * BotLogger.info(bot.getId() + " 🤐 Занят рукой, не говорит: " + message);
          * isDone = true;
          * return;
          * }
@@ -59,7 +59,7 @@ public class BotTalkTask extends BotTask {
          * }
          * // 🤫 Иначе просто бурчим себе под нос (логируем)
          * else {
-         * BotLogger.debug(bot.getId() + " бурчит себе под нос: " + message);
+         * BotLogger.info(bot.getId() + " бурчит себе под нос: " + message);
          * }
          * 
          * isDone = true;

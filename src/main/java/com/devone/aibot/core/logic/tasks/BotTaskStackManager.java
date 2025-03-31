@@ -21,7 +21,7 @@ public class BotTaskStackManager {
         }
 
         taskStack.push(task);
-        BotLogger.debug(true, "✚ Добавлена задача: " + task.getClass().getSimpleName() + "[ " + task.getUUID()+" ]");
+        BotLogger.info(true, "✚ Добавлена задача: " + task.getClass().getSimpleName() + "[ " + task.getUUID()+" ]");
     }
 
     public void popTask() {
@@ -29,7 +29,7 @@ public class BotTaskStackManager {
 
             BotLifecycleLogCsvWriter.write(this.bot);
 
-            BotLogger.debug(true, "➖ Удалена задача: " + taskStack.peek().getClass().getSimpleName());
+            BotLogger.info(true, "➖ Удалена задача: " + taskStack.peek().getClass().getSimpleName());
             taskStack.pop();
 
             // ✅ Если осталась активность, снимаем с неё паузу
@@ -71,18 +71,20 @@ public class BotTaskStackManager {
 
             BotTask currentTask = taskStack.peek();
 
-            BotLogger.debug(true, "✨ Active task: " + currentTask.getClass().getSimpleName() + " [" +currentTask.getUUID() +"]");
+            BotLogger.info(true, "✨ Active task: " + currentTask.getClass().getSimpleName() + " [" +currentTask.getUUID() +"]");
     
             // 🛑 Если у бота нет NPCEntity, удаляем ВСЕ задачи
             //if (bot.getNPCEntity() == null) {
-            //    BotLogger.error(bot.getId() + " ❌ Ошибка: NPCEntity == null! Очищаю задачи...");
+            //    BotLogger.info(bot.getId() + " ❌ Ошибка: NPCEntity == null! Очищаю задачи...");
             //    clearTasks();
             //    return;
             //}
     
             if (currentTask.isDone()) {
                 popTask();
+                BotLogger.info(true, "✨ Deactivating task: " + currentTask.getClass().getSimpleName() + " [" +currentTask.getUUID() +"]");
             } else {
+                BotLogger.info(true, "✨ Updating task: " + currentTask.getClass().getSimpleName() + " [" +currentTask.getUUID() +"]");
                 currentTask.update();
             }
         }
@@ -92,7 +94,7 @@ public class BotTaskStackManager {
     public void clearTasks() {
         while (!taskStack.isEmpty()) {
             BotTask removedTask = taskStack.pop();
-            BotLogger.debug(true, "❌ Удалена задача: " + removedTask.getClass().getSimpleName());
+            BotLogger.info(true, "❌ Удалена задача: " + removedTask.getClass().getSimpleName());
         }
     }
 

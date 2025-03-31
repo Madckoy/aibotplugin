@@ -80,9 +80,9 @@ public class Bot3DGeoScan {
     private static void saveScanResultToFile(Bot bot, JSONArray scanData) {
         File scanFile = new File(BotConstants.PLUGIN_TMP, bot.getId() + "_vision_log.json");
 
-        int centerX = bot.getRuntimeStatus().getCurrentLocation().blockX();
-        int centerY = bot.getRuntimeStatus().getCurrentLocation().blockY();
-        int centerZ = bot.getRuntimeStatus().getCurrentLocation().blockZ();
+        int centerX = bot.getRuntimeStatus().getCurrentLocation().getBlockX();
+        int centerY = bot.getRuntimeStatus().getCurrentLocation().getBlockY();
+        int centerZ = bot.getRuntimeStatus().getCurrentLocation().getBlockZ();
 
         try (FileWriter file = new FileWriter(scanFile)) {
             JSONObject root = new JSONObject();

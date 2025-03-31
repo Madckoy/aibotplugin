@@ -39,7 +39,7 @@ public class BotUtils {
     
         // ✅ Проверяем, что блок не AIR (иначе эффект не сработает)
         if (blockType == Material.AIR) {
-            BotLogger.trace(true, "⚠️ Эффект разрушения отменён: блок уже AIR " + BotStringUtils.formatLocation(location));
+            BotLogger.info(true, "⚠️ Эффект разрушения отменён: блок уже AIR " + BotStringUtils.formatLocation(location));
             return;
         }
     
@@ -51,7 +51,7 @@ public class BotUtils {
             location.getBlock().getBlockData() // Тип блока для эффекта
         );
     
-        BotLogger.trace(true, "🎇 Эффект разрушения воспроизведён на " + BotStringUtils.formatLocation(location));
+        BotLogger.info(true, "🎇 Эффект разрушения воспроизведён на " + BotStringUtils.formatLocation(location));
     }
 
     public static boolean requiresTool(Material blockType) {
