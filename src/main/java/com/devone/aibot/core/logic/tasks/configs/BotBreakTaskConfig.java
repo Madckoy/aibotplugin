@@ -2,13 +2,13 @@ package com.devone.aibot.core.logic.tasks.configs;
 
 import com.devone.aibot.utils.BotConstants;
 
-public class BotBreakBlockTaskConfig extends BotTaskConfig{
+public class BotBreakTaskConfig extends BotTaskConfig{
 
-    public BotBreakBlockTaskConfig() {
-        super( "BotBreakBlockTaskConfig.yml");
+    public BotBreakTaskConfig() {
+        super( "BotBreakTaskConfig.yml");
     }
 
-    public BotBreakBlockTaskConfig(String name) {
+    public BotBreakTaskConfig(String name) {
         super( name);
     }
 

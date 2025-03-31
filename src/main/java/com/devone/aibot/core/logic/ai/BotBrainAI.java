@@ -25,7 +25,7 @@ public class BotBrainAI {
             //executeAction(bot, action);
 
         } catch (Exception e) {
-            BotLogger.error(true,"❌ Ошибка в BotBrainAI: " + e.getMessage());
+            BotLogger.info(true,"❌ Ошибка в BotBrainAI: " + e.getMessage());
         }
     }
 
@@ -47,6 +47,6 @@ public class BotBrainAI {
                 bot.addTaskToQueue(new BotMakeDecisionTask(bot));
                 break;
         }
-        BotLogger.debug(true, "🤖 BotBrainAI выбрал действие: " + action);
+        BotLogger.info(true, "🤖 BotBrainAI выбрал действие: " + action);
     }
 }

@@ -54,7 +54,7 @@ public class BotManager {
 
             bot.despawnNPC();  // Деспавн и очистка стека задач вызывается из самого бота
 
-            BotLogger.debug(true, "➖" + name + " был удалён.");
+            BotLogger.info(true, "➖" + name + " был удалён.");
 
             saveBots(); // Сохраняем список после удаления одного бота
 
@@ -152,7 +152,7 @@ public class BotManager {
             BotLogger.info(true, "✅ Боты сохранены в BotManager.yml.");
 
         } catch (IOException e) {
-            BotLogger.error(true, "⚠️ Ошибка сохранения BotManager.yml: " + e.getMessage());
+            BotLogger.info(true, "⚠️ Ошибка сохранения BotManager.yml: " + e.getMessage());
         }
     }
 

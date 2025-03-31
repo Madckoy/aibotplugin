@@ -38,17 +38,17 @@ public class BotBreakInterpretedYamlPattern implements IBotDestructionPattern {
             this.radius = radius;
             this.direction = direction;
     
-            BotLogger.trace(true, "🛠️ Начинаем загрузку YAML-паттерна: " + yamlPath);
+            BotLogger.info(true, "🛠️ Начинаем загрузку YAML-паттерна: " + yamlPath);
     
             try (InputStream inputStream = Files.newInputStream(yamlPath)) {
                 this.generator = BotCoordinatesGenerator.loadYmlFromStream(inputStream);
             if (this.generator != null) {
                 BotLogger.info(true, "✅ Паттерн успешно загружен из YAML: " + yamlPath.getFileName());
             } else {
-                BotLogger.error(true, "❌ loadFromYaml() вернул null для файла: " + yamlPath);
+                BotLogger.info(true, "❌ loadFromYaml() вернул null для файла: " + yamlPath);
             }
         } catch (IOException e) {
-            BotLogger.error(true, "❌ Ошибка при открытии YAML-файла: " + yamlPath + " — " + e.getMessage());
+            BotLogger.info(true, "❌ Ошибка при открытии YAML-файла: " + yamlPath + " — " + e.getMessage());
         }
 
         return this;
@@ -57,30 +57,36 @@ public class BotBreakInterpretedYamlPattern implements IBotDestructionPattern {
 
     public Bot3DCoordinate findNextBlock(Bot bot ) {
         if (this.generator == null) {
-            BotLogger.error(true, "🚨 ❌ Паттерн не инициализирован! YAML: " + yamlPath);
+            BotLogger.info(true, "🚨 ❌ Паттерн не инициализирован! YAML: " + yamlPath);
             return null;
         }
 
         if (!initialized) {
-            BotLogger.trace(true, "🔁 Генерация точек по паттерну...");
+            BotLogger.info(true, "🔁 Генерация точек по паттерну: " + yamlPath);
             
-            Bot3DCoordinate center = new Bot3DCoordinate(bot.getRuntimeStatus().getCurrentLocation().getBlockX(), 
+            Bot3DCoordinate observer = new Bot3DCoordinate(bot.getRuntimeStatus().getCurrentLocation().getBlockX(), 
                                                                    bot.getRuntimeStatus().getCurrentLocation().getBlockY(), 
                                                                    bot.getRuntimeStatus().getCurrentLocation().getBlockZ()); 
+            
+            BotLogger.info(true, "🔁 Позиция строителя: " + observer.toString());
         
-            List<Bot3DCoordinate> kept = generator.generateInnerPointsFromObserver(center.x, center.y, center.z, radius, direction, radius, null);
-            List<Bot3DCoordinate> all =  generator.generateOuterPointsFromObserver(center.x, center.y, center.z, radius, direction, null);
+            List<Bot3DCoordinate> inner_points = generator.generateInnerPointsFromObserver(observer.x, observer.y, observer.z, radius, direction, radius, null);
+            //List<Bot3DCoordinate> all =  generator.generateOuterPointsFromObserver(observer.x, observer.y, observer.z, radius, direction, null);
 
 
-            List<Bot3DCoordinate> toBeRemoved = new ArrayList<>(all);
+            List<Bot3DCoordinate> toBeRemoved = new ArrayList<>(inner_points);
                                   
-            toBeRemoved.removeAll(kept);
+            //toBeRemoved.removeAll(kept);
 
             if (toBeRemoved != null && !toBeRemoved.isEmpty()) {
+
                 blocksToBreak.addAll(toBeRemoved);
-                BotLogger.trace(true, "✅ Added " + blocksToBreak.size() + " coordinates");
+                
+                BotLogger.info(true, "✅ Added " + blocksToBreak.size() + " coordinates");
             } else {
-                BotLogger.warn(true, "⚠️ Паттерн YAML не вернул ни одной точки для разрушения.");
+                
+                BotLogger.info(true, "⚠️ Паттерн YAML не вернул ни одной точки для разрушения.");
+
             }
 
             initialized = true;
@@ -89,7 +95,7 @@ public class BotBreakInterpretedYamlPattern implements IBotDestructionPattern {
         Bot3DCoordinate next = blocksToBreak.poll();
 
         if (next != null) {
-            BotLogger.trace(true, "🎯 Next coordinate: " + next.x + ", " + next.y + ", " + next.z);
+            BotLogger.info(true, "🎯 Next coordinate: " + next.x + ", " + next.y + ", " + next.z);
         }
         return next;
     }

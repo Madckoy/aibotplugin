@@ -40,7 +40,7 @@ public class BotTaskConfig {
         config.set("logging", true);
         config.set("priority", 1);
         save();
-        BotLogger.debug(isLogging(),"✅ Создан новый конфигурационный файл: " + file.getName());
+        BotLogger.info(isLogging(),"✅ Создан новый конфигурационный файл: " + file.getName());
     }
 
     public boolean isEnabled() {
@@ -63,9 +63,9 @@ public class BotTaskConfig {
     public void save() {
         try {
             config.save(file);
-            BotLogger.debug(this.isLogging(),"✅ Configuration has been saved: " + file.getName());
+            BotLogger.info(this.isLogging(),"✅ Configuration has been saved: " + file.getName());
         } catch (IOException e) {
-            BotLogger.error(this.isLogging(),"❌ Error saving configuration for: " + file.getName());
+            BotLogger.info(this.isLogging(),"❌ Error saving configuration for: " + file.getName());
         }
     }
 

@@ -49,7 +49,7 @@ public class BotMoveCmd implements CommandExecutor {
             World world = player.getWorld();
             Location targetLocation = new Location(world, x, y, z);
 
-            BotLogger.debug(true,"📌 /bot-move: Бот " + bot.getId() + " идет к " + BotStringUtils.formatLocation(targetLocation));
+            BotLogger.info(true,"📌 /bot-move: Бот " + bot.getId() + " идет к " + BotStringUtils.formatLocation(targetLocation));
 
             // ✅ Очищаем стек задач
             bot.getLifeCycle().getTaskStackManager().clearTasks();

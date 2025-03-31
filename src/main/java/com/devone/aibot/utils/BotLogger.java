@@ -50,31 +50,31 @@ public class BotLogger {
     }
 
     public static void debug(boolean enabled, String message) {
-        if (enabled && loggingEnabled && logLevel.intValue() <= Level.FINE.intValue()) {
+        if (enabled && loggingEnabled && logLevel.intValue() == Level.FINE.intValue()) {
             logger.fine("🟡 " + message);
         }
     }
 
     public static void info(boolean enabled, String message) {
-        if (enabled && loggingEnabled && logLevel.intValue() <= Level.INFO.intValue()) {
+        if (enabled && loggingEnabled && logLevel.intValue() == Level.INFO.intValue()) {
             logger.info("ℹ️ " + message);
         }
     }
 
     public static void warn(boolean enabled, String message) {
-        if (enabled && loggingEnabled && logLevel.intValue() <= Level.WARNING.intValue()) {
+        if (enabled && loggingEnabled && logLevel.intValue() == Level.WARNING.intValue()) {
             logger.warning("⚠️ " + message);
         }
     }
 
     public static void error(boolean enabled, String message) {
-        if (enabled && loggingEnabled && logLevel.intValue() <= Level.SEVERE.intValue()) {
+        if (enabled && loggingEnabled && logLevel.intValue() == Level.SEVERE.intValue()) {
             logger.severe("🚨 " + message);
         }
     }
 
     public static void trace(boolean enabled, String message) {
-        if (enabled && loggingEnabled && logLevel.intValue() <= Level.FINER.intValue()) {
+        if (enabled && loggingEnabled && logLevel.intValue() == Level.FINER.intValue()) {
             logger.finer("📃 " + message);
         }
     }

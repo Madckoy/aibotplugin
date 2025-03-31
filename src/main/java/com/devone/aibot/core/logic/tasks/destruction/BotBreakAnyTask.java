@@ -1,7 +1,7 @@
 package com.devone.aibot.core.logic.tasks.destruction;
 
 import com.devone.aibot.core.Bot;
-import com.devone.aibot.core.logic.tasks.configs.BotBreakBlockTaskConfig;
+import com.devone.aibot.core.logic.tasks.configs.BotBreakTaskConfig;
 import com.devone.aibot.utils.Bot3DGeoScan.ScanMode;
 
 public class BotBreakAnyTask extends BotBreakTask {
@@ -17,9 +17,11 @@ public class BotBreakAnyTask extends BotBreakTask {
         
         setScanMode(ScanMode.FULL);
 
-        BotBreakBlockTaskConfig config = new BotBreakBlockTaskConfig("BotBreakAnyTask.yml");
+        BotBreakTaskConfig config = new BotBreakTaskConfig("BotBreakAnyTask.yml");
+        logging = config.isLogging();
+        patternName = config.getPattern();
         // Передай в configure строку с именем yaml-файла
-        this.configure(null, 0, getBreakRadius(), true, false, null, config.getPattern());
+        //super.configure(null, 0, getBreakRadius(), true, false, null, config.getPattern());
     }
  
     @Override

@@ -5,6 +5,10 @@ import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.World;
 import org.bukkit.block.Block;
+import org.bukkit.util.Vector;
+
+import com.devone.aibot.core.Bot;
+
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -39,7 +43,7 @@ public class BotUtils {
     
         // ✅ Проверяем, что блок не AIR (иначе эффект не сработает)
         if (blockType == Material.AIR) {
-            BotLogger.trace(true, "⚠️ Эффект разрушения отменён: блок уже AIR " + BotStringUtils.formatLocation(location));
+            BotLogger.info(true, "⚠️ Эффект разрушения отменён: блок уже AIR " + BotStringUtils.formatLocation(location));
             return;
         }
     
@@ -51,7 +55,7 @@ public class BotUtils {
             location.getBlock().getBlockData() // Тип блока для эффекта
         );
     
-        BotLogger.trace(true, "🎇 Эффект разрушения воспроизведён на " + BotStringUtils.formatLocation(location));
+        BotLogger.info(true, "🎇 Эффект разрушения воспроизведён на " + BotStringUtils.formatLocation(location));
     }
 
     public static boolean requiresTool(Material blockType) {
@@ -65,6 +69,7 @@ public class BotUtils {
         World world = Bukkit.getWorlds().get(0);
         return world.getSpawnLocation();
     }
+
     public static boolean isBreakableBlock(Location location) {
         if (location == null || location.getWorld() == null) return false;
     
@@ -80,5 +85,28 @@ public class BotUtils {
         };
     }
     
+/**
+     * Поворачивает бота лицом к целевой точке, используя teleport с сохранением координат.
+     * Подходит для обхода запрета на setRotation().
+     *
+     * @param bot     Бот (CraftPlayer или NPC, поддерживающий teleport)
+     * @param target  Цель, к которой нужно повернуть лицо
+     */
+    public static void lookAt(Bot bot, Location target) {
+        Location from = bot.getNPCEntity().getLocation();
+        Location to = target.clone().add(0.5, 0.5, 0.5); // центр блока
+
+        Vector direction = to.toVector().subtract(from.toVector());
+
+        float yaw = (float) Math.toDegrees(Math.atan2(-direction.getX(), direction.getZ()));
+        float pitch = (float) Math.toDegrees(-Math.atan2(direction.getY(),
+                Math.sqrt(direction.getX() * direction.getX() + direction.getZ() * direction.getZ())));
+
+        Location newLook = from.clone();
+        newLook.setYaw(yaw);
+        newLook.setPitch(pitch);
+
+        bot.getNPCEntity().teleport(newLook);
+    }
 
 }

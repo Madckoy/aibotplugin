@@ -25,7 +25,7 @@ public class BotMakeDecisionTask extends BotTask {
         super(bot, "🎲");
         this.bot = bot;
         config = new BotMakeDecisionTaskConfig();
-
+        logging = config.isLogging();
         setObjective("Roll a dice");
     }
 
@@ -53,7 +53,7 @@ public class BotMakeDecisionTask extends BotTask {
             moveTask.configure(drop_off_loc);
             bot.addTaskToQueue(moveTask);
 
-            BotLogger.debug(isLogging(),"📦 " + bot.getId() + " Идёт к точке сброса: " + BotStringUtils.formatLocation(drop_off_loc));
+            BotLogger.info(isLogging(),"📦 " + bot.getId() + " Идёт к точке сброса: " + BotStringUtils.formatLocation(drop_off_loc));
             return;
         }
 
@@ -65,7 +65,7 @@ public class BotMakeDecisionTask extends BotTask {
         double huntChance = isNight ? 0.9 : 0.2; // 90% ночью, 20% днем
 
         if (rand < 0.1) { // 10% шанс сказать что-то про окружающий мир
-            BotLogger.debug(isLogging(),"🤖 " + bot.getId() + " Комментирует обстановку.");
+            BotLogger.info(isLogging(),"🤖 " + bot.getId() + " Комментирует обстановку.");
             bot.addTaskToQueue(new BotTalkTask(bot, null, BotTalkTask.TalkType.ENVIRONMENT_COMMENT));
             return;
         }
@@ -73,7 +73,7 @@ public class BotMakeDecisionTask extends BotTask {
 
         if (rand < huntChance) {
             // ⚔️ Охота
-            BotLogger.debug(isLogging(),"⚔️ " + bot.getId() + " Собирается на охоту! (Вероятность: " + huntChance * 100 + "%)");
+            BotLogger.info(isLogging(),"⚔️ " + bot.getId() + " Собирается на охоту! (Вероятность: " + huntChance * 100 + "%)");
            
             BotHuntMobsTask hunt_task = new BotHuntMobsTask(bot);
             //BotTaskHuntMobs config  = hunt_task.getConfig();
@@ -83,14 +83,14 @@ public class BotMakeDecisionTask extends BotTask {
             
             hunt_task.configure(targets, 20, true);
             bot.addTaskToQueue(hunt_task);
-            BotLogger.debug(isLogging(), "⚔️ " + bot.getId() + " Начинает охоту на " + (isNight ? "агрессивных мобов" : "животных") + "!");
+            BotLogger.info(isLogging(), "⚔️ " + bot.getId() + " Начинает охоту на " + (isNight ? "агрессивных мобов" : "животных") + "!");
 
             return;
         }
 
         if (rand >= 0.8) {
             // 📌 Начать патрулирование (20% вероятность)
-            BotLogger.debug(isLogging(), "🌐 " + bot.getId() + " начинает патрулирование.");
+            BotLogger.info(isLogging(), "🌐 " + bot.getId() + " начинает патрулирование.");
             BotExploreTask patrolTask = new BotExploreTask(bot);
             bot.addTaskToQueue(patrolTask);
             return;
@@ -112,11 +112,29 @@ public class BotMakeDecisionTask extends BotTask {
 
         if (rand < 0.8 && rand >= 0.2) {  
             // ⛏ 30% шанс начать добычу всего подряд вниз
-            BotBreakAnyDownwardTask breakAnyTask = new BotBreakAnyDownwardTask(bot);
+            BotBreakAnyDownwardTask breakTask = new BotBreakAnyDownwardTask(bot);
         
-            if (breakAnyTask.isEnabled) {
-                breakAnyTask.configure(null, maxToCollect, BotConstants.DEFAULT_SCAN_RANGE, true);
-                bot.addTaskToQueue(breakAnyTask);
+            if (breakTask.isEnabled) {
+
+                /**
+                     * Конфигурирует задачу разрушения.
+                     * 
+                     * Параметры (позиционные):
+                     * 
+                     * 0 - Set<Material> targetMaterials (nullable) — блоки, которые нужно разрушать.
+                     * 1 - Integer maxBlocks (nullable) — максимальное количество блоков, которые нужно собрать.
+                     * 2 - Integer breakRadius (nullable) — радиус разрушения.
+                     * 3 - Boolean shouldPickup (nullable) — собирать ли предметы после разрушения.
+                     * 4 - Boolean destroyAllIfNoTarget (nullable) — если нет подходящих блоков, разрушать всё подряд.
+                     * 5 - IBotDestructionPattern или String (nullable) — шаблон разрушения:
+                     *     - IBotDestructionPattern — готовый объект.
+                     *     - String — путь к YAML-файлу шаблона (относительно каталога паттернов).
+                     *
+                     * Если параметры не заданы, используются значения по умолчанию.
+                     */
+                breakTask.configure(null, maxToCollect, BotConstants.DEFAULT_SCAN_RANGE, true, true, breakTask.patternName);
+
+                bot.addTaskToQueue(breakTask);
             }    
         
             return;
@@ -128,7 +146,7 @@ public class BotMakeDecisionTask extends BotTask {
             BotIdleTask idle = new BotIdleTask(bot, null);
             bot.addTaskToQueue(idle);
 
-            BotLogger.debug(isLogging(),"🍹" + bot.getId() + " остаётся в IDLE.");
+            BotLogger.info(isLogging(),"🍹" + bot.getId() + " остаётся в IDLE.");
             return;
         }
     }

@@ -23,18 +23,18 @@ public class BotNavigationUtils {
         double distanceXZ = Math.sqrt(Math.pow(cx - tx, 2) + Math.pow(cz - tz, 2)); // 🔥 Только XZ
         double yDifference = Math.abs(cy - ty); 
  
-        BotLogger.trace(true, "✅ " + bot.getId() + " ZX  " + distanceXZ+ "  Y " + yDifference);
+        BotLogger.info(true, "✅ " + bot.getId() + " ZX  " + distanceXZ+ "  Y " + yDifference);
 
         // ✅ Если бот рядом по XZ и высота ±2 блока, считаем, что он дошёл
         if (distanceXZ <= tolerance && yDifference <= (tolerance*2)) { // цель либо глубоко либо высоко, все равно считаем что пришли
-            BotLogger.trace(true, "✅ " + bot.getId() + " Бот достиг цели! " + BotStringUtils.formatLocation(current));
+            BotLogger.info(true, "✅ " + bot.getId() + " Бот достиг цели! " + BotStringUtils.formatLocation(current));
             return true;
         }
     
         // ✅ Дополнительная проверка, если `distanceSquared()` даёт маленькое значение
         double distanceSquared = current.distanceSquared(target);
         if (distanceSquared < tolerance && yDifference <= tolerance) {
-            BotLogger.trace(true, "🎯 " + bot.getId() + " Бот достаточно близко (по `distanceSquared()`), завершаем.");
+            BotLogger.info(true, "🎯 " + bot.getId() + " Бот достаточно близко (по `distanceSquared()`), завершаем.");
             return true;
         }
     

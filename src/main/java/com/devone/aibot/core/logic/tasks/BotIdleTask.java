@@ -14,6 +14,7 @@ public class BotIdleTask extends BotPlayerLinkedTask {
         setObjective("Idle");
         
         config = new BotIdleTaskConfig();
+        logging = config.isLogging();
     }
 
     @Override
