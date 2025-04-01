@@ -2,7 +2,8 @@ package com.devone.aibot.core.logic.patterns.destruction;
 
 import com.devone.aibot.core.Bot;
 import com.devone.aibot.core.logic.patterns.BotCoordinatesGenerator;
-import com.devone.aibot.utils.Bot3DCoordinate;
+import com.devone.aibot.core.logic.patterns.BotPatternGenerationParams;
+import com.devone.aibot.utils.BotCoordinate3D;
 import com.devone.aibot.utils.BotAxisDirection.AxisDirection;
 import com.devone.aibot.utils.BotCoordinateComparators;
 import com.devone.aibot.utils.BotLogger;
@@ -24,20 +25,27 @@ public class BotBreakInterpretedYamlPattern implements IBotDestructionPattern {
     private BotCoordinatesGenerator generator;
 
     private boolean initialized = false;
-    private int radius = 0;
 
-    private AxisDirection direction = null;
+    private AxisDirection breakDirection = null;
+    private int offsetX, offsetY, offsetZ, outerRadius, innerRadius;  
 
-    private final Queue<Bot3DCoordinate> blocksToBreak = new LinkedList<>();
+    private final Queue<BotCoordinate3D> blocksToBreak = new LinkedList<>();
     
         public BotBreakInterpretedYamlPattern(Path path) {
             this.yamlPath = path;
         }
      
         @Override    
-        public IBotDestructionPattern configure(int radius, AxisDirection direction) {
-            this.radius = radius;
-            this.direction = direction;
+        public IBotDestructionPattern configure(int offsetX, int offsetY, int offsetZ, int outerRadius, int innerRadius, AxisDirection breakDirection) {
+            this.offsetX = offsetX;
+            this.offsetY = offsetY;
+            this.offsetZ = offsetZ;
+            
+            this.outerRadius = outerRadius;
+            this.innerRadius = innerRadius;
+
+            this.breakDirection = breakDirection;
+
     
             BotLogger.info(true, "🛠️ Начинаем загрузку YAML-паттерна: " + yamlPath);
     
@@ -55,8 +63,7 @@ public class BotBreakInterpretedYamlPattern implements IBotDestructionPattern {
         return this;
     }
 
-
-    public Bot3DCoordinate findNextBlock(Bot bot ) {
+    public BotCoordinate3D findNextBlock(Bot bot ) {
         if (this.generator == null) {
             BotLogger.info(true, "🚨 ❌ Паттерн не инициализирован! YAML: " + yamlPath);
             return null;
@@ -64,21 +71,25 @@ public class BotBreakInterpretedYamlPattern implements IBotDestructionPattern {
 
         if (!initialized) {
             BotLogger.info(true, "🔁 Генерация точек по паттерну: " + yamlPath);
-            
-            Bot3DCoordinate observer = new Bot3DCoordinate(bot.getRuntimeStatus().getCurrentLocation().getBlockX(), 
-                                                                   bot.getRuntimeStatus().getCurrentLocation().getBlockY(), 
-                                                                   bot.getRuntimeStatus().getCurrentLocation().getBlockZ()); 
-            
-            BotLogger.info(true, "🔁 Позиция строителя: " + observer.toString());
+                                                                     
+            BotPatternGenerationParams params = new BotPatternGenerationParams(bot.getRuntimeStatus().getCurrentLocation().getBlockX(), 
+                                                                               bot.getRuntimeStatus().getCurrentLocation().getBlockY(), 
+                                                                               bot.getRuntimeStatus().getCurrentLocation().getBlockZ(), 
+                                                                               offsetX, offsetY, offsetZ, outerRadius, innerRadius, breakDirection );
+                                                                               
         
-            List<Bot3DCoordinate> inner_points = generator.generateInnerPointsFromObserver(observer.x, observer.y, observer.z, radius, direction, radius, null);
+            BotLogger.info(true, "⚠️ Паттерн YAML не вернул ни одной точки для разрушения.");
+
+            List<BotCoordinate3D> inner_points = generator.generateInnerPoints(params);
+            
+            
             //List<Bot3DCoordinate> all =  generator.generateOuterPointsFromObserver(observer.x, observer.y, observer.z, radius, direction, null);
 
             
-            List<Bot3DCoordinate> toBeRemoved = new ArrayList<>(inner_points);
+            List<BotCoordinate3D> toBeRemoved = new ArrayList<>(inner_points);
 
             // ✅ Сортировка по направлению
-            Comparator<Bot3DCoordinate> sortingComparator = BotCoordinateComparators.byAxisDirection(direction);
+            Comparator<BotCoordinate3D> sortingComparator = BotCoordinateComparators.byAxisDirection(breakDirection);
             if (sortingComparator != null) {
                 toBeRemoved.sort(sortingComparator);
             }
@@ -99,7 +110,7 @@ public class BotBreakInterpretedYamlPattern implements IBotDestructionPattern {
             initialized = true;
         }
 
-        Bot3DCoordinate next = blocksToBreak.poll();
+        BotCoordinate3D next = blocksToBreak.poll();
 
         if (next != null) {
             BotLogger.info(true, "🎯 Next coordinate: " + next.x + ", " + next.y + ", " + next.z);
@@ -118,7 +129,7 @@ public class BotBreakInterpretedYamlPattern implements IBotDestructionPattern {
     }
 
 
-    public List<Bot3DCoordinate> getAllPlannedBlocks() {
+    public List<BotCoordinate3D> getAllPlannedBlocks() {
         return new ArrayList<>(blocksToBreak);
     }
 

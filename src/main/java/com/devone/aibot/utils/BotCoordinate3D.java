@@ -2,10 +2,10 @@ package com.devone.aibot.utils;
 
 import java.util.Objects;
 
-public class Bot3DCoordinate {
-    public final int x, y, z;
+public class BotCoordinate3D {
+    public int x, y, z;
 
-    public Bot3DCoordinate(int x, int y, int z) {
+    public BotCoordinate3D(int x, int y, int z) {
         this.x = x;
         this.y = y;
         this.z = z;
@@ -14,8 +14,8 @@ public class Bot3DCoordinate {
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
-        if (!(o instanceof Bot3DCoordinate)) return false;
-        Bot3DCoordinate that = (Bot3DCoordinate) o;
+        if (!(o instanceof BotCoordinate3D)) return false;
+        BotCoordinate3D that = (BotCoordinate3D) o;
         return x == that.x && y == that.y && z == that.z;
     }
 

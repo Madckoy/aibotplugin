@@ -9,7 +9,8 @@ import com.devone.aibot.core.logic.tasks.BotTask;
 import com.devone.aibot.core.logic.tasks.BotSonar3DTask;
 import com.devone.aibot.core.logic.tasks.BotUseHandTask;
 import com.devone.aibot.core.logic.tasks.configs.BotBreakTaskConfig;
-import com.devone.aibot.utils.Bot3DCoordinate;
+import com.devone.aibot.utils.BotAxisDirection;
+import com.devone.aibot.utils.BotCoordinate3D;
 import com.devone.aibot.utils.BotAxisDirection.AxisDirection;
 import com.devone.aibot.utils.BotConstants;
 import com.devone.aibot.utils.BotLogger;
@@ -34,12 +35,13 @@ public class BotBreakTask extends BotTask {
     private Set<Material> targetMaterials = null;
     public String patternName = BotConstants.DEFAULT_PATTERN_BREAK;
     private IBotDestructionPattern breakPattern = null;
+    private AxisDirection breakDirection = AxisDirection.DOWN;
 
-    private AxisDirection direction = AxisDirection.DOWN;
+    private int offsetX, offsetY, offsetZ = 0;
 
     public BotBreakTask(Bot bot) {
 
-        super(bot, "🪨👁🧑‍🔧");
+        super(bot, "🪨👁");
 
         this.config = new BotBreakTaskConfig();
         logging = config.isLogging();
@@ -50,7 +52,8 @@ public class BotBreakTask extends BotTask {
 
         Path path = Paths.get(BotConstants.PLUGIN_PATH_PATTERNS_BREAK, patternName);
 
-        this.breakPattern = new BotBreakInterpretedYamlPattern(path).configure(breakRadius, direction);
+        this.breakPattern = new BotBreakInterpretedYamlPattern(path).configure(offsetX,offsetY, offsetZ,  breakRadius, breakRadius, AxisDirection.DOWN);
+
     }
 
     /**
@@ -63,7 +66,11 @@ public class BotBreakTask extends BotTask {
      * 2 - Integer breakRadius (nullable) — радиус разрушения.
      * 3 - Boolean shouldPickup (nullable) — собирать ли предметы после разрушения.
      * 4 - Boolean destroyAllIfNoTarget (nullable) — если нет подходящих блоков, разрушать всё подряд.
-     * 5 - IBotDestructionPattern или String (nullable) — шаблон разрушения:
+     * 5 - AxisDirection breakDirection - в какую сторону разрушаем
+     * 6 - int offsetX
+     * 7 - int offsetY
+     * 8 - int offsetZ
+     * 9 - IBotDestructionPattern или String (nullable) — шаблон разрушения:
      *     - IBotDestructionPattern — готовый объект.
      *     - String — путь к YAML-файлу шаблона (относительно каталога паттернов).
      *
@@ -96,15 +103,30 @@ public class BotBreakTask extends BotTask {
         if (params.length >= 5 && params[4] instanceof Boolean) {
             this.destroyAllIfNoTarget = (Boolean) params[4];
         }
-
-        // YAML-паттерн через параметры
-        if (params.length >= 6) {
-            if (params[5] instanceof IBotDestructionPattern ptrn) {
+        
+        if (params.length >= 6 && params[5] instanceof AxisDirection bd) {
+            this.breakDirection  = bd;
+        }
+        if (params.length >= 7 && params[6] instanceof Integer) {
+            this.offsetX = (Integer) params[6];
+        }
+        if (params.length >= 8 && params[7] instanceof Integer) {
+            this.offsetY = (Integer) params[7];
+        }
+        if (params.length >= 9 && params[8] instanceof Integer) {
+            this.offsetZ = (Integer) params[8];
+        }
+        // Применяем создание шаблона с новыми параметрами
+        if (params.length >= 10) {
+            if (params[8] instanceof IBotDestructionPattern ptrn) {
                 this.breakPattern = ptrn;
                 BotLogger.info(isLogging(), "ℹ️ 📐 Получен готовый YAML-паттерн через параметры: " + ptrn.getName());
-            } else if (params[5] instanceof String patternFile && patternFile.endsWith(".yml")) {
+            } else if (params[8] instanceof String patternFile && patternFile.endsWith(".yml")) {
                 Path path = Paths.get(BotConstants.PLUGIN_PATH_PATTERNS_BREAK, patternFile);
-                this.breakPattern = new BotBreakInterpretedYamlPattern(path).configure(breakRadius, direction);
+
+                this.breakPattern = new BotBreakInterpretedYamlPattern(path)
+                        .configure(offsetX, offsetY, offsetZ, breakRadius, breakRadius, AxisDirection.DOWN);
+
                 BotLogger.info(isLogging(), "ℹ️ 📐 Загружен YAML-паттерн по имени: " + patternFile);
             }
         }
@@ -112,7 +134,8 @@ public class BotBreakTask extends BotTask {
         // Если не задано — fallback на default.yml
         if (this.breakPattern == null) {
             Path fallbackPath = Paths.get(BotConstants.PLUGIN_PATH_PATTERNS_BREAK, BotConstants.DEFAULT_PATTERN_BREAK);
-            this.breakPattern = new BotBreakInterpretedYamlPattern(fallbackPath).configure(breakRadius, direction);
+            this.breakPattern = new BotBreakInterpretedYamlPattern(fallbackPath).
+                                    configure(offsetX, offsetY, offsetZ, breakRadius, breakRadius, AxisDirection.DOWN);
             BotLogger.info(isLogging(),
                     "ℹ️ 📐 Используется дефолтный YAML-паттерн: " + BotConstants.DEFAULT_PATTERN_BREAK);
         }
@@ -126,9 +149,21 @@ public class BotBreakTask extends BotTask {
         return this;
     }
 
-    public void setDirection(AxisDirection direction) {
-        this.direction = direction;
+    public void setBreakDirection(AxisDirection direction) {
+        this.breakDirection = direction;
 
+    }
+
+    public void setOffsetX(int oX) {
+        this.offsetX = oX;
+    }
+
+    public void setOffsetY(int oY) {
+        this.offsetY = oY;
+    }
+    
+    public void setOffsetZ(int oZ) {
+        this.offsetZ = oZ;
     }
 
     public int getBreakRadius() {
@@ -158,13 +193,14 @@ public class BotBreakTask extends BotTask {
         if (breakPattern == null) {
             if (!StringUtil.isEmpty(patternName)) {
                 Path fallbackPath = Paths.get(BotConstants.PLUGIN_PATH_PATTERNS_BREAK, patternName);
-                this.breakPattern = new BotBreakInterpretedYamlPattern(fallbackPath).configure(breakRadius, direction);
+                this.breakPattern = new BotBreakInterpretedYamlPattern(fallbackPath).
+                                        configure(offsetX, offsetY, offsetZ, breakRadius, breakRadius, breakDirection);
                 BotLogger.info(isLogging(),
                         "ℹ️ 📐 Используется дефолтный YAML-паттерн: " + BotConstants.DEFAULT_PATTERN_BREAK);
                 
             } else {
                 Path fallbackPath = Paths.get(BotConstants.PLUGIN_PATH_PATTERNS_BREAK, BotConstants.DEFAULT_PATTERN_BREAK);
-                this.breakPattern = new BotBreakInterpretedYamlPattern(fallbackPath).configure(breakRadius, direction);
+                this.breakPattern = new BotBreakInterpretedYamlPattern(fallbackPath).configure(offsetX, offsetY, offsetZ, breakRadius, breakRadius, breakDirection);
                 BotLogger.info(isLogging(),
                         "ℹ️ 📐 Используется дефолтный YAML-паттерн: " + BotConstants.DEFAULT_PATTERN_BREAK);
             }
@@ -194,7 +230,7 @@ public class BotBreakTask extends BotTask {
             return;
         }
 
-        Bot3DCoordinate coordinate = breakPattern.findNextBlock(bot);
+        BotCoordinate3D coordinate = breakPattern.findNextBlock(bot);
 
         if (coordinate == null) {
             return;
@@ -236,10 +272,7 @@ public class BotBreakTask extends BotTask {
 
             setObjective("Breaking: " + BotUtils.getBlockName(bot.getRuntimeStatus().getTargetLocation().getBlock()));
 
-            // BotLogger.info("🚧 " + bot.getId() + " Разрушение блока: " +
-            // targetLocation.getBlock().toString());
-
-            BotUseHandTask handTask = new BotUseHandTask(bot, "🪨⛏🧑‍🔧");
+            BotUseHandTask handTask = new BotUseHandTask(bot, "🪨⛏");
             handTask.configure(targetLocation);
             bot.addTaskToQueue(handTask);
 

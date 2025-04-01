@@ -38,9 +38,11 @@ function renderBotTable(data) {
         // 🎮 Control Buttons
         let cmdCell = row.insertCell(8);
         cmdCell.innerHTML = `
-            <button class="cmd-btn" data-bot="${bot.id}" data-cmd="bot-tp">TP</button>
-            <button class="cmd-btn" data-bot="${bot.id}" data-cmd="bot-move">Move</button>
-            <button class="cmd-btn" data-bot="${bot.id}" data-cmd="bot-drop-all">Drop All</button
+            <div class="command-cell">
+               <button class="cmd-btn" data-bot="${bot.id}" data-cmd="bot-tp">TP</button>
+               <button class="cmd-btn" data-bot="${bot.id}" data-cmd="bot-move">Move</button>
+               <button class="cmd-btn" data-bot="${bot.id}" data-cmd="bot-drop-all">Drop All</button
+            </div>   
         `;
     });
 

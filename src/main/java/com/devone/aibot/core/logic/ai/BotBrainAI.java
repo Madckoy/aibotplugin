@@ -44,7 +44,7 @@ public class BotBrainAI {
                 bot.addTaskToQueue(new BotExploreTask(bot));
                 break;
             default:
-                bot.addTaskToQueue(new BotMakeDecisionTask(bot));
+                bot.addTaskToQueue(new BotDecisionMakeTask(bot));
                 break;
         }
         BotLogger.info(true, "🤖 BotBrainAI выбрал действие: " + action);

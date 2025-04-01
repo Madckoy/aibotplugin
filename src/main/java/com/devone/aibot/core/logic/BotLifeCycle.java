@@ -4,7 +4,7 @@ import org.bukkit.Bukkit;
 
 import com.devone.aibot.AIBotPlugin;
 import com.devone.aibot.core.Bot;
-import com.devone.aibot.core.logic.tasks.BotMakeDecisionTask;
+import com.devone.aibot.core.logic.tasks.BotDecisionMakeTask;
 import com.devone.aibot.core.logic.tasks.BotTaskStackManager;
 import com.devone.aibot.utils.BotLogger;
 import com.devone.aibot.utils.ServerUtils;
@@ -41,7 +41,7 @@ public class BotLifeCycle {
             if (!idleAdded) {
                 BotLogger.info(true, "😴 Бот " + bot.getId() + " Без задач. Добавляем IdleTask.");
                 
-                taskStackManager.pushTask(new BotMakeDecisionTask(bot));
+                taskStackManager.pushTask(new BotDecisionMakeTask(bot));
                 idleAdded = true; // ✅ Ставим флаг, что IdleActivity уже добавлена
             }
         }

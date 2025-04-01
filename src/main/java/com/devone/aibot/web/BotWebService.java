@@ -235,7 +235,7 @@ public class BotWebService {
                         ? new ArrayList<>(bot.getLifeCycle().getTaskStackManager().getTaskStack())
                         : new ArrayList<>();
                     String taskStackText = taskStack.isEmpty() ? "N/A" :
-                        taskStack.stream().map(BotTask::getName).collect(Collectors.joining("➜"));
+                        taskStack.stream().map(BotTask::getName).collect(Collectors.joining(" ➜ "));
                     botJson.addProperty("queue", taskStackText);
                     botsArray.add(botJson);
 

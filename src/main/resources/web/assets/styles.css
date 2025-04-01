@@ -137,7 +137,7 @@ th:nth-child(7), td:nth-child(7) {
     background-color: #444;
 }
 
-/*                    actions    */
+/*  actions    */
 .control-buttons {
     padding: 4px;
 }
@@ -148,4 +148,12 @@ button.btn-sm {
     font-size: 12px;
     border-radius: 4px;
     cursor: pointer;
+}
+
+.command-cell {
+    padding-right: 12px;
+    display: flex;
+    gap: 6px;
+    justify-content: flex-start;
+    align-items: center;
 }

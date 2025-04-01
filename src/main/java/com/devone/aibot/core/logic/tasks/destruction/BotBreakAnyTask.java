@@ -3,25 +3,29 @@ package com.devone.aibot.core.logic.tasks.destruction;
 import com.devone.aibot.core.Bot;
 import com.devone.aibot.core.logic.tasks.configs.BotBreakTaskConfig;
 import com.devone.aibot.utils.Bot3DGeoScan.ScanMode;
+import com.devone.aibot.utils.BotAxisDirection.AxisDirection;
+import com.devone.aibot.utils.BotConstants;
+
 
 public class BotBreakAnyTask extends BotBreakTask {
     
     public BotBreakAnyTask(Bot bot) {
         super(bot);
 
-        //setName("🪨👁🧑‍🔧");
+        bot.getRuntimeStatus().setTargetLocation(bot.getRuntimeStatus().getCurrentLocation());
 
         setTargetMaterials(null);
-
-        bot.getRuntimeStatus().setTargetLocation(bot.getRuntimeStatus().getCurrentLocation());
-        
         setScanMode(ScanMode.FULL);
+        setBreakDirection(AxisDirection.DOWN);
+        setOffsetX(0);
+        setOffsetY(-1*BotConstants.DEFAULT_SCAN_RANGE);
+        setOffsetZ(0);
 
         BotBreakTaskConfig config = new BotBreakTaskConfig("BotBreakAnyTask.yml");
         logging = config.isLogging();
         patternName = config.getPattern();
-        // Передай в configure строку с именем yaml-файла
-        //super.configure(null, 0, getBreakRadius(), true, false, null, config.getPattern());
+
+
     }
  
     @Override
