@@ -4,6 +4,7 @@ import com.devone.aibot.core.Bot;
 import com.devone.aibot.core.logic.patterns.BotCoordinatesGenerator;
 import com.devone.aibot.utils.Bot3DCoordinate;
 import com.devone.aibot.utils.BotAxisDirection.AxisDirection;
+import com.devone.aibot.utils.BotCoordinateComparators;
 import com.devone.aibot.utils.BotLogger;
 
 import java.io.IOException;
@@ -73,8 +74,14 @@ public class BotBreakInterpretedYamlPattern implements IBotDestructionPattern {
             List<Bot3DCoordinate> inner_points = generator.generateInnerPointsFromObserver(observer.x, observer.y, observer.z, radius, direction, radius, null);
             //List<Bot3DCoordinate> all =  generator.generateOuterPointsFromObserver(observer.x, observer.y, observer.z, radius, direction, null);
 
-
+            
             List<Bot3DCoordinate> toBeRemoved = new ArrayList<>(inner_points);
+
+            // ✅ Сортировка по направлению
+            Comparator<Bot3DCoordinate> sortingComparator = BotCoordinateComparators.byAxisDirection(direction);
+            if (sortingComparator != null) {
+                toBeRemoved.sort(sortingComparator);
+            }
                                   
             //toBeRemoved.removeAll(kept);
 
