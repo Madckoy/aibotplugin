@@ -168,32 +168,39 @@ public class BotWebService {
         protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws IOException {
             resp.setContentType("application/json");
             PrintWriter out = resp.getWriter();
-        
+
             try (BufferedReader reader = req.getReader()) {
                 JsonObject json = JsonParser.parseReader(reader).getAsJsonObject();
-        
+
                 String botId = json.get("botId").getAsString();
                 String command = json.get("command").getAsString();
                 List<String> params = new ArrayList<>();
                 json.getAsJsonArray("params").forEach(e -> params.add(e.getAsString()));
-        
-                String fullCommand = "/" + command + " " + botId + " " + String.join(" ", params);
+
+                String fullCommand = command + " " + botId + " " + String.join(" ", params);
                 BotLogger.info(true, "🌐 От сервера получена команда: " + fullCommand);
-        
-                boolean success = Bukkit.dispatchCommand(Bukkit.getConsoleSender(), fullCommand);
-                if (success) {
-                    out.write("{\"status\":\"ok\"}");
-                } else {
-                    resp.setStatus(HttpServletResponse.SC_BAD_REQUEST);
-                    out.write("{\"error\":\"Command execution failed\"}");
-                }
-        
+
+                // Выполнить команду на основном потоке сервера
+                Bukkit.getScheduler().runTask(
+                    Bukkit.getPluginManager().getPlugin("AIBotPlugin"),
+                    () -> {
+                        boolean success = Bukkit.dispatchCommand(Bukkit.getConsoleSender(), fullCommand);
+                        BotLogger.info(true, "📬 Команда выполнена: " + fullCommand + " -> " + (success ? "✅ OK" : "❌ FAIL"));
+                    }
+                );
+
+                out.write("{\"status\":\"accepted\"}");
+                out.flush();
+
             } catch (Exception e) {
+                e.printStackTrace(); // Временный вывод в консоль
                 BotLogger.error(true, "❌ Ошибка выполнения команды: " + e.getMessage());
                 resp.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
                 out.write("{\"error\":\"Internal error\"}");
+                out.flush();
             }
         }
+
     }
 
     private static class BotStatusServlet extends HttpServlet {

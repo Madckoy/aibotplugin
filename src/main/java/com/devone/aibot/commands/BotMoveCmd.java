@@ -3,8 +3,11 @@ package com.devone.aibot.commands;
 import com.devone.aibot.core.Bot;
 import com.devone.aibot.core.BotManager;
 import com.devone.aibot.core.logic.tasks.BotMoveTask;
+import com.devone.aibot.core.logic.tasks.BotTeleportTask;
 import com.devone.aibot.utils.BotLogger;
 import com.devone.aibot.utils.BotStringUtils;
+
+import java.util.Arrays;
 
 import org.bukkit.Location;
 import org.bukkit.World;
@@ -23,49 +26,57 @@ public class BotMoveCmd implements CommandExecutor {
 
     @Override
     public boolean onCommand(CommandSender sender, Command command, String label, String[] args) {
-        if (!(sender instanceof Player)) {
-            sender.sendMessage("§cOnly players can use this command.");
-            return true;
+
+       BotLogger.info(true, "🔧 Получена команда от сервера: " + Arrays.toString(args));
+
+        if (args.length < 4) {
+            sender.sendMessage("❌ Недостаточно аргументов. Используйте: /bot-move <bot_id> <x> <y> <z>");
+            BotLogger.info(true, "❌ Недостаточно аргументов для /bot-move");
+            return false;
         }
 
-        Player player = (Player) sender;
-        Bot bot = botManager.getOrSelectBot(player.getUniqueId());
+        String botName = args[0];
 
-        if (bot == null) {
-            player.sendMessage("§cБот не найден.");
-            return true;
-        }
-
-        if (args.length != 3) {
-            player.sendMessage("§cИспользование: /bot-move <x> <y> <z>");
-            return true;
-        }
+        int x, y, z;
 
         try {
-            double x = Double.parseDouble(args[0]);
-            double y = Double.parseDouble(args[1]);
-            double z = Double.parseDouble(args[2]);
-
-            World world = player.getWorld();
-            Location targetLocation = new Location(world, x, y, z);
-
-            BotLogger.info(true,"📌 /bot-move: Бот " + bot.getId() + " идет к " + BotStringUtils.formatLocation(targetLocation));
-
-            // ✅ Очищаем стек задач
-            bot.getLifeCycle().getTaskStackManager().clearTasks();
-
-            // ✅ Добавляем задачу на перемещение
-            BotMoveTask moveTask = new BotMoveTask(bot);
-            moveTask.configure(targetLocation);
-            bot.addTaskToQueue(moveTask);
-
-            player.sendMessage("§aБот " + bot.getId() + " идет к " + BotStringUtils.formatLocation(targetLocation));
+            x = Integer.parseInt(args[1]);
+            y = Integer.parseInt(args[2]);
+            z = Integer.parseInt(args[3]);
 
         } catch (NumberFormatException e) {
-            player.sendMessage("§cОшибка: координаты должны быть числами.");
+
+            sender.sendMessage("❌ Координаты должны быть целыми числами.");
+
+            BotLogger.info(true, "❌ Координаты должны быть целыми числами.");
+            
+            return false;
         }
 
-        return true;
+        Bot bot = botManager.getBot(botName);
+        
+        if (bot == null) {
+            sender.sendMessage("❌ Бот с именем " + botName + " не найден.");
+            
+            BotLogger.info(true, "❌ Бот с именем " + botName + " не найден.");
+
+            return false;
+        }
+
+        bot.getLifeCycle().getTaskStackManager().clearTasks();
+
+        Location targetLocation = new Location(bot.getNPCEntity().getWorld(), x, y, z);
+        // ✅ Добавляем задачу на перемещение
+        BotMoveTask moveTask = new BotMoveTask(bot);
+        moveTask.configure(targetLocation);
+        bot.addTaskToQueue(moveTask);
+
+        BotLogger.info(true, "📌 /bot-move: Бот " + bot.getId() + " направляется в " + BotStringUtils.formatLocation(targetLocation));
+        
+        sender.sendMessage("✅ Бот '" + botName + "' направляется в " + x + " " + y + " " + z);
+        
+        return true; 
+
     }
 
 }

@@ -29,14 +29,17 @@ public class BotCmdDispatcher implements CommandExecutor {
         registerCommand("bot-add", new BotAddCmd(botManager));
         registerCommand("bot-select", new BotSelectCmd(botManager));
         registerCommand("bot-unselect", new BotUnselectCmd(botManager));
+
         registerCommand("bot-list", new BotListCmd(botManager));
         registerCommand("bot-remove", new BotRemoveCmd(botManager));
         registerCommand("bot-remove-all", new BotRemoveAllCmd(botManager));
-
-        registerCommand("bot-here", new BotHereCmd(botManager));
+        
         registerCommand("bot-tp", new BotTpCmd(botManager));
         registerCommand("bot-tp-here", new BotTpHereCmd(botManager));
+
         registerCommand("bot-move", new BotMoveCmd(botManager));
+        registerCommand("bot-move-here", new BotMoveHereCmd(botManager));
+
         registerCommand("bot-stop", new BotStopCmd(botManager));
         registerCommand("bot-follow", new BotFollowCmd(botManager));
         registerCommand("bot-protect", new BotProtectCmd(botManager));

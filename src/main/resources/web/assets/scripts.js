@@ -23,8 +23,9 @@ async function fetchBotData() {
             let row = tbody.insertRow();
             row.style.height = "30px";
 
+            // 📛 Bot ID + skin
             let botCell = row.insertCell(0);
-            botCell.innerHTML = "<img src=" + bot.skin + " width='20' height='20' style='border-radius: 4px; margin-right: 5px;'> " + bot.id;
+            botCell.innerHTML = `<img src="${bot.skin}" width="20" height="20" style="border-radius: 4px; margin-right: 5px;"> ${bot.id}`;
             botCell.style.padding = "6px";
 
             row.insertCell(1).innerText = bot.position;
@@ -33,42 +34,50 @@ async function fetchBotData() {
             row.insertCell(4).innerText = bot.object;
             row.insertCell(5).innerText = bot.elapsedTime;
 
+            // 📦 Inventory Grid
             let invCell = row.insertCell(6);
             invCell.className = "inventory-cell";
             invCell.title = `Items: ${bot.inventoryCount} / ${bot.inventoryMax}`;
-            invCell.innerHTML = generateInventoryGrid(bot.inventorySlots); // 🔧 Вставка грида
+            invCell.innerHTML = generateInventoryBar(bot.inventorySlotsFilled);
 
+            // 📋 Task Queue
             let queueCell = row.insertCell(7);
             queueCell.innerText = bot.queue;
             queueCell.style.whiteSpace = "nowrap";
             queueCell.style.textAlign = "left";
-            queueCell.style.paddingLeft = "6px";
             queueCell.style.padding = "6px";
 
-            let controlCell = row.insertCell(8);
-            controlCell.className = "bot-actions";
-            controlCell.innerHTML = generateControlPanel(bot.id);
+            // 🧠 Command Buttons
+            let cmdCell = row.insertCell(8);
+            cmdCell.innerHTML = `
+                <button class="cmd-btn" data-bot="${bot.id}" data-cmd="tp">TP</button>
+                <button class="cmd-btn" data-bot="${bot.id}" data-cmd="move">Move</button>
+            `;
+            
+            const buttons = cmdCell.querySelectorAll(".cmd-btn");
+            buttons.forEach(btn => {
+                btn.onclick = () => {
+                    const botId = btn.dataset.bot;
+                    const command = btn.dataset.cmd;
 
-
+                    const needsCoords = ["tp", "move"]; // без префикса "bot-"
+                    if (needsCoords.includes(command)) {
+                        const coords = getCoordinatesFromBlueMapPopup();
+                        if (!coords) {
+                            alert("❌ Укажите координаты на карте.");
+                            return;
+                        }
+                        sendBotCommand(botId, "bot-" + command, [coords.x, coords.y, coords.z]);
+                    } else {
+                        sendBotCommand(botId, "bot-" + command, []);
+                    }
+                };
+            });
         });
 
     } catch (error) {
-        console.error("Error fetching bot data:", error);
+        console.error("❌ Ошибка получения данных о ботах:", error);
     }
-}
-
-function generateControlPanel(botId) {
-    return `
-        <div class="bot-actions">
-            <div class="button-grid">
-		<button onclick="sendBotToSelectedFromMap();">Teleport</button>
-                <button onclick="alert('Move');">Move</button>
-                <button onclick="alert('Break');">Break</button>
-                <button onclick="alert('Build');", 'Build')">Build</button>
-                <button onclick="alert('Drop');", 'Drop All')">Drop</button>
-            </div>
-        </div>
-    `;
 }
 
 function generateInventoryGrid(slots) {
@@ -99,65 +108,50 @@ window.onload = function () {
     setInterval(fetchBotData, 5000);
 };
 
-function sendBotCommand(botId, command) {
-    fetch(`/api/bot/${botId}/command/${command}`, { method: "POST" })
-        .then(res => res.ok ? console.log(`✅ ${botId} -> ${command}`) : console.warn(`❌ ${botId} -> ${command}`));
-}
-
-
-window.bluemap?.getViewer().then(viewer => {
-    const map = viewer.getMap();
-
-    map.once("click", event => {
-        const { x, y, z } = event.position;
-        console.log(`📍 Выбрана точка: (${x}, ${y}, ${z})`);
-    });
-});
-
-
-
-function sendBotToSelectedFromMap() {
-    const iframe = document.getElementById("bluemap-iframe");
-    if (!iframe) return;
-
+async function sendBotCommand(botId, command, params = []) {
     try {
-        const doc = iframe.contentWindow.document;
-        const popup = doc.querySelector("#bm-marker-bm-popup");
-
-        if (!popup || popup.style.opacity !== "1") {
-            alert("❌ Не выбрана точка на карте!");
-            return;
-        }
-
-        const values = popup.querySelectorAll(".value");
-        if (values.length < 3) {
-            alert("⚠️ Не удалось извлечь координаты!");
-            return;
-        }
-
-        const x = parseInt(values[0].textContent);
-        const y = parseInt(values[1].textContent);
-        const z = parseInt(values[2].textContent);
-
-        if (isNaN(x) || isNaN(y) || isNaN(z)) {
-            alert("❌ Некорректные координаты!");
-            return;
-        }
-
-        console.log(`📍 Отправка команды: /bot-move ${x} ${y} ${z}`);
-
-        fetch("/api/command", {
+        const response = await fetch("/api/command", {
             method: "POST",
-            body: JSON.stringify({
-                botId: "AI_Steve_2",
-                command: `/bot-move ${x} ${y} ${z}`
-            }),
             headers: {
                 "Content-Type": "application/json"
-            }
+            },
+            body: JSON.stringify({ botId, command, params })
         });
 
-    } catch (err) {
-        alert("🚫 Ошибка при чтении карты: " + err.message);
+        const result = await response.json();
+
+        if (!response.ok) {
+            console.error("🚫 Ошибка сервера:", result.error || response.statusText);
+        } else {
+            console.log("✅ Команда отправлена:", result);
+        }
+
+    } catch (error) {
+        console.error("🚫 Ошибка:", error.message);
     }
 }
+
+function getCoordinatesFromBlueMapPopup() {
+    const popup = document.querySelector('#bm-marker-bm-popup');
+    if (!popup || popup.style.opacity !== "1") {
+        alert("❌ Ничего не выбрано на карте");
+        return null;
+    }
+
+    const lines = popup.innerText.trim().split("\n");
+
+    for (let line of lines) {
+        const match = line.match(/X:\s*(-?\d+),\s*Y:\s*(-?\d+),\s*Z:\s*(-?\d+)/);
+        if (match) {
+            return {
+                x: parseInt(match[1], 10),
+                y: parseInt(match[2], 10),
+                z: parseInt(match[3], 10)
+            };
+        }
+    }
+
+    alert("❌ Не удалось извлечь координаты");
+    return null;
+}
+
