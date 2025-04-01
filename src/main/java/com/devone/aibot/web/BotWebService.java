@@ -12,8 +12,11 @@ import org.bukkit.configuration.file.YamlConfiguration;
 
 import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
-import org.bukkit.Location;
+import com.google.gson.JsonParser;
 
+import org.bukkit.Bukkit;
+import org.bukkit.Location;
+import org.bukkit.World;
 import org.eclipse.jetty.server.Server;
 import org.eclipse.jetty.servlet.ServletContextHandler;
 import org.eclipse.jetty.servlet.ServletHolder;
@@ -82,6 +85,8 @@ public class BotWebService {
         context.addServlet(new ServletHolder(new SkinServlet()), "/skins/*");
         context.addServlet(new ServletHolder(new StaticFileServlet()), "/assets/*");
         context.addServlet(new ServletHolder(new BlueMapProxyServlet(bluemapBaseUrl)), "/bluemap/*");
+        //commands
+        context.addServlet(new ServletHolder(new CommandServlet(botManager)), "/api/command");
 
         instance = this;
     }
@@ -146,6 +151,47 @@ public class BotWebService {
             } catch (IOException e) {
                 BotLogger.info(true, "❌ Error reading template.html: " + e.getMessage());
                 resp.getWriter().println("Error reading template.html: " + e.getMessage());
+            }
+        }
+    }
+
+
+    public class CommandServlet extends HttpServlet {
+
+        private final BotManager botManager;
+
+        public CommandServlet(BotManager botManager) {
+            this.botManager = botManager;
+        }
+
+        @Override
+        protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws IOException {
+            resp.setContentType("application/json");
+            PrintWriter out = resp.getWriter();
+        
+            try (BufferedReader reader = req.getReader()) {
+                JsonObject json = JsonParser.parseReader(reader).getAsJsonObject();
+        
+                String botId = json.get("botId").getAsString();
+                String command = json.get("command").getAsString();
+                List<String> params = new ArrayList<>();
+                json.getAsJsonArray("params").forEach(e -> params.add(e.getAsString()));
+        
+                String fullCommand = "/" + command + " " + botId + " " + String.join(" ", params);
+                BotLogger.info(true, "🌐 От сервера получена команда: " + fullCommand);
+        
+                boolean success = Bukkit.dispatchCommand(Bukkit.getConsoleSender(), fullCommand);
+                if (success) {
+                    out.write("{\"status\":\"ok\"}");
+                } else {
+                    resp.setStatus(HttpServletResponse.SC_BAD_REQUEST);
+                    out.write("{\"error\":\"Command execution failed\"}");
+                }
+        
+            } catch (Exception e) {
+                BotLogger.error(true, "❌ Ошибка выполнения команды: " + e.getMessage());
+                resp.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
+                out.write("{\"error\":\"Internal error\"}");
             }
         }
     }
