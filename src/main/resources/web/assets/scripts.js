@@ -53,7 +53,7 @@ async function fetchBotData() {
                 <button class="cmd-btn" data-bot="${bot.id}" data-cmd="tp">TP</button>
                 <button class="cmd-btn" data-bot="${bot.id}" data-cmd="move">Move</button>
                 <button class="cmd-btn" data-bot="${bot.id}" data-cmd="drop-all">Drop All</button>
-                <span/>
+                <&nbsp;>
             `;
             
             const buttons = cmdCell.querySelectorAll(".cmd-btn");
