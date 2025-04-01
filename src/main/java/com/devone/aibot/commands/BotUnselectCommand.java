@@ -7,11 +7,11 @@ import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
-public class BotUnselectCmd implements CommandExecutor {
+public class BotUnselectCommand implements CommandExecutor {
 
     private final BotManager botManager;
 
-    public BotUnselectCmd(BotManager botManager) {
+    public BotUnselectCommand(BotManager botManager) {
         this.botManager = botManager;
     }
 

@@ -2,19 +2,21 @@ package com.devone.aibot.commands;
 
 import com.devone.aibot.core.Bot;
 import com.devone.aibot.core.BotManager;
-import com.devone.aibot.core.logic.tasks.BotFollowTargetTask;
+import com.devone.aibot.core.logic.tasks.BotMoveTask;
 import com.devone.aibot.utils.BotLogger;
+import com.devone.aibot.utils.BotStringUtils;
 
+import org.bukkit.Location;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
-public class BotFollowCmd implements CommandExecutor {
+public class BotMoveHereCommand implements CommandExecutor {
 
     private final BotManager botManager;
 
-    public BotFollowCmd(BotManager botManager) {
+    public BotMoveHereCommand(BotManager botManager) {
         this.botManager = botManager;
     }
 
@@ -33,17 +35,22 @@ public class BotFollowCmd implements CommandExecutor {
             return true;
         }
 
-        BotLogger.info(true,"📌 /bot-follow: Бот " + bot.getId() + " следует за " + player.getName());
+        Location targetLocation = player.getLocation();
+
+        BotLogger.info(true,"📌 /bot-move-here: Бот " + bot.getId() + " Идет к игроку в точкe " + BotStringUtils.formatLocation(targetLocation));
+
 
         // ✅ Очищаем стек задач
         bot.getLifeCycle().getTaskStackManager().clearTasks();
-        
-        // ✅ Добавляем задачу на следование
-        BotFollowTargetTask followTask = new BotFollowTargetTask(bot, player);
-        bot.addTaskToQueue(followTask);
 
-        player.sendMessage("§aБот " + bot.getId() + " теперь следует за вами!");
+        // ✅ Добавляем задачу на перемещение
+        BotMoveTask moveTask = new BotMoveTask(bot);
+        moveTask.configure(targetLocation);
+        bot.addTaskToQueue(moveTask);
+
+        player.sendMessage("§aБот " + bot.getId() + " Идет к игроку!");
 
         return true;
     }
+
 }

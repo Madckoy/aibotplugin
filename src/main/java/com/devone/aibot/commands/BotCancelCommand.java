@@ -2,19 +2,17 @@ package com.devone.aibot.commands;
 
 import com.devone.aibot.core.Bot;
 import com.devone.aibot.core.BotManager;
-import com.devone.aibot.core.logic.tasks.BotProtectTask;
 import com.devone.aibot.utils.BotLogger;
-
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
-public class BotProtectCmd implements CommandExecutor {
+public class BotCancelCommand implements CommandExecutor {
 
     private final BotManager botManager;
 
-    public BotProtectCmd(BotManager botManager) {
+    public BotCancelCommand(BotManager botManager) {
         this.botManager = botManager;
     }
 
@@ -33,16 +31,13 @@ public class BotProtectCmd implements CommandExecutor {
             return true;
         }
 
-        BotLogger.info(true,"🛡️ /bot-protect: Бот " + bot.getId() + " защищает " + player.getName());
-
         // ✅ Очищаем стек задач
         bot.getLifeCycle().getTaskStackManager().clearTasks();
 
-        // ✅ Добавляем задачу на защиту
-        BotProtectTask protectTask = new BotProtectTask(bot, player);
-        bot.addTaskToQueue(protectTask);
+    
+        player.sendMessage("§aВсе задачи бота " + bot.getId() + " отменены!");
 
-        player.sendMessage("§aБот " + bot.getId() + " теперь защищает вас!");
+        BotLogger.info(true, "🛑 /bot-cancel: Очищен стек задач бота " + bot.getId());
 
         return true;
     }

@@ -52,10 +52,10 @@ commands:
     usage: /bot-remove-all
     permission: aibotplugin.bot.removeall
 
-  bot-here:
-    description: Makes the selected bot approach the player.
-    usage: /bot-here
-    permission: aibotplugin.bot.here
+  bot-tp:
+    description: Makes the selected bot teleport to coordinates.
+    usage: /bot-tp <bot_name> <x> <y> <z>
+    permission: aibotplugin.bot.tp
 
   bot-tp-here:
     description: Makes the selected bot teleport to the player.
@@ -64,8 +64,13 @@ commands:
 
   bot-move:
     description: Moves the bot to the specified coordinates.
-    usage: /bot-move <x> <y> <z>
+    usage: /bot-move <bot_name> <x> <y> <z>
     permission: aibotplugin.bot.move
+
+  bot-move-here:
+    description: Makes the selected bot approach the player.
+    usage: /bot-move-here
+    permission: aibotplugin.bot.move.here
 
   bot-stop:
     description: Stops the selected bot from moving.
@@ -86,6 +91,11 @@ commands:
     description: Clears the bot’s current task stack.
     usage: /bot-cancel
     permission: aibotplugin.bot.cancel
+
+  bot-drop-all:
+    description: Drops all items in inventory
+    usage: /bot-drop-all  <bot_name>
+    permission: aibotplugin.bot.drop.all 
 
   bot-reload:
     description: Reloads bot commands without restarting the server.

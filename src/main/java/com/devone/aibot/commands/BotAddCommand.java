@@ -16,7 +16,7 @@ import org.bukkit.Location;
 import java.util.List;
 import java.util.Random;
 
-public class BotAddCmd implements CommandExecutor {
+public class BotAddCommand implements CommandExecutor {
 
     private final BotManager botManager;
     private final Random random = new Random();
@@ -26,7 +26,7 @@ public class BotAddCmd implements CommandExecutor {
         "Steve", "Alex", "Ari", "Kai", "Noor", "Sunny", "Zuri", "Efe", "Makena"
     );
 
-    public BotAddCmd(BotManager botManager) {
+    public BotAddCommand(BotManager botManager) {
         this.botManager = botManager;
     }
 

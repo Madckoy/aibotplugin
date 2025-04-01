@@ -2,17 +2,18 @@ package com.devone.aibot.commands;
 
 import com.devone.aibot.core.Bot;
 import com.devone.aibot.core.BotManager;
-import com.devone.aibot.utils.BotLogger;
+import com.devone.aibot.core.logic.tasks.BotMakeDecisionTask;
+
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
-public class BotCancelCmd implements CommandExecutor {
+public class BotStopCommand implements CommandExecutor {
 
     private final BotManager botManager;
 
-    public BotCancelCmd(BotManager botManager) {
+    public BotStopCommand(BotManager botManager) {
         this.botManager = botManager;
     }
 
@@ -34,10 +35,11 @@ public class BotCancelCmd implements CommandExecutor {
         // ✅ Очищаем стек задач
         bot.getLifeCycle().getTaskStackManager().clearTasks();
 
-    
-        player.sendMessage("§aВсе задачи бота " + bot.getId() + " отменены!");
+        // ✅ Добавляем задачу на ожидание 5 минут
+        BotMakeDecisionTask idleTask = new BotMakeDecisionTask(bot);
+        bot.addTaskToQueue(idleTask);
 
-        BotLogger.info(true, "🛑 /bot-cancel: Очищен стек задач бота " + bot.getId());
+        player.sendMessage("§aБот " + bot.getId() + " Остановился и ждет!");
 
         return true;
     }

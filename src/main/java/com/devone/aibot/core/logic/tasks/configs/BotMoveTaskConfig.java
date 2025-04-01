@@ -5,7 +5,7 @@ public class BotMoveTaskConfig extends BotTaskConfig {
     private final float speedMultiplier;
 
     public BotMoveTaskConfig() {
-        super( "BotTaskMoveConfig.yml");
+        super( "BotMoveTaskConfig.yml");
         this.speedMultiplier = 1.5f; // Значение по умолчанию (обычный шаг)
     }
 

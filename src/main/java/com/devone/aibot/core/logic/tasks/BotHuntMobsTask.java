@@ -20,6 +20,7 @@ public class BotHuntMobsTask extends BotTask {
         this.config = new BotHuntTaskConfig(); // ✅ инициализируем родительское поле
         this.scanRadius = ((BotHuntTaskConfig) config).getScanRadius();
         logging = config.isLogging();
+        setObjective("Look for hostile targets");
     }
 
     @Override

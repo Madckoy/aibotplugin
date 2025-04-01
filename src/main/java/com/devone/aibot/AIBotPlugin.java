@@ -93,6 +93,7 @@ public class AIBotPlugin extends JavaPlugin {
 
         botManager = new BotManager(this);
         zoneManager = new BotZoneManager(this, getDataFolder());
+        
         new BotCmdDispatcher(this, botManager, zoneManager);
 
         BotLogger.info(true, "✅ Менеджеры перезапущены!");

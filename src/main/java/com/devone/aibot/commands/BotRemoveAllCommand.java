@@ -10,11 +10,11 @@ import org.bukkit.entity.Player;
 
 import java.util.Collection;
 
-public class BotRemoveAllCmd implements CommandExecutor {
+public class BotRemoveAllCommand implements CommandExecutor {
 
     private final BotManager botManager;
 
-    public BotRemoveAllCmd(BotManager botManager) {
+    public BotRemoveAllCommand(BotManager botManager) {
         this.botManager = botManager;
     }
 
