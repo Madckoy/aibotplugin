@@ -9,6 +9,7 @@ import com.devone.aibot.utils.BotLogger;
 import com.devone.aibot.utils.BotStringUtils;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.configuration.file.YamlConfiguration;
+import org.bukkit.inventory.ItemStack;
 
 import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
@@ -32,9 +33,11 @@ import java.net.URL;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collection;
 import java.util.Enumeration;
 import java.util.List;
+import java.util.Objects;
 import java.util.jar.JarEntry;
 import java.util.jar.JarFile;
 import java.util.stream.Collectors;
@@ -235,6 +238,31 @@ public class BotWebService {
                         taskStack.stream().map(BotTask::getName).collect(Collectors.joining("➜"));
                     botJson.addProperty("queue", taskStackText);
                     botsArray.add(botJson);
+
+
+                    // 📦 Serialize inventory
+                    ItemStack[] contents = bot.getInventory().getNPCInventory().getContents();
+                    JsonArray inventoryArray = new JsonArray();
+
+                    for (ItemStack item : contents) {
+                        if (item != null && item.getAmount() > 0) {
+                            JsonObject slotObj = new JsonObject();
+                            slotObj.addProperty("type", item.getType().toString().toLowerCase());
+                            slotObj.addProperty("amount", item.getAmount());
+                            inventoryArray.add(slotObj);
+                        }
+                    }
+
+                    botJson.add("inventorySlotsFilled", inventoryArray);
+
+                    int count = Arrays.stream(contents)
+                                    .filter(Objects::nonNull)
+                                    .mapToInt(ItemStack::getAmount)
+                                    .sum();
+
+                    botJson.addProperty("inventoryCount", count);
+                    botJson.addProperty("inventoryMax", 36); // или сколько слотов у тебя по факту
+
                 }
             }
 
