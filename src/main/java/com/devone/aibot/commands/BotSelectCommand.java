@@ -8,11 +8,11 @@ import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
-public class BotSelectCmd implements CommandExecutor {
+public class BotSelectCommand implements CommandExecutor {
 
     private final BotManager botManager;
 
-    public BotSelectCmd(BotManager botManager) {
+    public BotSelectCommand(BotManager botManager) {
         this.botManager = botManager;
     }
 

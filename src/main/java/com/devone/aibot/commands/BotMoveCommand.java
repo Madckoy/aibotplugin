@@ -2,7 +2,7 @@ package com.devone.aibot.commands;
 
 import com.devone.aibot.core.Bot;
 import com.devone.aibot.core.BotManager;
-
+import com.devone.aibot.core.logic.tasks.BotMoveTask;
 import com.devone.aibot.core.logic.tasks.BotTeleportTask;
 import com.devone.aibot.utils.BotLogger;
 import com.devone.aibot.utils.BotStringUtils;
@@ -10,27 +10,28 @@ import com.devone.aibot.utils.BotStringUtils;
 import java.util.Arrays;
 
 import org.bukkit.Location;
+import org.bukkit.World;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
+import org.bukkit.entity.Player;
 
-
-public class BotTpCmd implements CommandExecutor {
+public class BotMoveCommand implements CommandExecutor {
 
     private final BotManager botManager;
 
-    public BotTpCmd(BotManager botManager) {
+    public BotMoveCommand(BotManager botManager) {
         this.botManager = botManager;
     }
 
     @Override
     public boolean onCommand(CommandSender sender, Command command, String label, String[] args) {
 
-        BotLogger.info(true, "🔧 Получена команда от сервера: " + Arrays.toString(args));
+       BotLogger.info(true, "🔧 Получена команда от сервера: " + Arrays.toString(args));
 
         if (args.length < 4) {
-            sender.sendMessage("❌ Недостаточно аргументов. Используйте: /bot-tp <bot_id> <x> <y> <z>");
-            BotLogger.info(true, "❌ Недостаточно аргументов для /bot-tp");
+            sender.sendMessage("❌ Недостаточно аргументов. Используйте: /bot-move <bot_id> <x> <y> <z>");
+            BotLogger.info(true, "❌ Недостаточно аргументов для /bot-move");
             return false;
         }
 
@@ -42,6 +43,7 @@ public class BotTpCmd implements CommandExecutor {
             x = Integer.parseInt(args[1]);
             y = Integer.parseInt(args[2]);
             z = Integer.parseInt(args[3]);
+
         } catch (NumberFormatException e) {
 
             sender.sendMessage("❌ Координаты должны быть целыми числами.");
@@ -63,18 +65,18 @@ public class BotTpCmd implements CommandExecutor {
 
         bot.getLifeCycle().getTaskStackManager().clearTasks();
 
-        Location tpLoc = new Location(bot.getNPCEntity().getWorld(), x, y, z);
-        BotTeleportTask task = new BotTeleportTask(bot, null);
-        task.configure(tpLoc);
-        bot.addTaskToQueue(task);
+        Location targetLocation = new Location(bot.getNPCEntity().getWorld(), x, y, z);
+        // ✅ Добавляем задачу на перемещение
+        BotMoveTask moveTask = new BotMoveTask(bot);
+        moveTask.configure(targetLocation);
+        bot.addTaskToQueue(moveTask);
 
-        BotLogger.info(true, "📌 /bot-tp: Бот " + bot.getId() + " телепортируется в " + BotStringUtils.formatLocation(tpLoc));
+        BotLogger.info(true, "📌 /bot-move: Бот " + bot.getId() + " направляется в " + BotStringUtils.formatLocation(targetLocation));
         
-        sender.sendMessage("✅ Бот '" + botName + "' телепортируется в " + x + " " + y + " " + z);
+        sender.sendMessage("✅ Бот '" + botName + "' направляется в " + x + " " + y + " " + z);
+        
+        return true; 
 
-        BotLogger.info(true,"✅ Бот '" + botName + "' телепортируется в " + x + " " + y + " " + z);
-        
-        return true;
     }
 
 }

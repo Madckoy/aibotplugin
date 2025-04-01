@@ -92,6 +92,11 @@ commands:
     usage: /bot-cancel
     permission: aibotplugin.bot.cancel
 
+  bot-drop-all:
+    description: Drops all items in inventory
+    usage: /bot-drop-all  <bot_name>
+    permission: aibotplugin.bot.drop.all 
+
   bot-reload:
     description: Reloads bot commands without restarting the server.
     usage: /bot-reload

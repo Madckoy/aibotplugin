@@ -23,9 +23,9 @@ function getCoordinatesFromBlueMapPopup() {
         const popup = iframeDoc.querySelector('#bm-marker-bm-popup');
 
         if (popup && popup.style.opacity === "1") {
-            console.log("Popup найден:", popup);  // Логируем содержимое попапа для диагностики
+            //console.log("Popup найден:", popup);  // Логируем содержимое попапа для диагностики
             const lines = popup.innerText.trim().split("\n");
-            console.log("Строки попапа:", lines);  // Логируем строки попапа
+            //console.log("Строки попапа:", lines);  // Логируем строки попапа
 
             // Извлекаем координаты
             const coords = {};
@@ -41,7 +41,7 @@ function getCoordinatesFromBlueMapPopup() {
 
             // Проверяем, если координаты найдены
             if (coords.x !== undefined && coords.y !== undefined && coords.z !== undefined) {
-                console.log("Найдены координаты:", coords);  // Логируем координаты
+                //console.log("Найдены координаты:", coords);  // Логируем координаты
                 return coords;
             } else {
                 alert("❌ Не удалось извлечь координаты");

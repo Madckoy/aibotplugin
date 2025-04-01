@@ -8,10 +8,10 @@ import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
-public class BotZoneListCmd implements CommandExecutor {
+public class BotZoneListCommand implements CommandExecutor {
     private final BotZoneManager zoneManager;
 
-    public BotZoneListCmd(BotZoneManager zoneManager) {
+    public BotZoneListCommand(BotZoneManager zoneManager) {
         this.zoneManager = zoneManager;
     }
 

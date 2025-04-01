@@ -12,11 +12,11 @@ import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
-public class BotTpHereCmd implements CommandExecutor {
+public class BotTeleportHereCommand implements CommandExecutor {
 
     private final BotManager botManager;
 
-    public BotTpHereCmd(BotManager botManager) {
+    public BotTeleportHereCommand(BotManager botManager) {
         this.botManager = botManager;
     }
 

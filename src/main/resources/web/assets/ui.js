@@ -40,6 +40,7 @@ function renderBotTable(data) {
         cmdCell.innerHTML = `
             <button class="cmd-btn" data-bot="${bot.id}" data-cmd="bot-tp">TP</button>
             <button class="cmd-btn" data-bot="${bot.id}" data-cmd="bot-move">Move</button>
+            <button class="cmd-btn" data-bot="${bot.id}" data-cmd="bot-drop-all">Drop All</button
         `;
     });
 

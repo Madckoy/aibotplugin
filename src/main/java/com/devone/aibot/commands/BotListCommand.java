@@ -10,11 +10,11 @@ import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 import org.bukkit.Location;
 
-public class BotListCmd implements CommandExecutor {
+public class BotListCommand implements CommandExecutor {
 
     private final BotManager botManager;
 
-    public BotListCmd(BotManager botManager) {
+    public BotListCommand(BotManager botManager) {
         this.botManager = botManager;
     }
 

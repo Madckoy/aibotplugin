@@ -7,10 +7,10 @@ import org.bukkit.entity.Player;
 
 import com.devone.aibot.core.BotZoneManager;
 
-public class BotZoneRemoveCmd implements CommandExecutor {
+public class BotZoneRemoveCommand implements CommandExecutor {
     private final BotZoneManager zoneManager;
 
-    public BotZoneRemoveCmd(BotZoneManager zoneManager) {
+    public BotZoneRemoveCommand(BotZoneManager zoneManager) {
         this.zoneManager = zoneManager;
     }
 

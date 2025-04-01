@@ -8,10 +8,10 @@ import org.bukkit.entity.Player;
 
 import com.devone.aibot.core.BotZoneManager;
 
-public class BotZoneAddCmd implements CommandExecutor {
+public class BotZoneAddCommand implements CommandExecutor {
     private final BotZoneManager zoneManager;
 
-    public BotZoneAddCmd(BotZoneManager zoneManager) {
+    public BotZoneAddCommand(BotZoneManager zoneManager) {
         this.zoneManager = zoneManager;
     }
 
