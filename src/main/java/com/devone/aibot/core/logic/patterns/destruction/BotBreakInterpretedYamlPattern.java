@@ -1,7 +1,6 @@
 package com.devone.aibot.core.logic.patterns.destruction;
 
 import com.devone.aibot.core.Bot;
-import com.devone.aibot.core.logic.patterns.BotCoordinatesGenerator;
 import com.devone.aibot.core.logic.patterns.BotPatternGenerationParams;
 import com.devone.aibot.utils.BotCoordinate3D;
 import com.devone.aibot.utils.BotAxisDirection.AxisDirection;
@@ -75,7 +74,7 @@ public class BotBreakInterpretedYamlPattern implements IBotDestructionPattern {
             BotPatternGenerationParams params = new BotPatternGenerationParams(bot.getRuntimeStatus().getCurrentLocation().getBlockX(), 
                                                                                bot.getRuntimeStatus().getCurrentLocation().getBlockY(), 
                                                                                bot.getRuntimeStatus().getCurrentLocation().getBlockZ(), 
-                                                                               offsetX, offsetY, offsetZ, outerRadius, innerRadius, breakDirection );
+                                                                               offsetX, offsetY, offsetZ, outerRadius, innerRadius);
                                                                                
         
             BotLogger.info(true, "⚠️ Паттерн YAML не вернул ни одной точки для разрушения.");

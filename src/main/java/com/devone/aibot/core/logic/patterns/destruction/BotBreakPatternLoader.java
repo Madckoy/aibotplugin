@@ -2,8 +2,6 @@ package com.devone.aibot.core.logic.patterns.destruction;
 
 import org.yaml.snakeyaml.Yaml;
 
-import com.devone.aibot.core.logic.patterns.BotCoordinatesGenerator;
-
 import java.io.InputStream;
 import java.nio.file.Files;
 import java.nio.file.Path;
