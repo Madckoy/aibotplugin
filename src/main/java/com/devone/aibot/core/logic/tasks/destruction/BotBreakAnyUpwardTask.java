@@ -26,8 +26,11 @@ public class BotBreakAnyUpwardTask extends BotBreakTask {
 
         BotBreakTaskConfig config = new BotBreakTaskConfig("BotBreakAnyUpwardTask.yml");
         logging = config.isLogging();
-        
+
         setPatterName(config.getPattern());
+        setPatterName(config.getPattern());
+        setBreakRadius(config.getBreakRadius());
+
     }
 
     @Override

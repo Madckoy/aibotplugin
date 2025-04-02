@@ -28,6 +28,7 @@ public class BotBreakAnyDownwardTask extends BotBreakTask {
         logging = config.isLogging();
 
         setPatterName(config.getPattern());
+        setBreakRadius(config.getBreakRadius());
 
     }
 }
