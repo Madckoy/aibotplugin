@@ -17,16 +17,19 @@ import com.googlecode.aviator.AviatorEvaluator;
 import com.googlecode.aviator.Expression;
 
 public class BotCoordinatesGenerator {
-    
+
     private final List<Expression> filterExpressions;
     private final Expression sortExpression;
+    private boolean inverted;
 
-    public BotCoordinatesGenerator(List<String> filterExpressions, String sortExpression) {
+    public BotCoordinatesGenerator(List<String> filterExpressions, String sortExpression, boolean inverted) {
         this.filterExpressions = filterExpressions.stream()
                 .map(expr -> AviatorEvaluator.compile(expr, true))
                 .collect(Collectors.toList());
 
         this.sortExpression = AviatorEvaluator.compile(sortExpression, true);
+
+        this.inverted = inverted;
     }
 
     public static BotCoordinatesGenerator loadYmlFromStream(InputStream input) {
@@ -36,7 +39,10 @@ public class BotCoordinatesGenerator {
         List<String> sortList = (List<String>) data.getOrDefault("sort", Collections.singletonList("y"));
         String sort = sortList.get(0);
 
-        return new BotCoordinatesGenerator(filters, sort);
+        // Загрузка свойства inverted с значением по умолчанию false
+        boolean inverted = (boolean) data.getOrDefault("inverted", false);
+
+        return new BotCoordinatesGenerator(filters, sort, inverted);
     }
 
     public List<BotCoordinate3D> generateInnerPoints(BotPatternGenerationParams params) {
@@ -137,5 +143,9 @@ public class BotCoordinatesGenerator {
             }
         }
         return true;
+    }
+
+    public boolean getInverted() {
+        return this.inverted;
     }
 }

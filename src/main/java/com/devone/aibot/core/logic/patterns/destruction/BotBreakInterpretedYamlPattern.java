@@ -29,6 +29,7 @@ public class BotBreakInterpretedYamlPattern implements IBotDestructionPattern {
     private int offsetX, offsetY, offsetZ, outerRadius, innerRadius;  
 
     private final Queue<BotCoordinate3D> blocksToBreak = new LinkedList<>();
+    private boolean inverted = false;
     
         public BotBreakInterpretedYamlPattern(Path path) {
             this.yamlPath = path;
@@ -36,7 +37,7 @@ public class BotBreakInterpretedYamlPattern implements IBotDestructionPattern {
      
         @Override    
         public IBotDestructionPattern configure(int offsetX, int offsetY, int offsetZ, int outerRadius, int innerRadius, AxisDirection breakDirection) {
-            
+
             this.offsetX = offsetX;
             this.offsetY = offsetY;
             this.offsetZ = offsetZ;
@@ -76,17 +77,24 @@ public class BotBreakInterpretedYamlPattern implements IBotDestructionPattern {
                                                                                bot.getRuntimeStatus().getCurrentLocation().getBlockY(), 
                                                                                bot.getRuntimeStatus().getCurrentLocation().getBlockZ(), 
                                                                                offsetX, offsetY, offsetZ, outerRadius, innerRadius);
-                                                                               
-        
-            BotLogger.info(true, "⚠️ Паттерн YAML не вернул ни одной точки для разрушения.");
 
             List<BotCoordinate3D> inner_points = generator.generateInnerPoints(params);
-            
-            
-            //List<Bot3DCoordinate> all =  generator.generateOuterPointsFromObserver(observer.x, observer.y, observer.z, radius, direction, null);
+
+            boolean isInverted = generator.getInverted();
+
+            Set<BotCoordinate3D> result = new HashSet<>();
+
+            if(isInverted) {
+                List<BotCoordinate3D> all =  generator.generateOuterPoints(params);
+                result.addAll(all);  // Генерируем весь куб
+                result.removeAll(inner_points);  // Удаляем внутреннюю область
+            } else {
+                // Если не inverted, просто генерируем яму
+                result.addAll(inner_points);  // Только внутренняя область
+            }
 
             
-            List<BotCoordinate3D> toBeRemoved = new ArrayList<>(inner_points);
+            List<BotCoordinate3D> toBeRemoved = new ArrayList<>(result);
 
             // ✅ Сортировка по направлению
             Comparator<BotCoordinate3D> sortingComparator = BotCoordinateComparators.byAxisDirection(breakDirection);

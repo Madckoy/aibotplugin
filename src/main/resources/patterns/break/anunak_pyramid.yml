@@ -1,6 +1,0 @@
-# Combined pattern: remove everything above + everything around pyramid
-filters:
-  - "y >= cy - r && y <= cy + r"                  # весь вертикальный диапазон
-  - "math.abs(x - cx) > (cy - y) || y > cy"       # всё вне пирамиды ИЛИ выше её вершины
-sort:
-  - "y"
