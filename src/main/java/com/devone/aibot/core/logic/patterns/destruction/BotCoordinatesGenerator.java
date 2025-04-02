@@ -17,6 +17,7 @@ import com.googlecode.aviator.AviatorEvaluator;
 import com.googlecode.aviator.Expression;
 
 public class BotCoordinatesGenerator {
+    
     private final List<Expression> filterExpressions;
     private final Expression sortExpression;
 

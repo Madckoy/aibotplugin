@@ -36,6 +36,7 @@ public class BotBreakInterpretedYamlPattern implements IBotDestructionPattern {
      
         @Override    
         public IBotDestructionPattern configure(int offsetX, int offsetY, int offsetZ, int outerRadius, int innerRadius, AxisDirection breakDirection) {
+            
             this.offsetX = offsetX;
             this.offsetY = offsetY;
             this.offsetZ = offsetZ;
