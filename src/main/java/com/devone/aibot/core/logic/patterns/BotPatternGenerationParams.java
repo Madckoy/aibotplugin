@@ -17,5 +17,6 @@ public class BotPatternGenerationParams {
         this.offsetZ = offsetZ;
         this.outerRadius = outerRadius;
         this.innerRadius = innerRadius;
+
     }
 }

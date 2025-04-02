@@ -122,7 +122,7 @@ public class BotBreakTask extends BotTask {
             this.offsetX = (Integer) params[7];
         }
         if (params.length >= 9 && params[8] instanceof Integer) {
-            this.offsetY = (Integer) params[7];
+            this.offsetY = (Integer) params[8];
         }
         if (params.length >= 10 && params[9] instanceof Integer) {
             this.offsetZ = (Integer) params[9];

@@ -78,7 +78,12 @@ public class BotBreakInterpretedYamlPattern implements IBotDestructionPattern {
                                                                                bot.getRuntimeStatus().getCurrentLocation().getBlockZ(), 
                                                                                offsetX, offsetY, offsetZ, outerRadius, innerRadius);
 
+            BotLogger.info(true, params.toString());                                                                  
+
             List<BotCoordinate3D> inner_points = generator.generateInnerPoints(params);
+            
+            BotLogger.info(true, inner_points.toString());
+
 
             boolean isInverted = generator.getInverted();
 
@@ -114,6 +119,8 @@ public class BotBreakInterpretedYamlPattern implements IBotDestructionPattern {
                 BotLogger.info(true, "⚠️ Паттерн YAML не вернул ни одной точки для разрушения.");
 
             }
+
+            BotLogger.info(true, blocksToBreak.toString());
 
             initialized = true;
         }
