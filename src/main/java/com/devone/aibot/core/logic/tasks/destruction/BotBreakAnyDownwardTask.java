@@ -18,17 +18,19 @@ public class BotBreakAnyDownwardTask extends BotBreakTask {
         setScanMode(ScanMode.DOWNWARD);
         setBreakDirection(AxisDirection.DOWN);
 
-        setOffsetX(0);
-        setOffsetY(-1*BotConstants.DEFAULT_SCAN_RANGE);
-        setOffsetZ(0);
-
         bot.getRuntimeStatus().setTargetLocation(bot.getRuntimeStatus().getCurrentLocation());
 
         BotBreakTaskConfig config = new BotBreakTaskConfig("BotBreakAnyDownwardTask.yml");
         logging = config.isLogging();
 
         setPatterName(config.getPattern());
-        setBreakRadius(config.getBreakRadius());
+        setOuterRadius(config.getOuterRadius());
+        setInnerRadius(config.getInnerRadius());
+        
+        setOffsetX(config.getOffsetX());
+        setOffsetY(config.getOffsetY());
+        setOffsetZ(config.getOffsetZ());
+
 
     }
 }

@@ -18,9 +18,7 @@ public class BotBreakAnyUpwardTask extends BotBreakTask {
 
         setScanMode(ScanMode.UPWARD);
         setBreakDirection(AxisDirection.UP);
-        setOffsetX(0);
-        setOffsetY(BotConstants.DEFAULT_SCAN_RANGE);
-        setOffsetZ(0);
+
 
         bot.getRuntimeStatus().setTargetLocation(bot.getRuntimeStatus().getCurrentLocation());
 
@@ -28,8 +26,12 @@ public class BotBreakAnyUpwardTask extends BotBreakTask {
         logging = config.isLogging();
 
         setPatterName(config.getPattern());
-        setPatterName(config.getPattern());
-        setBreakRadius(config.getBreakRadius());
+        setOuterRadius(config.getOuterRadius());
+        setInnerRadius(config.getInnerRadius());
+        
+        setOffsetX(config.getOffsetX());
+        setOffsetY(config.getOffsetY());
+        setOffsetZ(config.getOffsetZ());
 
     }
 

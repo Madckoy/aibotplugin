@@ -120,14 +120,15 @@ public class BotDecisionMakeTask extends BotTask {
 
                 breakTask.configure(null, 
                                     maxToCollect, 
-                                    breakTask.getBreakRadius(), 
+                                    breakTask.getOuterRadius(),
+                                    breakTask.getInnerRadius(),  
                                     true, 
                                     true,
                                     AxisDirection.DOWN, 
-                                    0,
-                                    -1*breakTask.getBreakRadius(),
-                                    0, 
-                                    breakTask.patternName);
+                                    breakTask.getOffsetX(),
+                                    breakTask.getOffsetY(),
+                                    breakTask.getOffsetZ(), 
+                                    breakTask.getPatternName());
 
                 bot.addTaskToQueue(breakTask);
             }    

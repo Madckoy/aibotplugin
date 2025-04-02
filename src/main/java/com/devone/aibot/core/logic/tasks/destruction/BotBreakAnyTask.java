@@ -17,16 +17,18 @@ public class BotBreakAnyTask extends BotBreakTask {
         setTargetMaterials(null);
         setScanMode(ScanMode.FULL);
         setBreakDirection(AxisDirection.DOWN);
-        setOffsetX(0);
-        setOffsetY(-1*BotConstants.DEFAULT_SCAN_RANGE);
-        setOffsetZ(0);
+
 
         BotBreakTaskConfig config = new BotBreakTaskConfig("BotBreakAnyTask.yml");
         logging = config.isLogging();
 
         setPatterName(config.getPattern());
-        setPatterName(config.getPattern());
-        setBreakRadius(config.getBreakRadius());
+        setOuterRadius(config.getOuterRadius());
+        setInnerRadius(config.getInnerRadius());
+        
+        setOffsetX(config.getOffsetX());
+        setOffsetY(config.getOffsetY());
+        setOffsetZ(config.getOffsetZ());
 
 
 
