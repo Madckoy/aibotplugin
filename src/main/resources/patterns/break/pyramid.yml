@@ -6,5 +6,4 @@ filters:
   - "math.max(math.abs(x - cx), math.abs(z - cz)) <= (cy - y)"  # сужение конуса по мере понижения Y
 sort:
   - "y"
-inverted:
-  - true
+inverted: true

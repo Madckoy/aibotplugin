@@ -67,7 +67,7 @@ public class BotMoveTask extends BotTask {
 
         String block_name = BotUtils.getBlockName(bot.getRuntimeStatus().getTargetLocation().getBlock());
         
-        setObjective("I can navigate and reach the target: " + block_name);
+        setObjective("Navigating to  " + block_name);
 
         taskHandle = Bukkit.getScheduler().runTaskTimer(AIBotPlugin.getInstance(), () -> {
             if (isDone) {
