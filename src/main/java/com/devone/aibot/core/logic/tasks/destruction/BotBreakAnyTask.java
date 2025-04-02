@@ -23,7 +23,8 @@ public class BotBreakAnyTask extends BotBreakTask {
 
         BotBreakTaskConfig config = new BotBreakTaskConfig("BotBreakAnyTask.yml");
         logging = config.isLogging();
-        patternName = config.getPattern();
+
+        setPatterName(config.getPattern());
 
 
     }

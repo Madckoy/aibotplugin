@@ -158,6 +158,10 @@ public class BotBreakTask extends BotTask {
         this.offsetX = oX;
     }
 
+    public void setPatterName(String pName) {
+        this.patternName = pName;
+    }
+
     public void setOffsetY(int oY) {
         this.offsetY = oY;
     }
