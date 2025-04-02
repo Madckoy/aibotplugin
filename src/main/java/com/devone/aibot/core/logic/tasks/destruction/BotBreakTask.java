@@ -206,10 +206,10 @@ public class BotBreakTask extends BotTask {
         return this.offsetX;
     }
     public int getOffsetY() {
-        return this.offsetX;
+        return this.offsetY;
     }
     public int getOffsetZ() {
-        return this.offsetX;
+        return this.offsetZ;
     }
 
     public void setTargetMaterials(Set<Material> materials) {
