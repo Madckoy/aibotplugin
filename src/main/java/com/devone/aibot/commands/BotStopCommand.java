@@ -2,7 +2,7 @@ package com.devone.aibot.commands;
 
 import com.devone.aibot.core.Bot;
 import com.devone.aibot.core.BotManager;
-import com.devone.aibot.core.logic.tasks.BotMakeDecisionTask;
+import com.devone.aibot.core.logic.tasks.BotDecisionMakeTask;
 
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
@@ -36,7 +36,7 @@ public class BotStopCommand implements CommandExecutor {
         bot.getLifeCycle().getTaskStackManager().clearTasks();
 
         // ✅ Добавляем задачу на ожидание 5 минут
-        BotMakeDecisionTask idleTask = new BotMakeDecisionTask(bot);
+        BotDecisionMakeTask idleTask = new BotDecisionMakeTask(bot);
         bot.addTaskToQueue(idleTask);
 
         player.sendMessage("§aБот " + bot.getId() + " Остановился и ждет!");

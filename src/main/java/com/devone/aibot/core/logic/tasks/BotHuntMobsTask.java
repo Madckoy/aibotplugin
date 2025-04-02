@@ -16,7 +16,7 @@ public class BotHuntMobsTask extends BotTask {
     private LivingEntity targetMob = null;
 
     public BotHuntMobsTask(Bot bot) {
-        super(bot, "👮‍♂️");
+        super(bot, "😈");
         this.config = new BotHuntTaskConfig(); // ✅ инициализируем родительское поле
         this.scanRadius = ((BotHuntTaskConfig) config).getScanRadius();
         logging = config.isLogging();

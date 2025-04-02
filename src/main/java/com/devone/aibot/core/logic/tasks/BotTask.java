@@ -201,7 +201,7 @@ public abstract class BotTask implements IBotTask {
         BotLogger.info(isLogging(), "🚨 Игрок " + player.getName() + " вышел! Бот " + bot.getId() + " переходит в автономный режим.");
         this.bot.getLifeCycle().getTaskStackManager().clearTasks();
 
-        bot.addTaskToQueue(new BotMakeDecisionTask(bot));
+        bot.addTaskToQueue(new BotDecisionMakeTask(bot));
         isDone = true;
     }
 }

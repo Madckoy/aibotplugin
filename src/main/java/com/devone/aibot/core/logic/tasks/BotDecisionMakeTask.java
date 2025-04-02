@@ -16,12 +16,13 @@ import org.bukkit.entity.EntityType;
 
 import com.devone.aibot.core.Bot;
 import com.devone.aibot.core.BotInventory;
+import com.devone.aibot.utils.BotAxisDirection.AxisDirection;
 import com.devone.aibot.utils.BotConstants;
 import com.devone.aibot.utils.BotLogger;
 
-public class BotMakeDecisionTask extends BotTask {
+public class BotDecisionMakeTask extends BotTask {
 
-    public BotMakeDecisionTask(Bot bot) {
+    public BotDecisionMakeTask(Bot bot) {
         super(bot, "🎲");
         this.bot = bot;
         config = new BotMakeDecisionTaskConfig();
@@ -116,23 +117,18 @@ public class BotMakeDecisionTask extends BotTask {
         
             if (breakTask.isEnabled) {
 
-                /**
-                     * Конфигурирует задачу разрушения.
-                     * 
-                     * Параметры (позиционные):
-                     * 
-                     * 0 - Set<Material> targetMaterials (nullable) — блоки, которые нужно разрушать.
-                     * 1 - Integer maxBlocks (nullable) — максимальное количество блоков, которые нужно собрать.
-                     * 2 - Integer breakRadius (nullable) — радиус разрушения.
-                     * 3 - Boolean shouldPickup (nullable) — собирать ли предметы после разрушения.
-                     * 4 - Boolean destroyAllIfNoTarget (nullable) — если нет подходящих блоков, разрушать всё подряд.
-                     * 5 - IBotDestructionPattern или String (nullable) — шаблон разрушения:
-                     *     - IBotDestructionPattern — готовый объект.
-                     *     - String — путь к YAML-файлу шаблона (относительно каталога паттернов).
-                     *
-                     * Если параметры не заданы, используются значения по умолчанию.
-                     */
-                breakTask.configure(null, maxToCollect, BotConstants.DEFAULT_SCAN_RANGE, true, true, breakTask.patternName);
+
+                breakTask.configure(null, 
+                                    maxToCollect, 
+                                    breakTask.getOuterRadius(),
+                                    breakTask.getInnerRadius(),  
+                                    true, 
+                                    true,
+                                    AxisDirection.DOWN, 
+                                    breakTask.getOffsetX(),
+                                    breakTask.getOffsetY(),
+                                    breakTask.getOffsetZ(), 
+                                    breakTask.getPatternName());
 
                 bot.addTaskToQueue(breakTask);
             }    

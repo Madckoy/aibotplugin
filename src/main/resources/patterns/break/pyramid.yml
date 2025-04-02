@@ -1,8 +1,9 @@
-# pyramid
+# inverted cone (vertex at top)
 filters:
-  - "x >= cx - r && x <= cx + r"
-  - "y >= cy - r && y <= cy + r"
-  - "z >= cz - r && z <= cz + r"
-  - "!(((x - cx >= 0 ? x - cx : cx - x) + (z - cz >= 0 ? z - cz : cz - z)) <= (y - cy) && y >= cy)"
+  - "x >= cx - r && x <= cx + r"  # ширина по X
+  - "y <= cy && y >= cy - r"  # высота от вершины вниз (cy) до нижней границы (cy - r)
+  - "z >= cz - r && z <= cz + r"  # ширина по Z
+  - "math.max(math.abs(x - cx), math.abs(z - cz)) <= (cy - y)"  # сужение конуса по мере понижения Y
 sort:
   - "y"
+inverted: true

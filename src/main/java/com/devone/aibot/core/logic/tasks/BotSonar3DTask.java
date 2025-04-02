@@ -24,7 +24,7 @@ public class BotSonar3DTask extends BotTask {
     private ScanMode scanMode = ScanMode.FULL;
 
     public BotSonar3DTask(Bot bot, BotTask caller, int radius, int height) {
-        super(bot, "ᯤ"); // ᯤ
+        super(bot, "𖣠"); // ᯤ
         parent = caller;
         this.radius = radius;
         this.height = height;

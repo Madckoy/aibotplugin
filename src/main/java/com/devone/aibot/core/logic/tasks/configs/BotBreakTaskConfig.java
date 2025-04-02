@@ -15,7 +15,11 @@ public class BotBreakTaskConfig extends BotTaskConfig{
     public void generateDefaultConfig() {
 
         config.set("pattern", BotConstants.DEFAULT_PATTERN_BREAK);
-        config.set("break_radius", BotConstants.DEFAULT_SCAN_RANGE);
+        config.set("outer_radius", BotConstants.DEFAULT_SCAN_RANGE);
+        config.set("inner_radius", BotConstants.DEFAULT_SCAN_RANGE);
+        config.set("offsetX", 0);
+        config.set("offsetY", 0);
+        config.set("offsetZ", 0);
 
         super.generateDefaultConfig();
     }
@@ -24,8 +28,25 @@ public class BotBreakTaskConfig extends BotTaskConfig{
         return config.getString("pattern", BotConstants.DEFAULT_PATTERN_BREAK);
     }
 
-    public int getBreakRadius(){
-        return config.getInt("break_radius", BotConstants.DEFAULT_SCAN_RANGE);
+    public int getOuterRadius(){
+        return config.getInt("outer_radius", BotConstants.DEFAULT_SCAN_RANGE);
     }
+
+    public int getInnerRadius(){
+        return config.getInt("inner_radius", BotConstants.DEFAULT_SCAN_RANGE);
+    }
+
+    public int getOffsetX(){
+        return config.getInt("offsetX", 0);
+    }
+
+    public int getOffsetY(){
+        return config.getInt("offsetY", 0);
+    }
+
+    public int getOffsetZ(){
+        return config.getInt("offsetZ", 0);
+    }
+
 
 }
