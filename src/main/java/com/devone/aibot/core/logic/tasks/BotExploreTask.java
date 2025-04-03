@@ -32,7 +32,7 @@ public class BotExploreTask extends BotTask {
         BotLogger.info(this.isLogged(), "🏞 " + bot.getId() + " Patrolling with radius: " + scanRadius + " [ID: " + uuid + "]");
         
         if(getEnvMap()==null) {
-            BotSonar3DTask sonar = new BotSonar3DTask(bot, this, scanRadius, 4);
+            BotSonar3DTask sonar = new BotSonar3DTask(bot, this, scanRadius, 2);
             bot.addTaskToQueue(sonar);
             isDone = false;
             return;
@@ -50,7 +50,6 @@ public class BotExploreTask extends BotTask {
         // ✅ Если бот уже идёт — не даём ему новую команду
         if (bot.getNPCNavigator().isNavigating()) {
             BotLogger.info(this.isLogged(), "🏞 " + bot.getId() + " Already moving, skipping exploration update."+ " [ID: " + uuid + "]");
-            return;
         }
 
         double rand = Math.random();

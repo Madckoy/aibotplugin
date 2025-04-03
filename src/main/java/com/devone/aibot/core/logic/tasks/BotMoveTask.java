@@ -57,7 +57,7 @@ public class BotMoveTask extends BotTask {
         }
 
         if (bot.getNPCNavigator().isNavigating()) {
-            return;
+            BotLogger.info(this.isLogged(), " ⚠️ "+ bot.getId() + " В движении...");
         }
 
         if (!bot.getNPCNavigator().canNavigateTo(bot.getRuntimeStatus().getTargetLocation())) {
