@@ -23,4 +23,9 @@ public class BotCoordinate3D {
     public int hashCode() {
         return Objects.hash(x, y, z);
     }
+ 
+    @Override
+    public String toString() {
+        return String.format("(%d,%d,%d)", x, y, z);
+    }
 }

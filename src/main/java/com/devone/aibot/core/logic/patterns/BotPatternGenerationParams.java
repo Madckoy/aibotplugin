@@ -19,4 +19,14 @@ public class BotPatternGenerationParams {
         this.innerRadius = innerRadius;
 
     }
+
+    @Override
+    public String toString() {
+    return String.format(
+        "📦 origin: (%d, %d, %d), offset: (%d, %d, %d), outerRadius: %d, innerRadius: %d",
+        observerX, observerY, observerZ,
+        offsetX, offsetY, offsetZ,
+        outerRadius, innerRadius
+    );
+}
 }
