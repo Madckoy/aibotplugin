@@ -2,7 +2,6 @@ package com.devone.aibot.web;
 
 import com.devone.aibot.AIBotPlugin;
 import com.devone.aibot.config.AIBotPluginConfig;
-
 import com.devone.aibot.core.BotManager;
 
 
