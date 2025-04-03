@@ -12,7 +12,7 @@ public class BotBreakAnyUpwardTask extends BotBreakTask {
     public BotBreakAnyUpwardTask(Bot bot) {
         super(bot);
 
-        setName(getName()+"(▲)");
+        setName(getName()+" ▲ ");
 
         setTargetMaterials(null);
 
