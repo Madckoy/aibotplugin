@@ -12,6 +12,7 @@ import java.io.InputStream;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.*;
+import java.util.stream.Collectors;
 
 /**
  * Реализация разрушительного паттерна, загружаемого из YAML.
@@ -82,8 +83,11 @@ public class BotBreakInterpretedYamlPattern implements IBotDestructionPattern {
 
             List<BotCoordinate3D> inner_points = generator.generateInnerPoints(params);
             
-            BotLogger.info(true, inner_points.toString());
-
+            String pointsLog = inner_points.stream()
+            .map(p -> String.format("(%d, %d, %d)", p.x, p.y, p.z))
+            .collect(Collectors.joining(", "));
+        
+            BotLogger.info(true, String.format("🔢 Generated %d points: [%s]", inner_points.size(), pointsLog));        
 
             boolean isInverted = generator.getInverted();
 
