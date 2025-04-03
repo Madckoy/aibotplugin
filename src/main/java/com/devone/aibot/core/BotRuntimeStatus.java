@@ -13,7 +13,7 @@ public class BotRuntimeStatus {
     // Другие состояния
     private boolean isStuck;
     private int stuckCount;
-    private int mobsKilled
+    private int mobsKilled;
 
     public BotRuntimeStatus(Bot bot) {
         this.owner = bot;
@@ -99,7 +99,7 @@ public class BotRuntimeStatus {
     public void mobKilledAdd(int count) {
         this.mobsKilled = mobsKilled + count;
     }
-    
+
     public int getMobsKilled() {
         return mobsKilled;
     }
