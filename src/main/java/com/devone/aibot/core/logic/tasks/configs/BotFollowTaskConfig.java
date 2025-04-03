@@ -13,7 +13,7 @@ public class BotFollowTaskConfig extends BotLocationConfig {
         FileConfiguration config = getConfig();
 
         config.set("follow.follow_distance", 2.5); // Расстояние следования за игроком
-        config.set("follow.attack_range", 1.5); // Дистанция атаки на мобов
+        config.set("follow.attack_range", 10); // Дистанция атаки на мобов
         config.set("follow.chat_cooldown", 10); // Пауза между репликами (в секундах)
         config.set("follow.insult_chance", 0.3); // Вероятность ругани при атаке
 
