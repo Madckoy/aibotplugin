@@ -42,7 +42,7 @@ public class BotBreakTask extends BotTask {
 
     public BotBreakTask(Bot bot) {
 
-        super(bot, "🪨👁");
+        super(bot, "🪨");
 
         this.config = new BotBreakTaskConfig();
         this.isLogged = config.isLogged();
@@ -314,7 +314,7 @@ public class BotBreakTask extends BotTask {
 
             setObjective("Breaking: " + BotUtils.getBlockName(bot.getRuntimeStatus().getTargetLocation().getBlock()));
 
-            BotUseHandTask handTask = new BotUseHandTask(bot, "🪨⛏");
+            BotUseHandTask handTask = new BotUseHandTask(bot, "⛏");
             handTask.configure(targetLocation);
             bot.addTaskToQueue(handTask);
 

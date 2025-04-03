@@ -12,6 +12,8 @@ public class BotBreakAnyTask extends BotBreakTask {
     public BotBreakAnyTask(Bot bot) {
         super(bot);
 
+        setName(getName()+"(✴)");
+
         bot.getRuntimeStatus().setTargetLocation(bot.getRuntimeStatus().getCurrentLocation());
 
         setTargetMaterials(null);

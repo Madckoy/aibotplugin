@@ -14,7 +14,7 @@ public class BotExploreTask extends BotTask {
     private BotExploreTaskConfig config;
 
     public BotExploreTask(Bot bot) {
-        super(bot, "🏞️");
+        super(bot, "🌐");
 
         config = new BotExploreTaskConfig();
         this.isLogged = config.isLogged();

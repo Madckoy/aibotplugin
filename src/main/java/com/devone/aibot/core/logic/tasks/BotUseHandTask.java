@@ -16,7 +16,7 @@ import java.util.Arrays;
 public class BotUseHandTask extends BotTask {
 
     private LivingEntity target;
-    private int damage = 1;
+    private int damage = 5;
 
     public BotUseHandTask(Bot bot) {
         super(bot, "✋🏻");
