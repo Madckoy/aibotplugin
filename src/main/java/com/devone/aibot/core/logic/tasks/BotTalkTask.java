@@ -96,6 +96,6 @@ public class BotTalkTask extends BotTask {
 
     @Override
     public boolean isLogged() {
-        return this.isLogged();
+        return this.isLogged;
     }
 }
