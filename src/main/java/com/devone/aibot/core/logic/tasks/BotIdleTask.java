@@ -22,8 +22,4 @@ public class BotIdleTask extends BotPlayerLinkedTask {
       isDone = true;
     }
 
-    @Override
-    public boolean isLogged() {
-        return this.isLogged;
-    }
 }

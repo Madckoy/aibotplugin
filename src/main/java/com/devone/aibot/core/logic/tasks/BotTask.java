@@ -90,12 +90,12 @@ public abstract class BotTask implements IBotTask, IBotTaskConfigurable {
 
     public void setObjective(String objctv) {
         objective = objctv;
-        BotLogger.info(isLogged(), "🚩 " + bot.getId() + "  Set Objective: " + objctv);
+        BotLogger.info(this.isLogged(), "🚩 " + bot.getId() + "  Set Objective: " + objctv);
     }
 
     @Override
     public void update() {
-        BotLogger.info(isLogged(), "🚦 " + bot.getId() + " " + name + " Status: " + isDone + " | " + isPaused +
+        BotLogger.info(this.isLogged(), "🚦 " + bot.getId() + " " + name + " Status: " + isDone + " | " + isPaused +
                 " 📍 xyz: " + BotStringUtils.formatLocation(bot.getRuntimeStatus().getCurrentLocation()) +
                 " 🎯 xyz: " + BotStringUtils.formatLocation(bot.getRuntimeStatus().getTargetLocation()) + " [ID: " + uuid + "]");
 
@@ -116,7 +116,6 @@ public abstract class BotTask implements IBotTask, IBotTaskConfigurable {
         return uuid;
     }
 
-    @Override
     public boolean isDone() {
         return isDone;
     }
@@ -125,11 +124,15 @@ public abstract class BotTask implements IBotTask, IBotTaskConfigurable {
         return isEnabled;
     }
 
+    public boolean isLogged() {
+        return isLogged;
+    }
+
     @Override
     public void setPaused(boolean paused) {
         this.isPaused = paused;
         String status = isPaused ? "⏸️ Pausing..." : "▶️ Resuming...";
-        BotLogger.info(isLogged(), status + bot.getId() + " [ID: " + uuid + "]");
+        BotLogger.info(this.isLogged(), status + bot.getId() + " [ID: " + uuid + "]");
     }
 
     @Override
@@ -142,7 +145,6 @@ public abstract class BotTask implements IBotTask, IBotTaskConfigurable {
         return config;
     }
 
-    @Override
     public String getName() {
         return name;
     }
@@ -158,7 +160,7 @@ public abstract class BotTask implements IBotTask, IBotTaskConfigurable {
     public void handleStuck() {
         if (bot.getRuntimeStatus().getTargetLocation() != null) {
             if (bot.getNPCEntity() != null) {
-                BotLogger.info(isLogged(), "✨ " + bot.getId() + " Застрял! Телепортируемся в " + BotStringUtils.formatLocation(bot.getRuntimeStatus().getTargetLocation()));
+                BotLogger.info(this.isLogged(), "✨ " + bot.getId() + " Застрял! Телепортируемся в " + BotStringUtils.formatLocation(bot.getRuntimeStatus().getTargetLocation()));
 
                 BotTeleportTask tp = new BotTeleportTask(bot, player);
                 if (player != null) {
@@ -169,11 +171,11 @@ public abstract class BotTask implements IBotTask, IBotTaskConfigurable {
 
                 bot.addTaskToQueue(tp);
             } else {
-                BotLogger.info(isLogged(), "✨ " + bot.getId() + " Застрял! Нет Taget Location и нет NPC Entity!");
+                BotLogger.info(this.isLogged(), "✨ " + bot.getId() + " Застрял! Нет Taget Location и нет NPC Entity!");
             }
         } else {
             if (bot.getNPCEntity() != null) {
-                BotLogger.info(isLogged(), "✨ " + bot.getId() + " Застрял! Нет Taget Location! Телепортируемся в точку респавна!");
+                BotLogger.info(this.isLogged(), "✨ " + bot.getId() + " Застрял! Нет Taget Location! Телепортируемся в точку респавна!");
 
                 BotTeleportTask tp = new BotTeleportTask(bot, player);
 
@@ -185,7 +187,7 @@ public abstract class BotTask implements IBotTask, IBotTaskConfigurable {
 
                 bot.addTaskToQueue(tp);
             } else {
-                BotLogger.info(isLogged(), "✨ " + bot.getId() + " Застрял! Нет Taget Location и нет NPC Entity!");
+                BotLogger.info(this.isLogged(), "✨ " + bot.getId() + " Застрял! Нет Taget Location и нет NPC Entity!");
             }
         }
     }
@@ -195,7 +197,7 @@ public abstract class BotTask implements IBotTask, IBotTaskConfigurable {
     }
 
     private void handlePlayerDisconnect() {
-        BotLogger.info(isLogged(), "🚨 Игрок " + player.getName() + " вышел! Бот " + bot.getId() + " переходит в автономный режим.");
+        BotLogger.info(this.isLogged(), "🚨 Игрок " + player.getName() + " вышел! Бот " + bot.getId() + " переходит в автономный режим.");
         this.bot.getLifeCycle().getTaskStackManager().clearTasks();
 
         bot.addTaskToQueue(new BotDecisionMakeTask(bot));

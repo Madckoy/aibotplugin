@@ -30,7 +30,7 @@ public class BotHuntMobsTask extends BotTask {
         setObjective("Look for hostile targets");
 
         if (getBioEntities() == null) {
-            BotLogger.info(isLogged(),"🔍 Запускаем 3D-сканирование живых целей.");
+            BotLogger.info(this.isLogged(),"🔍 Запускаем 3D-сканирование живых целей.");
             bot.addTaskToQueue(new BotSonar3DTask(bot, this, scanRadius*2, 4));
             isDone = false;
             return;
@@ -42,13 +42,13 @@ public class BotHuntMobsTask extends BotTask {
 
         if (targetMob != null) {
             bot.addTaskToQueue(new BotFollowTargetTask(bot, targetMob));
-            BotLogger.info(isLogged(),"🎯 Бот начинает преследование " + targetMob.getType());
+            BotLogger.info(this.isLogged(),"🎯 Бот начинает преследование " + targetMob.getType());
             isDone = true;
             return;
         }
 
         if (getElapsedTime() > 180000) {
-            BotLogger.info(isLogged(),"😴 Устал, охота утомляет.");
+            BotLogger.info(this.isLogged(),"😴 Устал, охота утомляет.");
             isDone = true;
             return;
         }
@@ -64,7 +64,7 @@ public class BotHuntMobsTask extends BotTask {
             if (BotEntityUtils.isHostileMob(entity)) {
                 if (huntConfig.getTargetAggressiveMobs().contains(entity.getType())) {
                     targetMob = entity;
-                    BotLogger.info(isLogged(),"🎯 Найдена враждебная цель: " + targetMob.getType());
+                    BotLogger.info(this.isLogged(),"🎯 Найдена враждебная цель: " + targetMob.getType());
                     return;
                 }
             }
@@ -74,18 +74,14 @@ public class BotHuntMobsTask extends BotTask {
             for (LivingEntity entity : nearbyEntities) {
                 if (entity instanceof Player) {
                     targetMob = entity;
-                    BotLogger.info(isLogged(),"🎯 Найден игрок! Начинаем следование.");
+                    BotLogger.info(this.isLogged(),"🎯 Найден игрок! Начинаем следование.");
                     return;
                 }
             }
         }
 
-        BotLogger.info(isLogged(),"❌ Ни одной подходящей цели не найдено.");
+        BotLogger.info(this.isLogged(),"❌ Ни одной подходящей цели не найдено.");
         isDone = true;
     }
 
-    @Override
-    public boolean isLogged() {
-        return this.isLogged;
-    }
 }

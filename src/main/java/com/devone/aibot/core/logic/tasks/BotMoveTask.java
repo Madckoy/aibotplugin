@@ -83,7 +83,7 @@ public class BotMoveTask extends BotTask {
             if (bot.getRuntimeStatus().getCurrentLocation().distanceSquared(lastPosition) < 0.5) {
                 // Если прошло > 10 сек и координаты не изменились → бот застрял
                 if (System.currentTimeMillis() - lastMoveTime > 10_000) {
-                    BotLogger.warn(isLogged(),bot.getId() + " ⚠️ Бот застрял! Пересчитываем путь...");
+                    BotLogger.warn(this.isLogged(),bot.getId() + " ⚠️ Бот застрял! Пересчитываем путь...");
                     taskHandle.cancel();
                     isDone = true;
                     return;
@@ -123,10 +123,5 @@ public class BotMoveTask extends BotTask {
                 }
             }
         }, 0L, 40L);
-    }
-
-    @Override
-    public boolean isLogged() {
-        return this.isLogged;
     }
 }

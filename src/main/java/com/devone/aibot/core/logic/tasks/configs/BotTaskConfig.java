@@ -41,7 +41,7 @@ public class BotTaskConfig {
 
         save();
 
-        BotLogger.info(isLogged(),"✅ Создан новый конфигурационный файл: " + file.getName());
+        BotLogger.info(this.isLogged(),"✅ Создан новый конфигурационный файл: " + file.getName());
     }
 
     public boolean isEnabled() {

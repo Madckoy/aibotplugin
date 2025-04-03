@@ -34,9 +34,4 @@ public class BotDropAllTask extends BotPlayerLinkedTask {
         isDone = true;
     }
 
-    @Override
-    public boolean isLogged() {
-        return this.isLogged;
-    }
-
 }
