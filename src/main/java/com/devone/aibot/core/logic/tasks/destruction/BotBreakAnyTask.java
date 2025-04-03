@@ -19,7 +19,7 @@ public class BotBreakAnyTask extends BotBreakTask {
         setBreakDirection(AxisDirection.DOWN);
 
 
-        BotBreakTaskConfig config = new BotBreakTaskConfig("BotBreakAnyTask.yml");
+        BotBreakTaskConfig config = new BotBreakTaskConfig("BotBreakAnyTask");
         this.isLogged = config.isLogged();
 
         setPatterName(config.getPattern());
