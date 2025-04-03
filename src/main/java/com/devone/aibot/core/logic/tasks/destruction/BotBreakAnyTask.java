@@ -20,7 +20,7 @@ public class BotBreakAnyTask extends BotBreakTask {
 
 
         BotBreakTaskConfig config = new BotBreakTaskConfig("BotBreakAnyTask.yml");
-        logging = config.isLogging();
+        this.isLogged = config.isLogged();
 
         setPatterName(config.getPattern());
         setOuterRadius(config.getOuterRadius());

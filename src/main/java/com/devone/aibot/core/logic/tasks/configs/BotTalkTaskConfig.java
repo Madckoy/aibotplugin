@@ -6,7 +6,7 @@ import java.util.List;
 public class BotTalkTaskConfig extends BotTaskConfig {
 
     public BotTalkTaskConfig() {
-        super("BotTalkTaskConfig.yml");
+        super(BotTalkTaskConfig.class.getSimpleName());
     }
 
     @Override

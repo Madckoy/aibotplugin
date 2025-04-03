@@ -16,4 +16,9 @@ public class BotProtectTask extends BotPlayerLinkedTask {
     public void executeTask() {
     
     }
+
+    @Override
+    public boolean isLogged() {
+        return this.isLogged();
+    }
 }

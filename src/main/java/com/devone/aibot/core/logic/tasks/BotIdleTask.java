@@ -14,11 +14,16 @@ public class BotIdleTask extends BotPlayerLinkedTask {
         setObjective("Idle");
         
         config = new BotIdleTaskConfig();
-        logging = config.isLogging();
+        this.isLogged = config.isLogged();
     }
 
     @Override
     public void executeTask() {
     
+    }
+
+    @Override
+    public boolean isLogged() {
+        return this.isLogged();
     }
 }

@@ -4,7 +4,7 @@ public class BotDropAllTaskConfig extends BotLocationConfig{
 
 
     public BotDropAllTaskConfig() {
-        super("BotDropAllTaskConfig.yml");
+        super(BotDropAllTaskConfig.class.getSimpleName());
     }
 
 }

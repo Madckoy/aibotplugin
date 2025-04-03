@@ -10,7 +10,6 @@ import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
-import org.bukkit.util.Vector;
 
 import java.util.Arrays;
 
@@ -22,7 +21,7 @@ public class BotUseHandTask extends BotTask {
     public BotUseHandTask(Bot bot) {
         super(bot, "✋🏻");
         setObjective("Hit the target");
-        logging = config.isLogging();
+        this.isLogged = config.isLogged();
     }
 
     public BotUseHandTask(Bot bot, String name) {
@@ -52,7 +51,7 @@ public class BotUseHandTask extends BotTask {
         }
 
         if (!hasParams) {
-            BotLogger.info(isLogging(), bot.getId() + " ❌ Некорректные параметры для `BotTaskUseHand`: " + Arrays.toString(params));
+            BotLogger.info(isLogged(), bot.getId() + " ❌ Некорректные параметры для `BotTaskUseHand`: " + Arrays.toString(params));
             isDone = true;
         }
 
@@ -62,14 +61,14 @@ public class BotUseHandTask extends BotTask {
     @Override
     public void executeTask() {
         if (bot.getRuntimeStatus().getTargetLocation() == null && target == null) {
-            BotLogger.info(isLogging(), bot.getId() + " ❌ Нет цели или координат для удара");
+            BotLogger.info(isLogged(), bot.getId() + " ❌ Нет цели или координат для удара");
             isDone = true;
             return;
         }
     
         // ✅ Проверяем, если цель уже мертва — выходим (для атаки)
         if (target != null && target.isDead()) {
-            BotLogger.info(isLogging(), bot.getId() + " ☠️ Цель уже мертва. Завершаем атаку.");
+            BotLogger.info(isLogged(), bot.getId() + " ☠️ Цель уже мертва. Завершаем атаку.");
             isDone = true;
             return;
         }
@@ -85,16 +84,16 @@ public class BotUseHandTask extends BotTask {
     
             if (target != null && !target.isDead()) {
                 target.damage(damage);
-                BotLogger.info(isLogging(), bot.getId() + " ✋🏻 Нанесён урон существу: " + target.getName());
+                BotLogger.info(isLogged(), bot.getId() + " ✋🏻 Нанесён урон существу: " + target.getName());
             } else if (bot.getRuntimeStatus().getTargetLocation() != null && bot.getRuntimeStatus().getTargetLocation().getBlock().getType() != Material.AIR) {
                 // ✅ Добавляем эффект разрушения перед ломанием блока
                 BotUtils.playBlockBreakEffect(bot.getRuntimeStatus().getTargetLocation());
     
                 bot.getRuntimeStatus().getTargetLocation().getBlock().breakNaturally();
 
-                BotLogger.info(isLogging(), bot.getId() + " ✅ Блок разрушен на " + BotStringUtils.formatLocation(bot.getRuntimeStatus().getTargetLocation()));
+                BotLogger.info(isLogged(), bot.getId() + " ✅ Блок разрушен на " + BotStringUtils.formatLocation(bot.getRuntimeStatus().getTargetLocation()));
             } else {
-                BotLogger.warn(isLogging(), bot.getId() + " ⚠️ Нечего разрушать");
+                BotLogger.warn(isLogged(), bot.getId() + " ⚠️ Нечего разрушать");
             }
     
             isDone = true;
@@ -112,15 +111,20 @@ public class BotUseHandTask extends BotTask {
             bot.getNPCEntity().teleport(bot.getRuntimeStatus().getCurrentLocation());
         }, 1L); // ✅ Через тик, чтобы дать время на обновление
 
-        BotLogger.info(isLogging(), "🔄 TURNING: " + bot.getId() + " to look at the target: " + BotStringUtils.formatLocation(target));
+        BotLogger.info(isLogged(), "🔄 TURNING: " + bot.getId() + " to look at the target: " + BotStringUtils.formatLocation(target));
     }
 
     private void animateHand() {
         if (bot.getNPCEntity() instanceof Player playerBot) {
             playerBot.swingMainHand();
-            BotLogger.info(isLogging(), "✋🏻 Анимация руки выполнена");
+            BotLogger.info(isLogged(), "✋🏻 Анимация руки выполнена");
         } else {
-            BotLogger.info(isLogging(), "✋🏻 Анимация не выполнена: бот — не игрок");
+            BotLogger.info(isLogged(), "✋🏻 Анимация не выполнена: бот — не игрок");
         }
+    }
+
+    @Override
+    public boolean isLogged() {
+       return true;
     }
 }

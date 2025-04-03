@@ -15,7 +15,7 @@ public class BotDropAllTask extends BotPlayerLinkedTask {
         super(bot, player, "📦↴");
         
         BotDropAllTaskConfig config = new BotDropAllTaskConfig();
-        logging = config.isLogging();
+        this.isLogged  = config.isLogged();
 
         bot.getRuntimeStatus().setTargetLocation(new Location (Bukkit.getWorlds().get(0), config.getX(),
                                                                   config.getY(), 
@@ -32,6 +32,11 @@ public class BotDropAllTask extends BotPlayerLinkedTask {
         BotInventory.dropAllItems(bot);
 
         isDone = true;
+    }
+
+    @Override
+    public boolean isLogged() {
+        return this.isLogged();
     }
 
 }

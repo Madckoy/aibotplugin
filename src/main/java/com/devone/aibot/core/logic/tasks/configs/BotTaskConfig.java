@@ -16,10 +16,9 @@ public class BotTaskConfig {
     protected FileConfiguration config;
     protected String fileName=null;
 
-
     public BotTaskConfig(String f_name) {
 
-        fileName = f_name;
+        fileName = f_name + ".yml";
 
         File configFolder = new File(BotConstants.PLUGIN_PATH_CONFIGS_TASKS);
         if (!configFolder.exists()) {
@@ -37,18 +36,20 @@ public class BotTaskConfig {
 
     public void generateDefaultConfig() {
         config.set("enabled", true);
-        config.set("logging", true);
+        config.set("logged", true);
         config.set("priority", 1);
+
         save();
-        BotLogger.info(isLogging(),"✅ Создан новый конфигурационный файл: " + file.getName());
+
+        BotLogger.info(isLogged(),"✅ Создан новый конфигурационный файл: " + file.getName());
     }
 
     public boolean isEnabled() {
         return config.getBoolean("enabled", true);
     }
 
-    public boolean isLogging() {
-        return config.getBoolean("logging", true);
+    public boolean isLogged() {
+        return config.getBoolean("logged", true);
     }
 
     public FileConfiguration getConfig() {
@@ -63,13 +64,9 @@ public class BotTaskConfig {
     public void save() {
         try {
             config.save(file);
-            BotLogger.info(this.isLogging(),"✅ Configuration has been saved: " + file.getName());
+            BotLogger.info(this.isLogged(),"✅ Configuration has been saved: " + file.getName());
         } catch (IOException e) {
-            BotLogger.info(this.isLogging(),"❌ Error saving configuration for: " + file.getName());
+            BotLogger.info(this.isLogged(),"❌ Error saving configuration for: " + file.getName());
         }
-    }
-
-    public int getBreakRadius() {
-        return BotConstants.DEFAULT_SCAN_RANGE;
     }
 }

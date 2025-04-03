@@ -6,7 +6,7 @@ public class BotExploreTaskConfig extends BotTaskConfig{
 
 
     public BotExploreTaskConfig() {
-        super("BotExploreTaskConfig.yml");
+        super(BotExploreTaskConfig.class.getSimpleName());
     }
 
     public BotExploreTaskConfig(String name) {
@@ -15,7 +15,7 @@ public class BotExploreTaskConfig extends BotTaskConfig{
 
     public void generateDefaultConfig() {
 
-        config.set("scan_radius", BotConstants.DEFAULT_SCAN_RANGE);
+        config.set("scan_radius", 2*BotConstants.DEFAULT_SCAN_RANGE);
 
         super.generateDefaultConfig();
     }

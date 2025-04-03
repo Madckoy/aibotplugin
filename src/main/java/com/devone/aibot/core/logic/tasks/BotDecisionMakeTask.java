@@ -26,7 +26,7 @@ public class BotDecisionMakeTask extends BotTask {
         super(bot, "🎲");
         this.bot = bot;
         config = new BotMakeDecisionTaskConfig();
-        logging = config.isLogging();
+        this.isLogged = config.isLogged();
         setObjective("Roll a dice");
     }
 
@@ -54,7 +54,7 @@ public class BotDecisionMakeTask extends BotTask {
             moveTask.configure(drop_off_loc);
             bot.addTaskToQueue(moveTask);
 
-            BotLogger.info(isLogging(),"📦 " + bot.getId() + " Идёт к точке сброса: " + BotStringUtils.formatLocation(drop_off_loc));
+            BotLogger.info(isLogged(),"📦 " + bot.getId() + " Идёт к точке сброса: " + BotStringUtils.formatLocation(drop_off_loc));
             return;
         }
 
@@ -66,7 +66,7 @@ public class BotDecisionMakeTask extends BotTask {
         double huntChance = isNight ? 0.5 : 0.1; // 90% ночью, 10% днем
 
         if (rand < 0.1) { // 10% шанс сказать что-то про окружающий мир
-            BotLogger.info(isLogging(),"🤖 " + bot.getId() + " Комментирует обстановку.");
+            BotLogger.info(isLogged(),"🤖 " + bot.getId() + " Комментирует обстановку.");
             bot.addTaskToQueue(new BotTalkTask(bot, null, BotTalkTask.TalkType.ENVIRONMENT_COMMENT));
             return;
         }
@@ -74,7 +74,7 @@ public class BotDecisionMakeTask extends BotTask {
 
         if (rand < huntChance) {
             // ⚔️ Охота
-            BotLogger.info(isLogging(),"⚔️ " + bot.getId() + " Собирается на охоту! (Вероятность: " + huntChance * 100 + "%)");
+            BotLogger.info(isLogged(),"⚔️ " + bot.getId() + " Собирается на охоту! (Вероятность: " + huntChance * 100 + "%)");
            
             BotHuntMobsTask hunt_task = new BotHuntMobsTask(bot);
             //BotTaskHuntMobs config  = hunt_task.getConfig();
@@ -84,14 +84,14 @@ public class BotDecisionMakeTask extends BotTask {
             
             hunt_task.configure(targets, 20, true);
             bot.addTaskToQueue(hunt_task);
-            BotLogger.info(isLogging(), "⚔️ " + bot.getId() + " Начинает охоту на " + (isNight ? "агрессивных мобов" : "животных") + "!");
+            BotLogger.info(isLogged(), "⚔️ " + bot.getId() + " Начинает охоту на " + (isNight ? "агрессивных мобов" : "животных") + "!");
 
             return;
         }
 
         if (rand >= 0.8) {
             // 📌 Начать патрулирование (20% вероятность)
-            BotLogger.info(isLogging(), "🌐 " + bot.getId() + " начинает патрулирование.");
+            BotLogger.info(isLogged(), "🌐 " + bot.getId() + " начинает патрулирование.");
             BotExploreTask patrolTask = new BotExploreTask(bot);
             bot.addTaskToQueue(patrolTask);
             return;
@@ -142,8 +142,13 @@ public class BotDecisionMakeTask extends BotTask {
             BotIdleTask idle = new BotIdleTask(bot, null);
             bot.addTaskToQueue(idle);
 
-            BotLogger.info(isLogging(),"🍹" + bot.getId() + " остаётся в IDLE.");
+            BotLogger.info(isLogged(),"🍹" + bot.getId() + " остаётся в IDLE.");
             return;
         }
+    }
+
+    @Override
+    public boolean isLogged() {
+        return this.isLogged();
     }
 }

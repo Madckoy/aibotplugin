@@ -4,7 +4,7 @@ public class BotTeleportTaskConfig extends BotLocationConfig {
 
 
     public BotTeleportTaskConfig() {
-        super("BotTeleportTaskConfig.yml");
+        super(BotTeleportTaskConfig.class.getSimpleName());
     }
 
 }

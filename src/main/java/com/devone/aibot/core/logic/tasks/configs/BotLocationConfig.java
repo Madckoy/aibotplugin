@@ -2,16 +2,15 @@ package com.devone.aibot.core.logic.tasks.configs;
 
 public class BotLocationConfig extends BotTaskConfig{
 
-
     public BotLocationConfig(String f_name) {
-        super(f_name);
+        super(BotLocationConfig.class.getSimpleName());
     }
 
     public void generateDefaultConfig() {
 
-            config.set("X", 0);
-            config.set("Y", 0);
-            config.set("Z", 0);
+        config.set("X", 0);
+        config.set("Y", 0);
+        config.set("Z", 0);
 
         super.generateDefaultConfig();
     }

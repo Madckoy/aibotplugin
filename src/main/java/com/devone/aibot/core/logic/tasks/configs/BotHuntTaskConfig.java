@@ -8,7 +8,7 @@ import java.util.Set;
 public class BotHuntTaskConfig extends BotExploreTaskConfig {
 
     public BotHuntTaskConfig() {
-        super("BotHuntTaskConfig.yml");
+        super(BotHuntTaskConfig.class.getSimpleName());
     }
 
     @Override

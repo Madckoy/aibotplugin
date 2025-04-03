@@ -5,7 +5,7 @@ import com.devone.aibot.utils.BotConstants;
 public class BotBreakTaskConfig extends BotTaskConfig{
 
     public BotBreakTaskConfig() {
-        super( "BotBreakTaskConfig.yml");
+        super(BotBreakTaskConfig.class.getSimpleName());
     }
 
     public BotBreakTaskConfig(String name) {

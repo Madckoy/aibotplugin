@@ -17,7 +17,7 @@ public class BotTeleportTask extends BotTask {
         super(bot, player, "💫");
 
         config = new BotTeleportTaskConfig();
-        logging = config.isLogging();
+        isLogged = config.isLogged();
         
         setObjective("Teleport");
     }
@@ -30,7 +30,7 @@ public class BotTeleportTask extends BotTask {
             bot.getRuntimeStatus().setTargetLocation(loc);
         }
 
-        BotLogger.info(isLogging(), "⚙️ BotTaskTeleport is configured: " + BotStringUtils.formatLocation(bot.getRuntimeStatus().getTargetLocation()));
+        BotLogger.info(isLogged(), "⚙️ BotTaskTeleport is configured: " + BotStringUtils.formatLocation(bot.getRuntimeStatus().getTargetLocation()));
 
         return this;
     }
@@ -50,6 +50,12 @@ public class BotTeleportTask extends BotTask {
 
        isDone = true;
 
+    }
+
+    @Override
+    public boolean isLogged() {
+        // TODO Auto-generated method stub
+        throw new UnsupportedOperationException("Unimplemented method 'isLogged'");
     }
 
 }

@@ -21,7 +21,7 @@ public class BotBreakAnyDownwardTask extends BotBreakTask {
         bot.getRuntimeStatus().setTargetLocation(bot.getRuntimeStatus().getCurrentLocation());
 
         BotBreakTaskConfig config = new BotBreakTaskConfig("BotBreakAnyDownwardTask.yml");
-        logging = config.isLogging();
+        this.isLogged = config.isLogged();
 
         setPatterName(config.getPattern());
         setOuterRadius(config.getOuterRadius());

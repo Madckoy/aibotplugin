@@ -21,8 +21,9 @@ public class BotMoveTask extends BotTask {
         super(bot, "...🏃🏻‍♂️‍➡️");
         this.lastPosition = bot.getRuntimeStatus().getCurrentLocation();
         this.lastMoveTime = System.currentTimeMillis();
+
         setObjective("Move" );
-        logging = config.isLogging();
+        isLogged = config.isLogged();
     }
 
     @Override
@@ -35,7 +36,7 @@ public class BotMoveTask extends BotTask {
             bot.getRuntimeStatus().setTargetLocation(loc);
 
         } else {
-            BotLogger.info(isLogging(),bot.getId() + " ❌ Некорректные параметры для `BotTaskMove`!");
+            BotLogger.info(isLogged(),bot.getId() + " ❌ Некорректные параметры для `BotTaskMove`!");
             isDone = true;
         }
 
@@ -82,7 +83,7 @@ public class BotMoveTask extends BotTask {
             if (bot.getRuntimeStatus().getCurrentLocation().distanceSquared(lastPosition) < 0.5) {
                 // Если прошло > 10 сек и координаты не изменились → бот застрял
                 if (System.currentTimeMillis() - lastMoveTime > 10_000) {
-                    BotLogger.warn(isLogging(),bot.getId() + " ⚠️ Бот застрял! Пересчитываем путь...");
+                    BotLogger.warn(isLogged(),bot.getId() + " ⚠️ Бот застрял! Пересчитываем путь...");
                     taskHandle.cancel();
                     isDone = true;
                     return;
@@ -122,5 +123,10 @@ public class BotMoveTask extends BotTask {
                 }
             }
         }, 0L, 40L);
+    }
+
+    @Override
+    public boolean isLogged() {
+        return this.isLogged();
     }
 }

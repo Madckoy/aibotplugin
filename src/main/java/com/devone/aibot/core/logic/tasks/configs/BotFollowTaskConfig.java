@@ -5,7 +5,7 @@ import org.bukkit.configuration.file.FileConfiguration;
 public class BotFollowTaskConfig extends BotLocationConfig {
 
     public BotFollowTaskConfig() {
-        super("BotFollowTaskConfig.yml");
+        super(BotFollowTaskConfig.class.getSimpleName());
     }
 
     @Override

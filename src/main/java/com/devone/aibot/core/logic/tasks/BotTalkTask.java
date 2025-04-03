@@ -93,4 +93,9 @@ public class BotTalkTask extends BotTask {
             return "🤖 ...";
         return messages.get(random.nextInt(messages.size()));
     }
+
+    @Override
+    public boolean isLogged() {
+        return this.isLogged();
+    }
 }
