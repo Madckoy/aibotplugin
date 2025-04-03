@@ -69,6 +69,7 @@ public class BotUseHandTask extends BotTask {
         // ✅ Проверяем, если цель уже мертва — выходим (для атаки)
         if (target != null && target.isDead()) {
             BotLogger.info(this.isLogged(), bot.getId() + " ☠️ Цель уже мертва. Завершаем атаку.");
+            bot.getRuntimeStatus().mobKilledAdd(1);
             isDone = true;
             return;
         }

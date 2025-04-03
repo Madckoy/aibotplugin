@@ -13,6 +13,7 @@ public class BotRuntimeStatus {
     // Другие состояния
     private boolean isStuck;
     private int stuckCount;
+    private int mobsKilled
 
     public BotRuntimeStatus(Bot bot) {
         this.owner = bot;
@@ -21,6 +22,7 @@ public class BotRuntimeStatus {
         this.targetLocation = null;  // Начальное значение для targetLocation
         this.isStuck = false;
         this.stuckCount = 0;
+        this.mobsKilled = 0;
     }
 
     // Получение и обновление currentLocation с проверкой на застревание
@@ -93,4 +95,17 @@ public class BotRuntimeStatus {
     public void setTargetLocation(Location targetLocation) {
         this.targetLocation = targetLocation;
     }
+
+    public void mobKilledAdd(int count) {
+        this.mobsKilled = mobsKilled + count;
+    }
+    
+    public int getMobsKilled() {
+        return mobsKilled;
+    }
+
+    public void resetMobsKilled() {
+        this.mobsKilled = 0;
+    }
+
 }
