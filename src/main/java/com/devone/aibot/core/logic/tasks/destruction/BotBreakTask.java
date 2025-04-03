@@ -248,6 +248,12 @@ public class BotBreakTask extends BotTask {
             }
         }
 
+        if (breakPattern.isFinished()) {
+            BotLogger.info(this.isLogged(), "🏁 Все блоки по паттерну обработаны. Завершаем задачу.");
+            isDone = true;
+            return;
+        }
+
         if (isInventoryFull() || isEnoughBlocksCollected()) {
             BotLogger.info(this.isLogged(), "⛔ Задача завершена: инвентарь полон или ресурсов достаточно");
             isDone = true;
@@ -266,15 +272,11 @@ public class BotBreakTask extends BotTask {
             return;
         }
 
-        if (breakPattern.isFinished()) {
-            BotLogger.info(this.isLogged(), "🏁 Все блоки по паттерну обработаны. Завершаем задачу.");
-            isDone = true;
-            return;
-        }
-
         BotCoordinate3D coordinate = breakPattern.findNextBlock(bot);
 
         if (coordinate == null) {
+            isDone = true;
+            BotLogger.info(this.isLogged(), "🙈 Не удалось получитькоординаты блока для разрушения. Выходим.");
             return;
         }
 
