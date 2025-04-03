@@ -5,6 +5,7 @@ import com.devone.aibot.core.Bot;
 import com.devone.aibot.core.logic.tasks.configs.BotFollowTaskConfig;
 import com.devone.aibot.utils.BotLogger;
 import com.devone.aibot.utils.BotNavigationUtils;
+import com.devone.aibot.utils.BotUtils;
 
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
@@ -78,6 +79,9 @@ public class BotFollowTargetTask extends BotTask {
     }
 
     private void followAndAttack(double distance) {
+        
+        BotUtils.lookAt(bot, target.getLocation());
+
         if (distance > attackRange) {
             updateNavigationIfNeeded(target.getLocation());
             BotLogger.info(this.isLogged(),"🏃 Преследуем " + target.getType() + " (расстояние: " + distance + ")");

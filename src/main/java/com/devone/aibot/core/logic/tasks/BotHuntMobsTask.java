@@ -3,6 +3,7 @@ package com.devone.aibot.core.logic.tasks;
 import com.devone.aibot.core.Bot;
 import com.devone.aibot.core.logic.tasks.configs.BotHuntTaskConfig;
 import com.devone.aibot.utils.BotLogger;
+import com.devone.aibot.utils.BotUtils;
 import com.devone.aibot.utils.BotEntityUtils;
 import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
@@ -41,6 +42,9 @@ public class BotHuntMobsTask extends BotTask {
         }
 
         if (targetMob != null) {
+            
+            BotUtils.lookAt(bot, targetMob.getLocation());
+
             bot.addTaskToQueue(new BotFollowTargetTask(bot, targetMob));
             BotLogger.info(this.isLogged(),"🎯 Бот начинает преследование " + targetMob.getType());
             isDone = true;
