@@ -42,7 +42,7 @@ public class BotHuntMobsTask extends BotTask {
         }
 
         if (targetMob != null) {
-            
+
             BotUtils.lookAt(bot, targetMob.getLocation());
 
             bot.addTaskToQueue(new BotFollowTargetTask(bot, targetMob));
@@ -65,24 +65,29 @@ public class BotHuntMobsTask extends BotTask {
         BotHuntTaskConfig huntConfig = (BotHuntTaskConfig) config;
 
         for (LivingEntity entity : nearbyEntities) {
-            if (BotEntityUtils.isHostileMob(entity)) {
-                if (huntConfig.getTargetAggressiveMobs().contains(entity.getType())) {
-                    targetMob = entity;
-                    BotLogger.info(this.isLogged(),"🎯 Найдена враждебная цель: " + targetMob.getType());
-                    return;
-                }
-            }
+            // kill them all
+            targetMob = entity;
+            BotLogger.info(this.isLogged(),"🎯 Найдена цель: " + targetMob.getType());
+            return;
+
+           // if (BotEntityUtils.isHostileMob(entity)) {
+            //    if (huntConfig.getTargetAggressiveMobs().contains(entity.getType())) {
+               //     targetMob = entity;
+                //    BotLogger.info(this.isLogged(),"🎯 Найдена враждебная цель: " + targetMob.getType());
+                   // return;
+                //}
+            //}
         }
 
-        if (shouldFollowPlayer) {
-            for (LivingEntity entity : nearbyEntities) {
-                if (entity instanceof Player) {
-                    targetMob = entity;
-                    BotLogger.info(this.isLogged(),"🎯 Найден игрок! Начинаем следование.");
-                    return;
-                }
-            }
-        }
+        //if (shouldFollowPlayer) {
+        //    for (LivingEntity entity : nearbyEntities) {
+        //        if (entity instanceof Player) {
+        //            targetMob = entity;
+        //            BotLogger.info(this.isLogged(),"🎯 Найден игрок! Начинаем следование.");
+        //            return;
+        //        }
+        //    }
+        //}
 
         BotLogger.info(this.isLogged(),"❌ Ни одной подходящей цели не найдено.");
         isDone = true;

@@ -10,7 +10,7 @@ import com.devone.aibot.utils.Bot3DGeoScan;
 
 public class BotExploreTask extends BotTask {
   
-    private int scanRadius = 2*BotConstants.DEFAULT_SCAN_RANGE;
+    private int scanRadius = BotConstants.DEFAULT_SCAN_RANGE;
     private BotExploreTaskConfig config;
 
     public BotExploreTask(Bot bot) {
@@ -19,7 +19,7 @@ public class BotExploreTask extends BotTask {
         config = new BotExploreTaskConfig();
         this.isLogged = config.isLogged();
         
-        scanRadius = config.getScanRadius();
+        this.scanRadius = config.getScanRadius();
 
         setObjective("Explore the area");
 
