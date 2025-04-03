@@ -1,81 +1,57 @@
 package com.devone.aibot.utils;
 
-import org.bukkit.configuration.file.FileConfiguration;
 import com.devone.aibot.AIBotPlugin;
+import com.devone.aibot.config.AIBotPluginConfig;
 
-import java.io.File;
 import java.io.IOException;
 import java.util.logging.*;
 
 public class BotLogger {
+
     private static final Logger logger = Logger.getLogger("AIBotPlugin");
-    private static Level logLevel = Level.INFO;
+    private static Handler fileHandler;
     private static boolean loggingEnabled = true;
-    private static FileHandler fileHandler;
-    private static final String LOG_FILE_PATH = "plugins/AIBotPlugin/logs/console.log";
 
-    public static void init(AIBotPlugin plugin) {
-        FileConfiguration config = plugin.getConfig();
-        loggingEnabled = config.getBoolean("logging.enable", true);
-        String levelStr = config.getString("logging.level", "INFO").toUpperCase();
+    public static void init(AIBotPlugin plugin, AIBotPluginConfig config) {
+        loggingEnabled = config.logging.enable;
+        Level logLevel = Level.parse(config.logging.level);
 
-        // ✅ Создаём каталог, если нужно
+        // ✅ Используем кастомный хэндлер
         try {
-            File logFile = new File(LOG_FILE_PATH);
-            logFile.getParentFile().mkdirs();
-
-            fileHandler = new FileHandler(LOG_FILE_PATH, 10 * 1024 * 1024, 5, true);
-            fileHandler.setFormatter(new SimpleFormatter());
+            fileHandler = new SimpleRollingFileHandler("plugins/AIBotPlugin/logs/console.log", 
+                10 * 1024 * 1024, 5);
             logger.addHandler(fileHandler);
         } catch (IOException e) {
             System.err.println("❌ Ошибка инициализации логгера: " + e.getMessage());
-            fileHandler = null;
-        }
-
-        // Уровень логирования
-        try {
-            logLevel = Level.parse(levelStr);
-        } catch (IllegalArgumentException e) {
-            logLevel = Level.SEVERE;
-            error(true, "❌ Некорректный уровень логирования в config.yml, используется SEVERE.");
         }
 
         logger.setLevel(logLevel);
-        if (fileHandler != null) {
-            fileHandler.setLevel(logLevel);
-        }
-
         logger.setUseParentHandlers(false);
-        info(true, "🔧 Установлен уровень логирования: " + logLevel.getName());
+
+        info(true, "🔧 Logger initialized with level: " + logLevel.getName());
     }
 
     public static void debug(boolean enabled, String message) {
-        if (enabled && loggingEnabled && logLevel.intValue() == Level.FINE.intValue()) {
+        if (enabled && loggingEnabled) {
             logger.fine("🟡 " + message);
         }
     }
 
     public static void info(boolean enabled, String message) {
-        if (enabled && loggingEnabled && logLevel.intValue() == Level.INFO.intValue()) {
+        if (enabled && loggingEnabled) {
             logger.info("ℹ️ " + message);
         }
     }
 
     public static void warn(boolean enabled, String message) {
-        if (enabled && loggingEnabled && logLevel.intValue() == Level.WARNING.intValue()) {
+        if (enabled && loggingEnabled) {
             logger.warning("⚠️ " + message);
         }
     }
 
     public static void error(boolean enabled, String message) {
-        if (enabled && loggingEnabled && logLevel.intValue() == Level.SEVERE.intValue()) {
+        if (enabled && loggingEnabled) {
             logger.severe("🚨 " + message);
-        }
-    }
-
-    public static void trace(boolean enabled, String message) {
-        if (enabled && loggingEnabled && logLevel.intValue() == Level.FINER.intValue()) {
-            logger.finer("📃 " + message);
         }
     }
 }

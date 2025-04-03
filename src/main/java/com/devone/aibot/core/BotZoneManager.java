@@ -1,81 +1,61 @@
 package com.devone.aibot.core;
 
-import org.bukkit.Bukkit;
-import org.bukkit.Location;
-import org.bukkit.configuration.file.FileConfiguration;
-import org.bukkit.configuration.file.YamlConfiguration;
 import com.devone.aibot.AIBotPlugin;
+import com.devone.aibot.core.config.BotManagerConfig;
+import com.devone.aibot.core.config.BotZoneConfig;
 import com.devone.aibot.utils.BotConstants;
 import com.devone.aibot.utils.BotLogger;
+import org.bukkit.Bukkit;
+import org.bukkit.Location;
+
 import java.io.File;
-import java.io.IOException;
-import java.util.HashMap;
-import java.util.Map;
-import java.util.Set;
+import java.util.*;
 
 public class BotZoneManager {
 
-    public static BotZoneManager instance; // ✅ Статическая ссылка на текущий экземпляр
+    private static BotZoneManager instance;
 
     private final AIBotPlugin plugin;
-    private final File zonesFile;
-    private final FileConfiguration config;
+    private final BotZoneConfig config;
     private final Map<String, BotProtectedZone> protectedZones = new HashMap<>();
-    private static final long AUTO_SAVE_INTERVAL = 5 * 60 * 20; // 5 minutes in ticks
+    private static final long AUTO_SAVE_INTERVAL = 5 * 60 * 20;
 
     public BotZoneManager(AIBotPlugin plugin, File pluginFolder) {
         this.plugin = plugin;
-        instance = this; // ✅ Сохраняем экземпляр для статического доступа
+        instance = this;
 
-        if (!pluginFolder.exists()) {
-            pluginFolder.mkdirs();
-        }
-
-        zonesFile = new File(BotConstants.PLUGIN_PATH_CONFIGS, "BotZoneManager.yml");
-        config = YamlConfiguration.loadConfiguration(zonesFile);
+        File zonesFile = new File(BotConstants.PLUGIN_PATH_CONFIGS, BotZoneManager.class.getSimpleName() + ".json");
+        this.config = new BotZoneConfig(zonesFile);
         loadZones();
 
-        // ✅ Schedule auto-save every 5 minutes
         scheduleAutoSave();
     }
 
     private void loadZones() {
         protectedZones.clear();
-        if (config.contains("zones")) {
-            for (String zoneName : config.getConfigurationSection("zones").getKeys(false)) {
-                double x = config.getDouble("zones." + zoneName + ".x");
-                double y = config.getDouble("zones." + zoneName + ".y");
-                double z = config.getDouble("zones." + zoneName + ".z");
-                int radius = config.getInt("zones." + zoneName + ".radius");
-                protectedZones.put(zoneName, new BotProtectedZone(x, y, z, radius));
-                BotLogger.info(true, "━ Loaded zone: " + zoneName + " at (" + x + ", " + y + ", " + z + ") with radius " + radius);
-            }
+        BotZoneConfig.Data loadedData = config.loadOrCreate();
+        for (Map.Entry<String, BotZoneConfig.ZoneEntry> entry : loadedData.zones.entrySet()) {
+            String zoneName = entry.getKey();
+            BotZoneConfig.ZoneEntry z = entry.getValue();
+            protectedZones.put(zoneName, new BotProtectedZone(z.x, z.y, z.z, z.radius));
+            BotLogger.info(true, "━ Loaded zone: " + zoneName + " at (" + z.x + ", " + z.y + ", " + z.z + ") with radius " + z.radius);
         }
         BotLogger.info(true, "☰ Total zones loaded: " + protectedZones.size());
     }
 
     public void saveZones() {
-        config.set("zones", null);
-        for (Map.Entry<String, BotProtectedZone> entry : protectedZones.entrySet()) {
-            String zoneName = entry.getKey();
-            BotProtectedZone zone = entry.getValue();
-            config.set("zones." + zoneName + ".x", (int) Math.round(zone.getX()));
-            config.set("zones." + zoneName + ".y", (int) Math.round(zone.getY()));
-            config.set("zones." + zoneName + ".z", (int) Math.round(zone.getZ()));
-            config.set("zones." + zoneName + ".radius", zone.getRadius());
-        }
-        try {
-            config.save(zonesFile);
-            BotLogger.info(true, "🗺️ Zones saved succesfully.");
-
-        } catch (IOException e) {
-            BotLogger.info(true, "❌ Failed to save zones: " + e.getMessage());
-        }
-    }    
+        BotZoneConfig.Data data = config.get();
+        data.zones.clear();
+        protectedZones.forEach((name, zone) ->
+            data.zones.put(name, new BotZoneConfig.ZoneEntry(zone.getX(), zone.getY(), zone.getZ(), zone.getRadius()))
+        );
+        config.save();
+        BotLogger.info(true, "🗺️ Zones saved successfully.");
+    }
 
     public void addZone(String name, Location center, int radius) {
         protectedZones.put(name, new BotProtectedZone(center.getX(), center.getY(), center.getZ(), radius));
-        BotLogger.info(true, "➕ Added new zone: " + name + " at " + center.toString() + " with radius " + radius);
+        BotLogger.info(true, "➕ Added new zone: " + name + " at " + center + " with radius " + radius);
     }
 
     public boolean removeZone(String name) {
@@ -87,12 +67,7 @@ public class BotZoneManager {
     }
 
     public boolean isInProtectedZone(Location location) {
-        for (BotProtectedZone zone : protectedZones.values()) {
-            if (zone.isInside(location)) {
-                return true;
-            }
-        }
-        return false;
+        return protectedZones.values().stream().anyMatch(z -> z.isInside(location));
     }
 
     public Set<String> listZones() {
@@ -106,24 +81,21 @@ public class BotZoneManager {
 
     public BotProtectedZone getZone(String zoneName) {
         return protectedZones.get(zoneName);
-    }    
+    }
 
-    // ✅ Статический метод для проверки зоны
     public static boolean isLocationInProtectedZone(Location location) {
         if (instance == null) {
-            BotLogger.info(true, "❌ ZoneManager не инициализирован! Невозможно проверить зону.");
+            BotLogger.info(true, "❌ ZoneManager not initialized!");
             return false;
         }
         return instance.isInProtectedZone(location);
     }
 
-    // ✅ Schedule periodic auto-save every 5 minutes
     private void scheduleAutoSave() {
         Bukkit.getScheduler().runTaskTimerAsynchronously(plugin, this::saveZones, AUTO_SAVE_INTERVAL, AUTO_SAVE_INTERVAL);
     }
 
     public static BotZoneManager getInstance() {
-        return AIBotPlugin.getInstance().getZoneManager();
+        return instance;
     }
-    
 }

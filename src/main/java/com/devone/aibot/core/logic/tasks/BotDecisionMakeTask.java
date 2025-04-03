@@ -63,7 +63,7 @@ public class BotDecisionMakeTask extends BotTask {
         long time = world.getTime();
         boolean isNight = (time >= 13000 && time <= 23000); // Примерно 13000 - закат, 23000 - рассвет
 
-        double huntChance = isNight ? 0.9 : 0.2; // 90% ночью, 20% днем
+        double huntChance = isNight ? 0.5 : 0.1; // 90% ночью, 10% днем
 
         if (rand < 0.1) { // 10% шанс сказать что-то про окружающий мир
             BotLogger.info(isLogging(),"🤖 " + bot.getId() + " Комментирует обстановку.");
