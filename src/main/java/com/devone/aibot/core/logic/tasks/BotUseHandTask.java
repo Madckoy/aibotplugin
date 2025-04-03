@@ -108,7 +108,8 @@ public class BotUseHandTask extends BotTask {
         
         // ✅ Принудительно обновляем положение, если поворот сбрасывается
         Bukkit.getScheduler().runTaskLater(AIBotPlugin.getInstance(), () -> {
-            bot.getNPCEntity().teleport(bot.getRuntimeStatus().getCurrentLocation());
+            BotUtils.lookAt(bot, target);
+            //bot.getNPCEntity().teleport(bot.getRuntimeStatus().getCurrentLocation());
         }, 1L); // ✅ Через тик, чтобы дать время на обновление
 
         BotLogger.info(this.isLogged(), "🔄 TURNING: " + bot.getId() + " to look at the target: " + BotStringUtils.formatLocation(target));

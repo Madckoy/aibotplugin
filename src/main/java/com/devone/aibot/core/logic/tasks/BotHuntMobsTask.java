@@ -43,7 +43,7 @@ public class BotHuntMobsTask extends BotTask {
 
         if (targetMob != null) {
 
-            BotUtils.lookAt(bot, targetMob.getLocation());
+            //BotUtils.lookAt(bot, targetMob.getLocation());
 
             bot.addTaskToQueue(new BotFollowTargetTask(bot, targetMob));
             BotLogger.info(this.isLogged(),"🎯 Бот начинает преследование " + targetMob.getType());

@@ -68,7 +68,7 @@ public class BotFollowTargetTask extends BotTask {
 
     private void followPlayer(Player player, double distance) {
         if (distance > followDistance) {
-            updateNavigationIfNeeded(player.getLocation());
+            updateNavigation(player.getLocation());
             BotLogger.info(this.isLogged(),"🏃 Бот следует за игроком " + player.getName());
         }
 
@@ -80,10 +80,11 @@ public class BotFollowTargetTask extends BotTask {
 
     private void followAndAttack(double distance) {
         
-        BotUtils.lookAt(bot, target.getLocation());
+        //BotUtils.lookAt(bot, target.getLocation());
 
         if (distance > attackRange) {
-            updateNavigationIfNeeded(target.getLocation());
+            updateNavigation(target.getLocation());
+        
             BotLogger.info(this.isLogged(),"🏃 Преследуем " + target.getType() + " (расстояние: " + distance + ")");
         } else {
             attackTarget();
@@ -91,14 +92,12 @@ public class BotFollowTargetTask extends BotTask {
         }
     }
 
-    private void updateNavigationIfNeeded(Location newTargetLocation) {
-        if (lastKnownLocation.distanceSquared(newTargetLocation) > relocateThreshold * relocateThreshold) {
-            lastKnownLocation = newTargetLocation;
+    private void updateNavigation(Location newTargetLocation) {
 
             BotNavigationUtils.navigateTo(bot, lastKnownLocation, 2.5);
             
             BotLogger.info(this.isLogged(),"🔄 Обновляем маршрут к новой позиции цели.");
-        }
+  
     }
 
     private void attackTarget() {
