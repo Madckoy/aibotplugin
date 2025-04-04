@@ -54,13 +54,17 @@ public class BotNavigationUtils {
             && material != Material.LAVA && material != Material.WATER;
     }
 
-        public static void navigateTo(Bot bot, Location target) {
-        BotMoveTask moveTask = new BotMoveTask(bot);
-        moveTask.configure(target);
-        bot.addTaskToQueue(moveTask);
+    public static void navigateTo(Bot bot, Location target) {
+        navigateTo(bot, target, 2.5);
     }
 
     public static void navigateTo(Bot bot, Location target, double multiplier) {
+
+        if(!isSuitableForNavigation(target, target.getBlock().getType())) { 
+            BotLogger.info(true, "⛔ " + bot.getId() + " Navigation is not allowed to " + target.getBlock().getType());    
+            return; 
+        }
+
         BotMoveTask moveTask = new BotMoveTask(bot);
         moveTask.configure(target, multiplier);
         bot.addTaskToQueue(moveTask);

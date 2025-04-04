@@ -113,12 +113,12 @@ public class BotMoveTask extends BotTask {
                         taskHandle.cancel();
                         isDone = true;
                     } else {
-                        //BotLogger.info(bot.getId() + " 🚶 Двигаюсь в " + BotStringUtils.formatLocation(bot.getRuntimeStatus().getTargetLocation()) + " [ID: " + uuid + "]");
+                        BotLogger.info(this.isLogged(), bot.getId() + " 🚶 Двигаюсь в " + BotStringUtils.formatLocation(bot.getRuntimeStatus().getTargetLocation()) + " [ID: " + uuid + "]");
 
                         bot.getNPCNavigator().getDefaultParameters().speedModifier(speedMultiplier);
-
                         bot.getRuntimeStatus().getCurrentLocation().setDirection(bot.getRuntimeStatus().getTargetLocation().toVector().subtract(bot.getRuntimeStatus().getCurrentLocation().toVector()));
                         bot.getNPCNavigator().setTarget(bot.getRuntimeStatus().getTargetLocation());
+
                     }
                 }
             }
