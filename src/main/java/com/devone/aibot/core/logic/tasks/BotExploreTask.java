@@ -32,7 +32,7 @@ public class BotExploreTask extends BotTask {
         BotLogger.info(this.isLogged(), "🌐 " + bot.getId() + " Patrolling with radius: " + scanRadius + " [ID: " + uuid + "]");
         
         if(getEnvMap()==null) {
-            BotSonar3DTask sonar = new BotSonar3DTask(bot, this, scanRadius, 5);
+            BotSonar3DTask sonar = new BotSonar3DTask(bot, this, scanRadius, 4);
             bot.addTaskToQueue(sonar);
             return;
         }  
