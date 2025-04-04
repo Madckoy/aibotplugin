@@ -25,7 +25,7 @@ public class BotHuntMobsTask extends BotTask {
     }
 
     @Override
-    public void executeTask() {
+    public void execute() {
         BotLogger.info(isLogged(),"🚀 Запуск задачи охоты для бота " + bot.getId());
 
         setObjective("Look for hostile targets");
@@ -33,7 +33,6 @@ public class BotHuntMobsTask extends BotTask {
         if (getBioEntities() == null) {
             BotLogger.info(this.isLogged(),"🔍 Запускаем 3D-сканирование живых целей.");
             bot.addTaskToQueue(new BotSonar3DTask(bot, this, scanRadius*2, 4));
-            isDone = false;
             return;
         }
 
@@ -47,13 +46,13 @@ public class BotHuntMobsTask extends BotTask {
 
             bot.addTaskToQueue(new BotFollowTargetTask(bot, targetMob));
             BotLogger.info(this.isLogged(),"🎯 Бот начинает преследование " + targetMob.getType());
-            isDone = true;
+            this.stop();
             return;
         }
 
         if (getElapsedTime() > 180000) {
             BotLogger.info(this.isLogged(),"😴 Устал, охота утомляет.");
-            isDone = true;
+            this.stop();
             return;
         }
 
@@ -90,6 +89,11 @@ public class BotHuntMobsTask extends BotTask {
         //}
 
         BotLogger.info(this.isLogged(),"❌ Ни одной подходящей цели не найдено.");
+        this.stop();
+    }
+
+    @Override
+    public void stop() {
         isDone = true;
     }
 

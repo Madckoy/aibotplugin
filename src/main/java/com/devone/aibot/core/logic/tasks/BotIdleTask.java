@@ -18,8 +18,14 @@ public class BotIdleTask extends BotPlayerLinkedTask {
     }
 
     @Override
-    public void executeTask() {
-      isDone = true;
+    public void execute() {
+        this.stop();
+    }
+
+    @Override
+    public void stop() {
+        this.isDone = true;
+
     }
 
 }

@@ -48,7 +48,7 @@ public class BotSonar3DTask extends BotTask {
 
 
     @Override
-    public void executeTask() {
+    public void execute() {
 
         setObjective("Scanning Signatures");
         
@@ -64,7 +64,12 @@ public class BotSonar3DTask extends BotTask {
             BotLogger.info(this.isLogged(),"🧬 Bio scan complete. Entities: " + bio.size());
         }
     
-        isDone = true;
+        this.stop();
+    }
+
+    @Override
+    public void stop() {
+        this.isDone = true;
     }
 
 }

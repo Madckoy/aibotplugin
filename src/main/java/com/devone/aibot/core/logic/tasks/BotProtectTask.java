@@ -13,7 +13,12 @@ public class BotProtectTask extends BotPlayerLinkedTask {
     }
 
     @Override
-    public void executeTask() {
+    public void execute() {
+        this.stop();
+    }
+    
+    @Override
+    public void stop() {
         isDone = true;
     }
 

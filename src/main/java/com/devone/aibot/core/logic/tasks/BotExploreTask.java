@@ -25,7 +25,7 @@ public class BotExploreTask extends BotTask {
 
     }
 
-    public void executeTask() {
+    public void execute() {
 
         if (isPaused) return;
 
@@ -34,7 +34,6 @@ public class BotExploreTask extends BotTask {
         if(getEnvMap()==null) {
             BotSonar3DTask sonar = new BotSonar3DTask(bot, this, scanRadius, 5);
             bot.addTaskToQueue(sonar);
-            isDone = false;
             return;
         }  
     
@@ -42,7 +41,7 @@ public class BotExploreTask extends BotTask {
 
         if (bot.getRuntimeStatus().getTargetLocation() == null) {
             BotLogger.info(this.isLogged(), "🌐 " + bot.getId() + " Has finished exploration." +  " [ID: " + uuid + "]");
-            isDone = true; // ✅ Теперь `PATROL` корректно завершает себя
+            this.stop();
             setEnvMap(null);// reset env map to force rescan
             return;
         }
@@ -58,17 +57,21 @@ public class BotExploreTask extends BotTask {
             // 📌 30% шанс выйти из патрулирования
             BotLogger.info(this.isLogged(), "🌐" + bot.getId() + " Moving out of exploration: " + BotStringUtils.formatLocation(bot.getRuntimeStatus().getTargetLocation()) + " [Task ID: " + uuid + "]");
             bot.getRuntimeStatus().setTargetLocation(null);
-            isDone = true;
+
+            this.stop();
 
         } else {
             BotLogger.info(this.isLogged(), "🌐 " + bot.getId() + " Moving to exploration point: " + BotStringUtils.formatLocation(bot.getRuntimeStatus().getTargetLocation()) + " [Task ID: " + uuid + "]");
 
             BotNavigationUtils.navigateTo(bot, bot.getRuntimeStatus().getTargetLocation()); // via a new MoVeTask()
-
-            isDone = false;
         }
 
         setEnvMap(null);
+    }
+
+    @Override
+    public void stop() {
+       this.isDone = true;
     }
 
 

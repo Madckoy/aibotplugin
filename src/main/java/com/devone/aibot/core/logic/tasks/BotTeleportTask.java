@@ -36,7 +36,7 @@ public class BotTeleportTask extends BotTask {
     }
 
     @Override
-    public void executeTask() {
+    public void execute() {
         setObjective("Teleporting");
 
        //do nothing
@@ -48,8 +48,12 @@ public class BotTeleportTask extends BotTask {
                     //bot.getNPCEntity().teleport();
                 });
 
-       isDone = true;
+       stop();
 
+    }
+
+    public void stop() {
+        isDone = true;
     }
 
 }

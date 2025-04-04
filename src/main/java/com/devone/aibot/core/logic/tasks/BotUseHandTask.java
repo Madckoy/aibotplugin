@@ -52,17 +52,17 @@ public class BotUseHandTask extends BotTask {
 
         if (!hasParams) {
             BotLogger.info(this.isLogged(), bot.getId() + " ❌ Некорректные параметры для `BotTaskUseHand`: " + Arrays.toString(params));
-            isDone = true;
+            this.stop();
         }
 
         return this;
     }
 
     @Override
-    public void executeTask() {
+    public void execute() {
         if (bot.getRuntimeStatus().getTargetLocation() == null && target == null) {
             BotLogger.info(this.isLogged(), bot.getId() + " ❌ Нет цели или координат для удара");
-            isDone = true;
+            this.stop();
             return;
         }
     
@@ -70,7 +70,7 @@ public class BotUseHandTask extends BotTask {
         if (target != null && target.isDead()) {
             BotLogger.info(this.isLogged(), bot.getId() + " ☠️ Цель уже мертва. Завершаем атаку.");
             bot.getRuntimeStatus().mobKilledAdd(1);
-            isDone = true;
+            this.stop();
             return;
         }
     
@@ -97,7 +97,8 @@ public class BotUseHandTask extends BotTask {
                 BotLogger.warn(this.isLogged(), bot.getId() + " ⚠️ Нечего разрушать");
             }
     
-            isDone = true;
+            this.stop();
+
         });
     }
 
@@ -123,6 +124,10 @@ public class BotUseHandTask extends BotTask {
         } else {
             BotLogger.info(this.isLogged(), "✋🏻 Анимация не выполнена: бот — не игрок");
         }
+    }
+
+    public void stop() {
+        isDone = true;
     }
 
 }

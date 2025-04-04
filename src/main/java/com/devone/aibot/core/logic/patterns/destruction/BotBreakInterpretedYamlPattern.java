@@ -30,7 +30,6 @@ public class BotBreakInterpretedYamlPattern implements IBotDestructionPattern {
     private int offsetX, offsetY, offsetZ, outerRadius, innerRadius;  
 
     private final Queue<BotCoordinate3D> blocksToBreak = new LinkedList<>();
-    private boolean inverted = false;
     
         public BotBreakInterpretedYamlPattern(Path path) {
             this.yamlPath = path;

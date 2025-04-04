@@ -31,7 +31,7 @@ public class BotDecisionMakeTask extends BotTask {
     }
 
     @Override
-    public void executeTask() {
+    public void execute() {
         
         setObjective("Rolling a dice" );
   
@@ -145,6 +145,11 @@ public class BotDecisionMakeTask extends BotTask {
             BotLogger.info(this.isLogged(),"🍹" + bot.getId() + " остаётся в IDLE.");
             return;
         }
+    }
+
+    @Override
+    public void stop() {
+        this.isDone = true;
     }
 
 }

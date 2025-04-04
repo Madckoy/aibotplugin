@@ -34,9 +34,4 @@ public class BotBreakAnyUpwardTask extends BotBreakTask {
         setOffsetZ(config.getOffsetZ());
 
     }
-
-    @Override
-    public void executeTask() {
-        super.executeTask();
-    }
 }

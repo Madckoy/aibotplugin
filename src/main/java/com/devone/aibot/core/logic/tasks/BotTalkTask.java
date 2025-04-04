@@ -33,12 +33,13 @@ public class BotTalkTask extends BotTask {
     }
 
     @Override
-    public void executeTask() {
+    public void execute() {
         String message = generateMessage();
         // ✅ Показываем в мониторинге всегда, даже если бот молчит
         setObjective("Saying: " + message);
 
-        isDone = true;
+        this.stop();
+
         return;
 
         /*****
@@ -92,5 +93,9 @@ public class BotTalkTask extends BotTask {
         if (messages == null || messages.isEmpty())
             return "🤖 ...";
         return messages.get(random.nextInt(messages.size()));
+    }
+    @Override
+    public void stop() {
+        isDone = true;
     }
 }

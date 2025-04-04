@@ -27,11 +27,16 @@ public class BotDropAllTask extends BotPlayerLinkedTask {
     }
 
     @Override
-    public void executeTask() {
+    public void execute() {
         
         BotInventory.dropAllItems(bot);
 
-        isDone = true;
+        this.stop();
+    }
+
+    @Override
+    public void stop() {
+        this.isDone = true;
     }
 
 }

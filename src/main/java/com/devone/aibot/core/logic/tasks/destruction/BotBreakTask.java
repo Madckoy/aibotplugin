@@ -35,7 +35,7 @@ public class BotBreakTask extends BotTask {
     private boolean destroyAllIfNoTarget = false;
     private Set<Material> targetMaterials = null;
     private String patternName = BotConstants.DEFAULT_PATTERN_BREAK;
-    private IBotDestructionPattern breakPattern = null;
+    private IBotDestructionPattern breakPatternImpl = null;
     private AxisDirection breakDirection = AxisDirection.DOWN;
 
     private int offsetX, offsetY, offsetZ = 0;
@@ -128,35 +128,12 @@ public class BotBreakTask extends BotTask {
             this.offsetZ = (Integer) params[9];
         }
         // Применяем создание шаблона с новыми параметрами
-        if (params.length >= 11) {
-            if (params[10] instanceof IBotDestructionPattern ptrn) {
-                this.breakPattern = ptrn;
-                BotLogger.info(this.isLogged(), "ℹ️ 📐 Получен готовый YAML-паттерн через параметры: " + ptrn.getName());
-            } else if (params[10] instanceof String patternFile && patternFile.endsWith(".yml")) {
-                Path path = Paths.get(BotConstants.PLUGIN_PATH_PATTERNS_BREAK, patternFile);
-
-                this.breakPattern = new BotBreakInterpretedYamlPattern(path)
-                        .configure(offsetX, offsetY, offsetZ, outerRadius, innerRadius, AxisDirection.DOWN);
-
-                BotLogger.info(this.isLogged(), "ℹ️ 📐 Загружен YAML-паттерн по имени: " + patternFile);
-            }
+        if (params.length >= 11 && params[10] instanceof String) {
+                this.patternName = (String) params[10];
         }
 
-        // Если не задано — fallback на default.yml
-        if (this.breakPattern == null ) {
-            Path fallbackPath = Paths.get(BotConstants.PLUGIN_PATH_PATTERNS_BREAK, patternName);
-            this.breakPattern = new BotBreakInterpretedYamlPattern(fallbackPath).
-                                    configure(offsetX, offsetY, offsetZ, outerRadius, innerRadius, AxisDirection.DOWN);
-            BotLogger.info(this.isLogged(),
-                    "ℹ️ 📐 Используется дефолтный YAML-паттерн: " + patternName);
-        }
+        BotLogger.info(this.isLogged(), "📐 Установлен паттерн разрушения через config(): " +patternName);
 
-        BotLogger.info(this.isLogged(), "📐 Выбран паттерн разрушения: " + breakPattern.getName());
-
-        bot.setAutoPickupEnabled(shouldPickup);
-
-        BotLogger.info(this.isLogged(),
-                "⚙️ BotTaskBreakBlock настроена: " + (targetMaterials == null ? "ВСЕ БЛОКИ" : targetMaterials));
         return this;
     }
 
@@ -217,47 +194,46 @@ public class BotBreakTask extends BotTask {
         BotLogger.info(this.isLogged(), "🎯 Установлены целевые блоки: " + materials);
     }
 
-    public void setBreakPattern(IBotDestructionPattern ptrn) {
-        breakPattern = ptrn;
-    }
-
     public Set<Material> getTargetMaterials() {
         BotLogger.info(this.isLogged(), "📜 Получены целевые блоки: " + targetMaterials);
         return this.targetMaterials;
     }
 
     @Override
-    public void executeTask() {
+    public void execute() {
 
         BotLogger.info(this.isLogged(), "🚀 Запуск задачи разрушения блоков для бота " + bot.getId() +
                 " (Целевые блоки: " + (targetMaterials == null ? "ВСЕ" : targetMaterials) + ")");
 
-        if (breakPattern == null) {
+        if (breakPatternImpl == null) {
             if (!StringUtil.isEmpty(patternName)) {
-                Path fallbackPath = Paths.get(BotConstants.PLUGIN_PATH_PATTERNS_BREAK, patternName);
-                this.breakPattern = new BotBreakInterpretedYamlPattern(fallbackPath).
+
+                Path ptrnPath = Paths.get(BotConstants.PLUGIN_PATH_PATTERNS_BREAK, patternName);
+                this.breakPatternImpl = new BotBreakInterpretedYamlPattern(ptrnPath).
                                         configure(offsetX, offsetY, offsetZ, outerRadius, innerRadius, breakDirection);
+
                 BotLogger.info(this.isLogged(),
-                        "ℹ️ 📐 Используется YAML-паттерн: " + patternName);
+                        "ℹ️ 📐 Используется YAML-паттерн: " + this.breakPatternImpl.getName());
                 
             } else {
                 Path fallbackPath = Paths.get(BotConstants.PLUGIN_PATH_PATTERNS_BREAK, BotConstants.DEFAULT_PATTERN_BREAK);
-                this.breakPattern = new BotBreakInterpretedYamlPattern(fallbackPath).configure(offsetX, offsetY, offsetZ, outerRadius, innerRadius, breakDirection);
+                
+                this.breakPatternImpl = new BotBreakInterpretedYamlPattern(fallbackPath).configure(offsetX, offsetY, offsetZ, outerRadius, innerRadius, breakDirection);
+                
                 BotLogger.info(this.isLogged(),
                         "ℹ️ 📐 Используется дефолтный YAML-паттерн: " + BotConstants.DEFAULT_PATTERN_BREAK);
             }
         }
 
-        if (breakPattern.isFinished()) {
+        if (breakPatternImpl.isFinished()) {
             BotLogger.info(this.isLogged(), "🏁 Все блоки по паттерну обработаны. Завершаем задачу.");
-            isDone = true;
+            this.stop();
             return;
         }
 
         if (isInventoryFull() || isEnoughBlocksCollected()) {
             BotLogger.info(this.isLogged(), "⛔ Задача завершена: инвентарь полон или ресурсов достаточно");
-            isDone = true;
-            bot.getRuntimeStatus().setTargetLocation(null);
+            this.stop();
             return;
         }
 
@@ -268,14 +244,13 @@ public class BotBreakTask extends BotTask {
             BotSonar3DTask scanTask = new BotSonar3DTask(bot, this, outerRadius, innerRadius);
             scanTask.configure(scanMode);
             bot.addTaskToQueue(scanTask);
-            isDone = false;
             return;
         }
 
-        BotCoordinate3D coordinate = breakPattern.findNextBlock(bot);
+        BotCoordinate3D coordinate = breakPatternImpl.findNextBlock(bot);
 
         if (coordinate == null) {
-            isDone = true;
+            this.stop();
             BotLogger.info(this.isLogged(), "🙈 Не удалось получить координаты блока для разрушения. Выходим.");
             return;
         }
@@ -292,8 +267,7 @@ public class BotBreakTask extends BotTask {
             if (isInProtectedZone(bot.getRuntimeStatus().getTargetLocation())) {
                 BotLogger.info(this.isLogged(), "⛔ " + bot.getId() + " в запретной зоне, НЕ будет разрушать блок: " +
                         BotStringUtils.formatLocation(bot.getRuntimeStatus().getTargetLocation()));
-                isDone = true;
-                bot.getRuntimeStatus().setTargetLocation(null);
+                this.stop();
                 return;
             }
 
@@ -334,11 +308,10 @@ public class BotBreakTask extends BotTask {
         if (destroyAllIfNoTarget) {
             BotLogger.info(this.isLogged(), "🔄 " + bot.getId() + " Целевых блоков нет! Запускаем полное разрушение.");
             bot.addTaskToQueue(new BotBreakAnyTask(bot));
-            isDone = false;
         } else {
             setObjective("");
             BotLogger.info(this.isLogged(), "❌ " + bot.getId() + " Нет подходящих блоков. Завершаем.");
-            isDone = true;
+            this.stop();
         }
     }
 
@@ -360,6 +333,14 @@ public class BotBreakTask extends BotTask {
             BotLogger.info(this.isLogged(), "🛑 Блок в запретной зоне, разрушение запрещено.");
         }
         return protectedZone;
+    }
+
+    @Override
+    public void stop() {
+       this.isDone = true;
+       this.breakPatternImpl = null;
+       bot.getRuntimeStatus().setTargetLocation(null);
+       BotLogger.info(this.isLogged(), "🛑 Задача разрушения остановлена.");
     }
 
 }

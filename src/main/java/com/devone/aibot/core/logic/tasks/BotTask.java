@@ -95,6 +95,7 @@ public abstract class BotTask implements IBotTask, IBotTaskConfigurable {
 
     @Override
     public void update() {
+        
         BotLogger.info(this.isLogged(), "🚦 " + bot.getId() + " " + name + " Status: " + isDone + " | " + isPaused +
                 " 📍 xyz: " + BotStringUtils.formatLocation(bot.getRuntimeStatus().getCurrentLocation()) +
                 " 🎯 xyz: " + BotStringUtils.formatLocation(bot.getRuntimeStatus().getTargetLocation()) + " [ID: " + uuid + "]");
@@ -106,11 +107,13 @@ public abstract class BotTask implements IBotTask, IBotTaskConfigurable {
         }
 
         if (isEnabled) {
-            executeTask();
+            execute();
         }
     }
 
-    public abstract void executeTask();
+    public abstract void execute();
+
+    public abstract void stop();
 
     public String getUUID() {
         return uuid;
@@ -201,6 +204,7 @@ public abstract class BotTask implements IBotTask, IBotTaskConfigurable {
         this.bot.getLifeCycle().getTaskStackManager().clearTasks();
 
         bot.addTaskToQueue(new BotDecisionMakeTask(bot));
-        isDone = true;
+
+        this.stop();
     }
 }

@@ -35,10 +35,10 @@ public class BotFollowTargetTask extends BotTask {
     }
 
     @Override
-    public void executeTask() {
+    public void execute() {
         if (target == null || target.isDead()) {
             BotLogger.info(this.isLogged(),"💀 Цель исчезла. Завершаем преследование.");
-            isDone = true;
+            this.stop();
             return;
         }
 
@@ -47,12 +47,12 @@ public class BotFollowTargetTask extends BotTask {
         updateFollowLogic();
 
         // Повторим проверку через заданный интервал
-        Bukkit.getScheduler().runTaskLater(AIBotPlugin.getInstance(), this::executeTask, updateIntervalTicks);
+        Bukkit.getScheduler().runTaskLater(AIBotPlugin.getInstance(), this::execute, updateIntervalTicks);
 
         // Защита от вечного цикла
         if (getElapsedTime() > 120000) {
             BotLogger.info(this.isLogged(),"💀 Не могу добраться до цели. Завершаю преследование.");
-            isDone = true;
+            this.stop();
         }
     }
 
@@ -88,7 +88,7 @@ public class BotFollowTargetTask extends BotTask {
             BotLogger.info(this.isLogged(),"🏃 Преследуем " + target.getType() + " (расстояние: " + distance + ")");
         } else {
             attackTarget();
-            isDone = true; // Завершаем после атаки — задача выполнена
+            this.stop();
         }
     }
 
@@ -115,6 +115,11 @@ public class BotFollowTargetTask extends BotTask {
 
     public LivingEntity getFollowingObject() {
         return this.target;
+    }
+
+    @Override
+    public void stop() {
+        this.isDone = true;
     }
 
 }
