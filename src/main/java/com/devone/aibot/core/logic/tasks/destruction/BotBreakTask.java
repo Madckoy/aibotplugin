@@ -276,7 +276,7 @@ public class BotBreakTask extends BotTask {
 
         if (coordinate == null) {
             isDone = true;
-            BotLogger.info(this.isLogged(), "🙈 Не удалось получитькоординаты блока для разрушения. Выходим.");
+            BotLogger.info(this.isLogged(), "🙈 Не удалось получить координаты блока для разрушения. Выходим.");
             return;
         }
 
