@@ -89,8 +89,8 @@ public class BotDecisionMakeTask extends BotTask {
             return;
         }
 
-        if (rand >= 0.8) {
-            // 📌 Начать патрулирование (20% вероятность)
+        if (rand >= 0.6) {
+            // 📌 Начать патрулирование (40% вероятность)
             BotLogger.info(this.isLogged(), "🌐 " + bot.getId() + " начинает патрулирование.");
             BotExploreTask patrolTask = new BotExploreTask(bot);
             bot.addTaskToQueue(patrolTask);
@@ -111,7 +111,7 @@ public class BotDecisionMakeTask extends BotTask {
         }
             */
 
-        if (rand < 0.8 && rand >= 0.2) {  
+        if (rand < 0.6 && rand >= 0.2) {  
             // ⛏ 30% шанс начать добычу всего подряд вниз
             BotBreakAnyDownwardTask breakTask = new BotBreakAnyDownwardTask(bot);
         
