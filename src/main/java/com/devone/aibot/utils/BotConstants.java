@@ -8,7 +8,7 @@ public class BotConstants {
     public static final String  PLUGIN_PATH_WEB_ASSETS       = PLUGIN_PATH + "/web/assets"; 
     public static final String  PLUGIN_PATH_LOGS             = PLUGIN_PATH+"/logs/";
     public static final String  PLUGIN_TMP                   = PLUGIN_PATH+"/tmp/";
-    public static final boolean FLIP_COORDS                  = true;
+    public static final boolean FLIP_COORDS                  = false;
     public static final String  PLUGIN_PATH_PATTERNS_BREAK   = PLUGIN_PATH + "/patterns/break/";
     public static final String  RESOURCE_PATH_PATTERNS_BREAK = "patterns/break/";
 

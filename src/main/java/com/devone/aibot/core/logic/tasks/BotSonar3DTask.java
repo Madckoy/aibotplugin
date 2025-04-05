@@ -11,7 +11,6 @@ import com.devone.aibot.core.Bot;
 import com.devone.aibot.core.logic.tasks.destruction.BotBreakTask;
 import com.devone.aibot.utils.Bot3DBioScan;
 import com.devone.aibot.utils.Bot3DGeoScan;
-import com.devone.aibot.utils.Bot3DGeoScan.ScanMode;
 import com.devone.aibot.utils.BotLogger;
 
 
@@ -21,14 +20,11 @@ public class BotSonar3DTask extends BotTask {
     private int radius;
     private int height;
 
-    private ScanMode scanMode = ScanMode.FULL;
-
     public BotSonar3DTask(Bot bot, BotTask caller, int radius, int height) {
         super(bot, "𖣠"); // ᯤ
         parent = caller;
         this.radius = radius;
         this.height = height;
-        this.scanMode = Bot3DGeoScan.ScanMode.FULL;
 
         setObjective("Scan Signatures");
     }
@@ -36,13 +32,7 @@ public class BotSonar3DTask extends BotTask {
     // Метод конфигурации для установки ScanMode
     @Override
     public BotTask configure(Object... params) {
-    super.configure(params);
-
-        if (params.length >= 1 && params[0] instanceof ScanMode) {
-            scanMode = (ScanMode) params[0];  // Устанавливаем scanMode из параметров
-        }
-
-        BotLogger.info(this.isLogged(),"⚙️ BotTaskSonar3D сконфигурирован с режимом сканирования: " + scanMode);
+        super.configure(params);
         return this;
     }
 
@@ -53,7 +43,7 @@ public class BotSonar3DTask extends BotTask {
         setObjective("Scanning Signatures");
         
         if (parent instanceof BotExploreTask || parent instanceof BotBreakTask) {
-            Map<Location, Material> geo = Bot3DGeoScan.scan3D(bot, radius, height, scanMode);
+            Map<Location, Material> geo = Bot3DGeoScan.scan3D(bot, radius, height);
             parent.setGeoMap(geo);
             BotLogger.info(this.isLogged(),"🛰️ Geo scan complete. Blocks: " + geo.size());
         }

@@ -7,7 +7,6 @@ import org.bukkit.entity.Player;
 
 import com.devone.aibot.core.Bot;
 import com.devone.aibot.core.logic.tasks.configs.BotTaskConfig;
-import com.devone.aibot.utils.Bot3DGeoScan.ScanMode;
 import com.devone.aibot.utils.BotLogger;
 import com.devone.aibot.utils.BotStringUtils;
 import com.devone.aibot.utils.BotUtils;
@@ -32,7 +31,6 @@ public abstract class BotTask implements IBotTask, IBotTaskConfigurable {
     protected Map<Location, Material> geoMap;
     protected List<LivingEntity> bioEntities;
     protected String objective;
-    protected ScanMode scanMode = com.devone.aibot.utils.Bot3DGeoScan.ScanMode.FULL;
     
     protected BotTaskConfig config;
 
@@ -54,10 +52,6 @@ public abstract class BotTask implements IBotTask, IBotTaskConfigurable {
         this.player = player;
         this.name = name;
         this.uuid = UUID.randomUUID().toString();
-    }
-
-    public void setScanMode(ScanMode scm) {
-        this.scanMode = scm;
     }
 
     public void setEnvMap(Map<Location, Material> env_map) {
@@ -95,7 +89,7 @@ public abstract class BotTask implements IBotTask, IBotTaskConfigurable {
 
     @Override
     public void update() {
-        
+
         BotLogger.info(this.isLogged(), "🚦 " + bot.getId() + " " + name + " Status: " + isDone + " | " + isPaused +
                 " 📍 xyz: " + BotStringUtils.formatLocation(bot.getRuntimeStatus().getCurrentLocation()) +
                 " 🎯 xyz: " + BotStringUtils.formatLocation(bot.getRuntimeStatus().getTargetLocation()) + " [ID: " + uuid + "]");

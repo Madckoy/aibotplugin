@@ -16,33 +16,23 @@ import com.devone.aibot.core.Bot;
 
 public class Bot3DGeoScan {
 
-    public static enum ScanMode {
-        FULL,
-        DOWNWARD,
-        UPWARD
-    }
-
     @SuppressWarnings("unchecked")
-    public static Map<Location, Material> scan3D(Bot bot, int scanRadius, int height, ScanMode scanMode) {
+    public static Map<Location, Material> scan3D(Bot bot, int scanRadius, int height) {
 
+        int deltaY = (height-1) / 2;
         World world = Bukkit.getWorlds().get(0);
 
         int centerX = bot.getRuntimeStatus().getCurrentLocation().getBlockX();
         int centerY = bot.getRuntimeStatus().getCurrentLocation().getBlockY();
         int centerZ = bot.getRuntimeStatus().getCurrentLocation().getBlockZ();
 
-        int minY = centerY - height;
-        int maxY = centerY + height;
+        int minY = centerY - deltaY;
+        int maxY = centerY + deltaY;
 
         Map<Location, Material> scannedBlocks = new HashMap<>();
         JSONArray blockArray = new JSONArray();
 
         for (int y = maxY; y >= minY; y--) {
-            if (scanMode == ScanMode.DOWNWARD && y > centerY)
-                continue;
-            if (scanMode == ScanMode.UPWARD && y < centerY)
-                continue;
-
             for (int x = -scanRadius; x <= scanRadius; x++) {
                 for (int z = -scanRadius; z <= scanRadius; z++) {
 

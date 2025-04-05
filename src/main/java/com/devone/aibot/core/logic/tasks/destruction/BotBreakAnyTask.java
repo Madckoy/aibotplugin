@@ -2,7 +2,6 @@ package com.devone.aibot.core.logic.tasks.destruction;
 
 import com.devone.aibot.core.Bot;
 import com.devone.aibot.core.logic.tasks.configs.BotBreakTaskConfig;
-import com.devone.aibot.utils.Bot3DGeoScan.ScanMode;
 import com.devone.aibot.utils.BotAxisDirection.AxisDirection;
 import com.devone.aibot.utils.BotConstants;
 
@@ -17,7 +16,6 @@ public class BotBreakAnyTask extends BotBreakTask {
         bot.getRuntimeStatus().setTargetLocation(bot.getRuntimeStatus().getCurrentLocation());
 
         setTargetMaterials(null);
-        setScanMode(ScanMode.FULL);
         setBreakDirection(AxisDirection.DOWN);
 
 
