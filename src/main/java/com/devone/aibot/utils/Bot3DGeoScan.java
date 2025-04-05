@@ -68,7 +68,7 @@ public class Bot3DGeoScan {
     }
 
     private static void saveScanResultToFile(Bot bot, JSONArray scanData) {
-        File scanFile = new File(BotConstants.PLUGIN_TMP, bot.getId() + "_3d_geo_scan.json");
+        File scanFile = new File(BotConstants.PLUGIN_TMP, bot.getId() + "_scan_data.json");
 
         int centerX = bot.getRuntimeStatus().getCurrentLocation().getBlockX();
         int centerY = bot.getRuntimeStatus().getCurrentLocation().getBlockY();
