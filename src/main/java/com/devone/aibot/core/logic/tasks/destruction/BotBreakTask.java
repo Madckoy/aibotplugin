@@ -241,7 +241,7 @@ public class BotBreakTask extends BotTask {
 
         if (getGeoMap() == null) {
             BotLogger.info(this.isLogged(), "🔍 Запускаем 3D-сканирование окружающей среды.");
-            BotSonar3DTask scanTask = new BotSonar3DTask(bot, this, 2*outerRadius, 2);
+            BotSonar3DTask scanTask = new BotSonar3DTask(bot, this, outerRadius, outerRadius);
             bot.addTaskToQueue(scanTask);
             return;
         }

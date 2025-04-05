@@ -32,7 +32,7 @@ public class BotHuntMobsTask extends BotTask {
 
         if (getBioEntities() == null) {
             BotLogger.info(this.isLogged(),"🔍 Запускаем 3D-сканирование живых целей.");
-            bot.addTaskToQueue(new BotSonar3DTask(bot, this, scanRadius, 4));
+            bot.addTaskToQueue(new BotSonar3DTask(bot, this, scanRadius, scanRadius));
             return;
         }
 
