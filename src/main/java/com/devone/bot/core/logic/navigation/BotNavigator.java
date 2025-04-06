@@ -8,6 +8,7 @@ import com.devone.bot.utils.BotCoordinate3D;
 public class BotNavigator {
 
     public BotCoordinate3D getNavigableTargetRND(String json) {
+
         List<BotBlockData> data = null;
         BotGeoDataLoader loader = new BotGeoDataLoader();
         
@@ -25,11 +26,8 @@ public class BotNavigator {
 
         BotCoordinate3D botPosition = loader.getBotPosition();
 
-        List<BotBlockData> trimmedBlocks = BotVerticalRangeFilter.trimByYRange(data, botPosition.y, 2);
-
         List<BotCoordinate3D> reachable = BotSafeBlockFilter.extractReachableBlocksFromBot(
-            trimmedBlocks, botPosition);
-
+            data, botPosition);
 
         List<List<BotCoordinate3D>> validPaths = BotExplorationPlanner.findPathsToDistantTargets(
             new BotCoordinate3D(botPosition), reachable);
