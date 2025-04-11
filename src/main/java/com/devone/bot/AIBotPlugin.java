@@ -18,6 +18,7 @@ import com.devone.bot.utils.BotConstants;
 import com.devone.bot.utils.BotLogger;
 import com.devone.bot.utils.BotResourceExtractor;
 import com.devone.bot.utils.ServerUtils;
+import com.devone.bot.utils.server.BotTickProtector;
 import com.devone.bot.web.BotWebService;
 import com.googlecode.aviator.AviatorEvaluator;
 
@@ -51,6 +52,8 @@ public class AIBotPlugin extends JavaPlugin {
         reloadPlugin(); // ✅ Now `onEnable()` only calls `reloadPlugin()`
 
         BotLogger.info(true, "✅ AI Bot Plugin has been enabled successfully!");
+
+        //BotTickProtector.ensureTickAlive(this); // workaround to keep server running when players are not online
     }
 
     @Override
