@@ -63,6 +63,8 @@ public class BotExploreTask extends BotTask {
         List<BotBlockData> nav_targets   = BotNavigationPlannerWrapper.getNextExplorationTargets(sceneData.blocks, bot_pos);
 
         BotBlockData       target        = BotTargetRandomizer.pickRandomTarget(nav_targets);
+
+
         
         if (target == null) {
             // 📌 Если цель не найдена, то выходим

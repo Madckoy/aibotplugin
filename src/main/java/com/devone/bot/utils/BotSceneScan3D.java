@@ -16,13 +16,14 @@ public class BotSceneScan3D {
     public static BotSceneData scan(Bot bot, int scanRadius, int height) {
 
         int deltaY = (height - 1) / 2;
-        World world = bot.getNPCEntity().getWorld();
+        World world = BotWorldHelper.getWorld();
 
         // Центр сканирования
-        Location botLoc = bot.getNPCEntity().getLocation();
-        int centerX = botLoc.getBlockX();
-        int centerY = botLoc.getBlockY();
-        int centerZ = botLoc.getBlockZ();
+        BotCoordinate3D botLoc = bot.getRuntimeStatus().getCurrentLocation();
+
+        int centerX = botLoc.x;
+        int centerY = botLoc.y;
+        int centerZ = botLoc.z;
 
         int minY = centerY - deltaY;
         int maxY = centerY + deltaY;
@@ -50,19 +51,20 @@ public class BotSceneScan3D {
         }
 
         // 2. Сканирование живых существ
+        Location botLocWorld = BotWorldHelper.getWorldLocation(botLoc);
+
         for (LivingEntity entity : world.getLivingEntities()) {
             if (entity == bot.getNPCEntity() || entity instanceof Player || entity.isDead()) continue;
-            if (entity.getLocation().distance(botLoc) > scanRadius) continue;
+            if (entity.getLocation().distance(botLocWorld) > scanRadius) continue;
 
             Location loc = entity.getLocation();
-            String name = entity.getCustomName() != null ? entity.getCustomName() : entity.getName();
-            String type = entity.getType().toString();
+            String type = entity.getCustomName() != null ? entity.getCustomName() : entity.getName();;
 
             BotBlockData blockData = new BotBlockData();
             blockData.x = loc.getBlockX();
             blockData.y = loc.getBlockY();
             blockData.z = loc.getBlockZ();
-            blockData.type = name;
+            blockData.type = type;
             blockData.bot = false;
 
             scannedEntities.add(blockData);

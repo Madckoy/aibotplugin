@@ -39,6 +39,7 @@ public class BotMoveTask extends BotTask {
             BotMoveTaskParams moveParams = (BotMoveTaskParams) params;
             BotCoordinate3D loc = moveParams.getTarget();
             this.speedMultiplier = moveParams.getSpeedMultiplier();
+            bot.getRuntimeStatus().setTargetLocation(loc);
 
             if (loc != null) {
                 bot.getRuntimeStatus().setTargetLocation(loc);
@@ -60,12 +61,14 @@ public class BotMoveTask extends BotTask {
         }
 
         if (bot.getRuntimeStatus().getTargetLocation() == null) {
+            BotLogger.info(this.isLogged(), bot.getId() + " ❌ Целевая локация не задана! [ID: " + uuid + "]");
             this.stop();
             return;
         }
 
         if (bot.getNPCNavigator().isNavigating()) {
             BotLogger.info(this.isLogged(), " ⚠️ "+ bot.getId() + " В движении...");
+            return;
         }
 
         Location targetLocation = BotWorldHelper.getWorldLocation(bot.getRuntimeStatus().getTargetLocation());
@@ -80,7 +83,7 @@ public class BotMoveTask extends BotTask {
 
         String block_name = BotUtils.getBlockName(targetBlock);
         
-        setObjective("Navigating to  " + block_name);
+        setObjective("Navigating to  " + block_name + " at: " + bot.getRuntimeStatus().getTargetLocation());
 
         taskHandle = Bukkit.getScheduler().runTaskTimer(AIBotPlugin.getInstance(), () -> {
             if (isDone) {
@@ -106,12 +109,12 @@ public class BotMoveTask extends BotTask {
                 lastMoveTime = System.currentTimeMillis();
             }
 
-            if (BotNavigationUtils.hasReachedTarget(BotCoordinate3DHelper.convertFrom(targetLocation), bot.getRuntimeStatus().getTargetLocation())) {
+            if (BotNavigationUtils.hasReachedTarget(bot.getRuntimeStatus().getCurrentLocation(), bot.getRuntimeStatus().getTargetLocation())) {
                 
                 bot.getRuntimeStatus().setTargetLocation(null);
 
                 this.stop();
-                //BotLogger.info(bot.getId() + " 🎯 Достиг цели! Реальная позиция: " + bot.getNPCEntity().getLocation() + " [ID: " + uuid + "]");
+                BotLogger.info(this.isLogged(), bot.getId() + " 🎯 Достиг цели! Реальная позиция: " + bot.getNPCEntity().getLocation() + " [ID: " + uuid + "]");
                 return;
             } else {
                 if (!bot.getNPCNavigator().canNavigateTo(targetLocation)) {

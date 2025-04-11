@@ -8,7 +8,8 @@ import com.devone.bot.core.logic.tasks.params.BotMoveTaskParams;
 public class BotNavigationUtils {
     
     public static boolean hasReachedTarget(BotCoordinate3D botLoc, BotCoordinate3D targetLoc) {
-
+        BotLogger.info(true, botLoc.toString());
+        BotLogger.info(true, targetLoc.toString());
         return botLoc.equals(targetLoc);
     }
 
@@ -17,6 +18,11 @@ public class BotNavigationUtils {
     }
 
     public static void navigateTo(Bot bot, BotCoordinate3D target, double multiplier) {
+
+        
+        BotLogger.info(true, bot.getId() + " 🏃🏻‍♂️‍➡️ Wants to navigate to " + target.toString() + " [ID: " + bot.getCurrentTask().getName() + "]");
+        BotLogger.info(true, bot.getId() + " Runtime Target Location: " + bot.getRuntimeStatus().getTargetLocation().toString() + " [ID: " + bot.getCurrentTask().getName() + "]");
+
 
         BotMoveTask moveTask = new BotMoveTask(bot);
         BotMoveTaskParams moveTaskParams = new BotMoveTaskParams();
