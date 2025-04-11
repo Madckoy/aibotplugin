@@ -8,11 +8,30 @@ public class BlockMaterialUtils {
 
     public static final Set<String> AIR_TYPES = Set.of("AIR", "CAVE_AIR", "VOID_AIR");
 
+    // Блоки, сквозь которые нельзя пройти (используются для построения графа навигации)
+    public static final Set<String> NON_PASSABLE_BLOCKS = Set.of(
+        "STONE", "GRANITE", "DIORITE", "ANDESITE", "DEEPSLATE", "COBBLESTONE",
+        "BEDROCK", "OBSIDIAN", "OAK_PLANKS", "SPRUCE_PLANKS", "BIRCH_PLANKS",
+        "JUNGLE_PLANKS", "ACACIA_PLANKS", "DARK_OAK_PLANKS", "CRIMSON_PLANKS", "WARPED_PLANKS",
+        "OAK_LOG", "SPRUCE_LOG", "BIRCH_LOG", "JUNGLE_LOG", "ACACIA_LOG", "DARK_OAK_LOG",
+        "CRIMSON_STEM", "WARPED_STEM", "GLASS", "ICE", "PACKED_ICE", "BLUE_ICE",
+        "SAND", "RED_SAND", "GRAVEL", "CLAY", "BRICKS", "BOOKSHELF", "GLOWSTONE",
+        "SEA_LANTERN", "IRON_BLOCK", "GOLD_BLOCK", "DIAMOND_BLOCK", "EMERALD_BLOCK",
+        "NETHERITE_BLOCK", "QUARTZ_BLOCK", "PURPUR_BLOCK", "END_STONE", "END_BRICKS",
+        "NETHER_BRICKS", "RED_NETHER_BRICKS", "BASALT", "POLISHED_BASALT", "BLACKSTONE",
+        "POLISHED_BLACKSTONE", "CRYING_OBSIDIAN", "ANCIENT_DEBRIS", "DEEPSLATE_BRICKS",
+        "DEEPSLATE_TILES", "REINFORCED_DEEPSLATE"
+    );
+
+    // Блоки, которые представляют угрозу (например, наносят урон или мешают движению)
     public static final Set<String> UNSAFE_TYPES = Set.of(
-        "WATER", "LAVA", "CACTUS", "FIRE", "MAGMA_BLOCK"
+        "WATER", "LAVA", "CACTUS", "FIRE", "MAGMA_BLOCK", "CAMPFIRE", "SOUL_CAMPFIRE",
+        "WITHER_ROSE", "SWEET_BERRY_BUSH", "DRIPSTONE_BLOCK", "POINTED_DRIPSTONE",
+        "POWDER_SNOW", "END_PORTAL", "NETHER_PORTAL", "VOID_AIR", "UNKNOWN"
     );
 
     public static final Set<String> COVER_TYPES = Set.of(
+        "ICE",
         "SNOW",
         "CARPET",
         "TALL_GRASS",
@@ -41,7 +60,8 @@ public class BlockMaterialUtils {
         "LILAC",
         "MOSS_CARPET",
         "ROOTS",
-        "HANGING_ROOTS"
+        "HANGING_ROOTS",
+        "SUGAR_CANE"
     );
 
     private static final Map<String, String> MATERIAL_COLOR_MAP = createColorMap();

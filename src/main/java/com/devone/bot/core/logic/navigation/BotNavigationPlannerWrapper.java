@@ -1,14 +1,15 @@
 package com.devone.bot.core.logic.navigation;
 
+
 import com.devone.bot.core.logic.navigation.BotExplorationTargetPlanner.Strategy;
-import com.devone.bot.core.logic.navigation.filters.BotNavigablePointFilter;
-import com.devone.bot.core.logic.navigation.filters.BotRemoveAirFilter;
-import com.devone.bot.core.logic.navigation.filters.BotSolidBlockFilter;
-import com.devone.bot.core.logic.navigation.filters.BotVerticalRangeFilter;
-import com.devone.bot.core.logic.navigation.filters.BotWalkableSurfaceFilter;
+import com.devone.bot.core.logic.navigation.filters.BotBlocksNavigableFilter;
+import com.devone.bot.core.logic.navigation.filters.BotBlocksNoDangerousFilter;
+import com.devone.bot.core.logic.navigation.filters.BotBlocksVerticalSliceFilter;
+import com.devone.bot.core.logic.navigation.filters.BotBlocksWalkableFilter;
 import com.devone.bot.core.logic.navigation.resolvers.BotReachabilityResolver;
 import com.devone.bot.utils.BotBlockData;
 import com.devone.bot.utils.BotCoordinate3D;
+
 
 import java.util.List;
 
@@ -22,16 +23,21 @@ public class BotNavigationPlannerWrapper {
     public static List<BotBlockData> getNextExplorationTargets(List<BotBlockData> allBlocks, BotCoordinate3D botPosition) {
 
 
-        List<BotBlockData> trimmed       = BotVerticalRangeFilter.filter(allBlocks, botPosition.y, 2);//relative!!!
-        if (trimmed == null || trimmed.isEmpty()) return null;
-        List<BotBlockData> solid         = BotSolidBlockFilter.filter(trimmed);
-        if (solid == null || solid.isEmpty()) return null;
-        List<BotBlockData> walkable      = BotWalkableSurfaceFilter.filter(solid);
+        List<BotBlockData> sliced       = BotBlocksVerticalSliceFilter.filter(allBlocks, botPosition.y, 2);//relative!!!
+        if (sliced == null || sliced.isEmpty()) return null;
+
+        List<BotBlockData> safe          = BotBlocksNoDangerousFilter.filter(sliced);
+
+        if (safe == null || safe.isEmpty()) return null;
+
+        List<BotBlockData> walkable      = BotBlocksWalkableFilter.filter(safe);
         if (walkable == null || walkable.isEmpty()) return null;
-        List<BotBlockData> navigable     = BotNavigablePointFilter.filter(BotRemoveAirFilter.filter(walkable));
+
+        List<BotBlockData> navigable     = BotBlocksNavigableFilter.filter(walkable);
         if (navigable == null || navigable.isEmpty()) return null;
+
         List<BotBlockData> reachable     = BotReachabilityResolver.resolve(botPosition, navigable);
-        if (reachable == null || reachable.isEmpty()) return null;
+        if( reachable == null || reachable.isEmpty()) return null;
 
         int sectorCount = estimateSectorCountByArea(reachable);
 

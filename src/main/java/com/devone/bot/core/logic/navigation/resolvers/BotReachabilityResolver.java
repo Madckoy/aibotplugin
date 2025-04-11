@@ -13,7 +13,7 @@ public class BotReachabilityResolver {
 
     public static List<BotBlockData> resolve(BotCoordinate3D botPos, List<BotBlockData> navigableBlocks) {
         // Начинаем с блока под ботом
-        BotCoordinate3D start = new BotCoordinate3D(botPos.x, botPos.y - 1, botPos.z);
+        BotCoordinate3D start = new BotCoordinate3D(botPos.x, botPos.y, botPos.z);
 
         Map<BotCoordinate3D, BotBlockData> map = new HashMap<>();
         for (BotBlockData b : navigableBlocks) {

@@ -5,9 +5,9 @@ import com.devone.bot.utils.BotCoordinate3D;
 
 import java.util.*;
 
-public class BotNavigablePointFilter {
+public class BotBlocksNavigableFilter {
 
-    /**
+    /* 
      * Оставляет только те точки, к которым можно перейти хотя бы с одной соседней.
      */
     public static List<BotBlockData> filter(List<BotBlockData> walkableBlocks) {
