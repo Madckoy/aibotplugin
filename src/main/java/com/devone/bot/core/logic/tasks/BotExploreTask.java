@@ -39,12 +39,6 @@ public class BotExploreTask extends BotTask {
 
         BotLogger.info(this.isLogged(), "🌐 " + bot.getId() + " Exploring with radius: " + scanRadius + " [ID: " + uuid + "]");
         
-        // ✅ Если бот уже идёт — не даём ему новую команду
-        if (bot.getNPCNavigator().isNavigating()) {
-            BotLogger.info(this.isLogged(), "🌐 " + bot.getId() + " Already moving, skipping exploration update."+ " [ID: " + uuid + "]");
-            return;
-        }
-
         if(getSceneData()==null) {
             BotSonar3DTask sonar = new BotSonar3DTask(bot, this, scanRadius, scanRadius);
             bot.addTaskToQueue(sonar);
@@ -63,8 +57,6 @@ public class BotExploreTask extends BotTask {
         List<BotBlockData> nav_targets   = BotNavigationPlannerWrapper.getNextExplorationTargets(sceneData.blocks, bot_pos);
 
         BotBlockData       target        = BotTargetRandomizer.pickRandomTarget(nav_targets);
-
-
         
         if (target == null) {
             // 📌 Если цель не найдена, то выходим

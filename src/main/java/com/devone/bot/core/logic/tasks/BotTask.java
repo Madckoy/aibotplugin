@@ -2,6 +2,7 @@ package com.devone.bot.core.logic.tasks;
 
 import org.bukkit.Location;
 import org.bukkit.entity.Player;
+import org.bukkit.event.Listener;
 
 import com.devone.bot.core.Bot;
 import com.devone.bot.core.logic.tasks.configs.BotTaskConfig;
@@ -14,7 +15,7 @@ import com.devone.bot.utils.BotUtils;
 
 import java.util.UUID;
 
-public abstract class BotTask implements IBotTask, IBotTaskConfigurable {
+public abstract class BotTask implements IBotTask, IBotTaskConfigurable, Listener {
 
     //configurable
     protected boolean isEnabled = true;
@@ -31,6 +32,7 @@ public abstract class BotTask implements IBotTask, IBotTaskConfigurable {
     protected String objective;
     
     protected BotTaskConfig config;
+    protected boolean isListenerRegistered = false;
 
     public BotTask(Bot bot) {
         this.config = new BotTaskConfig(null);
@@ -85,6 +87,10 @@ public abstract class BotTask implements IBotTask, IBotTaskConfigurable {
             execute();
         }
     }
+
+    public Bot getBot() {
+        return bot;
+    }   
 
     public abstract void execute();
 

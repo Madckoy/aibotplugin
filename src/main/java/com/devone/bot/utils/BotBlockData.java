@@ -43,7 +43,7 @@ public class BotBlockData extends BotCoordinate3D {
     
     @JsonIgnore
     public BotCoordinate3D getCoordinate3D() {
-        return (BotCoordinate3D)this;
+        return new BotCoordinate3D(x,y,z);
     }
     
     @JsonIgnore

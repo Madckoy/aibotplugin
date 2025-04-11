@@ -11,10 +11,6 @@ public class BotWorldHelper {
         return Bukkit.getWorlds().get(0);
     }
 
-    public static String getWorldName() {
-        return getWorld().getName();
-    }
-
     public static Block getBlockAt(BotCoordinate3D coordinate) {
         World world = getWorld();
         if (world == null) {

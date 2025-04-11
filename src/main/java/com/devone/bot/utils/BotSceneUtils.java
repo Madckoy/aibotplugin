@@ -3,7 +3,7 @@ package com.devone.bot.utils;
 
 import java.util.List;
 
-public class BotGeoUtils {
+public class BotSceneUtils {
     public static int estimateHorizontalRadius(List<BotBlockData> blocks) {
         int minX = Integer.MAX_VALUE, maxX = Integer.MIN_VALUE;
         int minZ = Integer.MAX_VALUE, maxZ = Integer.MIN_VALUE;
