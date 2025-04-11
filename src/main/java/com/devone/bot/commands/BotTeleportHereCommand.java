@@ -8,8 +8,9 @@ import org.bukkit.entity.Player;
 import com.devone.bot.core.Bot;
 import com.devone.bot.core.BotManager;
 import com.devone.bot.core.logic.tasks.BotTeleportTask;
+import com.devone.bot.core.logic.tasks.params.BotTeleportTaskParams;
+import com.devone.bot.utils.BotCoordinate3D;
 import com.devone.bot.utils.BotLogger;
-import com.devone.bot.utils.BotStringUtils;
 
 public class BotTeleportHereCommand implements CommandExecutor {
 
@@ -37,13 +38,19 @@ public class BotTeleportHereCommand implements CommandExecutor {
         // ✅ Очищаем стек задач
         bot.getLifeCycle().getTaskStackManager().clearTasks();
 
+        BotCoordinate3D targetLocation = new BotCoordinate3D(player.getLocation().getBlockX(),
+                                                             player.getLocation().getBlockY(),
+                                                             player.getLocation().getBlockZ()); 
+
         // ✅ Добавляем задачу на мгновенное перемещение
         BotTeleportTask task = new BotTeleportTask(bot, player);
-        task.configure(player.getLocation());
+        BotTeleportTaskParams taskParams = new BotTeleportTaskParams();
+        taskParams.setTarget(targetLocation);
+        task.configure(taskParams);
         bot.addTaskToQueue(task);
 
         BotLogger.info(true,"📌 /bot-tp-here: Бот " + bot.getId() + " Телепортируется в точку игрока" + 
-                                                  BotStringUtils.formatLocation(bot.getRuntimeStatus().getTargetLocation()));
+        taskParams.getTarget().toString());
 
         player.sendMessage("§aБот " + bot.getId() + " Телепортируется к игроку!");
 

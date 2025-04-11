@@ -14,6 +14,8 @@ import com.devone.bot.core.comms.BotCommunicator;
 import com.devone.bot.core.logic.BotLifeCycle;
 import com.devone.bot.core.logic.tasks.BotMoveTask;
 import com.devone.bot.core.logic.tasks.BotTask;
+import com.devone.bot.core.logic.tasks.params.BotMoveTaskParams;
+import com.devone.bot.utils.BotCoordinate3D;
 import com.devone.bot.utils.BotLogger;
 
 import net.citizensnpcs.api.ai.Navigator;
@@ -143,7 +145,8 @@ public class Bot {
         BotLogger.info(true, "✅ "+getId() +" Дроп подобран, двигаюсь к последнему разрушенному блоку " + lastBrokenBlock);
         
         BotMoveTask mv_task = new BotMoveTask(this);
-        mv_task.configure(lastBrokenBlock);
+        BotMoveTaskParams mv_taskParams = new BotMoveTaskParams(new BotCoordinate3D(lastBrokenBlock.getBlockX(), lastBrokenBlock.getBlockY(), lastBrokenBlock.getBlockZ()));
+        mv_task.configure(mv_taskParams);
         addTaskToQueue(mv_task);
     }
 

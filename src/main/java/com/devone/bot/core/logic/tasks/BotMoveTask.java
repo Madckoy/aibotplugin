@@ -8,13 +8,16 @@ import org.bukkit.scheduler.BukkitTask;
 import com.devone.bot.AIBotPlugin;
 import com.devone.bot.core.Bot;
 import com.devone.bot.core.logic.tasks.configs.BotMoveTaskConfig;
+import com.devone.bot.core.logic.tasks.params.BotMoveTaskParams;
+import com.devone.bot.core.logic.tasks.params.BotTaskParams;
+import com.devone.bot.core.logic.tasks.params.IBotTaskParams;
 import com.devone.bot.utils.*;
 
 public class BotMoveTask extends BotTask {
 
     private BukkitTask taskHandle;
-    private static final BotMoveTaskConfig config = new BotMoveTaskConfig();
-    private final float speedMultiplier = config.getSpeedMultiplier();
+    private BotMoveTaskConfig config = new BotMoveTaskConfig();
+    private double speedMultiplier = config.getSpeedMultiplier();
 
     private BotCoordinate3D lastPosition; // 🆕 Запоминаем прошлую позицию
     private long lastMoveTime; // 🆕 Время последнего движения
@@ -29,19 +32,22 @@ public class BotMoveTask extends BotTask {
     }
 
     @Override
-    public BotTask configure(Object... params) {
-        super.configure(params);
+    public BotTask configure(IBotTaskParams params) {
+        super.configure((BotTaskParams)params);
 
-        if (params.length == 1 && params[0] instanceof BotCoordinate3D) {
-            BotCoordinate3D loc = (BotCoordinate3D) params[0];
-            
-            bot.getRuntimeStatus().setTargetLocation(loc);
+        if (params instanceof BotMoveTaskParams) {
+            BotMoveTaskParams moveParams = (BotMoveTaskParams) params;
+            BotCoordinate3D loc = moveParams.getTarget();
+            this.speedMultiplier = moveParams.getSpeedMultiplier();
 
-        } else {
-            BotLogger.info(isLogged(),bot.getId() + " ❌ Некорректные параметры для `BotTaskMove`!");
-            this.stop();
+            if (loc != null) {
+                bot.getRuntimeStatus().setTargetLocation(loc);
+            } else {
+                BotLogger.info(isLogged(),bot.getId() + " ❌ Некорректные параметры для `BotMoveTask`!");
+                this.stop();
+            }
+
         }
-
         return this;
     }
 
@@ -120,9 +126,9 @@ public class BotMoveTask extends BotTask {
                         this.stop();
 
                     } else {
-                        BotLogger.info(this.isLogged(), bot.getId() + " 🚶 Двигаюсь в " + BotStringUtils.formatLocation(bot.getRuntimeStatus().getTargetLocation()) + " [ID: " + uuid + "]");
+                        BotLogger.info(this.isLogged(), bot.getId() + " 🚶 Двигаюсь в " + bot.getRuntimeStatus().getTargetLocation() + " [ID: " + uuid + "]");
 
-                        bot.getNPCNavigator().getDefaultParameters().speedModifier(speedMultiplier);
+                        bot.getNPCNavigator().getDefaultParameters().speedModifier((float)speedMultiplier);
                         
                         //bot.getRuntimeStatus().getCurrentLocation().setDirection(bot.getRuntimeStatus().getTargetLocation().toVector().subtract(bot.getRuntimeStatus().getCurrentLocation().toVector()));
                         

@@ -1,7 +1,5 @@
 package com.devone.bot.core.logic.patterns.destruction;
 
-import org.yaml.snakeyaml.Yaml;
-
 import java.io.InputStream;
 import java.nio.file.Files;
 import java.nio.file.Path;

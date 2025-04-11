@@ -41,11 +41,11 @@ public class BotStatusServlet extends HttpServlet {
             if (loc != null) {
                 botJson.addProperty("skin", "http://" + BotWebService.getServerHost() + ":"+BotWebService.getServerPort()+"/skins/" + bot.getUuid() + ".png");
                 botJson.addProperty("id", bot.getId());
-                botJson.addProperty("position", BotStringUtils.formatLocation(loc));
+                botJson.addProperty("position", loc.toString());
                 botJson.addProperty("task", bot.getCurrentTask().getName());
                 botJson.addProperty("object", getCurrentObjective(bot));
                 BotCoordinate3D tg_loc = bot.getRuntimeStatus().getTargetLocation();
-                botJson.addProperty("target", BotStringUtils.formatLocation(tg_loc));
+                botJson.addProperty("target", tg_loc.toString());
                 botJson.addProperty("elapsedTime", BotStringUtils.formatTime(bot.getCurrentTask().getElapsedTime()));
 
                 List<BotTask> taskStack = (bot.getLifeCycle() != null && bot.getLifeCycle().getTaskStackManager() != null)

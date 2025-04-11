@@ -7,9 +7,11 @@ import org.bukkit.entity.Player;
 import com.devone.bot.AIBotPlugin;
 import com.devone.bot.core.Bot;
 import com.devone.bot.core.logic.tasks.configs.BotTeleportTaskConfig;
+import com.devone.bot.core.logic.tasks.params.BotTaskParams;
+import com.devone.bot.core.logic.tasks.params.BotTeleportTaskParams;
+import com.devone.bot.core.logic.tasks.params.IBotTaskParams;
 import com.devone.bot.utils.BotCoordinate3D;
 import com.devone.bot.utils.BotLogger;
-import com.devone.bot.utils.BotStringUtils;
 import com.devone.bot.utils.BotWorldHelper;
 
 public class BotTeleportTask extends BotTask {
@@ -23,16 +25,25 @@ public class BotTeleportTask extends BotTask {
         setObjective("Teleport");
     }
 
-     public BotTask configure(Object... params) {
-        super.configure(params);
+    @Override
+    public BotTeleportTask configure(IBotTaskParams params) {
 
-        if (params.length >= 1 && params[0] instanceof BotCoordinate3D) {
-            BotCoordinate3D loc  = (BotCoordinate3D) params[0];
-            bot.getRuntimeStatus().setTargetLocation(loc);
+        super.configure((BotTaskParams) params);
+        
+        if (params instanceof BotTeleportTaskParams) {
+            BotTeleportTaskParams teleportParams = (BotTeleportTaskParams) params;
+            BotCoordinate3D loc = teleportParams.getTarget();
+
+            if (loc != null) {
+                bot.getRuntimeStatus().setTargetLocation(loc);
+            } else {
+                BotLogger.info(this.isLogged(), bot.getId() + " ❌ Некорректные параметры для `BotTeleportTask`!");
+                this.stop();
+            }
+        } else {
+            BotLogger.info(this.isLogged(), bot.getId() + " ❌ Некорректные параметры для `BotTeleportTask`!");
+            this.stop();
         }
-
-        BotLogger.info(this.isLogged(), "⚙️ BotTaskTeleport is configured: " + BotStringUtils.formatLocation(bot.getRuntimeStatus().getTargetLocation()));
-
         return this;
     }
 
@@ -43,9 +54,8 @@ public class BotTeleportTask extends BotTask {
         BotCoordinate3D targetLocation = bot.getRuntimeStatus().getTargetLocation();
                 // Телепортация в основном потоке
                 Bukkit.getScheduler().runTask(AIBotPlugin.getInstance(), () -> {
-                    
                     bot.getNPCEntity().teleport(BotWorldHelper.getWorldLocation(targetLocation));
-                    BotLogger.info(this.isLogged(), "🗲 " + bot.getId() + " Телепортируемся в " + BotStringUtils.formatLocation(targetLocation));
+                    BotLogger.info(this.isLogged(), "🗲 " + bot.getId() + " Телепортируемся в " + targetLocation);
                 });
 
        stop();

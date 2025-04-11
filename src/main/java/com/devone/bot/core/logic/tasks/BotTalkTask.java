@@ -6,8 +6,6 @@ import com.devone.bot.core.Bot;
 import com.devone.bot.core.BotInventory;
 import com.devone.bot.core.comms.BotCommunicator;
 import com.devone.bot.core.logic.tasks.configs.BotTalkTaskConfig;
-import com.devone.bot.utils.BotLogger;
-
 import java.util.List;
 import java.util.Random;
 

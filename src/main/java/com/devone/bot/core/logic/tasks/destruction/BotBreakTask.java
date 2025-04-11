@@ -1,7 +1,5 @@
 package com.devone.bot.core.logic.tasks.destruction;
 
-import org.bukkit.Bukkit;
-import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.block.Block;
 import org.eclipse.jetty.util.StringUtil;
@@ -15,10 +13,13 @@ import com.devone.bot.core.logic.tasks.BotSonar3DTask;
 import com.devone.bot.core.logic.tasks.BotTask;
 import com.devone.bot.core.logic.tasks.BotUseHandTask;
 import com.devone.bot.core.logic.tasks.configs.BotBreakTaskConfig;
+import com.devone.bot.core.logic.tasks.destruction.params.BotBreakTaskParams;
+import com.devone.bot.core.logic.tasks.params.BotTaskParams;
+import com.devone.bot.core.logic.tasks.params.BotUseHandTaskParams;
+import com.devone.bot.core.logic.tasks.params.IBotTaskParams;
 import com.devone.bot.utils.BotConstants;
 import com.devone.bot.utils.BotCoordinate3D;
 import com.devone.bot.utils.BotLogger;
-import com.devone.bot.utils.BotStringUtils;
 import com.devone.bot.utils.BotUtils;
 import com.devone.bot.utils.BotWorldHelper;
 import com.devone.bot.utils.BotAxisDirection.AxisDirection;
@@ -88,51 +89,33 @@ public class BotBreakTask extends BotTask {
 
     @SuppressWarnings("unchecked")
     @Override
-    public BotTask configure(Object... params) {
+    public BotBreakTask configure(IBotTaskParams params) {
 
-        BotLogger.info(this.isLogged(), "⚙️ Запуск configure() с параметрами: " + Arrays.toString(params));
+        super.configure((BotTaskParams)params);
+        if(params instanceof BotBreakTaskParams) {
 
+            BotBreakTaskParams breakParams = (BotBreakTaskParams) params;
 
-        super.configure(params);
+            this.targetMaterials = breakParams.getTargetMaterials();
+            this.maxBlocks = breakParams.getMaxBlocks();
+            this.outerRadius = breakParams.getOuterRadius();
+            this.innerRadius = breakParams.getInnerRadius();
+            this.shouldPickup = breakParams.isShouldPickup();
+            this.destroyAllIfNoTarget = breakParams.isDestroyAllIfNoTarget();
+            this.breakDirection = breakParams.getBreakDirection();
 
-        if (params.length >= 1 && params[0] instanceof Set) {
-            targetMaterials = (Set<Material>) params[0];
-            if (targetMaterials.isEmpty())
-                targetMaterials = null;
-        }
-        if (params.length >= 2 && params[1] instanceof Integer) {
-            this.maxBlocks = (Integer) params[1];
-        }
-        if (params.length >= 3 && params[2] instanceof Integer) {
-            this.outerRadius = (Integer) params[2];
-        }
-        if (params.length >= 4 && params[3] instanceof Integer) {
-            this.innerRadius = (Integer) params[3];
-        }
+            this.offsetX = breakParams.getOffsetX();
+            this.offsetY = breakParams.getOffsetY();
+            this.offsetZ = breakParams.getOffsetZ();
 
-        if (params.length >= 5 && params[4] instanceof Boolean) {
-            this.shouldPickup = (Boolean) params[4];
-        }
-        if (params.length >= 6 && params[5] instanceof Boolean) {
-            this.destroyAllIfNoTarget = (Boolean) params[5];
-        }
-        
-        if (params.length >= 7 && params[6] instanceof AxisDirection bd) {
-            this.breakDirection  = bd;
-        }
-        if (params.length >= 8 && params[7] instanceof Integer) {
-            this.offsetX = (Integer) params[7];
-        }
-        if (params.length >= 9 && params[8] instanceof Integer) {
-            this.offsetY = (Integer) params[8];
-        }
-        if (params.length >= 10 && params[9] instanceof Integer) {
-            this.offsetZ = (Integer) params[9];
-        }
-        // Применяем создание шаблона с новыми параметрами
-        if (params.length >= 11 && params[10] instanceof String) {
-                this.patternName = (String) params[10];
-        }
+            if (breakParams.getPatternName() != null) {
+                this.patternName = breakParams.getPatternName();
+                BotLogger.info(this.isLogged(), "📐 Установлен паттерн разрушения: " + patternName);
+            }
+
+        } else {
+            BotLogger.info(this.isLogged(), bot.getId() + " ❌ Некорректные параметры для `BotBreakTask`!");
+        }   
 
         BotLogger.info(this.isLogged(), "📐 Установлен паттерн разрушения через config(): " +patternName);
 
@@ -265,18 +248,18 @@ public class BotBreakTask extends BotTask {
         if (bot.getRuntimeStatus().getTargetLocation() != null) {
 
             setObjective("Probing: " + BotUtils.getBlockName(targetBlock)
-                    + " at " + BotStringUtils.formatLocation(targetLocation));
+                    + " at " + targetLocation);
 
             if (isInProtectedZone(bot.getRuntimeStatus().getTargetLocation())) {
                 BotLogger.info(this.isLogged(), "⛔ " + bot.getId() + " в запретной зоне, НЕ будет разрушать блок: " +
-                        BotStringUtils.formatLocation(bot.getRuntimeStatus().getTargetLocation()));
+                        bot.getRuntimeStatus().getTargetLocation());
                 this.stop();
                 return;
             }
 
             if (!BotUtils.isBreakableBlock(targetBlock)) {
                 BotLogger.info(this.isLogged(), "⛔ Неразрушаемый блок: "
-                        + BotStringUtils.formatLocation(bot.getRuntimeStatus().getTargetLocation()));
+                        + bot.getRuntimeStatus().getTargetLocation());
                 bot.getRuntimeStatus().setTargetLocation(null);
                 return;
             }
@@ -294,7 +277,7 @@ public class BotBreakTask extends BotTask {
             setObjective("Breaking: " + BotUtils.getBlockName(targetBlock));
 
             BotUseHandTask handTask = new BotUseHandTask(bot, "⛏");
-            handTask.configure(targetLocation);
+            handTask.configure(new BotUseHandTaskParams());
             bot.addTaskToQueue(handTask);
 
         } else {

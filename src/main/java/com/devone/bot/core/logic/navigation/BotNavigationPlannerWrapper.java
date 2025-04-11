@@ -1,6 +1,12 @@
 package com.devone.bot.core.logic.navigation;
 
 import com.devone.bot.core.logic.navigation.BotExplorationTargetPlanner.Strategy;
+import com.devone.bot.core.logic.navigation.filters.BotNavigablePointFilter;
+import com.devone.bot.core.logic.navigation.filters.BotRemoveAirFilter;
+import com.devone.bot.core.logic.navigation.filters.BotSolidBlockFilter;
+import com.devone.bot.core.logic.navigation.filters.BotVerticalRangeFilter;
+import com.devone.bot.core.logic.navigation.filters.BotWalkableSurfaceFilter;
+import com.devone.bot.core.logic.navigation.resolvers.BotReachabilityResolver;
 import com.devone.bot.utils.BotBlockData;
 import com.devone.bot.utils.BotCoordinate3D;
 
@@ -13,10 +19,19 @@ public class BotNavigationPlannerWrapper {
      * Если sectorCount == null, будет подобрано автоматически по площади.
      * scanRadius теперь тоже рассчитывается адаптивно.
      */
-    public static List<BotBlockData> getNextExplorationTargets(BotCoordinate3D botPosition,
-                                                                List<BotBlockData> reachable) {
-        if (reachable == null || reachable.isEmpty()) return null;
+    public static List<BotBlockData> getNextExplorationTargets(List<BotBlockData> allBlocks, BotCoordinate3D botPosition) {
 
+
+        List<BotBlockData> trimmed       = BotVerticalRangeFilter.filter(allBlocks, botPosition.y, 2);//relative!!!
+        if (trimmed == null || trimmed.isEmpty()) return null;
+        List<BotBlockData> solid         = BotSolidBlockFilter.filter(trimmed);
+        if (solid == null || solid.isEmpty()) return null;
+        List<BotBlockData> walkable      = BotWalkableSurfaceFilter.filter(solid);
+        if (walkable == null || walkable.isEmpty()) return null;
+        List<BotBlockData> navigable     = BotNavigablePointFilter.filter(BotRemoveAirFilter.filter(walkable));
+        if (navigable == null || navigable.isEmpty()) return null;
+        List<BotBlockData> reachable     = BotReachabilityResolver.resolve(botPosition, navigable);
+        if (reachable == null || reachable.isEmpty()) return null;
 
         int sectorCount = estimateSectorCountByArea(reachable);
 

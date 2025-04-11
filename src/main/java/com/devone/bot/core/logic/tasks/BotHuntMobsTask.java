@@ -1,16 +1,9 @@
 package com.devone.bot.core.logic.tasks;
 
-import org.bukkit.entity.LivingEntity;
-import org.bukkit.entity.Player;
-
 import com.devone.bot.core.Bot;
 import com.devone.bot.core.logic.tasks.configs.BotHuntTaskConfig;
 import com.devone.bot.utils.BotBlockData;
-import com.devone.bot.utils.BotEntityUtils;
 import com.devone.bot.utils.BotLogger;
-import com.devone.bot.utils.BotUtils;
-
-import java.util.List;
 
 public class BotHuntMobsTask extends BotTask {
 

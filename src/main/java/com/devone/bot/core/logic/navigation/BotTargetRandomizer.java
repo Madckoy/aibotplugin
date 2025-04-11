@@ -4,6 +4,7 @@
 package com.devone.bot.core.logic.navigation;
 
 import com.devone.bot.utils.BotBlockData;
+import com.devone.bot.utils.BotLogger;
 
 import java.util.List;
 import java.util.Random;
@@ -20,9 +21,16 @@ public class BotTargetRandomizer {
      */
     public static BotBlockData pickRandomTarget(List<BotBlockData> targets) {
         if (targets == null || targets.isEmpty()) {
+            if (targets == null) {
+                BotLogger.info(true, " 🤷‍♂️ Navigation Target list is null or empty");
+            }
             return null;
         }
+
         int index = RANDOM.nextInt(targets.size());
-        return targets.get(index);
+        BotBlockData target = targets.get(index);
+        BotLogger.info(true, " 🎯 Random Navition target selected: " + target);
+
+        return target;
     }
 }

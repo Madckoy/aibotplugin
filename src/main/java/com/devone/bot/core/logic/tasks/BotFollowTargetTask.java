@@ -6,7 +6,6 @@ import com.devone.bot.AIBotPlugin;
 import com.devone.bot.core.Bot;
 import com.devone.bot.core.logic.tasks.configs.BotFollowTaskConfig;
 import com.devone.bot.utils.BotBlockData;
-import com.devone.bot.utils.BotCoordinate3D;
 import com.devone.bot.utils.BotLogger;
 
 import com.devone.bot.utils.BotUtils;

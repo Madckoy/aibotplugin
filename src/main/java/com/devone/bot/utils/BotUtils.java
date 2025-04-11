@@ -1,6 +1,5 @@
 package com.devone.bot.utils;
 
-import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.World;
@@ -43,7 +42,7 @@ public class BotUtils {
     
         // ✅ Проверяем, что блок не AIR (иначе эффект не сработает)
         if (blockType == Material.AIR) {
-            BotLogger.info(true, "⚠️ Эффект разрушения отменён: блок уже AIR " + BotStringUtils.formatLocation(location));
+            BotLogger.info(true, "⚠️ Эффект разрушения отменён: блок уже AIR " + location.toString());
             return;
         }
     
@@ -55,7 +54,7 @@ public class BotUtils {
             location.getBlock().getBlockData() // Тип блока для эффекта
         );
     
-        BotLogger.info(true, "🎇 Эффект разрушения воспроизведён на " + BotStringUtils.formatLocation(location));
+        BotLogger.info(true, "🎇 Эффект разрушения воспроизведён на " + location.toString());
     }
 
     public static boolean requiresTool(Material blockType) {
@@ -65,9 +64,14 @@ public class BotUtils {
         };
     }
     
-    public static Location getFallbackLocation() {
-        World world = Bukkit.getWorlds().get(0);
+    private static Location getFallbackPos() {
+        World world = BotWorldHelper.getWorld();
         return world.getSpawnLocation();
+    }
+
+    public static BotCoordinate3D getFallbackCoordinate3D() {
+        BotCoordinate3D coord = new BotCoordinate3D(getFallbackPos().getBlockX(), getFallbackPos().getBlockY(), getFallbackPos().getBlockZ());
+        return coord;
     }
 
     public static boolean isBreakableBlock(Block block) {

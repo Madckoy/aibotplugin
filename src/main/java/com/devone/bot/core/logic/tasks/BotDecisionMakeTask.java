@@ -1,23 +1,8 @@
 package com.devone.bot.core.logic.tasks;
 
-import java.util.Set;
-
-import org.bukkit.Location;
-import org.bukkit.World;
-import org.bukkit.entity.EntityType;
-
 import com.devone.bot.core.Bot;
-import com.devone.bot.core.BotInventory;
-import com.devone.bot.core.logic.tasks.configs.BotHuntTaskConfig;
-import com.devone.bot.core.logic.tasks.configs.BotIdleTaskConfig;
 import com.devone.bot.core.logic.tasks.configs.BotMakeDecisionTaskConfig;
-import com.devone.bot.core.logic.tasks.destruction.BotBreakAnyDownwardTask;
-import com.devone.bot.utils.BotConstants;
-import com.devone.bot.utils.BotCoordinate3D;
 import com.devone.bot.utils.BotLogger;
-import com.devone.bot.utils.BotMaterialUtils;
-import com.devone.bot.utils.BotStringUtils;
-import com.devone.bot.utils.BotAxisDirection.AxisDirection;
 
 public class BotDecisionMakeTask extends BotTask {
 
@@ -30,7 +15,20 @@ public class BotDecisionMakeTask extends BotTask {
     }
 
     @Override
+
     public void execute() {
+        setObjective("Rolling a dice" );
+
+        // 📌 Начать исследование
+        BotLogger.info(this.isLogged(), "🌐 " + bot.getId() + " начинает исследование");
+        BotExploreTask explore = new BotExploreTask(bot);
+        bot.addTaskToQueue(explore);
+        return;
+
+    }
+
+        /* 
+    public void execute_old() {
         
         setObjective("Rolling a dice" );
   
@@ -96,7 +94,7 @@ public class BotDecisionMakeTask extends BotTask {
             return;
         }
 
-        /* 
+
         if (rand < 0.8 && rand >= 0.5) {
             // ⛏ 30% шанс начать добычу земли
             BotTaskBreakBlock breakTask = new BotTaskBreakBlock(bot);
@@ -108,7 +106,7 @@ public class BotDecisionMakeTask extends BotTask {
         
             return;
         }
-            */
+
 
         if (rand < 0.6 && rand >= 0.2) {  
             // ⛏ 30% шанс начать добычу всего подряд вниз
@@ -145,6 +143,7 @@ public class BotDecisionMakeTask extends BotTask {
             return;
         }
     }
+    *****/
 
     @Override
     public void stop() {

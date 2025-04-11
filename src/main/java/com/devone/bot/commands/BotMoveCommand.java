@@ -3,18 +3,15 @@ package com.devone.bot.commands;
 import java.util.Arrays;
 
 import org.bukkit.Location;
-import org.bukkit.World;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
-import org.bukkit.entity.Player;
-
 import com.devone.bot.core.Bot;
 import com.devone.bot.core.BotManager;
 import com.devone.bot.core.logic.tasks.BotMoveTask;
-import com.devone.bot.core.logic.tasks.BotTeleportTask;
+import com.devone.bot.core.logic.tasks.params.BotMoveTaskParams;
+import com.devone.bot.utils.BotCoordinate3D;
 import com.devone.bot.utils.BotLogger;
-import com.devone.bot.utils.BotStringUtils;
 
 public class BotMoveCommand implements CommandExecutor {
 
@@ -68,10 +65,12 @@ public class BotMoveCommand implements CommandExecutor {
         Location targetLocation = new Location(bot.getNPCEntity().getWorld(), x, y, z);
         // ✅ Добавляем задачу на перемещение
         BotMoveTask moveTask = new BotMoveTask(bot);
-        moveTask.configure(targetLocation);
+        BotMoveTaskParams moveTaskParams = new BotMoveTaskParams();
+        moveTaskParams.setTarget(new BotCoordinate3D(x, y, z)); 
+        moveTask.configure(moveTaskParams);
         bot.addTaskToQueue(moveTask);
 
-        BotLogger.info(true, "📌 /bot-move: Бот " + bot.getId() + " направляется в " + BotStringUtils.formatLocation(targetLocation));
+        BotLogger.info(true, "📌 /bot-move: Бот " + bot.getId() + " направляется в " + targetLocation);
         
         sender.sendMessage("✅ Бот '" + botName + "' направляется в " + x + " " + y + " " + z);
         

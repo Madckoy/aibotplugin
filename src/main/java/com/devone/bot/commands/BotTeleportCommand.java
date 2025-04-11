@@ -2,7 +2,6 @@ package com.devone.bot.commands;
 
 import java.util.Arrays;
 
-import org.bukkit.Location;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
@@ -10,8 +9,9 @@ import org.bukkit.command.CommandSender;
 import com.devone.bot.core.Bot;
 import com.devone.bot.core.BotManager;
 import com.devone.bot.core.logic.tasks.BotTeleportTask;
+import com.devone.bot.core.logic.tasks.params.BotTeleportTaskParams;
+import com.devone.bot.utils.BotCoordinate3D;
 import com.devone.bot.utils.BotLogger;
-import com.devone.bot.utils.BotStringUtils;
 
 
 public class BotTeleportCommand implements CommandExecutor {
@@ -62,12 +62,14 @@ public class BotTeleportCommand implements CommandExecutor {
 
         bot.getLifeCycle().getTaskStackManager().clearTasks();
 
-        Location tpLoc = new Location(bot.getNPCEntity().getWorld(), x, y, z);
+
         BotTeleportTask task = new BotTeleportTask(bot, null);
-        task.configure(tpLoc);
+        BotTeleportTaskParams tpParams = new BotTeleportTaskParams();
+        tpParams.setTarget(new BotCoordinate3D(x, y, z));  
+        task.configure(tpParams);
         bot.addTaskToQueue(task);
 
-        BotLogger.info(true, "📌 /bot-tp: Бот " + bot.getId() + " телепортируется в " + BotStringUtils.formatLocation(tpLoc));
+        BotLogger.info(true, "📌 /bot-tp: Бот " + bot.getId() + " телепортируется в " + tpParams.getTarget());
         
         sender.sendMessage("✅ Бот '" + botName + "' телепортируется в " + x + " " + y + " " + z);
 

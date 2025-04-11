@@ -5,20 +5,16 @@ import java.util.List;
 import com.devone.bot.core.Bot;
 import com.devone.bot.core.logic.navigation.BotNavigationPlannerWrapper;
 import com.devone.bot.core.logic.navigation.BotTargetRandomizer;
-import com.devone.bot.core.logic.navigation.filters.BotNavigablePointFilter;
-import com.devone.bot.core.logic.navigation.filters.BotRemoveAirFilter;
-import com.devone.bot.core.logic.navigation.filters.BotSolidBlockFilter;
-import com.devone.bot.core.logic.navigation.filters.BotVerticalRangeFilter;
-import com.devone.bot.core.logic.navigation.filters.BotWalkableSurfaceFilter;
-import com.devone.bot.core.logic.navigation.resolvers.BotReachabilityResolver;
 import com.devone.bot.core.logic.tasks.configs.BotExploreTaskConfig;
+import com.devone.bot.core.logic.tasks.params.BotExploreTaskParams;
+import com.devone.bot.core.logic.tasks.params.BotTaskParams;
+import com.devone.bot.core.logic.tasks.params.IBotTaskParams;
 import com.devone.bot.utils.BotBlockData;
 import com.devone.bot.utils.BotConstants;
 import com.devone.bot.utils.BotCoordinate3D;
 import com.devone.bot.utils.BotLogger;
 import com.devone.bot.utils.BotNavigationUtils;
 import com.devone.bot.utils.BotSceneData;
-import com.devone.bot.utils.BotStringUtils;
 
 public class BotExploreTask extends BotTask {
   
@@ -29,8 +25,8 @@ public class BotExploreTask extends BotTask {
         super(bot, "🌐");
 
         config = new BotExploreTaskConfig();
+
         this.isLogged = config.isLogged();
-        
         this.scanRadius = config.getScanRadius();
 
         setObjective("Explore the area");
@@ -41,8 +37,14 @@ public class BotExploreTask extends BotTask {
 
         if (isPaused) return;
 
-        BotLogger.info(this.isLogged(), "🌐 " + bot.getId() + " Patrolling with radius: " + scanRadius + " [ID: " + uuid + "]");
+        BotLogger.info(this.isLogged(), "🌐 " + bot.getId() + " Exploring with radius: " + scanRadius + " [ID: " + uuid + "]");
         
+        // ✅ Если бот уже идёт — не даём ему новую команду
+        if (bot.getNPCNavigator().isNavigating()) {
+            BotLogger.info(this.isLogged(), "🌐 " + bot.getId() + " Already moving, skipping exploration update."+ " [ID: " + uuid + "]");
+            return;
+        }
+
         if(getSceneData()==null) {
             BotSonar3DTask sonar = new BotSonar3DTask(bot, this, scanRadius, scanRadius);
             bot.addTaskToQueue(sonar);
@@ -56,56 +58,49 @@ public class BotExploreTask extends BotTask {
             return;
         }
 
-        BotCoordinate3D bot_pos = bot.getRuntimeStatus().getCurrentLocation();
+        BotCoordinate3D    bot_pos       = bot.getRuntimeStatus().getCurrentLocation();
 
-        List<BotBlockData> trimmed       = BotVerticalRangeFilter.filter(sceneData.blocks, bot_pos.y, 2);//relative!!!
-        List<BotBlockData> solid         = BotSolidBlockFilter.filter(trimmed);
-        List<BotBlockData> walkable      = BotWalkableSurfaceFilter.filter(solid);
-        List<BotBlockData> navigable     = BotNavigablePointFilter.filter(BotRemoveAirFilter.filter(walkable));
-        List<BotBlockData> reachable     = BotReachabilityResolver.resolve(bot_pos, navigable);
-        List<BotBlockData> nav_targets   = BotNavigationPlannerWrapper.getNextExplorationTargets(bot_pos,reachable);
+        List<BotBlockData> nav_targets   = BotNavigationPlannerWrapper.getNextExplorationTargets(sceneData.blocks, bot_pos);
 
-        BotCoordinate3D target = BotTargetRandomizer.pickRandomTarget(nav_targets);
+        BotBlockData       target        = BotTargetRandomizer.pickRandomTarget(nav_targets);
         
-        BotLogger.info(this.isLogged(), "🌐 " + bot.getId() + " Target: " + BotStringUtils.formatLocation(target) + " [ID: " + uuid + "]");
-        
-        
-        bot.getRuntimeStatus().setTargetLocation(target); 
-
-        if (bot.getRuntimeStatus().getTargetLocation() == null) {
-            BotLogger.info(this.isLogged(), "🌐 " + bot.getId() + " Has finished exploration." +  " [ID: " + uuid + "]");
+        if (target == null) {
+            // 📌 Если цель не найдена, то выходим
+            BotLogger.info(this.isLogged(), "🌐 " + bot.getId() + " No valid targets found. [ID: " + uuid + "]");
             this.stop();
-            setSceneData(null);// reset scene map to force rescan
             return;
         }
 
-        // ✅ Если бот уже идёт — не даём ему новую команду
-        if (bot.getNPCNavigator().isNavigating()) {
-            BotLogger.info(this.isLogged(), "🌐 " + bot.getId() + " Already moving, skipping exploration update."+ " [ID: " + uuid + "]");
-        }
+        // 📌 Если цель найдена, начинаем движение
+        BotLogger.info(this.isLogged(), "🌐 " + bot.getId() + " Target: " + target.getCoordinate3D() + " [ID: " + uuid + "]");
+        
+        bot.getRuntimeStatus().setTargetLocation(target.getCoordinate3D()); 
+        // 
+        BotNavigationUtils.navigateTo(bot, bot.getRuntimeStatus().getTargetLocation()); // via a new MoVeTask()
 
-        double rand = Math.random();
-
-        if (rand < 0.4) {
-            // 📌 30% шанс выйти из патрулирования
-            BotLogger.info(this.isLogged(), "🌐" + bot.getId() + " Moving out of exploration: " + BotStringUtils.formatLocation(bot.getRuntimeStatus().getTargetLocation()) + " [Task ID: " + uuid + "]");
-            bot.getRuntimeStatus().setTargetLocation(null);
-
-            this.stop();
-
-        } else {
-            BotLogger.info(this.isLogged(), "🌐 " + bot.getId() + " Moving to exploration point: " + BotStringUtils.formatLocation(bot.getRuntimeStatus().getTargetLocation()) + " [Task ID: " + uuid + "]");
-
-            BotNavigationUtils.navigateTo(bot, bot.getRuntimeStatus().getTargetLocation()); // via a new MoVeTask()
-        }
-
-        setSceneData(null);
+        this.stop();
+        BotLogger.info(this.isLogged(), "🌐 " + bot.getId() + " Exploration task completed. [ID: " + uuid + "]");
+        return;
     }
 
     @Override
     public void stop() {
        this.isDone = true;
+       setSceneData(null);
     }
 
+    @Override
+    public BotExploreTask configure(IBotTaskParams params) {
+        super.configure((BotTaskParams)params);
+        
+        if (params instanceof BotExploreTaskParams) {
+            BotExploreTaskParams exploreParams = (BotExploreTaskParams) params;
+            this.scanRadius = exploreParams.getScanRadius();
+        } else {
+            BotLogger.info(this.isLogged(), "🌐 " + bot.getId() + " Invalid parameters for `BotExploreTask`! [ID: " + uuid + "]");
+            this.stop();
+        }
+        return this;
+    }
 
 }

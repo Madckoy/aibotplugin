@@ -13,6 +13,7 @@ import com.devone.bot.utils.BotCoordinate3D;
 import com.devone.bot.utils.BotCoordinate3DHelper;
 import com.devone.bot.utils.BotLogger;
 import com.devone.bot.utils.BotUtils;
+import com.devone.bot.utils.BotWorldHelper;
 import com.devone.bot.utils.bluemap.BlueMapMarkers;
 
 import java.io.File;
@@ -52,15 +53,16 @@ public class BotManager {
             if (botExists(botName))
                 continue;
 
-            Location storedLocation = BotUtils.getFallbackLocation();
+            BotCoordinate3D storedLocation = BotUtils.getFallbackCoordinate3D();
 
             if (loadedData.bots.containsKey(botName)) {
                 BotCoordinate3D coord = loadedData.bots.get(botName).position;
-                storedLocation = new Location(Bukkit.getWorlds().get(0), coord.x, coord.y, coord.z);
+                storedLocation = coord;
             }
 
             if (!npc.isSpawned()) {
-                npc.spawn(storedLocation);
+                Location spawnLocation = BotWorldHelper.getWorldLocation(storedLocation);
+                npc.spawn(spawnLocation);
                 BotLogger.info(true, "✅ Spawned NPC: " + botName);
             }
 

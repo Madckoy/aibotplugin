@@ -1,6 +1,5 @@
 package com.devone.bot.commands;
 
-import org.bukkit.Location;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
@@ -8,7 +7,6 @@ import org.bukkit.command.CommandSender;
 import com.devone.bot.core.Bot;
 import com.devone.bot.core.BotManager;
 import com.devone.bot.core.logic.tasks.BotDropAllTask;
-import com.devone.bot.core.logic.tasks.BotMoveTask;
 import com.devone.bot.utils.BotCoordinate3D;
 
 public class BotDropAllCommand implements CommandExecutor {
@@ -39,7 +37,6 @@ public class BotDropAllCommand implements CommandExecutor {
 
         // ✅ Добавляем задачу на перемещение
         BotDropAllTask dropAllTask = new BotDropAllTask(bot, null);
-        dropAllTask.configure(targetLocation);
         bot.addTaskToQueue(dropAllTask);
 
         // Подтверждение для игрока

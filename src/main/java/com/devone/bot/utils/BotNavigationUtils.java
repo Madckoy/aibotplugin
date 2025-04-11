@@ -2,6 +2,7 @@ package com.devone.bot.utils;
 
 import com.devone.bot.core.Bot;
 import com.devone.bot.core.logic.tasks.BotMoveTask;
+import com.devone.bot.core.logic.tasks.params.BotMoveTaskParams;
 
 
 public class BotNavigationUtils {
@@ -18,7 +19,10 @@ public class BotNavigationUtils {
     public static void navigateTo(Bot bot, BotCoordinate3D target, double multiplier) {
 
         BotMoveTask moveTask = new BotMoveTask(bot);
-        moveTask.configure(target, multiplier);
+        BotMoveTaskParams moveTaskParams = new BotMoveTaskParams();
+        moveTaskParams.setTarget(target);
+        moveTaskParams.setSpeedMultiplier(multiplier);
+        moveTask.configure(moveTaskParams);
         bot.addTaskToQueue(moveTask);
     }
 }

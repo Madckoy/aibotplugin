@@ -9,8 +9,9 @@ import org.bukkit.entity.Player;
 import com.devone.bot.core.Bot;
 import com.devone.bot.core.BotManager;
 import com.devone.bot.core.logic.tasks.BotMoveTask;
+import com.devone.bot.core.logic.tasks.params.BotMoveTaskParams;
+import com.devone.bot.utils.BotCoordinate3D;
 import com.devone.bot.utils.BotLogger;
-import com.devone.bot.utils.BotStringUtils;
 
 public class BotMoveHereCommand implements CommandExecutor {
 
@@ -37,7 +38,7 @@ public class BotMoveHereCommand implements CommandExecutor {
 
         Location targetLocation = player.getLocation();
 
-        BotLogger.info(true,"📌 /bot-move-here: Бот " + bot.getId() + " Идет к игроку в точкe " + BotStringUtils.formatLocation(targetLocation));
+        BotLogger.info(true,"📌 /bot-move-here: Бот " + bot.getId() + " Идет к игроку в точкe " + targetLocation);
 
 
         // ✅ Очищаем стек задач
@@ -45,7 +46,9 @@ public class BotMoveHereCommand implements CommandExecutor {
 
         // ✅ Добавляем задачу на перемещение
         BotMoveTask moveTask = new BotMoveTask(bot);
-        moveTask.configure(targetLocation);
+        BotMoveTaskParams moveTaskParams = new BotMoveTaskParams();
+        moveTaskParams.setTarget(new BotCoordinate3D(targetLocation.getBlockX(), targetLocation.getBlockY(), targetLocation.getBlockZ()));
+        moveTask.configure(moveTaskParams);
         bot.addTaskToQueue(moveTask);
 
         player.sendMessage("§aБот " + bot.getId() + " Идет к игроку!");

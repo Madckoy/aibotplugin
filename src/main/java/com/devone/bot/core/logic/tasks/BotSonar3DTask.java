@@ -1,6 +1,8 @@
 package com.devone.bot.core.logic.tasks;
 
 import com.devone.bot.core.Bot;
+import com.devone.bot.core.logic.tasks.params.BotTaskParams;
+import com.devone.bot.core.logic.tasks.params.IBotTaskParams;
 import com.devone.bot.utils.BotSceneData;
 import com.devone.bot.utils.BotSceneScan3D;
 
@@ -22,8 +24,8 @@ public class BotSonar3DTask extends BotTask {
 
     // Метод конфигурации для установки ScanMode
     @Override
-    public BotTask configure(Object... params) {
-        super.configure(params);
+    public BotSonar3DTask configure(IBotTaskParams params) {
+        super.configure((BotTaskParams)params);
         return this;
     }
 
