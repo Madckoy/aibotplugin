@@ -46,7 +46,7 @@ public class BotBlockData extends BotCoordinate3D {
         return (BotCoordinate3D)this;
     }
     
-    @Override
+    @JsonIgnore
     public String toString() {
         return String.format("Block[x=%d, y=%d, z=%d, type=%s, bot=%b]", x, y, z, type, bot);
     }
