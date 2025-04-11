@@ -1,7 +1,5 @@
 package com.devone.bot.core;
 
-import org.bukkit.Location;
-
 import com.devone.bot.utils.BotCoordinate3D;
 import com.devone.bot.utils.BotCoordinate3DHelper;
 
