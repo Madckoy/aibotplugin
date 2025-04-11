@@ -28,7 +28,7 @@ public class BotBlocksWalkableFilter {
             BotBlockData blockAbove1 = blockMap.get(above1);
             BotBlockData blockAbove2 = blockMap.get(above2);
 
-            System.out.println("block: " + block + " blockAbove1: " + blockAbove1 + " blockAbove2: " + blockAbove2);
+            //System.out.println("block: " + block + " blockAbove1: " + blockAbove1 + " blockAbove2: " + blockAbove2);
 
             // Проверяем, что блоки над текущим блоком существуют
             if (blockAbove1 == null || blockAbove2 == null) { 

@@ -64,6 +64,7 @@ public class BotTeleportTask extends BotTask {
 
     public void stop() {
         isDone = true;
+        bot.getRuntimeStatus().setTargetLocation(null);
     }
 
 }

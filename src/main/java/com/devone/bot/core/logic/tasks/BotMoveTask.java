@@ -110,9 +110,6 @@ public class BotMoveTask extends BotTask {
             }
 
             if (BotNavigationUtils.hasReachedTarget(bot.getRuntimeStatus().getCurrentLocation(), bot.getRuntimeStatus().getTargetLocation())) {
-                
-                bot.getRuntimeStatus().setTargetLocation(null);
-
                 this.stop();
                 BotLogger.info(this.isLogged(), bot.getId() + " 🎯 Достиг цели! Реальная позиция: " + bot.getNPCEntity().getLocation() + " [ID: " + uuid + "]");
                 return;
@@ -146,6 +143,7 @@ public class BotMoveTask extends BotTask {
     @Override
     public void stop() {
         this.isDone = true;
+        bot.getRuntimeStatus().setTargetLocation(null);
         BotLogger.info(this.isLogged(), bot.getId() + " 🛑 Move task завершён [ID: " + uuid + "]");  
 
     }
