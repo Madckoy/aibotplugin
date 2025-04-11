@@ -10,7 +10,7 @@ public class BotSceneSaver {
 
     public static void saveToJsonFile(String filePath, BotSceneData blocks) throws IOException {
         ObjectMapper mapper = new ObjectMapper();
-        mapper.enable(SerializationFeature.INDENT_OUTPUT); // Читабельный JSON
+        //mapper.enable(SerializationFeature.INDENT_OUTPUT); // Читабельный JSON
         mapper.writeValue(new File(filePath), blocks);
     }
 }
