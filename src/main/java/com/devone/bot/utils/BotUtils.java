@@ -70,10 +70,10 @@ public class BotUtils {
         return world.getSpawnLocation();
     }
 
-    public static boolean isBreakableBlock(Location location) {
-        if (location == null || location.getWorld() == null) return false;
+    public static boolean isBreakableBlock(Block block) {
+        if (block == null ) return false;
     
-        Material type = location.getBlock().getType();
+        Material type = block.getType();
     
         return switch (type) {
             case AIR, CAVE_AIR, VOID_AIR,
@@ -92,9 +92,12 @@ public class BotUtils {
      * @param bot     Бот (CraftPlayer или NPC, поддерживающий teleport)
      * @param target  Цель, к которой нужно повернуть лицо
      */
-    public static void lookAt(Bot bot, Location target) {
+    public static void lookAt(Bot bot, BotCoordinate3D target) {
+
+        Location tgt = BotWorldHelper.getWorldLocation(target);
+
         Location from = bot.getNPCEntity().getLocation();
-        Location to = target.clone().add(0.5, 0.5, 0.5); // центр блока
+        Location to = tgt.clone().add(0.5, 0.5, 0.5); // центр блока
 
         Vector direction = to.toVector().subtract(from.toVector());
 

@@ -8,12 +8,12 @@ import java.util.List;
 import java.util.Objects;
 import java.util.stream.Collectors;
 
-import org.bukkit.Location;
 import org.bukkit.inventory.ItemStack;
 
 import com.devone.bot.core.Bot;
 import com.devone.bot.core.BotManager;
 import com.devone.bot.core.logic.tasks.BotTask;
+import com.devone.bot.utils.BotCoordinate3D;
 import com.devone.bot.utils.BotStringUtils;
 import com.devone.bot.web.BotWebService;
 import com.google.gson.JsonArray;
@@ -37,14 +37,14 @@ public class BotStatusServlet extends HttpServlet {
 
         for (Bot bot : bots) {
             JsonObject botJson = new JsonObject();
-            Location loc = bot.getRuntimeStatus().getCurrentLocation();
+            BotCoordinate3D loc = bot.getRuntimeStatus().getCurrentLocation();
             if (loc != null) {
                 botJson.addProperty("skin", "http://" + BotWebService.getServerHost() + ":"+BotWebService.getServerPort()+"/skins/" + bot.getUuid() + ".png");
                 botJson.addProperty("id", bot.getId());
                 botJson.addProperty("position", BotStringUtils.formatLocation(loc));
                 botJson.addProperty("task", bot.getCurrentTask().getName());
                 botJson.addProperty("object", getCurrentObjective(bot));
-                Location tg_loc = bot.getRuntimeStatus().getTargetLocation();
+                BotCoordinate3D tg_loc = bot.getRuntimeStatus().getTargetLocation();
                 botJson.addProperty("target", BotStringUtils.formatLocation(tg_loc));
                 botJson.addProperty("elapsedTime", BotStringUtils.formatTime(bot.getCurrentTask().getElapsedTime()));
 

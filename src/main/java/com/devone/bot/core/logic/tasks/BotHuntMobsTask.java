@@ -5,6 +5,7 @@ import org.bukkit.entity.Player;
 
 import com.devone.bot.core.Bot;
 import com.devone.bot.core.logic.tasks.configs.BotHuntTaskConfig;
+import com.devone.bot.utils.BotBlockData;
 import com.devone.bot.utils.BotEntityUtils;
 import com.devone.bot.utils.BotLogger;
 import com.devone.bot.utils.BotUtils;
@@ -14,8 +15,7 @@ import java.util.List;
 public class BotHuntMobsTask extends BotTask {
 
     private int scanRadius;
-    private boolean shouldFollowPlayer = false;
-    private LivingEntity targetMob = null;
+    private BotBlockData target = null;
 
     public BotHuntMobsTask(Bot bot) {
         super(bot, "😈");
@@ -31,22 +31,20 @@ public class BotHuntMobsTask extends BotTask {
 
         setObjective("Look for hostile targets");
 
-        if (getBioEntities() == null) {
+        if (getSceneData() == null) {
             BotLogger.info(this.isLogged(),"🔍 Запускаем 3D-сканирование живых целей.");
             bot.addTaskToQueue(new BotSonar3DTask(bot, this, scanRadius, scanRadius));
             return;
         }
 
-        if (targetMob == null || targetMob.isDead()) {
+        if (target == null) {
             findTarget();
         }
 
-        if (targetMob != null) {
+        if (target != null) {
 
-            //BotUtils.lookAt(bot, targetMob.getLocation());
-
-            bot.addTaskToQueue(new BotFollowTargetTask(bot, targetMob));
-            BotLogger.info(this.isLogged(),"🎯 Бот начинает преследование " + targetMob.getType());
+            bot.addTaskToQueue(new BotFollowTargetTask(bot, target));
+            BotLogger.info(this.isLogged(),"🎯 Бот начинает преследование " + target.type);
             this.stop();
             return;
         }
@@ -57,38 +55,10 @@ public class BotHuntMobsTask extends BotTask {
             return;
         }
 
-        setBioEntities(null); // попробовать ещё раз в следующий такт
+        setSceneData(null); // попробовать ещё раз в следующий такт
     }
 
     private void findTarget() {
-        List<LivingEntity> nearbyEntities = getBioEntities();
-        BotHuntTaskConfig huntConfig = (BotHuntTaskConfig) config;
-
-        for (LivingEntity entity : nearbyEntities) {
-            // kill them all
-            targetMob = entity;
-            BotLogger.info(this.isLogged(),"🎯 Найдена цель: " + targetMob.getType());
-            return;
-
-           // if (BotEntityUtils.isHostileMob(entity)) {
-            //    if (huntConfig.getTargetAggressiveMobs().contains(entity.getType())) {
-               //     targetMob = entity;
-                //    BotLogger.info(this.isLogged(),"🎯 Найдена враждебная цель: " + targetMob.getType());
-                   // return;
-                //}
-            //}
-        }
-
-        //if (shouldFollowPlayer) {
-        //    for (LivingEntity entity : nearbyEntities) {
-        //        if (entity instanceof Player) {
-        //            targetMob = entity;
-        //            BotLogger.info(this.isLogged(),"🎯 Найден игрок! Начинаем следование.");
-        //            return;
-        //        }
-        //    }
-        //}
-
         BotLogger.info(this.isLogged(),"❌ Ни одной подходящей цели не найдено.");
         this.stop();
     }

@@ -5,6 +5,12 @@ import java.util.Objects;
 public class BotCoordinate3D {
     public int x, y, z;
 
+    public BotCoordinate3D() {
+        this.x = 0;
+        this.y = 0;
+        this.z = 0;
+    }
+
     public BotCoordinate3D(int x, int y, int z) {
         this.x = x;
         this.y = y;

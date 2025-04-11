@@ -1,22 +1,24 @@
 package com.devone.bot.core.logic.tasks;
 
 import org.bukkit.Bukkit;
-import org.bukkit.Location;
 import org.bukkit.Material;
-import org.bukkit.entity.LivingEntity;
+import org.bukkit.block.Block;
 import org.bukkit.entity.Player;
 
 import com.devone.bot.AIBotPlugin;
 import com.devone.bot.core.Bot;
+import com.devone.bot.utils.BotBlockData;
+import com.devone.bot.utils.BotCoordinate3D;
 import com.devone.bot.utils.BotLogger;
 import com.devone.bot.utils.BotStringUtils;
 import com.devone.bot.utils.BotUtils;
+import com.devone.bot.utils.BotWorldHelper;
 
 import java.util.Arrays;
 
 public class BotUseHandTask extends BotTask {
 
-    private LivingEntity target;
+    private BotBlockData target;
     private int damage = 5;
 
     public BotUseHandTask(Bot bot) {
@@ -36,12 +38,12 @@ public class BotUseHandTask extends BotTask {
 
         boolean hasParams = false;
 
-        if (params.length > 0 && params[0] instanceof Location loc) {
+        if (params.length > 0 && params[0] instanceof BotCoordinate3D loc) {
             bot.getRuntimeStatus().setTargetLocation(loc);
             hasParams = true;
         }
 
-        if (params.length > 1 && params[1] instanceof LivingEntity entity) {
+        if (params.length > 1 && params[1] instanceof BotBlockData entity) {
             this.target = entity;
             hasParams = true;
         }
@@ -66,53 +68,39 @@ public class BotUseHandTask extends BotTask {
             this.stop();
             return;
         }
-    
-        // ✅ Проверяем, если цель уже мертва — выходим (для атаки)
-        if (target != null && target.isDead()) {
-            BotLogger.info(this.isLogged(), bot.getId() + " ☠️ Цель уже мертва. Завершаем атаку.");
-            bot.getRuntimeStatus().mobKilledAdd(1);
-            this.stop();
-            return;
-        }
-    
-        Location faceTarget = (target != null) ? target.getLocation() : bot.getRuntimeStatus().getTargetLocation();
 
-        setObjective("Hitting: " + BotUtils.getBlockName(faceTarget.getBlock())+" at "+BotStringUtils.formatLocation(faceTarget));
+    
+        BotCoordinate3D faceTarget = (target != null) ? target.getCoordinate3D() : bot.getRuntimeStatus().getTargetLocation();
+
+        Block faceBlock = BotWorldHelper.getBlockAt(faceTarget);
+
+        setObjective("Hitting: " + BotUtils.getBlockName(faceBlock)+" at "+BotStringUtils.formatLocation(faceTarget));
     
         turnToBlock(faceTarget);
     
         Bukkit.getScheduler().runTask(AIBotPlugin.getInstance(), () -> {
+            
             animateHand();
     
-            if (target != null && !target.isDead()) {
-                target.damage(damage);
-                BotLogger.info(this.isLogged(), bot.getId() + " ✋🏻 Нанесён урон существу: " + target.getName());
-            } else if (bot.getRuntimeStatus().getTargetLocation() != null && bot.getRuntimeStatus().getTargetLocation().getBlock().getType() != Material.AIR) {
-                // ✅ Добавляем эффект разрушения перед ломанием блока
-                BotUtils.playBlockBreakEffect(bot.getRuntimeStatus().getTargetLocation());
-    
-                bot.getRuntimeStatus().getTargetLocation().getBlock().breakNaturally();
+            if (faceBlock != null && faceBlock.getType() != Material.AIR) {
+                BotUtils.playBlockBreakEffect(faceBlock.getLocation());
 
-                BotLogger.info(this.isLogged(), bot.getId() + " ✅ Блок разрушен на " + BotStringUtils.formatLocation(bot.getRuntimeStatus().getTargetLocation()));
-            } else {
-                BotLogger.warn(this.isLogged(), bot.getId() + " ⚠️ Нечего разрушать");
-            }
-    
+                faceBlock.breakNaturally();
+
+                BotLogger.info(this.isLogged(), bot.getId() + " ✋🏻 Нанесён урон по: " + faceBlock);
+
+            } 
+
             this.stop();
 
         });
     }
 
-    private void turnToBlock(Location target) {
-        //Vector direction = target.toVector().subtract(bot.getRuntimeStatus().getCurrentLocation().toVector()).normalize();
-        //float yaw = (float) Math.toDegrees(Math.atan2(-direction.getX(), direction.getZ()));
-
-        BotUtils.lookAt(bot, target);
+    private void turnToBlock(BotCoordinate3D target) {
         
         // ✅ Принудительно обновляем положение, если поворот сбрасывается
         Bukkit.getScheduler().runTaskLater(AIBotPlugin.getInstance(), () -> {
             BotUtils.lookAt(bot, target);
-            //bot.getNPCEntity().teleport(bot.getRuntimeStatus().getCurrentLocation());
         }, 1L); // ✅ Через тик, чтобы дать время на обновление
 
         BotLogger.info(this.isLogged(), "🔄 TURNING: " + bot.getId() + " to look at the target: " + BotStringUtils.formatLocation(target));

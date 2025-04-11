@@ -9,6 +9,7 @@ import com.devone.bot.core.Bot;
 import com.devone.bot.core.BotManager;
 import com.devone.bot.core.logic.tasks.BotDropAllTask;
 import com.devone.bot.core.logic.tasks.BotMoveTask;
+import com.devone.bot.utils.BotCoordinate3D;
 
 public class BotDropAllCommand implements CommandExecutor {
 
@@ -34,7 +35,7 @@ public class BotDropAllCommand implements CommandExecutor {
             return false;
         }
 
-        Location targetLocation = bot.getRuntimeStatus().getCurrentLocation();
+        BotCoordinate3D targetLocation = bot.getRuntimeStatus().getCurrentLocation();
 
         // ✅ Добавляем задачу на перемещение
         BotDropAllTask dropAllTask = new BotDropAllTask(bot, null);

@@ -3,6 +3,7 @@ package com.devone.bot.core.logic.tasks.destruction;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.Material;
+import org.bukkit.block.Block;
 import org.eclipse.jetty.util.StringUtil;
 
 import com.devone.bot.core.Bot;
@@ -19,6 +20,7 @@ import com.devone.bot.utils.BotCoordinate3D;
 import com.devone.bot.utils.BotLogger;
 import com.devone.bot.utils.BotStringUtils;
 import com.devone.bot.utils.BotUtils;
+import com.devone.bot.utils.BotWorldHelper;
 import com.devone.bot.utils.BotAxisDirection.AxisDirection;
 
 import java.nio.file.Path;
@@ -239,7 +241,7 @@ public class BotBreakTask extends BotTask {
 
         bot.pickupNearbyItems(shouldPickup);
 
-        if (getGeoMap() == null) {
+        if (getSceneData() == null) {
             BotLogger.info(this.isLogged(), "🔍 Запускаем 3D-сканирование окружающей среды.");
             BotSonar3DTask scanTask = new BotSonar3DTask(bot, this, outerRadius, outerRadius);
             bot.addTaskToQueue(scanTask);
@@ -254,14 +256,16 @@ public class BotBreakTask extends BotTask {
             return;
         }
 
-        Location targetLocation = new Location(Bukkit.getWorlds().get(0), coordinate.x, coordinate.y, coordinate.z);
+        BotCoordinate3D targetLocation = new BotCoordinate3D(coordinate.x, coordinate.y, coordinate.z);
+
+        Block targetBlock = BotWorldHelper.getBlockAt(targetLocation);
 
         bot.getRuntimeStatus().setTargetLocation(targetLocation);
 
         if (bot.getRuntimeStatus().getTargetLocation() != null) {
 
-            setObjective("Probing: " + BotUtils.getBlockName(bot.getRuntimeStatus().getTargetLocation().getBlock())
-                    + " at " + BotStringUtils.formatLocation(bot.getRuntimeStatus().getTargetLocation()));
+            setObjective("Probing: " + BotUtils.getBlockName(targetBlock)
+                    + " at " + BotStringUtils.formatLocation(targetLocation));
 
             if (isInProtectedZone(bot.getRuntimeStatus().getTargetLocation())) {
                 BotLogger.info(this.isLogged(), "⛔ " + bot.getId() + " в запретной зоне, НЕ будет разрушать блок: " +
@@ -270,14 +274,14 @@ public class BotBreakTask extends BotTask {
                 return;
             }
 
-            if (!BotUtils.isBreakableBlock(bot.getRuntimeStatus().getTargetLocation())) {
+            if (!BotUtils.isBreakableBlock(targetBlock)) {
                 BotLogger.info(this.isLogged(), "⛔ Неразрушаемый блок: "
                         + BotStringUtils.formatLocation(bot.getRuntimeStatus().getTargetLocation()));
                 bot.getRuntimeStatus().setTargetLocation(null);
                 return;
             }
 
-            Material mat = bot.getRuntimeStatus().getTargetLocation().getBlock().getType();
+            Material mat = targetBlock.getType();
 
             if (BotUtils.requiresTool(mat)) {
                 if (!BotInventory.equipRequiredTool(bot, mat)) {
@@ -287,7 +291,7 @@ public class BotBreakTask extends BotTask {
                 }
             }
 
-            setObjective("Breaking: " + BotUtils.getBlockName(bot.getRuntimeStatus().getTargetLocation().getBlock()));
+            setObjective("Breaking: " + BotUtils.getBlockName(targetBlock));
 
             BotUseHandTask handTask = new BotUseHandTask(bot, "⛏");
             handTask.configure(targetLocation);
@@ -326,7 +330,7 @@ public class BotBreakTask extends BotTask {
         return enough;
     }
 
-    private boolean isInProtectedZone(Location location) {
+    private boolean isInProtectedZone(BotCoordinate3D location) {
         boolean protectedZone = BotZoneManager.getInstance().isInProtectedZone(location);
         if (protectedZone) {
             BotLogger.info(this.isLogged(), "🛑 Блок в запретной зоне, разрушение запрещено.");
@@ -339,6 +343,7 @@ public class BotBreakTask extends BotTask {
        this.isDone = true;
        this.breakPatternImpl = null;
        bot.getRuntimeStatus().setTargetLocation(null);
+       setSceneData(null);
        BotLogger.info(this.isLogged(), "🛑 Задача разрушения остановлена.");
     }
 

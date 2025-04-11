@@ -8,6 +8,7 @@ import org.bukkit.entity.Player;
 import com.devone.bot.core.Bot;
 import com.devone.bot.core.BotManager;
 import com.devone.bot.core.logic.tasks.BotFollowTargetTask;
+import com.devone.bot.utils.BotBlockData;
 import com.devone.bot.utils.BotLogger;
 
 public class BotFollowCommand implements CommandExecutor {
@@ -37,9 +38,16 @@ public class BotFollowCommand implements CommandExecutor {
 
         // ✅ Очищаем стек задач
         bot.getLifeCycle().getTaskStackManager().clearTasks();
+
+        BotBlockData block_data = new BotBlockData();
+        block_data.type = "player";
+        block_data.x = player.getLocation().getBlockX();
+        block_data.y = player.getLocation().getBlockY();
+        block_data.z = player.getLocation().getBlockZ();
+     
         
         // ✅ Добавляем задачу на следование
-        BotFollowTargetTask followTask = new BotFollowTargetTask(bot, player);
+        BotFollowTargetTask followTask = new BotFollowTargetTask(bot, block_data);
         bot.addTaskToQueue(followTask);
 
         player.sendMessage("§aБот " + bot.getId() + " теперь следует за вами!");

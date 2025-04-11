@@ -1,25 +1,52 @@
 package com.devone.bot.utils;
 
-import java.util.Set;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 
-public class BotBlockData extends BotCoordinate3D{
-
-    private static final Set<String> AIR_TYPES = Set.of("AIR", "CAVE_AIR", "VOID_AIR");
-
-    public BotBlockData(int x, int y, int z) {
-        super(x, y, z);
-    }
-
+public class BotBlockData extends BotCoordinate3D {
 
     public String type;
-    public boolean bot;  // из JSON
+
+     @JsonIgnore
+    public boolean bot;  // из JSON  
 
     public boolean isAir() {
-        return type != null && AIR_TYPES.contains(type.toUpperCase());
+        return type != null && BlockMaterialUtils.AIR_TYPES.contains(type.toUpperCase());
+    } 
+
+    public boolean isCover() {
+        return type != null && BlockMaterialUtils.COVER_TYPES.contains(type.toUpperCase());
+    }   
+    
+    public boolean isDangerous() {
+        return type != null && BlockMaterialUtils.UNSAFE_TYPES.contains(type.toUpperCase());
+    } 
+
+    public BotCoordinate3D getCoordinate3D() {
+        return new BotCoordinate3D(x, y, z);
+    }
+
+    public boolean isSolid() {
+        // сюда можно добавлять исключения по мере надобности
+        if (type == null) return false;
+        String t = type.toUpperCase();
+        return !(
+            t.contains("AIR") ||
+            t.contains("WATER") ||
+            t.contains("LAVA") ||
+
+            t.equals("FIRE") ||
+            t.equals("CACTUS")
+        );
     }
 
     public boolean isBot() {
         return bot;
+    }
+
+    public boolean isPassableAndSafe() {
+        if (type == null) return false;
+        String t = type.toUpperCase();
+        return BlockMaterialUtils.AIR_TYPES.contains(t) || t.equals("TALL_GRASS") || t.equals("SNOW") || t.equals("FLOWER");
     }
 
     @Override

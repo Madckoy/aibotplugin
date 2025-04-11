@@ -7,6 +7,7 @@ import com.devone.bot.AIBotPlugin;
 import com.devone.bot.core.config.BotManagerConfig;
 import com.devone.bot.core.config.BotZoneConfig;
 import com.devone.bot.utils.BotConstants;
+import com.devone.bot.utils.BotCoordinate3D;
 import com.devone.bot.utils.BotLogger;
 
 import java.io.File;
@@ -67,7 +68,7 @@ public class BotZoneManager {
         return false;
     }
 
-    public boolean isInProtectedZone(Location location) {
+    public boolean isInProtectedZone(BotCoordinate3D location) {
         return protectedZones.values().stream().anyMatch(z -> z.isInside(location));
     }
 
@@ -84,7 +85,7 @@ public class BotZoneManager {
         return protectedZones.get(zoneName);
     }
 
-    public static boolean isLocationInProtectedZone(Location location) {
+    public static boolean isLocationInProtectedZone(BotCoordinate3D location) {
         if (instance == null) {
             BotLogger.info(true, "❌ ZoneManager not initialized!");
             return false;

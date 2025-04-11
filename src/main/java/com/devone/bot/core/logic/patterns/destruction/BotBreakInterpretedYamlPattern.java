@@ -73,9 +73,9 @@ public class BotBreakInterpretedYamlPattern implements IBotDestructionPattern {
         if (!initialized) {
             BotLogger.info(true, "🔁 Генерация точек по паттерну: " + yamlPath);
                                                                      
-            BotPatternGenerationParams params = new BotPatternGenerationParams(bot.getRuntimeStatus().getCurrentLocation().getBlockX(), 
-                                                                               bot.getRuntimeStatus().getCurrentLocation().getBlockY(), 
-                                                                               bot.getRuntimeStatus().getCurrentLocation().getBlockZ(), 
+            BotPatternGenerationParams params = new BotPatternGenerationParams(bot.getRuntimeStatus().getCurrentLocation().x, 
+                                                                               bot.getRuntimeStatus().getCurrentLocation().y, 
+                                                                               bot.getRuntimeStatus().getCurrentLocation().z, 
                                                                                offsetX, offsetY, offsetZ, outerRadius, innerRadius);
 
             BotLogger.info(true, params.toString());                                                                  

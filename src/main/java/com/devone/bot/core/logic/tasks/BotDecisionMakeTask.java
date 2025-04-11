@@ -13,6 +13,7 @@ import com.devone.bot.core.logic.tasks.configs.BotIdleTaskConfig;
 import com.devone.bot.core.logic.tasks.configs.BotMakeDecisionTaskConfig;
 import com.devone.bot.core.logic.tasks.destruction.BotBreakAnyDownwardTask;
 import com.devone.bot.utils.BotConstants;
+import com.devone.bot.utils.BotCoordinate3D;
 import com.devone.bot.utils.BotLogger;
 import com.devone.bot.utils.BotMaterialUtils;
 import com.devone.bot.utils.BotStringUtils;
@@ -45,7 +46,7 @@ public class BotDecisionMakeTask extends BotTask {
             drop_task.setPaused(true);
             bot.addTaskToQueue(drop_task);
             
-            Location drop_off_loc = bot.getRuntimeStatus().getTargetLocation();
+            BotCoordinate3D drop_off_loc = bot.getRuntimeStatus().getTargetLocation();
             
             // Перемещение к точке сброса
             BotMoveTask moveTask = new BotMoveTask(bot);

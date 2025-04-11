@@ -1,7 +1,6 @@
 package com.devone.bot.utils;
 
 import org.bukkit.Bukkit;
-import org.bukkit.Location;
 
 import com.devone.bot.core.Bot;
 import com.devone.bot.core.logic.tasks.BotTask;
@@ -9,32 +8,24 @@ import com.devone.bot.core.logic.tasks.BotTask;
 import java.io.*;
 import java.text.SimpleDateFormat;
 import java.util.Date;
-import java.util.HashMap;
-import java.util.Map;
 
 public class BotLifecycleLogCsvWriter {
     private static final String LOG_FOLDER = BotConstants.PLUGIN_TMP; // Путь к логам
-    private static final Map<String, Location> lastLoggedLocations = new HashMap<>();
+
     private static final String SESSION_ID = generateSessionId();
 
     public static void write(Bot bot) {
         // Получаем текущую локацию через BotRuntimeStatus
-        Location loc = bot.getRuntimeStatus().getCurrentLocation();
+        BotCoordinate3D loc = bot.getRuntimeStatus().getCurrentLocation();
         if (loc == null) return;
 
         String botName = bot.getId();
-        String filename = LOG_FOLDER + botName + "_session_" + SESSION_ID + ".csv";
+        String filename = LOG_FOLDER + botName + "_movements_" + SESSION_ID + ".csv";
 
         // Если файл не существует, создаем его и пишем заголовки
         File logFile = new File(filename);
         if (!logFile.exists()) {
             writeHeader(logFile);
-        }
-
-        // Проверяем, изменилось ли местоположение
-        Location lastLoc = lastLoggedLocations.get(botName);
-        if (lastLoc != null && lastLoc.distance(loc) < 3) {
-            return; // Пропускаем незначительные движения
         }
 
         // Записываем в CSV
@@ -52,14 +43,11 @@ public class BotLifecycleLogCsvWriter {
             }
 
             String logEntry = String.format("%s,%s,%s,%d,%d,%d,%s,%s",
-                    getCurrentTimestamp(), botName, loc.getWorld().getName(),
-                    loc.getBlockX(), loc.getBlockY(), loc.getBlockZ(), "'" + t_name + "'", e_time);
+                    getCurrentTimestamp(), botName, Bukkit.getWorlds().get(0).getName(),
+                    loc.x, loc.y, loc.z, "'" + t_name + "'", e_time);
 
             bw.write(logEntry);
             bw.newLine();
-
-            // Обновляем кешированные координаты
-            lastLoggedLocations.put(botName, loc.clone());
 
         } catch (IOException e) {
             Bukkit.getLogger().warning("[BotMovementLogger] Ошибка записи в лог " + filename + ": " + e.getMessage());

@@ -7,7 +7,9 @@ import org.bukkit.entity.Player;
 
 import com.devone.bot.core.Bot;
 import com.devone.bot.core.logic.tasks.configs.BotTaskConfig;
+import com.devone.bot.utils.BotBlockData;
 import com.devone.bot.utils.BotLogger;
+import com.devone.bot.utils.BotSceneData;
 import com.devone.bot.utils.BotStringUtils;
 import com.devone.bot.utils.BotUtils;
 
@@ -28,8 +30,7 @@ public abstract class BotTask implements IBotTask, IBotTaskConfigurable {
     protected boolean isPaused = false;
     protected boolean isDone = false;
     protected final String uuid;
-    protected Map<Location, Material> geoMap;
-    protected List<LivingEntity> bioEntities;
+    protected BotSceneData sceneData;
     protected String objective;
     
     protected BotTaskConfig config;
@@ -54,28 +55,12 @@ public abstract class BotTask implements IBotTask, IBotTaskConfigurable {
         this.uuid = UUID.randomUUID().toString();
     }
 
-    public void setEnvMap(Map<Location, Material> env_map) {
-        geoMap = env_map;
+    public void setSceneData(BotSceneData sceneData) {
+        this.sceneData = sceneData;
     }
 
-    public Map<Location, Material> getEnvMap() {
-        return geoMap;
-    }
-
-    public Map<Location, Material> getGeoMap() {
-        return geoMap;
-    }
-
-    public void setGeoMap(Map<Location, Material> geoMap) {
-        this.geoMap = geoMap;
-    }
-
-    public List<LivingEntity> getBioEntities() {
-        return bioEntities;
-    }
-
-    public void setBioEntities(List<LivingEntity> bioEntities) {
-        this.bioEntities = bioEntities;
+    public BotSceneData getSceneData() {
+        return this.sceneData;
     }
 
     public String getObjective() {

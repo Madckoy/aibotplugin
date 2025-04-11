@@ -1,10 +1,18 @@
 package com.devone.bot.utils;
 
-import org.bukkit.Location;
-
 import java.util.concurrent.TimeUnit;
 
+import org.bukkit.Location;
+
 public class BotStringUtils {
+
+    public static String formatLocation(BotCoordinate3D coord) {
+        if( coord!=null ) {
+            return "(" + coord.x + ", " + coord.y + ", " + coord.z + ")";
+        } else {
+            return "";
+        }
+    }
 
     public static String formatLocation(Location loc) {
         if( loc!=null ) {

@@ -1,7 +1,5 @@
 package com.devone.bot.core.logic.tasks;
 
-import org.bukkit.Bukkit;
-import org.bukkit.Location;
 import org.bukkit.entity.Player;
 
 import com.devone.bot.core.Bot;
@@ -16,10 +14,6 @@ public class BotDropAllTask extends BotPlayerLinkedTask {
         
         BotDropAllTaskConfig config = new BotDropAllTaskConfig();
         this.isLogged  = config.isLogged();
-
-        bot.getRuntimeStatus().setTargetLocation(new Location (Bukkit.getWorlds().get(0), config.getX(),
-                                                                  config.getY(), 
-                                                                  config.getZ()));
 
         setObjective("Drop off the loot");
 

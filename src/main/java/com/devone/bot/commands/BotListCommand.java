@@ -7,9 +7,8 @@ import org.bukkit.entity.Player;
 
 import com.devone.bot.core.Bot;
 import com.devone.bot.core.BotManager;
+import com.devone.bot.utils.BotCoordinate3D;
 import com.devone.bot.utils.BotStringUtils;
-
-import org.bukkit.Location;
 
 public class BotListCommand implements CommandExecutor {
 
@@ -30,7 +29,7 @@ public class BotListCommand implements CommandExecutor {
         player.sendMessage("§aActive Bots:");
 
         for (Bot bot : botManager.getAllBots()) {
-            Location loc = bot.getRuntimeStatus().getCurrentLocation();
+            BotCoordinate3D loc = bot.getRuntimeStatus().getCurrentLocation();
             String locationText = BotStringUtils.formatLocation(loc);
             player.sendMessage(bot.getId() + " " + locationText );
         }

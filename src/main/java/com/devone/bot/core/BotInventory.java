@@ -14,7 +14,9 @@ import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.InventoryHolder;
 import org.bukkit.inventory.ItemStack;
 
+import com.devone.bot.utils.BotCoordinate3D;
 import com.devone.bot.utils.BotLogger;
+import com.devone.bot.utils.BotWorldHelper;
 
 public class BotInventory {
 
@@ -114,9 +116,9 @@ public class BotInventory {
         }
 
         try {
-            Location botLocation = bot.getRuntimeStatus().getCurrentLocation();
+            Location botLocation = BotWorldHelper.getWorldLocation(bot.getRuntimeStatus().getCurrentLocation());
 
-            List<Entity> nearbyEntities = botLocation.getWorld().getEntities();
+            List<Entity> nearbyEntities = BotWorldHelper.getWorld().getEntities();
 
             for (Entity entity : nearbyEntities) {
                 if (entity instanceof Item) {

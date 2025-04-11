@@ -2,6 +2,7 @@ package com.devone.bot.core.logic.tasks;
 
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
+import org.bukkit.block.Block;
 import org.bukkit.scheduler.BukkitTask;
 
 import com.devone.bot.AIBotPlugin;
@@ -15,7 +16,7 @@ public class BotMoveTask extends BotTask {
     private static final BotMoveTaskConfig config = new BotMoveTaskConfig();
     private final float speedMultiplier = config.getSpeedMultiplier();
 
-    private Location lastPosition; // 🆕 Запоминаем прошлую позицию
+    private BotCoordinate3D lastPosition; // 🆕 Запоминаем прошлую позицию
     private long lastMoveTime; // 🆕 Время последнего движения
 
     public BotMoveTask(Bot bot) {
@@ -31,8 +32,8 @@ public class BotMoveTask extends BotTask {
     public BotTask configure(Object... params) {
         super.configure(params);
 
-        if (params.length == 1 && params[0] instanceof Location) {
-            Location loc = (Location) params[0];
+        if (params.length == 1 && params[0] instanceof BotCoordinate3D) {
+            BotCoordinate3D loc = (BotCoordinate3D) params[0];
             
             bot.getRuntimeStatus().setTargetLocation(loc);
 
@@ -61,13 +62,17 @@ public class BotMoveTask extends BotTask {
             BotLogger.info(this.isLogged(), " ⚠️ "+ bot.getId() + " В движении...");
         }
 
-        if (!bot.getNPCNavigator().canNavigateTo(bot.getRuntimeStatus().getTargetLocation())) {
-            //BotLogger.info(bot.getId() + " 🛑 Target Location is not reachable. Stopping where I am.[ID: " + uuid + "]");
+        Location targetLocation = BotWorldHelper.getWorldLocation(bot.getRuntimeStatus().getTargetLocation());
+
+        if (!bot.getNPCNavigator().canNavigateTo(targetLocation)) {
+            BotLogger.info(this.isLogged(), bot.getId() + " 🛑 Target Location is not reachable. Stopping where I am.[ID: " + uuid + "]");
             this.stop();
             return;
         }
 
-        String block_name = BotUtils.getBlockName(bot.getRuntimeStatus().getTargetLocation().getBlock());
+        Block targetBlock = BotWorldHelper.getBlockAt(bot.getRuntimeStatus().getTargetLocation());
+
+        String block_name = BotUtils.getBlockName(targetBlock);
         
         setObjective("Navigating to  " + block_name);
 
@@ -81,7 +86,7 @@ public class BotMoveTask extends BotTask {
             }
 
             // 🆕 Проверяем, двигается ли бот или застрял
-            if (bot.getRuntimeStatus().getCurrentLocation().distanceSquared(lastPosition) < 0.5) {
+            if (bot.getRuntimeStatus().getCurrentLocation().equals(lastPosition)) {
                 // Если прошло > 10 сек и координаты не изменились → бот застрял
                 if (System.currentTimeMillis() - lastMoveTime > 10_000) {
                     BotLogger.warn(this.isLogged(),bot.getId() + " ⚠️ Бот застрял! Пересчитываем путь...");
@@ -95,7 +100,7 @@ public class BotMoveTask extends BotTask {
                 lastMoveTime = System.currentTimeMillis();
             }
 
-            if (BotNavigationUtils.hasReachedTargetFlex(bot.getRuntimeStatus().getCurrentLocation(), bot.getRuntimeStatus().getTargetLocation(), 1.5, 1.5)) {
+            if (BotNavigationUtils.hasReachedTarget(BotCoordinate3DHelper.convertFrom(targetLocation), bot.getRuntimeStatus().getTargetLocation())) {
                 
                 bot.getRuntimeStatus().setTargetLocation(null);
 
@@ -103,7 +108,7 @@ public class BotMoveTask extends BotTask {
                 //BotLogger.info(bot.getId() + " 🎯 Достиг цели! Реальная позиция: " + bot.getNPCEntity().getLocation() + " [ID: " + uuid + "]");
                 return;
             } else {
-                if (!bot.getNPCNavigator().canNavigateTo(bot.getRuntimeStatus().getTargetLocation())) {
+                if (!bot.getNPCNavigator().canNavigateTo(targetLocation)) {
                     //BotLogger.info(bot.getId() + " ❌ Не могу найти путь, Stopping where I am" + " [ID: " + uuid + "]");
                     taskHandle.cancel();
                     this.stop();
@@ -118,8 +123,10 @@ public class BotMoveTask extends BotTask {
                         BotLogger.info(this.isLogged(), bot.getId() + " 🚶 Двигаюсь в " + BotStringUtils.formatLocation(bot.getRuntimeStatus().getTargetLocation()) + " [ID: " + uuid + "]");
 
                         bot.getNPCNavigator().getDefaultParameters().speedModifier(speedMultiplier);
-                        bot.getRuntimeStatus().getCurrentLocation().setDirection(bot.getRuntimeStatus().getTargetLocation().toVector().subtract(bot.getRuntimeStatus().getCurrentLocation().toVector()));
-                        bot.getNPCNavigator().setTarget(bot.getRuntimeStatus().getTargetLocation());
+                        
+                        //bot.getRuntimeStatus().getCurrentLocation().setDirection(bot.getRuntimeStatus().getTargetLocation().toVector().subtract(bot.getRuntimeStatus().getCurrentLocation().toVector()));
+                        
+                        bot.getNPCNavigator().setTarget(targetLocation);
 
                     }
                 }

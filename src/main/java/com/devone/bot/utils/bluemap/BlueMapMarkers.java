@@ -7,30 +7,22 @@ import com.devone.bot.utils.*;
 import com.devone.bot.web.BotWebService;
 import com.flowpowered.math.vector.Vector3d;
 import de.bluecolored.bluemap.api.BlueMapAPI;
-import de.bluecolored.bluemap.api.BlueMapAPI;
-import de.bluecolored.bluemap.api.BlueMapAPI;
+
 import de.bluecolored.bluemap.api.BlueMapMap;
-import de.bluecolored.bluemap.api.BlueMapMap;
-import de.bluecolored.bluemap.api.markers.MarkerSet;
 
 import de.bluecolored.bluemap.api.markers.MarkerSet;
-import de.bluecolored.bluemap.api.markers.MarkerSet;
-import de.bluecolored.bluemap.api.markers.MarkerSet;
-import de.bluecolored.bluemap.api.markers.MarkerSet;
-import de.bluecolored.bluemap.api.markers.MarkerSet;
+
 import de.bluecolored.bluemap.api.markers.POIMarker;
-import de.bluecolored.bluemap.api.markers.POIMarker;
-import org.bukkit.Bukkit;
-import org.bukkit.Location;
-import org.checkerframework.checker.units.qual.m;
 
 import java.util.*;
+
+import org.bukkit.Bukkit;
 
 public class BlueMapMarkers {
     private final BotManager botManager;
     private static final String MARKERS_SET_ID = "blue-map-bot-markers";
     private MarkerSet mSet;
-    private final Map<String, Location> lastKnownLocations = new HashMap<>();
+    private final Map<String, BotCoordinate3D> lastKnownLocations = new HashMap<>();
 
     public BlueMapMarkers(BotManager botManager) {
         this.botManager = botManager;
@@ -66,11 +58,11 @@ public class BlueMapMarkers {
 
         for (Bot bot : bots) {
 
-            Location loc = bot.getRuntimeStatus().getCurrentLocation();
+            BotCoordinate3D loc = bot.getRuntimeStatus().getCurrentLocation();
 
             if (loc != null) {
                 String botId = bot.getId();
-                Location lastLocation = lastKnownLocations.get(botId);
+                BotCoordinate3D lastLocation = lastKnownLocations.get(botId);
 
                 if (lastLocation != null) {
                     BotLogger.info(true, "💡 " + bot.getId() + " 📍Last known location on map: " + BotStringUtils.formatLocation(lastLocation));
@@ -82,7 +74,7 @@ public class BlueMapMarkers {
                     }
                 }
 
-                lastKnownLocations.put(botId, loc.clone()); // Обновляем кешированное значение
+                lastKnownLocations.put(botId, new BotCoordinate3D(loc)); // Обновляем кешированное значение
 
                 hasChanges = true;
 
@@ -143,7 +135,7 @@ public class BlueMapMarkers {
         }
     }
 
-    public void updateBlueMapMarkers(List<Bot> bots,  Map<String, Location> lastKnownLocations) {
+    public void updateBlueMapMarkers(List<Bot> bots,  Map<String, BotCoordinate3D> lastKnownLocations) {
 
         if (mSet == null) {
             BotLogger.info(true, "❌ MarkerSet set is not initialized yet!");
@@ -160,15 +152,15 @@ public class BlueMapMarkers {
         for (Bot bot : bots) {
 
             String botId = bot.getId();
-            Location loc = bot.getRuntimeStatus().getCurrentLocation();
+            BotCoordinate3D loc = bot.getRuntimeStatus().getCurrentLocation();
             UUID botUUID = bot.getUuid();
 
             // -----------------------------------------------------------------------------------
             // using BlueMapAPI here
 
-            int x = loc.getBlockX();
-            int y = loc.getBlockY();
-            int z = loc.getBlockZ();
+            int x = loc.x;
+            int y = loc.y;
+            int z = loc.z;
 
             // ✅ Get or download the bot’s skin icon
             String skinFilePath = BotImageUtils.getSkinFile(botUUID);

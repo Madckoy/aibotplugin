@@ -3,6 +3,7 @@ package com.devone.bot.core.comms;
 import org.bukkit.entity.Player;
 
 import com.devone.bot.core.Bot;
+import com.devone.bot.utils.BotWorldHelper;
 
 
 public class BotCommunicator {
@@ -27,7 +28,7 @@ public class BotCommunicator {
     // Метод для отправки сообщений в глобальный чат или другие каналы
     public void broadcastMessage(String message) {
         // Допустим, если бот может взаимодействовать с миром или чатом
-        bot.getRuntimeStatus().getCurrentLocation().getWorld().getPlayers().forEach(player -> {
+        BotWorldHelper.getWorld().getPlayers().forEach(player -> {
             player.sendMessage("[Bot] " + message);
         });
     }
