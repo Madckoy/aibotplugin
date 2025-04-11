@@ -69,6 +69,13 @@ public class BotMoveTask extends BotTask {
             this.stop(); // Или можно re-queue
             return;
         }
+        
+        if (bot.getRuntimeStatus().getTargetLocation()==null) {
+            BotLogger.info(isLogged(), bot.getId() + " ❌ Нет цели для движения! [ID: " + uuid + "]");
+            this.stop();
+            return;                 
+        }
+        
         //---------------------------
         Location targetLocation = BotWorldHelper.getWorldLocation(bot.getRuntimeStatus().getTargetLocation());
 
