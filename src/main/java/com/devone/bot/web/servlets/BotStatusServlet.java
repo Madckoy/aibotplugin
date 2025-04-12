@@ -56,12 +56,13 @@ public class BotStatusServlet extends HttpServlet {
             if (loc != null) {
                 botJson.addProperty("skin", "http://" + BotWebService.getServerHost() + ":"+BotWebService.getServerPort()+"/skins/" + bot.getUuid() + ".png");
                 botJson.addProperty("id", bot.getId());
+                botJson.addProperty("stuck", bot.getRuntimeStatus().getStuck());
 
                 String currLoc = " " + loc.x + ", " + loc.y + ", " + loc.z;   
 
                 botJson.addProperty("position", currLoc);
 
-                botJson.addProperty("task", bot.getCurrentTask().getName());
+                botJson.addProperty("task", bot.getRuntimeStatus().getCurrentTask().getName());
                 
                 botJson.addProperty("object", getCurrentObjective(bot));
 
@@ -70,7 +71,7 @@ public class BotStatusServlet extends HttpServlet {
                 botJson.addProperty("target", tgtLoc != null ? " " + tgtLoc.x + ", " + tgtLoc.y + ", " + tgtLoc.z : "");
 
 
-                botJson.addProperty("elapsedTime", BotUtils.formatTime(bot.getCurrentTask().getElapsedTime()));
+                botJson.addProperty("elapsedTime", BotUtils.formatTime(bot.getRuntimeStatus().getCurrentTask().getElapsedTime()));
 
                 List<BotTask> taskStack = (bot.getLifeCycle() != null && bot.getLifeCycle().getTaskStackManager() != null)
                     ? new ArrayList<>(bot.getLifeCycle().getTaskStackManager().getTaskStack())
@@ -112,7 +113,7 @@ public class BotStatusServlet extends HttpServlet {
     }
     
     private static String getCurrentObjective(Bot bot) {
-        BotTask currentTask = bot.getCurrentTask();
+        BotTask currentTask = bot.getRuntimeStatus().getCurrentTask();
         return (currentTask != null) ? currentTask.getObjective() : "";
     }
 }

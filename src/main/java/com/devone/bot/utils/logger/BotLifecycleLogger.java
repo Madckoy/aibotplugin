@@ -36,7 +36,7 @@ public class BotLifecycleLogger {
         try (FileWriter writer = new FileWriter(filename, true);
              BufferedWriter bw = new BufferedWriter(writer)) {
 
-            BotTask task = bot.getCurrentTask();
+            BotTask task = bot.getRuntimeStatus().getCurrentTask();
 
             String t_name = "N/A";
             String e_time = "N/A";

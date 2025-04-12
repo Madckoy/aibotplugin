@@ -1,6 +1,7 @@
 package com.devone.bot.core.status;
 
 import com.devone.bot.core.bot.Bot;
+import com.devone.bot.core.logic.tasks.BotTask;
 import com.devone.bot.utils.blocks.BotCoordinate3D;
 import com.devone.bot.utils.blocks.BotCoordinate3DHelper;
 
@@ -13,7 +14,7 @@ public class BotStatusRuntime {
     private BotCoordinate3D targetLocation;  // Новое свойство для целевой локации
 
     // Другие состояния
-    private boolean isStuck;
+    private boolean stuck;
     private int stuckCount;
     private int mobsKilled;
 
@@ -21,9 +22,13 @@ public class BotStatusRuntime {
         this.owner = bot;
         this.currentLocation = getCurrentLocation();  // Инициализируем с текущей локацией
         this.targetLocation = null;  // Начальное значение для targetLocation
-        this.isStuck = false;
+        this.stuck = false;
         this.stuckCount = 0;
         this.mobsKilled = 0;
+    }
+
+    public BotTask getCurrentTask() {
+        return owner.getLifeCycle().getTaskStackManager().getActiveTask();
     }
 
     // Получение и обновление currentLocation с проверкой на застревание
@@ -31,19 +36,7 @@ public class BotStatusRuntime {
         if (owner.getNPC() != null) {
             // Получаем текущую локацию NPC
             BotCoordinate3D newLocation = BotCoordinate3DHelper.convertFrom(owner.getNPC().getStoredLocation());
-
-            // Проверка на застревание: если NPC не двигается и его локация не изменилась
-            if (newLocation.equals(currentLocation)) {
-                // Устанавливаем флаг застревания, если локация не изменилась
-                this.isStuck = true;
-
-                // Не обновляем локацию, если бот не двигается
-                return currentLocation;
-            } else {
-                // Если локация изменилась, обновляем currentLocation и lastKnownLocation
-                currentLocation = newLocation;
-                this.isStuck = false;  // Сбрасываем флаг застревания, так как бот двигается
-            }
+            currentLocation = newLocation;
         } else {
             // Если NPC не найден, возвращаем null
             return null;
@@ -56,12 +49,12 @@ public class BotStatusRuntime {
     }
 
     // Флаг застревания
-    public boolean isStuck() {
-        return isStuck;
+    public boolean getStuck() {
+        return stuck;
     }
 
     public void setStuck(boolean stuck) {
-        this.isStuck = stuck;
+        this.stuck = stuck;
     }
 
     // Счётчик застревания

@@ -24,8 +24,8 @@ import com.devone.bot.utils.world.BotWorldHelper;
 public class BotHandTask extends BotTask {
 
     private BotBlockData target;
-    @SuppressWarnings("unused")
     private double damage = 5.0;
+    private boolean isLogged = true;
 
     public BotHandTask(Bot bot) {
         super(bot, "✋🏻");

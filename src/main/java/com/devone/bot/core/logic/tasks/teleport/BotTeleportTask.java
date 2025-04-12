@@ -16,6 +16,7 @@ import com.devone.bot.utils.logger.BotLogger;
 import com.devone.bot.utils.world.BotWorldHelper;
 
 public class BotTeleportTask extends BotTask {
+    private BotCoordinate3D target;
 
     public BotTeleportTask(Bot bot, Player player) {
         super(bot, player, "🗲");
@@ -33,10 +34,10 @@ public class BotTeleportTask extends BotTask {
         
         if (params instanceof BotTeleportTaskParams) {
             BotTeleportTaskParams teleportParams = (BotTeleportTaskParams) params;
-            BotCoordinate3D loc = teleportParams.getTarget();
+            BotCoordinate3D target = teleportParams.getTarget();
 
-            if (loc != null) {
-                bot.getRuntimeStatus().setTargetLocation(loc);
+            if (target != null) {
+                bot.getRuntimeStatus().setTargetLocation(target);
             } else {
                 BotLogger.info(this.isLogged(), bot.getId() + " ❌ Некорректные параметры для `BotTeleportTask`!");
                 this.stop();
@@ -50,14 +51,21 @@ public class BotTeleportTask extends BotTask {
 
     @Override
     public void execute() {
-        setObjective("Teleporting");
+        setObjective("Teleporting...");
+
+        if (this.target == null) {
+            BotLogger.warn(isLogged(), bot.getId() + " ❌ Целевая точка телепортации не задана.");
+            stop();
+            return;
+        }
 
         BotCoordinate3D targetLocation = bot.getRuntimeStatus().getTargetLocation();
-                // Телепортация в основном потоке
-                Bukkit.getScheduler().runTask(AIBotPlugin.getInstance(), () -> {
-                    bot.getNPCEntity().teleport(BotWorldHelper.getWorldLocation(targetLocation));
-                    BotLogger.info(this.isLogged(), "🗲 " + bot.getId() + " Телепортируемся в " + targetLocation);
-                });
+        // Телепортация в основном потоке
+        Bukkit.getScheduler().runTask(AIBotPlugin.getInstance(), () -> {
+            bot.getNPCEntity().teleport(BotWorldHelper.getWorldLocation(targetLocation));
+            bot.getRuntimeStatus().setStuck(false);
+            BotLogger.info(isLogged(), bot.getId() + " 🗲 Телепорт с " + bot.getNPCEntity().getLocation().toVector() + " → " + targetLocation);
+        });
 
        stop();
 
@@ -65,7 +73,6 @@ public class BotTeleportTask extends BotTask {
 
     public void stop() {
         isDone = true;
-        bot.getRuntimeStatus().setTargetLocation(null);
     }
 
 }

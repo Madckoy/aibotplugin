@@ -1,7 +1,6 @@
 package com.devone.bot.core.logic.tasks.explore;
 
-import java.util.List;
-
+import com.devone.bot.core.logic.tasks.strikes.params.BotSurvivalStrikeTaskParams;
 import com.devone.bot.core.bot.Bot;
 import com.devone.bot.core.chat.BotChat;
 import com.devone.bot.core.logic.navigation.BotNavigationPlannerWrapper;
@@ -14,6 +13,7 @@ import com.devone.bot.core.logic.tasks.explore.params.BotExploreTaskParams;
 import com.devone.bot.core.logic.tasks.params.BotTaskParams;
 import com.devone.bot.core.logic.tasks.params.IBotTaskParams;
 import com.devone.bot.core.logic.tasks.sonar.BotSonar3DTask;
+import com.devone.bot.core.logic.tasks.strikes.BotSurvivalStrikeTask;
 import com.devone.bot.utils.BotConstants;
 import com.devone.bot.utils.blocks.BotBlockData;
 import com.devone.bot.utils.blocks.BotCoordinate3D;
@@ -27,7 +27,6 @@ public class BotExploreTask extends BotTask {
   
     private int scanRadius = BotConstants.DEFAULT_SCAN_RANGE;
     private BotExploreTaskConfig config;
-    private boolean isStuck = false;
 
     public BotExploreTask(Bot bot) {
         super(bot, "🌐");
@@ -66,46 +65,56 @@ public class BotExploreTask extends BotTask {
 
         BotSceneContext context     = BotNavigationPlannerWrapper.getSceneContext(sceneData.blocks, sceneData.entities, bot_pos);
 
-        BotBlockData    navPoint    = BotGeoSelector.pickRandomTarget(context.blocks);
+        BotBlockData    navTarget    = BotGeoSelector.pickRandomTarget(context.navTargets);
 
         BotBlockData    animal      = BotBioSelector.pickNearestTarget(context.entities, bot_pos);
 
-        Block block = BotWorldHelper.getBlockAt(navPoint.getCoordinate3D());
+        Block block = BotWorldHelper.getBlockAt(navTarget.getCoordinate3D());
+
+        BotLogger.info(this.isLogged(), "🌐 " + bot.getId() + " Total nav targets: " + context.navTargets);
+
 
         if(bot.getNPCEntity() != null) {
             if(bot.getNPCNavigator().canNavigateTo(block.getLocation())==false) {
                 BotLogger.info(this.isLogged(), "🌐 " + bot.getId() + " Navigation to target is not possible. [ID: " + uuid + "]");
-                isStuck = true;
-                this.stop();
-                return;
+                bot.getRuntimeStatus().setStuck(true);
             }
-        }
-
-        if (animal != null) {
-            BotChat.broadcastMessage("I see an animal: " + animal.getCoordinate3D() + " [ID: " + uuid + "]");
-            if(isStuck) {
-                BotChat.broadcastMessage(" [ID: " + uuid + "]");
-                isStuck = false;
-            }
-            BotLogger.info(this.isLogged(), "🌐 " + bot.getId() + " Spotted an animal. [ID: " + uuid + "]");
-        }
-
-        if (navPoint == null) {
-            // 📌 Если цель не найдена, то выходим
-            BotLogger.info(this.isLogged(), "🌐 " + bot.getId() + " No valid targets found. [ID: " + uuid + "]");
+        } else {
+            BotLogger.info(this.isLogged(), "🌐 " + bot.getId() + " NPC entity is null. [ID: " + uuid + "]");
             this.stop();
             return;
         }
 
-        // 📌 Если цель найдена, начинаем движение
-        BotLogger.info(this.isLogged(), "🌐 " + bot.getId() + " Target: " + navPoint.getCoordinate3D() + " [ID: " + uuid + "]");
-        
-        bot.getRuntimeStatus().setTargetLocation(navPoint.getCoordinate3D()); 
-        // 
-        BotNavigationUtils.navigateTo(bot, bot.getRuntimeStatus().getTargetLocation()); // via a new MoVeTask()
+        if(bot.getRuntimeStatus().getStuck()) {
+            BotLogger.info(this.isLogged(), "🌐 " + bot.getId() + " Bot is stuck. [ID: " + uuid + "]");
+            if(animal != null) {
+                BotChat.broadcastMessage("Inflicting survival strike! [ID: " + uuid + "]");
+                BotSurvivalStrikeTaskParams params = new BotSurvivalStrikeTaskParams(animal, 5.0);
+                BotSurvivalStrikeTask strikeTask = new BotSurvivalStrikeTask(bot).configure((IBotTaskParams)params);
+                bot.addTaskToQueue(strikeTask);
+                stop();
+                return;
+            }
 
+        } else {
+            if(animal != null) {
+                BotChat.broadcastMessage("Inflicting survival strike! [ID: " + uuid + "]");
+                BotSurvivalStrikeTaskParams params = new BotSurvivalStrikeTaskParams(animal, 5.0);
+                BotSurvivalStrikeTask strikeTask = new BotSurvivalStrikeTask(bot).configure((IBotTaskParams)params);
+                bot.addTaskToQueue(strikeTask);
+                stop();
+                return;
+            }
+        }
+
+        // 📌 Если цель найдена, начинаем движение
+        BotLogger.info(this.isLogged(), "🌐 " + bot.getId() + " Target: " + navTarget.getCoordinate3D() + " [ID: " + uuid + "]");
+        //
+        bot.getRuntimeStatus().setTargetLocation(navTarget.getCoordinate3D()); 
+        //
+        BotNavigationUtils.navigateTo(bot, bot.getRuntimeStatus().getTargetLocation()); // via a new MoVeTask()
+        //
         this.stop();
-        BotLogger.info(this.isLogged(), "🌐 " + bot.getId() + " Exploration task completed. [ID: " + uuid + "]");
         return;
     }
 
@@ -113,6 +122,7 @@ public class BotExploreTask extends BotTask {
     public void stop() {
        this.isDone = true;
        setSceneData(null);
+       BotLogger.info(this.isLogged(), "🌐 " + bot.getId() + " Exploration task completed. [ID: " + uuid + "]");
     }
 
     @Override

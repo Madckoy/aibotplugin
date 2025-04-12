@@ -32,6 +32,7 @@ public class Bot {
     private boolean autoPickupEnabled = false;
     private BotStatusRuntime rStatus; // Рантайм статус бота
     private BotChat communicator; // Создаем поле для общения бота
+    private boolean stuck;    
 
     public Bot(String id, NPC an_npc, BotManager botManager) {
         this.id = id;
@@ -101,10 +102,6 @@ public class Bot {
         return id;
     }
 
-    public BotTask getCurrentTask() {
-        return getLifeCycle().getTaskStackManager().getActiveTask();
-    }
-
     public BotLifeCycle getLifeCycle() {
         return lifeCycle;
     }
@@ -151,8 +148,4 @@ public class Bot {
         mv_task.configure(mv_taskParams);
         addTaskToQueue(mv_task);
     }
-
-    public BotTask getActiveTask() {
-       return this.getLifeCycle().getTaskStackManager().getActiveTask();
-    }    
 }
