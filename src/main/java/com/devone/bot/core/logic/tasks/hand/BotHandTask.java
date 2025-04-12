@@ -3,7 +3,10 @@ package com.devone.bot.core.logic.tasks.hand;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.block.Block;
+import org.bukkit.entity.Entity;
+import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
+import org.bukkit.scheduler.BukkitRunnable;
 
 import com.devone.bot.AIBotPlugin;
 import com.devone.bot.core.bot.Bot;
@@ -44,6 +47,7 @@ public class BotHandTask extends BotTask {
             BotHandTaskParams useHandParams = (BotHandTaskParams) params;
  
             this.damage = useHandParams.getDamage();
+            this.target = useHandParams.getTarget();
 
         } else {
             BotLogger.info(this.isLogged(),bot.getId() + " ❌ Некорректные параметры для `BotUseHandTask`!");
@@ -52,42 +56,64 @@ public class BotHandTask extends BotTask {
         return this;
     }
 
+
     @Override
     public void execute() {
-
-        if (bot.getRuntimeStatus().getTargetLocation() == null && target == null) {
-            BotLogger.info(this.isLogged(), bot.getId() + " ❌ Нет цели или координат для удара");
+        if (target == null) {
+            BotLogger.info(this.isLogged(), bot.getId() + " ❌ Цель для BotHandTask не задана");
             this.stop();
             return;
         }
 
         BotCoordinate3D faceTarget = (target != null) ? target.getCoordinate3D() : bot.getRuntimeStatus().getTargetLocation();
-
         Block faceBlock = BotWorldHelper.getBlockAt(faceTarget);
-
         setObjective("Hitting: " + BotUtils.getBlockName(faceBlock)+" at "+faceTarget);
-    
-        turnToBlock(faceTarget);
-    
-        Bukkit.getScheduler().runTask(AIBotPlugin.getInstance(), () -> {
-            
-            animateHand();
-    
-            if (faceBlock != null && faceBlock.getType() != Material.AIR) {
-                BotUtils.playBlockBreakEffect(faceBlock.getLocation());
 
-                faceBlock.breakNaturally();
+        new BukkitRunnable() {
+            @Override
+            public void run() {
+                if (isDone || bot.getNPCEntity() == null) {
+                    stop();
+                    cancel();
+                    return;
+                }
 
-                BotLogger.info(this.isLogged(), bot.getId() + " ✋🏻 Нанесён урон по: " + faceBlock);
+                turnToTarget(target);
+                animateHand(); 
 
-            } 
+                if (target.uuid != null) {
+                    Entity entity = Bukkit.getEntity(target.uuid);
+                    if (!(entity instanceof LivingEntity living) || living.isDead()) {
+                        BotLogger.info(isLogged, bot.getId() + " ✅ Цель мертва или недоступна. Завершаем.");
+                        stop();
+                        cancel();
+                        return;
+                    }
 
-            this.stop();
+                    living.damage(damage, bot.getNPCEntity());
 
-        });
+                    BotLogger.info(isLogged, bot.getId() + " ✋🏻 Ударил моба: " + living.getType());
+
+                } else {
+
+                    Block block = BotWorldHelper.getBlockAt(target);
+                    if (block == null || block.getType() == Material.AIR) {
+                        BotLogger.info(isLogged, bot.getId() + " ✅ Блок разрушен. Завершаем.");
+                        stop();
+                        cancel();
+                        return;
+                    }
+
+                    BotUtils.playBlockBreakEffect(block.getLocation());
+                    block.breakNaturally();
+
+                    BotLogger.info(isLogged, bot.getId() + " ✋🏻 Ударил блок: " + block.getType());
+                }
+            }
+        }.runTaskTimer(AIBotPlugin.getInstance(), 0L, 10L);
     }
 
-    private void turnToBlock(BotCoordinate3D target) {
+    private void turnToTarget(BotCoordinate3D target) {
         
         // ✅ Принудительно обновляем положение, если поворот сбрасывается
         Bukkit.getScheduler().runTaskLater(AIBotPlugin.getInstance(), () -> {

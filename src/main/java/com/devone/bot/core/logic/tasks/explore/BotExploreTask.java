@@ -20,11 +20,14 @@ import com.devone.bot.utils.blocks.BotCoordinate3D;
 import com.devone.bot.utils.logger.BotLogger;
 import com.devone.bot.utils.navigation.BotNavigationUtils;
 import com.devone.bot.utils.scene.BotSceneData;
+import com.devone.bot.utils.world.BotWorldHelper;
+import org.bukkit.block.Block;
 
 public class BotExploreTask extends BotTask {
   
     private int scanRadius = BotConstants.DEFAULT_SCAN_RANGE;
     private BotExploreTaskConfig config;
+    private boolean isStuck = false;
 
     public BotExploreTask(Bot bot) {
         super(bot, "🌐");
@@ -63,12 +66,27 @@ public class BotExploreTask extends BotTask {
 
         BotSceneContext context     = BotNavigationPlannerWrapper.getSceneContext(sceneData.blocks, sceneData.entities, bot_pos);
 
-        BotBlockData    navPoint  = BotGeoSelector.pickRandomTarget(context.blocks);
+        BotBlockData    navPoint    = BotGeoSelector.pickRandomTarget(context.blocks);
 
-        BotBlockData    animal  = BotBioSelector.pickNearestTarget(context.entities, bot_pos);
+        BotBlockData    animal      = BotBioSelector.pickNearestTarget(context.entities, bot_pos);
+
+        Block block = BotWorldHelper.getBlockAt(navPoint.getCoordinate3D());
+
+        if(bot.getNPCEntity() != null) {
+            if(bot.getNPCNavigator().canNavigateTo(block.getLocation())==false) {
+                BotLogger.info(this.isLogged(), "🌐 " + bot.getId() + " Navigation to target is not possible. [ID: " + uuid + "]");
+                isStuck = true;
+                this.stop();
+                return;
+            }
+        }
 
         if (animal != null) {
             BotChat.broadcastMessage("I see an animal: " + animal.getCoordinate3D() + " [ID: " + uuid + "]");
+            if(isStuck) {
+                BotChat.broadcastMessage(" [ID: " + uuid + "]");
+                isStuck = false;
+            }
             BotLogger.info(this.isLogged(), "🌐 " + bot.getId() + " Spotted an animal. [ID: " + uuid + "]");
         }
 

@@ -1,13 +1,15 @@
 package com.devone.bot.utils.blocks;
 
+import java.util.UUID;
+
 import org.bukkit.entity.EntityType;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
 public class BotBlockData extends BotCoordinate3D {
 
-
     public String type;
+    public UUID   uuid;
 
     @JsonIgnore
     public boolean bot;  // из JSON  
