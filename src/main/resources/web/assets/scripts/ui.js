@@ -1,5 +1,10 @@
 // ui.js
 
+function updateMonitoringHeader(data) {
+    document.getElementById("mc-time").textContent = `⛅ ${data["mc-time"]}`;
+    document.getElementById("server-time").textContent = `🕒 ${data["server-time"]}`;
+}
+
 function renderBotTable(data) {
     let table = document.getElementById("botTable");
     let tbody = table.querySelector("tbody");

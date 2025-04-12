@@ -6,6 +6,7 @@ window.onload = async function () {
 
     setInterval(async () => {
         const newData = await fetchBotData();
+        updateMonitoringHeader(newData);
         renderBotTable(newData);
-    }, 5000);
+    }, 1000);
 };

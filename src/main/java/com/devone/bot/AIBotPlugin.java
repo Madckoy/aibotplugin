@@ -52,7 +52,6 @@ public class AIBotPlugin extends JavaPlugin {
 
         BotLogger.info(true, "✅ AI Bot Plugin has been enabled successfully!");
 
-        //BotTickProtector.ensureTickAlive(this); // workaround to keep server running when players are not online
     }
 
     @Override
@@ -138,7 +137,7 @@ public class AIBotPlugin extends JavaPlugin {
     }
 
     private void copyEssentialResources() {
-        BotResourceExtractor.copyDirectoryFromJar("web", BotConstants.PLUGIN_PATH + "/web", true, Set.of(".html", ".css", ".js"));
+        BotResourceExtractor.copyDirectoryFromJar("web", BotConstants.PLUGIN_PATH + "/web", true, Set.of(".html", ".css", ".js", ".png"));
         BotResourceExtractor.copyDirectoryFromJar("patterns", BotConstants.PLUGIN_PATH + "/patterns", false, Set.of(".json", ".yml"));
     }
 

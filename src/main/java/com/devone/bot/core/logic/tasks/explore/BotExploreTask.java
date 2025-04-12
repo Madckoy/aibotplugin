@@ -70,7 +70,6 @@ public class BotExploreTask extends BotTask {
         if (animal != null) {
             BotChat.broadcastMessage("I see an animal: " + animal.getCoordinate3D() + " [ID: " + uuid + "]");
             BotLogger.info(this.isLogged(), "🌐 " + bot.getId() + " Spotted an animal. [ID: " + uuid + "]");
-            return;
         }
 
         if (navPoint == null) {

@@ -1,6 +1,8 @@
 package com.devone.bot.web.servlets;
 
 import java.io.IOException;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
@@ -8,6 +10,7 @@ import java.util.List;
 import java.util.Objects;
 import java.util.stream.Collectors;
 
+import org.bukkit.Bukkit;
 import org.bukkit.inventory.ItemStack;
 
 import com.devone.bot.core.bot.Bot;
@@ -32,6 +35,18 @@ public class BotStatusServlet extends HttpServlet {
         resp.setHeader("Access-Control-Allow-Origin", "*");
 
         JsonObject result = new JsonObject();
+
+        String serverTime = LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss"));
+        result.addProperty("server-time", serverTime);
+
+        // Время Minecraft
+        long mcTicks = Bukkit.getWorlds().get(0).getTime();
+        int hour = (int)((mcTicks / 1000 + 6) % 24);
+        int minute = (int)((mcTicks % 1000) * 60 / 1000);
+        String mcTimeFormatted = String.format("%02d:%02d", hour, minute);
+        result.addProperty("mc-time", mcTimeFormatted);
+
+
         JsonArray botsArray = new JsonArray();
         Collection<Bot> bots = botManager.getAllBots();
 
