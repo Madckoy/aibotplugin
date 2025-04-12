@@ -33,7 +33,17 @@ public class BotNavigationPlannerWrapper {
         if (walkable == null || walkable.isEmpty()) return null;
 
         List<BotBlockData> navigable     = BotBlocksNavigableFilter.filter(walkable);
+
         if (navigable == null || navigable.isEmpty()) return null;
+
+        BotBlockData fakeBlockDirt = new BotBlockData();
+
+        fakeBlockDirt.x = botPosition.x;
+        fakeBlockDirt.y = botPosition.y-1;
+        fakeBlockDirt.z = botPosition.z; 
+        fakeBlockDirt.type = "DIRT";
+            
+        navigable.add(fakeBlockDirt);
 
         List<BotBlockData> reachable     = BotReachabilityResolver.resolve(botPosition, navigable);
         if( reachable == null || reachable.isEmpty()) return null;
