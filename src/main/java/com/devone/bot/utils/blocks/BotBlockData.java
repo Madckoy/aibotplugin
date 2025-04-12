@@ -1,5 +1,7 @@
 package com.devone.bot.utils.blocks;
 
+import org.bukkit.entity.EntityType;
+
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
 public class BotBlockData extends BotCoordinate3D {
@@ -39,6 +41,20 @@ public class BotBlockData extends BotCoordinate3D {
     public boolean isPassable() {
         return type != null && !type.isBlank()
                && !BlockMaterialUtils.NON_PASSABLE_BLOCKS.contains(type.toUpperCase());
+    }
+
+    public EntityType toEntityType() {
+        return EntityType.valueOf(type.toUpperCase());
+    }
+
+    @JsonIgnore
+    public boolean isHostileMob() {
+        return BotEntityUtils.isHostileMob(this.type);
+    }
+
+    @JsonIgnore
+    public boolean isPassiveMob() {
+        return BotEntityUtils.isPassiveMob(this.type);
     }
     
     @JsonIgnore
