@@ -8,8 +8,8 @@ import java.util.List;
 
 import org.bukkit.Bukkit;
 
-import com.devone.bot.core.BotManager;
-import com.devone.bot.utils.BotLogger;
+import com.devone.bot.core.bot.BotManager;
+import com.devone.bot.utils.logger.BotLogger;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
 
@@ -19,6 +19,7 @@ import jakarta.servlet.http.HttpServletResponse;
 
 public class CommandServlet extends HttpServlet {
 
+    @SuppressWarnings("unused")
     private final BotManager botManager;
 
     public CommandServlet(BotManager botManager) {

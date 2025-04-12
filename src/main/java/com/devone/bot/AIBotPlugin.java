@@ -8,17 +8,16 @@ import org.bukkit.plugin.java.JavaPlugin;
 
 import com.devone.bot.config.AIBotPluginConfig;
 import com.devone.bot.config.AIBotPluginConfigManager;
-import com.devone.bot.core.BotCmdDispatcher;
-import com.devone.bot.core.BotManager;
-import com.devone.bot.core.BotZoneManager;
-import com.devone.bot.core.events.BotEvents;
-import com.devone.bot.core.events.PlayerEvents;
+import com.devone.bot.core.bot.BotManager;
+import com.devone.bot.core.commands.BotCommandsDispatcher;
+import com.devone.bot.core.listeners.BotListener;
+import com.devone.bot.core.listeners.PlayerListener;
 import com.devone.bot.core.math.BotMathMaxFunction;
+import com.devone.bot.core.zone.BotZoneManager;
 import com.devone.bot.utils.BotConstants;
-import com.devone.bot.utils.BotLogger;
-import com.devone.bot.utils.BotResourceExtractor;
-import com.devone.bot.utils.ServerUtils;
-import com.devone.bot.utils.server.BotTickProtector;
+import com.devone.bot.utils.logger.BotLogger;
+import com.devone.bot.utils.server.BotResourceExtractor;
+import com.devone.bot.utils.server.ServerUtils;
 import com.devone.bot.web.BotWebService;
 import com.googlecode.aviator.AviatorEvaluator;
 
@@ -91,7 +90,7 @@ public class AIBotPlugin extends JavaPlugin {
         botManager = new BotManager(this);
         zoneManager = new BotZoneManager(this, getDataFolder());
         
-        new BotCmdDispatcher(this, botManager, zoneManager);
+        new BotCommandsDispatcher(this, botManager, zoneManager);
 
         BotLogger.info(true, "✅ Менеджеры перезапущены!");
 
@@ -115,9 +114,9 @@ public class AIBotPlugin extends JavaPlugin {
         }
 
         // тут зарегаем ивенты
-        getServer().getPluginManager().registerEvents(new PlayerEvents(botManager), this);
+        getServer().getPluginManager().registerEvents(new PlayerListener(botManager), this);
         //
-        getServer().getPluginManager().registerEvents(new BotEvents(botManager), this);
+        getServer().getPluginManager().registerEvents(new BotListener(botManager), this);
 
         BotLogger.info(true, "✅ AI Bot Plugin перезагружен успешно!");
 

@@ -1,9 +1,11 @@
 package com.devone.bot.utils.bluemap;
 
 import com.devone.bot.AIBotPlugin;
-import com.devone.bot.core.Bot;
-import com.devone.bot.core.BotManager;
-import com.devone.bot.utils.*;
+import com.devone.bot.core.bot.Bot;
+import com.devone.bot.core.bot.BotManager;
+import com.devone.bot.utils.blocks.BotCoordinate3D;
+import com.devone.bot.utils.image.BotImageUtils;
+import com.devone.bot.utils.logger.BotLogger;
 import com.devone.bot.web.BotWebService;
 import com.flowpowered.math.vector.Vector3d;
 import de.bluecolored.bluemap.api.BlueMapAPI;
@@ -163,6 +165,7 @@ public class BlueMapMarkers {
             int z = loc.z;
 
             // ✅ Get or download the bot’s skin icon
+            @SuppressWarnings("unused")
             String skinFilePath = BotImageUtils.getSkinFile(botUUID);
 
             POIMarker marker = new POIMarker(botId,  new Vector3d(x, y, z));

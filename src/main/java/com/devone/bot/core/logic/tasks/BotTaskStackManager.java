@@ -2,9 +2,9 @@ package com.devone.bot.core.logic.tasks;
 
 import java.util.Stack;
 
-import com.devone.bot.core.Bot;
-import com.devone.bot.utils.BotLifecycleLogCsvWriter;
-import com.devone.bot.utils.BotLogger;
+import com.devone.bot.core.bot.Bot;
+import com.devone.bot.utils.logger.BotLifecycleLogger;
+import com.devone.bot.utils.logger.BotLogger;
 
 public class BotTaskStackManager {
     private final Stack<BotTask> taskStack = new Stack<>();
@@ -27,7 +27,7 @@ public class BotTaskStackManager {
     public void popTask() {
         if (!taskStack.isEmpty()) {
 
-            BotLifecycleLogCsvWriter.write(this.bot);
+            BotLifecycleLogger.write(this.bot);
 
             BotLogger.info(true, "➖ Удалена задача: " + taskStack.peek().getClass().getSimpleName());
             taskStack.pop();

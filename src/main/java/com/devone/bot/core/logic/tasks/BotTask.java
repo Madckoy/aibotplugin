@@ -4,14 +4,16 @@ import org.bukkit.Location;
 import org.bukkit.entity.Player;
 import org.bukkit.event.Listener;
 
-import com.devone.bot.core.Bot;
+import com.devone.bot.core.bot.Bot;
 import com.devone.bot.core.logic.tasks.configs.BotTaskConfig;
-import com.devone.bot.core.logic.tasks.params.BotTeleportTaskParams;
+import com.devone.bot.core.logic.tasks.decision.BotDecisionMakeTask;
 import com.devone.bot.core.logic.tasks.params.IBotTaskParams;
-import com.devone.bot.utils.BotCoordinate3D;
-import com.devone.bot.utils.BotLogger;
-import com.devone.bot.utils.BotSceneData;
+import com.devone.bot.core.logic.tasks.teleport.BotTeleportTask;
+import com.devone.bot.core.logic.tasks.teleport.params.BotTeleportTaskParams;
 import com.devone.bot.utils.BotUtils;
+import com.devone.bot.utils.blocks.BotCoordinate3D;
+import com.devone.bot.utils.logger.BotLogger;
+import com.devone.bot.utils.scene.BotSceneData;
 
 import java.util.UUID;
 

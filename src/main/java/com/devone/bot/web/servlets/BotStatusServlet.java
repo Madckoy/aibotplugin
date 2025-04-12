@@ -10,11 +10,11 @@ import java.util.stream.Collectors;
 
 import org.bukkit.inventory.ItemStack;
 
-import com.devone.bot.core.Bot;
-import com.devone.bot.core.BotManager;
+import com.devone.bot.core.bot.Bot;
+import com.devone.bot.core.bot.BotManager;
 import com.devone.bot.core.logic.tasks.BotTask;
-import com.devone.bot.utils.BotCoordinate3D;
-import com.devone.bot.utils.BotStringUtils;
+import com.devone.bot.utils.BotUtils;
+import com.devone.bot.utils.blocks.BotCoordinate3D;
 import com.devone.bot.web.BotWebService;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
@@ -55,7 +55,7 @@ public class BotStatusServlet extends HttpServlet {
                 botJson.addProperty("target", tgtLoc != null ? " " + tgtLoc.x + ", " + tgtLoc.y + ", " + tgtLoc.z : "");
 
 
-                botJson.addProperty("elapsedTime", BotStringUtils.formatTime(bot.getCurrentTask().getElapsedTime()));
+                botJson.addProperty("elapsedTime", BotUtils.formatTime(bot.getCurrentTask().getElapsedTime()));
 
                 List<BotTask> taskStack = (bot.getLifeCycle() != null && bot.getLifeCycle().getTaskStackManager() != null)
                     ? new ArrayList<>(bot.getLifeCycle().getTaskStackManager().getTaskStack())

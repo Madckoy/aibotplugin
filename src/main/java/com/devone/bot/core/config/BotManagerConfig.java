@@ -5,7 +5,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 import com.devone.bot.config.AIBotBaseJsonConfig;
-import com.devone.bot.utils.BotCoordinate3D;
+import com.devone.bot.utils.blocks.BotCoordinate3D;
 
 public class BotManagerConfig extends AIBotBaseJsonConfig<BotManagerConfig.Data> {
 

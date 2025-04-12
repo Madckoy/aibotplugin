@@ -3,10 +3,10 @@
 
 package com.devone.bot.core.logic.navigation;
 
-import com.devone.bot.utils.BotBlockData;
-
 import java.util.List;
 import java.util.Random;
+
+import com.devone.bot.utils.blocks.BotBlockData;
 
 public class BotTargetRandomizer {
 

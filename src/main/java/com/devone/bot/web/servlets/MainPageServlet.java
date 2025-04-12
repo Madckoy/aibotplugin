@@ -7,7 +7,7 @@ import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 
 import com.devone.bot.utils.BotConstants;
-import com.devone.bot.utils.BotLogger;
+import com.devone.bot.utils.logger.BotLogger;
 
 public class MainPageServlet extends HttpServlet {
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {

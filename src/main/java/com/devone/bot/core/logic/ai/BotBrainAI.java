@@ -1,13 +1,9 @@
 package com.devone.bot.core.logic.ai;
 
-import com.devone.bot.core.Bot;
-import com.devone.bot.core.logic.tasks.*;
-import com.devone.bot.core.logic.tasks.destruction.BotBreakTask;
-import com.devone.bot.utils.BotLogger;
+import com.devone.bot.core.bot.Bot;
+import com.devone.bot.utils.logger.BotLogger;
 
 public class BotBrainAI {
-
-    private static final String AI_SERVER_URL = "http://localhost:5000/decide";
 
     public static void processDecision(Bot bot) {
         try {
@@ -29,24 +25,4 @@ public class BotBrainAI {
         }
     }
 
-    private static void executeAction(Bot bot, String action) {
-        switch (action) {
-            case "hunt_mob":
-                bot.addTaskToQueue(new BotHuntMobsTask(bot));
-                break;
-            case "break_block":
-                bot.addTaskToQueue(new BotBreakTask(bot));
-                break;
-            case "drop_off":
-                bot.addTaskToQueue(new BotDropAllTask(bot, null));
-                break;
-            case "explore":
-                bot.addTaskToQueue(new BotExploreTask(bot));
-                break;
-            default:
-                bot.addTaskToQueue(new BotDecisionMakeTask(bot));
-                break;
-        }
-        BotLogger.info(true, "🤖 BotBrainAI выбрал действие: " + action);
-    }
 }

@@ -4,7 +4,7 @@ import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.configuration.file.YamlConfiguration;
 
 import com.devone.bot.utils.BotConstants;
-import com.devone.bot.utils.BotLogger;
+import com.devone.bot.utils.logger.BotLogger;
 
 import java.io.File;
 import java.io.IOException;

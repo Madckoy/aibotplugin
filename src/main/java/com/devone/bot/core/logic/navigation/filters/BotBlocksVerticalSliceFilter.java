@@ -4,8 +4,7 @@ package com.devone.bot.core.logic.navigation.filters;
 import java.util.ArrayList;
 import java.util.List;
 
-
-import com.devone.bot.utils.BotBlockData;
+import com.devone.bot.utils.blocks.BotBlockData;
 
 public class BotBlocksVerticalSliceFilter {
     public static List<BotBlockData> filter(List<BotBlockData> blocks, int botY, int range) {

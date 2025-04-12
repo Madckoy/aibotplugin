@@ -6,8 +6,12 @@ import org.bukkit.World;
 import org.bukkit.block.Block;
 import org.bukkit.util.Vector;
 
-import com.devone.bot.core.Bot;
+import com.devone.bot.core.bot.Bot;
+import com.devone.bot.utils.blocks.BotCoordinate3D;
+import com.devone.bot.utils.logger.BotLogger;
+import com.devone.bot.utils.world.BotWorldHelper;
 
+import java.util.concurrent.TimeUnit;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -116,4 +120,10 @@ public class BotUtils {
         bot.getNPCEntity().teleport(newLook);
     }
 
+        public static String formatTime(long milliseconds) {
+        long hours   = TimeUnit.MILLISECONDS.toHours(milliseconds);
+        long minutes = TimeUnit.MILLISECONDS.toMinutes(milliseconds) % 60;
+        long seconds = TimeUnit.MILLISECONDS.toSeconds(milliseconds) % 60;
+        return String.format("%02d:%02d:%02d", hours, minutes, seconds);
+    }
 }
