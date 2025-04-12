@@ -33,7 +33,7 @@ public class BotSonar3DTask extends BotTask {
     @Override
     public void execute() {
 
-        setObjective("Scanning Signatures");
+        setObjective("Scanning Signatures...");
         BotSceneData scene = BotSceneScan3D.scan(bot, radius, this.height); // full range scan
         parent.setSceneData(scene);
 

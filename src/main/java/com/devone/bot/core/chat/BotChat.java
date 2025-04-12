@@ -26,10 +26,10 @@ public class BotChat {
     }
 
     // Метод для отправки сообщений в глобальный чат или другие каналы
-    public void broadcastMessage(String message) {
+    public static void broadcastMessage(String message) {
         // Допустим, если бот может взаимодействовать с миром или чатом
         BotWorldHelper.getWorld().getPlayers().forEach(player -> {
-            player.sendMessage("[Bot] " + message);
+            player.sendMessage(message);
         });
     }
 

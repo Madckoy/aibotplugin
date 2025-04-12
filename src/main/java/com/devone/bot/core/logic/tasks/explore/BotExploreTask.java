@@ -3,8 +3,11 @@ package com.devone.bot.core.logic.tasks.explore;
 import java.util.List;
 
 import com.devone.bot.core.bot.Bot;
+import com.devone.bot.core.chat.BotChat;
 import com.devone.bot.core.logic.navigation.BotNavigationPlannerWrapper;
-import com.devone.bot.core.logic.navigation.BotTargetRandomizer;
+import com.devone.bot.core.logic.navigation.scene.BotSceneContext;
+import com.devone.bot.core.logic.navigation.selectors.BotBioSelector;
+import com.devone.bot.core.logic.navigation.selectors.BotGeoSelector;
 import com.devone.bot.core.logic.tasks.BotTask;
 import com.devone.bot.core.logic.tasks.explore.config.BotExploreTaskConfig;
 import com.devone.bot.core.logic.tasks.explore.params.BotExploreTaskParams;
@@ -46,6 +49,8 @@ public class BotExploreTask extends BotTask {
             bot.addTaskToQueue(sonar);
             return;
         }  
+        
+        setObjective("Exploring the area...");
 
         BotSceneData sceneData = getSceneData();
         if (sceneData == null) {
@@ -54,13 +59,21 @@ public class BotExploreTask extends BotTask {
             return;
         }
 
-        BotCoordinate3D    bot_pos       = bot.getRuntimeStatus().getCurrentLocation();
+        BotCoordinate3D    bot_pos  = bot.getRuntimeStatus().getCurrentLocation();
 
-        List<BotBlockData> nav_targets   = BotNavigationPlannerWrapper.getNextExplorationTargets(sceneData.blocks, bot_pos);
+        BotSceneContext context     = BotNavigationPlannerWrapper.getSceneContext(sceneData.blocks, sceneData.entities, bot_pos);
 
-        BotBlockData       target        = BotTargetRandomizer.pickRandomTarget(nav_targets);
-        
-        if (target == null) {
+        BotBlockData    navPoint  = BotGeoSelector.pickRandomTarget(context.blocks);
+
+        BotBlockData    animal  = BotBioSelector.pickNearestTarget(context.entities, bot_pos);
+
+        if (animal != null) {
+            BotChat.broadcastMessage("I see an animal: " + animal.getCoordinate3D() + " [ID: " + uuid + "]");
+            BotLogger.info(this.isLogged(), "🌐 " + bot.getId() + " Spotted an animal. [ID: " + uuid + "]");
+            return;
+        }
+
+        if (navPoint == null) {
             // 📌 Если цель не найдена, то выходим
             BotLogger.info(this.isLogged(), "🌐 " + bot.getId() + " No valid targets found. [ID: " + uuid + "]");
             this.stop();
@@ -68,9 +81,9 @@ public class BotExploreTask extends BotTask {
         }
 
         // 📌 Если цель найдена, начинаем движение
-        BotLogger.info(this.isLogged(), "🌐 " + bot.getId() + " Target: " + target.getCoordinate3D() + " [ID: " + uuid + "]");
+        BotLogger.info(this.isLogged(), "🌐 " + bot.getId() + " Target: " + navPoint.getCoordinate3D() + " [ID: " + uuid + "]");
         
-        bot.getRuntimeStatus().setTargetLocation(target.getCoordinate3D()); 
+        bot.getRuntimeStatus().setTargetLocation(navPoint.getCoordinate3D()); 
         // 
         BotNavigationUtils.navigateTo(bot, bot.getRuntimeStatus().getTargetLocation()); // via a new MoVeTask()
 

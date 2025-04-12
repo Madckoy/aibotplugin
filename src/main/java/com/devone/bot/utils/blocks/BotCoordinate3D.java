@@ -31,6 +31,14 @@ public class BotCoordinate3D {
         return x == that.x && y == that.y && z == that.z;
     }
 
+    public double distanceTo(BotCoordinate3D other) {
+        if (other == null) return Double.MAX_VALUE;
+        int dx = this.x - other.x;
+        int dy = this.y - other.y;
+        int dz = this.z - other.z;
+        return Math.sqrt(dx * dx + dy * dy + dz * dz);
+    }
+
     @Override
     public int hashCode() {
         return Objects.hash(x, y, z);
