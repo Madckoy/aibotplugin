@@ -1,7 +1,7 @@
 package com.devone.bot.core.logic.task.teleport;
 
 import org.bukkit.Bukkit;
-
+import org.bukkit.Location;
 import org.bukkit.entity.Player;
 
 import com.devone.bot.AIBotPlugin;
@@ -51,26 +51,28 @@ public class BotTeleportTask extends BotTask {
 
     @Override
     public void execute() {
-        
-        setObjective("Teleporting to: "+ target);
-
+        setObjective("Teleporting to: " + target);
+    
         if (this.target == null) {
             BotLogger.warn(isLogged(), bot.getId() + " ❌ Целевая точка телепортации не задана.");
             stop();
             return;
         }
-        // Телепортация в основном потоке
+    
         Bukkit.getScheduler().runTask(AIBotPlugin.getInstance(), () -> {
-            bot.getNPCEntity().teleport(BotWorldHelper.getWorldLocation(target));
-            bot.getRuntimeStatus().setStuck(false);
+            Location baseLocation = BotWorldHelper.getWorldLocation(target);
             
+            // 💡 Добавим небольшое смещение по X и Z, чтобы не встать "внутрь" сущности
+            Location safeOffset = baseLocation.clone().add(0.5, 0, 0.5);
+    
+            bot.getNPCEntity().teleport(safeOffset);
+            bot.getRuntimeStatus().setStuck(false);
             bot.getRuntimeStatus().teleportUsedIncrease();
-
-            BotLogger.info(isLogged(), bot.getId() + " 🗲 Телепорт с " + bot.getNPCEntity().getLocation().toVector() + " → " + target);
+    
+            BotLogger.info(isLogged(), bot.getId() + " 🗲 Телепорт с " + baseLocation.toVector() + " → " + safeOffset.toVector());
         });
-
-       stop();
-
+    
+        stop();
     }
 
     public void stop() {

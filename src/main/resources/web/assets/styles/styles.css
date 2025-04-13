@@ -31,11 +31,12 @@ h1 {
     display: flex;
     justify-content: space-between;
     align-items: center;
-    padding: 10px 16px;
+    padding: 1px 5px 10px 5px; /* ⬅️ раньше было 10px сверху и снизу */
     background-color: #1e1e1e;
     border-bottom: 2px solid #444;
-    margin-bottom: 12px;
+    margin-bottom: 5px;
 }
+
 
 .logo-container {
     display: flex;
