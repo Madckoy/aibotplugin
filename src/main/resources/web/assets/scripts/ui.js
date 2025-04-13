@@ -1,8 +1,24 @@
 // ui.js
 
 function updateMonitoringHeader(data) {
-    document.getElementById("mc-time").textContent = `⛅ ${data["mc-time"]}`;
-    document.getElementById("server-time").textContent = `🕒 ${data["server-time"]}`;
+    const mcTimeElem = document.getElementById("mc-time");
+    const serverTimeElem = document.getElementById("server-time");
+
+    // ⛅ Minecraft Time (уже строка)
+    const mcTime = data["mc-time"];
+    if (typeof mcTime === "string" && mcTime.trim() !== "") {
+        mcTimeElem.textContent = `⛅ ${mcTime}`;
+    } else {
+        mcTimeElem.textContent = "⛅ --:--";
+    }
+
+    // 🕒 Server Time
+    const serverTime = data["server-time"];
+    if (typeof serverTime === "string" && serverTime.trim() !== "") {
+        serverTimeElem.textContent = `🕒 ${serverTime}`;
+    } else {
+        serverTimeElem.textContent = "🕒 N/A";
+    }
 }
 
 function renderBotTable(data) {
@@ -26,14 +42,21 @@ function renderBotTable(data) {
                                 <div class="bot-stats-cell">
                                     <div><span>🧱</span><span>${bot.blocks_broken}</span></div>
                                     <div><span>💀</span><span>${bot.mobs_killed}</span></div>
-                                    <div><span>🗲</span><span>${bot.teleport_used}</span></div>
+                                    <div><span>⚡️</span><span>${bot.teleport_used}</span></div>
                                 </div>`; 
 
         row.insertCell(2).innerText = bot.position; 
         row.insertCell(3).innerText = bot.stuck;
         row.insertCell(4).innerText = bot.task;
         row.insertCell(5).innerText = bot.target;
-        row.insertCell(6).innerText = bot.object;
+        
+        let objCell = row.insertCell(6);
+        objCell.className = "objective-cell";
+        objCell.innerHTML = `
+            <div class="objective-queue-icons">ᯓ ${bot.queue}</div>
+            <div class="objective-description">🎯 ${bot.object}</div>
+        `;
+
         row.insertCell(7).innerText = bot.elapsedTime;
 
         // 📦 Inventory
@@ -42,15 +65,9 @@ function renderBotTable(data) {
         invCell.title = `Items: ${bot.inventoryCount} / ${bot.inventoryMax}`;
         invCell.innerHTML = generateInventoryGrid(bot.inventorySlotsFilled);
 
-        // 📋 Task Queue
-        let queueCell = row.insertCell(9);
-        queueCell.innerText = bot.queue;
-        queueCell.style.whiteSpace = "nowrap";
-        queueCell.style.textAlign = "left";
-        queueCell.style.padding = "6px";
 
         // 🎮 Control Buttons
-        let cmdCell = row.insertCell(10);
+        let cmdCell = row.insertCell(9);
         cmdCell.innerHTML = `
             <div class="command-cell">
                <button class="cmd-btn" data-bot="${bot.id}" data-cmd="bot-tp">TP</button>

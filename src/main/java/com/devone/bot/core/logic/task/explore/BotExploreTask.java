@@ -10,6 +10,8 @@ import com.devone.bot.core.logic.task.attack.survival.BotSurvivalAttackTask;
 import com.devone.bot.core.logic.task.attack.survival.params.BotSurvivalAttackTaskParams;
 import com.devone.bot.core.logic.task.explore.config.BotExploreTaskConfig;
 import com.devone.bot.core.logic.task.explore.params.BotExploreTaskParams;
+import com.devone.bot.core.logic.task.hand.attack.BotHandAttackTask;
+import com.devone.bot.core.logic.task.hand.attack.params.BotHandAttackTaskParams;
 import com.devone.bot.core.logic.task.params.BotTaskParams;
 import com.devone.bot.core.logic.task.params.IBotTaskParams;
 import com.devone.bot.core.logic.task.sonar.BotSonar3DTask;
@@ -127,14 +129,13 @@ public class BotExploreTask extends BotTask {
             }
         } 
    
-        //    if(animal != null) {
-        //        BotLogger.info(this.isLogged(), "🌐 " + bot.getId() + " Inflicting Survuval Strike to bring justice!");
-        //        BotSurvivalStrikeTaskParams params = new BotSurvivalStrikeTaskParams(animal, 5.0);
-        //        BotSurvivalStrikeTask strikeTask = new BotSurvivalStrikeTask(bot).configure(params);
-        //        bot.addTaskToQueue(strikeTask);
-        //        stop();
-        //        return;
-        //}
+        if(animal != null) {
+                BotLogger.info(this.isLogged(), "🌐 " + bot.getId() + " Inflicting Attack to bring justice on: "+animal);
+                BotHandAttackTaskParams handParams = new BotHandAttackTaskParams(animal, 5.0);
+                BotHandAttackTask handTask = new BotHandAttackTask(bot).configure(handParams);
+                bot.addTaskToQueue(handTask);
+                return;
+        }
 
         
         // 📌 Если цель найдена, начинаем движение
@@ -144,8 +145,8 @@ public class BotExploreTask extends BotTask {
         //
         BotNavigationUtils.navigateTo(bot, bot.getRuntimeStatus().getTargetLocation(), 1); // via a new MoVeTask()
         //
-        if(getElapsedTime() > 10 * BotConstants.DEFAULT_TASK_TIMEOUT) {
-            BotLogger.info(this.isLogged(), "🌐 " + bot.getId() + " "+ this.name +" Task timeout.");
+        if(getElapsedTime() > 3 * BotConstants.DEFAULT_TASK_TIMEOUT) {
+            BotLogger.info(this.isLogged(), "🌐 " + bot.getId() + " "+ this.name +" Task timeout: "+getElapsedTime());
             this.stop();
         }
         return;
