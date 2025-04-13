@@ -31,7 +31,7 @@ public class BotHandTask extends BotTask {
     private BotKillListener listener;
 
     private int pursuitTicks = 0;
-    private final int MAX_PURSUIT_TICKS = 60; // ~3 секунды (если тик каждые 10л)
+    private final int MAX_PURSUIT_TICKS = 600; // ~30 секунды (если тик каждые 10л)
 
     public BotHandTask(Bot bot) {
         super(bot, "✋🏻");
@@ -96,8 +96,18 @@ public class BotHandTask extends BotTask {
                     BotUtils.lookAt(bot, BotCoordinate3DHelper.convertFrom(living.getLocation()));
 
                     if (distance > 1.0) {
+                        bot.getNPCNavigator().getDefaultParameters().speedModifier(2.5F);
+
+                        if (pursuitTicks % 20 == 0) {
+                            bot.getNPCNavigator().getDefaultParameters().speedModifier(2.5F);
+                            bot.getNPCNavigator().setTarget(living.getLocation());
+                        }
                         bot.getNPCNavigator().setTarget(living.getLocation());
+
                         BotLogger.info(isLogged, bot.getId() + " 🚶 Pursuing mob, distance: " + String.format("%.2f", distance));
+
+
+
                     } else {
                         animateHand();
                         living.damage(damage, bot.getNPCEntity());
