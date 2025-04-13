@@ -21,6 +21,7 @@ public class BotKillListener implements Listener {
         this.task = task;
     }
 
+    @EventHandler
     public void onEntityDeath(EntityDeathEvent event) {
         Bot bot = task.getBot();
         

@@ -20,7 +20,7 @@ public class BotSurvivalStrikeTask extends BotTask {
     private boolean isLogged = true;
 
     public BotSurvivalStrikeTask(Bot bot) {
-        super(bot, "⚔️");
+        super(bot, "જ⁀➴");
         setObjective("Survival strike: Teleport and Strike");
         this.isLogged = true;
     }
@@ -55,13 +55,13 @@ public class BotSurvivalStrikeTask extends BotTask {
         BotTeleportTask tpTask = new BotTeleportTask(bot, null).configure(new BotTeleportTaskParams(target.getCoordinate3D()));
         
         // ✋🏻 2. Атака
-        BotHandTask handTask = new BotHandTask(bot).configure(new BotHandTaskParams(target, this.damage));
+        BotHandTask handTask = new BotHandTask(bot, "⚔️").configure(new BotHandTaskParams(target, this.damage));
 
         // 📋 Добавляем в очередь в обратном порядке: сначала атака, затем телепорт
         bot.addTaskToQueue(handTask);
         bot.addTaskToQueue(tpTask);
 
-        BotLogger.info(isLogged, bot.getId() + " ⚔️ Подготовлен боевой выпад на цель: " + target.uuid);
+        BotLogger.info(isLogged, bot.getId() + " જ⁀➴ Подготовлен боевой выпад на цель: " + target.uuid);
         this.stop();
     }
 

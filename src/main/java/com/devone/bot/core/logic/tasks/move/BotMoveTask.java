@@ -100,7 +100,7 @@ public class BotMoveTask extends BotTask {
                 listener = new BotMoveTaskListener(this);
                 Bukkit.getPluginManager().registerEvents(listener, AIBotPlugin.getInstance());
             }
-            
+            bot.getNPCNavigator().getDefaultParameters().speedModifier((float)speedMultiplier);
             bot.getNPCNavigator().setTarget(targetLocation); // ← ОДИН РАЗ
             
             isMoving = true;
