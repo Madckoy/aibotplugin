@@ -120,9 +120,10 @@ public class BotHandTask extends BotTask {
                     pursuitTicks = 0;
 
                     BotUtils.lookAt(bot, BotCoordinate3DHelper.convertFrom(living.getLocation()));
+                    
                     animateHand();
+
                     living.damage(damage, bot.getNPCEntity());
-                    bot.getRuntimeStatus().killedMobsIncrease() ;
 
                     BotLogger.info(isLogged, bot.getId() + " 💥 Attacked mob: " + living.getType());
 
