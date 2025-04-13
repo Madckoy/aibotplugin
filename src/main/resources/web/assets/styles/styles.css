@@ -70,54 +70,71 @@ tr:hover {
 /* 🎯 Специфичные колонки */
 th:nth-child(1), td:nth-child(1) {  /* ID */
     text-align: center;
-    width: 60px;
+    width: 85px;
+    min-width: 85px;
+    white-space: nowrap;
 }
 
 th:nth-child(2), td:nth-child(2) { /* position */
     text-align: center;
-    width: 50px;
+    width: 80px;
+    min-width: 80px;
+    white-space: nowrap;
 }
 
 th:nth-child(3), td:nth-child(3) { /* stuck*/
     text-align: center;
     width: 30px;
+    min-width: 30px;
+    white-space: nowrap;
 }
 
 th:nth-child(4), td:nth-child(4) { /* task */
     text-align: center;
     width: 30px;
+    white-space: nowrap;
 }
 
 th:nth-child(5), td:nth-child(5) { /*target*/
     text-align: center;
-    width: 50px;
+    width: 80px;
+    min-width: 80px;
+    white-space: nowrap;
 }
 
 th:nth-child(6), td:nth-child(6) { /* objective*/
     text-align: left;
     text-overflow: ellipsis;
     width:auto;
+    white-space: nowrap;
 }
 
 th:nth-child(7), td:nth-child(7) { /* duration*/
     text-align: center;
-    width: 50px;
+    white-space: nowrap;
+    width: 80px;
+    min-width: 80px;
     white-space: nowrap;
 }
 
 th:nth-child(8), td:nth-child(8) { /* inv */
     text-align: center;
-    width: 150px;
+    width: 100px;
+    white-space: nowrap;
 }
 
-th:nth-child(9), td:nth-child(9) {
+th:nth-child(9), td:nth-child(9) { /* queu*/
     text-align: left;
     width: auto;
+    text-overflow: ellipsis;
+    white-space: nowrap;
 }
 
-th:nth-child(10), td:nth-child(10) {
+th:nth-child(10), td:nth-child(10) { /* cmd */
     text-align: center;
-    width: 150;
+    width: 140px;
+    min-width: 140px;
+    white-space: nowrap;
 }
 
 table td, table th {
