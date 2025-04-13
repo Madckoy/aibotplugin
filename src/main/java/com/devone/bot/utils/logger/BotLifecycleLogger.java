@@ -3,7 +3,7 @@ package com.devone.bot.utils.logger;
 import org.bukkit.Bukkit;
 
 import com.devone.bot.core.bot.Bot;
-import com.devone.bot.core.logic.tasks.BotTask;
+import com.devone.bot.core.logic.task.BotTask;
 import com.devone.bot.utils.BotConstants;
 
 import com.devone.bot.utils.BotUtils;
@@ -36,7 +36,7 @@ public class BotLifecycleLogger {
         try (FileWriter writer = new FileWriter(filename, true);
              BufferedWriter bw = new BufferedWriter(writer)) {
 
-            BotTask task = bot.getCurrentTask();
+            BotTask task = bot.getRuntimeStatus().getCurrentTask();
 
             String t_name = "N/A";
             String e_time = "N/A";

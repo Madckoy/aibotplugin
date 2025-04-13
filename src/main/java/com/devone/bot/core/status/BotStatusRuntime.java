@@ -1,6 +1,7 @@
 package com.devone.bot.core.status;
 
 import com.devone.bot.core.bot.Bot;
+import com.devone.bot.core.logic.task.BotTask;
 import com.devone.bot.utils.blocks.BotCoordinate3D;
 import com.devone.bot.utils.blocks.BotCoordinate3DHelper;
 
@@ -13,17 +14,25 @@ public class BotStatusRuntime {
     private BotCoordinate3D targetLocation;  // Новое свойство для целевой локации
 
     // Другие состояния
-    private boolean isStuck;
+    private boolean stuck;
     private int stuckCount;
-    private int mobsKilled;
+    private long killedMobs;
+    private long brokebBlocks;
+    private long teleportUsed;
 
     public BotStatusRuntime(Bot bot) {
         this.owner = bot;
         this.currentLocation = getCurrentLocation();  // Инициализируем с текущей локацией
         this.targetLocation = null;  // Начальное значение для targetLocation
-        this.isStuck = false;
+        this.stuck = false;
         this.stuckCount = 0;
-        this.mobsKilled = 0;
+        this.killedMobs = 0;
+        this.brokebBlocks = 0;
+        this.teleportUsed = 0;
+    }
+
+    public BotTask getCurrentTask() {
+        return owner.getLifeCycle().getTaskStackManager().getActiveTask();
     }
 
     // Получение и обновление currentLocation с проверкой на застревание
@@ -31,19 +40,7 @@ public class BotStatusRuntime {
         if (owner.getNPC() != null) {
             // Получаем текущую локацию NPC
             BotCoordinate3D newLocation = BotCoordinate3DHelper.convertFrom(owner.getNPC().getStoredLocation());
-
-            // Проверка на застревание: если NPC не двигается и его локация не изменилась
-            if (newLocation.equals(currentLocation)) {
-                // Устанавливаем флаг застревания, если локация не изменилась
-                this.isStuck = true;
-
-                // Не обновляем локацию, если бот не двигается
-                return currentLocation;
-            } else {
-                // Если локация изменилась, обновляем currentLocation и lastKnownLocation
-                currentLocation = newLocation;
-                this.isStuck = false;  // Сбрасываем флаг застревания, так как бот двигается
-            }
+            currentLocation = newLocation;
         } else {
             // Если NPC не найден, возвращаем null
             return null;
@@ -57,11 +54,12 @@ public class BotStatusRuntime {
 
     // Флаг застревания
     public boolean isStuck() {
-        return isStuck;
+        return stuck;
     }
 
     public void setStuck(boolean stuck) {
-        this.isStuck = stuck;
+        this.stuck = stuck;
+        incrementStuckCount();
     }
 
     // Счётчик застревания
@@ -86,16 +84,40 @@ public class BotStatusRuntime {
         this.targetLocation = targetLocation;
     }
 
-    public void mobKilledAdd(int count) {
-        this.mobsKilled = mobsKilled + count;
+    public void killedMobsIncrease() {
+        this.killedMobs = killedMobs + 1;
     }
 
-    public int getMobsKilled() {
-        return mobsKilled;
+    public void brokenBlocksIncrease() {
+        this.brokebBlocks = brokebBlocks + 1;
+    }
+
+    public long getMobsKilled() {
+        return killedMobs;
+    }
+
+    public long getBrokenBlocks() {
+        return brokebBlocks;
+    }
+    public void resetBrokenBlocks() {
+        this.brokebBlocks = 0;
+    }
+    public void resetKilledMobs() {
+        this.killedMobs = 0;
     }
 
     public void resetMobsKilled() {
-        this.mobsKilled = 0;
+        this.killedMobs = 0;
     }
 
+    public void teleportUsedIncrease() {
+        this.teleportUsed = teleportUsed + 1;
+    }
+
+    public long getTeleportUsed() {
+        return teleportUsed;
+    }
+    public void resetTeleportUsed() {
+        this.teleportUsed = 0;
+    }
 }

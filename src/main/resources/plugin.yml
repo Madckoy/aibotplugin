@@ -77,13 +77,13 @@ commands:
     usage: /bot-stop
     permission: aibotplugin.bot.stop
 
-  bot-follow:
-    description: Makes the bot follow the player.
-    usage: /bot-follow
-    permission: aibotplugin.bot.follow
+  bot-chase:
+    description: Makes the bot chase the player.
+    usage: /bot-chase
+    permission: aibotplugin.bot.chase
 
   bot-protect:
-    description: The bot will protect the player from nearby mobs.
+    description: The bot will protect the player.
     usage: /bot-protect
     permission: aibotplugin.bot.protect
 

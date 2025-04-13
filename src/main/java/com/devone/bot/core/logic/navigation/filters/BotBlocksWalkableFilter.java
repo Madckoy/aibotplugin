@@ -28,8 +28,6 @@ public class BotBlocksWalkableFilter {
             BotBlockData blockAbove1 = blockMap.get(above1);
             BotBlockData blockAbove2 = blockMap.get(above2);
 
-            //System.out.println("block: " + block + " blockAbove1: " + blockAbove1 + " blockAbove2: " + blockAbove2);
-
             // Проверяем, что блоки над текущим блоком существуют
             if (blockAbove1 == null || blockAbove2 == null) { 
                 
@@ -37,9 +35,12 @@ public class BotBlocksWalkableFilter {
             }
 
             // Если над блоком два уровня воздуха или длинные проходимые растения — он пригоден для ходьбы
-            if(blockAbove2.isAir() || blockAbove2.isPassable()) {
-                if(blockAbove1.isAir() || blockAbove1.isBot() || blockAbove1.isCover() || blockAbove1.isPassable()) {
-                    result.add(block); // Добавляем блок в результат, если он прошел все проверки
+            if(blockAbove1.isAir() || blockAbove1.isBot() || blockAbove1.isCover() ) {
+                if(blockAbove2.isAir() || blockAbove2.isBot()) {
+                    if(!block.isAir()){
+                        //System.out.println("block: " + block + " blockAbove1: " + blockAbove1 + " blockAbove2: " + blockAbove2);
+                        result.add(block); // Добавляем блок в результат, если он прошел все проверки
+                    }
                 }
             }
         }

@@ -57,4 +57,23 @@ public class BotEntityUtils {
     public static boolean isPassiveMob(LivingEntity entity) {
         return PASSIVE_MOBS.contains(entity.getType());
     }
+
+
+    public static boolean isHostileMob(String type) {
+        try {
+            EntityType entityType = EntityType.valueOf(type.toUpperCase());
+            return HOSTILE_MOBS.contains(entityType);
+        } catch (IllegalArgumentException e) {
+            return false; // строка не соответствует ни одному EntityType
+        }
+    }
+    
+    public static boolean isPassiveMob(String type) {
+        try {
+            EntityType entityType = EntityType.valueOf(type.toUpperCase());
+            return PASSIVE_MOBS.contains(entityType);
+        } catch (IllegalArgumentException e) {
+            return false;
+        }
+    }
 }

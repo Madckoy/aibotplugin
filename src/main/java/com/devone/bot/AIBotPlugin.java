@@ -9,9 +9,9 @@ import org.bukkit.plugin.java.JavaPlugin;
 import com.devone.bot.config.AIBotPluginConfig;
 import com.devone.bot.config.AIBotPluginConfigManager;
 import com.devone.bot.core.bot.BotManager;
-import com.devone.bot.core.commands.BotCommandsDispatcher;
-import com.devone.bot.core.listeners.BotListener;
-import com.devone.bot.core.listeners.PlayerListener;
+import com.devone.bot.core.command.BotCommandsDispatcher;
+import com.devone.bot.core.listener.BotListener;
+import com.devone.bot.core.listener.PlayerListener;
 import com.devone.bot.core.math.BotMathMaxFunction;
 import com.devone.bot.core.zone.BotZoneManager;
 import com.devone.bot.utils.BotConstants;
@@ -52,7 +52,6 @@ public class AIBotPlugin extends JavaPlugin {
 
         BotLogger.info(true, "✅ AI Bot Plugin has been enabled successfully!");
 
-        //BotTickProtector.ensureTickAlive(this); // workaround to keep server running when players are not online
     }
 
     @Override
@@ -138,7 +137,7 @@ public class AIBotPlugin extends JavaPlugin {
     }
 
     private void copyEssentialResources() {
-        BotResourceExtractor.copyDirectoryFromJar("web", BotConstants.PLUGIN_PATH + "/web", true, Set.of(".html", ".css", ".js"));
+        BotResourceExtractor.copyDirectoryFromJar("web", BotConstants.PLUGIN_PATH + "/web", true, Set.of(".html", ".css", ".js", ".png"));
         BotResourceExtractor.copyDirectoryFromJar("patterns", BotConstants.PLUGIN_PATH + "/patterns", false, Set.of(".json", ".yml"));
     }
 

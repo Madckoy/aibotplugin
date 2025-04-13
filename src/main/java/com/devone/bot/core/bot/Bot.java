@@ -13,9 +13,9 @@ import org.bukkit.entity.Player;
 import com.devone.bot.core.chat.BotChat;
 import com.devone.bot.core.inventory.BotInventory;
 import com.devone.bot.core.logic.lifecycle.BotLifeCycle;
-import com.devone.bot.core.logic.tasks.BotTask;
-import com.devone.bot.core.logic.tasks.move.BotMoveTask;
-import com.devone.bot.core.logic.tasks.move.params.BotMoveTaskParams;
+import com.devone.bot.core.logic.task.BotTask;
+import com.devone.bot.core.logic.task.move.BotMoveTask;
+import com.devone.bot.core.logic.task.move.params.BotMoveTaskParams;
 import com.devone.bot.core.status.BotStatusRuntime;
 import com.devone.bot.utils.blocks.BotCoordinate3D;
 import com.devone.bot.utils.logger.BotLogger;
@@ -32,6 +32,7 @@ public class Bot {
     private boolean autoPickupEnabled = false;
     private BotStatusRuntime rStatus; // Рантайм статус бота
     private BotChat communicator; // Создаем поле для общения бота
+
 
     public Bot(String id, NPC an_npc, BotManager botManager) {
         this.id = id;
@@ -101,10 +102,6 @@ public class Bot {
         return id;
     }
 
-    public BotTask getCurrentTask() {
-        return getLifeCycle().getTaskStackManager().getActiveTask();
-    }
-
     public BotLifeCycle getLifeCycle() {
         return lifeCycle;
     }
@@ -151,8 +148,4 @@ public class Bot {
         mv_task.configure(mv_taskParams);
         addTaskToQueue(mv_task);
     }
-
-    public BotTask getActiveTask() {
-       return this.getLifeCycle().getTaskStackManager().getActiveTask();
-    }    
 }
