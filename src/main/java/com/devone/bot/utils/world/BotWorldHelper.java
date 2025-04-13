@@ -5,6 +5,7 @@ import org.bukkit.Location;
 import org.bukkit.World;
 import org.bukkit.block.Block;
 
+import com.devone.bot.utils.blocks.BotBlockData;
 import com.devone.bot.utils.blocks.BotCoordinate3D;
 
 public class BotWorldHelper {
@@ -28,5 +29,16 @@ public class BotWorldHelper {
 
     public static Location getWorldLocation(BotCoordinate3D coordinate) {
         return getBlockAt(coordinate).getLocation();
+    }
+
+    public static BotBlockData getWorldSpawnLocation() {
+        
+        Location spawnLocation = getWorld().getSpawnLocation();
+        BotBlockData blockData = new BotBlockData();
+        blockData.x = spawnLocation.getBlockX();
+        blockData.y = spawnLocation.getBlockY();
+        blockData.z = spawnLocation.getBlockZ();
+
+        return blockData;
     }
 }

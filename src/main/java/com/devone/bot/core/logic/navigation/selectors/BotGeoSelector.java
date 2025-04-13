@@ -10,6 +10,8 @@ import java.util.stream.Collectors;
 
 import com.devone.bot.utils.blocks.BotBlockData;
 import com.devone.bot.utils.blocks.BotCoordinate3D;
+import com.devone.bot.utils.logger.BotLogger;
+import com.devone.bot.utils.world.BotWorldHelper;
 
 public class BotGeoSelector {
 
@@ -29,14 +31,52 @@ public class BotGeoSelector {
         return targets.get(index);
     }
 
-    public static BotBlockData pickEmergencyTeleportTarget(BotCoordinate3D botPos, List<BotBlockData> reachable) {
-        List<BotBlockData> options = reachable.stream()
-            .filter(b -> !b.equals(botPos) && b.distanceTo(botPos) > 1)
+public static BotBlockData pickEmergencyTeleportTarget(
+        BotCoordinate3D botPos,
+        List<BotBlockData> reachableGoals,
+        List<BotBlockData> reachable,
+        List<BotBlockData> navigable,
+        List<BotBlockData> walkable) {
+
+    List<List<BotBlockData>> prioritySources = List.of(
+        reachableGoals, reachable, navigable, walkable
+    );
+
+    for (List<BotBlockData> source : prioritySources) {
+        if (source == null || source.isEmpty()) continue;
+
+        List<BotBlockData> options = source.stream()
+            .filter(b -> {
+                boolean isSame = b.equals(botPos);
+                boolean isDirectlyUnder = (b.x == botPos.x && b.z == botPos.z && b.y == botPos.y - 1);
+                return !isSame && !isDirectlyUnder && b.distanceTo(botPos) > 1;
+            })
             .collect(Collectors.toList());
 
-        if (options.isEmpty()) return null;
+        if (!options.isEmpty()) {
+            Collections.shuffle(options);
+            BotBlockData selected = options.get(0);
 
-        Collections.shuffle(options);
-        return options.get(0);
+            BotBlockData elevated = new BotBlockData();
+            elevated.x = selected.x;
+            elevated.y = selected.y + 1;
+            elevated.z = selected.z;
+            elevated.type = "AIR";
+            return elevated;
+        }
     }
+
+    // ⛔ Fallback на спавн
+    BotLogger.warn(true, "⚠️ EmergencyTeleport: fallback to world spawn!");
+
+    BotCoordinate3D spawn = BotWorldHelper.getWorldSpawnLocation();
+
+    BotBlockData fallback = new BotBlockData();
+    fallback.x = spawn.x;
+    fallback.y = spawn.y;
+    fallback.z = spawn.z;
+    fallback.type = "AIR";
+    return fallback;
+}
+
 }

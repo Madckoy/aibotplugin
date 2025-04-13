@@ -70,11 +70,11 @@ public class BotNavigationPlannerWrapper {
                 scanRadius
         );
 
-        context.walkable   = walkable;
-        context.navigable  = navigable;
-        context.reachable  = reachable;
-        context.navTargets = targets;
-        context.entities   = livingTargets;
+        context.walkable       = walkable;
+        context.navigable      = navigable;
+        context.reachable      = reachable;
+        context.reachableGoals = targets;
+        context.entities       = livingTargets;
 
         return context;
     }

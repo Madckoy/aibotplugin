@@ -70,13 +70,13 @@ public class BotExploreTask extends BotTask {
 
         BotSceneContext context     = BotNavigationPlannerWrapper.getSceneContext(sceneData.blocks, sceneData.entities, bot_pos);
 
-        BotBlockData    navTarget    = BotGeoSelector.pickRandomTarget(context.navTargets);
+        BotBlockData    goal    = BotGeoSelector.pickRandomTarget(context.reachableGoals);
 
         BotBlockData    animal      = BotBioSelector.pickNearestTarget(context.entities, bot_pos);
 
         //Block block = BotWorldHelper.getBlockAt(navTarget.getCoordinate3D());
 
-        BotLogger.info(this.isLogged(), "🌐 " + bot.getId() + " Total nav targets: " + context.navTargets);
+        BotLogger.info(this.isLogged(), "🌐 " + bot.getId() + " Total nav targets: " + context.reachableGoals);
 
 
         //if(bot.getNPCEntity() != null) {
@@ -108,7 +108,7 @@ public class BotExploreTask extends BotTask {
                 if(elapsed > BotConstants.DEFAULT_TASK_TIMEOUT) {
                     BotLogger.info(this.isLogged(), "🌐 " + bot.getId() + " Task timeout.");
         
-                    BotBlockData fallback = BotGeoSelector.pickEmergencyTeleportTarget(bot.getRuntimeStatus().getCurrentLocation(), context.navTargets);
+                    BotBlockData fallback = BotGeoSelector.pickEmergencyTeleportTarget(bot.getRuntimeStatus().getCurrentLocation(), context.reachableGoals, context.reachable, context.navigable, context.walkable);
         
                     if (fallback != null) {
                         BotLogger.warn(true, bot.getId() + " 🌀 Навигация невозможна, но есть путь — телепорт к: " + fallback);
@@ -134,9 +134,9 @@ public class BotExploreTask extends BotTask {
                 return;
             }
             // 📌 Если цель найдена, начинаем движение
-            BotLogger.info(this.isLogged(), "🌐 " + bot.getId() + " Target: " + navTarget.getCoordinate3D());
+            BotLogger.info(this.isLogged(), "🌐 " + bot.getId() + " Target: " + goal.getCoordinate3D());
             //
-            bot.getRuntimeStatus().setTargetLocation(navTarget.getCoordinate3D()); 
+            bot.getRuntimeStatus().setTargetLocation(goal.getCoordinate3D()); 
             //
             BotNavigationUtils.navigateTo(bot, bot.getRuntimeStatus().getTargetLocation()); // via a new MoVeTask()
             //

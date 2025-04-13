@@ -8,5 +8,5 @@ public class BotSceneContext extends BotSceneData {
     public List<BotBlockData> walkable;
     public List<BotBlockData> navigable;
     public List<BotBlockData> reachable;
-    public List<BotBlockData> navTargets;
+    public List<BotBlockData> reachableGoals;
 }
