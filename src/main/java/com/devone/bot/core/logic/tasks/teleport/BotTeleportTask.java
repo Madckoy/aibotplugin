@@ -36,14 +36,14 @@ public class BotTeleportTask extends BotTask {
             BotTeleportTaskParams teleportParams = (BotTeleportTaskParams) params;
             BotCoordinate3D tpTarget = teleportParams.getTarget();
 
-            if (target != null) {
+            if (tpTarget != null) {
                 target = tpTarget;
             } else {
                 BotLogger.info(this.isLogged(), bot.getId() + " ❌ Некорректные параметры для `BotTeleportTask`!");
                 this.stop();
             }
         } else {
-            BotLogger.info(this.isLogged(), bot.getId() + " ❌ Некорректные параметры для `BotTeleportTask`!");
+            BotLogger.info(this.isLogged(), bot.getId() + " ❌ Некорректный тип параметров для `BotTeleportTask`!");
             this.stop();
         }
         return this;

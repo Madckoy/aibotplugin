@@ -52,7 +52,7 @@ public class BotMoveTask extends BotTask {
             if (loc != null) {
                 bot.getRuntimeStatus().setTargetLocation(loc);
             } else {
-                BotLogger.info(isLogged(),bot.getId() + " ❌ Некорректные параметры для `BotMoveTask`!");
+                BotLogger.info(isLogged(),bot.getId() + " ❌ Некорректный тип параметров для `BotMoveTask`!");
                 this.stop();
             }
 

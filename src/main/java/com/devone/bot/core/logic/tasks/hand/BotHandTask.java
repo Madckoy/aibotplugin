@@ -53,7 +53,7 @@ public class BotHandTask extends BotTask {
             bot.getRuntimeStatus().setTargetLocation(target.getCoordinate3D());
 
         } else {
-            BotLogger.info(this.isLogged(),bot.getId() + " ❌ Некорректные параметры для `BotUseHandTask`!");
+            BotLogger.info(this.isLogged(),bot.getId() + " ❌ Некорректный тип параметров для `BotUseHandTask`!");
             this.stop();
         }    
         return this;
