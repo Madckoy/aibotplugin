@@ -16,7 +16,8 @@ public class BotStatusRuntime {
     // Другие состояния
     private boolean stuck;
     private int stuckCount;
-    private int mobsKilled;
+    private long killedMobs;
+    private long brokebBlocks;
 
     public BotStatusRuntime(Bot bot) {
         this.owner = bot;
@@ -24,7 +25,8 @@ public class BotStatusRuntime {
         this.targetLocation = null;  // Начальное значение для targetLocation
         this.stuck = false;
         this.stuckCount = 0;
-        this.mobsKilled = 0;
+        this.killedMobs = 0;
+        this.brokebBlocks = 0;
     }
 
     public BotTask getCurrentTask() {
@@ -55,6 +57,7 @@ public class BotStatusRuntime {
 
     public void setStuck(boolean stuck) {
         this.stuck = stuck;
+        incrementStuckCount();
     }
 
     // Счётчик застревания
@@ -79,16 +82,30 @@ public class BotStatusRuntime {
         this.targetLocation = targetLocation;
     }
 
-    public void mobKilledAdd(int count) {
-        this.mobsKilled = mobsKilled + count;
+    public void killedMobsIncrease() {
+        this.killedMobs = killedMobs + 1;
     }
 
-    public int getMobsKilled() {
-        return mobsKilled;
+    public void brokenBlocksIncrease() {
+        this.brokebBlocks = brokebBlocks + 1;
+    }
+
+    public long getMobsKilled() {
+        return killedMobs;
+    }
+
+    public long getBrokenBlocks() {
+        return brokebBlocks;
+    }
+    public void resetBrokenBlocks() {
+        this.brokebBlocks = 0;
+    }
+    public void resetKilledMobs() {
+        this.killedMobs = 0;
     }
 
     public void resetMobsKilled() {
-        this.mobsKilled = 0;
+        this.killedMobs = 0;
     }
 
 }

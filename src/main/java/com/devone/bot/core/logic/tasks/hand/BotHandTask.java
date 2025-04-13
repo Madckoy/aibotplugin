@@ -1,5 +1,7 @@
 package com.devone.bot.core.logic.tasks.hand;
 
+import java.util.UUID;
+
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.block.Block;
@@ -26,6 +28,7 @@ public class BotHandTask extends BotTask {
     private BotBlockData target;
     private double damage = 5.0;
     private boolean isLogged = true;
+    private UUID lastTargetUUID = null;
 
     public BotHandTask(Bot bot) {
         super(bot, "✋🏻");
@@ -97,12 +100,23 @@ public class BotHandTask extends BotTask {
                     double distance = bot.getNPCEntity().getLocation().distance(living.getLocation());
 
                     if (distance > 3.0) {
-                        bot.getNPCNavigator().setTarget(living.getLocation());
-                        BotLogger.info(isLogged, bot.getId() + " 🚶 Цель далеко (" + String.format("%.2f", distance) + "), идём к ней.");
+                        if (lastTargetUUID == null || !lastTargetUUID.equals(living.getUniqueId())) {
+                            bot.getNPCNavigator().setTarget(living.getLocation());
+                            lastTargetUUID = living.getUniqueId();
+                    
+                            BotLogger.info(isLogged, bot.getId() + " 🚶 Цель далеко (" + String.format("%.2f", distance) + "), двигаемся.");
+                        }
                         return;
                     }
 
                     living.damage(damage, bot.getNPCEntity());
+
+                    if (living.getHealth() - damage <= 0) {
+
+                        bot.getRuntimeStatus().killedMobsIncrease();
+
+                        BotLogger.info(isLogged, bot.getId() + " 💀 Моб убит: " + living.getType());
+                    }
 
                     BotLogger.info(isLogged, bot.getId() + " ✋🏻 Ударил моба: " + living.getType());
 
@@ -118,6 +132,7 @@ public class BotHandTask extends BotTask {
 
                     BotUtils.playBlockBreakEffect(block.getLocation());
                     block.breakNaturally();
+                    bot.getRuntimeStatus().brokenBlocksIncrease();
 
                     BotLogger.info(isLogged, bot.getId() + " ✋🏻 Ударил блок: " + block.getType());
                 }
