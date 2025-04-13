@@ -54,7 +54,7 @@ public class BotTeleportTask extends BotTask {
         setObjective("Teleporting to: " + target);
     
         if (this.target == null) {
-            BotLogger.warn(isLogged(), bot.getId() + " ❌ Целевая точка телепортации не задана.");
+            BotLogger.info(isLogged(), bot.getId() + " ❌ Целевая точка телепортации не задана.");
             stop();
             return;
         }
