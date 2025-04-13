@@ -51,11 +51,12 @@ function renderBotTable(data) {
         row.insertCell(5).innerText = bot.target;
         
         let objCell = row.insertCell(6);
-        objCell.className = "objective-cell";
         objCell.innerHTML = `
-            <div class="objective-queue-icons">ᯓ ${bot.queue}</div>
-            <div class="objective-description">🎯 ${bot.object}</div>
-        `;
+            <div class="bot-objective-cell">
+                <div><span>🧠</span><span>${bot.queue}</span></div>
+                <div class="bot-objective-divider"></div>
+                <div><span>🎯</span><span>${bot.object}</span></div>
+            </div>`;
 
         row.insertCell(7).innerText = bot.elapsedTime;
 
