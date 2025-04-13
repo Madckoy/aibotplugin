@@ -138,7 +138,7 @@ public class BotExploreTask extends BotTask {
             //
             bot.getRuntimeStatus().setTargetLocation(goal.getCoordinate3D()); 
             //
-            BotNavigationUtils.navigateTo(bot, bot.getRuntimeStatus().getTargetLocation()); // via a new MoVeTask()
+            BotNavigationUtils.navigateTo(bot, bot.getRuntimeStatus().getTargetLocation(), 1); // via a new MoVeTask()
             //
             stop();
             return;

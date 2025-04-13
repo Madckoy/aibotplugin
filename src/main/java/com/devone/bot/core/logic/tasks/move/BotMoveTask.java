@@ -26,7 +26,7 @@ public class BotMoveTask extends BotTask {
 
     private BukkitTask taskHandle;
     private BotMoveTaskConfig config = new BotMoveTaskConfig();
-    @SuppressWarnings("unused")
+
     private double speedMultiplier = config.getSpeedMultiplier();
     private boolean isMoving = false;
     private BotMoveTaskListener listener;
