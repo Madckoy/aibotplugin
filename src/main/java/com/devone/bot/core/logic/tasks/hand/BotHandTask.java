@@ -20,6 +20,7 @@ import com.devone.bot.core.logic.tasks.params.IBotTaskParams;
 import com.devone.bot.utils.BotUtils;
 import com.devone.bot.utils.blocks.BotBlockData;
 import com.devone.bot.utils.blocks.BotCoordinate3D;
+import com.devone.bot.utils.blocks.BotCoordinate3DHelper;
 import com.devone.bot.utils.logger.BotLogger;
 import com.devone.bot.utils.world.BotWorldHelper;
 
@@ -103,6 +104,11 @@ public class BotHandTask extends BotTask {
 
                     if (distance > 3.0) {
                         if (lastTargetUUID == null || !lastTargetUUID.equals(living.getUniqueId())) {
+
+                            turnToTarget(new BotCoordinate3D(BotCoordinate3DHelper.convertFrom(living.getLocation())));
+
+                            animateHand();                  
+
                             bot.getNPCNavigator().setTarget(living.getLocation());
                             lastTargetUUID = living.getUniqueId();
                     
@@ -140,25 +146,6 @@ public class BotHandTask extends BotTask {
                 }
             }
         }.runTaskTimer(AIBotPlugin.getInstance(), 0L, 10L);
-    }
-
-    private void turnToTarget(BotCoordinate3D target) {
-        
-        // ✅ Принудительно обновляем положение, если поворот сбрасывается
-        Bukkit.getScheduler().runTaskLater(AIBotPlugin.getInstance(), () -> {
-            BotUtils.lookAt(bot, target);
-        }, 1L); // ✅ Через тик, чтобы дать время на обновление
-
-        BotLogger.info(this.isLogged(), "🔄 TURNING: " + bot.getId() + " to look at the target: " + target);
-    }
-
-    private void animateHand() {
-        if (bot.getNPCEntity() instanceof Player playerBot) {
-            playerBot.swingMainHand();
-            BotLogger.info(this.isLogged(), "✋🏻 Анимация руки выполнена");
-        } else {
-            BotLogger.info(this.isLogged(), "✋🏻 Анимация не выполнена: бот — не игрок");
-        }
     }
 
     public void stop() {

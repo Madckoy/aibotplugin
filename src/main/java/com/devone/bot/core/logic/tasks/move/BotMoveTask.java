@@ -16,6 +16,7 @@ import com.devone.bot.core.logic.tasks.params.BotTaskParams;
 import com.devone.bot.core.logic.tasks.params.IBotTaskParams;
 import com.devone.bot.utils.*;
 import com.devone.bot.utils.blocks.BotCoordinate3D;
+import com.devone.bot.utils.blocks.BotCoordinate3DHelper;
 import com.devone.bot.utils.logger.BotLogger;
 import com.devone.bot.utils.world.BotWorldHelper;
 
@@ -107,6 +108,9 @@ public class BotMoveTask extends BotTask {
             BotLogger.info(this.isLogged(), bot.getId() + " 🏃🏻‍♂️ Начал движение к " + targetLocation);
         
             taskHandle = Bukkit.getScheduler().runTaskTimer(AIBotPlugin.getInstance(), () -> {
+                
+                turnToTarget(new BotCoordinate3D(BotCoordinate3DHelper.convertFrom(targetLocation)));
+
                 if (isDone || bot.getNPCEntity() == null) {
                     stopTaskHandle();
                     return;

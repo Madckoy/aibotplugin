@@ -1,12 +1,16 @@
 package com.devone.bot.core.logic.tasks;
 
+import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 import org.bukkit.event.Listener;
 
+import com.devone.bot.AIBotPlugin;
 import com.devone.bot.core.bot.Bot;
 import com.devone.bot.core.logic.tasks.configs.BotTaskConfig;
 import com.devone.bot.core.logic.tasks.decision.BotDecisionMakeTask;
 import com.devone.bot.core.logic.tasks.params.IBotTaskParams;
+import com.devone.bot.utils.BotUtils;
+import com.devone.bot.utils.blocks.BotCoordinate3D;
 import com.devone.bot.utils.logger.BotLogger;
 import com.devone.bot.utils.scene.BotSceneData;
 
@@ -150,5 +154,24 @@ public abstract class BotTask implements IBotTask, IBotTaskConfigurable, Listene
         bot.addTaskToQueue(new BotDecisionMakeTask(bot));
 
         this.stop();
+    }
+
+    public void turnToTarget(BotCoordinate3D target) {
+        
+        // ✅ Принудительно обновляем положение, если поворот сбрасывается
+        Bukkit.getScheduler().runTaskLater(AIBotPlugin.getInstance(), () -> {
+            BotUtils.lookAt(bot, target);
+        }, 1L); // ✅ Через тик, чтобы дать время на обновление
+
+        BotLogger.info(this.isLogged(), "🔄 TURNING: " + bot.getId() + " to look at the target: " + target);
+    }
+
+    public void animateHand() {
+        if (bot.getNPCEntity() instanceof Player playerBot) {
+            playerBot.swingMainHand();
+            BotLogger.info(this.isLogged(), "✋🏻 Анимация руки выполнена");
+        } else {
+            BotLogger.info(this.isLogged(), "✋🏻 Анимация не выполнена: бот — не игрок");
+        }
     }
 }
