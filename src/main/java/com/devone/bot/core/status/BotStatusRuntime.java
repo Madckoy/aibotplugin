@@ -1,7 +1,7 @@
 package com.devone.bot.core.status;
 
 import com.devone.bot.core.bot.Bot;
-import com.devone.bot.core.logic.tasks.BotTask;
+import com.devone.bot.core.logic.task.BotTask;
 import com.devone.bot.utils.blocks.BotCoordinate3D;
 import com.devone.bot.utils.blocks.BotCoordinate3DHelper;
 

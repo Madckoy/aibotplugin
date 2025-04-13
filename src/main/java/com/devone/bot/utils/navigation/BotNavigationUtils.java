@@ -1,8 +1,8 @@
 package com.devone.bot.utils.navigation;
 
 import com.devone.bot.core.bot.Bot;
-import com.devone.bot.core.logic.tasks.move.BotMoveTask;
-import com.devone.bot.core.logic.tasks.move.params.BotMoveTaskParams;
+import com.devone.bot.core.logic.task.move.BotMoveTask;
+import com.devone.bot.core.logic.task.move.params.BotMoveTaskParams;
 import com.devone.bot.utils.blocks.BotCoordinate3D;
 import com.devone.bot.utils.logger.BotLogger;
 

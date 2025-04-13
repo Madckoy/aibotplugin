@@ -15,7 +15,7 @@ import org.bukkit.inventory.ItemStack;
 
 import com.devone.bot.core.bot.Bot;
 import com.devone.bot.core.bot.BotManager;
-import com.devone.bot.core.logic.tasks.BotTask;
+import com.devone.bot.core.logic.task.BotTask;
 import com.devone.bot.utils.BotUtils;
 import com.devone.bot.utils.blocks.BotCoordinate3D;
 import com.devone.bot.web.BotWebService;
@@ -92,6 +92,9 @@ public class BotStatusServlet extends HttpServlet {
 
                 // 📦 Serialize inventory
                 ItemStack[] contents = bot.getInventory().getNPCInventory().getContents();
+                if (contents == null) {
+                    continue;
+                }
                 JsonArray inventoryArray = new JsonArray();
 
                 for (ItemStack item : contents) {
