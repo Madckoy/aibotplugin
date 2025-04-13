@@ -1,28 +1,23 @@
 package com.devone.bot.core.logic.tasks.hand;
 
-import java.util.UUID;
-
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.block.Block;
-import org.bukkit.entity.Entity;
+
 import org.bukkit.entity.LivingEntity;
-import org.bukkit.entity.Player;
+
 import org.bukkit.scheduler.BukkitRunnable;
 import org.bukkit.scheduler.BukkitTask;
 
 import com.devone.bot.AIBotPlugin;
 import com.devone.bot.core.bot.Bot;
-
 import com.devone.bot.core.logic.tasks.BotTask;
 import com.devone.bot.core.logic.tasks.hand.listeners.BotKillListener;
 import com.devone.bot.core.logic.tasks.hand.params.BotHandTaskParams;
-import com.devone.bot.core.logic.tasks.move.listeners.BotMoveTaskListener;
 import com.devone.bot.core.logic.tasks.params.BotTaskParams;
 import com.devone.bot.core.logic.tasks.params.IBotTaskParams;
 import com.devone.bot.utils.BotUtils;
 import com.devone.bot.utils.blocks.BotBlockData;
-
 import com.devone.bot.utils.blocks.BotCoordinate3DHelper;
 import com.devone.bot.utils.logger.BotLogger;
 import com.devone.bot.utils.world.BotWorldHelper;
@@ -32,12 +27,11 @@ public class BotHandTask extends BotTask {
     private BotBlockData target;
     private double damage = 5.0;
     private boolean isLogged = true;
-    private UUID lastTargetUUID = null;
     private BukkitTask bukkitTask;
     private BotKillListener listener;
 
     private int pursuitTicks = 0;
-    private final int MAX_PURSUIT_TICKS = 60; // ~3 секунды
+    private final int MAX_PURSUIT_TICKS = 60; // ~3 секунды (если тик каждые 10л)
 
     public BotHandTask(Bot bot) {
         super(bot, "✋🏻");
@@ -72,68 +66,55 @@ public class BotHandTask extends BotTask {
             this.stop();
             return;
         }
-            if (listener == null) {
-                listener = new BotKillListener(this);
-                Bukkit.getPluginManager().registerEvents(listener, AIBotPlugin.getInstance());
-            }
 
+        if (listener == null) {
+            listener = new BotKillListener(this);
+            Bukkit.getPluginManager().registerEvents(listener, AIBotPlugin.getInstance());
+        }
 
         bukkitTask = new BukkitRunnable() {
             @Override
             public void run() {
                 if (isDone || bot.getNPCEntity() == null) {
-                    stop();
-                    cancel();
-                    return;
+                    stop(); cancel(); return;
                 }
 
+                // 🔍 Работа с мобом по UUID
                 if (target.uuid != null) {
-                    Entity entity = Bukkit.getEntity(target.uuid);
-                    if (!(entity instanceof LivingEntity living) || living.isDead()) {
-                        BotLogger.info(isLogged, bot.getId() + " ✅ Target dead or unreachable.");
-                        stop();
-                        cancel();
-                        return;
+                    LivingEntity living = BotWorldHelper.findLivingEntityByUUID(target.uuid);
+
+                    if (living == null || living.isDead()) {
+                        BotLogger.info(isLogged, bot.getId() + " ✅ Target is dead or unreachable.");
+                        stop(); cancel(); return;
                     }
 
                     double distance = bot.getNPCEntity().getLocation().distance(living.getLocation());
 
-                    if (distance > 3.0) {
-                        pursuitTicks++;
-
-                        if (!living.getUniqueId().equals(lastTargetUUID)) {
-                            bot.getNPCNavigator().setTarget(living.getLocation());
-                            lastTargetUUID = living.getUniqueId();
-                        }
-
-                        BotUtils.lookAt(bot, BotCoordinate3DHelper.convertFrom(living.getLocation()));
-                        animateHand();
-
-                        if (pursuitTicks >= MAX_PURSUIT_TICKS) {
-                            BotLogger.info(isLogged, bot.getId() + " ❌ Pursuit timeout.");
-                            stop();
-                            cancel();
-                        }
-                        return;
-                    }
-
-                    pursuitTicks = 0;
+                    // 🔄 Обновляем targetLocation
+                    bot.getRuntimeStatus().setTargetLocation(BotCoordinate3DHelper.convertFrom(living.getLocation()));
 
                     BotUtils.lookAt(bot, BotCoordinate3DHelper.convertFrom(living.getLocation()));
-                    
-                    animateHand();
 
-                    living.damage(damage, bot.getNPCEntity());
+                    if (distance > 1.0) {
+                        bot.getNPCNavigator().setTarget(living.getLocation());
+                        BotLogger.info(isLogged, bot.getId() + " 🚶 Pursuing mob, distance: " + String.format("%.2f", distance));
+                    } else {
+                        animateHand();
+                        living.damage(damage, bot.getNPCEntity());
+                        BotLogger.info(isLogged, bot.getId() + " ✋🏻 Attacked mob: " + living.getType());
+                    }
 
-                    BotLogger.info(isLogged, bot.getId() + " 💥 Attacked mob: " + living.getType());
+                    if (++pursuitTicks > MAX_PURSUIT_TICKS) {
+                        BotLogger.info(isLogged, bot.getId() + " ⏱️ Pursuit timeout reached.");
+                        stop(); cancel(); return;
+                    }
 
                 } else {
+                    // 🧱 Работа с блоком
                     Block block = BotWorldHelper.getBlockAt(target);
                     if (block == null || block.getType() == Material.AIR) {
                         BotLogger.info(isLogged, bot.getId() + " ✅ Block destroyed.");
-                        stop();
-                        cancel();
-                        return;
+                        stop(); cancel(); return;
                     }
 
                     animateHand();
@@ -156,10 +137,11 @@ public class BotHandTask extends BotTask {
             listener.unregister();
             listener = null;
         }
-    
+
         if (bukkitTask != null) {
             bukkitTask.cancel();
             bukkitTask = null;
         }
     }
+
 }
