@@ -22,7 +22,12 @@ function renderBotTable(data) {
         botCell_0.style.padding = "6px";
 
         let botCell_1 = row.insertCell(1); 
-        botCell_1.innerHTML = `<span class="bot-stats-horizontal"><div>🧱 ${bot.blocks_broken}</div><div>💀 ${bot.mobs_killed}</div><div>🗲 ${bot.teleport_used}</div></span>`;
+        botCell_1.innerHTML = `
+                                <div class="bot-stats-cell">
+                                    <div><span>🧱</span><span>${bot.blocks_broken}</span></div>
+                                    <div><span>💀</span><span>${bot.mobs_killed}</span></div>
+                                    <div><span>🗲</span><span>${bot.teleport_used}</span></div>
+                                </div>`; 
 
         row.insertCell(2).innerText = bot.position; 
         row.insertCell(3).innerText = bot.stuck;

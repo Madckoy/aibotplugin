@@ -63,6 +63,9 @@ public class BotTeleportTask extends BotTask {
         Bukkit.getScheduler().runTask(AIBotPlugin.getInstance(), () -> {
             bot.getNPCEntity().teleport(BotWorldHelper.getWorldLocation(target));
             bot.getRuntimeStatus().setStuck(false);
+            
+            bot.getRuntimeStatus().teleportUsedIncrease();
+
             BotLogger.info(isLogged(), bot.getId() + " 🗲 Телепорт с " + bot.getNPCEntity().getLocation().toVector() + " → " + target);
         });
 
