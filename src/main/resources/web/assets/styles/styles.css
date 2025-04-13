@@ -132,8 +132,8 @@ th:nth-child(9), td:nth-child(9) { /* queu*/
 
 th:nth-child(10), td:nth-child(10) { /* cmd */
     text-align: center;
-    width: 140px;
-    min-width: 140px;
+    width: 150px;
+    min-width: 150px;
     white-space: nowrap;
 }
 

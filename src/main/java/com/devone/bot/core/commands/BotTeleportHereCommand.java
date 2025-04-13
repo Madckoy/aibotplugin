@@ -47,6 +47,7 @@ public class BotTeleportHereCommand implements CommandExecutor {
         BotTeleportTaskParams taskParams = new BotTeleportTaskParams();
         taskParams.setTarget(targetLocation);
         task.configure(taskParams);
+        
         bot.addTaskToQueue(task);
 
         BotLogger.info(true,"📌 /bot-tp-here: Бот " + bot.getId() + " Телепортируется в точку игрока" + 

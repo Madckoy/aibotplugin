@@ -94,6 +94,7 @@ public class BotTaskStackManager {
     public void clearTasks() {
         while (!taskStack.isEmpty()) {
             BotTask removedTask = taskStack.pop();
+            removedTask.stop();
             BotLogger.info(true, "❌ Удалена задача: " + removedTask.getClass().getSimpleName());
         }
     }

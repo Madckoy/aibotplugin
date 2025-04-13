@@ -9,6 +9,7 @@ import org.bukkit.entity.Entity;
 import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
 import org.bukkit.scheduler.BukkitRunnable;
+import org.bukkit.scheduler.BukkitTask;
 
 import com.devone.bot.AIBotPlugin;
 import com.devone.bot.core.bot.Bot;
@@ -29,6 +30,7 @@ public class BotHandTask extends BotTask {
     private double damage = 5.0;
     private boolean isLogged = true;
     private UUID lastTargetUUID = null;
+    private BukkitTask bukkitTask;
 
     public BotHandTask(Bot bot) {
         super(bot, "✋🏻");
@@ -75,7 +77,7 @@ public class BotHandTask extends BotTask {
         Block faceBlock = BotWorldHelper.getBlockAt(faceTarget);
         setObjective("Hitting: " + BotUtils.getBlockName(faceBlock)+" at "+faceTarget);
 
-        new BukkitRunnable() {
+        bukkitTask = new BukkitRunnable() {
             @Override
             public void run() {
                 if (isDone || bot.getNPCEntity() == null) {
@@ -161,7 +163,10 @@ public class BotHandTask extends BotTask {
 
     public void stop() {
         isDone = true;
+        if(bukkitTask != null) {
+            bukkitTask.cancel();
+            bukkitTask = null;
+        }  
     }
-
 
 }
