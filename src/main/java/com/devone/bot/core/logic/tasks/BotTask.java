@@ -195,8 +195,4 @@ public abstract class BotTask implements IBotTask, IBotTaskConfigurable, Listene
 
         this.stop();
     }
-
-    public long currentTimeMillis() {
-        return System.currentTimeMillis();  
-    }
 }

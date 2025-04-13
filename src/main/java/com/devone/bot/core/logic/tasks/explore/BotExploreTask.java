@@ -22,8 +22,7 @@ import com.devone.bot.utils.blocks.BotCoordinate3D;
 import com.devone.bot.utils.logger.BotLogger;
 import com.devone.bot.utils.navigation.BotNavigationUtils;
 import com.devone.bot.utils.scene.BotSceneData;
-import com.devone.bot.utils.world.BotWorldHelper;
-import org.bukkit.block.Block;
+
 
 public class BotExploreTask extends BotTask {
   
@@ -95,7 +94,7 @@ public class BotExploreTask extends BotTask {
 
         if(bot.getRuntimeStatus().isStuck()) {
             BotLogger.info(this.isLogged(), "🌐 " + bot.getId() + " Bot is stuck. [ID: " + uuid + "]");
-            if(animal != null) {
+            if(animal!=null) {
                 BotLogger.info(this.isLogged(), "🌐 " + bot.getId() + " Inflicting Survival Strike to unstuck!  [ID: " + uuid + "]");
                 BotSurvivalStrikeTaskParams params = new BotSurvivalStrikeTaskParams(animal, 5.0);
                 BotSurvivalStrikeTask strikeTask = new BotSurvivalStrikeTask(bot).configure(params);
@@ -104,13 +103,11 @@ public class BotExploreTask extends BotTask {
                 return;
             } else {
                 BotLogger.info(this.isLogged(), "🌐 " + bot.getId() + " No animal found to unstuck. [ID: " + uuid + "]");
-
                 //----------
-
                 long elapsed = System.currentTimeMillis() - startTime;
                 BotLogger.info(this.isLogged(), "🌐 " + bot.getId() + " Elapsed time: " + elapsed + "ms [ID: " + uuid + "]");
         
-                if(elapsed > TIMEOUT_MS) {
+                if(elapsed > BotConstants.DEFAULT_TASK_TIMEOUT) {
                     BotLogger.info(this.isLogged(), "🌐 " + bot.getId() + " Task timeout. [ID: " + uuid + "]");
         
                     BotBlockData fallback = BotGeoSelector.pickEmergencyTeleportTarget(bot.getRuntimeStatus().getCurrentLocation(), context.navTargets);
@@ -122,6 +119,7 @@ public class BotExploreTask extends BotTask {
                         BotTeleportTask tpTask = new BotTeleportTask(bot, null).configure(tpParams);
                         bot.addTaskToQueue(tpTask);
                         BotLogger.info(this.isLogged(), "🌐 " + bot.getId() + " Teleporting to fallback location: " + fallback.getCoordinate3D() + " [ID: " + uuid + "]");
+                        
                         this.stop();
                         return;
                     }

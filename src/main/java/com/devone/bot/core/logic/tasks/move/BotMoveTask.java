@@ -29,7 +29,6 @@ public class BotMoveTask extends BotTask {
     private double speedMultiplier = config.getSpeedMultiplier();
     private boolean isMoving = false;
     private BotMoveTaskListener listener;
-    private static final long TIMEOUT_MS = 15_000; // 15 секунд на движение
 
     public BotMoveTask(Bot bot) {
         super(bot, "🏃🏻‍♂️‍➡️");
@@ -114,7 +113,7 @@ public class BotMoveTask extends BotTask {
                 }
             
                 long elapsed = System.currentTimeMillis() - startTime;
-                if (elapsed > TIMEOUT_MS) {
+                if (elapsed > BotConstants.DEFAULT_TASK_TIMEOUT ) {
                     BotLogger.warn(isLogged(), bot.getId() + " ⏱ Тайм-аут навигации! Прерываем задачу. [ID: " + uuid + "]");
                     bot.getRuntimeStatus().setStuck(true);
                     stopTaskHandle();
