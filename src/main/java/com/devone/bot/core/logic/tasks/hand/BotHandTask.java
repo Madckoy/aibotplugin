@@ -93,6 +93,15 @@ public class BotHandTask extends BotTask {
                         return;
                     }
 
+
+                    double distance = bot.getNPCEntity().getLocation().distance(living.getLocation());
+
+                    if (distance > 3.0) {
+                        bot.getNPCNavigator().setTarget(living.getLocation());
+                        BotLogger.info(isLogged, bot.getId() + " 🚶 Цель далеко (" + String.format("%.2f", distance) + "), идём к ней.");
+                        return;
+                    }
+
                     living.damage(damage, bot.getNPCEntity());
 
                     BotLogger.info(isLogged, bot.getId() + " ✋🏻 Ударил моба: " + living.getType());
