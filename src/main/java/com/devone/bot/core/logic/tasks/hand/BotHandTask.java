@@ -87,9 +87,6 @@ public class BotHandTask extends BotTask {
                     return;
                 }
 
-                turnToTarget(target);
-                animateHand(); 
-
                 if (target.uuid != null) {
                     Entity entity = Bukkit.getEntity(target.uuid);
                     if (!(entity instanceof LivingEntity living) || living.isDead()) {
@@ -137,7 +134,7 @@ public class BotHandTask extends BotTask {
                         cancel();
                         return;
                     }
-
+                    animateHand();   
                     BotUtils.playBlockBreakEffect(block.getLocation());
                     block.breakNaturally();
                     bot.getRuntimeStatus().brokenBlocksIncrease();
