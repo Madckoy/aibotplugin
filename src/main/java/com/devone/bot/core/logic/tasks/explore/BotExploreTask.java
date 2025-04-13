@@ -77,7 +77,7 @@ public class BotExploreTask extends BotTask {
 
         BotBlockData    animal      = BotBioSelector.pickNearestTarget(context.entities, bot_pos);
 
-        Block block = BotWorldHelper.getBlockAt(navTarget.getCoordinate3D());
+        //Block block = BotWorldHelper.getBlockAt(navTarget.getCoordinate3D());
 
         BotLogger.info(this.isLogged(), "🌐 " + bot.getId() + " Total nav targets: " + context.navTargets);
 
@@ -96,7 +96,7 @@ public class BotExploreTask extends BotTask {
         if(bot.getRuntimeStatus().isStuck()) {
             BotLogger.info(this.isLogged(), "🌐 " + bot.getId() + " Bot is stuck. [ID: " + uuid + "]");
             if(animal != null) {
-                BotLogger.info(this.isLogged(), "🌐 " + bot.getId() + " Inflicting survival strike to unstuck!  [ID: " + uuid + "]");
+                BotLogger.info(this.isLogged(), "🌐 " + bot.getId() + " Inflicting Survival Strike to unstuck!  [ID: " + uuid + "]");
                 BotSurvivalStrikeTaskParams params = new BotSurvivalStrikeTaskParams(animal, 5.0);
                 BotSurvivalStrikeTask strikeTask = new BotSurvivalStrikeTask(bot).configure(params);
                 bot.addTaskToQueue(strikeTask);
@@ -104,44 +104,49 @@ public class BotExploreTask extends BotTask {
                 return;
             } else {
                 BotLogger.info(this.isLogged(), "🌐 " + bot.getId() + " No animal found to unstuck. [ID: " + uuid + "]");
+
+                //----------
+
+                long elapsed = System.currentTimeMillis() - startTime;
+                BotLogger.info(this.isLogged(), "🌐 " + bot.getId() + " Elapsed time: " + elapsed + "ms [ID: " + uuid + "]");
+        
+                if(elapsed > TIMEOUT_MS) {
+                    BotLogger.info(this.isLogged(), "🌐 " + bot.getId() + " Task timeout. [ID: " + uuid + "]");
+        
+                    BotBlockData fallback = BotGeoSelector.pickEmergencyTeleportTarget(bot.getRuntimeStatus().getCurrentLocation(), context.navTargets);
+        
+                    if (fallback != null) {
+                        BotLogger.warn(true, bot.getId() + " 🌀 Навигация невозможна, но есть путь — телепорт к: " + fallback);
+        
+                        BotTeleportTaskParams tpParams = new BotTeleportTaskParams(fallback.getCoordinate3D());
+                        BotTeleportTask tpTask = new BotTeleportTask(bot, null).configure(tpParams);
+                        bot.addTaskToQueue(tpTask);
+                        BotLogger.info(this.isLogged(), "🌐 " + bot.getId() + " Teleporting to fallback location: " + fallback.getCoordinate3D() + " [ID: " + uuid + "]");
+                        this.stop();
+                        return;
+                    }
+                }
                 return;
             }
-        } else {
+        } else { 
             if(animal != null) {
-                BotLogger.info(this.isLogged(), "🌐 " + bot.getId() + " Inflicting justified strike!  [ID: " + uuid + "]");
+                BotLogger.info(this.isLogged(), "🌐 " + bot.getId() + " Inflicting Survuval Strike to bring justice!  [ID: " + uuid + "]");
                 BotSurvivalStrikeTaskParams params = new BotSurvivalStrikeTaskParams(animal, 5.0);
                 BotSurvivalStrikeTask strikeTask = new BotSurvivalStrikeTask(bot).configure(params);
                 bot.addTaskToQueue(strikeTask);
                 stop();
                 return;
             }
+            // 📌 Если цель найдена, начинаем движение
+            BotLogger.info(this.isLogged(), "🌐 " + bot.getId() + " Target: " + navTarget.getCoordinate3D() + " [ID: " + uuid + "]");
+            //
+            bot.getRuntimeStatus().setTargetLocation(navTarget.getCoordinate3D()); 
+            //
+            BotNavigationUtils.navigateTo(bot, bot.getRuntimeStatus().getTargetLocation()); // via a new MoVeTask()
+            //
+            stop();
+            return;
         }
-
-        // 📌 Если цель найдена, начинаем движение
-        BotLogger.info(this.isLogged(), "🌐 " + bot.getId() + " Target: " + navTarget.getCoordinate3D() + " [ID: " + uuid + "]");
-        //
-        bot.getRuntimeStatus().setTargetLocation(navTarget.getCoordinate3D()); 
-        //
-        BotNavigationUtils.navigateTo(bot, bot.getRuntimeStatus().getTargetLocation()); // via a new MoVeTask()
-        //
-        long elapsed = System.currentTimeMillis() - startTime;
-        if(elapsed > TIMEOUT_MS) {
-            BotLogger.info(this.isLogged(), "🌐 " + bot.getId() + " Task timeout. [ID: " + uuid + "]");
-
-            BotBlockData fallback = BotGeoSelector.pickEmergencyTeleportTarget(bot.getRuntimeStatus().getCurrentLocation(), context.navTargets);
-
-            if (fallback != null) {
-                BotLogger.warn(true, bot.getId() + " 🌀 Навигация невозможна, но есть путь — телепорт к: " + fallback);
-
-                BotTeleportTaskParams tpParams = new BotTeleportTaskParams(fallback.getCoordinate3D());
-                BotTeleportTask tpTask = new BotTeleportTask(bot, null).configure(tpParams);
-                bot.addTaskToQueue(tpTask);
-                BotLogger.info(this.isLogged(), "🌐 " + bot.getId() + " Teleporting to fallback location: " + fallback.getCoordinate3D() + " [ID: " + uuid + "]");
-                this.stop();
-                return;
-            }
-        }
-        return;
     }
 
     @Override
