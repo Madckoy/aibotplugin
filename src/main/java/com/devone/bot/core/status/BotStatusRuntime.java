@@ -18,6 +18,7 @@ public class BotStatusRuntime {
     private int stuckCount;
     private long killedMobs;
     private long brokebBlocks;
+    private long teleportUsed;
 
     public BotStatusRuntime(Bot bot) {
         this.owner = bot;
@@ -27,6 +28,7 @@ public class BotStatusRuntime {
         this.stuckCount = 0;
         this.killedMobs = 0;
         this.brokebBlocks = 0;
+        this.teleportUsed = 0;
     }
 
     public BotTask getCurrentTask() {
@@ -108,4 +110,14 @@ public class BotStatusRuntime {
         this.killedMobs = 0;
     }
 
+    public void teleportUsedIncrease() {
+        this.teleportUsed = teleportUsed + 1;
+    }
+
+    public long getTeleportUsed() {
+        return teleportUsed;
+    }
+    public void resetTeleportUsed() {
+        this.teleportUsed = 0;
+    }
 }

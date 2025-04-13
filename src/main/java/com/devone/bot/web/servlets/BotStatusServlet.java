@@ -55,10 +55,16 @@ public class BotStatusServlet extends HttpServlet {
             BotCoordinate3D loc = bot.getRuntimeStatus().getCurrentLocation();
             if (loc != null) {
                 botJson.addProperty("skin", "http://" + BotWebService.getServerHost() + ":"+BotWebService.getServerPort()+"/skins/" + bot.getUuid() + ".png");
+                
                 botJson.addProperty("id", bot.getId());
+                botJson.addProperty("name", bot.getNPC().getName());
+
                 botJson.addProperty("stuck", bot.getRuntimeStatus().isStuck());
+                botJson.addProperty("stuckCount", bot.getRuntimeStatus().getStuckCount());
+
                 botJson.addProperty("blocks_broken", bot.getRuntimeStatus().getBrokenBlocks());
                 botJson.addProperty("mobs_killed", bot.getRuntimeStatus().getMobsKilled());
+                botJson.addProperty("teleport_used", bot.getRuntimeStatus().getTeleportUsed());
 
                 String currLoc = " " + loc.x + ", " + loc.y + ", " + loc.z;   
 

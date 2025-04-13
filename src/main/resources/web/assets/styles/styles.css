@@ -75,41 +75,49 @@ th:nth-child(1), td:nth-child(1) {  /* ID */
     white-space: nowrap;
 }
 
-th:nth-child(2), td:nth-child(2) { /* position */
+th:nth-child(2), td:nth-child(2) { /* stats */
+    text-align: center;
+    width: 100;
+    min-width: 120px;
+    white-space: nowrap;
+}
+
+
+th:nth-child(3), td:nth-child(3) { /* position */
     text-align: center;
     width: 80px;
     min-width: 80px;
     white-space: nowrap;
 }
 
-th:nth-child(3), td:nth-child(3) { /* stuck*/
+th:nth-child(4), td:nth-child(4) { /* stuck*/
     text-align: center;
     width: 40px;
     min-width: 40px;
     white-space: nowrap;
 }
 
-th:nth-child(4), td:nth-child(4) { /* task */
+th:nth-child(5), td:nth-child(5) { /* task */
     text-align: center;
     width: 30px;
     white-space: nowrap;
 }
 
-th:nth-child(5), td:nth-child(5) { /*target*/
+th:nth-child(6), td:nth-child(6) { /*target*/
     text-align: center;
     width: 80px;
     min-width: 80px;
     white-space: nowrap;
 }
 
-th:nth-child(6), td:nth-child(6) { /* objective*/
+th:nth-child(7), td:nth-child(7) { /* objective*/
     text-align: left;
     text-overflow: ellipsis;
     width:auto;
     white-space: nowrap;
 }
 
-th:nth-child(7), td:nth-child(7) { /* duration*/
+th:nth-child(7), td:nth-child(8) { /* duration*/
     text-align: center;
     white-space: nowrap;
     width: 80px;
@@ -117,25 +125,26 @@ th:nth-child(7), td:nth-child(7) { /* duration*/
     white-space: nowrap;
 }
 
-th:nth-child(8), td:nth-child(8) { /* inv */
+th:nth-child(9), td:nth-child(9) { /* inv */
     text-align: center;
     width: 100px;
     white-space: nowrap;
 }
 
-th:nth-child(9), td:nth-child(9) { /* queu*/
+th:nth-child(10), td:nth-child(10) { /* queu*/
     text-align: left;
     width: auto;
     text-overflow: ellipsis;
     white-space: nowrap;
 }
 
-th:nth-child(10), td:nth-child(10) { /* cmd */
+th:nth-child(11), td:nth-child(11) { /* cmd */
     text-align: center;
     width: 150px;
     min-width: 150px;
     white-space: nowrap;
 }
+
 
 table td, table th {
     border-right: 1px dotted #555;  /* Прерывистая линия */
@@ -258,4 +267,17 @@ button.btn-sm:hover {
     background-color: #2c2c2c;
     padding: 2px 6px;
     border-radius: 4px;
+}
+
+.bot-stats-horizontal {
+    display: flex;
+    flex-direction: column;
+    font-size: 12px;
+    color: #aaa;
+    margin-top: 2px;
+    line-height: 1.2;
+}
+
+.bot-stats-horizontal div {
+    white-space: nowrap;
 }
