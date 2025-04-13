@@ -22,26 +22,27 @@ function renderBotTable(data) {
         botCell.style.padding = "6px";
 
         row.insertCell(1).innerText = bot.position;
-        row.insertCell(2).innerText = bot.task;
-        row.insertCell(3).innerText = bot.target;
-        row.insertCell(4).innerText = bot.object;
-        row.insertCell(5).innerText = bot.elapsedTime;
+        row.insertCell(2).innerText = bot.stuck;
+        row.insertCell(3).innerText = bot.task;
+        row.insertCell(4).innerText = bot.target;
+        row.insertCell(5).innerText = bot.object;
+        row.insertCell(6).innerText = bot.elapsedTime;
 
         // 📦 Inventory
-        let invCell = row.insertCell(6);
+        let invCell = row.insertCell(7);
         invCell.className = "inventory-cell";
         invCell.title = `Items: ${bot.inventoryCount} / ${bot.inventoryMax}`;
         invCell.innerHTML = generateInventoryGrid(bot.inventorySlotsFilled);
 
         // 📋 Task Queue
-        let queueCell = row.insertCell(7);
+        let queueCell = row.insertCell(8);
         queueCell.innerText = bot.queue;
         queueCell.style.whiteSpace = "nowrap";
         queueCell.style.textAlign = "left";
         queueCell.style.padding = "6px";
 
         // 🎮 Control Buttons
-        let cmdCell = row.insertCell(8);
+        let cmdCell = row.insertCell(9);
         cmdCell.innerHTML = `
             <div class="command-cell">
                <button class="cmd-btn" data-bot="${bot.id}" data-cmd="bot-tp">TP</button>

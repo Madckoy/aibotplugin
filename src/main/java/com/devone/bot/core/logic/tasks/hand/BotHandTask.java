@@ -30,12 +30,13 @@ public class BotHandTask extends BotTask {
     public BotHandTask(Bot bot) {
         super(bot, "✋🏻");
         setObjective("Hit the target");
-        this.isLogged = config.isLogged();
+        this.isLogged = true;
     }
 
     public BotHandTask(Bot bot, String name) {
         super(bot,name);
         setObjective("Hit the target");
+        this.isLogged = true;
     }
 
     @Override
@@ -48,6 +49,7 @@ public class BotHandTask extends BotTask {
  
             this.damage = useHandParams.getDamage();
             this.target = useHandParams.getTarget();
+            this.isLogged = useHandParams.isLogged();
 
         } else {
             BotLogger.info(this.isLogged(),bot.getId() + " ❌ Некорректные параметры для `BotUseHandTask`!");

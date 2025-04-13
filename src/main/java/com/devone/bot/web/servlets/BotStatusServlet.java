@@ -56,7 +56,7 @@ public class BotStatusServlet extends HttpServlet {
             if (loc != null) {
                 botJson.addProperty("skin", "http://" + BotWebService.getServerHost() + ":"+BotWebService.getServerPort()+"/skins/" + bot.getUuid() + ".png");
                 botJson.addProperty("id", bot.getId());
-                botJson.addProperty("stuck", bot.getRuntimeStatus().getStuck());
+                botJson.addProperty("stuck", bot.getRuntimeStatus().isStuck());
 
                 String currLoc = " " + loc.x + ", " + loc.y + ", " + loc.z;   
 

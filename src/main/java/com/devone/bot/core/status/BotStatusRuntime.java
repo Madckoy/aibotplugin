@@ -49,7 +49,7 @@ public class BotStatusRuntime {
     }
 
     // Флаг застревания
-    public boolean getStuck() {
+    public boolean isStuck() {
         return stuck;
     }
 

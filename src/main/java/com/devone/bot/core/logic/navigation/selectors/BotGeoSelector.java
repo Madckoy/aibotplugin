@@ -3,10 +3,13 @@
 
 package com.devone.bot.core.logic.navigation.selectors;
 
+import java.util.Collections;
 import java.util.List;
 import java.util.Random;
+import java.util.stream.Collectors;
 
 import com.devone.bot.utils.blocks.BotBlockData;
+import com.devone.bot.utils.blocks.BotCoordinate3D;
 
 public class BotGeoSelector {
 
@@ -24,5 +27,16 @@ public class BotGeoSelector {
         }
         int index = RANDOM.nextInt(targets.size());
         return targets.get(index);
+    }
+
+    public static BotBlockData pickEmergencyTeleportTarget(BotCoordinate3D botPos, List<BotBlockData> reachable) {
+        List<BotBlockData> options = reachable.stream()
+            .filter(b -> !b.equals(botPos) && b.distanceTo(botPos) > 1)
+            .collect(Collectors.toList());
+
+        if (options.isEmpty()) return null;
+
+        Collections.shuffle(options);
+        return options.get(0);
     }
 }

@@ -1,6 +1,8 @@
 package com.devone.bot.core.logic.tasks.explore;
 
 import com.devone.bot.core.logic.tasks.strikes.params.BotSurvivalStrikeTaskParams;
+import com.devone.bot.core.logic.tasks.teleport.BotTeleportTask;
+import com.devone.bot.core.logic.tasks.teleport.params.BotTeleportTaskParams;
 import com.devone.bot.core.bot.Bot;
 import com.devone.bot.core.chat.BotChat;
 import com.devone.bot.core.logic.navigation.BotNavigationPlannerWrapper;
@@ -74,33 +76,36 @@ public class BotExploreTask extends BotTask {
         BotLogger.info(this.isLogged(), "🌐 " + bot.getId() + " Total nav targets: " + context.navTargets);
 
 
-        if(bot.getNPCEntity() != null) {
-            if(bot.getNPCNavigator().canNavigateTo(block.getLocation())==false) {
-                BotLogger.info(this.isLogged(), "🌐 " + bot.getId() + " Navigation to target is not possible. [ID: " + uuid + "]");
-                bot.getRuntimeStatus().setStuck(true);
-            }
-        } else {
-            BotLogger.info(this.isLogged(), "🌐 " + bot.getId() + " NPC entity is null. [ID: " + uuid + "]");
-            this.stop();
-            return;
-        }
+        //if(bot.getNPCEntity() != null) {
+        //    if(bot.getNPCNavigator().canNavigateTo(block.getLocation())==false) {
+        //        BotLogger.info(this.isLogged(), "🌐 " + bot.getId() + " Navigation to target is not possible. [ID: " + uuid + "]");
+        //        bot.getRuntimeStatus().setStuck(true);
+        //    }
+        //} else {
+        //    BotLogger.info(this.isLogged(), "🌐 " + bot.getId() + " NPC entity is null. [ID: " + uuid + "]");
+        //    this.stop();
+        //    return;
+        //}
 
-        if(bot.getRuntimeStatus().getStuck()) {
+        if(bot.getRuntimeStatus().isStuck()) {
             BotLogger.info(this.isLogged(), "🌐 " + bot.getId() + " Bot is stuck. [ID: " + uuid + "]");
             if(animal != null) {
-                BotChat.broadcastMessage("Inflicting survival strike! [ID: " + uuid + "]");
+                BotLogger.info(this.isLogged(), "🌐 " + bot.getId() + " Inflicting survival strike to unstuck!  [ID: " + uuid + "]");
                 BotSurvivalStrikeTaskParams params = new BotSurvivalStrikeTaskParams(animal, 5.0);
-                BotSurvivalStrikeTask strikeTask = new BotSurvivalStrikeTask(bot).configure((IBotTaskParams)params);
+                BotSurvivalStrikeTask strikeTask = new BotSurvivalStrikeTask(bot).configure(params);
                 bot.addTaskToQueue(strikeTask);
                 stop();
                 return;
+            } else {
+                BotLogger.info(this.isLogged(), "🌐 " + bot.getId() + " No animal found to unstuck. [ID: " + uuid + "]");
+                this.stop();
+                return;
             }
-
         } else {
             if(animal != null) {
-                BotChat.broadcastMessage("Inflicting survival strike! [ID: " + uuid + "]");
+                BotLogger.info(this.isLogged(), "🌐 " + bot.getId() + " Inflicting justified strike!  [ID: " + uuid + "]");
                 BotSurvivalStrikeTaskParams params = new BotSurvivalStrikeTaskParams(animal, 5.0);
-                BotSurvivalStrikeTask strikeTask = new BotSurvivalStrikeTask(bot).configure((IBotTaskParams)params);
+                BotSurvivalStrikeTask strikeTask = new BotSurvivalStrikeTask(bot).configure(params);
                 bot.addTaskToQueue(strikeTask);
                 stop();
                 return;
@@ -114,7 +119,22 @@ public class BotExploreTask extends BotTask {
         //
         BotNavigationUtils.navigateTo(bot, bot.getRuntimeStatus().getTargetLocation()); // via a new MoVeTask()
         //
-        this.stop();
+        if(currentTimeMillis() - startTime > BotConstants.DEFAULT_TASK_TIMEOUT) {
+            BotLogger.info(this.isLogged(), "🌐 " + bot.getId() + " Task timeout. [ID: " + uuid + "]");
+
+            BotBlockData fallback = BotGeoSelector.pickEmergencyTeleportTarget(bot.getRuntimeStatus().getCurrentLocation(), context.navTargets);
+
+            if (fallback != null) {
+                BotLogger.warn(true, bot.getId() + " 🌀 Навигация невозможна, но есть путь — телепорт к: " + fallback);
+
+                BotTeleportTaskParams tpParams = new BotTeleportTaskParams(fallback.getCoordinate3D());
+                BotTeleportTask tpTask = new BotTeleportTask(bot, null).configure(tpParams);
+                bot.addTaskToQueue(tpTask);
+                BotLogger.info(this.isLogged(), "🌐 " + bot.getId() + " Teleporting to fallback location: " + fallback.getCoordinate3D() + " [ID: " + uuid + "]");
+                this.stop();
+                return;
+            }
+        }
         return;
     }
 

@@ -1,8 +1,9 @@
 package com.devone.bot.core.logic.tasks.strikes.params;
 
+import com.devone.bot.core.logic.tasks.params.BotTaskParams;
 import com.devone.bot.utils.blocks.BotBlockData;
 
-public class BotSurvivalStrikeTaskParams {
+public class BotSurvivalStrikeTaskParams extends BotTaskParams {
     private BotBlockData target;
     private double damage;
     private boolean isLogged = true;
