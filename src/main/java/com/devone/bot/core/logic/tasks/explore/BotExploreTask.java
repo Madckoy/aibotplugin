@@ -98,7 +98,7 @@ public class BotExploreTask extends BotTask {
                 return;
             } else {
                 BotLogger.info(this.isLogged(), "🌐 " + bot.getId() + " No animal found to unstuck. [ID: " + uuid + "]");
-                this.stop();
+                setSceneData(null);
                 return;
             }
         } else {
