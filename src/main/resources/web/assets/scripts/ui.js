@@ -24,8 +24,6 @@ function renderBotTable(data) {
         let botCell_1 = row.insertCell(1); 
         botCell_1.innerHTML = `<span class="bot-stats-horizontal"><div>🧱 ${bot.blocks_broken}</div><div>💀 ${bot.mobs_killed}</div><div>🗲 ${bot.teleport_used}</div></span>`;
 
-        row.insertCell(1).innerText = bot.position;
-
         row.insertCell(2).innerText = bot.position; 
         row.insertCell(3).innerText = bot.stuck;
         row.insertCell(4).innerText = bot.task;
