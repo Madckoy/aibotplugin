@@ -125,7 +125,7 @@ th:nth-child(5), td:nth-child(5) { width: 40px; text-align: center; }  /* Task *
 th:nth-child(6), td:nth-child(6) { width: 100px; text-align: center; } /* Target */
 th:nth-child(8), td:nth-child(8) { width: 90px; text-align: center; }  /* Duration */
 th:nth-child(9), td:nth-child(9) { width: 110px; text-align: center; } /* Inventory */
-th:nth-child(11), td:nth-child(11) { width: 130px; text-align: center; } /* CMD */
+th:nth-child(11), td:nth-child(11) { width: 150px; text-align: center; } /* CMD */
 
 /* === FLEXIBLE COLUMNS === */
 th:nth-child(7), td:nth-child(7),  /* Objective */
