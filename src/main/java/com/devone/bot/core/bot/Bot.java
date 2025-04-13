@@ -32,7 +32,7 @@ public class Bot {
     private boolean autoPickupEnabled = false;
     private BotStatusRuntime rStatus; // Рантайм статус бота
     private BotChat communicator; // Создаем поле для общения бота
-    private boolean stuck;    
+
 
     public Bot(String id, NPC an_npc, BotManager botManager) {
         this.id = id;

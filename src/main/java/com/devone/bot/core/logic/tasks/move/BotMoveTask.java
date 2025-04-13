@@ -104,7 +104,7 @@ public class BotMoveTask extends BotTask {
             
             isMoving = true;
         
-            BotLogger.info(this.isLogged(), bot.getId() + " 🏃🏻‍♂️ Начал движение к " + targetLocation + " [ID: " + uuid + "]");
+            BotLogger.info(this.isLogged(), bot.getId() + " 🏃🏻‍♂️ Начал движение к " + targetLocation);
         
             taskHandle = Bukkit.getScheduler().runTaskTimer(AIBotPlugin.getInstance(), () -> {
                 if (isDone || bot.getNPCEntity() == null) {
@@ -114,7 +114,7 @@ public class BotMoveTask extends BotTask {
             
                 long elapsed = System.currentTimeMillis() - startTime;
                 if (elapsed > BotConstants.DEFAULT_TASK_TIMEOUT ) {
-                    BotLogger.warn(isLogged(), bot.getId() + " ⏱ Тайм-аут навигации! Прерываем задачу. [ID: " + uuid + "]");
+                    BotLogger.warn(isLogged(), bot.getId() + " ⏱ Тайм-аут навигации! Прерываем задачу.");
                     bot.getRuntimeStatus().setStuck(true);
                     stopTaskHandle();
                     this.stop();
@@ -123,7 +123,7 @@ public class BotMoveTask extends BotTask {
             }, 0L, 20L); // проверка раз в секунду
         }        
         else {
-            BotLogger.info(this.isLogged(), bot.getId() + " ⏳ Двигаюсь к " + targetLocation + " [ID: " + uuid + "]");
+            BotLogger.info(this.isLogged(), bot.getId() + " ⏳ Двигаюсь к " + targetLocation);
         }
         
     }
@@ -140,7 +140,7 @@ public class BotMoveTask extends BotTask {
         this.isDone = true;
         this.isMoving = false;
         bot.getRuntimeStatus().setTargetLocation(null);
-        BotLogger.info(this.isLogged(), bot.getId() + " 🛑 Move task завершён [ID: " + uuid + "]");  
+        BotLogger.info(this.isLogged(), bot.getId() + " 🛑 Move task завершён");  
         
         stopTaskHandle();
 
@@ -155,7 +155,7 @@ public class BotMoveTask extends BotTask {
     public void onNavigationComplete(NavigationCompleteEvent event) {
         if (event.getNPC().getId() != bot.getNPC().getId()) return;
 
-        BotLogger.info(this.isLogged(), bot.getId() + " ✅ Навигатор сообщил о завершении [ID: " + uuid + "]");
+        BotLogger.info(this.isLogged(), bot.getId() + " ✅ Навигатор сообщил о завершении");
         this.stop(); // Завершаем задачу
     }
 }

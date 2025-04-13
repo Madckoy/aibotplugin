@@ -77,7 +77,8 @@ public abstract class BotTask implements IBotTask, IBotTaskConfigurable, Listene
     public void update() {
 
         BotLogger.info(this.isLogged(), "🚦 " + bot.getId() + " " + name + " Status: " + isDone + " | " + isPaused +
-                " 🎯 xyz: " + bot.getRuntimeStatus().getTargetLocation() + " [ID: " + uuid + "]");
+                " 📍 xyz: " + bot.getRuntimeStatus().getCurrentLocation() + " | " + 
+                " 🎯 xyz: " + bot.getRuntimeStatus().getTargetLocation());
 
         if (isPaused) return;
 
@@ -118,7 +119,7 @@ public abstract class BotTask implements IBotTask, IBotTaskConfigurable, Listene
     public void setPaused(boolean paused) {
         this.isPaused = paused;
         String status = isPaused ? "⏸️ Pausing..." : "▶️ Resuming...";
-        BotLogger.info(this.isLogged(), status + bot.getId() + " [ID: " + uuid + "]");
+        BotLogger.info(this.isLogged(), status + bot.getId());
     }
 
     @Override
@@ -141,46 +142,6 @@ public abstract class BotTask implements IBotTask, IBotTaskConfigurable, Listene
 
     public long getElapsedTime() {
         return System.currentTimeMillis() - startTime;
-    }
-
-    public void handleStuck() {
-
-        Location pLoc = player.getLocation();
-        BotCoordinate3D pCoord = new BotCoordinate3D((int)pLoc.getX(), (int)pLoc.getY(), (int)pLoc.getZ()); 
-
-        if (bot.getRuntimeStatus().getTargetLocation() != null) {
-            if (bot.getNPCEntity() != null) {
-                BotLogger.info(this.isLogged(), "✨ " + bot.getId() + " Застрял! Телепортируемся в " + bot.getRuntimeStatus().getTargetLocation());
-
-                BotTeleportTask tp = new BotTeleportTask(bot, player);
-
-                if (player != null) {
-                    tp.configure(new BotTeleportTaskParams(pCoord));
-                } else {
-                    tp.configure(new BotTeleportTaskParams(bot.getRuntimeStatus().getTargetLocation()));
-                }
-
-                bot.addTaskToQueue(tp);
-            } else {
-                BotLogger.info(this.isLogged(), "✨ " + bot.getId() + " Застрял! Нет Taget Location и нет NPC Entity!");
-            }
-        } else {
-            if (bot.getNPCEntity() != null) {
-                BotLogger.info(this.isLogged(), "✨ " + bot.getId() + " Застрял! Нет Taget Location! Телепортируемся в точку респавна!");
-
-                BotTeleportTask tp = new BotTeleportTask(bot, player);
-
-                if (player != null) {
-                    tp.configure(new BotTeleportTaskParams(pCoord));
-                } else {
-                    tp.configure(new BotTeleportTaskParams(BotUtils.getFallbackCoordinate3D()));
-                }
-
-                bot.addTaskToQueue(tp);
-            } else {
-                BotLogger.info(this.isLogged(), "✨ " + bot.getId() + " Застрял! Нет Taget Location и нет NPC Entity!");
-            }
-        }
     }
 
     private boolean isPlayerOnline() {

@@ -4,7 +4,6 @@ import com.devone.bot.core.logic.tasks.strikes.params.BotSurvivalStrikeTaskParam
 import com.devone.bot.core.logic.tasks.teleport.BotTeleportTask;
 import com.devone.bot.core.logic.tasks.teleport.params.BotTeleportTaskParams;
 import com.devone.bot.core.bot.Bot;
-import com.devone.bot.core.chat.BotChat;
 import com.devone.bot.core.logic.navigation.BotNavigationPlannerWrapper;
 import com.devone.bot.core.logic.navigation.scene.BotSceneContext;
 import com.devone.bot.core.logic.navigation.selectors.BotBioSelector;
@@ -28,7 +27,6 @@ public class BotExploreTask extends BotTask {
   
     private int scanRadius = BotConstants.DEFAULT_SCAN_RANGE;
     private BotExploreTaskConfig config;
-    private static final long TIMEOUT_MS = 60_000; // 60
 
     public BotExploreTask(Bot bot) {
         super(bot, "🌐");
@@ -46,7 +44,7 @@ public class BotExploreTask extends BotTask {
 
         if (isPaused) return;
 
-        BotLogger.info(this.isLogged(), "🌐 " + bot.getId() + " Exploring with radius: " + scanRadius + " [ID: " + uuid + "]");
+        BotLogger.info(this.isLogged(), "🌐 " + bot.getId() + " Exploring with radius: " + scanRadius);
         
         if(getSceneData()==null) {
             BotSonar3DTask sonar = new BotSonar3DTask(bot, this, scanRadius, scanRadius);
@@ -63,7 +61,7 @@ public class BotExploreTask extends BotTask {
 
         BotSceneData sceneData = getSceneData();
         if (sceneData == null) {
-            BotLogger.info(this.isLogged(), "🌐 " + bot.getId() + " No scene data available. [ID: " + uuid + "]");
+            BotLogger.info(this.isLogged(), "🌐 " + bot.getId() + " No scene data available.");
             this.stop();
             return;
         }
@@ -95,20 +93,20 @@ public class BotExploreTask extends BotTask {
         if(bot.getRuntimeStatus().isStuck()) {
             BotLogger.info(this.isLogged(), "🌐 " + bot.getId() + " Bot is stuck. [ID: " + uuid + "]");
             if(animal!=null) {
-                BotLogger.info(this.isLogged(), "🌐 " + bot.getId() + " Inflicting Survival Strike to unstuck!  [ID: " + uuid + "]");
+                BotLogger.info(this.isLogged(), "🌐 " + bot.getId() + " Inflicting Survival Strike to unstuck!");
                 BotSurvivalStrikeTaskParams params = new BotSurvivalStrikeTaskParams(animal, 5.0);
                 BotSurvivalStrikeTask strikeTask = new BotSurvivalStrikeTask(bot).configure(params);
                 bot.addTaskToQueue(strikeTask);
                 stop();
                 return;
             } else {
-                BotLogger.info(this.isLogged(), "🌐 " + bot.getId() + " No animal found to unstuck. [ID: " + uuid + "]");
+                BotLogger.info(this.isLogged(), "🌐 " + bot.getId() + " No animal found to unstuck.");
                 //----------
                 long elapsed = System.currentTimeMillis() - startTime;
-                BotLogger.info(this.isLogged(), "🌐 " + bot.getId() + " Elapsed time: " + elapsed + "ms [ID: " + uuid + "]");
+                BotLogger.info(this.isLogged(), "🌐 " + bot.getId() + " Elapsed time: " + elapsed + "ms.");
         
                 if(elapsed > BotConstants.DEFAULT_TASK_TIMEOUT) {
-                    BotLogger.info(this.isLogged(), "🌐 " + bot.getId() + " Task timeout. [ID: " + uuid + "]");
+                    BotLogger.info(this.isLogged(), "🌐 " + bot.getId() + " Task timeout.");
         
                     BotBlockData fallback = BotGeoSelector.pickEmergencyTeleportTarget(bot.getRuntimeStatus().getCurrentLocation(), context.navTargets);
         
@@ -118,7 +116,7 @@ public class BotExploreTask extends BotTask {
                         BotTeleportTaskParams tpParams = new BotTeleportTaskParams(fallback.getCoordinate3D());
                         BotTeleportTask tpTask = new BotTeleportTask(bot, null).configure(tpParams);
                         bot.addTaskToQueue(tpTask);
-                        BotLogger.info(this.isLogged(), "🌐 " + bot.getId() + " Teleporting to fallback location: " + fallback.getCoordinate3D() + " [ID: " + uuid + "]");
+                        BotLogger.info(this.isLogged(), "🌐 " + bot.getId() + " Teleporting to fallback location: " + fallback.getCoordinate3D());
                         
                         this.stop();
                         return;
@@ -128,7 +126,7 @@ public class BotExploreTask extends BotTask {
             }
         } else { 
             if(animal != null) {
-                BotLogger.info(this.isLogged(), "🌐 " + bot.getId() + " Inflicting Survuval Strike to bring justice!  [ID: " + uuid + "]");
+                BotLogger.info(this.isLogged(), "🌐 " + bot.getId() + " Inflicting Survuval Strike to bring justice!");
                 BotSurvivalStrikeTaskParams params = new BotSurvivalStrikeTaskParams(animal, 5.0);
                 BotSurvivalStrikeTask strikeTask = new BotSurvivalStrikeTask(bot).configure(params);
                 bot.addTaskToQueue(strikeTask);
@@ -136,7 +134,7 @@ public class BotExploreTask extends BotTask {
                 return;
             }
             // 📌 Если цель найдена, начинаем движение
-            BotLogger.info(this.isLogged(), "🌐 " + bot.getId() + " Target: " + navTarget.getCoordinate3D() + " [ID: " + uuid + "]");
+            BotLogger.info(this.isLogged(), "🌐 " + bot.getId() + " Target: " + navTarget.getCoordinate3D());
             //
             bot.getRuntimeStatus().setTargetLocation(navTarget.getCoordinate3D()); 
             //
@@ -151,7 +149,7 @@ public class BotExploreTask extends BotTask {
     public void stop() {
        this.isDone = true;
        setSceneData(null);
-       BotLogger.info(this.isLogged(), "🌐 " + bot.getId() + " Exploration task completed. [ID: " + uuid + "]");
+       BotLogger.info(this.isLogged(), "🌐 " + bot.getId() + " Exploration task completed.");
     }
 
     @Override
@@ -162,7 +160,7 @@ public class BotExploreTask extends BotTask {
             BotExploreTaskParams exploreParams = (BotExploreTaskParams) params;
             this.scanRadius = exploreParams.getScanRadius();
         } else {
-            BotLogger.info(this.isLogged(), "🌐 " + bot.getId() + " Invalid parameters for `BotExploreTask`! [ID: " + uuid + "]");
+            BotLogger.info(this.isLogged(), "🌐 " + bot.getId() + " Invalid parameters for `BotExploreTask`!");
             this.stop();
         }
         return this;
