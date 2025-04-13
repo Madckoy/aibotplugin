@@ -18,8 +18,8 @@ function renderBotTable(data) {
 
         // 📛 Bot ID + Skin
         let botCell_0 = row.insertCell(0);
-        botCell.innerHTML = `<img src="${bot.skin}" width="20" height="20" style="border-radius: 4px; margin-right: 5px;"> ${bot.id}`;
-        botCell.style.padding = "6px";
+        botCell_0.innerHTML = `<img src="${bot.skin}" width="20" height="20" style="border-radius: 4px; margin-right: 5px;"> ${bot.id}`;
+        botCell_0.style.padding = "6px";
 
         let botCell_1 = row.insertCell(1); 
         botCell_1.innerHTML = `<span class="bot-stats-horizontal"><div>🧱 ${bot.blocks_broken}</div><div>💀 ${bot.mobs_killed}</div><div>🗲 ${bot.teleport_used}</div></span>`;
