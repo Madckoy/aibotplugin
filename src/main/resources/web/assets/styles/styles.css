@@ -49,11 +49,26 @@ h1 {
     image-rendering: pixelated;
 }
 
-.monitoring-title {
-    font-size: 22px;
+.title-block {
+    display: flex;
+    flex-direction: column;
+    gap: 3px;
+}
+
+.plugin-title {
+    font-size: 20px;
     font-weight: 600;
     color: #f0f0f0;
     letter-spacing: 1.2px;
+    text-transform: uppercase;
+}
+
+.plugin-subtitle {
+    font-size: 13px;
+    font-weight: 300;
+    color: #aaa;
+    letter-spacing: 1px;
+    margin-left: 5px;  /* 👈 Сдвиг вправо */
 }
 
 .time-info {
