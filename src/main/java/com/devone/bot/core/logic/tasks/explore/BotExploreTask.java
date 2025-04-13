@@ -29,6 +29,7 @@ public class BotExploreTask extends BotTask {
   
     private int scanRadius = BotConstants.DEFAULT_SCAN_RANGE;
     private BotExploreTaskConfig config;
+    private static final long TIMEOUT_MS = 60_000; // 60
 
     public BotExploreTask(Bot bot) {
         super(bot, "🌐");
@@ -55,6 +56,11 @@ public class BotExploreTask extends BotTask {
         }  
         
         setObjective("Exploring the area...");
+
+        if(bot.getRuntimeStatus().isStuck()) { // force sonar scan
+            BotSonar3DTask sonar = new BotSonar3DTask(bot, this, scanRadius, scanRadius);
+            bot.addTaskToQueue(sonar);
+        }
 
         BotSceneData sceneData = getSceneData();
         if (sceneData == null) {
@@ -98,7 +104,6 @@ public class BotExploreTask extends BotTask {
                 return;
             } else {
                 BotLogger.info(this.isLogged(), "🌐 " + bot.getId() + " No animal found to unstuck. [ID: " + uuid + "]");
-                setSceneData(null);
                 return;
             }
         } else {
@@ -119,7 +124,8 @@ public class BotExploreTask extends BotTask {
         //
         BotNavigationUtils.navigateTo(bot, bot.getRuntimeStatus().getTargetLocation()); // via a new MoVeTask()
         //
-        if(currentTimeMillis() - startTime > BotConstants.DEFAULT_TASK_TIMEOUT) {
+        long elapsed = System.currentTimeMillis() - startTime;
+        if(elapsed > TIMEOUT_MS) {
             BotLogger.info(this.isLogged(), "🌐 " + bot.getId() + " Task timeout. [ID: " + uuid + "]");
 
             BotBlockData fallback = BotGeoSelector.pickEmergencyTeleportTarget(bot.getRuntimeStatus().getCurrentLocation(), context.navTargets);

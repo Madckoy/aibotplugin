@@ -85,7 +85,7 @@ th:nth-child(3), td:nth-child(3) { /* stuck*/
 
 th:nth-child(4), td:nth-child(4) { /* task */
     text-align: center;
-    width: 40px;
+    width: 30px;
 }
 
 th:nth-child(5), td:nth-child(5) { /*target*/
