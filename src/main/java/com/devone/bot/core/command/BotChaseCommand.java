@@ -7,15 +7,15 @@ import org.bukkit.entity.Player;
 
 import com.devone.bot.core.bot.Bot;
 import com.devone.bot.core.bot.BotManager;
-import com.devone.bot.core.logic.task.playerlinked.follow.BotFollowTargetTask;
+import com.devone.bot.core.logic.task.playerlinked.chase.BotChaseTargetTask;
 import com.devone.bot.utils.blocks.BotBlockData;
 import com.devone.bot.utils.logger.BotLogger;
 
-public class BotFollowCommand implements CommandExecutor {
+public class BotChaseCommand implements CommandExecutor {
 
     private final BotManager botManager;
 
-    public BotFollowCommand(BotManager botManager) {
+    public BotChaseCommand(BotManager botManager) {
         this.botManager = botManager;
     }
 
@@ -34,7 +34,7 @@ public class BotFollowCommand implements CommandExecutor {
             return true;
         }
 
-        BotLogger.info(true,"📌 /bot-follow: Бот " + bot.getId() + " следует за " + player.getName());
+        BotLogger.info(true,"📌 /bot-chase: Бот " + bot.getId() + " следует за " + player.getName());
 
         // ✅ Очищаем стек задач
         bot.getLifeCycle().getTaskStackManager().clearTasks();
@@ -47,7 +47,7 @@ public class BotFollowCommand implements CommandExecutor {
      
         
         // ✅ Добавляем задачу на следование
-        BotFollowTargetTask followTask = new BotFollowTargetTask(bot, block_data);
+        BotChaseTargetTask followTask = new BotChaseTargetTask(bot, block_data);
         bot.addTaskToQueue(followTask);
 
         player.sendMessage("§aБот " + bot.getId() + " теперь следует за вами!");

@@ -1,4 +1,4 @@
-package com.devone.bot.core.logic.task.playerlinked.follow.config;
+package com.devone.bot.core.logic.task.playerlinked.chase.config;
 
 import org.bukkit.configuration.file.FileConfiguration;
 

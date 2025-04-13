@@ -1,16 +1,16 @@
-package com.devone.bot.core.logic.task.playerlinked.follow;
+package com.devone.bot.core.logic.task.playerlinked.chase;
 
 import org.bukkit.Bukkit;
 
 import com.devone.bot.AIBotPlugin;
 import com.devone.bot.core.bot.Bot;
 import com.devone.bot.core.logic.task.BotTask;
-import com.devone.bot.core.logic.task.playerlinked.follow.config.BotFollowTaskConfig;
+import com.devone.bot.core.logic.task.playerlinked.chase.config.BotFollowTaskConfig;
 import com.devone.bot.utils.BotUtils;
 import com.devone.bot.utils.blocks.BotBlockData;
 import com.devone.bot.utils.logger.BotLogger;
 
-public class BotFollowTargetTask extends BotTask {
+public class BotChaseTargetTask extends BotTask {
 
     private BotBlockData target;
 
@@ -22,7 +22,7 @@ public class BotFollowTargetTask extends BotTask {
 
     private final int updateIntervalTicks = 10; // каждые 0.5 сек
 
-    public BotFollowTargetTask(Bot bot, BotBlockData target) {
+    public BotChaseTargetTask(Bot bot, BotBlockData target) {
         super(bot, "🎯");
         this.target = target;
         bot.getRuntimeStatus().setTargetLocation(target.getCoordinate3D());   
@@ -55,17 +55,12 @@ public class BotFollowTargetTask extends BotTask {
 
     private void updateFollowLogic() {
 
-        followAndAttack();
-
-    }
-
-    private void followAndAttack() {
-        
         BotUtils.lookAt(bot, target.getCoordinate3D());
         
         BotLogger.info(this.isLogged(),"🏃 Преследуем " + target.type );
 
         this.stop();
+
     }
 
     public BotBlockData getFollowingObject() {

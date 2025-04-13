@@ -102,13 +102,14 @@ public class BotExploreTask extends BotTask {
             } else {
                 BotLogger.info(this.isLogged(), "🌐 " + bot.getId() + " No animal found to unstuck.");
                 //----------
-                long elapsed = System.currentTimeMillis() - startTime;
-                BotLogger.info(this.isLogged(), "🌐 " + bot.getId() + " Elapsed time: " + elapsed + "ms.");
-        
-                if(elapsed > BotConstants.DEFAULT_TASK_TIMEOUT) {
+                if(getElapsedTime() > BotConstants.DEFAULT_TASK_TIMEOUT) {
                     BotLogger.info(this.isLogged(), "🌐 " + bot.getId() + " Task timeout.");
         
-                    BotBlockData fallback = BotGeoSelector.pickEmergencyTeleportTarget(bot.getRuntimeStatus().getCurrentLocation(), context.reachableGoals, context.reachable, context.navigable, context.walkable);
+                    BotBlockData fallback = BotGeoSelector.pickEmergencyTeleportTarget(bot.getRuntimeStatus().getCurrentLocation(), 
+                                                                                       context.reachableGoals, 
+                                                                                       context.reachable, 
+                                                                                       context.navigable, 
+                                                                                       context.walkable);
         
                     if (fallback != null) {
                         BotLogger.warn(true, bot.getId() + " 🌀 Навигация невозможна, но есть путь — телепорт к: " + fallback);
@@ -143,9 +144,11 @@ public class BotExploreTask extends BotTask {
         //
         BotNavigationUtils.navigateTo(bot, bot.getRuntimeStatus().getTargetLocation(), 1); // via a new MoVeTask()
         //
-        stop();
+        if(getElapsedTime() > 10 * BotConstants.DEFAULT_TASK_TIMEOUT) {
+            BotLogger.info(this.isLogged(), "🌐 " + bot.getId() + " "+ this.name +" Task timeout.");
+            this.stop();
+        }
         return;
-        
     }
 
     @Override

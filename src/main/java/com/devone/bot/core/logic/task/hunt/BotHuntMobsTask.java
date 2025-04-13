@@ -3,7 +3,7 @@ package com.devone.bot.core.logic.task.hunt;
 import com.devone.bot.core.bot.Bot;
 import com.devone.bot.core.logic.task.BotTask;
 import com.devone.bot.core.logic.task.hunt.config.BotHuntTaskConfig;
-import com.devone.bot.core.logic.task.playerlinked.follow.BotFollowTargetTask;
+import com.devone.bot.core.logic.task.playerlinked.chase.BotChaseTargetTask;
 import com.devone.bot.core.logic.task.sonar.BotSonar3DTask;
 import com.devone.bot.utils.blocks.BotBlockData;
 import com.devone.bot.utils.logger.BotLogger;
@@ -39,7 +39,7 @@ public class BotHuntMobsTask extends BotTask {
 
         if (target != null) {
 
-            bot.addTaskToQueue(new BotFollowTargetTask(bot, target));
+            bot.addTaskToQueue(new BotChaseTargetTask(bot, target));
             BotLogger.info(this.isLogged(),"🎯 Бот начинает преследование " + target.type);
             this.stop();
             return;
