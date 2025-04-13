@@ -70,13 +70,13 @@ public abstract class BotTask implements IBotTask, IBotTaskConfigurable, Listene
 
     public void setObjective(String objctv) {
         objective = objctv;
-        BotLogger.info(this.isLogged(), "🚩 " + bot.getId() + "  Set Objective: " + objctv);
+        BotLogger.info(this.isLogged(), "🚩 " + name +" : "+ bot.getId() + "  Set Objective: " + objctv);
     }
 
     @Override
     public void update() {
 
-        BotLogger.info(this.isLogged(), "🚦 " + bot.getId() + " " + name + " Status: " + isDone + " | " + isPaused +
+        BotLogger.info(this.isLogged(), "🚦 " + name +" : "+ bot.getId() + " " + name + " Status: " + isDone + " | " + isPaused +
                 " 📍 xyz: " + bot.getRuntimeStatus().getCurrentLocation() + " | " + 
                 " 🎯 xyz: " + bot.getRuntimeStatus().getTargetLocation());
 

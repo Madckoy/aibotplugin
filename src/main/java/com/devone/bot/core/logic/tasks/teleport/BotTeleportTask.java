@@ -59,13 +59,11 @@ public class BotTeleportTask extends BotTask {
             stop();
             return;
         }
-
-        BotCoordinate3D targetLocation = bot.getRuntimeStatus().getTargetLocation();
         // Телепортация в основном потоке
         Bukkit.getScheduler().runTask(AIBotPlugin.getInstance(), () -> {
-            bot.getNPCEntity().teleport(BotWorldHelper.getWorldLocation(targetLocation));
+            bot.getNPCEntity().teleport(BotWorldHelper.getWorldLocation(target));
             bot.getRuntimeStatus().setStuck(false);
-            BotLogger.info(isLogged(), bot.getId() + " 🗲 Телепорт с " + bot.getNPCEntity().getLocation().toVector() + " → " + targetLocation);
+            BotLogger.info(isLogged(), bot.getId() + " 🗲 Телепорт с " + bot.getNPCEntity().getLocation().toVector() + " → " + target);
         });
 
        stop();

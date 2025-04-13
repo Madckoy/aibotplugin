@@ -50,6 +50,7 @@ public class BotHandTask extends BotTask {
             this.damage = useHandParams.getDamage();
             this.target = useHandParams.getTarget();
             this.isLogged = useHandParams.isLogged();
+            bot.getRuntimeStatus().setTargetLocation(target.getCoordinate3D());
 
         } else {
             BotLogger.info(this.isLogged(),bot.getId() + " ❌ Некорректные параметры для `BotUseHandTask`!");
@@ -67,7 +68,7 @@ public class BotHandTask extends BotTask {
             return;
         }
 
-        BotCoordinate3D faceTarget = (target != null) ? target.getCoordinate3D() : bot.getRuntimeStatus().getTargetLocation();
+        BotCoordinate3D faceTarget = target;
         Block faceBlock = BotWorldHelper.getBlockAt(faceTarget);
         setObjective("Hitting: " + BotUtils.getBlockName(faceBlock)+" at "+faceTarget);
 
