@@ -38,12 +38,6 @@ public class BotBlockData extends BotCoordinate3D {
     public boolean isUnknown() {
         return type != null && BlockMaterialUtils.UNSAFE_TYPES.contains(type.toUpperCase());
     }
-    
-    @JsonIgnore
-    public boolean isPassable() {
-        return type != null && !type.isBlank()
-               && !BlockMaterialUtils.NON_PASSABLE_BLOCKS.contains(type.toUpperCase());
-    }
 
     public EntityType toEntityType() {
         return EntityType.valueOf(type.toUpperCase());
