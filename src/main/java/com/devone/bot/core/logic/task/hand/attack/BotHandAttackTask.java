@@ -15,6 +15,7 @@ import com.devone.bot.core.logic.task.params.BotTaskParams;
 import com.devone.bot.core.logic.task.params.IBotTaskParams;
 import com.devone.bot.utils.BotUtils;
 import com.devone.bot.utils.blocks.BotBlockData;
+import com.devone.bot.utils.blocks.BotCoordinate3D;
 import com.devone.bot.utils.blocks.BotCoordinate3DHelper;
 import com.devone.bot.utils.logger.BotLogger;
 import com.devone.bot.utils.world.BotWorldHelper;
@@ -26,14 +27,20 @@ public class BotHandAttackTask extends BotHandTask {
     private boolean isLogged = true;
     private BukkitTask bukkitTask;
     private BotHandAttackListener listener;
+    private long hits = 0;
+    private long attempts = 0;
+    private BotCoordinate3D startPos = null;
 
     private int pursuitTicks = 0;
-    private final int MAX_PURSUIT_TICKS = 600; // ~30 секунды (если тик каждые 10л)
+    private final int MAX_PURSUIT_TICKS = 120;
 
     public BotHandAttackTask(Bot bot) {
         super(bot);
         setName("⚔️");
         setObjective("Attack the target");
+        attempts = 0;
+        hits  = 0;
+        startPos = new BotCoordinate3D(bot.getRuntimeStatus().getCurrentLocation());
     }
 
     @Override
@@ -80,8 +87,10 @@ public class BotHandAttackTask extends BotHandTask {
                     BotLogger.info(isLogged, bot.getId() + " ❌ BotHandAttackTask: Task is done or Bot NPC is null.");
                     stop(); cancel(); return;
                 }
-                
-                setObjective("Attacking the target: " + target);
+
+                setObjective("Attacking: " + target.type + "("+target.x+", "+target.y+", "+target.z+")");
+
+                attempts = attempts+1;
 
                 // 🔍 Работа с мобом по UUID
                 if (target.uuid != null) {
@@ -119,7 +128,11 @@ public class BotHandAttackTask extends BotHandTask {
 
                     } else {
                         animateHand();
+
                         living.damage(damage, bot.getNPCEntity());
+                     
+                        hits++;
+                        
                         BotLogger.info(isLogged, bot.getId() + " ✋🏻 Attacked mob: " + living.getType());
                     }
 
@@ -131,6 +144,15 @@ public class BotHandAttackTask extends BotHandTask {
                 }
             }
         }.runTaskTimer(AIBotPlugin.getInstance(), 0L, 10L);
+
+        BotLogger.info(isLogged, bot.getId() + " ⏱️ Hits made: " + hits);
+        BotLogger.info(isLogged, bot.getId() + " ⏱️ Attempts made: " + attempts);
+
+        BotCoordinate3D endPos = bot.getRuntimeStatus().getCurrentLocation();
+        if(endPos.equals(startPos) && hits == 0) {
+                // consider the bot is stuck
+                bot.getRuntimeStatus().setStuck(true);
+        }
     }
 
     @Override
