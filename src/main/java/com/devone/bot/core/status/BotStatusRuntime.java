@@ -1,5 +1,7 @@
 package com.devone.bot.core.status;
 
+import java.util.ArrayList;
+
 import com.devone.bot.core.bot.Bot;
 import com.devone.bot.core.logic.task.BotTask;
 import com.devone.bot.utils.blocks.BotCoordinate3D;
@@ -18,8 +20,8 @@ public class BotStatusRuntime {
     // Другие состояния
     private boolean stuck;
     private int stuckCount;
-    private long killedMobs;
-    private long brokebBlocks;
+    private ArrayList<String> killedMobs;
+    private ArrayList<String> brokenBlocks;
     private long teleportUsed;
     protected BotSceneData sceneData;
 
@@ -29,8 +31,8 @@ public class BotStatusRuntime {
         this.targetLocation = null;  // Начальное значение для targetLocation
         this.stuck = false;
         this.stuckCount = 0;
-        this.killedMobs = 0;
-        this.brokebBlocks = 0;
+        this.killedMobs   = new ArrayList<String>();
+        this.brokenBlocks = new ArrayList<String>();
         this.teleportUsed = 0;
         this.sceneData = null;
     }
@@ -89,30 +91,20 @@ public class BotStatusRuntime {
         this.targetLocation = targetLocation;
     }
 
-    public void killedMobsIncrease() {
-        this.killedMobs = killedMobs + 1;
+    public void killedMobsIncrease(String mobName) {
+        this.killedMobs.add(mobName);
     }
 
-    public void brokenBlocksIncrease() {
-        this.brokebBlocks = brokebBlocks + 1;
+    public void brokenBlocksIncrease(String blockName) {
+        this.brokenBlocks.add(blockName);
     }
 
-    public long getMobsKilled() {
+    public ArrayList<String> getMobsKilled() {
         return killedMobs;
     }
 
-    public long getBrokenBlocks() {
-        return brokebBlocks;
-    }
-    public void resetBrokenBlocks() {
-        this.brokebBlocks = 0;
-    }
-    public void resetKilledMobs() {
-        this.killedMobs = 0;
-    }
-
-    public void resetMobsKilled() {
-        this.killedMobs = 0;
+    public ArrayList<String> getBlocksBroken() {
+        return brokenBlocks;
     }
 
     public void teleportUsedIncrease() {
@@ -122,9 +114,7 @@ public class BotStatusRuntime {
     public long getTeleportUsed() {
         return teleportUsed;
     }
-    public void resetTeleportUsed() {
-        this.teleportUsed = 0;
-    }
+
     public void setSceneData(BotSceneData sceneData) {
         this.sceneData = sceneData;
     }

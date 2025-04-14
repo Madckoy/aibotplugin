@@ -62,8 +62,10 @@ public class BotStatusServlet extends HttpServlet {
                 botJson.addProperty("stuck", bot.getRuntimeStatus().isStuck());
                 botJson.addProperty("stuckCount", bot.getRuntimeStatus().getStuckCount());
 
-                botJson.addProperty("blocks_broken", bot.getRuntimeStatus().getBrokenBlocks());
-                botJson.addProperty("mobs_killed", bot.getRuntimeStatus().getMobsKilled());
+                botJson.addProperty("blocks_broken_size", bot.getRuntimeStatus().getBlocksBroken().size());
+                botJson.addProperty("blocks_broken",  bot.getRuntimeStatus().getBlocksBroken().toString());
+                botJson.addProperty("mobs_killed_size", bot.getRuntimeStatus().getMobsKilled().size());
+                botJson.addProperty("mobs_killed", bot.getRuntimeStatus().getMobsKilled().toString());
                 botJson.addProperty("teleport_used", bot.getRuntimeStatus().getTeleportUsed());
 
                 String currLoc = " " + loc.x + ", " + loc.y + ", " + loc.z;   

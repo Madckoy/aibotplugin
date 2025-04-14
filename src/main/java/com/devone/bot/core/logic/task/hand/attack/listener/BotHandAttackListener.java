@@ -24,7 +24,7 @@ public class BotHandAttackListener implements Listener {
         if (event.getEntity().getKiller() != null
             && event.getEntity().getKiller().getUniqueId().equals(bot.getNPCEntity().getUniqueId())) {
             
-            bot.getRuntimeStatus().killedMobsIncrease();
+            bot.getRuntimeStatus().killedMobsIncrease(event.getEntity().getName());
 
             task.stop(); // Завершаем задачу 
 

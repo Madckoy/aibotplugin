@@ -78,7 +78,7 @@ public class BotHandExcavateTask extends BotHandTask {
 
                 block.breakNaturally();
 
-                bot.getRuntimeStatus().brokenBlocksIncrease();
+                bot.getRuntimeStatus().brokenBlocksIncrease(target.type);
 
                 BotLogger.info(isLogged, bot.getId() + " 🧱 Block excavated: " + block);
                 
