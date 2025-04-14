@@ -33,6 +33,7 @@ public class BotHandAttackTask extends BotHandTask {
 
     private int pursuitTicks = 0;
     private final int MAX_PURSUIT_TICKS = 120;
+    private final int MAX_ATTEMPTS      = 120;
 
     public BotHandAttackTask(Bot bot) {
         super(bot);
@@ -140,16 +141,17 @@ public class BotHandAttackTask extends BotHandTask {
                         BotLogger.info(isLogged, bot.getId() + " ⏱️ Pursuit timeout reached.");
                         stop(); cancel(); return;
                     }
-
+                    if(attempts > MAX_ATTEMPTS) { // застряли плотно
+                        BotCoordinate3D endPos = bot.getRuntimeStatus().getCurrentLocation();
+                        if(endPos.equals(startPos) && hits == 0) {
+                                // consider the bot is stuck
+                                bot.getRuntimeStatus().setStuck(true);
+                                stop(); cancel(); return;
+                        }
+                    }
                 }
             }
         }.runTaskTimer(AIBotPlugin.getInstance(), 0L, 10L);
-
-        BotCoordinate3D endPos = bot.getRuntimeStatus().getCurrentLocation();
-        if(endPos.equals(startPos) && hits == 0) {
-                // consider the bot is stuck
-                bot.getRuntimeStatus().setStuck(true);
-        }
     }
 
     @Override
