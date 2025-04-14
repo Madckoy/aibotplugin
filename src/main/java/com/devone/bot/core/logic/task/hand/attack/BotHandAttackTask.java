@@ -97,7 +97,7 @@ public class BotHandAttackTask extends BotHandTask {
                     LivingEntity living = BotWorldHelper.findLivingEntityByUUID(target.uuid);
 
                     if (living == null || living.isDead() || living.getHealth() <= 0) {
-                        BotLogger.info(isLogged, bot.getId() + " ✅ Target is dead or unreachable.");
+                        BotLogger.info(isLogged, bot.getId() + " 💀 Target is dead or unreachable.");
 
                         target.uuid = null;
                         target = null;
@@ -121,10 +121,10 @@ public class BotHandAttackTask extends BotHandTask {
                             bot.getNPCNavigator().setTarget(living.getLocation());
                             bot.getRuntimeStatus().setTargetLocation(BotCoordinate3DHelper.convertFrom(living.getLocation()));
                             BotUtils.lookAt(bot, BotCoordinate3DHelper.convertFrom(living.getLocation()));
-                            BotLogger.info(isLogged, bot.getId() + " 🚶 Pursuing mob, correcting direction. Ddistance: " + String.format("%.2f", distance));
+                            BotLogger.info(isLogged, bot.getId() + " 🏃🏻‍➡️ Pursuing mob, correcting direction. Ddistance: " + String.format("%.2f", distance));
                         }
 
-                        BotLogger.info(isLogged, bot.getId() + " 🚶 Pursuing mob, distance: " + String.format("%.2f", distance));
+                        BotLogger.info(isLogged, bot.getId() + " 🏃🏻‍➡️ Pursuing mob, distance: " + String.format("%.2f", distance));
 
                     } else {
                         animateHand();
@@ -133,7 +133,7 @@ public class BotHandAttackTask extends BotHandTask {
                      
                         hits++;
                         
-                        BotLogger.info(isLogged, bot.getId() + " ✋🏻 Attacked mob: " + living.getType());
+                        BotLogger.info(isLogged, bot.getId() + " ⚔️ Attacked mob: " + living.getType());
                     }
 
                     if (++pursuitTicks > MAX_PURSUIT_TICKS) {
