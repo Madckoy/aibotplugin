@@ -42,7 +42,7 @@ public class BotLifecycleLogger {
             String e_time = "N/A";
 
             if (task != null) {
-                t_name = task.getName();
+                t_name = task.getIcon();
                 e_time = BotUtils.formatTime(task.getElapsedTime());
             }
 

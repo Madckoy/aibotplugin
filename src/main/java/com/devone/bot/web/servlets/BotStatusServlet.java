@@ -72,7 +72,7 @@ public class BotStatusServlet extends HttpServlet {
 
                 botJson.addProperty("position", currLoc);
 
-                botJson.addProperty("task", bot.getRuntimeStatus().getCurrentTask().getName());
+                botJson.addProperty("task", bot.getRuntimeStatus().getCurrentTask().getIcon());
                 
                 botJson.addProperty("object", getCurrentObjective(bot));
 
@@ -87,7 +87,7 @@ public class BotStatusServlet extends HttpServlet {
                     ? new ArrayList<>(bot.getLifeCycle().getTaskStackManager().getTaskStack())
                     : new ArrayList<>();
                 String taskStackText = taskStack.isEmpty() ? "N/A" :
-                    taskStack.stream().map(BotTask::getName).collect(Collectors.joining(" ➜ "));
+                    taskStack.stream().map(BotTask::getIcon).collect(Collectors.joining(" ➜ "));
                 botJson.addProperty("queue", taskStackText);
                 botsArray.add(botJson);
 

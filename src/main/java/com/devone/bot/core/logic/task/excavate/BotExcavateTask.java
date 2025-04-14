@@ -7,7 +7,6 @@ import org.eclipse.jetty.util.StringUtil;
 import com.devone.bot.core.bot.Bot;
 import com.devone.bot.core.inventory.BotInventory;
 import com.devone.bot.core.logic.task.BotTask;
-import com.devone.bot.core.logic.task.excavate.config.BotExcavateTaskConfig;
 import com.devone.bot.core.logic.task.excavate.params.BotExcavateTaskParams;
 import com.devone.bot.core.logic.task.excavate.patterns.IBotExcavatePattern;
 import com.devone.bot.core.logic.task.excavate.patterns.generator.BotExcavateInterpretedYamlPattern;
@@ -46,19 +45,19 @@ public class BotExcavateTask extends BotTask {
 
     public BotExcavateTask(Bot bot) {
 
-        super(bot, "🪨");
+        super(bot);
 
-        this.config = new BotExcavateTaskConfig();
-        this.isLogged = config.isLogged();
+        setIcon(params.getIcon());
+        setObjective(params.getObjective());
 
-        this.outerRadius = ((BotExcavateTaskConfig)this.config).getOuterRadius();
-        this.innerRadius = ((BotExcavateTaskConfig)this.config).getInnerRadius();
+        this.outerRadius = ((BotExcavateTaskParams)this.params).getOuterRadius();
+        this.innerRadius = ((BotExcavateTaskParams)this.params).getInnerRadius();
         
-        this.offsetX     = ((BotExcavateTaskConfig)this.config).getOffsetX();
-        this.offsetY     = ((BotExcavateTaskConfig)this.config).getOffsetY();
-        this.offsetZ     = ((BotExcavateTaskConfig)this.config).getOffsetZ();
+        this.offsetX     = ((BotExcavateTaskParams)this.params).getOffsetX();
+        this.offsetY     = ((BotExcavateTaskParams)this.params).getOffsetY();
+        this.offsetZ     = ((BotExcavateTaskParams)this.params).getOffsetZ();
 
-        this.patternName = ((BotExcavateTaskConfig) config).getPattern();
+        this.patternName = ((BotExcavateTaskParams)this.params).getPatternName();
     }
 
     /**
@@ -90,6 +89,8 @@ public class BotExcavateTask extends BotTask {
         if(params instanceof BotExcavateTaskParams) {
 
             BotExcavateTaskParams breakParams = (BotExcavateTaskParams) params;
+            setIcon(breakParams.getIcon());
+            setObjective(breakParams.getObjective());
 
             this.targetMaterials = breakParams.getTargetMaterials();
             this.maxBlocks = breakParams.getMaxBlocks();
@@ -105,14 +106,14 @@ public class BotExcavateTask extends BotTask {
 
             if (breakParams.getPatternName() != null) {
                 this.patternName = breakParams.getPatternName();
-                BotLogger.info(this.isLogged(), "📐 Установлен паттерн разрушения: " + patternName);
+                BotLogger.info(isLogging(), "📐 Установлен паттерн разрушения: " + patternName);
             }
 
         } else {
-            BotLogger.info(this.isLogged(), bot.getId() + " ❌ Некорректные параметры для `BotBreakTask`!");
+            BotLogger.info(isLogging(), bot.getId() + " ❌ Некорректные параметры для `BotBreakTask`!");
         }   
 
-        BotLogger.info(this.isLogged(), "📐 Установлен паттерн разрушения через config(): " +patternName);
+        BotLogger.info(isLogging(), "📐 Установлен паттерн разрушения через config(): " +patternName);
 
         return this;
     }
@@ -171,18 +172,18 @@ public class BotExcavateTask extends BotTask {
 
     public void setTargetMaterials(Set<Material> materials) {
         this.targetMaterials = materials;
-        BotLogger.info(this.isLogged(), "🎯 Установлены целевые блоки: " + materials);
+        BotLogger.info(isLogging(), "🎯 Установлены целевые блоки: " + materials);
     }
 
     public Set<Material> getTargetMaterials() {
-        BotLogger.info(this.isLogged(), "📜 Получены целевые блоки: " + targetMaterials);
+        BotLogger.info(isLogging(), "📜 Получены целевые блоки: " + targetMaterials);
         return this.targetMaterials;
     }
 
     @Override
     public void execute() {
 
-        BotLogger.info(this.isLogged(), "🚀 Запуск задачи разрушения блоков для бота " + bot.getId() +
+        BotLogger.info(isLogging(), "🚀 Запуск задачи разрушения блоков для бота " + bot.getId() +
                 " (Целевые блоки: " + (targetMaterials == null ? "ВСЕ" : targetMaterials) + ")");
 
         if (breakPatternImpl == null) {
@@ -192,7 +193,7 @@ public class BotExcavateTask extends BotTask {
                 this.breakPatternImpl = new BotExcavateInterpretedYamlPattern(ptrnPath).
                                         configure(offsetX, offsetY, offsetZ, outerRadius, innerRadius, breakDirection);
 
-                BotLogger.info(this.isLogged(),
+                BotLogger.info(isLogging(),
                         "ℹ️ 📐 Используется YAML-паттерн: " + this.breakPatternImpl.getName());
                 
             } else {
@@ -200,27 +201,27 @@ public class BotExcavateTask extends BotTask {
                 
                 this.breakPatternImpl = new BotExcavateInterpretedYamlPattern(fallbackPath).configure(offsetX, offsetY, offsetZ, outerRadius, innerRadius, breakDirection);
                 
-                BotLogger.info(this.isLogged(),
+                BotLogger.info(isLogging(),
                         "ℹ️ 📐 Используется дефолтный YAML-паттерн: " + BotConstants.DEFAULT_PATTERN_BREAK);
             }
         }
 
         if (breakPatternImpl.isFinished()) {
-            BotLogger.info(this.isLogged(), "🏁 Все блоки по паттерну обработаны. Завершаем задачу.");
+            BotLogger.info(isLogging(), "🏁 Все блоки по паттерну обработаны. Завершаем задачу.");
             this.stop();
             return;
         }
 
         if (isInventoryFull() || isEnoughBlocksCollected()) {
-            BotLogger.info(this.isLogged(), "⛔ Задача завершена: инвентарь полон или ресурсов достаточно");
+            BotLogger.info(isLogging(), "⛔ Задача завершена: инвентарь полон или ресурсов достаточно");
             this.stop();
             return;
         }
 
         bot.pickupNearbyItems(shouldPickup);
 
-        BotLogger.info(this.isLogged(), "🔍 Запускаем 3D-сканирование окружающей среды.");
-        BotSonar3DTask scanTask = new BotSonar3DTask(bot, this, outerRadius, outerRadius);
+        BotLogger.info(isLogging(), "🔍 Запускаем 3D-сканирование окружающей среды.");
+        BotSonar3DTask scanTask = new BotSonar3DTask(bot, outerRadius, outerRadius);
         bot.addTaskToQueue(scanTask);
 
 
@@ -228,7 +229,7 @@ public class BotExcavateTask extends BotTask {
 
         if (coordinate == null) {
             this.stop();
-            BotLogger.info(this.isLogged(), "🙈 Не удалось получить координаты блока для разрушения. Выходим.");
+            BotLogger.info(isLogging(), "🙈 Не удалось получить координаты блока для разрушения. Выходим.");
             return;
         }
 
@@ -244,14 +245,14 @@ public class BotExcavateTask extends BotTask {
                     + " at " + targetLocation);
 
             if (isInProtectedZone(bot.getRuntimeStatus().getTargetLocation())) {
-                BotLogger.info(this.isLogged(), "⛔ " + bot.getId() + " в запретной зоне, НЕ будет разрушать блок: " +
+                BotLogger.info(isLogging(), "⛔ " + bot.getId() + " в запретной зоне, НЕ будет разрушать блок: " +
                         bot.getRuntimeStatus().getTargetLocation());
                 this.stop();
                 return;
             }
 
             if (!BotUtils.isBreakableBlock(targetBlock)) {
-                BotLogger.info(this.isLogged(), "⛔ Неразрушаемый блок: "
+                BotLogger.info(isLogging(), "⛔ Неразрушаемый блок: "
                         + bot.getRuntimeStatus().getTargetLocation());
                 bot.getRuntimeStatus().setTargetLocation(null);
                 return;
@@ -261,7 +262,7 @@ public class BotExcavateTask extends BotTask {
 
             if (BotUtils.requiresTool(mat)) {
                 if (!BotInventory.equipRequiredTool(bot, mat)) {
-                    BotLogger.info(this.isLogged(), "🙈 Не удалось взять инструмент в руку. Пропускаем.");
+                    BotLogger.info(isLogging(), "🙈 Не удалось взять инструмент в руку. Пропускаем.");
                     bot.getRuntimeStatus().setTargetLocation(null);
                     return;
                 }
@@ -285,41 +286,41 @@ public class BotExcavateTask extends BotTask {
         bot.getRuntimeStatus().setTargetLocation(null);
 
         if (destroyAllIfNoTarget) {
-            BotLogger.info(this.isLogged(), "🔄 " + bot.getId() + " Целевых блоков нет! Запускаем полное разрушение.");
-            bot.addTaskToQueue(new BotExcavateAnyTask(bot));
+            BotLogger.info(isLogging(), "🔄 " + bot.getId() + " Целевых блоков нет! Запускаем полное разрушение.");
+            bot.addTaskToQueue(new BotExcavateAnyAroundTask(bot));
         } else {
             setObjective("");
-            BotLogger.info(this.isLogged(), "❌ " + bot.getId() + " Нет подходящих блоков. Завершаем.");
+            BotLogger.info(isLogging(), "❌ " + bot.getId() + " Нет подходящих блоков. Завершаем.");
             this.stop();
         }
     }
 
     private boolean isInventoryFull() {
         boolean full = !BotInventory.hasFreeInventorySpace(bot, targetMaterials);
-        BotLogger.info(this.isLogged(), "📦 Проверка инвентаря: " + (full ? "полон" : "есть место"));
+        BotLogger.info(isLogging(), "📦 Проверка инвентаря: " + (full ? "полон" : "есть место"));
         return full;
     }
 
     private boolean isEnoughBlocksCollected() {
         boolean enough = BotInventory.hasEnoughBlocks(bot, targetMaterials, maxBlocks);
-        BotLogger.info(this.isLogged(), "📊 Проверка количества блоков: " + (enough ? "достаточно" : "нужно больше"));
+        BotLogger.info(isLogging(), "📊 Проверка количества блоков: " + (enough ? "достаточно" : "нужно больше"));
         return enough;
     }
 
     private boolean isInProtectedZone(BotCoordinate3D location) {
         boolean protectedZone = BotZoneManager.getInstance().isInProtectedZone(location);
         if (protectedZone) {
-            BotLogger.info(this.isLogged(), "🛑 Блок в запретной зоне, разрушение запрещено.");
+            BotLogger.info(isLogging(), "🛑 Блок в запретной зоне, разрушение запрещено.");
         }
         return protectedZone;
     }
 
     @Override
     public void stop() {
-       this.isDone = true;
        this.breakPatternImpl = null;
        bot.getRuntimeStatus().setTargetLocation(null);
-       BotLogger.info(this.isLogged(), "🛑 Задача разрушения остановлена.");
+       BotLogger.info(isLogging(), "🛑 Задача разрушения остановлена.");
+       super.stop();
     }
 
 }

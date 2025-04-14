@@ -1,35 +1,38 @@
 package com.devone.bot.core.logic.task.hand.excavate.params;
 
 import com.devone.bot.core.logic.task.hand.params.BotHandTaskParams;
-
+import com.devone.bot.utils.BotConstants;
 import com.devone.bot.utils.blocks.BotBlockData;
 
 public class BotHandExcavateTaskParams extends BotHandTaskParams {
-    public double damage;
-    public BotBlockData target;
-    private boolean isLogged = true;
+    private double damage = BotConstants.DEFAULT_HAND_DAMAGE;
+    private BotBlockData target;
+    private String icon = "⛏";
+    private String objective = "Excavate";
 
-    public BotHandExcavateTaskParams(BotBlockData target, double damage, boolean isLogged) {
+    public BotHandExcavateTaskParams(BotBlockData target, double damage) {
+        super(BotHandExcavateTaskParams.class.getSimpleName());
         this.target = target;
         this.damage = damage;
-        this.isLogged = isLogged;
+        setDefaults();
     }
     
-    public BotHandExcavateTaskParams(BotBlockData target, double damage) {
-        this.target = target;
-        this.damage = damage;
-    }
     public BotHandExcavateTaskParams(BotBlockData target) {
+        super(BotHandExcavateTaskParams.class.getSimpleName());
         this.target = target;
-        this.damage = 5.0;
+        setDefaults();
     }
 
     public BotHandExcavateTaskParams(double damage) {
+        super(BotHandExcavateTaskParams.class.getSimpleName());
         this.damage = damage;
+        setDefaults();
     }
     public BotHandExcavateTaskParams() {
-        this.damage = 5.0;
+        super(BotHandExcavateTaskParams.class.getSimpleName());
+        setDefaults();
     }
+
     public double getDamage() {
         return damage;
     }
@@ -42,12 +45,16 @@ public class BotHandExcavateTaskParams extends BotHandTaskParams {
     public void setTarget(BotBlockData target) {
         this.target = target;
     }
-    public boolean isLogged() {
-        return isLogged;
+    
+    public Object setDefaults() {
+        config.set("hand.excavate.icon", this.icon);
+        config.set("hand.excavate.objective", this.objective);
+        config.set("hand.excavate.damage", this.damage);
+
+        super.setDefaults();
+        return this;
     }
-    public void setLogged(boolean isLogged) {
-        this.isLogged = isLogged;
-    }
+
     @Override
     public String toString() {
         return "BotUseHandTaskParams{" +

@@ -1,42 +1,81 @@
 package com.devone.bot.core.logic.task.move.params;
 
 import com.devone.bot.core.logic.task.params.BotTaskParams;
+import com.devone.bot.core.logic.task.params.IBotTaskParams;
 import com.devone.bot.utils.blocks.BotCoordinate3D;
 
 public class BotMoveTaskParams extends BotTaskParams { 
     // 🆕 Параметры задачи движения
-    public BotCoordinate3D target;
-    public float speedMultiplier;
+    private BotCoordinate3D target;
+    private float speed;
 
-    public BotMoveTaskParams(BotCoordinate3D target, float speedMultiplier) {
+    private String icon = "🏃🏻‍♂️‍➡️";
+    private String objective = "Move";
+
+
+    public BotMoveTaskParams(BotCoordinate3D target, float speed) {
+        super(BotMoveTaskParams.class.getSimpleName());
         this.target = target;
-        this.speedMultiplier = speedMultiplier;
+        this.speed = speed;
+        setDefaults();
     }
+
     public BotMoveTaskParams(BotCoordinate3D target) {
+        super(BotMoveTaskParams.class.getSimpleName());
         this.target = target;
-        this.speedMultiplier = 1.0F;
+        this.speed = 1.0F;
+        setDefaults();
     }
+
     public BotMoveTaskParams() {
+        super(BotMoveTaskParams.class.getSimpleName());
         this.target = null;
-        this.speedMultiplier = 1.0F;
+        this.speed = 1.0F;
+        setDefaults();
     }
+
     public BotCoordinate3D getTarget() {
         return target;
     }
+
     public void setTarget(BotCoordinate3D target) {
         this.target = target;
     }
-    public double getSpeedMultiplier() {
-        return speedMultiplier;
+
+    public float getSpeed() {
+        return speed;
     }
-    public void setSpeedMultiplier(float speedMultiplier) {
-        this.speedMultiplier = speedMultiplier;
+
+    public void setSpeed(float speed) {
+        this.speed = speed;
     }
+    
+    @Override
+    public Object setDefaults() {
+        config.set("move.icon", this.icon);
+        config.set("move.objective", this.objective);
+        config.set("move.speed", this.speed);
+        super.setDefaults();
+        return this;
+    }
+    @Override
+    public Object copyFrom(IBotTaskParams source) {
+        super.copyFrom(source);
+
+        setIcon(((BotMoveTaskParams)source).getIcon());
+        setObjective(((BotMoveTaskParams)source).getObjective());
+        
+        speed = ((BotMoveTaskParams)source).getSpeed();
+        return this;
+    }
+   
     @Override
     public String toString() {
         return "BotMoveTaskParams{" +
                 "target=" + target +
-                ", speedMultiplier=" + speedMultiplier +
+                ", speedMultiplier=" + speed +
                 '}';
     }
+
+
 }

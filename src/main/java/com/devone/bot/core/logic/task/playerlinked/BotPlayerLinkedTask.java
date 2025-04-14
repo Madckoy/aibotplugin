@@ -9,8 +9,8 @@ public abstract class BotPlayerLinkedTask extends BotTask {
 
     protected Player player;
 
-    public BotPlayerLinkedTask(Bot bot, Player player, String name) {
-        super(bot, player, name);
+    public BotPlayerLinkedTask(Bot bot, Player player) {
+        super(bot, player);
     }
 
 }

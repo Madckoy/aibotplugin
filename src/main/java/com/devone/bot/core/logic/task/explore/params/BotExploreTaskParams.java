@@ -4,13 +4,18 @@ import com.devone.bot.core.logic.task.params.BotTaskParams;
 import com.devone.bot.utils.BotConstants;
 
 public class BotExploreTaskParams extends BotTaskParams {
-    public int scanRadius;
+    private int scanRadius = BotConstants.DEFAULT_SCAN_RANGE;
+    private String icon = "🌐";
+    private String objective = "Explore";
     
     public BotExploreTaskParams(int scanRadius) {
+        super(BotExploreTaskParams.class.getSimpleName());
         this.scanRadius = scanRadius;
+        setDefaults();
     }
     public BotExploreTaskParams() {
-        this.scanRadius = BotConstants.DEFAULT_SCAN_RANGE;
+        super(BotExploreTaskParams.class.getSimpleName());
+        setDefaults();
     }
     public int getScanRadius() {
         return scanRadius;
@@ -18,6 +23,17 @@ public class BotExploreTaskParams extends BotTaskParams {
     public void setScanRadius(int scanRadius) {
         this.scanRadius = scanRadius;
     }
+
+    @Override
+    public Object setDefaults() {
+        config.set("explore.icon", this.icon);
+        config.set("explore.objective", this.objective);
+        config.set("explore.scan.radius",  this.scanRadius);
+        super.setDefaults();
+        return this;
+    }
+
+
     @Override
     public String toString() {
         return "BotExploreTaskParams{" +

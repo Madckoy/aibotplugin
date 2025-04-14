@@ -15,27 +15,28 @@ import com.devone.bot.utils.logger.BotLogger;
 
 public class BotSurvivalAttackTask extends BotTask {
 
+    BotSurvivalAttackTaskParams params = new BotSurvivalAttackTaskParams();
+
     private BotBlockData target;
     private double damage = 5.0;
-    private boolean isLogged = true;
 
     public BotSurvivalAttackTask(Bot bot) {
-        super(bot, "જ⁀➴");
-        setObjective("Survival strike: Teleport and Strike");
-        this.isLogged = true;
+        super(bot);
+        setIcon(params.getIcon());
+        setObjective(params.getObjective());
     }
 
     @Override
     public BotSurvivalAttackTask configure(IBotTaskParams params) {
         super.configure((BotTaskParams) params);
-
         if (params instanceof BotSurvivalAttackTaskParams) {
-
-            this.target = ((BotSurvivalAttackTaskParams) params).getTarget();
-            this.damage = ((BotSurvivalAttackTaskParams) params).getDamage();
-
+            this.params.copyFrom(params);
+            this.icon   = this.params.getIcon();
+            this.objective = this.params.getObjective();
+            this.target = this.params.getTarget();
+            this.damage = this.params.getDamage();
         } else {
-            BotLogger.info(isLogged, bot.getId() + " ❌ Неверные параметры для BotSurvivalStrikeTask");
+            BotLogger.info(isLogging(), bot.getId() + " ❌ Неверные параметры для BotSurvivalStrikeTask");
             this.stop();
         }
         return this;
@@ -44,12 +45,12 @@ public class BotSurvivalAttackTask extends BotTask {
     @Override
     public void execute() {
         if (target == null || target.uuid == null) {
-            BotLogger.info(isLogged, bot.getId() + " ❌ Цель отсутствует или не содержит UUID");
+            BotLogger.info(isLogging(), bot.getId() + " ❌ Цель отсутствует или не содержит UUID");
             this.stop();
             return;
         }
 
-        setObjective("Teleporting and killing...");
+        setObjective(getObjective() + " at: " + target);
 
         // 🗲 1. Телепорт
         BotTeleportTask tpTask = new BotTeleportTask(bot, null).configure(new BotTeleportTaskParams(target.getCoordinate3D()));
@@ -61,12 +62,7 @@ public class BotSurvivalAttackTask extends BotTask {
         bot.addTaskToQueue(handTask);
         bot.addTaskToQueue(tpTask);
 
-        BotLogger.info(isLogged, bot.getId() + " જ⁀➴ Подготовлен боевой выпад на цель: " + target.uuid);
+        BotLogger.info(isLogging(), bot.getId() + " જ⁀➴ Подготовлен боевой выпад на цель: " + target.uuid);
         this.stop();
-    }
-
-    @Override
-    public void stop() {
-        this.isDone = true;
     }
 }

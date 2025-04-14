@@ -2,27 +2,25 @@ package com.devone.bot.core.logic.task.decision;
 
 import com.devone.bot.core.bot.Bot;
 import com.devone.bot.core.logic.task.BotTask;
-import com.devone.bot.core.logic.task.decision.config.BotDecisionMakeTaskConfig;
+import com.devone.bot.core.logic.task.decision.params.BotDecisionMakeTaskParams;
 import com.devone.bot.core.logic.task.explore.BotExploreTask;
 import com.devone.bot.utils.logger.BotLogger;
 
 public class BotDecisionMakeTask extends BotTask {
 
+    BotDecisionMakeTaskParams params = new BotDecisionMakeTaskParams();
+
     public BotDecisionMakeTask(Bot bot) {
-        super(bot, "🎲");
-        this.bot = bot;
-        config = new BotDecisionMakeTaskConfig();
-        this.isLogged = config.isLogged();
-        setObjective("Roll a dice");
+        super(bot);
+        setIcon(params.getIcon());
+        setObjective(params.getObjective());
     }
 
     @Override
 
     public void execute() {
-        setObjective("Rolling a dice" );
-
         // 📌 Начать исследование
-        BotLogger.info(this.isLogged(), "🌐 " + bot.getId() + " начинает исследование");
+        BotLogger.info(this.isLogging(), "🌐 " + bot.getId() + " начинает исследование");
         BotExploreTask explore = new BotExploreTask(bot);
         bot.addTaskToQueue(explore);
         return;
@@ -146,10 +144,4 @@ public class BotDecisionMakeTask extends BotTask {
         }
     }
     *****/
-
-    @Override
-    public void stop() {
-        this.isDone = true;
-    }
-
 }

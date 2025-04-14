@@ -19,29 +19,31 @@ import com.devone.bot.utils.logger.BotLogger;
 import com.devone.bot.utils.world.BotWorldHelper;
 
 public class BotHandExcavateTask extends BotHandTask {
+    
+    private BotHandExcavateTaskParams params = new BotHandExcavateTaskParams();
+    private BotBlockData target;
+    private BukkitTask bukkitTask;
 
     public BotHandExcavateTask(Bot bot) {
         super(bot);
-        setName("⛏");
-        setObjective("Excavate block");
+        setIcon(params.getIcon());
+        setObjective(params.getObjective());
     }
-
-    private BotBlockData target;
-    private boolean isLogged = true;
-    private BukkitTask bukkitTask;
-
 
     @Override
     public BotHandExcavateTask configure(IBotTaskParams params) {
         super.configure((BotTaskParams) params);
 
         if (params instanceof BotHandExcavateTaskParams handParams) {
+            setIcon(handParams.getIcon());
+            setObjective(handParams.getObjective());
+
             this.target = handParams.getTarget();
-            this.isLogged = handParams.isLogged();
+
             bot.getRuntimeStatus().setTargetLocation(target.getCoordinate3D());
-            BotLogger.info(isLogged, bot.getId() + " ✅ Parameters for BotHandExcavateTask set.");
+            BotLogger.info(isLogging(), bot.getId() + " ✅ Parameters for BotHandExcavateTask set.");
         } else {
-            BotLogger.info(isLogged, bot.getId() + " ❌ Invalid parameters for BotHandExcavateTask.");
+            BotLogger.info(isLogging(), bot.getId() + " ❌ Invalid parameters for BotHandExcavateTask.");
             //this.stop();
         }
         return this;
@@ -51,9 +53,9 @@ public class BotHandExcavateTask extends BotHandTask {
 
         super.execute();
 
-        BotLogger.info(isLogged, bot.getId() + " 🔶 Executing BotHandExcavateTask");
+        BotLogger.info(isLogging(), bot.getId() + " 🔶 Executing BotHandExcavateTask");
 
-        setObjective("Excavating block: " + target);
+        setObjective(getObjective() +": "+target);
 
         bukkitTask = new BukkitRunnable() {
             @Override
@@ -68,7 +70,7 @@ public class BotHandExcavateTask extends BotHandTask {
                 // 🧱 Работа с блоком
                 Block block = BotWorldHelper.getBlockAt(target);
                 if (block == null || block.getType() == Material.AIR) {
-                    BotLogger.info(isLogged, bot.getId() + " ✅ Block already excavated.");
+                    BotLogger.info(isLogging(), bot.getId() + " ✅ Block already excavated.");
                     stop(); cancel(); return;
                 }
 
@@ -80,7 +82,7 @@ public class BotHandExcavateTask extends BotHandTask {
 
                 bot.getRuntimeStatus().brokenBlocksIncrease(target.type);
 
-                BotLogger.info(isLogged, bot.getId() + " 🧱 Block excavated: " + block);
+                BotLogger.info(isLogging(), bot.getId() + " 🧱 Block excavated: " + block);
                 
             }
         }.runTaskTimer(AIBotPlugin.getInstance(), 0L, 10L);
@@ -94,5 +96,4 @@ public class BotHandExcavateTask extends BotHandTask {
         }
         super.stop();
     }
-
 }

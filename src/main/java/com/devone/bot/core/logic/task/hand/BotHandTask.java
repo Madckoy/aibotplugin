@@ -11,38 +11,41 @@ import com.devone.bot.utils.logger.BotLogger;
 public abstract class BotHandTask extends BotTask {
 
     private BotBlockData target;
-    private boolean isLogged = true;
+    private BotHandTaskParams params = new BotHandTaskParams();
 
     public BotHandTask(Bot bot) {
-        super(bot, "✋🏻");
-        setObjective("Hit the target");
+        super(bot);
+        setIcon(params.getIcon());
+        setObjective(params.getObjective());
     }
 
     @Override
     public BotHandTask configure(IBotTaskParams params) {
         super.configure((BotTaskParams) params);
+        this.params.copyFrom(params);
+        setIcon(this.params.getIcon());
+        setObjective(this.params.getObjective());
         this.target = ((BotHandTaskParams)params).getTarget();
-        this.isLogged = ((BotHandTaskParams)params).isLogged();
         bot.getRuntimeStatus().setTargetLocation(target.getCoordinate3D());
-        BotLogger.info(isLogged, bot.getId() + " ✅ Parameters for BotHandTask set.");
-        BotLogger.info(isLogged, bot.getId() + " BotHandTaskParams: " + params);   
+        BotLogger.info(isLogging(), bot.getId() + " ✅ Parameters for BotHandTask set.");
+        BotLogger.info(isLogging(), bot.getId() + " BotHandTaskParams: " + params);   
         return this;
     }
 
 
     public void execute() {
-        BotLogger.info(isLogged, bot.getId() + " 🔶 Executing BotHandTask");
+        BotLogger.info(isLogging(), bot.getId() + " 🔶 Executing BotHandTask");
         
         if (target == null) {
-            BotLogger.info(isLogged, bot.getId() + " ❌ BotHandTask: Target is null.");
+            BotLogger.info(isLogging(), bot.getId() + " ❌ BotHandTask: Target is null.");
             this.stop();
         }
     };
 
     @Override
     public void stop() {
-        isDone = true;
         bot.getRuntimeStatus().setTargetLocation(null);
+        super.stop();
     }
 
 }

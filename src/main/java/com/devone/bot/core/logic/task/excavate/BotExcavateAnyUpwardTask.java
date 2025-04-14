@@ -1,34 +1,33 @@
 package com.devone.bot.core.logic.task.excavate;
 
 import com.devone.bot.core.bot.Bot;
-import com.devone.bot.core.logic.task.excavate.config.BotExcavateTaskConfig;
+import com.devone.bot.core.logic.task.excavate.params.BotExcavateAnyUpwardTaskParams;
 import com.devone.bot.utils.blocks.BotAxisDirection.AxisDirection;
 
 
 public class BotExcavateAnyUpwardTask extends BotExcavateTask {
 
+    private BotExcavateAnyUpwardTaskParams params = new BotExcavateAnyUpwardTaskParams();
+
     public BotExcavateAnyUpwardTask(Bot bot) {
         super(bot);
 
-        setName(getName()+" ▲ ");
+        setIcon(params.getIcon());
+        setObjective(params.getObjective());
 
         setTargetMaterials(null);
 
         setBreakDirection(AxisDirection.UP);
 
-
         bot.getRuntimeStatus().setTargetLocation(bot.getRuntimeStatus().getCurrentLocation());
 
-        BotExcavateTaskConfig config = new BotExcavateTaskConfig("BotBreakAnyUpwardTaskConfig");
-        this.isLogged = config.isLogged();
-
-        setPatterName(config.getPattern());
-        setOuterRadius(config.getOuterRadius());
-        setInnerRadius(config.getInnerRadius());
+        setPatterName(params.getPatternName());
+        setOuterRadius(params.getOuterRadius());
+        setInnerRadius(params.getInnerRadius());
         
-        setOffsetX(config.getOffsetX());
-        setOffsetY(config.getOffsetY());
-        setOffsetZ(config.getOffsetZ());
+        setOffsetX(params.getOffsetX());
+        setOffsetY(params.getOffsetY());
+        setOffsetZ(params.getOffsetZ());
 
     }
 }

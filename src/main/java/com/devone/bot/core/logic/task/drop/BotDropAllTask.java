@@ -4,21 +4,17 @@ import org.bukkit.entity.Player;
 
 import com.devone.bot.core.bot.Bot;
 import com.devone.bot.core.inventory.BotInventory;
-import com.devone.bot.core.logic.task.drop.config.BotDropAllTaskConfig;
+import com.devone.bot.core.logic.task.drop.params.BotDropAllTaskParams;
 import com.devone.bot.core.logic.task.playerlinked.BotPlayerLinkedTask;
 
 public class BotDropAllTask extends BotPlayerLinkedTask {
 
+    BotDropAllTaskParams params = new BotDropAllTaskParams();
 
-    public BotDropAllTask(Bot bot, Player player) {
-        super(bot, player, "📦↴");
-        
-        BotDropAllTaskConfig config = new BotDropAllTaskConfig();
-        this.isLogged  = config.isLogged();
-
-        setObjective("Drop off the loot");
-
-        
+    public BotDropAllTask(Bot bot, Player pl) {
+        super(bot, pl);
+        setIcon(params.getIcon());
+        setObjective(params.getObjective());
     }
 
     @Override
@@ -28,10 +24,4 @@ public class BotDropAllTask extends BotPlayerLinkedTask {
 
         this.stop();
     }
-
-    @Override
-    public void stop() {
-        this.isDone = true;
-    }
-
 }
