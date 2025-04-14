@@ -30,7 +30,7 @@ public class BotMoveTaskListener implements Listener {
 
     public void onNavigationCancel(NavigationCancelEvent event) {
         if(event.getNPC().getId() != task.getBot().getNPC().getId()) return;
-        task.getBot().getRuntimeStatus().setStuck(true);
+        //task.getBot().getRuntimeStatus().setStuck(true);
         BotLogger.info(true,"❌ Навигация отменена (BotMoveTaskListener) — NPC не смог дойти");
         task.stop();
     }

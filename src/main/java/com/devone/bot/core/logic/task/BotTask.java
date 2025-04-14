@@ -12,8 +12,6 @@ import com.devone.bot.core.logic.task.params.IBotTaskParams;
 import com.devone.bot.utils.BotUtils;
 import com.devone.bot.utils.blocks.BotCoordinate3D;
 import com.devone.bot.utils.logger.BotLogger;
-import com.devone.bot.utils.scene.BotSceneData;
-
 import java.util.UUID;
 
 public abstract class BotTask implements IBotTask, IBotTaskConfigurable, Listener {

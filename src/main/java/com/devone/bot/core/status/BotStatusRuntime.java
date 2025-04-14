@@ -4,6 +4,7 @@ import com.devone.bot.core.bot.Bot;
 import com.devone.bot.core.logic.task.BotTask;
 import com.devone.bot.utils.blocks.BotCoordinate3D;
 import com.devone.bot.utils.blocks.BotCoordinate3DHelper;
+import com.devone.bot.utils.logger.BotLogger;
 import com.devone.bot.utils.scene.BotSceneData;
 
 public class BotStatusRuntime {
@@ -62,6 +63,7 @@ public class BotStatusRuntime {
 
     public void setStuck(boolean stuck) {
         this.stuck = stuck;
+        BotLogger.info(true, "🔔 BotStatusRuntime: set Stuck="+stuck);
         incrementStuckCount();
     }
 

@@ -13,7 +13,7 @@ public class BotConstants {
     public static final String  RESOURCE_PATH_PATTERNS_BREAK = "patterns/break/";
 
 
-    public static int DEFAULT_SCAN_RANGE = 5;
+    public static int DEFAULT_SCAN_RANGE = 10;
     public static final String  DEFAULT_PATTERN_BREAK = "default.yml";
     public static final long DEFAULT_TASK_TIMEOUT = 60_000; // 60 sec
 }

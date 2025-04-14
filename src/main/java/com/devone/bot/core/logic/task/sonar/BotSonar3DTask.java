@@ -10,13 +10,11 @@ import com.devone.bot.utils.scene.BotSceneScan3D;
 
 public class BotSonar3DTask extends BotTask {
 
-    private BotTask parent;
     private int radius;
     private int height;
 
     public BotSonar3DTask(Bot bot, BotTask caller, int radius, int height) {
         super(bot, "𖣠"); // ᯤ
-        parent = caller;
         this.radius = radius;
         this.height = radius; // full range scan
 

@@ -119,7 +119,7 @@ public class BotMoveTask extends BotTask {
                 long elapsed = System.currentTimeMillis() - startTime;
                 if (elapsed > BotConstants.DEFAULT_TASK_TIMEOUT ) {
                     BotLogger.warn(isLogged(), bot.getId() + " ⏱ Тайм-аут навигации! Прерываем задачу.");
-                    bot.getRuntimeStatus().setStuck(true);
+                    bot.getRuntimeStatus().setStuck(true);  // 
                     stopTaskHandle();
                     this.stop();
                 }
