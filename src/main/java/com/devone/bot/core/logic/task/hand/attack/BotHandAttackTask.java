@@ -141,10 +141,12 @@ public class BotHandAttackTask extends BotHandTask {
                         BotLogger.info(isLogged, bot.getId() + " ⏱️ Pursuit timeout reached.");
                         stop(); cancel(); return;
                     }
+
                     if(attempts > MAX_ATTEMPTS) { // застряли плотно
                         BotCoordinate3D endPos = bot.getRuntimeStatus().getCurrentLocation();
                         if(endPos.equals(startPos) && hits == 0) {
                                 // consider the bot is stuck
+                                BotLogger.info(isLogged, bot.getId() + " ⏱️ Seems like the bot got stuck.");
                                 bot.getRuntimeStatus().setStuck(true);
                                 stop(); cancel(); return;
                         }
