@@ -47,16 +47,26 @@ public class BotHandAttackTask extends BotHandTask {
 
             bot.getRuntimeStatus().setTargetLocation(target.getCoordinate3D());
 
+            BotLogger.info(isLogged, bot.getId() + " ✅ Parameters for BotHandAttackTask set.");
+
         } else {
-            BotLogger.info(isLogged, bot.getId() + " ❌ Invalid parameters for BotHandTask.");
-            this.stop();
+            BotLogger.info(isLogged, bot.getId() + " ❌ Invalid parameters for BotHandAttackTask.");
+            //this.stop();
         }
         return this;
     }
 
-    @Override
     public void execute() {
+
         super.execute();
+
+        BotLogger.info(isLogged, bot.getId() + " 🔶 Executing BotHandAttachTask");
+
+        if (target == null) {
+            BotLogger.info(isLogged, bot.getId() + " ❌ BotHandAttackTask: Target is null.");
+            this.stop();
+            return;
+        }
 
         if (listener == null) {
             listener = new BotHandAttackListener(this);
@@ -67,6 +77,7 @@ public class BotHandAttackTask extends BotHandTask {
             @Override
             public void run() {
                 if (isDone || bot.getNPCEntity() == null) {
+                    BotLogger.info(isLogged, bot.getId() + " ❌ BotHandAttackTask: Task is done or Bot NPC is null.");
                     stop(); cancel(); return;
                 }
                 
@@ -76,31 +87,35 @@ public class BotHandAttackTask extends BotHandTask {
                 if (target.uuid != null) {
                     LivingEntity living = BotWorldHelper.findLivingEntityByUUID(target.uuid);
 
-                    if (living == null || living.isDead()) {
+                    if (living == null || living.isDead() || living.getHealth() <= 0) {
                         BotLogger.info(isLogged, bot.getId() + " ✅ Target is dead or unreachable.");
+
+                        target.uuid = null;
+                        target = null;
+                        
+                        bot.getRuntimeStatus().setTargetLocation(null);
+
                         stop(); cancel(); return;
                     }
 
-                    double distance = bot.getNPCEntity().getLocation().distance(living.getLocation());
-
                     // 🔄 Обновляем targetLocation
                     bot.getRuntimeStatus().setTargetLocation(BotCoordinate3DHelper.convertFrom(living.getLocation()));
-
                     BotUtils.lookAt(bot, BotCoordinate3DHelper.convertFrom(living.getLocation()));
-
-                    if (distance > 1.0) {
+                    bot.getNPCNavigator().setTarget(living.getLocation());
+                    double distance = bot.getNPCEntity().getLocation().distance(living.getLocation());
+                    
+                    if (distance > 2.0) {
                         bot.getNPCNavigator().getDefaultParameters().speedModifier(2.5F);
 
                         if (pursuitTicks % 20 == 0) {
                             bot.getNPCNavigator().getDefaultParameters().speedModifier(2.5F);
                             bot.getNPCNavigator().setTarget(living.getLocation());
+                            bot.getRuntimeStatus().setTargetLocation(BotCoordinate3DHelper.convertFrom(living.getLocation()));
+                            BotUtils.lookAt(bot, BotCoordinate3DHelper.convertFrom(living.getLocation()));
+                            BotLogger.info(isLogged, bot.getId() + " 🚶 Pursuing mob, correcting direction. Ddistance: " + String.format("%.2f", distance));
                         }
 
-                        bot.getNPCNavigator().setTarget(living.getLocation());
-
                         BotLogger.info(isLogged, bot.getId() + " 🚶 Pursuing mob, distance: " + String.format("%.2f", distance));
-
-
 
                     } else {
                         animateHand();
@@ -131,6 +146,7 @@ public class BotHandAttackTask extends BotHandTask {
             bukkitTask.cancel();
             bukkitTask = null;
         }
+        BotLogger.info(isLogged, bot.getId() + " ⛔ BotHandAttackTask: Task is stopped");
     }
 
 }

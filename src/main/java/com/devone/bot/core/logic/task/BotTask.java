@@ -29,7 +29,6 @@ public abstract class BotTask implements IBotTask, IBotTaskConfigurable, Listene
     protected boolean isPaused = false;
     protected boolean isDone = false;
     protected final String uuid;
-    protected BotSceneData sceneData;
     protected String objective;
     
     protected BotTaskConfig config;
@@ -53,14 +52,6 @@ public abstract class BotTask implements IBotTask, IBotTaskConfigurable, Listene
         this.player = player;
         this.name = name;
         this.uuid = UUID.randomUUID().toString();
-    }
-
-    public void setSceneData(BotSceneData sceneData) {
-        this.sceneData = sceneData;
-    }
-
-    public BotSceneData getSceneData() {
-        return this.sceneData;
     }
 
     public String getObjective() {

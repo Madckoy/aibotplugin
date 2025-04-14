@@ -219,12 +219,10 @@ public class BotExcavateTask extends BotTask {
 
         bot.pickupNearbyItems(shouldPickup);
 
-        if (getSceneData() == null) {
-            BotLogger.info(this.isLogged(), "🔍 Запускаем 3D-сканирование окружающей среды.");
-            BotSonar3DTask scanTask = new BotSonar3DTask(bot, this, outerRadius, outerRadius);
-            bot.addTaskToQueue(scanTask);
-            return;
-        }
+        BotLogger.info(this.isLogged(), "🔍 Запускаем 3D-сканирование окружающей среды.");
+        BotSonar3DTask scanTask = new BotSonar3DTask(bot, this, outerRadius, outerRadius);
+        bot.addTaskToQueue(scanTask);
+
 
         BotCoordinate3D coordinate = breakPatternImpl.findNextBlock(bot);
 
@@ -321,7 +319,6 @@ public class BotExcavateTask extends BotTask {
        this.isDone = true;
        this.breakPatternImpl = null;
        bot.getRuntimeStatus().setTargetLocation(null);
-       setSceneData(null);
        BotLogger.info(this.isLogged(), "🛑 Задача разрушения остановлена.");
     }
 

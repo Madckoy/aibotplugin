@@ -4,6 +4,7 @@ import com.devone.bot.core.bot.Bot;
 import com.devone.bot.core.logic.task.BotTask;
 import com.devone.bot.utils.blocks.BotCoordinate3D;
 import com.devone.bot.utils.blocks.BotCoordinate3DHelper;
+import com.devone.bot.utils.scene.BotSceneData;
 
 public class BotStatusRuntime {
     private Bot owner;
@@ -19,6 +20,7 @@ public class BotStatusRuntime {
     private long killedMobs;
     private long brokebBlocks;
     private long teleportUsed;
+    protected BotSceneData sceneData;
 
     public BotStatusRuntime(Bot bot) {
         this.owner = bot;
@@ -29,6 +31,7 @@ public class BotStatusRuntime {
         this.killedMobs = 0;
         this.brokebBlocks = 0;
         this.teleportUsed = 0;
+        this.sceneData = null;
     }
 
     public BotTask getCurrentTask() {
@@ -119,5 +122,12 @@ public class BotStatusRuntime {
     }
     public void resetTeleportUsed() {
         this.teleportUsed = 0;
+    }
+    public void setSceneData(BotSceneData sceneData) {
+        this.sceneData = sceneData;
+    }
+
+    public BotSceneData getSceneData() {
+        return this.sceneData;
     }
 }

@@ -35,7 +35,8 @@ public class BotSonar3DTask extends BotTask {
 
         setObjective("Scanning Signatures...");
         BotSceneData scene = BotSceneScan3D.scan(bot, radius, this.height); // full range scan
-        parent.setSceneData(scene);
+
+        bot.getRuntimeStatus().setSceneData(scene);
 
         this.stop();
     }

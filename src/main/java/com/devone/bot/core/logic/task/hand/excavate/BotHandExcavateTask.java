@@ -10,7 +10,7 @@ import org.bukkit.scheduler.BukkitTask;
 import com.devone.bot.AIBotPlugin;
 import com.devone.bot.core.bot.Bot;
 import com.devone.bot.core.logic.task.hand.BotHandTask;
-import com.devone.bot.core.logic.task.hand.params.BotHandTaskParams;
+import com.devone.bot.core.logic.task.hand.excavate.params.BotHandExcavateTaskParams;
 import com.devone.bot.core.logic.task.params.BotTaskParams;
 import com.devone.bot.core.logic.task.params.IBotTaskParams;
 import com.devone.bot.utils.BotUtils;
@@ -35,21 +35,23 @@ public class BotHandExcavateTask extends BotHandTask {
     public BotHandExcavateTask configure(IBotTaskParams params) {
         super.configure((BotTaskParams) params);
 
-        if (params instanceof BotHandTaskParams handParams) {
+        if (params instanceof BotHandExcavateTaskParams handParams) {
             this.target = handParams.getTarget();
             this.isLogged = handParams.isLogged();
             bot.getRuntimeStatus().setTargetLocation(target.getCoordinate3D());
+            BotLogger.info(isLogged, bot.getId() + " ✅ Parameters for BotHandExcavateTask set.");
         } else {
             BotLogger.info(isLogged, bot.getId() + " ❌ Invalid parameters for BotHandExcavateTask.");
-            this.stop();
+            //this.stop();
         }
         return this;
     }
 
-    @Override
     public void execute() {
 
         super.execute();
+
+        BotLogger.info(isLogged, bot.getId() + " 🔶 Executing BotHandExcavateTask");
 
         setObjective("Excavating block: " + target);
 

@@ -27,11 +27,9 @@ public class BotHuntMobsTask extends BotTask {
 
         setObjective("Look for hostile targets");
 
-        if (getSceneData() == null) {
-            BotLogger.info(this.isLogged(),"🔍 Запускаем 3D-сканирование живых целей.");
-            bot.addTaskToQueue(new BotSonar3DTask(bot, this, scanRadius, scanRadius));
-            return;
-        }
+        BotLogger.info(this.isLogged(),"🔍 Запускаем 3D-сканирование живых целей.");
+        BotSonar3DTask sonar = new BotSonar3DTask(bot, this, scanRadius, scanRadius);
+        sonar.execute();
 
         if (target == null) {
             findTarget();
@@ -50,8 +48,6 @@ public class BotHuntMobsTask extends BotTask {
             this.stop();
             return;
         }
-
-        setSceneData(null); // попробовать ещё раз в следующий такт
     }
 
     private void findTarget() {

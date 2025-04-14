@@ -1,9 +1,10 @@
 package com.devone.bot.core.logic.task.hand.attack.params;
 
-import com.devone.bot.core.logic.task.params.BotTaskParams;
+import com.devone.bot.core.logic.task.hand.params.BotHandTaskParams;
+
 import com.devone.bot.utils.blocks.BotBlockData;
 
-public class BotHandAttackTaskParams extends BotTaskParams {
+public class BotHandAttackTaskParams extends BotHandTaskParams {
     public double damage;
     public BotBlockData target;
     private boolean isLogged = true;

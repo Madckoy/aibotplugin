@@ -48,20 +48,14 @@ public class BotExploreTask extends BotTask {
 
         BotLogger.info(this.isLogged(), "🌐 " + bot.getId() + " Exploring with radius: " + scanRadius);
         
-        if(getSceneData()==null) {
-            BotSonar3DTask sonar = new BotSonar3DTask(bot, this, scanRadius, scanRadius);
-            bot.addTaskToQueue(sonar);
-            return;
-        }  
-        
         setObjective("Exploring the area...");
 
-        if(bot.getRuntimeStatus().isStuck()) { // force sonar scan
-            BotSonar3DTask sonar = new BotSonar3DTask(bot, this, scanRadius, scanRadius);
-            bot.addTaskToQueue(sonar);
-        }
+        BotSonar3DTask sonar = new BotSonar3DTask(bot, this, scanRadius, scanRadius);
+        sonar.execute();
 
-        BotSceneData sceneData = getSceneData();
+        setObjective("Exploring the area...");
+
+        BotSceneData sceneData = bot.getRuntimeStatus().getSceneData();
         if (sceneData == null) {
             BotLogger.info(this.isLogged(), "🌐 " + bot.getId() + " No scene data available.");
             this.stop();
@@ -155,7 +149,6 @@ public class BotExploreTask extends BotTask {
     @Override
     public void stop() {
        this.isDone = true;
-       setSceneData(null);
        BotLogger.info(this.isLogged(), "🌐 " + bot.getId() + " Exploration task completed.");
     }
 
