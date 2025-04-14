@@ -145,9 +145,6 @@ public class BotHandAttackTask extends BotHandTask {
             }
         }.runTaskTimer(AIBotPlugin.getInstance(), 0L, 10L);
 
-        BotLogger.info(isLogged, bot.getId() + " ⏱️ Hits made: " + hits);
-        BotLogger.info(isLogged, bot.getId() + " ⏱️ Attempts made: " + attempts);
-
         BotCoordinate3D endPos = bot.getRuntimeStatus().getCurrentLocation();
         if(endPos.equals(startPos) && hits == 0) {
                 // consider the bot is stuck
@@ -168,6 +165,8 @@ public class BotHandAttackTask extends BotHandTask {
             bukkitTask.cancel();
             bukkitTask = null;
         }
+        BotLogger.info(isLogged, bot.getId() + " ✍🏼 Hits made: " + hits);
+        BotLogger.info(isLogged, bot.getId() + " ✍🏼 Attempts made: " + attempts);
         BotLogger.info(isLogged, bot.getId() + " ⛔ BotHandAttackTask: Task is stopped");
     }
 
