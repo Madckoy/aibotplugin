@@ -9,14 +9,14 @@ import org.bukkit.inventory.ItemStack;
 import com.devone.bot.core.bot.Bot;
 import com.devone.bot.utils.logger.BotLogger;
 
-public class BotNaturalEnvScan {
+public class BotScanNatural {
 
-public static List<Entity> scanNearbyNatural(Bot bot, double radius) {
+public static List<Entity> scan(Bot bot, double radius) {
         return bot.getNPCEntity().getNearbyEntities(radius, radius, radius);
     }
 
     public static void logScanNatural(Bot bot, double radius) {
-        List<Entity> nearbyEntities = BotNaturalEnvScan.scanNearbyNatural(bot, radius);
+        List<Entity> nearbyEntities = BotScanNatural.scan(bot, radius);
     
         if (nearbyEntities.isEmpty()) {
             BotLogger.info(true, "💡 " + bot.getId()+" В радиусе " + radius + " блоков нет НИЧЕГО.");

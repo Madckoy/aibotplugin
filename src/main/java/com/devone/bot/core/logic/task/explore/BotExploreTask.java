@@ -1,6 +1,7 @@
 package com.devone.bot.core.logic.task.explore;
 
 import com.devone.bot.core.bot.Bot;
+import com.devone.bot.core.inventory.BotInventory;
 import com.devone.bot.core.logic.navigation.BotNavigationPlannerWrapper;
 import com.devone.bot.core.logic.navigation.scene.BotSceneContext;
 import com.devone.bot.core.logic.navigation.selectors.BotBioSelector;
@@ -26,14 +27,13 @@ import com.devone.bot.utils.scene.BotSceneData;
 
 public class BotExploreTask extends BotTask {
     private BotExploreTaskParams params = new BotExploreTaskParams();
-    private int scanRadius = BotConstants.DEFAULT_SCAN_RANGE;
+    private int scanRadius = params.getScanRadius();
 
 
     public BotExploreTask(Bot bot) {
         super(bot);
         setIcon(params.getIcon());
         setObjective(params.getObjective());
-        scanRadius = params.getScanRadius();
     }
 
     public void execute() {
@@ -46,6 +46,8 @@ public class BotExploreTask extends BotTask {
         sonar.execute();
 
         setObjective(params.getObjective());
+
+        bot.getInventory().pickupAll(params.shouldPickup(), params.shouldPickupAuto());
 
         BotSceneData sceneData = bot.getRuntimeStatus().getSceneData();
         if (sceneData == null) {
