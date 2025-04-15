@@ -15,7 +15,7 @@ public class BotTaskParams implements IBotTaskParams, IBotTaskParamsConfigurable
     private boolean isLogging = true;
     private String  objective = "Do something abstract";
     
-    protected String fileName ="BotTaskParams";
+    protected String fileName = null;
     protected File file;
     protected FileConfiguration config;
 
