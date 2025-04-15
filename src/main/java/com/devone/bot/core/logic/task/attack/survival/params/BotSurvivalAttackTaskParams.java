@@ -25,7 +25,6 @@ public class BotSurvivalAttackTaskParams extends BotTaskParams {
         this.damage = damage;
         setIcon(icon);
         setObjective(objective);
-        setDefaults();
     }
 
     public BotBlockData getTarget() {

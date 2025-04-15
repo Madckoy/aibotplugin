@@ -5,8 +5,13 @@ public class BotCoordinate3DParams extends BotTaskParams{
 
     private BotCoordinate3D loc = new BotCoordinate3D(0,0,0);
 
-    public BotCoordinate3DParams(String f_name) {
+    public BotCoordinate3DParams() {
         super(BotCoordinate3DParams.class.getSimpleName());
+        setDefaults();
+    }
+
+    public BotCoordinate3DParams(String f_name) {
+        super(f_name);
         setDefaults();
     }
 
@@ -22,12 +27,10 @@ public class BotCoordinate3DParams extends BotTaskParams{
 
     public Object copyFrom(IBotTaskParams source) {
 
-        int x = ((BotCoordinate3DParams)source).getX();
-        int y = ((BotCoordinate3DParams)source).getY();
-        int z = ((BotCoordinate3DParams)source).getZ();
-
-        loc = new BotCoordinate3D(x,y,z);
-
+        loc.x = ((BotCoordinate3DParams)source).getX();
+        loc.y = ((BotCoordinate3DParams)source).getY();
+        loc.z = ((BotCoordinate3DParams)source).getZ();
+        
         super.copyFrom(source);
         return this;
     }

@@ -13,7 +13,6 @@ public class BotExploreTaskParams extends BotTaskParams {
         this.scanRadius = scanRadius;
         setIcon(icon);
         setObjective(objective);
-        setDefaults();
     }
     public BotExploreTaskParams() {
         super(BotExploreTaskParams.class.getSimpleName());

@@ -5,7 +5,7 @@ import com.devone.bot.utils.blocks.BotBlockData;
 
 public class BotHandAttackTaskParams extends BotHandTaskParams {
     public double damage = BotConstants.DEFAULT_HAND_DAMAGE;
-    public BotBlockData target;
+    public BotBlockData target = new BotBlockData();
   
     private String icon = "⚔️";
     private String objective = "Attack";
@@ -16,15 +16,19 @@ public class BotHandAttackTaskParams extends BotHandTaskParams {
         this.damage = dmg;
         setIcon(icon);
         setObjective(objective);
-        setDefaults();
     }
     
+    public BotHandAttackTaskParams() {
+        super(BotHandAttackTaskParams.class.getSimpleName());
+        setIcon(icon);
+        setObjective(objective);
+    }
+
     public BotHandAttackTaskParams(BotBlockData target) {
         super(BotHandAttackTaskParams.class.getSimpleName());
         this.target = target;
         setIcon(icon);
         setObjective(objective);
-        setDefaults();
     }
 
     public BotHandAttackTaskParams(double damage) {
@@ -33,13 +37,6 @@ public class BotHandAttackTaskParams extends BotHandTaskParams {
         setIcon(icon);
         setObjective(objective);
         setDefaults();   
-    }
-
-    public BotHandAttackTaskParams() {
-        super(BotHandAttackTaskParams.class.getSimpleName());
-        setIcon(icon);
-        setObjective(objective);
-        setDefaults();
     }
 
     public double getDamage() {

@@ -56,7 +56,6 @@ public class BotExcavateTaskParams extends BotTaskParams{
         this.patternName = patternName;
         setIcon(icon);
         setObjective(objective);
-        setDefaults();
     }
     public Set<Material> getTargetMaterials() {
         return targetMaterials;

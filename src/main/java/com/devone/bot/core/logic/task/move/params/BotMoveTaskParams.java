@@ -6,7 +6,7 @@ import com.devone.bot.utils.blocks.BotCoordinate3D;
 
 public class BotMoveTaskParams extends BotTaskParams { 
     // 🆕 Параметры задачи движения
-    private BotCoordinate3D target;
+    private BotCoordinate3D target = new BotCoordinate3D();
     private float speed;
 
     private String icon = "🏃🏻‍♂️‍➡️";
@@ -18,7 +18,6 @@ public class BotMoveTaskParams extends BotTaskParams {
         this.speed = speed;
         setIcon(icon);
         setObjective(objective);
-        setDefaults();
     }
 
     public BotMoveTaskParams(BotCoordinate3D target) {
@@ -27,7 +26,6 @@ public class BotMoveTaskParams extends BotTaskParams {
         this.speed = 1.0F;
         setIcon(icon);
         setObjective(objective);
-        setDefaults();
     }
 
     public BotMoveTaskParams() {

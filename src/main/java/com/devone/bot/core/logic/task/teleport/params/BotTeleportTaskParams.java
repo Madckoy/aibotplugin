@@ -15,8 +15,8 @@ public class BotTeleportTaskParams extends BotCoordinate3DParams {
         this.target = target;
         setIcon(icon);
         setObjective(objective);
-        setDefaults();
     }
+
     public BotTeleportTaskParams() {
         super(BotTeleportTaskParams.class.getSimpleName());
         setIcon(icon);
@@ -32,9 +32,6 @@ public class BotTeleportTaskParams extends BotCoordinate3DParams {
 
     @Override
     public Object setDefaults() {
-        config.set("target.x", target.x);
-        config.set("target.y", target.y);
-        config.set("target.z", target.z);
         super.setDefaults();
         return this;
     }
