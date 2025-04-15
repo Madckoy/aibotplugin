@@ -8,44 +8,42 @@ import com.devone.bot.core.logic.task.params.IBotTaskParams;
 import com.devone.bot.utils.blocks.BotBlockData;
 import com.devone.bot.utils.logger.BotLogger;
 
-public class BotHandTask extends BotTask {
+public abstract class BotHandTask extends BotTask {
 
     private BotBlockData target;
-    private boolean isLogged = true;
+    private BotHandTaskParams params = new BotHandTaskParams();
 
     public BotHandTask(Bot bot) {
-        super(bot, "✋🏻");
-        setObjective("Hit the target");
+        super(bot);
+        setIcon(params.getIcon());
+        setObjective(params.getObjective());
     }
 
     @Override
     public BotHandTask configure(IBotTaskParams params) {
         super.configure((BotTaskParams) params);
-
-        if (params instanceof BotHandTaskParams handParams) {
-            this.target = handParams.getTarget();
-            this.isLogged = handParams.isLogged();
-            bot.getRuntimeStatus().setTargetLocation(target.getCoordinate3D());
-        } else {
-            BotLogger.info(isLogged, bot.getId() + " ❌ Invalid parameters for BotHandTask.");
-            this.stop();
-        }
+        this.params.copyFrom(params);
+        this.target = ((BotHandTaskParams)params).getTarget();
+        bot.getRuntimeStatus().setTargetLocation(target.getCoordinate3D());
+        BotLogger.info(isLogging(), bot.getId() + " ✅ Parameters for BotHandTask set.");
+        BotLogger.info(isLogging(), bot.getId() + " BotHandTaskParams: " + params);   
         return this;
     }
 
 
     public void execute() {
+        BotLogger.info(isLogging(), bot.getId() + " 🔶 Executing BotHandTask");
+        
         if (target == null) {
-            BotLogger.info(isLogged, bot.getId() + " ❌ Target is null.");
+            BotLogger.info(isLogging(), bot.getId() + " ❌ BotHandTask: Target is null.");
             this.stop();
-            return;
         }
     };
 
     @Override
     public void stop() {
-        isDone = true;
         bot.getRuntimeStatus().setTargetLocation(null);
+        super.stop();
     }
 
 }

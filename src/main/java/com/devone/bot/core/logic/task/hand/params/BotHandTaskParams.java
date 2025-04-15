@@ -1,34 +1,55 @@
 package com.devone.bot.core.logic.task.hand.params;
 
 import com.devone.bot.core.logic.task.params.BotTaskParams;
+import com.devone.bot.core.logic.task.params.IBotTaskParams;
+import com.devone.bot.utils.BotConstants;
 import com.devone.bot.utils.blocks.BotBlockData;
 
 public class BotHandTaskParams extends BotTaskParams {
-    public double damage;
+    public double damage = BotConstants.DEFAULT_HAND_DAMAGE;
     public BotBlockData target;
-    private boolean isLogged = true;
+    private String icon = "✋🏻";
+    private String objective = "Hand";
 
-    public BotHandTaskParams(BotBlockData target, double damage, boolean isLogged) {
+    public BotHandTaskParams(BotBlockData target, double damage) {
+        super(BotHandTaskParams.class.getSimpleName());
         this.target = target;
         this.damage = damage;
-        this.isLogged = isLogged;
+        setIcon(icon);
+        setObjective(objective);
+        setDefaults();
     }
     
-    public BotHandTaskParams(BotBlockData target, double damage) {
-        this.target = target;
-        this.damage = damage;
-    }
     public BotHandTaskParams(BotBlockData target) {
+        super(BotHandTaskParams.class.getSimpleName());
         this.target = target;
-        this.damage = 5.0;
+        setIcon(icon);
+        setObjective(objective);
+        setDefaults();
     }
 
     public BotHandTaskParams(double damage) {
+        super(BotHandTaskParams.class.getSimpleName());
         this.damage = damage;
+        setIcon(icon);
+        setObjective(objective);
+        setDefaults();
     }
+
     public BotHandTaskParams() {
-        this.damage = 5.0;
+        super(BotHandTaskParams.class.getSimpleName());
+        setIcon(icon);
+        setObjective(objective);
+        setDefaults();
+    }    
+    
+    public BotHandTaskParams(String class_name) {
+        super(class_name);
+        setIcon(icon);
+        setObjective(objective);
+        setDefaults();
     }
+
     public double getDamage() {
         return damage;
     }
@@ -41,15 +62,22 @@ public class BotHandTaskParams extends BotTaskParams {
     public void setTarget(BotBlockData target) {
         this.target = target;
     }
-    public boolean isLogged() {
-        return isLogged;
+
+    public Object setDefaults() {
+        config.set("hand.damage", this.damage);
+        super.setDefaults();
+        return this;
     }
-    public void setLogged(boolean isLogged) {
-        this.isLogged = isLogged;
+
+    public Object copyFrom(IBotTaskParams source) {
+        super.copyFrom(source);
+        damage = ((BotHandTaskParams)source).getDamage();
+        return this;
     }
+
     @Override
     public String toString() {
-        return "BotUseHandTaskParams{" +
+        return "BotHandUseTaskParams{" +
                 "damage=" + damage +
                 '}';
     }

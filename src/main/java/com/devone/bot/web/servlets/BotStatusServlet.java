@@ -62,15 +62,17 @@ public class BotStatusServlet extends HttpServlet {
                 botJson.addProperty("stuck", bot.getRuntimeStatus().isStuck());
                 botJson.addProperty("stuckCount", bot.getRuntimeStatus().getStuckCount());
 
-                botJson.addProperty("blocks_broken", bot.getRuntimeStatus().getBrokenBlocks());
-                botJson.addProperty("mobs_killed", bot.getRuntimeStatus().getMobsKilled());
+                botJson.addProperty("blocks_broken_size", bot.getRuntimeStatus().getBlocksBroken().size());
+                botJson.addProperty("blocks_broken",  bot.getRuntimeStatus().getBlocksBroken().toString());
+                botJson.addProperty("mobs_killed_size", bot.getRuntimeStatus().getMobsKilled().size());
+                botJson.addProperty("mobs_killed", bot.getRuntimeStatus().getMobsKilled().toString());
                 botJson.addProperty("teleport_used", bot.getRuntimeStatus().getTeleportUsed());
 
                 String currLoc = " " + loc.x + ", " + loc.y + ", " + loc.z;   
 
                 botJson.addProperty("position", currLoc);
 
-                botJson.addProperty("task", bot.getRuntimeStatus().getCurrentTask().getName());
+                botJson.addProperty("task", bot.getRuntimeStatus().getCurrentTask().getIcon());
                 
                 botJson.addProperty("object", getCurrentObjective(bot));
 
@@ -85,7 +87,7 @@ public class BotStatusServlet extends HttpServlet {
                     ? new ArrayList<>(bot.getLifeCycle().getTaskStackManager().getTaskStack())
                     : new ArrayList<>();
                 String taskStackText = taskStack.isEmpty() ? "N/A" :
-                    taskStack.stream().map(BotTask::getName).collect(Collectors.joining(" ➜ "));
+                    taskStack.stream().map(BotTask::getIcon).collect(Collectors.joining(" ➜ "));
                 botJson.addProperty("queue", taskStackText);
                 botsArray.add(botJson);
 

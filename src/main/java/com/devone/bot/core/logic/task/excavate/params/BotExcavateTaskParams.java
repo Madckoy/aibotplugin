@@ -5,37 +5,44 @@ import java.util.Set;
 import org.bukkit.Material;
 
 import com.devone.bot.core.logic.task.params.BotTaskParams;
+import com.devone.bot.utils.BotConstants;
 import com.devone.bot.utils.blocks.BotAxisDirection.AxisDirection;
 
 public class BotExcavateTaskParams extends BotTaskParams{
-    public Set<Material> targetMaterials;
-    public int maxBlocks;
-    public int outerRadius;
-    public int innerRadius;
-    public boolean shouldPickup;
-    public boolean destroyAllIfNoTarget;
-    public AxisDirection breakDirection;
-    public int offsetX;
-    public int offsetY;
-    public int offsetZ;
-    public String patternName;
-    
+    private Set<Material> targetMaterials;
+    private int maxBlocks  = 64;
+    private int outerRadius =  BotConstants.DEFAULT_OUTER_RADIUS;
+    private int innerRadius =  BotConstants.DEFAULT_INNER_RADIUS;
+    private boolean shouldPickup = true;
+    private boolean destroyAllIfNoTarget = false;
+    private AxisDirection breakDirection = AxisDirection.DOWN;;
+    private int offsetX = 0;
+    private int offsetY = 0;
+    private int offsetZ = 0;
+    private String patternName = BotConstants.DEFAULT_PATTERN_BREAK;
+    private String icon = "🪨";
+    private String objective = "Excavate";
+
     public BotExcavateTaskParams() {
+        super(BotExcavateTaskParams.class.getSimpleName());
         this.targetMaterials = null;
-        this.maxBlocks = 0;
-        this.outerRadius = 0;
-        this.innerRadius = 0;
-        this.shouldPickup = false;
-        this.destroyAllIfNoTarget = false;
-        this.breakDirection = AxisDirection.DOWN;
-        this.offsetX = 0;
-        this.offsetY = 0;
-        this.offsetZ = 0;
-        this.patternName = null;
+        setIcon(icon);
+        setObjective(objective);
+        setDefaults();
     }
+
+    public BotExcavateTaskParams(String class_name) {
+        super(class_name);
+        this.targetMaterials = null;
+        setIcon(icon);
+        setObjective(objective);
+        setDefaults();
+    }
+
     public BotExcavateTaskParams(Set<Material> targetMaterials, int maxBlocks, int outerRadius, int innerRadius,
             boolean shouldPickup, boolean destroyAllIfNoTarget, AxisDirection breakDirection, int offsetX, int offsetY,
             int offsetZ, String patternName) {
+        super(BotExcavateTaskParams.class.getSimpleName());       
         this.targetMaterials = targetMaterials;
         this.maxBlocks = maxBlocks;
         this.outerRadius = outerRadius;
@@ -47,6 +54,9 @@ public class BotExcavateTaskParams extends BotTaskParams{
         this.offsetY = offsetY;
         this.offsetZ = offsetZ;
         this.patternName = patternName;
+        setIcon(icon);
+        setObjective(objective);
+        setDefaults();
     }
     public Set<Material> getTargetMaterials() {
         return targetMaterials;
@@ -114,6 +124,20 @@ public class BotExcavateTaskParams extends BotTaskParams{
     public void setPatternName(String patternName) {
         this.patternName = patternName;
     }
+
+    @Override
+    public Object setDefaults() {
+        config.set("excavate.pattern",      this.patternName);
+        config.set("excavate.outer.radius", this.outerRadius);
+        config.set("excavate.inner.radius", this.innerRadius);
+        config.set("excavate.offsetX", this.offsetX);
+        config.set("excavate.offsetY", this.offsetY);
+        config.set("excavate.offsetZ", this.offsetZ);
+
+        super.setDefaults();
+        return this;
+    }
+
     @Override
     public String toString() {
         return "BotBreakTaskParams{" +

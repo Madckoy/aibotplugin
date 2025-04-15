@@ -9,7 +9,6 @@ import com.devone.bot.core.bot.Bot;
 import com.devone.bot.core.logic.task.BotTask;
 import com.devone.bot.core.logic.task.params.BotTaskParams;
 import com.devone.bot.core.logic.task.params.IBotTaskParams;
-import com.devone.bot.core.logic.task.teleport.config.BotTeleportTaskConfig;
 import com.devone.bot.core.logic.task.teleport.params.BotTeleportTaskParams;
 import com.devone.bot.utils.blocks.BotCoordinate3D;
 import com.devone.bot.utils.logger.BotLogger;
@@ -17,44 +16,41 @@ import com.devone.bot.utils.world.BotWorldHelper;
 
 public class BotTeleportTask extends BotTask {
     private BotCoordinate3D target;
+    private BotTeleportTaskParams params = new BotTeleportTaskParams();
 
     public BotTeleportTask(Bot bot, Player player) {
-        super(bot, player, "🗲");
-
-        config = new BotTeleportTaskConfig();
-        this.isLogged = config.isLogged();
-        
-        setObjective("Teleport");
+        super(bot, player);
+        setIcon(params.getIcon());  
+        setObjective(params.getObjective());
     }
 
     @Override
     public BotTeleportTask configure(IBotTaskParams params) {
 
         super.configure((BotTaskParams) params);
-        
-        if (params instanceof BotTeleportTaskParams) {
-            BotTeleportTaskParams teleportParams = (BotTeleportTaskParams) params;
-            BotCoordinate3D tpTarget = teleportParams.getTarget();
+    
 
-            if (tpTarget != null) {
-                target = tpTarget;
-            } else {
-                BotLogger.info(this.isLogged(), bot.getId() + " ❌ Некорректные параметры для `BotTeleportTask`!");
-                this.stop();
-            }
+        this.params.copyFrom(params);
+
+        BotCoordinate3D tpTarget = ((BotTeleportTaskParams)params).getTarget();
+
+        if (tpTarget != null) {
+            target = tpTarget;
         } else {
-            BotLogger.info(this.isLogged(), bot.getId() + " ❌ Некорректный тип параметров для `BotTeleportTask`!");
+            BotLogger.info(this.isLogging(), bot.getId() + " ❌ Некорректные параметры для `BotTeleportTask`!");
             this.stop();
         }
+    
         return this;
     }
 
     @Override
     public void execute() {
-        setObjective("Teleporting to: " + target);
+
+        setObjective(params.getObjective() + " to: " + target);
     
         if (this.target == null) {
-            BotLogger.info(isLogged(), bot.getId() + " ❌ Целевая точка телепортации не задана.");
+            BotLogger.info(this.isLogging(), bot.getId() + " ❌ Целевая точка телепортации не задана.");
             stop();
             return;
         }
@@ -69,14 +65,10 @@ public class BotTeleportTask extends BotTask {
             bot.getRuntimeStatus().setStuck(false);
             bot.getRuntimeStatus().teleportUsedIncrease();
     
-            BotLogger.info(isLogged(), bot.getId() + " 🗲 Телепорт с " + baseLocation.toVector() + " → " + safeOffset.toVector());
+            BotLogger.info(this.isLogging(), bot.getId() + " 🗲 Телепорт с " + baseLocation.toVector() + " → " + safeOffset.toVector());
         });
     
         stop();
-    }
-
-    public void stop() {
-        isDone = true;
     }
 
 }

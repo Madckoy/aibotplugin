@@ -40,8 +40,8 @@ function renderBotTable(data) {
         let botCell_1 = row.insertCell(1); 
         botCell_1.innerHTML = `
                                 <div class="bot-stats-cell">
-                                    <div><span>🧱</span><span>${bot.blocks_broken}</span></div>
-                                    <div><span>💀</span><span>${bot.mobs_killed}</span></div>
+                                    <div><span>🪨</span><span>${bot.blocks_broken_size}</span></div>
+                                    <div><span>💀</span><span>${bot.mobs_killed_size}</span></div>
                                     <div><span>⚡️</span><span>${bot.teleport_used}</span></div>
                                 </div>`; 
 

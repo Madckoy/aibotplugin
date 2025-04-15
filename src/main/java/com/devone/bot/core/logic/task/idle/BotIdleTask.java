@@ -1,32 +1,23 @@
 package com.devone.bot.core.logic.task.idle;
 
-import org.bukkit.entity.Player;
-
 import com.devone.bot.core.bot.Bot;
-import com.devone.bot.core.logic.task.idle.config.BotIdleTaskConfig;
-import com.devone.bot.core.logic.task.playerlinked.BotPlayerLinkedTask;
+import com.devone.bot.core.logic.task.BotTask;
+import com.devone.bot.core.logic.task.idle.params.BotIdleTaskParams;
 
 
-public class BotIdleTask extends BotPlayerLinkedTask {
+public class BotIdleTask extends BotTask {
 
-    public BotIdleTask(Bot bot, Player player) {
-        super(bot, player, "🍹");
+    BotIdleTaskParams params = new BotIdleTaskParams();
 
-        setObjective("Idle");
-        
-        config = new BotIdleTaskConfig();
-        this.isLogged = config.isLogged();
+    public BotIdleTask(Bot bot) {
+        super(bot);
+        setIcon(params.getIcon());
+        setObjective(params.getObjective());
     }
 
     @Override
     public void execute() {
         this.stop();
-    }
-
-    @Override
-    public void stop() {
-        this.isDone = true;
-
     }
 
 }
