@@ -19,17 +19,19 @@ public abstract class BotTask implements IBotTask, IBotTaskConfigurable, Listene
     //configurable
     protected boolean isEnabled = true;
     protected boolean isLogging = true;
-    protected String  objective = "";
+
     // runtime
     protected Bot bot;
     protected Player player = null;
     protected long startTime = System.currentTimeMillis();
-    protected String icon = "☑️";
+
     protected boolean isPaused = false;
     protected boolean isDone = false;
     protected final String uuid;
     
     protected BotTaskParams params = new BotTaskParams(BotTaskParams.class.getSimpleName());
+    protected String icon = params.getIcon();
+    protected String objective = params.getObjective();
 
     protected boolean isListenerRegistered = false;
 

@@ -10,10 +10,10 @@ import com.devone.bot.utils.BotConstants;
 import com.devone.bot.utils.logger.BotLogger;
 
 public class BotTaskParams implements IBotTaskParams, IBotTaskParamsConfigurable {
-    private String  icon       = "";
+    private String  icon       = "☑️";
     private boolean isEnabled = true;
     private boolean isLogging = true;
-    private String  objective = "";
+    private String  objective = "Do something abstract";
     
     protected String fileName ="BotTaskParams";
     protected File file;
