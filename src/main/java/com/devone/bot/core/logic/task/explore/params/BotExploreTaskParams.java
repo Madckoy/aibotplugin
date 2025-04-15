@@ -25,12 +25,10 @@ public class BotExploreTaskParams extends BotTaskParams {
 
     public boolean shouldPickup() {
         return pickup;
-
     }
 
     public boolean shouldPickupAuto() {
         return pickupAuto;
-
     }
 
     public int getScanRadius() {
