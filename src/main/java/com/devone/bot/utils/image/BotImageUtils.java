@@ -37,9 +37,9 @@ public class BotImageUtils {
             // ✅ Сохраняем в кэш
             ImageIO.write(resizedImage, "png", skinFile);
     
-            BotLogger.info(true, "✅ Скачан и уменьшен скин для " + botUUID);
+            BotLogger.info("✅", true, "Скачан и уменьшен скин для " + botUUID);
         } catch (IOException e) {
-            BotLogger.info(true, "❌ Ошибка скачивания скина: " + e.getMessage());
+            BotLogger.info("❌" , true, "Ошибка скачивания скина: " + e.getMessage());
             return "/skins/default-bot.png"; // ✅ Запасной скин
         }
     
