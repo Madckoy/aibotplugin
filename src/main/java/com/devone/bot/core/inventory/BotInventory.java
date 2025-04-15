@@ -98,24 +98,22 @@ public class BotInventory {
         return false;
     }
 
-    public void pickupAll(Boolean shouldPickup, Boolean autoPickupEnabled) {
+    public void pickupAll(Boolean shouldPickup) {
 
         logInventory();
 
-        if (!shouldPickup || !autoPickupEnabled || !bot.isNPCSpawned() || bot.getNPC() == null) {
-            BotLogger.info(true, "🛒 " + bot.getId() + " Не будет подбирать материал! Параметры подбора: " + shouldPickup
-                    + " | " + autoPickupEnabled);
+        if (!shouldPickup || !bot.isNPCSpawned() || bot.getNPC() == null) {
+            BotLogger.info(true, "🛒 " + bot.getId() + " NPC issue or can't pickup items. Pickup parameters: " + shouldPickup);
             return;
         }
 
-        BotLogger.info(true, "🛒 " + bot.getId() + " Будет подобирать материал! Параметры подбора: " + shouldPickup + " | "
-                + autoPickupEnabled);
+        BotLogger.info(true, "🛒 " + bot.getId() + " Pickup parameters:: " + shouldPickup);
 
         BotScanNatural.logScanNatural(bot, BotConstants.DEFAULT_SCAN_RANGE);
 
-        if (autoPickupEnabled) {
-            pullAllItemsinRadius(2.0);
-        }
+
+        pullAllItemsinRadius(2.0);
+
 
         try {
             Location botLocation = BotWorldHelper.getWorldLocation(bot.getRuntimeStatus().getCurrentLocation());

@@ -29,7 +29,6 @@ public class Bot {
     private final BotLifeCycle lifeCycle; // Цикл жизни бота
     private final BotInventory inventory; // Инвентарь бота
     private final BotManager botManager; // Менеджер ботов
-    private boolean autoPickupEnabled = false;
     private BotStatusRuntime rStatus; // Рантайм статус бота
     private BotChat communicator; // Создаем поле для общения бота
 
@@ -122,12 +121,8 @@ public class Bot {
       getLifeCycle().getTaskStackManager().pushTask(task);
     }
 
-    public void setAutoPickupEnabled(boolean enabled) {
-            this.autoPickupEnabled = enabled;
-    }
-
     public void pickupNearbyItems(boolean shouldPickup) {
-        getInventory().pickupAll(shouldPickup, autoPickupEnabled);
+        getInventory().pickupAll(shouldPickup);
     }    
     // под вопросом, стоит ли перенести в BotUtils или в BotInventory
     public void checkAndSelfMove(Location lastBrokenBlock) {
