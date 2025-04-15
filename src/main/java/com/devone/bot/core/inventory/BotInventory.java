@@ -15,7 +15,9 @@ import org.bukkit.inventory.InventoryHolder;
 import org.bukkit.inventory.ItemStack;
 
 import com.devone.bot.core.bot.Bot;
+import com.devone.bot.utils.BotConstants;
 import com.devone.bot.utils.logger.BotLogger;
+import com.devone.bot.utils.scene.BotScanNatural;
 import com.devone.bot.utils.world.BotWorldHelper;
 
 public class BotInventory {
@@ -96,24 +98,31 @@ public class BotInventory {
         return false;
     }
 
-    public void pickupAll(Boolean shouldPickup, Boolean autoPickupEnabled) {
+    public void pickupAll(Boolean shouldPickup) {
+        BotLogger.info("🛒", true, bot.getId() + " Pickup parameters: " + shouldPickup +" | "+bot.getRuntimeStatus().getAutoPickupItems());
 
-        logInventory();
-
-        if (!shouldPickup || !autoPickupEnabled || !bot.isNPCSpawned() || bot.getNPC() == null) {
-            BotLogger.info(true, "🛒 " + bot.getId() + " Не будет подбирать материал! Параметры подбора: " + shouldPickup
-                    + " | " + autoPickupEnabled);
+        if (!bot.isNPCSpawned() || bot.getNPC() == null) {
+            BotLogger.info("🛒", true, bot.getId() + " NPC issue! Can't pickup items. Pickup parameters");
             return;
         }
 
-        BotLogger.info(true, "🛒 " + bot.getId() + " Будет подобирать материал! Параметры подбора: " + shouldPickup + " | "
-                + autoPickupEnabled);
+        logInventory();
 
-        // BotScanEnv.logScanNatural(bot, 20.0);
 
-        if (autoPickupEnabled) {
+        if (!shouldPickup && !bot.getRuntimeStatus().getAutoPickupItems() ) {
+            BotLogger.info("🛒", true, bot.getId() + " Will not pickup items. Pickup parameters: " + shouldPickup +" | "+bot.getRuntimeStatus().getAutoPickupItems());
+            return;
+        }
+
+        BotLogger.info("🛒", true, bot.getId() + " Pickup parameters:: " + shouldPickup);
+
+        BotScanNatural.logScanNatural(bot, BotConstants.DEFAULT_SCAN_RANGE);
+
+        if (bot.getRuntimeStatus().getAutoPickupItems()) {
             pullAllItemsinRadius(2.0);
         }
+
+
 
         try {
             Location botLocation = BotWorldHelper.getWorldLocation(bot.getRuntimeStatus().getCurrentLocation());
@@ -130,13 +139,13 @@ public class BotInventory {
                         addItem(material, amount); // Передаём два параметра в инвентарь
 
                         item.remove(); // Удаляем предмет с земли
-                        BotLogger.info(true, "🛒 " + bot.getId() + " Подобрал " + amount + " x " + material);
+                        BotLogger.info("🛒", true, bot.getId() + " Подобрал " + amount + " x " + material);
                     }
                 }
             }
 
         } catch (Exception e) {
-            BotLogger.info(true, "🛒 " + bot.getId() + " " + e.getMessage());
+            BotLogger.info("🛒", true, bot.getId() + " " + e.getMessage());
         }
 
     }
@@ -144,7 +153,7 @@ public class BotInventory {
     public static boolean hasEnoughBlocks(Bot bot, Set<Material> targetMaterials, int maxBlocksPerMaterial) {
 
         if (bot.getInventory().getNPCInventory() == null) {
-            BotLogger.info(true, "🛒 " + bot.getId() + " Has no inventory yet!");
+            BotLogger.info("🛒", true, bot.getId() + " Has no inventory yet!");
             return true;
         } // not yet created
 
@@ -171,8 +180,8 @@ public class BotInventory {
             // Проверяем, достигнуто ли нужное количество для любого из целевых материалов
             for (Material material : targetMaterials) {
                 int count = collectedCounts.getOrDefault(material, 0);
-                BotLogger.info(true, 
-                        "📦 " + bot.getId() + " | " + material + ": ( " + count + "/" + maxBlocksPerMaterial + ")");
+                BotLogger.info("📦 ", true, 
+                        bot.getId() + " | " + material + ": ( " + count + "/" + maxBlocksPerMaterial + ")");
 
                 if (count >= maxBlocksPerMaterial) {
                     return true; // Достигнута цель по какому-то материалу → завершаем задачу
@@ -186,7 +195,7 @@ public class BotInventory {
     public static boolean hasFreeInventorySpace(Bot bot, Set<Material> targetMaterials) {
 
         if (bot.getInventory().getNPCInventory() == null) {
-            BotLogger.info(true, "🛒 " + bot.getId() + " Has no inventory yet!");
+            BotLogger.info("🛒", true,  bot.getId() + " Has no inventory yet!");
             return true;
         } // not yet created
 
@@ -218,7 +227,7 @@ public class BotInventory {
 
         Inventory inventory = bot.getInventory().getNPCInventory();
         if (inventory == null) {
-            BotLogger.info(true, "🛒 " + bot.getId() + " Has no inventory yet!");
+            BotLogger.info("🛒 ", true,  bot.getId() + " Has no inventory yet!");
             return;
         } // not yet created
 
@@ -229,7 +238,7 @@ public class BotInventory {
         }
 
         inventory.clear(); // Полностью очищаем инвентарь после выброса
-        BotLogger.info(true, "🚮 " + bot.getId() + " Выбросил все предметы из инвентаря!");
+        BotLogger.info("🚮", true, bot.getId() + " Выбросил все предметы из инвентаря!");
     }
 
     public void pullAllItemsinRadius(double radius) {
@@ -238,7 +247,7 @@ public class BotInventory {
         for (Entity entity : nearbyItems) {
             if (entity instanceof Item) {
                 entity.teleport(bot.getNPCEntity().getLocation()); // Притягиваем предмет
-                BotLogger.info(true, "🛒 " + bot.getId() + " Pulled up a near item!");
+                BotLogger.info("🛒", true, bot.getId() + " Pulled up a near item!");
             }
         }
     }
@@ -327,12 +336,12 @@ public class BotInventory {
             ItemStack item = inv.getItem(i);
             if (item != null && item.getType() == requiredTool) {
                 bot.getPlayer().getInventory().setItemInMainHand(item);
-                BotLogger.info(true, "🤖 Взял в руку инструмент: " + requiredTool);
+                BotLogger.info("🤖 ", true, "Взял в руку инструмент: " + requiredTool);
                 return true;
             }
         }
 
-        BotLogger.info(true, "🧰 Инструмент " + requiredTool + " не найден в инвентаре");
+        BotLogger.info("🧰", true, "Инструмент " + requiredTool + " не найден в инвентаре");
         return false;
     }
 

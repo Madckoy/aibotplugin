@@ -40,14 +40,14 @@ public class CommandServlet extends HttpServlet {
             json.getAsJsonArray("params").forEach(e -> params.add(e.getAsString()));
 
             String fullCommand = command + " " + botId + " " + String.join(" ", params);
-            BotLogger.info(true, "🌐 От сервера получена команда: " + fullCommand);
+            BotLogger.info("🌐", true, "От сервера получена команда: " + fullCommand);
 
             // Выполнить команду на основном потоке сервера
             Bukkit.getScheduler().runTask(
                 Bukkit.getPluginManager().getPlugin("AIBotPlugin"),
                 () -> {
                     boolean success = Bukkit.dispatchCommand(Bukkit.getConsoleSender(), fullCommand);
-                    BotLogger.info(true, "📬 Команда выполнена: " + fullCommand + " -> " + (success ? "✅ OK" : "❌ FAIL"));
+                    BotLogger.info("📬", true, "Команда выполнена: " + fullCommand + " -> " + (success ? "✅ OK" : "❌ FAIL"));
                 }
             );
 
@@ -56,7 +56,7 @@ public class CommandServlet extends HttpServlet {
 
         } catch (Exception e) {
             e.printStackTrace(); // Временный вывод в консоль
-            BotLogger.error(true, "❌ Ошибка выполнения команды: " + e.getMessage());
+            BotLogger.info("❌", true, "Ошибка выполнения команды: " + e.getMessage());
             resp.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
             out.write("{\"error\":\"Internal error\"}");
             out.flush();

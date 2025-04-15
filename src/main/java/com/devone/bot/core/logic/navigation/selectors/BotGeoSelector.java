@@ -67,7 +67,7 @@ public static BotBlockData pickEmergencyTeleportTarget(
     }
 
     // ⛔ Fallback на спавн
-    BotLogger.warn(true, "⚠️ EmergencyTeleport: fallback to world spawn!");
+    BotLogger.info("⚠️ ", true, "EmergencyTeleport: fallback to world spawn!");
 
     BotCoordinate3D spawn = BotWorldHelper.getWorldSpawnLocation();
 

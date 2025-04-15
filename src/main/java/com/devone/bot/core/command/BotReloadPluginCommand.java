@@ -18,7 +18,7 @@ public class BotReloadPluginCommand implements CommandExecutor {
     @Override
     public boolean onCommand(CommandSender sender, Command command, String label, String[] args) {
         if (!(sender instanceof Player) || sender.hasPermission("aibotplugin.admin.reload")) {
-            BotLogger.info(true,"♻️ Перезагрузка AI Bot Plugin...");
+            BotLogger.info("♻️ ", true,"Перезагрузка AI Bot Plugin...");
 
             plugin.reloadPlugin(); // ✅ Вызываем метод перезагрузки
 

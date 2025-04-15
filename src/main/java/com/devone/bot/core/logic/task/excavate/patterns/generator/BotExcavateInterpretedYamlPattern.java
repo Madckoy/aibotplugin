@@ -49,17 +49,17 @@ public class BotExcavateInterpretedYamlPattern implements IBotExcavatePattern {
             this.breakDirection = breakDirection;
 
     
-            BotLogger.info(true, "🛠️ Начинаем загрузку YAML-паттерна: " + yamlPath);
+            BotLogger.info("🛠️", true, "Начинаем загрузку YAML-паттерна: " + yamlPath);
     
             try (InputStream inputStream = Files.newInputStream(yamlPath)) {
                 this.generator = BotExcavateCoordinatesGenerator.loadYmlFromStream(inputStream);
             if (this.generator != null) {
-                BotLogger.info(true, "✅ Паттерн успешно загружен из YAML: " + yamlPath.getFileName());
+                BotLogger.info("✅", true, "Паттерн успешно загружен из YAML: " + yamlPath.getFileName());
             } else {
-                BotLogger.info(true, "❌ loadFromYaml() вернул null для файла: " + yamlPath);
+                BotLogger.info("❌", true, "loadFromYaml() вернул null для файла: " + yamlPath);
             }
         } catch (IOException e) {
-            BotLogger.info(true, "❌ Ошибка при открытии YAML-файла: " + yamlPath + " — " + e.getMessage());
+            BotLogger.info("❌", true, "Ошибка при открытии YAML-файла: " + yamlPath + " — " + e.getMessage());
         }
 
         return this;
@@ -67,19 +67,19 @@ public class BotExcavateInterpretedYamlPattern implements IBotExcavatePattern {
 
     public BotCoordinate3D findNextBlock(Bot bot ) {
         if (this.generator == null) {
-            BotLogger.info(true, "🚨 ❌ Паттерн не инициализирован! YAML: " + yamlPath);
+            BotLogger.info("🚨 ", true, "Паттерн не инициализирован! YAML: " + yamlPath);
             return null;
         }
 
         if (!initialized) {
-            BotLogger.info(true, "🔁 Генерация точек по паттерну: " + yamlPath);
+            BotLogger.info("🔁 ", true, "Генерация точек по паттерну: " + yamlPath);
                                                                      
             BotExcavatePatternGenerationParams params = new BotExcavatePatternGenerationParams(bot.getRuntimeStatus().getCurrentLocation().x, 
                                                                                bot.getRuntimeStatus().getCurrentLocation().y, 
                                                                                bot.getRuntimeStatus().getCurrentLocation().z, 
                                                                                offsetX, offsetY, offsetZ, outerRadius, innerRadius);
 
-            BotLogger.info(true, params.toString());                                                                  
+            BotLogger.info("Params:", true, params.toString());                                                                  
 
             List<BotCoordinate3D> inner_points = generator.generateInnerPoints(params);
             
@@ -87,7 +87,7 @@ public class BotExcavateInterpretedYamlPattern implements IBotExcavatePattern {
             .map(p -> String.format("(%d, %d, %d)", p.x, p.y, p.z))
             .collect(Collectors.joining(", "));
         
-            BotLogger.info(true, String.format("🔢 Generated %d points: [%s]", inner_points.size(), pointsLog));        
+            BotLogger.info("🔢", true, String.format("Generated %d points: [%s]", inner_points.size(), pointsLog));        
 
             boolean isInverted = generator.getInverted();
 
@@ -117,14 +117,14 @@ public class BotExcavateInterpretedYamlPattern implements IBotExcavatePattern {
 
                 blocksToBreak.addAll(toBeRemoved);
                 
-                BotLogger.info(true, "✅ Added " + blocksToBreak.size() + " coordinates");
+                BotLogger.info("✅", true, "Added " + blocksToBreak.size() + " coordinates");
             } else {
                 
-                BotLogger.info(true, "⚠️ Паттерн YAML не вернул ни одной точки для разрушения.");
+                BotLogger.info("⚠️", true, "Паттерн YAML не вернул ни одной точки для разрушения.");
 
             }
 
-            BotLogger.info(true, blocksToBreak.toString());
+            BotLogger.info("Block:", true, blocksToBreak.toString());
 
             initialized = true;
         }
@@ -132,7 +132,7 @@ public class BotExcavateInterpretedYamlPattern implements IBotExcavatePattern {
         BotCoordinate3D next = blocksToBreak.poll();
 
         if (next != null) {
-            BotLogger.info(true, "🎯 Next coordinate: " + next.x + ", " + next.y + ", " + next.z);
+            BotLogger.info("🎯", true, "Next coordinate: " + next.x + ", " + next.y + ", " + next.z);
         }
         return next;
     }

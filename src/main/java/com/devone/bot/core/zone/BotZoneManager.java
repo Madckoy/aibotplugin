@@ -39,9 +39,9 @@ public class BotZoneManager {
             String zoneName = entry.getKey();
             BotZoneConfig.ZoneEntry z = entry.getValue();
             protectedZones.put(zoneName, new BotProtectedZone(z.x, z.y, z.z, z.radius));
-            BotLogger.info(true, "━ Loaded zone: " + zoneName + " at (" + z.x + ", " + z.y + ", " + z.z + ") with radius " + z.radius);
+            BotLogger.info("━",true, "Loaded zone: " + zoneName + " at (" + z.x + ", " + z.y + ", " + z.z + ") with radius " + z.radius);
         }
-        BotLogger.info(true, "☰ Total zones loaded: " + protectedZones.size());
+        BotLogger.info("☰", true, "Total zones loaded: " + protectedZones.size());
     }
 
     public void saveZones() {
@@ -51,17 +51,17 @@ public class BotZoneManager {
             data.zones.put(name, new BotZoneConfig.ZoneEntry(zone.getX(), zone.getY(), zone.getZ(), zone.getRadius()))
         );
         config.save();
-        BotLogger.info(true, "🗺️ Zones saved successfully.");
+        BotLogger.info("🗺️", true, "Zones saved successfully.");
     }
 
     public void addZone(String name, Location center, int radius) {
         protectedZones.put(name, new BotProtectedZone(center.getX(), center.getY(), center.getZ(), radius));
-        BotLogger.info(true, "➕ Added new zone: " + name + " at " + center + " with radius " + radius);
+        BotLogger.info("➕", true, "Added new zone: " + name + " at " + center + " with radius " + radius);
     }
 
     public boolean removeZone(String name) {
         if (protectedZones.remove(name) != null) {
-            BotLogger.info(true, "➖ Removed zone: " + name);
+            BotLogger.info("➖", true, "Removed zone: " + name);
             return true;
         }
         return false;
@@ -86,7 +86,7 @@ public class BotZoneManager {
 
     public static boolean isLocationInProtectedZone(BotCoordinate3D location) {
         if (instance == null) {
-            BotLogger.info(true, "❌ ZoneManager not initialized!");
+            BotLogger.info("❌",true, "ZoneManager not initialized!");
             return false;
         }
         return instance.isInProtectedZone(location);

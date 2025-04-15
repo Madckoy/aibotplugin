@@ -26,30 +26,31 @@ import com.devone.bot.utils.scene.BotSceneData;
 
 public class BotExploreTask extends BotTask {
     private BotExploreTaskParams params = new BotExploreTaskParams();
-    private int scanRadius = BotConstants.DEFAULT_SCAN_RANGE;
+    private int scanRadius = params.getScanRadius();
 
 
     public BotExploreTask(Bot bot) {
         super(bot);
         setIcon(params.getIcon());
         setObjective(params.getObjective());
-        scanRadius = params.getScanRadius();
     }
 
     public void execute() {
 
         if (isPaused) return;
 
-        BotLogger.info(isLogging(), bot.getId() + " Exploring with radius: " + scanRadius);
+        BotLogger.info("🔶", isLogging(), bot.getId() + " Exploring with radius: " + scanRadius);
 
         BotSonar3DTask sonar = new BotSonar3DTask(bot, scanRadius, scanRadius);
         sonar.execute();
 
         setObjective(params.getObjective());
+        
+        bot.pickupNearbyItems(params.shouldPickup());
 
         BotSceneData sceneData = bot.getRuntimeStatus().getSceneData();
         if (sceneData == null) {
-            BotLogger.info(isLogging(), bot.getId() + " No scene data available.");
+            BotLogger.info("❌", isLogging(), bot.getId() + "No scene data available.");
             this.stop();
             return;
         }
@@ -64,7 +65,7 @@ public class BotExploreTask extends BotTask {
 
         //Block block = BotWorldHelper.getBlockAt(navTarget.getCoordinate3D());
 
-        BotLogger.info(this.isLogging(), bot.getId() + " Total nav targets: " + context.reachableGoals);
+        BotLogger.info("🎯", this.isLogging(), bot.getId() + " Total nav targets: " + context.reachableGoals);
 
 
         //if(bot.getNPCEntity() != null) {
@@ -79,19 +80,19 @@ public class BotExploreTask extends BotTask {
         //}
 
         if(bot.getRuntimeStatus().isStuck()) {
-            BotLogger.info(this.isLogging(), bot.getId() + " Bot is stuck.");
+            BotLogger.info("⦻", this.isLogging(), bot.getId() + " Bot is stuck.");
             if(animal!=null) {
-                BotLogger.info(this.isLogging(), bot.getId() + " Inflicting Survival Strike to unstuck!");
+                BotLogger.info("⚔️", this.isLogging(), bot.getId() + "Inflicting Survival Strike to unstuck!");
                 BotSurvivalAttackTaskParams params = new BotSurvivalAttackTaskParams(animal, 5.0);
                 BotSurvivalAttackTask strikeTask = new BotSurvivalAttackTask(bot).configure(params);
                 bot.addTaskToQueue(strikeTask);
                 stop();
                 return;
             } else {
-                BotLogger.info(this.isLogging(), bot.getId() + " No animal found to unstuck.");
+                BotLogger.info("❌", this.isLogging(), bot.getId() + " No animal found to unstuck.");
                 //----------
                 if(getElapsedTime() > BotConstants.DEFAULT_TASK_TIMEOUT) {
-                    BotLogger.info(this.isLogging(), bot.getId() + " Task timeout.");
+                    BotLogger.info("⏱️", this.isLogging(), bot.getId() + " Task timeout.");
         
                     BotBlockData fallback = BotGeoSelector.pickEmergencyTeleportTarget(bot.getRuntimeStatus().getCurrentLocation(), 
                                                                                        context.reachableGoals, 
@@ -100,12 +101,12 @@ public class BotExploreTask extends BotTask {
                                                                                        context.walkable);
         
                     if (fallback != null) {
-                        BotLogger.warn(true, bot.getId() + " 🌀 Навигация невозможна, но есть путь — телепорт к: " + fallback);
+                        BotLogger.info("🌀", isLogging(), bot.getId() + " Навигация невозможна, но есть путь — телепорт к: " + fallback);
         
                         BotTeleportTaskParams tpParams = new BotTeleportTaskParams(fallback.getCoordinate3D());
                         BotTeleportTask tpTask = new BotTeleportTask(bot, null).configure(tpParams);
                         bot.addTaskToQueue(tpTask);
-                        BotLogger.info(this.isLogging(), bot.getId() + " Teleporting to fallback location: " + fallback.getCoordinate3D());
+                        BotLogger.info("💡", this.isLogging(), bot.getId() + " Teleporting to fallback location: " + fallback.getCoordinate3D());
                         
                         this.stop();
                         return;
@@ -116,7 +117,7 @@ public class BotExploreTask extends BotTask {
         } 
    
         if(animal != null) {
-                BotLogger.info(this.isLogging(), bot.getId() + " Inflicting Attack to bring justice on: "+animal);
+                BotLogger.info("⚔️", this.isLogging(), bot.getId() + "Inflicting Attack to bring justice on: "+animal);
                 BotHandAttackTaskParams handParams = new BotHandAttackTaskParams(animal, 5.0);
                 BotHandAttackTask handTask = new BotHandAttackTask(bot).configure(handParams);
                 bot.addTaskToQueue(handTask);
@@ -125,14 +126,14 @@ public class BotExploreTask extends BotTask {
 
         
         // 📌 Если цель найдена, начинаем движение
-        BotLogger.info(isLogging(), bot.getId() + " Target: " + goal.getCoordinate3D());
+        BotLogger.info("🎯", isLogging(), bot.getId() + " Target: " + goal.getCoordinate3D());
         //
         bot.getRuntimeStatus().setTargetLocation(goal.getCoordinate3D()); 
         //
         BotNavigationUtils.navigateTo(bot, bot.getRuntimeStatus().getTargetLocation(), 1); // via a new MoVeTask()
         //
         if(getElapsedTime() > 3 * BotConstants.DEFAULT_TASK_TIMEOUT) {
-            BotLogger.info(isLogging(), bot.getId() + " "+ getIcon() +" Task timeout: "+getElapsedTime());
+            BotLogger.info("⏱️", isLogging(), bot.getId() + " "+ getIcon() +" Task timeout: "+getElapsedTime());
             this.stop();
         }
         return;
@@ -141,7 +142,7 @@ public class BotExploreTask extends BotTask {
     @Override
     public void stop() {
        this.isDone = true;
-       BotLogger.info(isLogging(), bot.getId() + " Exploration task completed.");
+       BotLogger.info("✅", isLogging(), "Exploration task completed for "+bot.getId() );
     }
 
     @Override
@@ -152,7 +153,7 @@ public class BotExploreTask extends BotTask {
             BotExploreTaskParams exploreParams = (BotExploreTaskParams) params;
             this.scanRadius = exploreParams.getScanRadius();
         } else {
-            BotLogger.info(isLogging(), bot.getId() + " Invalid parameters for `BotExploreTask`!");
+            BotLogger.info("❌", isLogging(), bot.getId() + " Invalid parameters for `BotExploreTask`!");
             this.stop();
         }
         return this;

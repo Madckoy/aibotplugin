@@ -19,17 +19,19 @@ public abstract class BotTask implements IBotTask, IBotTaskConfigurable, Listene
     //configurable
     protected boolean isEnabled = true;
     protected boolean isLogging = true;
-    protected String  objective = "";
+
     // runtime
     protected Bot bot;
     protected Player player = null;
     protected long startTime = System.currentTimeMillis();
-    protected String icon = "☑️";
+
     protected boolean isPaused = false;
     protected boolean isDone = false;
     protected final String uuid;
     
     protected BotTaskParams params = new BotTaskParams(BotTaskParams.class.getSimpleName());
+    protected String icon = params.getIcon();
+    protected String objective = params.getObjective();
 
     protected boolean isListenerRegistered = false;
 
@@ -68,14 +70,14 @@ public abstract class BotTask implements IBotTask, IBotTaskConfigurable, Listene
 
     public void setObjective(String objctv) {
         objective = objctv;
-        BotLogger.info(this.isLogging(), "🚩 " + icon +" : "+ bot.getId() + "  Set Objective: " + objctv);
+        BotLogger.info("🚩", this.isLogging(), icon +" : "+ bot.getId() + "  Set Objective: " + objctv);
     }
 
     @Override
     public void update() {
         if (isEnabled) {
 
-            BotLogger.info(this.isLogging(), "🚦 " + icon +" : "+ bot.getId() + " " + icon + " Status: " + isDone + " | " + isPaused +
+            BotLogger.info("🚦", this.isLogging(), icon +" : "+ bot.getId() + " Status: " + isDone + " | " + isPaused +
                     " 📍 xyz: " + bot.getRuntimeStatus().getCurrentLocation() + " | " + 
                     " 🎯 xyz: " + bot.getRuntimeStatus().getTargetLocation());
 
@@ -120,7 +122,7 @@ public abstract class BotTask implements IBotTask, IBotTaskConfigurable, Listene
     public void setPaused(boolean paused) {
         this.isPaused = paused;
         String status = isPaused ? "⏸️ Pausing..." : "▶️ Resuming...";
-        BotLogger.info(this.isLogging(), status + bot.getId());
+        BotLogger.info(status, this.isLogging(), bot.getId());
     }
 
     @Override
@@ -149,7 +151,7 @@ public abstract class BotTask implements IBotTask, IBotTaskConfigurable, Listene
     }
 
     private void handlePlayerDisconnect() {
-        BotLogger.info(this.isLogging(), "🚨 Игрок " + player.getName() + " вышел! Бот " + bot.getId() + " переходит в автономный режим.");
+        BotLogger.info("🚨", this.isLogging(), "Игрок " + player.getName() + " вышел! Бот " + bot.getId() + " переходит в автономный режим.");
         this.bot.getLifeCycle().getTaskStackManager().clearTasks();
 
         bot.addTaskToQueue(new BotDecisionMakeTask(bot));
@@ -164,15 +166,15 @@ public abstract class BotTask implements IBotTask, IBotTaskConfigurable, Listene
             BotUtils.lookAt(bot, target);
         }, 1L); // ✅ Через тик, чтобы дать время на обновление
 
-        BotLogger.info(this.isLogging(), "🔄 TURNING: " + bot.getId() + " to look at the target: " + target);
+        BotLogger.info("🔄", this.isLogging(), "TURNING: " + bot.getId() + " to look at the target: " + target);
     }
 
     public void animateHand() {
         if (bot.getNPCEntity() instanceof Player playerBot) {
             playerBot.swingMainHand();
-            BotLogger.info(this.isLogging(), "✋🏻 Анимация руки выполнена");
+            BotLogger.info("✋🏻", this.isLogging(), "Анимация руки выполнена");
         } else {
-            BotLogger.info(this.isLogging(), "✋🏻 Анимация не выполнена: бот — не игрок");
+            BotLogger.info("✋🏻", this.isLogging(), "Анимация не выполнена: бот — не игрок");
         }
     }
 }

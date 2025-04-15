@@ -29,9 +29,8 @@ public class Bot {
     private final BotLifeCycle lifeCycle; // Цикл жизни бота
     private final BotInventory inventory; // Инвентарь бота
     private final BotManager botManager; // Менеджер ботов
-    private boolean autoPickupEnabled = false;
     private BotStatusRuntime rStatus; // Рантайм статус бота
-    private BotChat communicator; // Создаем поле для общения бота
+    private BotChat chat; // Создаем поле для общения бота
 
 
     public Bot(String id, NPC an_npc, BotManager botManager) {
@@ -41,13 +40,13 @@ public class Bot {
         this.inventory = new BotInventory(this);
         this.lifeCycle = new BotLifeCycle(this);
         this.rStatus = new BotStatusRuntime(this); // Инициализация рантайм статуса
-        this.communicator = new BotChat(this); // Инициализация BotCommunicator
-        BotLogger.info(true, "➕ " + id + " Has been CREATED AND SPAWNED!");
+        this.chat = new BotChat(this); // Инициализация BotCommunicator
+        BotLogger.info("➕", true, "Has been CREATED AND SPAWNED: " + id);
     }
 
     // Getter для общения
     public BotChat getCommunicator() {
-        return communicator;
+        return chat;
     }
 
     public NPC getNPC() {
@@ -79,15 +78,15 @@ public class Bot {
     public void despawnNPC() {
         if (npc != null) {
             //stop all tasks!
-            BotLogger.info(true, "➖ "+ id + " Stopping ALL Tasks!");
+            BotLogger.info("➖", true, "Stopping ALL Tasks for: " + id);
             getLifeCycle().getTaskStackManager().clearTasks();
 
-            BotLogger.info(true, "➖ "+ id + " Despawning and Destroying NPC");
+            BotLogger.info("➖", true, " Despawning and Destroying NPC for: "+id );
             npc.despawn();
             npc.destroy();
             npc = null;
         }
-        BotLogger.info(true, "➖ "+ id + " Has been DESPAWNED and DESTROYED!");
+        BotLogger.info("➖", true, "Has been DESPAWNED and DESTROYED: "+ id);
     }  
 
     public BotInventory getInventory() {
@@ -122,12 +121,8 @@ public class Bot {
       getLifeCycle().getTaskStackManager().pushTask(task);
     }
 
-    public void setAutoPickupEnabled(boolean enabled) {
-            this.autoPickupEnabled = enabled;
-    }
-
     public void pickupNearbyItems(boolean shouldPickup) {
-        getInventory().pickupAll(shouldPickup, autoPickupEnabled);
+        getInventory().pickupAll(shouldPickup);
     }    
     // под вопросом, стоит ли перенести в BotUtils или в BotInventory
     public void checkAndSelfMove(Location lastBrokenBlock) {
@@ -136,12 +131,12 @@ public class Bot {
     
         // Если есть дроп в радиусе 2 блоков — бот остается на месте
         if (!nearbyItems.isEmpty()) {
-            BotLogger.info(true, "✅ "+ getId() +"В радиусе " + pickupRadius + " блоков есть предметы, остаюсь на месте.");
+            BotLogger.info("✅",true, "В радиусе " + pickupRadius + " блоков от "+ getId() +" есть предметы, остаюсь на месте.");
             return;
         }
     
         // Если предметов рядом нет, двигаем бота к последнему разрушенному блоку
-        BotLogger.info(true, "✅ "+getId() +" Дроп подобран, двигаюсь к последнему разрушенному блоку " + lastBrokenBlock);
+        BotLogger.info("✅ ", true, "Дроп подобран "+ getId() +" и двигается к последнему разрушенному блоку " + lastBrokenBlock);
         
         BotMoveTask mv_task = new BotMoveTask(this);
         BotMoveTaskParams mv_taskParams = new BotMoveTaskParams(new BotCoordinate3D(lastBrokenBlock.getBlockX(), lastBrokenBlock.getBlockY(), lastBrokenBlock.getBlockZ()));

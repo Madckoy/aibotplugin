@@ -38,10 +38,9 @@ public class BotHandExcavateTask extends BotHandTask {
             this.target = handParams.getTarget();
 
             bot.getRuntimeStatus().setTargetLocation(target.getCoordinate3D());
-            BotLogger.info(isLogging(), bot.getId() + " ✅ Parameters for BotHandExcavateTask set.");
+            BotLogger.info("✅", isLogging(), bot.getId() + "Parameters for BotHandExcavateTask set.");
         } else {
-            BotLogger.info(isLogging(), bot.getId() + " ❌ Invalid parameters for BotHandExcavateTask.");
-            //this.stop();
+            BotLogger.info("❌", isLogging(), bot.getId() + "Invalid parameters for BotHandExcavateTask.");
         }
         return this;
     }
@@ -50,7 +49,7 @@ public class BotHandExcavateTask extends BotHandTask {
 
         super.execute();
 
-        BotLogger.info(isLogging(), bot.getId() + " 🔶 Executing BotHandExcavateTask");
+        BotLogger.info("🔶", isLogging(), bot.getId() + "Executing BotHandExcavateTask");
 
         setObjective(params.getObjective()  +": "+target);
 
@@ -67,7 +66,7 @@ public class BotHandExcavateTask extends BotHandTask {
                 // 🧱 Работа с блоком
                 Block block = BotWorldHelper.getBlockAt(target);
                 if (block == null || block.getType() == Material.AIR) {
-                    BotLogger.info(isLogging(), bot.getId() + " ✅ Block already excavated.");
+                    BotLogger.info("✅", isLogging(), bot.getId() + "Block already excavated.");
                     stop(); cancel(); return;
                 }
 
@@ -79,7 +78,7 @@ public class BotHandExcavateTask extends BotHandTask {
 
                 bot.getRuntimeStatus().brokenBlocksIncrease(target.type);
 
-                BotLogger.info(isLogging(), bot.getId() + " 🧱 Block excavated: " + block);
+                BotLogger.info("🧱", isLogging(), bot.getId() + "Block excavated: " + block);
                 
             }
         }.runTaskTimer(AIBotPlugin.getInstance(), 0L, 10L);

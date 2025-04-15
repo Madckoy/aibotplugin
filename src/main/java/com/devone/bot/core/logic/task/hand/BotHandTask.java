@@ -25,17 +25,17 @@ public abstract class BotHandTask extends BotTask {
         this.params.copyFrom(params);
         this.target = ((BotHandTaskParams)params).getTarget();
         bot.getRuntimeStatus().setTargetLocation(target.getCoordinate3D());
-        BotLogger.info(isLogging(), bot.getId() + " ✅ Parameters for BotHandTask set.");
-        BotLogger.info(isLogging(), bot.getId() + " BotHandTaskParams: " + params);   
+        BotLogger.info("✅", isLogging(), bot.getId() + "Parameters for BotHandTask set.");
+        BotLogger.info("✅", isLogging(), bot.getId() + " BotHandTaskParams: " + params);   
         return this;
     }
 
 
     public void execute() {
-        BotLogger.info(isLogging(), bot.getId() + " 🔶 Executing BotHandTask");
+        BotLogger.info("🔶", isLogging(), bot.getId() + "Executing BotHandTask");
         
         if (target == null) {
-            BotLogger.info(isLogging(), bot.getId() + " ❌ BotHandTask: Target is null.");
+            BotLogger.info("❌", isLogging(), bot.getId() + "BotHandTask: Target is null.");
             this.stop();
         }
     };

@@ -28,30 +28,30 @@ public class BotLogger {
         logger.setLevel(logLevel);
         logger.setUseParentHandlers(false);
 
-        info(true, "🔧 Logger initialized with level: " + logLevel.getName());
+        info("🔧 BotLogger", true, "Logger initialized with level: " + logLevel.getName());
     }
 
-    public static void debug(boolean enabled, String message) {
+    public static void debug(String method, boolean enabled, String message) {
         if (enabled && loggingEnabled) {
-            logger.fine("🟡 " + message);
+            logger.fine("🟡" +" "+ method + " "+message);
         }
     }
 
-    public static void info(boolean enabled, String message) {
+    public static void info(String method, boolean enabled, String message) {
         if (enabled && loggingEnabled) {
-            logger.info("ℹ️ " + message);
+            logger.info("ℹ️"+" "+ method + " "+message);
         }
     }
 
-    public static void warn(boolean enabled, String message) {
+    public static void warn(String method, boolean enabled, String message) {
         if (enabled && loggingEnabled) {
-            logger.warning("⚠️ " + message);
+            logger.warning("⚠️" +" "+ method + " "+message);
         }
     }
 
-    public static void error(boolean enabled, String message) {
+    public static void error(String method, boolean enabled, String message) {
         if (enabled && loggingEnabled) {
-            logger.severe("🚨 " + message);
+            logger.severe("🚨"+" "+ method + " "+ message);
         }
     }
 }

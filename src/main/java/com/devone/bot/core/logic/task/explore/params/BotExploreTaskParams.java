@@ -7,13 +7,13 @@ public class BotExploreTaskParams extends BotTaskParams {
     private int scanRadius = BotConstants.DEFAULT_SCAN_RANGE;
     private String icon = "🌐";
     private String objective = "Explore";
+    private boolean pickup = true;
     
     public BotExploreTaskParams(int scanRadius) {
         super(BotExploreTaskParams.class.getSimpleName());
         this.scanRadius = scanRadius;
         setIcon(icon);
         setObjective(objective);
-        setDefaults();
     }
     public BotExploreTaskParams() {
         super(BotExploreTaskParams.class.getSimpleName());
@@ -21,6 +21,11 @@ public class BotExploreTaskParams extends BotTaskParams {
         setObjective(objective);
         setDefaults();
     }
+
+    public boolean shouldPickup() {
+        return pickup;
+    }
+
     public int getScanRadius() {
         return scanRadius;
     }
@@ -30,7 +35,8 @@ public class BotExploreTaskParams extends BotTaskParams {
 
     @Override
     public Object setDefaults() {
-        config.set("explore.scan.radius",  this.scanRadius);
+        config.set("explore.scan.radius"  ,  this.scanRadius);
+        config.set("explore.pickup.enable", this.pickup);
         super.setDefaults();
         return this;
     }

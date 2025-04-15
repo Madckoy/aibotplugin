@@ -16,7 +16,8 @@ public class BotStatusRuntime {
     private BotCoordinate3D currentLocation;
 
     private BotCoordinate3D targetLocation;  // Новое свойство для целевой локации
-
+    // auto pick ip items
+    private boolean autoPickUpItems = true;
     // Другие состояния
     private boolean stuck;
     private int stuckCount;
@@ -54,6 +55,14 @@ public class BotStatusRuntime {
         return currentLocation;
     }
 
+    public void setAutoPickupItems(boolean pickup) {
+        autoPickUpItems = pickup;
+    }
+
+    public boolean getAutoPickupItems() {
+        return autoPickUpItems;
+    }
+
     public void setCurrentLocation(BotCoordinate3D location) {
         this.currentLocation = location;
     }
@@ -65,7 +74,7 @@ public class BotStatusRuntime {
 
     public void setStuck(boolean stuck) {
         this.stuck = stuck;
-        BotLogger.info(true, "🔔 BotStatusRuntime: set Stuck="+stuck);
+        BotLogger.info("🔔", true, "BotStatusRuntime: set Stuck="+stuck);
         incrementStuckCount();
     }
 

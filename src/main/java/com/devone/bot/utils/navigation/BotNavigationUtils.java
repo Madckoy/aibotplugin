@@ -17,8 +17,8 @@ public class BotNavigationUtils {
     private static void navigate(Bot bot, BotCoordinate3D target, float multiplier) {
 
         
-        BotLogger.info(true, bot.getId() + " 🏃🏻‍♂️‍➡️ Wants to navigate to " + target.toString() + " [ID: " + bot.getRuntimeStatus().getCurrentTask().getIcon() + "]");
-        BotLogger.info(true, bot.getId() + " Runtime Target Location: " + bot.getRuntimeStatus().getTargetLocation().toString() + " [ID: " + bot.getRuntimeStatus().getCurrentTask().getIcon() + "]");
+        BotLogger.info("🏃🏻‍♂️‍➡️ ", true, bot.getId() + "Wants to navigate to " + target.toString() + " [ID: " + bot.getRuntimeStatus().getCurrentTask().getIcon() + "]");
+        BotLogger.info("🎯", true,  bot.getId() + "Runtime Target Location: " + bot.getRuntimeStatus().getTargetLocation().toString() + " [ID: " + bot.getRuntimeStatus().getCurrentTask().getIcon() + "]");
 
 
         BotMoveTask moveTask = new BotMoveTask(bot);

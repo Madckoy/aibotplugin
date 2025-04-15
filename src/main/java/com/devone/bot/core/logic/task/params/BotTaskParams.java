@@ -10,12 +10,12 @@ import com.devone.bot.utils.BotConstants;
 import com.devone.bot.utils.logger.BotLogger;
 
 public class BotTaskParams implements IBotTaskParams, IBotTaskParamsConfigurable {
-    private String  icon       = "";
+    private String  icon       = "☑️";
     private boolean isEnabled = true;
     private boolean isLogging = true;
-    private String  objective = "";
+    private String  objective = "Do something abstract";
     
-    protected String fileName ="BotTaskParams";
+    protected String fileName = null;
     protected File file;
     protected FileConfiguration config;
 
@@ -29,7 +29,7 @@ public class BotTaskParams implements IBotTaskParams, IBotTaskParamsConfigurable
             configFolder.mkdirs();
         }
 
-        if(fileName!=null) {
+        if(fileName!=null || !fileName.equals("")) {
             loadFile(configFolder, fileName);
             if (!file.exists()) {
                 saveDefaultFile();
@@ -72,9 +72,9 @@ public class BotTaskParams implements IBotTaskParams, IBotTaskParamsConfigurable
     public Object saveDefaultFile() {
         try {
             config.save(file);
-            BotLogger.info(true,"✅ Configuration has been saved: " + file.getName());
+            BotLogger.info("✅", true,"Configuration has been saved: " + file.getName());
         } catch (IOException e) {
-            BotLogger.info(true,"❌ Error saving configuration for: " + file.getName());
+            BotLogger.info("❌", true,"Error saving configuration for: " + file.getName());
         }
         return this;
     }
@@ -83,6 +83,7 @@ public class BotTaskParams implements IBotTaskParams, IBotTaskParamsConfigurable
     public Object loadFile(File configFolder, String fileName) {
         this.file = new File(configFolder, fileName);
         this.config = YamlConfiguration.loadConfiguration(file);
+        BotLogger.info("🟢", true,"Loading task configuration: " + file.getName());
         return this;
     }
 

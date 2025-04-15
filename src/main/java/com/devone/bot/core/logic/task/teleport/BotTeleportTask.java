@@ -37,7 +37,7 @@ public class BotTeleportTask extends BotTask {
         if (tpTarget != null) {
             target = tpTarget;
         } else {
-            BotLogger.info(this.isLogging(), bot.getId() + " ❌ Некорректные параметры для `BotTeleportTask`!");
+            BotLogger.info("❌", this.isLogging(), bot.getId() + "Некорректные параметры для `BotTeleportTask`!");
             this.stop();
         }
     
@@ -50,7 +50,7 @@ public class BotTeleportTask extends BotTask {
         setObjective(params.getObjective() + " to: " + target);
     
         if (this.target == null) {
-            BotLogger.info(this.isLogging(), bot.getId() + " ❌ Целевая точка телепортации не задана.");
+            BotLogger.info("❌", this.isLogging(), bot.getId() + "Целевая точка телепортации не задана.");
             stop();
             return;
         }
@@ -65,7 +65,7 @@ public class BotTeleportTask extends BotTask {
             bot.getRuntimeStatus().setStuck(false);
             bot.getRuntimeStatus().teleportUsedIncrease();
     
-            BotLogger.info(this.isLogging(), bot.getId() + " 🗲 Телепорт с " + baseLocation.toVector() + " → " + safeOffset.toVector());
+            BotLogger.info("⚡", this.isLogging(), bot.getId() + "Телепорт с " + baseLocation.toVector() + " → " + safeOffset.toVector());
         });
     
         stop();
