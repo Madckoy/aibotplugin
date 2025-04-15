@@ -28,23 +28,16 @@ public class BotTeleportTask extends BotTask {
     public BotTeleportTask configure(IBotTaskParams params) {
 
         super.configure((BotTaskParams) params);
-        
-        if (params instanceof BotTeleportTaskParams) {
+    
 
-            this.params.copyFrom(params);
-            icon = this.params.getIcon();
-            objective = this.params.getObjective();
+        this.params.copyFrom(params);
 
-            BotCoordinate3D tpTarget = ((BotTeleportTaskParams)params).getTarget();
+        BotCoordinate3D tpTarget = ((BotTeleportTaskParams)params).getTarget();
 
-            if (tpTarget != null) {
-                target = tpTarget;
-            } else {
-                BotLogger.info(this.isLogging(), bot.getId() + " ❌ Некорректные параметры для `BotTeleportTask`!");
-                this.stop();
-            }
+        if (tpTarget != null) {
+            target = tpTarget;
         } else {
-            BotLogger.info(this.isLogging(), bot.getId() + " ❌ Некорректный тип параметров для `BotTeleportTask`!");
+            BotLogger.info(this.isLogging(), bot.getId() + " ❌ Некорректные параметры для `BotTeleportTask`!");
             this.stop();
         }
     
@@ -54,7 +47,7 @@ public class BotTeleportTask extends BotTask {
     @Override
     public void execute() {
 
-        setObjective(getObjective() + " to: " + target);
+        setObjective(params.getObjective() + " to: " + target);
     
         if (this.target == null) {
             BotLogger.info(this.isLogging(), bot.getId() + " ❌ Целевая точка телепортации не задана.");

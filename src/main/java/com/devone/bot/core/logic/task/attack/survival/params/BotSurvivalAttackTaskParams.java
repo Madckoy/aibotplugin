@@ -13,15 +13,19 @@ public class BotSurvivalAttackTaskParams extends BotTaskParams {
     
     public BotSurvivalAttackTaskParams() {
         super(BotSurvivalAttackTaskParams.class.getSimpleName());
+        setIcon(icon);
+        setObjective(objective);
         this.target = null;
         setDefaults();
     }
 
     public BotSurvivalAttackTaskParams(BotBlockData target, double damage) {
         super(BotSurvivalAttackTaskParams.class.getSimpleName());
-
         this.target = target;
         this.damage = damage;
+        setIcon(icon);
+        setObjective(objective);
+        setDefaults();
     }
 
     public BotBlockData getTarget() {
@@ -39,8 +43,6 @@ public class BotSurvivalAttackTaskParams extends BotTaskParams {
 
     @Override
     public Object setDefaults() {
-        config.set("survival.strike.icon", this.icon);
-        config.set("survival.strike.objective", this.objective);
         config.set("survival.strike.damage", this.damage);
         super.setDefaults();
         return this;
@@ -48,8 +50,6 @@ public class BotSurvivalAttackTaskParams extends BotTaskParams {
     @Override
     public Object copyFrom(IBotTaskParams source) {
         super.copyFrom(source);
-        icon = ((BotSurvivalAttackTaskParams)source).getIcon();
-        objective = ((BotSurvivalAttackTaskParams)source).getObjective();
         damage = ((BotSurvivalAttackTaskParams)source).getDamage();
         return this;
     }

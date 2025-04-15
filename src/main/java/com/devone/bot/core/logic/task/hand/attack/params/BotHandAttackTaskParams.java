@@ -14,23 +14,31 @@ public class BotHandAttackTaskParams extends BotHandTaskParams {
         super(BotHandAttackTaskParams.class.getSimpleName());
         this.target = target;
         this.damage = dmg;
+        setIcon(icon);
+        setObjective(objective);
         setDefaults();
     }
     
     public BotHandAttackTaskParams(BotBlockData target) {
         super(BotHandAttackTaskParams.class.getSimpleName());
         this.target = target;
+        setIcon(icon);
+        setObjective(objective);
         setDefaults();
     }
 
     public BotHandAttackTaskParams(double damage) {
         super(BotHandAttackTaskParams.class.getSimpleName());
         this.damage = damage;
+        setIcon(icon);
+        setObjective(objective);
         setDefaults();   
     }
 
     public BotHandAttackTaskParams() {
-        super();
+        super(BotHandAttackTaskParams.class.getSimpleName());
+        setIcon(icon);
+        setObjective(objective);
         setDefaults();
     }
 
@@ -49,8 +57,6 @@ public class BotHandAttackTaskParams extends BotHandTaskParams {
 
        @Override
     public Object setDefaults(){
-        config.set("hand.attack.icon", this.icon);
-        config.set("hand.attack.objective", this.objective);
         config.set("hand.attack.damage", this.damage);
         super.setDefaults();
         return this;

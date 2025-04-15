@@ -11,10 +11,14 @@ public class BotExploreTaskParams extends BotTaskParams {
     public BotExploreTaskParams(int scanRadius) {
         super(BotExploreTaskParams.class.getSimpleName());
         this.scanRadius = scanRadius;
+        setIcon(icon);
+        setObjective(objective);
         setDefaults();
     }
     public BotExploreTaskParams() {
         super(BotExploreTaskParams.class.getSimpleName());
+        setIcon(icon);
+        setObjective(objective);
         setDefaults();
     }
     public int getScanRadius() {
@@ -26,13 +30,10 @@ public class BotExploreTaskParams extends BotTaskParams {
 
     @Override
     public Object setDefaults() {
-        config.set("explore.icon", this.icon);
-        config.set("explore.objective", this.objective);
         config.set("explore.scan.radius",  this.scanRadius);
         super.setDefaults();
         return this;
     }
-
 
     @Override
     public String toString() {

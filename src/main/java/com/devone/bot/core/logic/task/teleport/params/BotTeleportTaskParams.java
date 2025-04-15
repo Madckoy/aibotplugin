@@ -5,7 +5,7 @@ import com.devone.bot.core.logic.task.params.IBotTaskParams;
 import com.devone.bot.utils.blocks.BotCoordinate3D;
 
 public class BotTeleportTaskParams extends BotCoordinate3DParams {
-    public BotCoordinate3D target;
+    public BotCoordinate3D target = new BotCoordinate3D(0,0,0);
 
     private String icon = "🗲";
     private String objective = "Teleport";
@@ -13,11 +13,14 @@ public class BotTeleportTaskParams extends BotCoordinate3DParams {
     public BotTeleportTaskParams(BotCoordinate3D target) {
         super(BotTeleportTaskParams.class.getSimpleName());
         this.target = target;
+        setIcon(icon);
+        setObjective(objective);
         setDefaults();
     }
     public BotTeleportTaskParams() {
         super(BotTeleportTaskParams.class.getSimpleName());
-        this.target = new BotCoordinate3D(0,0,0);
+        setIcon(icon);
+        setObjective(objective);
         setDefaults();
     }
     public BotCoordinate3D getTarget() {
@@ -29,8 +32,9 @@ public class BotTeleportTaskParams extends BotCoordinate3DParams {
 
     @Override
     public Object setDefaults() {
-        config.set("teleport.icon", icon);
-        config.set("teleport.objective", objective);
+        config.set("target.x", target.x);
+        config.set("target.y", target.y);
+        config.set("target.z", target.z);
         super.setDefaults();
         return this;
     }
@@ -38,8 +42,6 @@ public class BotTeleportTaskParams extends BotCoordinate3DParams {
     @Override
     public Object copyFrom(IBotTaskParams source) {
         super.copyFrom(source);
-        icon = ((BotTeleportTaskParams)source).getIcon();
-        objective = ((BotTeleportTaskParams)source).getObjective();
         target = ((BotTeleportTaskParams)source).getTarget();
         return this;
     }

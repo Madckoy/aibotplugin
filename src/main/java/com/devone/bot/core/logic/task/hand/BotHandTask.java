@@ -23,8 +23,6 @@ public abstract class BotHandTask extends BotTask {
     public BotHandTask configure(IBotTaskParams params) {
         super.configure((BotTaskParams) params);
         this.params.copyFrom(params);
-        setIcon(this.params.getIcon());
-        setObjective(this.params.getObjective());
         this.target = ((BotHandTaskParams)params).getTarget();
         bot.getRuntimeStatus().setTargetLocation(target.getCoordinate3D());
         BotLogger.info(isLogging(), bot.getId() + " ✅ Parameters for BotHandTask set.");

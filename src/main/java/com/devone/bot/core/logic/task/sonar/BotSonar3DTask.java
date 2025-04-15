@@ -34,8 +34,6 @@ public class BotSonar3DTask extends BotTask {
     public BotSonar3DTask configure(IBotTaskParams params) {
         super.configure((BotTaskParams)params);
         this.params.copyFrom(params);
-        setIcon(((BotSonarTaskParams)params).getIcon());
-        setObjective(((BotSonarTaskParams)params).getObjective());
         this.radius = ((BotSonarTaskParams)params).getRadius();
         this.height = ((BotSonarTaskParams)params).getHeight();
         return this;

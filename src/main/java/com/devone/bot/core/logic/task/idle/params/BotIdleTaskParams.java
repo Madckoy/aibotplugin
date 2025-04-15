@@ -11,12 +11,12 @@ public class BotIdleTaskParams extends BotTaskParams {
 
     public BotIdleTaskParams() {
         super(BotIdleTaskParams.class.getSimpleName());
+        setIcon(icon);
+        setObjective(objective);
         setDefaults();
     }
 
     public BotIdleTaskParams setDefaults() {
-        config.set("idle.icon", this.icon);
-        config.set("idle.objective", this.objective);
         config.set("idle.timeout", this.timeout);
         super.setDefaults();
         return this;

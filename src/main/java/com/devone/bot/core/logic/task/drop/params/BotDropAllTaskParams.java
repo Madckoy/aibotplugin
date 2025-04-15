@@ -9,15 +9,8 @@ public class BotDropAllTaskParams extends BotCoordinate3DParams{
 
     public BotDropAllTaskParams() {
         super(BotDropAllTaskParams.class.getSimpleName());
+        setIcon(icon);
+        setObjective(objective);
         setDefaults();
     }
-
-    @Override
-    public Object setDefaults(){
-        config.set("drop.all.icon", this.icon);
-        config.set("drop.all.objective", this.objective);
-        super.setDefaults();
-        return this;
-    }
-
 }

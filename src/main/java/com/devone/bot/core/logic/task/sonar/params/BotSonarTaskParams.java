@@ -14,10 +14,14 @@ public class BotSonarTaskParams extends BotTaskParams {
 
     public BotSonarTaskParams(BotCoordinate3D target) {
         super(BotSonarTaskParams.class.getSimpleName());
+        setIcon(icon);
+        setObjective(objective);
         setDefaults();
     }
     public BotSonarTaskParams() {
         super(BotSonarTaskParams.class.getSimpleName());
+        setIcon(icon);
+        setObjective(objective);
         setDefaults();
     }
 
@@ -38,8 +42,6 @@ public class BotSonarTaskParams extends BotTaskParams {
 
     @Override
     public Object setDefaults() {
-        config.set("sonar.icon", this.icon);
-        config.set("sonar.objective", this.objective);
         config.set("sonar.radius", this.radius);
         config.set("sonar.height", height);
 
@@ -50,8 +52,6 @@ public class BotSonarTaskParams extends BotTaskParams {
     @Override
     public Object copyFrom(IBotTaskParams source) {
         super.copyFrom(source);
-        icon = ((BotSonarTaskParams)source).getIcon();
-        objective = ((BotSonarTaskParams)source).getObjective();
         radius = ((BotSonarTaskParams)source).getRadius();
         height = ((BotSonarTaskParams)source).getHeight();
         return this;

@@ -89,8 +89,6 @@ public class BotExcavateTask extends BotTask {
         if(params instanceof BotExcavateTaskParams) {
 
             BotExcavateTaskParams breakParams = (BotExcavateTaskParams) params;
-            setIcon(breakParams.getIcon());
-            setObjective(breakParams.getObjective());
 
             this.targetMaterials = breakParams.getTargetMaterials();
             this.maxBlocks = breakParams.getMaxBlocks();
@@ -241,7 +239,7 @@ public class BotExcavateTask extends BotTask {
 
         if (bot.getRuntimeStatus().getTargetLocation() != null) {
 
-            setObjective("Probing: " + BotUtils.getBlockName(targetBlock)
+            setObjective(params.getObjective() + BotUtils.getBlockName(targetBlock)
                     + " at " + targetLocation);
 
             if (isInProtectedZone(bot.getRuntimeStatus().getTargetLocation())) {

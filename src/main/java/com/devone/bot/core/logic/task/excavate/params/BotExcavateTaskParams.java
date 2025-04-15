@@ -26,12 +26,16 @@ public class BotExcavateTaskParams extends BotTaskParams{
     public BotExcavateTaskParams() {
         super(BotExcavateTaskParams.class.getSimpleName());
         this.targetMaterials = null;
+        setIcon(icon);
+        setObjective(objective);
         setDefaults();
     }
 
     public BotExcavateTaskParams(String class_name) {
         super(class_name);
         this.targetMaterials = null;
+        setIcon(icon);
+        setObjective(objective);
         setDefaults();
     }
 
@@ -50,6 +54,8 @@ public class BotExcavateTaskParams extends BotTaskParams{
         this.offsetY = offsetY;
         this.offsetZ = offsetZ;
         this.patternName = patternName;
+        setIcon(icon);
+        setObjective(objective);
         setDefaults();
     }
     public Set<Material> getTargetMaterials() {
@@ -121,8 +127,6 @@ public class BotExcavateTaskParams extends BotTaskParams{
 
     @Override
     public Object setDefaults() {
-        config.set("icon", this.icon);
-        config.set("objective", this.objective);
         config.set("excavate.pattern",      this.patternName);
         config.set("excavate.outer.radius", this.outerRadius);
         config.set("excavate.inner.radius", this.innerRadius);

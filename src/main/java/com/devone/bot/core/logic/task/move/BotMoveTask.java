@@ -40,24 +40,22 @@ public class BotMoveTask extends BotTask {
     public BotTask configure(IBotTaskParams params) {
         super.configure((BotTaskParams)params);
 
-        if (params instanceof BotMoveTaskParams) {
-            this.params.copyFrom(params);
+        this.params.copyFrom(params);
 
-            BotCoordinate3D loc = this.params.getTarget();
-            setIcon(this.params.getIcon());
-            setObjective(this.params.getObjective());
-            this.speed     = this.params.getSpeed();
+        BotCoordinate3D loc = this.params.getTarget();
 
+        this.speed     = this.params.getSpeed();
+
+        bot.getRuntimeStatus().setTargetLocation(loc);
+
+        if (loc != null) {
             bot.getRuntimeStatus().setTargetLocation(loc);
-
-            if (loc != null) {
-                bot.getRuntimeStatus().setTargetLocation(loc);
-            } else {
-                BotLogger.info(isLogging(),bot.getId() + " ❌ Некорректный тип параметров для `BotMoveTask`!");
-                this.stop();
-            }
-
+            BotLogger.info(isLogging(),bot.getId() + " ✅ Target Location is set for `BotMoveTask`!");
+        } else {
+            BotLogger.info(isLogging(),bot.getId() + " ❌ Target Location is null! Invalid parameter type for `BotMoveTask`!");
+            this.stop();
         }
+
         return this;
     }
 
@@ -92,7 +90,7 @@ public class BotMoveTask extends BotTask {
 
         String tcs = tc != null ? " " + tc.x + ", " + tc.y + ", " + tc.z : "";
 
-        setObjective(getObjective() + " to " + block_name + " at:" + tcs);
+        setObjective(params.getObjective() + " to " + block_name + " at:" + tcs);
 
         if (!isMoving) {
 

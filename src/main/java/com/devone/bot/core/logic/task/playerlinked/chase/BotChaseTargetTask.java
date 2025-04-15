@@ -47,7 +47,7 @@ public class BotChaseTargetTask extends BotTask {
             return;
         }
 
-        setObjective(getObjective() + ": " + target.type);
+        setObjective(params.getObjective()  + ": " + target.type);
         
         updateFollowLogic();
 

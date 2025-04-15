@@ -14,22 +14,30 @@ public class BotHandExcavateTaskParams extends BotHandTaskParams {
         super(BotHandExcavateTaskParams.class.getSimpleName());
         this.target = target;
         this.damage = damage;
+        setIcon(icon);
+        setObjective(objective);        
         setDefaults();
     }
     
     public BotHandExcavateTaskParams(BotBlockData target) {
         super(BotHandExcavateTaskParams.class.getSimpleName());
         this.target = target;
+        setIcon(icon);
+        setObjective(objective);
         setDefaults();
     }
 
     public BotHandExcavateTaskParams(double damage) {
         super(BotHandExcavateTaskParams.class.getSimpleName());
         this.damage = damage;
+        setIcon(icon);
+        setObjective(objective);
         setDefaults();
     }
     public BotHandExcavateTaskParams() {
         super(BotHandExcavateTaskParams.class.getSimpleName());
+        setIcon(icon);
+        setObjective(objective);
         setDefaults();
     }
 
@@ -47,10 +55,7 @@ public class BotHandExcavateTaskParams extends BotHandTaskParams {
     }
     
     public Object setDefaults() {
-        config.set("hand.excavate.icon", this.icon);
-        config.set("hand.excavate.objective", this.objective);
         config.set("hand.excavate.damage", this.damage);
-
         super.setDefaults();
         return this;
     }

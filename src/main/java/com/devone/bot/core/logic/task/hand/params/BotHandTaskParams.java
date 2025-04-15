@@ -15,25 +15,38 @@ public class BotHandTaskParams extends BotTaskParams {
         super(BotHandTaskParams.class.getSimpleName());
         this.target = target;
         this.damage = damage;
+        setIcon(icon);
+        setObjective(objective);
+        setDefaults();
     }
     
     public BotHandTaskParams(BotBlockData target) {
         super(BotHandTaskParams.class.getSimpleName());
         this.target = target;
+        setIcon(icon);
+        setObjective(objective);
+        setDefaults();
     }
 
     public BotHandTaskParams(double damage) {
         super(BotHandTaskParams.class.getSimpleName());
         this.damage = damage;
+        setIcon(icon);
+        setObjective(objective);
+        setDefaults();
     }
 
     public BotHandTaskParams() {
         super(BotHandTaskParams.class.getSimpleName());
+        setIcon(icon);
+        setObjective(objective);
         setDefaults();
     }    
     
     public BotHandTaskParams(String class_name) {
         super(class_name);
+        setIcon(icon);
+        setObjective(objective);
         setDefaults();
     }
 
@@ -51,8 +64,6 @@ public class BotHandTaskParams extends BotTaskParams {
     }
 
     public Object setDefaults() {
-        config.set("hand.icon", this.icon);
-        config.set("hand.objective", this.objective);
         config.set("hand.damage", this.damage);
         super.setDefaults();
         return this;
@@ -60,9 +71,6 @@ public class BotHandTaskParams extends BotTaskParams {
 
     public Object copyFrom(IBotTaskParams source) {
         super.copyFrom(source);
-        setIcon(((BotHandTaskParams)source).getIcon());
-        setObjective(((BotHandTaskParams)source).getObjective());
-        setObjective(((BotHandTaskParams)source).getObjective());
         damage = ((BotHandTaskParams)source).getDamage();
         return this;
     }

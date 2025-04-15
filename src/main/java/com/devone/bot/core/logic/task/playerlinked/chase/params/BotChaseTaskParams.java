@@ -12,6 +12,8 @@ public class BotChaseTaskParams extends BotTaskParams {
 
     public BotChaseTaskParams() {
         super(BotChaseTaskParams.class.getSimpleName());
+        setIcon(icon);
+        setObjective(objective);
         setDefaults();
     }
 
@@ -19,8 +21,6 @@ public class BotChaseTaskParams extends BotTaskParams {
     public Object setDefaults() {
         config.set("chase.distance", chase_distance); // Расстояние следования за игроком
         config.set("chase.attack.range", attack_range); // Дистанция атаки на мобов
-        config.set("chase.icon", icon);
-        config.set("chase.objective", objective);
         super.setDefaults();
         return this;
     }
@@ -29,8 +29,6 @@ public class BotChaseTaskParams extends BotTaskParams {
         super.copyFrom(source);
         chase_distance = ((BotChaseTaskParams)source).getChaseDistance();
         attack_range = ((BotChaseTaskParams)source).getAttackRange();
-        icon = ((BotChaseTaskParams)source).getIcon();
-        objective = ((BotChaseTaskParams)source).getObjective();
         return this;
     }
 

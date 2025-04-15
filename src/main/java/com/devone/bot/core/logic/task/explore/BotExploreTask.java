@@ -45,7 +45,7 @@ public class BotExploreTask extends BotTask {
         BotSonar3DTask sonar = new BotSonar3DTask(bot, scanRadius, scanRadius);
         sonar.execute();
 
-        setObjective("Exploring the area...");
+        setObjective(params.getObjective());
 
         BotSceneData sceneData = bot.getRuntimeStatus().getSceneData();
         if (sceneData == null) {

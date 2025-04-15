@@ -12,6 +12,8 @@ public class BotProtectTaskParams extends BotTaskParams {
 
     public BotProtectTaskParams() {
         super(BotProtectTaskParams.class.getSimpleName());
+        setIcon(icon);
+        setObjective(objective);
         setDefaults();
     }
 
@@ -19,8 +21,6 @@ public class BotProtectTaskParams extends BotTaskParams {
     public Object setDefaults() {
         config.set("protect.distance", follow_distance); // Расстояние следования за игроком
         config.set("protect.attack.range", attack_range); // Дистанция атаки на мобов
-        config.set("protect.icon", icon);
-        config.set("protect.objective", objective);
         super.setDefaults();
         return this;
     }
@@ -29,8 +29,6 @@ public class BotProtectTaskParams extends BotTaskParams {
         super.copyFrom(source);
         follow_distance = ((BotProtectTaskParams)source).getFollowDistance();
         attack_range = ((BotProtectTaskParams)source).getAttackRange();
-        icon = ((BotProtectTaskParams)source).getIcon();
-        objective = ((BotProtectTaskParams)source).getObjective();
         return this;
     }
 

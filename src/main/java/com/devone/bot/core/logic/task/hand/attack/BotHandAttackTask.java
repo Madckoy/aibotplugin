@@ -54,8 +54,6 @@ public class BotHandAttackTask extends BotHandTask {
         super.configure((BotTaskParams) params);
 
         if (params instanceof BotHandAttackTaskParams handParams) {
-            setIcon(handParams.getIcon());
-            setObjective(handParams.getObjective());
             this.damage = handParams.getDamage();
             this.target = handParams.getTarget();
 
@@ -95,7 +93,7 @@ public class BotHandAttackTask extends BotHandTask {
                     stop(); cancel(); return;
                 }
 
-                setObjective(getObjective() + " "+ target.type + "("+target.x+", "+target.y+", "+target.z+")");
+                setObjective(params.getObjective()  + " "+ target.type + "("+target.x+", "+target.y+", "+target.z+")");
 
                 attempts = attempts+1;
 

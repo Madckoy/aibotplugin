@@ -12,11 +12,12 @@ public class BotMoveTaskParams extends BotTaskParams {
     private String icon = "🏃🏻‍♂️‍➡️";
     private String objective = "Move";
 
-
     public BotMoveTaskParams(BotCoordinate3D target, float speed) {
         super(BotMoveTaskParams.class.getSimpleName());
         this.target = target;
         this.speed = speed;
+        setIcon(icon);
+        setObjective(objective);
         setDefaults();
     }
 
@@ -24,6 +25,8 @@ public class BotMoveTaskParams extends BotTaskParams {
         super(BotMoveTaskParams.class.getSimpleName());
         this.target = target;
         this.speed = 1.0F;
+        setIcon(icon);
+        setObjective(objective);
         setDefaults();
     }
 
@@ -31,6 +34,8 @@ public class BotMoveTaskParams extends BotTaskParams {
         super(BotMoveTaskParams.class.getSimpleName());
         this.target = null;
         this.speed = 1.0F;
+        setIcon(icon);
+        setObjective(objective);
         setDefaults();
     }
 
@@ -52,8 +57,6 @@ public class BotMoveTaskParams extends BotTaskParams {
     
     @Override
     public Object setDefaults() {
-        config.set("move.icon", this.icon);
-        config.set("move.objective", this.objective);
         config.set("move.speed", this.speed);
         super.setDefaults();
         return this;
@@ -61,11 +64,8 @@ public class BotMoveTaskParams extends BotTaskParams {
     @Override
     public Object copyFrom(IBotTaskParams source) {
         super.copyFrom(source);
-
-        setIcon(((BotMoveTaskParams)source).getIcon());
-        setObjective(((BotMoveTaskParams)source).getObjective());
-        
         speed = ((BotMoveTaskParams)source).getSpeed();
+        target = ((BotMoveTaskParams)source).getTarget();
         return this;
     }
    

@@ -35,9 +35,6 @@ public class BotHandExcavateTask extends BotHandTask {
         super.configure((BotTaskParams) params);
 
         if (params instanceof BotHandExcavateTaskParams handParams) {
-            setIcon(handParams.getIcon());
-            setObjective(handParams.getObjective());
-
             this.target = handParams.getTarget();
 
             bot.getRuntimeStatus().setTargetLocation(target.getCoordinate3D());
@@ -55,7 +52,7 @@ public class BotHandExcavateTask extends BotHandTask {
 
         BotLogger.info(isLogging(), bot.getId() + " 🔶 Executing BotHandExcavateTask");
 
-        setObjective(getObjective() +": "+target);
+        setObjective(params.getObjective()  +": "+target);
 
         bukkitTask = new BukkitRunnable() {
             @Override

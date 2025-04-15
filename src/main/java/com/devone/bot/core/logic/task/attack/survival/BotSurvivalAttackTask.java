@@ -50,7 +50,7 @@ public class BotSurvivalAttackTask extends BotTask {
             return;
         }
 
-        setObjective(getObjective() + " at: " + target);
+        setObjective(params.getObjective() + " at: " + target);
 
         // 🗲 1. Телепорт
         BotTeleportTask tpTask = new BotTeleportTask(bot, null).configure(new BotTeleportTaskParams(target.getCoordinate3D()));
