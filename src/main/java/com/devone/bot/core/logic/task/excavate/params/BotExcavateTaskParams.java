@@ -20,7 +20,6 @@ public class BotExcavateTaskParams extends BotTaskParams{
     private int offsetY = 0;
     private int offsetZ = 0;
     private boolean pickup = true;
-    private boolean pickupAuto = true;
     private String patternName = BotConstants.DEFAULT_PATTERN_BREAK;
     private String icon = "🪨";
     private String objective = "Excavate";

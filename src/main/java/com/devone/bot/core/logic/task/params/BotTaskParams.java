@@ -72,9 +72,9 @@ public class BotTaskParams implements IBotTaskParams, IBotTaskParamsConfigurable
     public Object saveDefaultFile() {
         try {
             config.save(file);
-            BotLogger.info(true,"✅ Configuration has been saved: " + file.getName());
+            BotLogger.info("✅", true,"Configuration has been saved: " + file.getName());
         } catch (IOException e) {
-            BotLogger.info(true,"❌ Error saving configuration for: " + file.getName());
+            BotLogger.info("❌", true,"Error saving configuration for: " + file.getName());
         }
         return this;
     }
@@ -83,7 +83,7 @@ public class BotTaskParams implements IBotTaskParams, IBotTaskParamsConfigurable
     public Object loadFile(File configFolder, String fileName) {
         this.file = new File(configFolder, fileName);
         this.config = YamlConfiguration.loadConfiguration(file);
-        BotLogger.info(true,"🟢 Loading task configuration: " + file.getName());
+        BotLogger.info("🟢", true,"Loading task configuration: " + file.getName());
         return this;
     }
 

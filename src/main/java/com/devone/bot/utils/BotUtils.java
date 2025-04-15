@@ -46,7 +46,7 @@ public class BotUtils {
     
         // ✅ Проверяем, что блок не AIR (иначе эффект не сработает)
         if (blockType == Material.AIR) {
-            BotLogger.info(true, "⚠️ Эффект разрушения отменён: блок уже AIR " + location.toString());
+            BotLogger.info("⚠️", true, "Эффект разрушения отменён: блок уже AIR " + location.toString());
             return;
         }
     
@@ -58,7 +58,7 @@ public class BotUtils {
             location.getBlock().getBlockData() // Тип блока для эффекта
         );
     
-        BotLogger.info(true, "🎇 Эффект разрушения воспроизведён на " + location.toString());
+        BotLogger.info("🎇", true, "Эффект разрушения воспроизведён на " + location.toString());
     }
 
     public static boolean requiresTool(Material blockType) {
@@ -120,7 +120,7 @@ public class BotUtils {
         bot.getNPCEntity().teleport(newLook);
     }
 
-        public static String formatTime(long milliseconds) {
+    public static String formatTime(long milliseconds) {
         long hours   = TimeUnit.MILLISECONDS.toHours(milliseconds);
         long minutes = TimeUnit.MILLISECONDS.toMinutes(milliseconds) % 60;
         long seconds = TimeUnit.MILLISECONDS.toSeconds(milliseconds) % 60;

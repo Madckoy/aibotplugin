@@ -25,11 +25,11 @@ public class BotTeleportCommand implements CommandExecutor {
     @Override
     public boolean onCommand(CommandSender sender, Command command, String label, String[] args) {
 
-        BotLogger.info(true, "🔧 Получена команда от сервера: " + Arrays.toString(args));
+        BotLogger.info("🔧", true, "Получена команда от сервера: " + Arrays.toString(args));
 
         if (args.length < 4) {
             sender.sendMessage("❌ Недостаточно аргументов. Используйте: /bot-tp <bot_id> <x> <y> <z>");
-            BotLogger.info(true, "❌ Недостаточно аргументов для /bot-tp");
+            BotLogger.info("❌", true, "Недостаточно аргументов для /bot-tp");
             return false;
         }
 
@@ -45,7 +45,7 @@ public class BotTeleportCommand implements CommandExecutor {
 
             sender.sendMessage("❌ Координаты должны быть целыми числами.");
 
-            BotLogger.info(true, "❌ Координаты должны быть целыми числами.");
+            BotLogger.info("❌", true, "Координаты должны быть целыми числами.");
             
             return false;
         }
@@ -55,7 +55,7 @@ public class BotTeleportCommand implements CommandExecutor {
         if (bot == null) {
             sender.sendMessage("❌ Бот с именем " + botName + " не найден.");
             
-            BotLogger.info(true, "❌ Бот с именем " + botName + " не найден.");
+            BotLogger.info("❌", true, "Бот с именем " + botName + " не найден.");
 
             return false;
         }
@@ -69,11 +69,11 @@ public class BotTeleportCommand implements CommandExecutor {
         task.configure(tpParams);
         bot.addTaskToQueue(task);
 
-        BotLogger.info(true, "📌 /bot-tp: Бот " + bot.getId() + " телепортируется в " + tpParams.getTarget());
+        BotLogger.info("📌", true, "/bot-tp: Бот " + bot.getId() + " телепортируется в " + tpParams.getTarget());
         
         sender.sendMessage("✅ Бот '" + botName + "' телепортируется в " + x + " " + y + " " + z);
 
-        BotLogger.info(true,"✅ Бот '" + botName + "' телепортируется в " + x + " " + y + " " + z);
+        BotLogger.info("✅", true,"Бот '" + botName + "' телепортируется в " + x + " " + y + " " + z);
         
         return true;
     }

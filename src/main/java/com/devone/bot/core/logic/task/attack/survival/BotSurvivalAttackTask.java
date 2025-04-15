@@ -36,7 +36,7 @@ public class BotSurvivalAttackTask extends BotTask {
             this.target = this.params.getTarget();
             this.damage = this.params.getDamage();
         } else {
-            BotLogger.info(isLogging(), bot.getId() + " ❌ Неверные параметры для BotSurvivalStrikeTask");
+            BotLogger.info("❌", isLogging(), bot.getId() + "Неверные параметры для BotSurvivalStrikeTask");
             this.stop();
         }
         return this;
@@ -45,7 +45,7 @@ public class BotSurvivalAttackTask extends BotTask {
     @Override
     public void execute() {
         if (target == null || target.uuid == null) {
-            BotLogger.info(isLogging(), bot.getId() + " ❌ Цель отсутствует или не содержит UUID");
+            BotLogger.info("❌", isLogging(), bot.getId() + "Цель отсутствует или не содержит UUID");
             this.stop();
             return;
         }
@@ -62,7 +62,7 @@ public class BotSurvivalAttackTask extends BotTask {
         bot.addTaskToQueue(handTask);
         bot.addTaskToQueue(tpTask);
 
-        BotLogger.info(isLogging(), bot.getId() + " જ⁀➴ Подготовлен боевой выпад на цель: " + target.uuid);
+        BotLogger.info("જ⁀➴ ", isLogging(), bot.getId() + "Подготовлен боевой выпад на цель: " + target.uuid);
         this.stop();
     }
 }

@@ -38,7 +38,7 @@ public class BotMoveHereCommand implements CommandExecutor {
 
         Location targetLocation = player.getLocation();
 
-        BotLogger.info(true,"📌 /bot-move-here: Бот " + bot.getId() + " Идет к игроку в точкe " + targetLocation);
+        BotLogger.info("📌 ", true,"/bot-move-here: Бот " + bot.getId() + " Идет к игроку в точкe " + targetLocation);
 
 
         // ✅ Очищаем стек задач

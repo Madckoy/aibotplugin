@@ -25,11 +25,11 @@ public class BotMoveCommand implements CommandExecutor {
     @Override
     public boolean onCommand(CommandSender sender, Command command, String label, String[] args) {
 
-       BotLogger.info(true, "🔧 Получена команда от сервера: " + Arrays.toString(args));
+       BotLogger.info("🔧 ", true, "Получена команда от сервера: " + Arrays.toString(args));
 
         if (args.length < 4) {
             sender.sendMessage("❌ Недостаточно аргументов. Используйте: /bot-move <bot_id> <x> <y> <z>");
-            BotLogger.info(true, "❌ Недостаточно аргументов для /bot-move");
+            BotLogger.info("❌" , true, "Недостаточно аргументов для /bot-move");
             return false;
         }
 
@@ -46,7 +46,7 @@ public class BotMoveCommand implements CommandExecutor {
 
             sender.sendMessage("❌ Координаты должны быть целыми числами.");
 
-            BotLogger.info(true, "❌ Координаты должны быть целыми числами.");
+            BotLogger.info("❌ ", true, "Координаты должны быть целыми числами.");
             
             return false;
         }
@@ -56,7 +56,7 @@ public class BotMoveCommand implements CommandExecutor {
         if (bot == null) {
             sender.sendMessage("❌ Бот с именем " + botName + " не найден.");
             
-            BotLogger.info(true, "❌ Бот с именем " + botName + " не найден.");
+            BotLogger.info("❌",  true, "Бот с именем " + botName + " не найден.");
 
             return false;
         }
@@ -71,7 +71,7 @@ public class BotMoveCommand implements CommandExecutor {
         moveTask.configure(moveTaskParams);
         bot.addTaskToQueue(moveTask);
 
-        BotLogger.info(true, "📌 /bot-move: Бот " + bot.getId() + " направляется в " + targetLocation);
+        BotLogger.info("📌 ", true, "/bot-move: Бот " + bot.getId() + " направляется в " + targetLocation);
         
         sender.sendMessage("✅ Бот '" + botName + "' направляется в " + x + " " + y + " " + z);
         

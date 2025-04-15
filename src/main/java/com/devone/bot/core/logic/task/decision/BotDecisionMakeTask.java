@@ -20,7 +20,7 @@ public class BotDecisionMakeTask extends BotTask {
 
     public void execute() {
         // 📌 Начать исследование
-        BotLogger.info(this.isLogging(), "🌐 " + bot.getId() + " начинает исследование");
+        BotLogger.info("🌐", this.isLogging(), bot.getId() + " начинает исследование");
         BotExploreTask explore = new BotExploreTask(bot);
         bot.addTaskToQueue(explore);
         return;

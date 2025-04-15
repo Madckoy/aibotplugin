@@ -8,7 +8,6 @@ public class BotExploreTaskParams extends BotTaskParams {
     private String icon = "🌐";
     private String objective = "Explore";
     private boolean pickup = true;
-    private boolean pickupAuto = true;
     
     public BotExploreTaskParams(int scanRadius) {
         super(BotExploreTaskParams.class.getSimpleName());

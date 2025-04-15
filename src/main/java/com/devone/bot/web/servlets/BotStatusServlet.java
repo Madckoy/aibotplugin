@@ -67,6 +67,7 @@ public class BotStatusServlet extends HttpServlet {
                 botJson.addProperty("mobs_killed_size", bot.getRuntimeStatus().getMobsKilled().size());
                 botJson.addProperty("mobs_killed", bot.getRuntimeStatus().getMobsKilled().toString());
                 botJson.addProperty("teleport_used", bot.getRuntimeStatus().getTeleportUsed());
+                botJson.addProperty("auto_pick_up_items", bot.getRuntimeStatus().getAutoPickupItems());
 
                 String currLoc = " " + loc.x + ", " + loc.y + ", " + loc.z;   
 

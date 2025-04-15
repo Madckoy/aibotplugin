@@ -42,7 +42,7 @@ public class BotChaseTargetTask extends BotTask {
     @Override
     public void execute() {
         if (target == null) {
-            BotLogger.info(this.isLogging(),"💀 Цель исчезла. Завершаем преследование.");
+            BotLogger.info("💀", this.isLogging(),"Цель исчезла. Завершаем преследование.");
             this.stop();
             return;
         }
@@ -56,7 +56,7 @@ public class BotChaseTargetTask extends BotTask {
 
         // Защита от вечного цикла
         if (getElapsedTime() > 120000) {
-            BotLogger.info(this.isLogging(),"💀 Не могу добраться до цели. Завершаю преследование.");
+            BotLogger.info("💀", this.isLogging(),"Не могу добраться до цели. Завершаю преследование.");
             this.stop();
         }
     }
@@ -65,7 +65,7 @@ public class BotChaseTargetTask extends BotTask {
 
         BotUtils.lookAt(bot, target.getCoordinate3D());
         
-        BotLogger.info(this.isLogging(),"🏃 Chasing " + target.type );
+        BotLogger.info("🏃", this.isLogging(),"Chasing: " + target.type );
 
         this.stop();
 

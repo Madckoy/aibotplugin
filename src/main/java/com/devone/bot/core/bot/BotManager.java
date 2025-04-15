@@ -34,9 +34,9 @@ public class BotManager {
         this.config = new BotManagerConfig(botsFile);
 
         Bukkit.getScheduler().runTaskLater(plugin, () -> {
-            BotLogger.info(true, "💡 Loading bots...");
+            BotLogger.info("💡", true, "Loading bots...");
             loadExistingBots();
-            BotLogger.info(true, "✅ All bots loaded.");
+            BotLogger.info("✅ ", true, "All bots loaded.");
         }, 600L);
     }
 
@@ -63,18 +63,18 @@ public class BotManager {
             if (!npc.isSpawned()) {
                 Location spawnLocation = BotWorldHelper.getWorldLocation(storedLocation);
                 npc.spawn(spawnLocation);
-                BotLogger.info(true, "✅ Spawned NPC: " + botName);
+                BotLogger.info("✅", true, "Spawned NPC: " + botName);
             }
 
             Bot bot = new Bot(botName, npc, this);
             botsMap.put(botName, bot);
-            BotLogger.info(true, "✅ " + bot.getId() + " added to the map!");
+            BotLogger.info("✅", true, bot.getId() + " added to the map!");
         }
 
         bm_markers = new BlueMapMarkers(this);
         bm_markers.scheduleMarkerUpdate();
 
-        BotLogger.info(true, "✅ Loaded NPC bots: " + botsMap.size());
+        BotLogger.info("✅" , true, "Loaded NPC bots: " + botsMap.size());
     }
 
     public void saveBots() {
@@ -89,7 +89,7 @@ public class BotManager {
         });
 
         config.save();
-        BotLogger.info(true, "✅ Bots saved to bots.json.");
+        BotLogger.info("✅" , true, "Bots saved to bots.json.");
     }
 
     public void addBot(String name, Bot bot) {
@@ -105,13 +105,13 @@ public class BotManager {
             botsMap.remove(name);
             bm_markers.removeMarker(name);
             saveBots();
-            BotLogger.info(true, "➖ " + name + " has been removed.");
+            BotLogger.info("➖", true,  name + " has been removed.");
         }
     }
 
     public void removeAllBots() {
         new ArrayList<>(botsMap.keySet()).forEach(this::removeBot);
-        BotLogger.info(true, "✅ All bots removed.");
+        BotLogger.info("✅", true, "All bots removed.");
     }
 
     public Bot getBot(String name) {

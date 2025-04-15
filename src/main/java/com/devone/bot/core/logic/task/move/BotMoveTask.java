@@ -50,9 +50,9 @@ public class BotMoveTask extends BotTask {
 
         if (loc != null) {
             bot.getRuntimeStatus().setTargetLocation(loc);
-            BotLogger.info(isLogging(),bot.getId() + " ✅ Target Location is set for `BotMoveTask`!");
+            BotLogger.info("✅", isLogging(),bot.getId() + "Target Location is set for `BotMoveTask`!");
         } else {
-            BotLogger.info(isLogging(),bot.getId() + " ❌ Target Location is null! Invalid parameter type for `BotMoveTask`!");
+            BotLogger.info("❌", isLogging(),bot.getId() + "Target Location is null! Invalid parameter type for `BotMoveTask`!");
             this.stop();
         }
 
@@ -68,13 +68,13 @@ public class BotMoveTask extends BotTask {
         }
 
         if (!bot.getNPC().isSpawned()) {
-            BotLogger.info(isLogging(), bot.getId() + " ⚠️ NPC не заспавнен! Ожидаем...");
+            BotLogger.info("⚠️", isLogging(), bot.getId() + "NPC не заспавнен! Ожидаем...");
             this.stop(); // Или можно re-queue
             return;
         }
         
         if (bot.getRuntimeStatus().getTargetLocation()==null) {
-            BotLogger.info(isLogging(), bot.getId() + " ❌ Нет цели для движения! [ID: " + uuid + "]");
+            BotLogger.info("❌", isLogging(), bot.getId() + "Нет цели для движения! [ID: " + uuid + "]");
             this.stop();
             return;                 
         }
@@ -103,7 +103,7 @@ public class BotMoveTask extends BotTask {
             
             isMoving = true;
         
-            BotLogger.info(this.isLogging(), bot.getId() + " 🏃🏻‍♂️ Начал движение к " + targetLocation);
+            BotLogger.info("🏃🏻‍♂️", this.isLogging(), bot.getId() + "Начал движение к " + targetLocation);
         
             taskHandle = Bukkit.getScheduler().runTaskTimer(AIBotPlugin.getInstance(), () -> {
                 
@@ -116,7 +116,7 @@ public class BotMoveTask extends BotTask {
             
                 long elapsed = System.currentTimeMillis() - startTime;
                 if (elapsed > BotConstants.DEFAULT_TASK_TIMEOUT ) {
-                    BotLogger.warn(isLogging(), bot.getId() + " ⏱ Тайм-аут навигации! Прерываем задачу.");
+                    BotLogger.info("⏱️", isLogging(), bot.getId() + "Тайм-аут навигации! Прерываем задачу.");
                     bot.getRuntimeStatus().setStuck(true);  // 
                     stopTaskHandle();
                     this.stop();
@@ -125,7 +125,7 @@ public class BotMoveTask extends BotTask {
             }, 0L, 20L); // проверка раз в секунду
         }        
         else {
-            BotLogger.info(this.isLogging(), bot.getId() + " ⏳ Двигаюсь к " + targetLocation);
+            BotLogger.info("⏳", this.isLogging(), bot.getId() + "Двигаюсь к " + targetLocation);
         }
         
     }
@@ -142,7 +142,7 @@ public class BotMoveTask extends BotTask {
 
         this.isMoving = false;
         bot.getRuntimeStatus().setTargetLocation(null);
-        BotLogger.info(this.isLogging(), bot.getId() + " 🛑 Move task завершён");  
+        BotLogger.info("🛑", this.isLogging(), bot.getId() + "Move task завершён");  
         
         stopTaskHandle();
 
@@ -157,7 +157,7 @@ public class BotMoveTask extends BotTask {
     public void onNavigationComplete(NavigationCompleteEvent event) {
         if (event.getNPC().getId() != bot.getNPC().getId()) return;
 
-        BotLogger.info(this.isLogging(), bot.getId() + " ✅ Навигатор сообщил о завершении");
+        BotLogger.info("✅", this.isLogging(), bot.getId() + "Навигатор сообщил о завершении");
         this.stop(); // Завершаем задачу
     }
 }

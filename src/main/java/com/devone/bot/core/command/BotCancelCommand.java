@@ -38,7 +38,7 @@ public class BotCancelCommand implements CommandExecutor {
     
         player.sendMessage("§aВсе задачи бота " + bot.getId() + " отменены!");
 
-        BotLogger.info(true, "🛑 /bot-cancel: Очищен стек задач бота " + bot.getId());
+        BotLogger.info("🛑", true, "/bot-cancel: Очищен стек задач бота " + bot.getId());
 
         return true;
     }
