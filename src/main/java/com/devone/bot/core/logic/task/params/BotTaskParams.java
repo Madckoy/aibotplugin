@@ -15,7 +15,7 @@ public class BotTaskParams implements IBotTaskParams, IBotTaskParamsConfigurable
     private boolean isLogging = true;
     private String  objective = "Do something abstract";
     
-    protected String fileName = "";
+    protected String fileName = null;
     protected File file;
     protected FileConfiguration config;
 
@@ -29,7 +29,7 @@ public class BotTaskParams implements IBotTaskParams, IBotTaskParamsConfigurable
             configFolder.mkdirs();
         }
 
-        if(fileName!=null || fileName.equals("")) {
+        if(fileName!=null || !fileName.equals("")) {
             loadFile(configFolder, fileName);
             if (!file.exists()) {
                 saveDefaultFile();
