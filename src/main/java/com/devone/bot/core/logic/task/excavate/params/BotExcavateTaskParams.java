@@ -19,6 +19,8 @@ public class BotExcavateTaskParams extends BotTaskParams{
     private int offsetX = 0;
     private int offsetY = 0;
     private int offsetZ = 0;
+    private boolean pickup = true;
+    private boolean pickupAuto = true;
     private String patternName = BotConstants.DEFAULT_PATTERN_BREAK;
     private String icon = "🪨";
     private String objective = "Excavate";
@@ -123,16 +125,19 @@ public class BotExcavateTaskParams extends BotTaskParams{
     public void setPatternName(String patternName) {
         this.patternName = patternName;
     }
+    public boolean shouldPickup() {
+        return pickup;
+    }
 
     @Override
     public Object setDefaults() {
-        config.set("excavate.pattern",      this.patternName);
-        config.set("excavate.outer.radius", this.outerRadius);
-        config.set("excavate.inner.radius", this.innerRadius);
-        config.set("excavate.offsetX", this.offsetX);
-        config.set("excavate.offsetY", this.offsetY);
-        config.set("excavate.offsetZ", this.offsetZ);
-
+        config.set("excavate.pattern",       this.patternName);
+        config.set("excavate.outer.radius",  this.outerRadius);
+        config.set("excavate.inner.radius",  this.innerRadius);
+        config.set("excavate.offsetX"     ,  this.offsetX);
+        config.set("excavate.offsetY",       this.offsetY);
+        config.set("excavate.offsetZ",       this.offsetZ);
+        config.set("excavate.pickup.enable", this.pickup);
         super.setDefaults();
         return this;
     }

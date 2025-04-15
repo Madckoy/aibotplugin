@@ -46,8 +46,8 @@ public class BotExploreTask extends BotTask {
         sonar.execute();
 
         setObjective(params.getObjective());
-
-        bot.getInventory().pickupAll(params.shouldPickup(), params.shouldPickupAuto());
+        
+        bot.pickupNearbyItems(params.shouldPickup());
 
         BotSceneData sceneData = bot.getRuntimeStatus().getSceneData();
         if (sceneData == null) {

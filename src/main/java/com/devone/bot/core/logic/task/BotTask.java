@@ -29,7 +29,7 @@ public abstract class BotTask implements IBotTask, IBotTaskConfigurable, Listene
     protected boolean isDone = false;
     protected final String uuid;
     
-    protected BotTaskParams params = new BotTaskParams(BotTaskParams.class.getSimpleName());
+    protected BotTaskParams params = new BotTaskParams(null);
     protected String icon = params.getIcon();
     protected String objective = params.getObjective();
 

@@ -33,8 +33,8 @@ public class BotExcavateTask extends BotTask {
     private int maxBlocks;
     private int outerRadius = BotConstants.DEFAULT_SCAN_RANGE;
     private int innerRadius = BotConstants.DEFAULT_SCAN_RANGE;
-
-    private boolean shouldPickup = true;
+    private BotExcavateTaskParams params = new BotExcavateTaskParams();
+    private boolean shouldPickup = params.shouldPickup();
     private boolean destroyAllIfNoTarget = false;
     private Set<Material> targetMaterials = null;
     private String patternName = BotConstants.DEFAULT_PATTERN_BREAK;
@@ -216,7 +216,7 @@ public class BotExcavateTask extends BotTask {
             return;
         }
 
-        bot.pickupNearbyItems(shouldPickup);
+        bot.pickupNearbyItems(params.shouldPickup());
 
         BotLogger.info(isLogging(), "🔍 Запускаем 3D-сканирование окружающей среды.");
         BotSonar3DTask scanTask = new BotSonar3DTask(bot, outerRadius, outerRadius);

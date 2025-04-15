@@ -27,10 +27,6 @@ public class BotExploreTaskParams extends BotTaskParams {
         return pickup;
     }
 
-    public boolean shouldPickupAuto() {
-        return pickupAuto;
-    }
-
     public int getScanRadius() {
         return scanRadius;
     }
@@ -40,9 +36,8 @@ public class BotExploreTaskParams extends BotTaskParams {
 
     @Override
     public Object setDefaults() {
-        config.set("explore.scan.radius",  this.scanRadius);
-        config.set("explore.pickup", this.pickup);
-        config.set("explore.pickup.auto", this.pickupAuto);
+        config.set("explore.scan.radius"  ,  this.scanRadius);
+        config.set("explore.pickup.enable", this.pickup);
         super.setDefaults();
         return this;
     }
