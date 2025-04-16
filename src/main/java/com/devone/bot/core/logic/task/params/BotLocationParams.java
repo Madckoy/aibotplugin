@@ -8,17 +8,14 @@ public class BotLocationParams extends BotTaskParams {
 
     public BotLocationParams() {
         // Загружаем из файла и копируем значения
-        BotLocationParams loaded = loadOrCreate(BotLocationParams.class);
-        this.location = loaded.location;
-        setIcon(loaded.getIcon());
-        setObjective(loaded.getObjective());
+        super();
     }
 
-    public BotLocation getCoordinate3D() {
+    public BotLocation getLocation() {
         return location;
     }
 
-    public void setCoordinate3D(BotLocation coord) {
+    public void setLocation(BotLocation coord) {
         this.location = coord;
     }
 }
