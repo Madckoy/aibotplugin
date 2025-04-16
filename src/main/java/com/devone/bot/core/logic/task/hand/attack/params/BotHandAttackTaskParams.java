@@ -1,11 +1,10 @@
 package com.devone.bot.core.logic.task.hand.attack.params;
 
 import com.devone.bot.core.logic.task.hand.params.BotHandTaskParams;
-import com.devone.bot.utils.BotConstants;
 import com.devone.bot.utils.blocks.BotBlockData;
 
 public class BotHandAttackTaskParams extends BotHandTaskParams {
-    public double damage = BotConstants.DEFAULT_HAND_DAMAGE;
+
     public BotBlockData target = new BotBlockData();
 
     public BotHandAttackTaskParams() {
@@ -18,17 +17,9 @@ public class BotHandAttackTaskParams extends BotHandTaskParams {
     public BotHandAttackTaskParams(BotBlockData target, double damage) {
         super(); // Важно вызвать родительский конструктор
         this.target = target;
-        this.damage = damage;
+        setDamage(damage);
         setIcon("⚔️");
         setObjective("Attack");
-    }
-
-    public double getDamage() {
-        return damage;
-    }
-
-    public void setDamage(double damage) {
-        this.damage = damage;
     }
 
     public BotBlockData getTarget() {
@@ -42,7 +33,7 @@ public class BotHandAttackTaskParams extends BotHandTaskParams {
     @Override
     public String toString() {
         return "BotHandAttackTaskParams{" +
-                "damage=" + damage +
+                "damage=" + getDamage() +
                 '}';
     }
 }

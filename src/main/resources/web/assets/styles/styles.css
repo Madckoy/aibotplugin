@@ -175,6 +175,10 @@ th:nth-child(7), td:nth-child(7) {  /* Objective */ /* Queue */
     background-color: #555;
 }
 
+.inv-slot.pickup-enabled {
+    border: 1px solid #3E5B56;
+}
+
 /* === BUTTONS === */
 .control-buttons {
     padding: 2px;
