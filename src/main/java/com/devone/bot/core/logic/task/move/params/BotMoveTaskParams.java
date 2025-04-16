@@ -12,13 +12,6 @@ public class BotMoveTaskParams extends BotTaskParams {
         // дефолтные значения
         setIcon("🏃🏻‍♂️‍➡️");
         setObjective("Move");
-
-        // подгружаем из файла (если есть)
-        BotMoveTaskParams loaded = loadOrCreate(BotMoveTaskParams.class);
-        this.target = loaded.target;
-        this.speed = loaded.speed;
-        setIcon(loaded.getIcon());
-        setObjective(loaded.getObjective());
     }
 
     public BotMoveTaskParams(BotLocation target) {
