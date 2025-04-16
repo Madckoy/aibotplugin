@@ -10,7 +10,7 @@ import org.bukkit.entity.Entity;
 import org.bukkit.entity.LivingEntity;
 
 import com.devone.bot.utils.blocks.BotBlockData;
-import com.devone.bot.utils.blocks.BotCoordinate3D;
+import com.devone.bot.utils.blocks.BotLocation;
 
 public class BotWorldHelper {
 
@@ -18,20 +18,20 @@ public class BotWorldHelper {
         return Bukkit.getWorlds().get(0);
     }
 
-    public static Block getBlockAt(BotCoordinate3D coordinate) {
+    public static Block getBlockAt(BotLocation location) {
         World world = getWorld();
         if (world == null) {
             return null;
         }
         
-        int x = coordinate.x;
-        int y = coordinate.y;
-        int z = coordinate.z;
+        int x = location.getX();
+        int y = location.getY();
+        int z = location.getZ();
 
         return world.getBlockAt(x, y, z);
     }
 
-    public static Location getWorldLocation(BotCoordinate3D coordinate) {
+    public static Location getWorldLocation(BotLocation coordinate) {
         return getBlockAt(coordinate).getLocation();
     }
 
@@ -39,9 +39,9 @@ public class BotWorldHelper {
         
         Location spawnLocation = getWorld().getSpawnLocation();
         BotBlockData blockData = new BotBlockData();
-        blockData.x = spawnLocation.getBlockX();
-        blockData.y = spawnLocation.getBlockY();
-        blockData.z = spawnLocation.getBlockZ();
+        blockData.setX(spawnLocation.getBlockX());
+        blockData.setX(spawnLocation.getBlockY());
+        blockData.setZ(spawnLocation.getBlockZ());
 
         return blockData;
     }

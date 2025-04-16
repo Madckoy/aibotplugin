@@ -7,19 +7,18 @@ import org.eclipse.jetty.util.StringUtil;
 import com.devone.bot.core.bot.Bot;
 import com.devone.bot.core.inventory.BotInventory;
 import com.devone.bot.core.logic.task.BotTask;
+import com.devone.bot.core.logic.task.IBotTaskParameterized;
 import com.devone.bot.core.logic.task.excavate.params.BotExcavateTaskParams;
 import com.devone.bot.core.logic.task.excavate.patterns.IBotExcavatePattern;
 import com.devone.bot.core.logic.task.excavate.patterns.generator.BotExcavateInterpretedYamlPattern;
 import com.devone.bot.core.logic.task.hand.BotHandTask;
 import com.devone.bot.core.logic.task.hand.excavate.BotHandExcavateTask;
 import com.devone.bot.core.logic.task.hand.excavate.params.BotHandExcavateTaskParams;
-import com.devone.bot.core.logic.task.params.BotTaskParams;
-import com.devone.bot.core.logic.task.params.IBotTaskParams;
 import com.devone.bot.core.logic.task.sonar.BotSonar3DTask;
 import com.devone.bot.core.zone.BotZoneManager;
 import com.devone.bot.utils.BotConstants;
 import com.devone.bot.utils.BotUtils;
-import com.devone.bot.utils.blocks.BotCoordinate3D;
+import com.devone.bot.utils.blocks.BotLocation;
 import com.devone.bot.utils.blocks.BotAxisDirection.AxisDirection;
 import com.devone.bot.utils.logger.BotLogger;
 import com.devone.bot.utils.world.BotWorldHelper;
@@ -28,7 +27,7 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.*;
 
-public class BotExcavateTask extends BotTask {
+public class BotExcavateTask extends BotTask<BotExcavateTaskParams>{
 
     private int maxBlocks;
     private int outerRadius = BotConstants.DEFAULT_SCAN_RANGE;
@@ -82,13 +81,11 @@ public class BotExcavateTask extends BotTask {
      * Если параметры не заданы, используются значения по умолчанию.
      */
 
-    @Override
-    public BotExcavateTask configure(IBotTaskParams params) {
+    public IBotTaskParameterized<BotExcavateTaskParams> configure(BotExcavateTaskParams params) {
 
-        super.configure((BotTaskParams)params);
         if(params instanceof BotExcavateTaskParams) {
 
-            BotExcavateTaskParams breakParams = (BotExcavateTaskParams) params;
+            BotExcavateTaskParams breakParams = params;
 
             this.targetMaterials = breakParams.getTargetMaterials();
             this.maxBlocks = breakParams.getMaxBlocks();
@@ -220,18 +217,17 @@ public class BotExcavateTask extends BotTask {
 
         BotLogger.info("🔍", isLogging(), "Запускаем 3D-сканирование окружающей среды.");
         BotSonar3DTask scanTask = new BotSonar3DTask(bot, outerRadius, outerRadius);
-        bot.addTaskToQueue(scanTask);
+        bot.getLifeCycle().getTaskStackManager().pushTask(scanTask);
 
+        BotLocation location = breakPatternImpl.findNextBlock(bot);
 
-        BotCoordinate3D coordinate = breakPatternImpl.findNextBlock(bot);
-
-        if (coordinate == null) {
+        if (location == null) {
             this.stop();
             BotLogger.info("🙈", isLogging(), "Не удалось получить координаты блока для разрушения. Выходим.");
             return;
         }
 
-        BotCoordinate3D targetLocation = new BotCoordinate3D(coordinate.x, coordinate.y, coordinate.z);
+        BotLocation targetLocation = new BotLocation(location);
 
         Block targetBlock = BotWorldHelper.getBlockAt(targetLocation);
 
@@ -269,8 +265,8 @@ public class BotExcavateTask extends BotTask {
             setObjective("Excavating: " + BotUtils.getBlockName(targetBlock));
 
             BotHandTask handTask = new BotHandExcavateTask(bot);
-            handTask.configure(new BotHandExcavateTaskParams());
-            bot.addTaskToQueue(handTask);
+            handTask.setParams(new BotHandExcavateTaskParams());
+            bot.getLifeCycle().getTaskStackManager().pushTask(handTask);
 
         } else {
 
@@ -285,7 +281,7 @@ public class BotExcavateTask extends BotTask {
 
         if (destroyAllIfNoTarget) {
             BotLogger.info("🔄", isLogging(), bot.getId() + " Целевых блоков нет! Запускаем полное разрушение.");
-            bot.addTaskToQueue(new BotExcavateAnyAroundTask(bot));
+            bot.getLifeCycle().getTaskStackManager().pushTask(new BotExcavateAnyAroundTask(bot));
         } else {
             setObjective("");
             BotLogger.info("❌" , isLogging(), bot.getId() + " Нет подходящих блоков. Завершаем.");
@@ -305,7 +301,7 @@ public class BotExcavateTask extends BotTask {
         return enough;
     }
 
-    private boolean isInProtectedZone(BotCoordinate3D location) {
+    private boolean isInProtectedZone(BotLocation location) {
         boolean protectedZone = BotZoneManager.getInstance().isInProtectedZone(location);
         if (protectedZone) {
             BotLogger.info("🛑", isLogging(), "Блок в запретной зоне, разрушение запрещено.");

@@ -6,12 +6,13 @@ import com.devone.bot.core.logic.task.decision.params.BotDecisionMakeTaskParams;
 import com.devone.bot.core.logic.task.explore.BotExploreTask;
 import com.devone.bot.utils.logger.BotLogger;
 
-public class BotDecisionMakeTask extends BotTask {
+public class BotDecisionMakeTask extends BotTask<BotDecisionMakeTaskParams> {
 
     BotDecisionMakeTaskParams params = new BotDecisionMakeTaskParams();
 
     public BotDecisionMakeTask(Bot bot) {
         super(bot);
+
         setIcon(params.getIcon());
         setObjective(params.getObjective());
     }
@@ -22,7 +23,8 @@ public class BotDecisionMakeTask extends BotTask {
         // 📌 Начать исследование
         BotLogger.info("🌐", this.isLogging(), bot.getId() + " начинает исследование");
         BotExploreTask explore = new BotExploreTask(bot);
-        bot.addTaskToQueue(explore);
+
+        bot.getLifeCycle().getTaskStackManager().pushTask(explore);
         return;
 
     }

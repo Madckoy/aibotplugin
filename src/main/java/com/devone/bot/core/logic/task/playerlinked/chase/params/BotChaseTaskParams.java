@@ -1,42 +1,53 @@
 package com.devone.bot.core.logic.task.playerlinked.chase.params;
+
 import com.devone.bot.core.logic.task.params.BotTaskParams;
-import com.devone.bot.core.logic.task.params.IBotTaskParams;
+import com.devone.bot.utils.blocks.BotBlockData;
 
 public class BotChaseTaskParams extends BotTaskParams {
 
-    private double chase_distance = 2.5;
-    private double attack_range = 10.0;
-    private String icon = "🎯";
-    private String objective = "Chase";
+    private double chaseDistance = 2.5;
+    private double attackRange = 10.0;
 
+    // 🧠 Цель в рантайме, не сохраняется
+    private transient BotBlockData target;
 
     public BotChaseTaskParams() {
-        super(BotChaseTaskParams.class.getSimpleName());
-        setIcon(icon);
-        setObjective(objective);
-        setDefaults();
+        setIcon("🎯");
+        setObjective("Chase");
+
+        BotChaseTaskParams loaded = loadOrCreate(BotChaseTaskParams.class);
+        this.chaseDistance = loaded.chaseDistance;
+        this.attackRange = loaded.attackRange;
+        setIcon(loaded.getIcon());
+        setObjective(loaded.getObjective());
     }
 
-    @Override
-    public Object setDefaults() {
-        config.set("chase.distance", chase_distance); // Расстояние следования за игроком
-        config.set("chase.attack.range", attack_range); // Дистанция атаки на мобов
-        super.setDefaults();
-        return this;
-    }
-
-    public Object copyFrom(IBotTaskParams source) {
-        super.copyFrom(source);
-        chase_distance = ((BotChaseTaskParams)source).getChaseDistance();
-        attack_range = ((BotChaseTaskParams)source).getAttackRange();
-        return this;
+    public BotChaseTaskParams(BotBlockData tgt) {
+        this(); // загружаем всё из файла
+        this.target = tgt; // но переопределяем runtime-цель
     }
 
     public double getChaseDistance() {
-        return chase_distance;
+        return chaseDistance;
+    }
+
+    public void setChaseDistance(double distance) {
+        this.chaseDistance = distance;
     }
 
     public double getAttackRange() {
-        return attack_range;
+        return attackRange;
+    }
+
+    public void setAttackRange(double distance) {
+        this.attackRange = distance;
+    }
+
+    public BotBlockData getTarget() {
+        return target;
+    }
+
+    public void setTarget(BotBlockData tgt) {
+        this.target = tgt;
     }
 }

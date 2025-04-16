@@ -34,7 +34,7 @@ public class BotDropAllCommand implements CommandExecutor {
 
         // ✅ Добавляем задачу на перемещение
         BotDropAllTask dropAllTask = new BotDropAllTask(bot, null);
-        bot.addTaskToQueue(dropAllTask);
+        bot.getLifeCycle().getTaskStackManager().pushTask(dropAllTask);
 
         // Подтверждение для игрока
         sender.sendMessage("✅ Инвентарь бота '" + botName + "' был сброшен на месте.");

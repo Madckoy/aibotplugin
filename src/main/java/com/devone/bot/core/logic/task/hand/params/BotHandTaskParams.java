@@ -1,80 +1,56 @@
 package com.devone.bot.core.logic.task.hand.params;
 
 import com.devone.bot.core.logic.task.params.BotTaskParams;
-import com.devone.bot.core.logic.task.params.IBotTaskParams;
 import com.devone.bot.utils.BotConstants;
 import com.devone.bot.utils.blocks.BotBlockData;
 
 public class BotHandTaskParams extends BotTaskParams {
-    public double damage = BotConstants.DEFAULT_HAND_DAMAGE;
-    public BotBlockData target = new BotBlockData();
-    private String icon = "✋🏻";
-    private String objective = "Hand";
 
-    public BotHandTaskParams(BotBlockData target, double damage) {
-        super(BotHandTaskParams.class.getSimpleName());
-        this.target = target;
-        this.damage = damage;
-        setIcon(icon);
-        setObjective(objective);
-    }
-    
-    public BotHandTaskParams(BotBlockData target) {
-        super(BotHandTaskParams.class.getSimpleName());
-        this.target = target;
-        setIcon(icon);
-        setObjective(objective);
-    }
+    private double damage = BotConstants.DEFAULT_HAND_DAMAGE;
 
-    public BotHandTaskParams(double damage) {
-        super(BotHandTaskParams.class.getSimpleName());
-        this.damage = damage;
-        setIcon(icon);
-        setObjective(objective);
-    }
+    private transient BotBlockData target = new BotBlockData();
 
     public BotHandTaskParams() {
-        super(BotHandTaskParams.class.getSimpleName());
-        setIcon(icon);
-        setObjective(objective);
-        setDefaults();
-    }    
-    
-    public BotHandTaskParams(String class_name) {
-        super(class_name);
-        setIcon(icon);
-        setObjective(objective);
-        setDefaults();
+        setIcon("✋🏻");
+        setObjective("Hand");
+
+        BotHandTaskParams loaded = loadOrCreate(BotHandTaskParams.class);
+        
+        this.damage = loaded.damage;
+        setIcon(loaded.getIcon());
+        setObjective(loaded.getObjective());
+    }
+
+    public BotHandTaskParams(BotBlockData target) {
+        this(); // загружаем из файла
+        this.target = target;
+    }
+
+    public BotHandTaskParams(BotBlockData target, double damage) {
+        this(); // загружаем из файла
+        this.target = target;
+        this.damage = damage;
     }
 
     public double getDamage() {
         return damage;
     }
+
     public void setDamage(double damage) {
         this.damage = damage;
     }
+
     public BotBlockData getTarget() {
         return target;
     }
+
     public void setTarget(BotBlockData target) {
         this.target = target;
     }
 
-    public Object setDefaults() {
-        config.set("hand.damage", this.damage);
-        super.setDefaults();
-        return this;
-    }
-
-    public Object copyFrom(IBotTaskParams source) {
-        super.copyFrom(source);
-        damage = ((BotHandTaskParams)source).getDamage();
-        return this;
-    }
-
     @Override
     public String toString() {
-        return "BotHandUseTaskParams{" +
+        return "BotHandTaskParams{" +
                 "damage=" + damage +
                 '}';
     }

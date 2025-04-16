@@ -25,25 +25,22 @@ public class BotExcavateTaskParams extends BotTaskParams{
     private String objective = "Excavate";
 
     public BotExcavateTaskParams() {
-        super(BotExcavateTaskParams.class.getSimpleName());
-        this.targetMaterials = null;
-        setIcon(icon);
-        setObjective(objective);
-        setDefaults();
+        // Загружаем параметры из файла
+        BotExcavateTaskParams loaded = loadOrCreate(BotExcavateTaskParams.class);
+        this.targetMaterials = loaded.getTargetMaterials();
+        setIcon(loaded.getIcon());
+        setObjective(loaded.getObjective());
     }
 
     public BotExcavateTaskParams(String class_name) {
-        super(class_name);
         this.targetMaterials = null;
         setIcon(icon);
         setObjective(objective);
-        setDefaults();
     }
 
     public BotExcavateTaskParams(Set<Material> targetMaterials, int maxBlocks, int outerRadius, int innerRadius,
             boolean shouldPickup, boolean destroyAllIfNoTarget, AxisDirection breakDirection, int offsetX, int offsetY,
-            int offsetZ, String patternName) {
-        super(BotExcavateTaskParams.class.getSimpleName());       
+            int offsetZ, String patternName) {    
         this.targetMaterials = targetMaterials;
         this.maxBlocks = maxBlocks;
         this.outerRadius = outerRadius;
@@ -126,19 +123,6 @@ public class BotExcavateTaskParams extends BotTaskParams{
     }
     public boolean shouldPickup() {
         return pickup;
-    }
-
-    @Override
-    public Object setDefaults() {
-        config.set("excavate.pattern",       this.patternName);
-        config.set("excavate.outer.radius",  this.outerRadius);
-        config.set("excavate.inner.radius",  this.innerRadius);
-        config.set("excavate.offsetX"     ,  this.offsetX);
-        config.set("excavate.offsetY",       this.offsetY);
-        config.set("excavate.offsetZ",       this.offsetZ);
-        config.set("excavate.pickup.enable", this.pickup);
-        super.setDefaults();
-        return this;
     }
 
     @Override

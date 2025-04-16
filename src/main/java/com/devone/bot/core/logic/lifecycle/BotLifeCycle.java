@@ -4,19 +4,19 @@ import org.bukkit.Bukkit;
 
 import com.devone.bot.AIBotPlugin;
 import com.devone.bot.core.bot.Bot;
-import com.devone.bot.core.logic.task.BotTaskStackManager;
+import com.devone.bot.core.logic.task.BotTaskManager;
 import com.devone.bot.core.logic.task.decision.BotDecisionMakeTask;
 import com.devone.bot.utils.logger.BotLogger;
 import com.devone.bot.utils.server.ServerUtils;
 
 public class BotLifeCycle {
     private final Bot bot;
-    private final BotTaskStackManager taskStackManager;
+    private final BotTaskManager taskStackManager;
     private boolean idleAdded = false; // ✅ Флаг, чтобы не добавлять IdleActivity несколько раз
 
     public BotLifeCycle(Bot bot) {
         this.bot = bot;
-        this.taskStackManager = new BotTaskStackManager(bot);
+        this.taskStackManager = new BotTaskManager(bot);
 
         startLifeCycle();
     }
@@ -42,12 +42,13 @@ public class BotLifeCycle {
                 BotLogger.info("😴", true, "Бот " + bot.getId() + " Без задач. Добавляем IdleTask.");
                 
                 taskStackManager.pushTask(new BotDecisionMakeTask(bot));
+                
                 idleAdded = true; // ✅ Ставим флаг, что IdleActivity уже добавлена
             }
         }
     }
 
-    public BotTaskStackManager getTaskStackManager() {
+    public BotTaskManager getTaskStackManager() {
         return taskStackManager;
     }
 }

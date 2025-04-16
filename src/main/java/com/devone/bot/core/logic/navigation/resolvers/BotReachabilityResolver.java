@@ -1,7 +1,7 @@
 package com.devone.bot.core.logic.navigation.resolvers;
 
 import com.devone.bot.utils.blocks.BotBlockData;
-import com.devone.bot.utils.blocks.BotCoordinate3D;
+import com.devone.bot.utils.blocks.BotLocation;
 
 import java.util.*;
 
@@ -11,23 +11,23 @@ public class BotReachabilityResolver {
         {1, 0}, {-1, 0}, {0, 1}, {0, -1}
     };
 
-    public static List<BotBlockData> resolve(BotCoordinate3D botPos, List<BotBlockData> navigableBlocks) {
+    public static List<BotBlockData> resolve(BotLocation botPos, List<BotBlockData> navigableBlocks) {
         // Начинаем с блока под ботом
-        BotCoordinate3D start = new BotCoordinate3D(botPos.x, botPos.y-1, botPos.z);
+        BotLocation start = new BotLocation(botPos.getX(), botPos.getY()-1, botPos.getZ());
 
-        Map<BotCoordinate3D, BotBlockData> map = new HashMap<>();
+        Map<BotLocation, BotBlockData> map = new HashMap<>();
         for (BotBlockData b : navigableBlocks) {
-            map.put(new BotCoordinate3D(b.x, b.y, b.z), b);
+            map.put(new BotLocation(b.getX(), b.getY(), b.getZ()), b);
         }
 
-        Set<BotCoordinate3D> visited = new HashSet<>();
-        Queue<BotCoordinate3D> queue = new LinkedList<>();
+        Set<BotLocation> visited = new HashSet<>();
+        Queue<BotLocation> queue = new LinkedList<>();
         queue.add(start);
 
         List<BotBlockData> reachable = new ArrayList<>();
 
         while (!queue.isEmpty()) {
-            BotCoordinate3D current = queue.poll();
+            BotLocation current = queue.poll();
             if (visited.contains(current)) continue;
             visited.add(current);
 
@@ -40,11 +40,11 @@ public class BotReachabilityResolver {
                     int dz = d[1];
 
                     for (int dy = -1; dy <= 1; dy++) {
-                        int nx = current.x + dx;
-                        int ny = current.y + dy;
-                        int nz = current.z + dz;
+                        int nx = current.getX() + dx;
+                        int ny = current.getY() + dy;
+                        int nz = current.getZ() + dz;
 
-                        BotCoordinate3D neighbor = new BotCoordinate3D(nx, ny, nz);
+                        BotLocation neighbor = new BotLocation(nx, ny, nz);
                         if (!visited.contains(neighbor) && map.containsKey(neighbor)) {
                             queue.add(neighbor);
                         }

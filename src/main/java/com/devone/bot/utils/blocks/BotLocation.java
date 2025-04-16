@@ -2,22 +2,22 @@ package com.devone.bot.utils.blocks;
 
 import java.util.Objects;
 
-public class BotCoordinate3D {
-    public int x, y, z;
+public class BotLocation {
+    private int x, y, z;
 
-    public BotCoordinate3D() {
+    public BotLocation() {
         this.x = 0;
         this.y = 0;
         this.z = 0;
     }
 
-    public BotCoordinate3D(int x, int y, int z) {
+    public BotLocation(int x, int y, int z) {
         this.x = x;
         this.y = y;
         this.z = z;
     }
 
-    public BotCoordinate3D(BotCoordinate3D other) {
+    public BotLocation(BotLocation other) {
         this.x = other.x;
         this.y = other.y;
         this.z = other.z;
@@ -26,12 +26,12 @@ public class BotCoordinate3D {
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
-        if (!(o instanceof BotCoordinate3D)) return false;
-        BotCoordinate3D that = (BotCoordinate3D) o;
+        if (!(o instanceof BotLocation)) return false;
+        BotLocation that = (BotLocation) o;
         return x == that.x && y == that.y && z == that.z;
     }
 
-    public double distanceTo(BotCoordinate3D other) {
+    public double distanceTo(BotLocation other) {
         if (other == null) return Double.MAX_VALUE;
         int dx = this.x - other.x;
         int dy = this.y - other.y;
@@ -46,6 +46,16 @@ public class BotCoordinate3D {
  
     @Override
     public String toString() {
-        return String.format("(%d,%d,%d)", x, y, z);
+        return String.format("%d,%d,%d", x, y, z);
     }
+
+    public int getX() { return x; }
+    public void setX(int x) { this.x = x; }
+
+    public int getY() { return y; }
+    public void setY(int y) { this.y = y; }
+
+    public int getZ() { return z; }
+    public void setZ(int z) { this.z = z; }
+
 }

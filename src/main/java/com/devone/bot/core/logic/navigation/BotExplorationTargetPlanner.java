@@ -14,7 +14,7 @@
 package com.devone.bot.core.logic.navigation;
 
 import com.devone.bot.utils.blocks.BotBlockData;
-import com.devone.bot.utils.blocks.BotCoordinate3D;
+import com.devone.bot.utils.blocks.BotLocation;
 
 import java.util.*;
  import java.util.stream.Collectors;
@@ -26,7 +26,7 @@ import java.util.*;
          EVEN_DISTRIBUTED
      }
  
-     public static List<BotBlockData> selectTargets(BotCoordinate3D bot,
+     public static List<BotBlockData> selectTargets(BotLocation bot,
                                                     List<BotBlockData> reachable,
                                                     Strategy strategy,
                                                     int sectorCount,
@@ -46,13 +46,13 @@ import java.util.*;
          }
      }
  
-     private static List<BotBlockData> selectAdaptiveSectorTargets(List<BotBlockData> reachable, BotCoordinate3D bot, int sectorCount) {
+     private static List<BotBlockData> selectAdaptiveSectorTargets(List<BotBlockData> reachable, BotLocation bot, int sectorCount) {
          Map<Integer, BotBlockData> bestInSector = new HashMap<>();
          Map<Integer, Double> maxDistances = new HashMap<>();
  
          for (BotBlockData point : reachable) {
-             int dx = point.x - bot.x;
-             int dz = point.z - bot.z;
+             int dx = point.getX() - bot.getX();
+             int dz = point.getZ() - bot.getZ();
  
              if (dx == 0 && dz == 0) continue;
  
@@ -72,7 +72,7 @@ import java.util.*;
  
      private static List<BotBlockData> findEvenlyDistributedTargets(
         List<BotBlockData> reachable,
-        BotCoordinate3D bot,
+        BotLocation bot,
         int sectors,
         int maxTargetsInput,
         boolean preferDistant,
@@ -88,11 +88,11 @@ import java.util.*;
     Map<Integer, BotBlockData> sectorMap = new HashMap<>();
 
     for (BotBlockData point : reachable) {
-        if (point.x == bot.x && point.z == bot.z) continue;
+        if (point.getX() == bot.getX() && point.getZ() == bot.getZ()) continue;
 
-        double dx = point.x - bot.x;
-        double dy = point.y - bot.y;
-        double dz = point.z - bot.z;
+        double dx = point.getX() - bot.getX();
+        double dy = point.getY() - bot.getY();
+        double dz = point.getZ() - bot.getZ();
         double distSq = dx * dx + dy * dy + dz * dz;
         double dist = Math.sqrt(distSq);
 
@@ -144,8 +144,8 @@ import java.util.*;
         return Math.max(1, Math.min(suggested, reachable.size()));
     }
     
-    private static double squaredDistance(BotBlockData a, BotCoordinate3D b) {
-        return Math.pow(a.x - b.x, 2) + Math.pow(a.y - b.y, 2) + Math.pow(a.z - b.z, 2);
+    private static double squaredDistance(BotBlockData a, BotLocation b) {
+        return Math.pow(a.getX() - b.getX(), 2) + Math.pow(a.getY() - b.getY(), 2) + Math.pow(a.getZ() - b.getZ(), 2);
     }
     
     private static List<BotBlockData> filterByDistance(List<BotBlockData> candidates, double minDist) {

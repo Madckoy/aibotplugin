@@ -10,7 +10,7 @@ import com.devone.bot.core.bot.Bot;
 import com.devone.bot.core.bot.BotManager;
 import com.devone.bot.core.logic.task.move.BotMoveTask;
 import com.devone.bot.core.logic.task.move.params.BotMoveTaskParams;
-import com.devone.bot.utils.blocks.BotCoordinate3D;
+import com.devone.bot.utils.blocks.BotLocation;
 import com.devone.bot.utils.logger.BotLogger;
 
 public class BotMoveHereCommand implements CommandExecutor {
@@ -47,9 +47,9 @@ public class BotMoveHereCommand implements CommandExecutor {
         // ✅ Добавляем задачу на перемещение
         BotMoveTask moveTask = new BotMoveTask(bot);
         BotMoveTaskParams moveTaskParams = new BotMoveTaskParams();
-        moveTaskParams.setTarget(new BotCoordinate3D(targetLocation.getBlockX(), targetLocation.getBlockY(), targetLocation.getBlockZ()));
-        moveTask.configure(moveTaskParams);
-        bot.addTaskToQueue(moveTask);
+        moveTaskParams.setTarget(new BotLocation(targetLocation.getBlockX(), targetLocation.getBlockY(), targetLocation.getBlockZ()));
+        moveTask.setParams(moveTaskParams);
+        bot.getLifeCycle().getTaskStackManager().pushTask(moveTask);
 
         player.sendMessage("§aБот " + bot.getId() + " Идет к игроку!");
 

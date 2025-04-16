@@ -10,7 +10,7 @@ import java.util.stream.Collectors;
 import com.devone.bot.core.bot.Bot;
 import com.devone.bot.core.logic.task.excavate.patterns.IBotExcavatePattern;
 import com.devone.bot.core.logic.task.excavate.patterns.generator.params.BotExcavatePatternGenerationParams;
-import com.devone.bot.utils.blocks.BotCoordinate3D;
+import com.devone.bot.utils.blocks.BotLocation;
 import com.devone.bot.utils.blocks.BotCoordinateComparators;
 import com.devone.bot.utils.blocks.BotAxisDirection.AxisDirection;
 import com.devone.bot.utils.logger.BotLogger;
@@ -30,7 +30,7 @@ public class BotExcavateInterpretedYamlPattern implements IBotExcavatePattern {
     private AxisDirection breakDirection = null;
     private int offsetX, offsetY, offsetZ, outerRadius, innerRadius;  
 
-    private final Queue<BotCoordinate3D> blocksToBreak = new LinkedList<>();
+    private final Queue<BotLocation> blocksToBreak = new LinkedList<>();
     
         public BotExcavateInterpretedYamlPattern(Path path) {
             this.yamlPath = path;
@@ -65,7 +65,7 @@ public class BotExcavateInterpretedYamlPattern implements IBotExcavatePattern {
         return this;
     }
 
-    public BotCoordinate3D findNextBlock(Bot bot ) {
+    public BotLocation findNextBlock(Bot bot ) {
         if (this.generator == null) {
             BotLogger.info("🚨 ", true, "Паттерн не инициализирован! YAML: " + yamlPath);
             return null;
@@ -74,27 +74,27 @@ public class BotExcavateInterpretedYamlPattern implements IBotExcavatePattern {
         if (!initialized) {
             BotLogger.info("🔁 ", true, "Генерация точек по паттерну: " + yamlPath);
                                                                      
-            BotExcavatePatternGenerationParams params = new BotExcavatePatternGenerationParams(bot.getRuntimeStatus().getCurrentLocation().x, 
-                                                                               bot.getRuntimeStatus().getCurrentLocation().y, 
-                                                                               bot.getRuntimeStatus().getCurrentLocation().z, 
+            BotExcavatePatternGenerationParams params = new BotExcavatePatternGenerationParams(bot.getRuntimeStatus().getCurrentLocation().getX(), 
+                                                                               bot.getRuntimeStatus().getCurrentLocation().getY(), 
+                                                                               bot.getRuntimeStatus().getCurrentLocation().getZ(), 
                                                                                offsetX, offsetY, offsetZ, outerRadius, innerRadius);
 
             BotLogger.info("Params:", true, params.toString());                                                                  
 
-            List<BotCoordinate3D> inner_points = generator.generateInnerPoints(params);
+            List<BotLocation> inner_points = generator.generateInnerPoints(params);
             
             String pointsLog = inner_points.stream()
-            .map(p -> String.format("(%d, %d, %d)", p.x, p.y, p.z))
+            .map(p -> String.format("%d, %d, %d", p.getX(), p.getY(), p.getZ()))
             .collect(Collectors.joining(", "));
         
             BotLogger.info("🔢", true, String.format("Generated %d points: [%s]", inner_points.size(), pointsLog));        
 
             boolean isInverted = generator.getInverted();
 
-            Set<BotCoordinate3D> result = new HashSet<>();
+            Set<BotLocation> result = new HashSet<>();
 
             if(isInverted) {
-                List<BotCoordinate3D> all =  generator.generateOuterPoints(params);
+                List<BotLocation> all =  generator.generateOuterPoints(params);
                 result.addAll(all);  // Генерируем весь куб
                 result.removeAll(inner_points);  // Удаляем внутреннюю область
             } else {
@@ -103,10 +103,10 @@ public class BotExcavateInterpretedYamlPattern implements IBotExcavatePattern {
             }
 
             
-            List<BotCoordinate3D> toBeRemoved = new ArrayList<>(result);
+            List<BotLocation> toBeRemoved = new ArrayList<>(result);
 
             // ✅ Сортировка по направлению
-            Comparator<BotCoordinate3D> sortingComparator = BotCoordinateComparators.byAxisDirection(breakDirection);
+            Comparator<BotLocation> sortingComparator = BotCoordinateComparators.byAxisDirection(breakDirection);
             if (sortingComparator != null) {
                 toBeRemoved.sort(sortingComparator);
             }
@@ -129,10 +129,10 @@ public class BotExcavateInterpretedYamlPattern implements IBotExcavatePattern {
             initialized = true;
         }
 
-        BotCoordinate3D next = blocksToBreak.poll();
+        BotLocation next = blocksToBreak.poll();
 
         if (next != null) {
-            BotLogger.info("🎯", true, "Next coordinate: " + next.x + ", " + next.y + ", " + next.z);
+            BotLogger.info("🎯", true, "Next coordinate: " + next.getX() + ", " + next.getY() + ", " + next.getZ());
         }
         return next;
     }
@@ -148,7 +148,7 @@ public class BotExcavateInterpretedYamlPattern implements IBotExcavatePattern {
     }
 
 
-    public List<BotCoordinate3D> getAllPlannedBlocks() {
+    public List<BotLocation> getAllPlannedBlocks() {
         return new ArrayList<>(blocksToBreak);
     }
 

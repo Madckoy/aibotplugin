@@ -7,7 +7,7 @@ import com.devone.bot.core.inventory.BotInventory;
 import com.devone.bot.core.logic.task.drop.params.BotDropAllTaskParams;
 import com.devone.bot.core.logic.task.playerlinked.BotPlayerLinkedTask;
 
-public class BotDropAllTask extends BotPlayerLinkedTask {
+public class BotDropAllTask extends BotPlayerLinkedTask<BotDropAllTaskParams> {
 
     BotDropAllTaskParams params = new BotDropAllTaskParams();
 

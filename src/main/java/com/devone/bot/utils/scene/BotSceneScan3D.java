@@ -3,7 +3,7 @@ package com.devone.bot.utils.scene;
 import com.devone.bot.core.bot.Bot;
 import com.devone.bot.utils.BotConstants;
 import com.devone.bot.utils.blocks.BotBlockData;
-import com.devone.bot.utils.blocks.BotCoordinate3D;
+import com.devone.bot.utils.blocks.BotLocation;
 import com.devone.bot.utils.world.BotWorldHelper;
 
 import org.bukkit.Location;
@@ -24,11 +24,11 @@ public class BotSceneScan3D {
         World world = BotWorldHelper.getWorld();
 
         // Центр сканирования
-        BotCoordinate3D botLoc = bot.getRuntimeStatus().getCurrentLocation();
+        BotLocation botLoc = bot.getRuntimeStatus().getCurrentLocation();
 
-        int centerX = botLoc.x;
-        int centerY = botLoc.y;
-        int centerZ = botLoc.z;
+        int centerX = botLoc.getX();
+        int centerY = botLoc.getY();
+        int centerZ = botLoc.getZ();
 
         int minY = centerY - deltaY;
         int maxY = centerY + deltaY;
@@ -45,9 +45,9 @@ public class BotSceneScan3D {
                     Material material = world.getBlockAt(loc).getType();
 
                     BotBlockData blockData = new BotBlockData();
-                    blockData.x = loc.getBlockX();
-                    blockData.y = loc.getBlockY();
-                    blockData.z = loc.getBlockZ();
+                    blockData.setX(loc.getBlockX());
+                    blockData.setY(loc.getBlockY());
+                    blockData.setZ(loc.getBlockZ());
                     blockData.type = material.toString();
 
                     scannedBlocks.add(blockData);
@@ -66,18 +66,18 @@ public class BotSceneScan3D {
             String type = entity.getCustomName() != null ? entity.getCustomName() : entity.getName();;
 
             BotBlockData blockData = new BotBlockData();
-            blockData.x = loc.getBlockX();
-            blockData.y = loc.getBlockY();
-            blockData.z = loc.getBlockZ();
+            blockData.setX(loc.getBlockX());
+            blockData.setY(loc.getBlockY());
+            blockData.setZ(loc.getBlockZ());
             blockData.type = type;
             blockData.uuid = entity.getUniqueId();
-            blockData.bot = false;
+            blockData.setBot(false);
 
             scannedEntities.add(blockData);
         }
 
         // 3. Координаты бота
-        BotCoordinate3D botCoords = new BotCoordinate3D(centerX, centerY, centerZ);
+        BotLocation botCoords = new BotLocation(centerX, centerY, centerZ);
 
         // 4. Сохраняем всё в JSON
         String fileName = BotConstants.PLUGIN_TMP + bot.getId() + "_scene.json";

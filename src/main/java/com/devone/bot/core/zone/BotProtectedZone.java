@@ -1,6 +1,6 @@
 package com.devone.bot.core.zone;
 
-import com.devone.bot.utils.blocks.BotCoordinate3D;
+import com.devone.bot.utils.blocks.BotLocation;
 
 public class BotProtectedZone {
     private final double x, y, z;
@@ -13,10 +13,10 @@ public class BotProtectedZone {
         this.radius = radius;
     }
 
-    public boolean isInside(BotCoordinate3D location) {
-        double dx = location.x - x;
-        double dy = location.y - y;
-        double dz = location.z - z;
+    public boolean isInside(BotLocation location) {
+        double dx = location.getX() - x;
+        double dy = location.getY() - y;
+        double dz = location.getZ() - z;
         return (dx * dx + dy * dy + dz * dz) <= (radius * radius);
     }
 

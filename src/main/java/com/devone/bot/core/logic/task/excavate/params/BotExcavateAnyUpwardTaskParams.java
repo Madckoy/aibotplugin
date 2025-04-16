@@ -6,7 +6,6 @@ public class BotExcavateAnyUpwardTaskParams extends BotExcavateTaskParams{
         super(BotExcavateAnyUpwardTaskParams.class.getSimpleName());
         setIcon("🪨");
         setObjective("Excavate all up");
-        setDefaults();
     }
 
 }
