@@ -1,113 +1,104 @@
 package com.devone.bot.core.logic.task.params;
 
-import java.io.File;
-import java.io.IOException;
-
-import org.bukkit.configuration.file.FileConfiguration;
-import org.bukkit.configuration.file.YamlConfiguration;
-
 import com.devone.bot.utils.BotConstants;
-import com.devone.bot.utils.logger.BotLogger;
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
 
-public class BotTaskParams implements IBotTaskParams, IBotTaskParamsConfigurable {
-    private String  icon       = "☑️";
+import java.io.*;
+
+public abstract class BotTaskParams implements IBotTaskParams {
+
+    private static final Gson GSON = new GsonBuilder()
+            .setPrettyPrinting()
+            .create();
+
+    private String icon = "☑️";
+    private String objective = "Do something abstract";
     private boolean isEnabled = true;
     private boolean isLogging = true;
-    private String  objective = "Do something abstract";
-    
-    protected String fileName = null;
-    protected File file;
-    protected FileConfiguration config;
 
-    public BotTaskParams(String p_class_name) {
 
-        fileName = p_class_name + ".yml";
+    private transient File configFile;
 
+    public File getConfigFile() {
+        return configFile;
+    }
+
+    public void setConfigFile(File configFile) {
+        this.configFile = configFile;
+    }
+
+    public static <T extends BotTaskParams> T loadOrCreate(Class<T> clazz) {
+        String fileName = clazz.getSimpleName() + ".json";
         File configFolder = new File(BotConstants.PLUGIN_PATH_CONFIGS_TASKS);
+        if (!configFolder.exists()) configFolder.mkdirs();
 
-        if (!configFolder.exists()) {
-            configFolder.mkdirs();
-        }
+        File file = new File(configFolder, fileName);
 
-        if(fileName!=null || !fileName.equals("")) {
-            loadFile(configFolder, fileName);
+        try {
             if (!file.exists()) {
-                saveDefaultFile();
+                // Файл не существует — создаём дефолтный экземпляр и записываем его
+                T instance = clazz.getDeclaredConstructor().newInstance();
+                instance.setConfigFile(file);
+                instance.save();
+                return instance;
+            } else {
+                try (Reader reader = new FileReader(file)) {
+                    T loaded = GSON.fromJson(reader, clazz);
+
+                    if (loaded == null) {
+                        // Повреждённый файл — удаляем
+                        file.delete();
+                        throw new RuntimeException("Конфигурация повреждена. Файл удалён: " + file.getName());
+                    }
+
+                    loaded.setConfigFile(file);
+                    return loaded;
+                }
             }
+        } catch (Exception e) {
+            throw new RuntimeException("Ошибка при загрузке параметров: " + clazz.getSimpleName(), e);
         }
+    }
+
+    public void save() {
+        if (configFile == null) return;
+        try (Writer writer = new FileWriter(configFile)) {
+            GSON.toJson(this, writer);
+        } catch (IOException e) {
+            throw new RuntimeException("Ошибка при сохранении параметров: " + configFile.getName(), e);
+        }
+    }
+
+    public String getIcon() {
+        return icon;
+    }
+
+    public void setIcon(String icon) {
+        this.icon = icon;
+    }
+
+    public String getObjective() {
+        return objective;
+    }
+
+    public void setObjective(String objective) {
+        this.objective = objective;
     }
 
     public boolean isEnabled() {
         return isEnabled;
     }
-    
-    public void setEnable(boolean enbl) {
-        isEnabled = enbl;
+
+    public void setEnable(boolean enabled) {
+        this.isEnabled = enabled;
     }
 
     public boolean isLogging() {
-        return isEnabled;
+        return isLogging;
     }
 
-    public void setIsLogging(boolean lgn) {
-        isLogging = lgn;
+    public void setIsLogging(boolean logging) {
+        this.isLogging = logging;
     }
-
-    public void setObjective(String obj){
-        objective = obj;
-    }
-
-    public String getIcon() {
-        return icon;
-    } 
-    public void setIcon(String icn) {
-        icon = icn;
-    }
-
-    public String getObjective(){
-        return objective;
-    }
-
-    @Override
-    public Object saveDefaultFile() {
-        try {
-            config.save(file);
-            BotLogger.info("✅", true,"Configuration has been saved: " + file.getName());
-        } catch (IOException e) {
-            BotLogger.info("❌", true,"Error saving configuration for: " + file.getName());
-        }
-        return this;
-    }
-
-    @Override
-    public Object loadFile(File configFolder, String fileName) {
-        this.file = new File(configFolder, fileName);
-        this.config = YamlConfiguration.loadConfiguration(file);
-        BotLogger.info("🟢", true,"Loading task configuration: " + file.getName());
-        return this;
-    }
-
-    @Override
-    public Object setDefaults() {
-        config.set("icon", this.icon);
-        config.set("objective", this.objective);
-        config.set("enable", this.isEnabled);
-        config.set("logging", this.isLogging);
-
-        saveDefaultFile();
-
-        return this;
-    }
-    @Override
-    public Object copyFrom(IBotTaskParams source) {
-        icon      = ((BotTaskParams)source).getIcon();
-        isEnabled = ((BotTaskParams)source).isEnabled();
-        isLogging = ((BotTaskParams)source).isLogging();
-        objective = ((BotTaskParams)source).getObjective();
-        return this;
-    }
-    public FileConfiguration getConfig() {
-        return config;
-    }
-
 }

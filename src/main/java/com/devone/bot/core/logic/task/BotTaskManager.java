@@ -3,25 +3,30 @@ package com.devone.bot.core.logic.task;
 import java.util.Stack;
 
 import com.devone.bot.core.bot.Bot;
+import com.devone.bot.core.logic.task.params.BotTaskParams;
 import com.devone.bot.utils.logger.BotLifecycleLogger;
 import com.devone.bot.utils.logger.BotLogger;
 
-public class BotTaskStackManager {
-    private final Stack<BotTask> taskStack = new Stack<>();
+public class BotTaskManager {
+
+    private final Stack<BotTask<?>> taskStack = new Stack<>();
+
     private final Bot bot;
 
-    public BotTaskStackManager(Bot bot) {
+    public BotTaskManager(Bot bot) {
         this.bot = bot;
     }
 
-    public void pushTask(BotTask task) {
+    // Метод теперь работает с обобщённым типом T
+    public <T extends BotTaskParams> void pushTask(BotTask<T> task) {
         if (!taskStack.isEmpty()) {
-            BotTask currentTask = taskStack.peek();
-            currentTask.setPaused(true); // ✅ Ставим текущую активность на паузу
+            BotTask<?> currentTask = taskStack.peek();
+            currentTask.setPaused(true); // Ставим текущую задачу на паузу
         }
 
         taskStack.push(task);
-        BotLogger.info("✚", true, "Добавлена задача: " + task.getClass().getSimpleName() + "[ " + task.getUUID()+" ]");
+
+        BotLogger.info("✚", true, "Добавлена задача: " + task.getClass().getSimpleName());
     }
 
     public void popTask() {
@@ -39,7 +44,7 @@ public class BotTaskStackManager {
         }
     }
 
-    public BotTask getActiveTask() {
+    public BotTask<?> getActiveTask() {
         if (!taskStack.isEmpty()) {
             return  taskStack.peek();
 
@@ -52,8 +57,8 @@ public class BotTaskStackManager {
         return taskStack.isEmpty();
     }
 
-    public boolean isTaskActive(Class<? extends BotTask> taskClass) {
-        for (BotTask task : taskStack) {
+    public boolean isTaskActive(Class<? extends BotTask<?>> taskClass) {
+        for (BotTask<?> task : taskStack) {
             if (task.getClass().equals(taskClass) && !task.isDone()) {
                 return true;
             }
@@ -61,7 +66,7 @@ public class BotTaskStackManager {
         return false;
     }
 
-    public Stack<BotTask> getTaskStack() {
+    public Stack<BotTask<?>> getTaskStack() {
         return taskStack;
     }
 
@@ -69,22 +74,15 @@ public class BotTaskStackManager {
     public void updateActiveTask() {
         if (!taskStack.isEmpty()) {
 
-            BotTask currentTask = taskStack.peek();
+            BotTask<?> currentTask = taskStack.peek();
 
-            BotLogger.info("✨", true, "Active task: " + currentTask.getClass().getSimpleName() + " [" +currentTask.getUUID() +"]");
-    
-            // 🛑 Если у бота нет NPCEntity, удаляем ВСЕ задачи
-            //if (bot.getNPCEntity() == null) {
-            //    BotLogger.info(bot.getId() + " ❌ Ошибка: NPCEntity == null! Очищаю задачи...");
-            //    clearTasks();
-            //    return;
-            //}
+            BotLogger.info("✨", true, "Active task: " + currentTask.getClass().getSimpleName());
     
             if (currentTask.isDone()) {
                 popTask();
-                BotLogger.info("✨", true, "Deactivating task: " + currentTask.getClass().getSimpleName() + " [" +currentTask.getUUID() +"]");
+                BotLogger.info("✨", true, "Deactivating task: " + currentTask.getClass().getSimpleName());
             } else {
-                BotLogger.info("✨", true, "Updating task: " + currentTask.getClass().getSimpleName() + " [" +currentTask.getUUID() +"]");
+                BotLogger.info("✨", true, "Updating task: " + currentTask.getClass().getSimpleName());
                 currentTask.update();
             }
         }
@@ -93,7 +91,7 @@ public class BotTaskStackManager {
     // ✅ Функция для удаления всех задач с логированием
     public void clearTasks() {
         while (!taskStack.isEmpty()) {
-            BotTask removedTask = taskStack.pop();
+            BotTask<?> removedTask = taskStack.pop();
             removedTask.stop();
             BotLogger.info("❌", true, "Удалена задача: " + removedTask.getClass().getSimpleName());
         }

@@ -17,7 +17,7 @@ import com.devone.bot.core.bot.Bot;
 import com.devone.bot.core.bot.BotManager;
 import com.devone.bot.core.logic.task.BotTask;
 import com.devone.bot.utils.BotUtils;
-import com.devone.bot.utils.blocks.BotCoordinate3D;
+import com.devone.bot.utils.blocks.BotLocation;
 import com.devone.bot.web.BotWebService;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
@@ -52,7 +52,7 @@ public class BotStatusServlet extends HttpServlet {
 
         for (Bot bot : bots) {
             JsonObject botJson = new JsonObject();
-            BotCoordinate3D loc = bot.getRuntimeStatus().getCurrentLocation();
+            BotLocation loc = bot.getRuntimeStatus().getCurrentLocation();
             if (loc != null) {
                 botJson.addProperty("skin", "http://" + BotWebService.getServerHost() + ":"+BotWebService.getServerPort()+"/skins/" + bot.getUuid() + ".png");
                 
@@ -69,7 +69,7 @@ public class BotStatusServlet extends HttpServlet {
                 botJson.addProperty("teleport_used", bot.getRuntimeStatus().getTeleportUsed());
                 botJson.addProperty("auto_pick_up_items", bot.getRuntimeStatus().getAutoPickupItems());
 
-                String currLoc = " " + loc.x + ", " + loc.y + ", " + loc.z;   
+                String currLoc = " " + loc.getX() + ", " + loc.getY() + ", " + loc.getZ();   
 
                 botJson.addProperty("position", currLoc);
 
@@ -77,14 +77,14 @@ public class BotStatusServlet extends HttpServlet {
                 
                 botJson.addProperty("object", getCurrentObjective(bot));
 
-                BotCoordinate3D tgtLoc = bot.getRuntimeStatus().getTargetLocation();
+                BotLocation tgtLoc = bot.getRuntimeStatus().getTargetLocation();
 
-                botJson.addProperty("target", tgtLoc != null ? " " + tgtLoc.x + ", " + tgtLoc.y + ", " + tgtLoc.z : "");
+                botJson.addProperty("target", tgtLoc != null ? " " + tgtLoc.getX() + ", " + tgtLoc.getY() + ", " + tgtLoc.getZ() : "");
 
 
                 botJson.addProperty("elapsedTime", BotUtils.formatTime(bot.getRuntimeStatus().getCurrentTask().getElapsedTime()));
 
-                List<BotTask> taskStack = (bot.getLifeCycle() != null && bot.getLifeCycle().getTaskStackManager() != null)
+                List<BotTask<?>> taskStack = (bot.getLifeCycle() != null && bot.getLifeCycle().getTaskStackManager() != null)
                     ? new ArrayList<>(bot.getLifeCycle().getTaskStackManager().getTaskStack())
                     : new ArrayList<>();
                 String taskStackText = taskStack.isEmpty() ? "N/A" :
@@ -127,7 +127,7 @@ public class BotStatusServlet extends HttpServlet {
     }
     
     private static String getCurrentObjective(Bot bot) {
-        BotTask currentTask = bot.getRuntimeStatus().getCurrentTask();
+        BotTask<?> currentTask = bot.getRuntimeStatus().getCurrentTask();
         return (currentTask != null) ? currentTask.getObjective() : "";
     }
 }

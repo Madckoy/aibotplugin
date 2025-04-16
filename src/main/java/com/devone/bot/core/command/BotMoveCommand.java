@@ -11,7 +11,7 @@ import com.devone.bot.core.bot.Bot;
 import com.devone.bot.core.bot.BotManager;
 import com.devone.bot.core.logic.task.move.BotMoveTask;
 import com.devone.bot.core.logic.task.move.params.BotMoveTaskParams;
-import com.devone.bot.utils.blocks.BotCoordinate3D;
+import com.devone.bot.utils.blocks.BotLocation;
 import com.devone.bot.utils.logger.BotLogger;
 
 public class BotMoveCommand implements CommandExecutor {
@@ -67,9 +67,9 @@ public class BotMoveCommand implements CommandExecutor {
         // ✅ Добавляем задачу на перемещение
         BotMoveTask moveTask = new BotMoveTask(bot);
         BotMoveTaskParams moveTaskParams = new BotMoveTaskParams();
-        moveTaskParams.setTarget(new BotCoordinate3D(x, y, z)); 
-        moveTask.configure(moveTaskParams);
-        bot.addTaskToQueue(moveTask);
+        moveTaskParams.setTarget(new BotLocation(x, y, z)); 
+        moveTask.setParams(moveTaskParams);
+        bot.getLifeCycle().getTaskStackManager().pushTask(moveTask);
 
         BotLogger.info("📌 ", true, "/bot-move: Бот " + bot.getId() + " направляется в " + targetLocation);
         

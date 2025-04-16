@@ -17,7 +17,7 @@ function updateMonitoringHeader(data) {
     if (typeof serverTime === "string" && serverTime.trim() !== "") {
         serverTimeElem.textContent = `🕒 ${serverTime}`;
     } else {
-        serverTimeElem.textContent = "🕒 N/A";
+        serverTimeElem.textContent = "🕒 --:--";
     }
 }
 
@@ -64,7 +64,7 @@ function renderBotTable(data) {
         let invCell = row.insertCell(8);
         invCell.className = "inventory-cell";
         invCell.title = `Items: ${bot.inventoryCount} / ${bot.inventoryMax}`;
-        invCell.innerHTML = generateInventoryGrid(bot.inventorySlotsFilled);
+        invCell.innerHTML = generateInventoryGrid(bot.inventorySlotsFilled, bot.auto_pick_up_items);
 
 
         // 🎮 Control Buttons
@@ -81,7 +81,7 @@ function renderBotTable(data) {
     setupButtonHandlers();
 }
 
-function generateInventoryGrid(slots) {
+function generateInventoryGrid(slots, autoPickupEnabled) {
     const maxSlots = 36;
     slots = Array.isArray(slots) ? slots : [];
 
@@ -94,6 +94,10 @@ function generateInventoryGrid(slots) {
             className += " full";
         } else if (slot && slot.amount > 0) {
             className += " partial";
+        }
+
+        if (autoPickupEnabled) {
+            className += " pickup-enabled";
         }
 
         const tooltip = slot ? `${slot.amount}× ${slot.type}` : 'Empty';

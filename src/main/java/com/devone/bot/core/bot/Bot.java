@@ -13,17 +13,17 @@ import org.bukkit.entity.Player;
 import com.devone.bot.core.chat.BotChat;
 import com.devone.bot.core.inventory.BotInventory;
 import com.devone.bot.core.logic.lifecycle.BotLifeCycle;
-import com.devone.bot.core.logic.task.BotTask;
 import com.devone.bot.core.logic.task.move.BotMoveTask;
 import com.devone.bot.core.logic.task.move.params.BotMoveTaskParams;
 import com.devone.bot.core.status.BotStatusRuntime;
-import com.devone.bot.utils.blocks.BotCoordinate3D;
+import com.devone.bot.utils.blocks.BotLocation;
 import com.devone.bot.utils.logger.BotLogger;
 
 import net.citizensnpcs.api.ai.Navigator;
 import net.citizensnpcs.api.npc.NPC;
 
 public class Bot {
+
     private final String id; // Уникальное имя бота
     private NPC npc; // Связанный NPC
     private final BotLifeCycle lifeCycle; // Цикл жизни бота
@@ -117,10 +117,6 @@ public class Bot {
         return npc.isSpawned();
     }
 
-    public void addTaskToQueue(BotTask task) {
-      getLifeCycle().getTaskStackManager().pushTask(task);
-    }
-
     public void pickupNearbyItems(boolean shouldPickup) {
         getInventory().pickupAll(shouldPickup);
     }    
@@ -139,8 +135,10 @@ public class Bot {
         BotLogger.info("✅ ", true, "Дроп подобран "+ getId() +" и двигается к последнему разрушенному блоку " + lastBrokenBlock);
         
         BotMoveTask mv_task = new BotMoveTask(this);
-        BotMoveTaskParams mv_taskParams = new BotMoveTaskParams(new BotCoordinate3D(lastBrokenBlock.getBlockX(), lastBrokenBlock.getBlockY(), lastBrokenBlock.getBlockZ()));
-        mv_task.configure(mv_taskParams);
-        addTaskToQueue(mv_task);
+        BotLocation loc = new BotLocation(lastBrokenBlock.getBlockX(), lastBrokenBlock.getBlockY(), lastBrokenBlock.getBlockZ());
+        BotMoveTaskParams mv_taskParams = new BotMoveTaskParams(loc);
+        mv_task.setParams(mv_taskParams);
+
+        getLifeCycle().getTaskStackManager().pushTask(mv_task);
     }
 }

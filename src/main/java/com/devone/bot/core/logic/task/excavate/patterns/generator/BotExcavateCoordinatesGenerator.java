@@ -12,7 +12,7 @@ import java.util.stream.Collectors;
 import org.yaml.snakeyaml.Yaml;
 
 import com.devone.bot.core.logic.task.excavate.patterns.generator.params.BotExcavatePatternGenerationParams;
-import com.devone.bot.utils.blocks.BotCoordinate3D;
+import com.devone.bot.utils.blocks.BotLocation;
 import com.googlecode.aviator.AviatorEvaluator;
 import com.googlecode.aviator.Expression;
 
@@ -47,7 +47,7 @@ public class BotExcavateCoordinatesGenerator {
         return new BotExcavateCoordinatesGenerator(filters, sort, inverted);
     }
 
-    public List<BotCoordinate3D> generateInnerPoints(BotExcavatePatternGenerationParams params) {
+    public List<BotLocation> generateInnerPoints(BotExcavatePatternGenerationParams params) {
         int ox = params.observerX;
         int oy = params.observerY;
         int oz = params.observerZ;
@@ -73,8 +73,8 @@ public class BotExcavateCoordinatesGenerator {
     }
 
     
-    private List<BotCoordinate3D> generateInnerPoints(int cx, int cy, int cz, int inner_radius) {
-        List<BotCoordinate3D> result = new ArrayList<>();
+    private List<BotLocation> generateInnerPoints(int cx, int cy, int cz, int inner_radius) {
+        List<BotLocation> result = new ArrayList<>();
         Map<String, Object> env = new HashMap<>();
 
         for (int y = cy - inner_radius; y <= cy + inner_radius; y++) {
@@ -89,23 +89,23 @@ public class BotExcavateCoordinatesGenerator {
                     env.put("r", inner_radius);
 
                     if (applyFilters(env)) {
-                        result.add(new BotCoordinate3D(x, y, z));
+                        result.add(new BotLocation(x, y, z));
                     }
                 }
             }
         }
 
         result.sort(Comparator.comparingDouble(loc -> {
-            env.put("x", loc.x);
-            env.put("y", loc.y);
-            env.put("z", loc.z);
+            env.put("x", loc.getX());
+            env.put("y", loc.getY());
+            env.put("z", loc.getZ());
             return ((Number) sortExpression.execute(env)).doubleValue();
         }));
 
         return result;
     }
 
-    public List<BotCoordinate3D> generateOuterPoints(BotExcavatePatternGenerationParams params) {
+    public List<BotLocation> generateOuterPoints(BotExcavatePatternGenerationParams params) {
         int ox = params.observerX;
         int oy = params.observerY;
         int oz = params.observerZ;
@@ -122,12 +122,12 @@ public class BotExcavateCoordinatesGenerator {
         return generateOuterPoints(center[0], center[1], center[2], outerRadius);
     }
 
-    private List<BotCoordinate3D> generateOuterPoints(int cx, int cy, int cz, int radius) {
-        List<BotCoordinate3D> result = new ArrayList<>();
+    private List<BotLocation> generateOuterPoints(int cx, int cy, int cz, int radius) {
+        List<BotLocation> result = new ArrayList<>();
         for (int y = cy - radius; y <= cy + radius; y++) {
             for (int x = cx - radius; x <= cx + radius; x++) {
                 for (int z = cz - radius; z <= cz + radius; z++) {
-                    result.add(new BotCoordinate3D(x, y, z));
+                    result.add(new BotLocation(x, y, z));
                 }
             }
         }

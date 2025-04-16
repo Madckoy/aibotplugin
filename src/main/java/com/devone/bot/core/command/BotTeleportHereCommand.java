@@ -9,7 +9,7 @@ import com.devone.bot.core.bot.Bot;
 import com.devone.bot.core.bot.BotManager;
 import com.devone.bot.core.logic.task.teleport.BotTeleportTask;
 import com.devone.bot.core.logic.task.teleport.params.BotTeleportTaskParams;
-import com.devone.bot.utils.blocks.BotCoordinate3D;
+import com.devone.bot.utils.blocks.BotLocation;
 import com.devone.bot.utils.logger.BotLogger;
 
 public class BotTeleportHereCommand implements CommandExecutor {
@@ -38,20 +38,20 @@ public class BotTeleportHereCommand implements CommandExecutor {
         // ✅ Очищаем стек задач
         bot.getLifeCycle().getTaskStackManager().clearTasks();
 
-        BotCoordinate3D targetLocation = new BotCoordinate3D(player.getLocation().getBlockX(),
+        BotLocation targetLocation = new BotLocation(player.getLocation().getBlockX(),
                                                              player.getLocation().getBlockY(),
                                                              player.getLocation().getBlockZ()); 
 
         // ✅ Добавляем задачу на мгновенное перемещение
         BotTeleportTask task = new BotTeleportTask(bot, player);
         BotTeleportTaskParams taskParams = new BotTeleportTaskParams();
-        taskParams.setTarget(targetLocation);
-        task.configure(taskParams);
+        taskParams.setLocation(targetLocation);
+        task.setParams(taskParams);
         
-        bot.addTaskToQueue(task);
+        bot.getLifeCycle().getTaskStackManager().pushTask(task);
 
         BotLogger.info("📌", true,"/bot-tp-here: Бот " + bot.getId() + " Телепортируется в точку игрока" + 
-        taskParams.getTarget().toString());
+        taskParams.getLocation().toString());
 
         player.sendMessage("§aБот " + bot.getId() + " Телепортируется к игроку!");
 

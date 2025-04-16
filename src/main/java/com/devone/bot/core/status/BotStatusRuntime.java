@@ -4,18 +4,19 @@ import java.util.ArrayList;
 
 import com.devone.bot.core.bot.Bot;
 import com.devone.bot.core.logic.task.BotTask;
-import com.devone.bot.utils.blocks.BotCoordinate3D;
-import com.devone.bot.utils.blocks.BotCoordinate3DHelper;
+import com.devone.bot.utils.blocks.BotLocation;
+import com.devone.bot.utils.blocks.BotLocationHelper;
 import com.devone.bot.utils.logger.BotLogger;
 import com.devone.bot.utils.scene.BotSceneData;
 
 public class BotStatusRuntime {
+
     private Bot owner;
 
     // Добавляем currentLocation, lastKnownLocation и targetLocation
-    private BotCoordinate3D currentLocation;
+    private BotLocation currentLocation;
 
-    private BotCoordinate3D targetLocation;  // Новое свойство для целевой локации
+    private BotLocation targetLocation;  // Новое свойство для целевой локации
     // auto pick ip items
     private boolean autoPickUpItems = true;
     // Другие состояния
@@ -38,15 +39,19 @@ public class BotStatusRuntime {
         this.sceneData = null;
     }
 
-    public BotTask getCurrentTask() {
-        return owner.getLifeCycle().getTaskStackManager().getActiveTask();
+    public BotTask<?> getCurrentTask() {
+        BotTask<?> task = owner.getLifeCycle().getTaskStackManager().getActiveTask();
+        if (task != null) {
+            return task; // Нам не нужно дополнительное приведение типов
+        }
+        return null; // или выбросить исключение, если задача не найдена
     }
 
     // Получение и обновление currentLocation с проверкой на застревание
-    public BotCoordinate3D getCurrentLocation() {
+    public BotLocation getCurrentLocation() {
         if (owner.getNPC() != null) {
             // Получаем текущую локацию NPC
-            BotCoordinate3D newLocation = BotCoordinate3DHelper.convertFrom(owner.getNPC().getStoredLocation());
+            BotLocation newLocation = BotLocationHelper.convertFrom(owner.getNPC().getStoredLocation());
             currentLocation = newLocation;
         } else {
             // Если NPC не найден, возвращаем null
@@ -63,7 +68,7 @@ public class BotStatusRuntime {
         return autoPickUpItems;
     }
 
-    public void setCurrentLocation(BotCoordinate3D location) {
+    public void setCurrentLocation(BotLocation location) {
         this.currentLocation = location;
     }
 
@@ -92,11 +97,11 @@ public class BotStatusRuntime {
     }
 
     // Геттер и Сеттер для targetLocation
-    public BotCoordinate3D getTargetLocation() {
+    public BotLocation getTargetLocation() {
         return targetLocation;
     }
 
-    public void setTargetLocation(BotCoordinate3D targetLocation) {
+    public void setTargetLocation(BotLocation targetLocation) {
         this.targetLocation = targetLocation;
     }
 

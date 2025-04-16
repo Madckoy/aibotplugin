@@ -3,7 +3,7 @@
 package com.devone.bot.core.logic.navigation.evaluators;
 
 import com.devone.bot.utils.blocks.BotBlockData;
-import com.devone.bot.utils.blocks.BotCoordinate3D;
+import com.devone.bot.utils.blocks.BotLocation;
 
 import java.util.*;
 import java.util.stream.Collectors;
@@ -14,13 +14,13 @@ public class BotTargetReachabilityEvaluator {
      * Проверяет, достижима ли конкретная точка target из позиции botPosition,
      * основываясь на списке навигационно проходимых точек.
      */
-    public static boolean isReachable(BotCoordinate3D botPosition,
-                                      BotCoordinate3D target,
+    public static boolean isReachable(BotLocation botPosition,
+                                      BotLocation target,
                                       List<BotBlockData> navigablePoints) {
         if (botPosition.equals(target)) return true;
 
         Set<String> visited = new HashSet<>();
-        Queue<BotCoordinate3D> queue = new LinkedList<>();
+        Queue<BotLocation> queue = new LinkedList<>();
         queue.add(botPosition);
         visited.add(coordKey(botPosition));
 
@@ -29,17 +29,17 @@ public class BotTargetReachabilityEvaluator {
                 .collect(Collectors.toSet());
 
         while (!queue.isEmpty()) {
-            BotCoordinate3D current = queue.poll();
+            BotLocation current = queue.poll();
 
             for (int dx = -1; dx <= 1; dx++) {
                 for (int dy = -1; dy <= 1; dy++) {
                     for (int dz = -1; dz <= 1; dz++) {
                         if (Math.abs(dx) + Math.abs(dy) + Math.abs(dz) != 1) continue;
 
-                        BotCoordinate3D neighbor = new BotCoordinate3D(
-                                current.x + dx,
-                                current.y + dy,
-                                current.z + dz);
+                        BotLocation neighbor = new BotLocation(
+                                current.getX() + dx,
+                                current.getY() + dy,
+                                current.getZ() + dz);
 
                         String key = coordKey(neighbor);
                         if (!navigableSet.contains(key) || visited.contains(key)) continue;
@@ -56,7 +56,7 @@ public class BotTargetReachabilityEvaluator {
         return false;
     }
 
-    private static String coordKey(BotCoordinate3D c) {
-        return c.x + "," + c.y + "," + c.z;
+    private static String coordKey(BotLocation c) {
+        return c.toString();
     }
 }

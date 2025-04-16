@@ -3,7 +3,7 @@ package com.devone.bot.utils.scene;
 import com.devone.bot.core.bot.Bot;
 import com.devone.bot.utils.BotConstants;
 import com.devone.bot.utils.blocks.BotBlockData;
-import com.devone.bot.utils.blocks.BotCoordinate3D;
+import com.devone.bot.utils.blocks.BotLocation;
 import com.devone.bot.utils.world.BotWorldHelper;
 
 import org.bukkit.Location;
@@ -24,11 +24,11 @@ public class BotSceneScan3D {
         World world = BotWorldHelper.getWorld();
 
         // Центр сканирования
-        BotCoordinate3D botLoc = bot.getRuntimeStatus().getCurrentLocation();
+        BotLocation botLoc = bot.getRuntimeStatus().getCurrentLocation();
 
-        int centerX = botLoc.x;
-        int centerY = botLoc.y;
-        int centerZ = botLoc.z;
+        int centerX = botLoc.getX();
+        int centerY = botLoc.getY();
+        int centerZ = botLoc.getZ();
 
         int minY = centerY - deltaY;
         int maxY = centerY + deltaY;
@@ -45,10 +45,10 @@ public class BotSceneScan3D {
                     Material material = world.getBlockAt(loc).getType();
 
                     BotBlockData blockData = new BotBlockData();
-                    blockData.x = loc.getBlockX();
-                    blockData.y = loc.getBlockY();
-                    blockData.z = loc.getBlockZ();
-                    blockData.type = material.toString();
+                    blockData.setX(loc.getBlockX());
+                    blockData.setY(loc.getBlockY());
+                    blockData.setZ(loc.getBlockZ());
+                    blockData.setType(material.toString());
 
                     scannedBlocks.add(blockData);
                 }
@@ -59,35 +59,41 @@ public class BotSceneScan3D {
         Location botLocWorld = BotWorldHelper.getWorldLocation(botLoc);
 
         for (LivingEntity entity : world.getLivingEntities()) {
-            if (entity == bot.getNPCEntity() || entity instanceof Player || entity.isDead()) continue;
-            if (entity.getLocation().distance(botLocWorld) > scanRadius) continue;
+            if (entity == bot.getNPCEntity() || entity instanceof Player || entity.isDead())
+                continue;
+            if (entity.getLocation().distance(botLocWorld) > scanRadius)
+                continue;
 
             Location loc = entity.getLocation();
-            String type = entity.getCustomName() != null ? entity.getCustomName() : entity.getName();;
+            String type = entity.getCustomName() != null ? entity.getCustomName() : entity.getName();
+            ;
 
             BotBlockData blockData = new BotBlockData();
-            blockData.x = loc.getBlockX();
-            blockData.y = loc.getBlockY();
-            blockData.z = loc.getBlockZ();
-            blockData.type = type;
-            blockData.uuid = entity.getUniqueId();
-            blockData.bot = false;
+            blockData.setX(loc.getBlockX());
+            blockData.setY(loc.getBlockY());
+            blockData.setZ(loc.getBlockZ());
+            blockData.setType(type);
+            blockData.setUUID(entity.getUniqueId());
+            blockData.setBot(false);
 
             scannedEntities.add(blockData);
         }
+        
+            // 3. Координаты бота
+            BotLocation botCoords = new BotLocation(centerX, centerY, centerZ);
+            BotSceneData sceneData = new BotSceneData(scannedBlocks, scannedEntities, botCoords);
 
-        // 3. Координаты бота
-        BotCoordinate3D botCoords = new BotCoordinate3D(centerX, centerY, centerZ);
+            if(bot.getRuntimeStatus().isStuck()) {
+                long currTime = System.currentTimeMillis(); 
+                // 4. Сохраняем всё в JSON если застряли
+                String fileName = BotConstants.PLUGIN_TMP + bot.getId() + "_stuck_scene_"+currTime+"+.json";
 
-        // 4. Сохраняем всё в JSON
-        String fileName = BotConstants.PLUGIN_TMP + bot.getId() + "_scene.json";
-        BotSceneData sceneData = new BotSceneData(scannedBlocks, scannedEntities, botCoords);
-
-        try {
-            BotSceneSaver.saveToJsonFile(fileName, sceneData);
-        } catch (IOException e) {
-            System.err.println("Ошибка при сохранении карты: " + e.getMessage());
-        }
+                try {
+                    BotSceneSaver.saveToJsonFile(fileName, sceneData);
+                } catch (IOException e) {
+                    System.err.println("Ошибка при сохранении карты: " + e.getMessage());
+                }
+            }
 
         return sceneData;
     }

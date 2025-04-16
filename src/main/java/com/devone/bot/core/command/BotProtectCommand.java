@@ -40,7 +40,7 @@ public class BotProtectCommand implements CommandExecutor {
 
         // ✅ Добавляем задачу на защиту
         BotProtectTask protectTask = new BotProtectTask(bot, player);
-        bot.addTaskToQueue(protectTask);
+        bot.getLifeCycle().getTaskStackManager().pushTask(protectTask);
 
         player.sendMessage("§aБот " + bot.getId() + " теперь защищает вас!");
 

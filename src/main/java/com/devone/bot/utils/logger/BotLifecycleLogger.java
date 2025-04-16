@@ -7,7 +7,7 @@ import com.devone.bot.core.logic.task.BotTask;
 import com.devone.bot.utils.BotConstants;
 
 import com.devone.bot.utils.BotUtils;
-import com.devone.bot.utils.blocks.BotCoordinate3D;
+import com.devone.bot.utils.blocks.BotLocation;
 
 import java.io.*;
 import java.text.SimpleDateFormat;
@@ -20,7 +20,7 @@ public class BotLifecycleLogger {
 
     public static void write(Bot bot) {
         // Получаем текущую локацию через BotRuntimeStatus
-        BotCoordinate3D loc = bot.getRuntimeStatus().getCurrentLocation();
+        BotLocation loc = bot.getRuntimeStatus().getCurrentLocation();
         if (loc == null) return;
 
         String botName = bot.getId();
@@ -36,7 +36,7 @@ public class BotLifecycleLogger {
         try (FileWriter writer = new FileWriter(filename, true);
              BufferedWriter bw = new BufferedWriter(writer)) {
 
-            BotTask task = bot.getRuntimeStatus().getCurrentTask();
+            BotTask<?> task = bot.getRuntimeStatus().getCurrentTask();
 
             String t_name = "N/A";
             String e_time = "N/A";
@@ -48,7 +48,7 @@ public class BotLifecycleLogger {
 
             String logEntry = String.format("%s,%s,%s,%d,%d,%d,%s,%s",
                     getCurrentTimestamp(), botName, Bukkit.getWorlds().get(0).getName(),
-                    loc.x, loc.y, loc.z, "'" + t_name + "'", e_time);
+                    loc.getX(), loc.getY(), loc.getZ(), "'" + t_name + "'", e_time);
 
             bw.write(logEntry);
             bw.newLine();

@@ -1,45 +1,37 @@
 package com.devone.bot.core.logic.task.teleport.params;
 
-import com.devone.bot.core.logic.task.params.BotCoordinate3DParams;
-import com.devone.bot.core.logic.task.params.IBotTaskParams;
-import com.devone.bot.utils.blocks.BotCoordinate3D;
+import com.devone.bot.core.logic.task.params.BotLocationParams;
+import com.devone.bot.utils.blocks.BotLocation;
 
-public class BotTeleportTaskParams extends BotCoordinate3DParams {
-    public BotCoordinate3D target = new BotCoordinate3D(0,0,0);
+public class BotTeleportTaskParams extends BotLocationParams {
 
-    private String icon = "🗲";
-    private String objective = "Teleport";
-    
-    public BotTeleportTaskParams(BotCoordinate3D target) {
-        super(BotTeleportTaskParams.class.getSimpleName());
-        this.target = target;
-        setIcon(icon);
-        setObjective(objective);
-    }
-
+    /**
+     * Загружает параметры из JSON-файла.
+     * Если файл отсутствует — создаётся дефолтный конфиг.
+     * Если файл повреждён — выбрасывается исключение.
+     */
     public BotTeleportTaskParams() {
-        super(BotTeleportTaskParams.class.getSimpleName());
-        setIcon(icon);
-        setObjective(objective);
-        setDefaults();
+        super();
+        // Устанавливаем значения по умолчанию (на случай, если файл не загрузится)
+        setIcon("🗲");
+        setObjective("Teleport");
+
     }
-    public BotCoordinate3D getTarget() {
-        return target;
-    }
-    public void setTarget(BotCoordinate3D target) {
-        this.target = target;
+
+    /**
+     * Позволяет создать параметры и вручную переопределить точку телепортации.
+     */
+    public BotTeleportTaskParams(BotLocation loc) {
+        this(); // загружаем всё остальное из JSON
+        setLocation(loc);
     }
 
     @Override
-    public Object setDefaults() {
-        super.setDefaults();
-        return this;
-    }
-
-    @Override
-    public Object copyFrom(IBotTaskParams source) {
-        super.copyFrom(source);
-        target = ((BotTeleportTaskParams)source).getTarget();
-        return this;
+    public String toString() {
+        return "BotTeleportTaskParams{" +
+                "location=" + getLocation() +
+                ", icon=" + getIcon() +
+                ", objective=" + getObjective() +
+                '}';
     }
 }

@@ -10,8 +10,8 @@ import com.devone.bot.AIBotPlugin;
 import com.devone.bot.core.config.BotManagerConfig;
 import com.devone.bot.utils.BotConstants;
 import com.devone.bot.utils.BotUtils;
-import com.devone.bot.utils.blocks.BotCoordinate3D;
-import com.devone.bot.utils.blocks.BotCoordinate3DHelper;
+import com.devone.bot.utils.blocks.BotLocation;
+import com.devone.bot.utils.blocks.BotLocationHelper;
 import com.devone.bot.utils.bluemap.BlueMapMarkers;
 import com.devone.bot.utils.logger.BotLogger;
 import com.devone.bot.utils.world.BotWorldHelper;
@@ -53,10 +53,10 @@ public class BotManager {
             if (botExists(botName))
                 continue;
 
-            BotCoordinate3D storedLocation = BotUtils.getFallbackCoordinate3D();
+            BotLocation storedLocation = BotUtils.getFallbackCoordinate3D();
 
             if (loadedData.bots.containsKey(botName)) {
-                BotCoordinate3D coord = loadedData.bots.get(botName).position;
+                BotLocation coord = loadedData.bots.get(botName).position;
                 storedLocation = coord;
             }
 
@@ -83,7 +83,7 @@ public class BotManager {
 
         botsMap.forEach((name, bot) -> {
 
-            BotCoordinate3D loc = BotCoordinate3DHelper.convertFrom(bot.getNPCEntity().getLocation());
+            BotLocation loc = BotLocationHelper.convertFrom(bot.getNPCEntity().getLocation());
 
             data.bots.put(name, new BotManagerConfig.BotEntry(bot.getUuid().toString(), loc));
         });
