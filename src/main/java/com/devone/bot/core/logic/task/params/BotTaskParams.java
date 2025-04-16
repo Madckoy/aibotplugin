@@ -18,7 +18,7 @@ public abstract class BotTaskParams implements IBotTaskParams {
     private boolean isLogging = true;
 
 
-    private File configFile;
+    private transient File configFile;
 
     public File getConfigFile() {
         return configFile;

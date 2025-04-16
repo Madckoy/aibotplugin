@@ -8,7 +8,7 @@ import org.bukkit.scheduler.BukkitTask;
 
 import com.devone.bot.AIBotPlugin;
 import com.devone.bot.core.bot.Bot;
-import com.devone.bot.core.logic.task.BotTask;
+import com.devone.bot.core.logic.task.BotTaskAutoParams;
 import com.devone.bot.core.logic.task.IBotTaskParameterized;
 import com.devone.bot.core.logic.task.move.listeners.BotMoveTaskListener;
 import com.devone.bot.core.logic.task.move.params.BotMoveTaskParams;
@@ -20,7 +20,7 @@ import com.devone.bot.utils.world.BotWorldHelper;
 
 import net.citizensnpcs.api.ai.event.NavigationCompleteEvent;
 
-public class BotMoveTask extends BotTask<BotMoveTaskParams> {
+public class BotMoveTask extends BotTaskAutoParams<BotMoveTaskParams> {
 
     private BukkitTask taskHandle;
     private boolean isMoving = false;
@@ -28,8 +28,7 @@ public class BotMoveTask extends BotTask<BotMoveTaskParams> {
     private float speed = 1.0F;
 
     public BotMoveTask(Bot bot) {
-        super(bot);
-        setParams(new BotMoveTaskParams()); // загрузка параметров из JSON
+        super(bot, BotMoveTaskParams.class);
     }
 
     @Override
