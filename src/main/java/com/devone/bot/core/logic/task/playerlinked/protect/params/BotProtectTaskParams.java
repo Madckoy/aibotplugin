@@ -1,42 +1,31 @@
 package com.devone.bot.core.logic.task.playerlinked.protect.params;
+
 import com.devone.bot.core.logic.task.params.BotTaskParams;
-import com.devone.bot.core.logic.task.params.IBotTaskParams;
 
 public class BotProtectTaskParams extends BotTaskParams {
 
     private double follow_distance = 2.5;
     private double attack_range = 10.0;
-    private String icon = "🛡️";
-    private String objective = "Protect";
-
 
     public BotProtectTaskParams() {
-        super(BotProtectTaskParams.class.getSimpleName());
-        setIcon(icon);
-        setObjective(objective);
-        setDefaults();
-    }
-
-    @Override
-    public Object setDefaults() {
-        config.set("protect.distance", follow_distance); // Расстояние следования за игроком
-        config.set("protect.attack.range", attack_range); // Дистанция атаки на мобов
-        super.setDefaults();
-        return this;
-    }
-
-    public Object copyFrom(IBotTaskParams source) {
-        super.copyFrom(source);
-        follow_distance = ((BotProtectTaskParams)source).getFollowDistance();
-        attack_range = ((BotProtectTaskParams)source).getAttackRange();
-        return this;
+        super();
+        setIcon("🛡️");
+        setObjective("Protect");
     }
 
     public double getFollowDistance() {
         return follow_distance;
     }
 
+    public void setFollowDistance(double dis) {
+        this.follow_distance = dis;
+    }
+
     public double getAttackRange() {
         return attack_range;
+    }
+
+    public void setAttackRange(double range) {
+        this.attack_range = range;
     }
 }

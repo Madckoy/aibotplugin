@@ -8,13 +8,14 @@ import com.devone.bot.AIBotPlugin;
 import com.devone.bot.core.bot.Bot;
 import com.devone.bot.core.logic.task.decision.BotDecisionMakeTask;
 import com.devone.bot.core.logic.task.params.BotTaskParams;
-import com.devone.bot.core.logic.task.params.IBotTaskParams;
 import com.devone.bot.utils.BotUtils;
-import com.devone.bot.utils.blocks.BotCoordinate3D;
+import com.devone.bot.utils.blocks.BotLocation;
 import com.devone.bot.utils.logger.BotLogger;
 import java.util.UUID;
 
-public abstract class BotTask implements IBotTask, IBotTaskConfigurable, Listener {
+public abstract class BotTask<T extends BotTaskParams> implements IBotTask, Listener, IBotTaskParameterized<T> {
+
+    protected T params;
 
     //configurable
     protected boolean isEnabled = true;
@@ -29,31 +30,27 @@ public abstract class BotTask implements IBotTask, IBotTaskConfigurable, Listene
     protected boolean isDone = false;
     protected final String uuid;
     
-    protected BotTaskParams params = new BotTaskParams(BotTaskParams.class.getSimpleName());
-    protected String icon = params.getIcon();
-    protected String objective = params.getObjective();
+    //protected BotTaskParams params = new BotTaskParams(BotTaskParams.class.getSimpleName());
+    protected String icon = "";
+    protected String objective = "";
 
     protected boolean isListenerRegistered = false;
 
     public BotTask(Bot bot) {
         this.bot = bot;
         this.uuid = UUID.randomUUID().toString();
-        objective = params.getObjective();
     }
 
     public BotTask(Bot bot, String icn) {
         this.bot = bot;
         this.icon = icn;
         this.uuid = UUID.randomUUID().toString();
-        objective = params.getObjective();
     }
 
     public BotTask(Bot bot, Player player) {
         this.bot = bot;
         this.player = player;
         this.uuid = UUID.randomUUID().toString();
-        this.icon = params.getIcon();
-        objective = params.getObjective();
     }
 
     public BotTask(Bot bot, Player player, String icn) {
@@ -61,7 +58,6 @@ public abstract class BotTask implements IBotTask, IBotTaskConfigurable, Listene
         this.player = player;
         this.icon = icn;
         this.uuid = UUID.randomUUID().toString();
-        objective = params.getObjective();
     }
 
     public String getObjective() {
@@ -73,7 +69,6 @@ public abstract class BotTask implements IBotTask, IBotTaskConfigurable, Listene
         BotLogger.info("🚩", this.isLogging(), icon +" : "+ bot.getId() + "  Set Objective: " + objctv);
     }
 
-    @Override
     public void update() {
         if (isEnabled) {
 
@@ -118,7 +113,6 @@ public abstract class BotTask implements IBotTask, IBotTaskConfigurable, Listene
         return isLogging;
     }
 
-    @Override
     public void setPaused(boolean paused) {
         this.isPaused = paused;
         String status = isPaused ? "⏸️ Pausing..." : "▶️ Resuming...";
@@ -126,14 +120,12 @@ public abstract class BotTask implements IBotTask, IBotTaskConfigurable, Listene
     }
 
     @Override
-    public BotTask configure(IBotTaskParams params) {
-        startTime = System.currentTimeMillis();
+    public IBotTaskParameterized<T> setParams(T params) {
+        this.params = params;
+        this.startTime = System.currentTimeMillis();
         return this;
     }
-
-    public BotTaskParams getParams() {
-        return params;
-    }
+    
     public String getIcon() {
         return icon;
     }
@@ -151,15 +143,18 @@ public abstract class BotTask implements IBotTask, IBotTaskConfigurable, Listene
     }
 
     private void handlePlayerDisconnect() {
+
         BotLogger.info("🚨", this.isLogging(), "Игрок " + player.getName() + " вышел! Бот " + bot.getId() + " переходит в автономный режим.");
         this.bot.getLifeCycle().getTaskStackManager().clearTasks();
 
-        bot.addTaskToQueue(new BotDecisionMakeTask(bot));
+        BotDecisionMakeTask task = new BotDecisionMakeTask(bot);
+
+        bot.getLifeCycle().getTaskStackManager().pushTask(task);
 
         this.stop();
     }
 
-    public void turnToTarget(BotCoordinate3D target) {
+    public void turnToTarget(BotLocation target) {
         
         // ✅ Принудительно обновляем положение, если поворот сбрасывается
         Bukkit.getScheduler().runTaskLater(AIBotPlugin.getInstance(), () -> {

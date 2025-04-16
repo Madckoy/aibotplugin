@@ -40,15 +40,16 @@ public class BotChaseCommand implements CommandExecutor {
         bot.getLifeCycle().getTaskStackManager().clearTasks();
 
         BotBlockData block_data = new BotBlockData();
-        block_data.type = "player";
-        block_data.x = player.getLocation().getBlockX();
-        block_data.y = player.getLocation().getBlockY();
-        block_data.z = player.getLocation().getBlockZ();
+        block_data.setType("player");
+        block_data.setX(player.getLocation().getBlockX());
+        block_data.setY(player.getLocation().getBlockY());
+        block_data.setZ(player.getLocation().getBlockZ());
      
         
         // ✅ Добавляем задачу на следование
         BotChaseTargetTask followTask = new BotChaseTargetTask(bot, block_data);
-        bot.addTaskToQueue(followTask);
+
+        bot.getLifeCycle().getTaskStackManager().pushTask(followTask);
 
         player.sendMessage("§aБот " + bot.getId() + " теперь следует за вами!");
 

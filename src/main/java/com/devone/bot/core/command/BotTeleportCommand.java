@@ -10,7 +10,7 @@ import com.devone.bot.core.bot.Bot;
 import com.devone.bot.core.bot.BotManager;
 import com.devone.bot.core.logic.task.teleport.BotTeleportTask;
 import com.devone.bot.core.logic.task.teleport.params.BotTeleportTaskParams;
-import com.devone.bot.utils.blocks.BotCoordinate3D;
+import com.devone.bot.utils.blocks.BotLocation;
 import com.devone.bot.utils.logger.BotLogger;
 
 
@@ -65,11 +65,11 @@ public class BotTeleportCommand implements CommandExecutor {
 
         BotTeleportTask task = new BotTeleportTask(bot, null);
         BotTeleportTaskParams tpParams = new BotTeleportTaskParams();
-        tpParams.setTarget(new BotCoordinate3D(x, y, z));  
-        task.configure(tpParams);
-        bot.addTaskToQueue(task);
+        tpParams.setLocation(new BotLocation(x, y, z));  
+        task.setParams(tpParams);
+        bot.getLifeCycle().getTaskStackManager().pushTask(task);
 
-        BotLogger.info("📌", true, "/bot-tp: Бот " + bot.getId() + " телепортируется в " + tpParams.getTarget());
+        BotLogger.info("📌", true, "/bot-tp: Бот " + bot.getId() + " телепортируется в " + tpParams.getLocation());
         
         sender.sendMessage("✅ Бот '" + botName + "' телепортируется в " + x + " " + y + " " + z);
 

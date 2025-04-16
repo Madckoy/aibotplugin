@@ -12,7 +12,7 @@ public class BotBlocksVerticalSliceFilter {
         
         for (BotBlockData block : blocks) {
             // Проверяем, что блок находится в пределах range от botY
-            if ((block.y >= botY - range) && (block.y <= botY + range)) {
+            if ((block.getY() >= botY - range) && (block.getY() <= botY + range)) {
                 result.add(block);
             }
         }

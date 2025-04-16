@@ -2,7 +2,7 @@ package com.devone.bot.core.logic.navigation.filters;
 
 
 import com.devone.bot.utils.blocks.BotBlockData;
-import com.devone.bot.utils.blocks.BotCoordinate3D;
+import com.devone.bot.utils.blocks.BotLocation;
 
 import java.util.*;
 
@@ -15,15 +15,15 @@ public class BotBlocksWalkableFilter {
         List<BotBlockData> result = new ArrayList<>();
 
         // Создаем карту блоков по координатам
-        Map<BotCoordinate3D, BotBlockData> blockMap = new HashMap<>();
+        Map<BotLocation, BotBlockData> blockMap = new HashMap<>();
         for (BotBlockData b : blocks) {
-            blockMap.put(new BotCoordinate3D(b.x, b.y, b.z), b);
+            blockMap.put(new BotLocation(b.getX(), b.getY(), b.getZ()), b);
         }
 
         for (BotBlockData block : blocks) {
 
-            BotCoordinate3D above1 = new BotCoordinate3D(block.x, block.y + 1, block.z);
-            BotCoordinate3D above2 = new BotCoordinate3D(block.x, block.y + 2, block.z);
+            BotLocation above1 = new BotLocation(block.getX(), block.getY() + 1, block.getZ());
+            BotLocation above2 = new BotLocation(block.getX(), block.getY() + 2, block.getZ());
 
             BotBlockData blockAbove1 = blockMap.get(above1);
             BotBlockData blockAbove2 = blockMap.get(above2);

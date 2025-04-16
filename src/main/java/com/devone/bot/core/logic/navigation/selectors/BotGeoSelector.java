@@ -9,7 +9,7 @@ import java.util.Random;
 import java.util.stream.Collectors;
 
 import com.devone.bot.utils.blocks.BotBlockData;
-import com.devone.bot.utils.blocks.BotCoordinate3D;
+import com.devone.bot.utils.blocks.BotLocation;
 import com.devone.bot.utils.logger.BotLogger;
 import com.devone.bot.utils.world.BotWorldHelper;
 
@@ -31,52 +31,53 @@ public class BotGeoSelector {
         return targets.get(index);
     }
 
-public static BotBlockData pickEmergencyTeleportTarget(
-        BotCoordinate3D botPos,
-        List<BotBlockData> reachableGoals,
-        List<BotBlockData> reachable,
-        List<BotBlockData> navigable,
-        List<BotBlockData> walkable) {
+    public static BotBlockData pickEmergencyTeleportTarget(
+            BotLocation botPos,
+            List<BotBlockData> reachableGoals,
+            List<BotBlockData> reachable,
+            List<BotBlockData> navigable,
+            List<BotBlockData> walkable) {
 
-    List<List<BotBlockData>> prioritySources = List.of(
-        reachableGoals, reachable, navigable, walkable
-    );
+        List<List<BotBlockData>> prioritySources = List.of(
+                reachableGoals, reachable, navigable, walkable);
 
-    for (List<BotBlockData> source : prioritySources) {
-        if (source == null || source.isEmpty()) continue;
+        for (List<BotBlockData> source : prioritySources) {
+            if (source == null || source.isEmpty())
+                continue;
 
-        List<BotBlockData> options = source.stream()
-            .filter(b -> {
-                boolean isSame = b.equals(botPos);
-                boolean isDirectlyUnder = (b.x == botPos.x && b.z == botPos.z && b.y == botPos.y - 1);
-                return !isSame && !isDirectlyUnder && b.distanceTo(botPos) > 1;
-            })
-            .collect(Collectors.toList());
+            List<BotBlockData> options = source.stream()
+                    .filter(b -> {
+                        boolean isSame = b.equals(botPos);
+                        boolean isDirectlyUnder = (b.getX() == botPos.getX() && b.getZ() == botPos.getZ()
+                                && b.getY() == botPos.getY() - 1);
+                        return !isSame && !isDirectlyUnder && b.distanceTo(botPos) > 1;
+                    })
+                    .collect(Collectors.toList());
 
-        if (!options.isEmpty()) {
-            Collections.shuffle(options);
-            BotBlockData selected = options.get(0);
+            if (!options.isEmpty()) {
+                Collections.shuffle(options);
+                BotBlockData selected = options.get(0);
 
-            BotBlockData elevated = new BotBlockData();
-            elevated.x = selected.x;
-            elevated.y = selected.y + 1;
-            elevated.z = selected.z;
-            elevated.type = "AIR";
-            return elevated;
+                BotBlockData elevated = new BotBlockData();
+                elevated.setX(selected.getX());
+                elevated.setY(selected.getY() + 1);
+                elevated.setZ(selected.getZ());
+                elevated.setType("AIR");
+                return elevated;
+            }
         }
+
+        // ⛔ Fallback на спавн
+        BotLogger.info("⚠️ ", true, "EmergencyTeleport: fallback to world spawn!");
+
+        BotLocation spawn = BotWorldHelper.getWorldSpawnLocation();
+
+        BotBlockData fallback = new BotBlockData();
+        fallback.setX(spawn.getX());
+        fallback.setY(spawn.getY());
+        fallback.setZ(spawn.getZ());
+        fallback.setType("AIR");
+        return fallback;
     }
-
-    // ⛔ Fallback на спавн
-    BotLogger.info("⚠️ ", true, "EmergencyTeleport: fallback to world spawn!");
-
-    BotCoordinate3D spawn = BotWorldHelper.getWorldSpawnLocation();
-
-    BotBlockData fallback = new BotBlockData();
-    fallback.x = spawn.x;
-    fallback.y = spawn.y;
-    fallback.z = spawn.z;
-    fallback.type = "AIR";
-    return fallback;
-}
 
 }

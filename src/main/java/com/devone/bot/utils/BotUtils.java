@@ -7,7 +7,7 @@ import org.bukkit.block.Block;
 import org.bukkit.util.Vector;
 
 import com.devone.bot.core.bot.Bot;
-import com.devone.bot.utils.blocks.BotCoordinate3D;
+import com.devone.bot.utils.blocks.BotLocation;
 import com.devone.bot.utils.logger.BotLogger;
 import com.devone.bot.utils.world.BotWorldHelper;
 
@@ -73,8 +73,8 @@ public class BotUtils {
         return world.getSpawnLocation();
     }
 
-    public static BotCoordinate3D getFallbackCoordinate3D() {
-        BotCoordinate3D coord = new BotCoordinate3D(getFallbackPos().getBlockX(), getFallbackPos().getBlockY(), getFallbackPos().getBlockZ());
+    public static BotLocation getFallbackCoordinate3D() {
+        BotLocation coord = new BotLocation(getFallbackPos().getBlockX(), getFallbackPos().getBlockY(), getFallbackPos().getBlockZ());
         return coord;
     }
 
@@ -100,7 +100,7 @@ public class BotUtils {
      * @param bot     Бот (CraftPlayer или NPC, поддерживающий teleport)
      * @param target  Цель, к которой нужно повернуть лицо
      */
-    public static void lookAt(Bot bot, BotCoordinate3D target) {
+    public static void lookAt(Bot bot, BotLocation target) {
 
         Location tgt = BotWorldHelper.getWorldLocation(target);
 
@@ -126,4 +126,16 @@ public class BotUtils {
         long seconds = TimeUnit.MILLISECONDS.toSeconds(milliseconds) % 60;
         return String.format("%02d:%02d:%02d", hours, minutes, seconds);
     }
+
+    public static void logMemoryUsage(String context) {
+        Runtime runtime = Runtime.getRuntime();
+        long usedMemory = runtime.totalMemory() - runtime.freeMemory();
+        long maxMemory = runtime.maxMemory();
+    
+        String usedMB = String.format("%.2f", usedMemory / 1024.0 / 1024.0);
+        String maxMB = String.format("%.2f", maxMemory / 1024.0 / 1024.0);
+    
+        BotLogger.info("📦", true, context + " — Использовано памяти: " + usedMB + " MB / " + maxMB + " MB");
+    }
+    
 }

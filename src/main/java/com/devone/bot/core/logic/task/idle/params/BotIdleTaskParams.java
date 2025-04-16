@@ -6,19 +6,19 @@ import com.devone.bot.utils.BotConstants;
 public class BotIdleTaskParams extends BotTaskParams {
 
     private long timeout = BotConstants.DEFAULT_TASK_TIMEOUT;
-    private String icon = "🍹";
-    private String objective = "Idle";
 
     public BotIdleTaskParams() {
-        super(BotIdleTaskParams.class.getSimpleName());
-        setIcon(icon);
-        setObjective(objective);
-        setDefaults();
+        super();
+
+        setIcon("🍹");
+        setObjective("Idle");
     }
 
-    public BotIdleTaskParams setDefaults() {
-        config.set("idle.timeout", this.timeout);
-        super.setDefaults();
-        return this;
+    public long getTimeout() {
+        return timeout;
+    }
+
+    public void setTimeout(long timeout) {
+        this.timeout = timeout;
     }
 }
