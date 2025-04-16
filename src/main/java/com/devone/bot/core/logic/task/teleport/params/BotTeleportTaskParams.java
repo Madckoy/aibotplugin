@@ -15,6 +15,7 @@ public class BotTeleportTaskParams extends BotLocationParams {
         // Устанавливаем значения по умолчанию (на случай, если файл не загрузится)
         setIcon("🗲");
         setObjective("Teleport");
+
     }
 
     /**
@@ -22,6 +23,7 @@ public class BotTeleportTaskParams extends BotLocationParams {
      */
     public BotTeleportTaskParams(BotLocation loc) {
         this(); // загружаем всё остальное из JSON
+        setLocation(loc);
     }
 
     @Override
