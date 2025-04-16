@@ -17,7 +17,7 @@ function updateMonitoringHeader(data) {
     if (typeof serverTime === "string" && serverTime.trim() !== "") {
         serverTimeElem.textContent = `🕒 ${serverTime}`;
     } else {
-        serverTimeElem.textContent = "🕒 N/A";
+        serverTimeElem.textContent = "🕒 --:--";
     }
 }
 
@@ -81,7 +81,7 @@ function renderBotTable(data) {
     setupButtonHandlers();
 }
 
-function generateInventoryGrid(slots, autopickup) {
+function generateInventoryGrid(slots, autoPickupEnabled) {
     const maxSlots = 36;
     slots = Array.isArray(slots) ? slots : [];
 
