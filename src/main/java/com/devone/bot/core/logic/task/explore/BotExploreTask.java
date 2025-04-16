@@ -5,7 +5,7 @@ import com.devone.bot.core.logic.navigation.BotNavigationPlannerWrapper;
 import com.devone.bot.core.logic.navigation.scene.BotSceneContext;
 import com.devone.bot.core.logic.navigation.selectors.BotBioSelector;
 import com.devone.bot.core.logic.navigation.selectors.BotGeoSelector;
-import com.devone.bot.core.logic.task.BotTask;
+import com.devone.bot.core.logic.task.BotTaskAutoParams;
 import com.devone.bot.core.logic.task.IBotTaskParameterized;
 import com.devone.bot.core.logic.task.attack.survival.BotSurvivalAttackTask;
 import com.devone.bot.core.logic.task.attack.survival.params.BotSurvivalAttackTaskParams;
@@ -22,22 +22,30 @@ import com.devone.bot.utils.logger.BotLogger;
 import com.devone.bot.utils.navigation.BotNavigationUtils;
 import com.devone.bot.utils.scene.BotSceneData;
 
-public class BotExploreTask extends BotTask<BotExploreTaskParams> {
+public class BotExploreTask extends BotTaskAutoParams<BotExploreTaskParams> {
 
     private int scanRadius;
-    private BotExploreTaskParams params;
 
     public BotExploreTask(Bot bot) {
-        super(bot);
-        this.params = new BotExploreTaskParams();
+        super(bot, BotExploreTaskParams.class);
+    }
+
+    public IBotTaskParameterized<BotExploreTaskParams> setParams(BotExploreTaskParams params) {
+
+        this.params = params;
+
         setIcon(params.getIcon());
         setObjective(params.getObjective());
-        this.scanRadius = params.getScanRadius();
+
+        this.scanRadius = params.getScanRadius(); // Извлекаем параметр
+
+        return this;
     }
 
     @Override
     public void execute() {
-        if (isPaused) return;
+        if (isPaused)
+            return;
 
         BotLogger.info("🔶", isLogging(), bot.getId() + " Exploring with radius: " + scanRadius);
 
@@ -45,7 +53,7 @@ public class BotExploreTask extends BotTask<BotExploreTaskParams> {
         sonar.execute();
 
         setObjective(params.getObjective());
-        bot.pickupNearbyItems(params.shouldPickup());
+        bot.pickupNearbyItems(params.isPickup());
 
         BotSceneData sceneData = bot.getRuntimeStatus().getSceneData();
         if (sceneData == null) {
@@ -55,7 +63,8 @@ public class BotExploreTask extends BotTask<BotExploreTaskParams> {
         }
 
         BotLocation botPos = bot.getRuntimeStatus().getCurrentLocation();
-        BotSceneContext context = BotNavigationPlannerWrapper.getSceneContext(sceneData.blocks, sceneData.entities, botPos);
+        BotSceneContext context = BotNavigationPlannerWrapper.getSceneContext(sceneData.blocks, sceneData.entities,
+                botPos);
 
         BotBlockData goal = BotGeoSelector.pickRandomTarget(context.reachableGoals);
         BotBlockData animal = BotBioSelector.pickNearestTarget(context.entities, botPos);
@@ -78,21 +87,24 @@ public class BotExploreTask extends BotTask<BotExploreTaskParams> {
                 BotLogger.info("❌", this.isLogging(), bot.getId() + " No animal found to unstuck.");
                 if (getElapsedTime() > BotConstants.DEFAULT_TASK_TIMEOUT) {
                     BotLogger.info("⏱️", this.isLogging(), bot.getId() + " Task timeout.");
-                    BotBlockData fallback = BotGeoSelector.pickEmergencyTeleportTarget(bot.getRuntimeStatus().getCurrentLocation(),
+                    BotBlockData fallback = BotGeoSelector.pickEmergencyTeleportTarget(
+                            bot.getRuntimeStatus().getCurrentLocation(),
                             context.reachableGoals, context.reachable, context.navigable, context.walkable);
                     if (fallback != null) {
-                        BotLogger.info("🌀", isLogging(), bot.getId() + " Navigation impossible, fallback teleporting to: " + fallback);
+                        BotLogger.info("🌀", isLogging(),
+                                bot.getId() + " Navigation impossible, fallback teleporting to: " + fallback);
 
                         // Создание параметров
                         BotTeleportTaskParams tpParams = new BotTeleportTaskParams(fallback);
 
                         // Создание задачи и передача параметров
                         BotTeleportTask tpTask = new BotTeleportTask(bot, null);
-                        tpTask.setParams(tpParams);  // Теперь параметры корректно передаются
-                        
+                        tpTask.setParams(tpParams); // Теперь параметры корректно передаются
+
                         bot.getLifeCycle().getTaskStackManager().pushTask(tpTask);
 
-                        BotLogger.info("💡", this.isLogging(), bot.getId() + " Teleporting to fallback location: " + fallback);
+                        BotLogger.info("💡", this.isLogging(),
+                                bot.getId() + " Teleporting to fallback location: " + fallback);
                         this.stop();
                         return;
                     }
@@ -107,11 +119,10 @@ public class BotExploreTask extends BotTask<BotExploreTaskParams> {
             // Создание параметров
             BotHandAttackTaskParams handParams = new BotHandAttackTaskParams(animal, 5.0);
 
-
             // Создание задачи и передача параметров
             BotHandAttackTask handTask = new BotHandAttackTask(bot);
-            handTask.setParams(handParams);  // Теперь параметры корректно передаются
-            bot.getLifeCycle().getTaskStackManager().pushTask(handTask);            
+            handTask.setParams(handParams); // Теперь параметры корректно передаются
+            bot.getLifeCycle().getTaskStackManager().pushTask(handTask);
             return;
         }
 
@@ -128,14 +139,7 @@ public class BotExploreTask extends BotTask<BotExploreTaskParams> {
     @Override
     public void stop() {
         BotLogger.info("✅", isLogging(), "Exploration task completed for " + bot.getId());
+        super.stop();
     }
 
-    public IBotTaskParameterized<BotExploreTaskParams> setParams(BotExploreTaskParams params)  {
-        super.setParams(params);  // вызов родительского setParams()
-        
-        // Здесь параметры типа BotExploreTaskParams
-        this.scanRadius = params.getScanRadius(); // Извлекаем параметр
-    
-        return this;
-    }
 }

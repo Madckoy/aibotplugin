@@ -13,12 +13,6 @@ public class BotHandTaskParams extends BotTaskParams {
     public BotHandTaskParams() {
         setIcon("✋🏻");
         setObjective("Hand");
-
-        BotHandTaskParams loaded = loadOrCreate(BotHandTaskParams.class);
-        
-        this.damage = loaded.damage;
-        setIcon(loaded.getIcon());
-        setObjective(loaded.getObjective());
     }
 
     public BotHandTaskParams(BotBlockData target) {

@@ -1,27 +1,26 @@
 package com.devone.bot.core.logic.task.hand;
 
 import com.devone.bot.core.bot.Bot;
-import com.devone.bot.core.logic.task.BotTask;
+import com.devone.bot.core.logic.task.BotTaskAutoParams;
 import com.devone.bot.core.logic.task.hand.params.BotHandTaskParams;
 import com.devone.bot.core.logic.task.IBotTaskParameterized;
 import com.devone.bot.utils.blocks.BotBlockData;
 import com.devone.bot.utils.logger.BotLogger;
 
-public abstract class BotHandTask extends BotTask<BotHandTaskParams> {
+public abstract class BotHandTask<T extends BotHandTaskParams> extends BotTaskAutoParams<T> {
 
     private BotBlockData target;
 
-    public BotHandTask(Bot bot) {
-        super(bot);
-        setParams(new BotHandTaskParams()); // загружаем конфиг
+    public BotHandTask(Bot bot, Class<T> paramClass) {
+        super(bot, paramClass);
     }
 
     @Override
-    public IBotTaskParameterized<BotHandTaskParams> setParams(BotHandTaskParams params) {
-        super.setParams(params);
+    public IBotTaskParameterized<T> setParams(T params) {
+        this.params = params;
+
         setIcon(params.getIcon());
         setObjective(params.getObjective());
-
         this.target = params.getTarget();
 
         if (target != null) {

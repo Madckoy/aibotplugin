@@ -143,7 +143,7 @@ public abstract class BotTask<T extends BotTaskParams> implements IBotTask, List
     }
 
     private void handlePlayerDisconnect() {
-        
+
         BotLogger.info("🚨", this.isLogging(), "Игрок " + player.getName() + " вышел! Бот " + bot.getId() + " переходит в автономный режим.");
         this.bot.getLifeCycle().getTaskStackManager().clearTasks();
 

@@ -48,7 +48,7 @@ public class BotSceneScan3D {
                     blockData.setX(loc.getBlockX());
                     blockData.setY(loc.getBlockY());
                     blockData.setZ(loc.getBlockZ());
-                    blockData.type = material.toString();
+                    blockData.setType(material.toString());
 
                     scannedBlocks.add(blockData);
                 }
@@ -59,18 +59,21 @@ public class BotSceneScan3D {
         Location botLocWorld = BotWorldHelper.getWorldLocation(botLoc);
 
         for (LivingEntity entity : world.getLivingEntities()) {
-            if (entity == bot.getNPCEntity() || entity instanceof Player || entity.isDead()) continue;
-            if (entity.getLocation().distance(botLocWorld) > scanRadius) continue;
+            if (entity == bot.getNPCEntity() || entity instanceof Player || entity.isDead())
+                continue;
+            if (entity.getLocation().distance(botLocWorld) > scanRadius)
+                continue;
 
             Location loc = entity.getLocation();
-            String type = entity.getCustomName() != null ? entity.getCustomName() : entity.getName();;
+            String type = entity.getCustomName() != null ? entity.getCustomName() : entity.getName();
+            ;
 
             BotBlockData blockData = new BotBlockData();
             blockData.setX(loc.getBlockX());
             blockData.setY(loc.getBlockY());
             blockData.setZ(loc.getBlockZ());
-            blockData.type = type;
-            blockData.uuid = entity.getUniqueId();
+            blockData.setType(type);
+            blockData.setUUID(entity.getUniqueId());
             blockData.setBot(false);
 
             scannedEntities.add(blockData);

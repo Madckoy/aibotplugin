@@ -10,8 +10,7 @@ import com.devone.bot.core.logic.task.playerlinked.protect.params.BotProtectTask
 public class BotProtectTask extends BotPlayerLinkedTask<BotProtectTaskParams> {
 
     public BotProtectTask(Bot bot, Player player) {
-        super(bot, player);
-        setParams(new BotProtectTaskParams()); // Загружаем параметры по умолчанию
+        super(bot, player, BotProtectTaskParams.class);
     }
 
     @Override

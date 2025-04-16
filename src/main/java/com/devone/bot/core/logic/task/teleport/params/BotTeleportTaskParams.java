@@ -14,17 +14,10 @@ public class BotTeleportTaskParams extends BotLocationParams {
      * Если файл повреждён — выбрасывается исключение.
      */
     public BotTeleportTaskParams() {
+        super();
         // Устанавливаем значения по умолчанию (на случай, если файл не загрузится)
         setIcon("🗲");
         setObjective("Teleport");
-
-        // Загружаем параметры из файла
-        BotTeleportTaskParams loaded = loadOrCreate(BotTeleportTaskParams.class);
-
-        // Копируем значения без проверок — файл должен быть корректным
-        this.location = loaded.location;
-        setIcon(loaded.getIcon());
-        setObjective(loaded.getObjective());
     }
 
     /**
@@ -41,5 +34,14 @@ public class BotTeleportTaskParams extends BotLocationParams {
 
     public void setLocation(BotLocation loc) {
         this.location = loc;
+    }
+
+    @Override
+    public String toString() {
+        return "BotTeleportTaskParams{" +
+                "location=" + location +
+                ", icon=" + getIcon() +
+                ", objective=" + getObjective() +
+                '}';
     }
 }

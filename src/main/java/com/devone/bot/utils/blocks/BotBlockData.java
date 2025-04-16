@@ -8,8 +8,24 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 
 public class BotBlockData extends BotLocation {
 
-    public String type;
-    public UUID   uuid;
+    private String type;
+    private UUID   uuid;
+
+    public void setType( String type){
+        this.type = type;
+    }
+
+    public String getType(){
+        return this.type;
+    }
+
+    public void setUUID( UUID id){
+        this.uuid = id;
+    }
+
+    public UUID getUUID(){
+        return this.uuid;
+    }
 
     @JsonIgnore
     private boolean bot;  // из JSON  

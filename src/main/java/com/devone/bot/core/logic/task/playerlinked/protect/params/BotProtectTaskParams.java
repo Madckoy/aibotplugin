@@ -8,14 +8,9 @@ public class BotProtectTaskParams extends BotTaskParams {
     private double attack_range = 10.0;
 
     public BotProtectTaskParams() {
+        super();
         setIcon("🛡️");
         setObjective("Protect");
-
-        BotProtectTaskParams loaded = loadOrCreate(BotProtectTaskParams.class);
-        this.follow_distance = loaded.follow_distance;
-        this.attack_range = loaded.attack_range;
-        setIcon(loaded.getIcon());
-        setObjective(loaded.getObjective());
     }
 
     public double getFollowDistance() {

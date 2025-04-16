@@ -8,14 +8,10 @@ public class BotIdleTaskParams extends BotTaskParams {
     private long timeout = BotConstants.DEFAULT_TASK_TIMEOUT;
 
     public BotIdleTaskParams() {
+        super();
+
         setIcon("🍹");
         setObjective("Idle");
-
-        BotIdleTaskParams loaded = loadOrCreate(BotIdleTaskParams.class);
-        
-        this.timeout = loaded.timeout;
-        setIcon(loaded.getIcon());
-        setObjective(loaded.getObjective());
     }
 
     public long getTimeout() {

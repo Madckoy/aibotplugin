@@ -17,9 +17,6 @@ public class BotSurvivalAttackTaskParams extends BotTaskParams {
         setIcon(DEFAULT_ICON);
         setObjective(DEFAULT_OBJECTIVE);
         this.target = null;
-
-        // Загрузка параметров из конфигурации
-        loadDefaults();
     }
 
     public BotSurvivalAttackTaskParams(BotBlockData target, double damage) {
@@ -28,20 +25,15 @@ public class BotSurvivalAttackTaskParams extends BotTaskParams {
         this.damage = damage;
         setIcon(DEFAULT_ICON);
         setObjective(DEFAULT_OBJECTIVE);
-
-        // Загрузка параметров из конфигурации
-        loadDefaults();
     }
 
-    // Метод для загрузки значений из файла
-    private void loadDefaults() {
-        // Загрузка параметров из родительского класса
-        BotSurvivalAttackTaskParams loaded = loadOrCreate(BotSurvivalAttackTaskParams.class);
-
-        this.damage = loaded.damage;  // Если есть параметры в файле — они перезапишут дефолтные
-        this.target = loaded.target;
-        setIcon(loaded.getIcon());  // Если есть загруженная иконка — она перезапишет дефолтную
-        setObjective(loaded.getObjective());
+    public static BotSurvivalAttackTaskParams clone(BotSurvivalAttackTaskParams source) {
+        BotSurvivalAttackTaskParams target = new BotSurvivalAttackTaskParams();
+        target.setIcon(source.getIcon());
+        target.setObjective(source.getObjective());
+        target.setDamage(source.getDamage());
+        target.setTarget(source.getTarget());
+        return target;
     }
 
     public BotBlockData getTarget() {

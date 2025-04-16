@@ -6,15 +6,9 @@ import com.devone.bot.utils.blocks.BotBlockData;
 public class BotHandExcavateTaskParams extends BotHandTaskParams {
 
     public BotHandExcavateTaskParams() {
-        super(); // загрузка из файла
-        // Загружаем параметры из файла или используем дефолтные
+        super();
         setIcon("⛏");
         setObjective("Excavate");
-
-        BotHandExcavateTaskParams loaded = loadOrCreate(BotHandExcavateTaskParams.class);
-
-        setIcon(loaded.getIcon());
-        setObjective(loaded.getObjective());
     }
 
     public BotHandExcavateTaskParams(BotBlockData target) {

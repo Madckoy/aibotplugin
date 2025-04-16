@@ -4,14 +4,14 @@ import org.bukkit.Bukkit;
 
 import com.devone.bot.AIBotPlugin;
 import com.devone.bot.core.bot.Bot;
-import com.devone.bot.core.logic.task.BotTask;
+import com.devone.bot.core.logic.task.BotTaskAutoParams;
 import com.devone.bot.core.logic.task.IBotTaskParameterized;
 import com.devone.bot.core.logic.task.playerlinked.chase.params.BotChaseTaskParams;
 import com.devone.bot.utils.BotUtils;
 import com.devone.bot.utils.blocks.BotBlockData;
 import com.devone.bot.utils.logger.BotLogger;
 
-public class BotChaseTargetTask extends BotTask<BotChaseTaskParams> {
+public class BotChaseTargetTask extends BotTaskAutoParams<BotChaseTaskParams> {
 
     private BotBlockData target;
     private double chaseDistance;
@@ -20,9 +20,7 @@ public class BotChaseTargetTask extends BotTask<BotChaseTaskParams> {
     private final int updateIntervalTicks = 10;
 
     public BotChaseTargetTask(Bot bot, BotBlockData target) {
-        super(bot);
-        BotChaseTaskParams params = new BotChaseTaskParams(target);
-        setParams(params);
+        super(bot, BotChaseTaskParams.class);
     }
 
     @Override
@@ -38,7 +36,8 @@ public class BotChaseTargetTask extends BotTask<BotChaseTaskParams> {
             bot.getRuntimeStatus().setTargetLocation(target);
         }
 
-        BotLogger.info("✅", this.isLogging(), "Chase parameters: " + target + " | " + chaseDistance + " | " + attackRange);
+        BotLogger.info("✅", this.isLogging(),
+                "Chase parameters: " + target + " | " + chaseDistance + " | " + attackRange);
         return this;
     }
 
@@ -50,7 +49,7 @@ public class BotChaseTargetTask extends BotTask<BotChaseTaskParams> {
             return;
         }
 
-        setObjective(params.getObjective() + ": " + target.type);
+        setObjective(params.getObjective() + ": " + target);
 
         updateFollowLogic();
 
@@ -64,7 +63,7 @@ public class BotChaseTargetTask extends BotTask<BotChaseTaskParams> {
 
     private void updateFollowLogic() {
         BotUtils.lookAt(bot, target);
-        BotLogger.info("🏃", this.isLogging(), "Chasing: " + target.type);
+        BotLogger.info("🏃", this.isLogging(), "Chasing: " + target);
         this.stop();
     }
 

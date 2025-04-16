@@ -12,14 +12,9 @@ public class BotChaseTaskParams extends BotTaskParams {
     private transient BotBlockData target;
 
     public BotChaseTaskParams() {
+        super();
         setIcon("🎯");
         setObjective("Chase");
-
-        BotChaseTaskParams loaded = loadOrCreate(BotChaseTaskParams.class);
-        this.chaseDistance = loaded.chaseDistance;
-        this.attackRange = loaded.attackRange;
-        setIcon(loaded.getIcon());
-        setObjective(loaded.getObjective());
     }
 
     public BotChaseTaskParams(BotBlockData tgt) {

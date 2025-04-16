@@ -40,7 +40,7 @@ public class BotChaseCommand implements CommandExecutor {
         bot.getLifeCycle().getTaskStackManager().clearTasks();
 
         BotBlockData block_data = new BotBlockData();
-        block_data.type = "player";
+        block_data.setType("player");
         block_data.setX(player.getLocation().getBlockX());
         block_data.setY(player.getLocation().getBlockY());
         block_data.setZ(player.getLocation().getBlockZ());

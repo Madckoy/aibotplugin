@@ -10,15 +10,9 @@ public class BotExploreTaskParams extends BotTaskParams {
     private boolean pickup = true;
 
     public BotExploreTaskParams() {
+        super();
         setIcon("🌐");
         setObjective("Explore");
-        // Загружаем параметры из файла, если они есть
-        BotExploreTaskParams loaded = loadOrCreate(BotExploreTaskParams.class);
-
-        this.scanRadius = loaded.getScanRadius(); // Применяем параметры из загруженного объекта
-        this.pickup = loaded.shouldPickup(); // Это значение можно использовать по умолчанию или из файла
-        setIcon(loaded.getIcon());
-        setObjective(loaded.getObjective());
     }
 
     public BotExploreTaskParams(int scanRadius) {
@@ -26,7 +20,11 @@ public class BotExploreTaskParams extends BotTaskParams {
         this.scanRadius = scanRadius;
     }
 
-    public boolean shouldPickup() {
+    public void setPickup(boolean pickup) {
+        this.pickup = pickup;
+    }
+
+    public boolean isPickup() {
         return pickup;
     }
 

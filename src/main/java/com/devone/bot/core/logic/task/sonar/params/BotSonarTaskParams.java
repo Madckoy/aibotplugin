@@ -9,17 +9,10 @@ public class BotSonarTaskParams extends BotTaskParams {
     private int height = BotConstants.DEFAULT_SCAN_RANGE;
 
     public BotSonarTaskParams() {
+        super();
         // Устанавливаем значения по умолчанию
         setIcon("𖣠");
         setObjective("Scan Signatures");
-
-        // Загружаем из конфигурационного файла (если он есть)
-        BotSonarTaskParams loaded = loadOrCreate(BotSonarTaskParams.class);
-
-        this.radius = loaded.radius;
-        this.height = loaded.height;
-        setIcon(loaded.getIcon());
-        setObjective(loaded.getObjective());
     }
 
     public int getRadius() {

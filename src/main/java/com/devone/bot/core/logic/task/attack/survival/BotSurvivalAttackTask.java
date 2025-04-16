@@ -1,8 +1,7 @@
 package com.devone.bot.core.logic.task.attack.survival;
 
-
 import com.devone.bot.core.bot.Bot;
-import com.devone.bot.core.logic.task.BotTask;
+import com.devone.bot.core.logic.task.BotTaskAutoParams;
 import com.devone.bot.core.logic.task.IBotTaskParameterized;
 import com.devone.bot.core.logic.task.attack.survival.params.BotSurvivalAttackTaskParams;
 import com.devone.bot.core.logic.task.hand.attack.BotHandAttackTask;
@@ -12,34 +11,28 @@ import com.devone.bot.core.logic.task.teleport.params.BotTeleportTaskParams;
 import com.devone.bot.utils.blocks.BotBlockData;
 import com.devone.bot.utils.logger.BotLogger;
 
-public class BotSurvivalAttackTask extends BotTask<BotSurvivalAttackTaskParams> {
+public class BotSurvivalAttackTask extends BotTaskAutoParams<BotSurvivalAttackTaskParams> {
 
     private BotBlockData target;
     private double damage = 5.0;
 
     public BotSurvivalAttackTask(Bot bot) {
-        super(bot);
-        BotSurvivalAttackTaskParams params = new BotSurvivalAttackTaskParams();
-        setIcon(params.getIcon());
-        setObjective(params.getObjective());
+        super(bot, null, BotSurvivalAttackTaskParams.class);
     }
 
     @Override
     public IBotTaskParameterized<BotSurvivalAttackTaskParams> setParams(BotSurvivalAttackTaskParams params) {
-        if (params instanceof BotSurvivalAttackTaskParams) {
-            this.target = this.params.getTarget();
-            this.damage = this.params.getDamage();
-        } else {
-            BotLogger.info("❌", isLogging(), bot.getId() + "Неверные параметры для BotSurvivalStrikeTask");
-            this.stop();
-        }
+        this.target = params.getTarget();
+        this.damage = params.getDamage();
+        setIcon(params.getIcon());
+        setObjective(params.getObjective());
         return this;
     }
 
     @Override
     public void execute() {
-        if (target == null || target.uuid == null) {
-            BotLogger.info("❌", isLogging(), bot.getId() + "Цель отсутствует или не содержит UUID");
+        if (target == null || target.getUUID() == null) {
+            BotLogger.info("❌", isLogging(), bot.getId() + "Target is absent or does not contain UUID");
             this.stop();
             return;
         }
@@ -49,7 +42,7 @@ public class BotSurvivalAttackTask extends BotTask<BotSurvivalAttackTaskParams> 
         // 🗲 1. Телепорт
         BotTeleportTask tpTask = new BotTeleportTask(bot, null);
         tpTask.setParams(new BotTeleportTaskParams(target));
-        
+
         // ✋🏻 2. Атака
         BotHandAttackTask handTask = new BotHandAttackTask(bot);
         handTask.setParams(new BotHandAttackTaskParams(target, this.damage));
@@ -58,7 +51,7 @@ public class BotSurvivalAttackTask extends BotTask<BotSurvivalAttackTaskParams> 
         bot.getLifeCycle().getTaskStackManager().pushTask(handTask);
         bot.getLifeCycle().getTaskStackManager().pushTask(tpTask);
 
-        BotLogger.info("જ⁀➴ ", isLogging(), bot.getId() + "Подготовлен боевой выпад на цель: " + target.uuid);
+        BotLogger.info(icon, isLogging(), bot.getId() + "Prepared Teleport and Attack on: " + target);
         this.stop();
     }
 }

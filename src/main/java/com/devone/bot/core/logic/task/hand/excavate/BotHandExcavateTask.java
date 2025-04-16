@@ -14,16 +14,15 @@ import com.devone.bot.utils.blocks.BotBlockData;
 import com.devone.bot.utils.logger.BotLogger;
 import com.devone.bot.utils.world.BotWorldHelper;
 
-public class BotHandExcavateTask extends BotHandTask {
+public class BotHandExcavateTask extends BotHandTask<BotHandExcavateTaskParams> {
 
     private BukkitTask bukkitTask;
 
     public BotHandExcavateTask(Bot bot) {
-        super(bot);
-        setParams(new BotHandExcavateTaskParams());
+        super(bot, BotHandExcavateTaskParams.class);
     }
 
-    public BotHandExcavateTask  setParams(BotHandExcavateTaskParams params) {
+    public BotHandExcavateTask setParams(BotHandExcavateTaskParams params) {
         super.setParams(params); // вызовет BotHandTask.setParams()
         return this;
     }
@@ -59,10 +58,17 @@ public class BotHandExcavateTask extends BotHandTask {
                     return;
                 }
 
+                if (!block.getType().toString().equals(target.getType().toString())) {
+                    BotLogger.info("⚠️", isLogging(), bot.getId() + " Block changed type before excavation. Skipping.");
+                    stop();
+                    cancel();
+                    return;
+                }
+
                 animateHand();
                 BotUtils.playBlockBreakEffect(block.getLocation());
                 block.breakNaturally();
-                bot.getRuntimeStatus().brokenBlocksIncrease(target.type);
+                bot.getRuntimeStatus().brokenBlocksIncrease(target.getType());
 
                 BotLogger.info("🧱", isLogging(), bot.getId() + " Block excavated: " + block);
             }
@@ -75,6 +81,9 @@ public class BotHandExcavateTask extends BotHandTask {
             bukkitTask.cancel();
             bukkitTask = null;
         }
+
+        bot.getRuntimeStatus().setTargetLocation(null);
+
         super.stop();
     }
 }
