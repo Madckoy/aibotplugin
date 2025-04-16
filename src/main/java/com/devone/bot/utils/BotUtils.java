@@ -126,4 +126,16 @@ public class BotUtils {
         long seconds = TimeUnit.MILLISECONDS.toSeconds(milliseconds) % 60;
         return String.format("%02d:%02d:%02d", hours, minutes, seconds);
     }
+
+    public static void logMemoryUsage(String context) {
+        Runtime runtime = Runtime.getRuntime();
+        long usedMemory = runtime.totalMemory() - runtime.freeMemory();
+        long maxMemory = runtime.maxMemory();
+    
+        String usedMB = String.format("%.2f", usedMemory / 1024.0 / 1024.0);
+        String maxMB = String.format("%.2f", maxMemory / 1024.0 / 1024.0);
+    
+        BotLogger.info("📦", true, context + " — Использовано памяти: " + usedMB + " MB / " + maxMB + " MB");
+    }
+    
 }
