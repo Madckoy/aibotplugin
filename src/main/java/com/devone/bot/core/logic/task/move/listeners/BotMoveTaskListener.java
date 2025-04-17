@@ -23,14 +23,14 @@ public class BotMoveTaskListener implements Listener {
         if (task.getBot().getNPC().getId() != event.getNPC().getId()) return;
 
         BotLogger.info("✅", true, "Навигация завершена (BotMoveTaskListener), ID: " + task.getUUID());
-        task.getBot().getMemory().setStuck(false);
+        task.getBot().getBrain().setStuck(false);
 
         task.stop(); // Завершаем задачу движения
     }
 
     public void onNavigationCancel(NavigationCancelEvent event) {
         if(event.getNPC().getId() != task.getBot().getNPC().getId()) return;
-        //task.getBot().getMemory().setStuck(true);
+        //task.getBot().getBrain().setStuck(true);
         BotLogger.info("❌", true,"Навигация отменена (BotMoveTaskListener) — NPC не смог дойти");
         task.stop();
     }

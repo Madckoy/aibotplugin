@@ -1,4 +1,4 @@
-package com.devone.bot.core.logic.task.brain;
+package com.devone.bot.core.brain;
 
 import com.devone.bot.core.bot.Bot;
 import com.devone.bot.core.logic.navigation.BotNavigationPlannerWrapper;
@@ -11,8 +11,8 @@ public class BotBrainUtils {
 
     public static boolean detectIfStuck(Bot bot) {
 
-        BotLocation botPos = bot.getMemory().getCurrentLocation();
-        BotSceneData sceneData =  bot.getMemory().getSceneData();
+        BotLocation botPos = bot.getBrain().getCurrentLocation();
+        BotSceneData sceneData =  bot.getBrain().getSceneData();
 
         BotSceneContext context = BotNavigationPlannerWrapper.getSceneContext(sceneData.blocks, sceneData.entities,
                 botPos);
@@ -22,7 +22,7 @@ public class BotBrainUtils {
 
         if(totalGoals <= 1) {
             //the bot is stuck!
-            bot.getMemory().setStuck(true);
+            bot.getBrain().setStuck(true);
             BotLogger.info("🚨", true, "The bot "+bot.getId() + " is stuck!");
             return true;
         } else {

@@ -45,7 +45,7 @@ public class BotBrainTask extends BotTaskAutoParams<BotBrainTaskParams> {
         BotLogger.info(icon, this.isLogging(), bot.getId() + "The bot "+ bot.getId() + " and makes a decision...");
         long currentTime = System.currentTimeMillis();
         //
-        long removed = bot.getMemory().getCache().cleanup();
+        long removed = bot.getBrain().getCache().cleanup();
         //
         BotLogger.info(icon, this.isLogging(), bot.getId() + "Removed outdated navigation points:"+removed);
         //
@@ -76,7 +76,7 @@ public class BotBrainTask extends BotTaskAutoParams<BotBrainTaskParams> {
 
     private Runnable determineBehaviorScenario(Bot bot) {
         // check if stuck
-        boolean stuck = bot.getMemory().isStuck();
+        boolean stuck = bot.getBrain().isStuck();
 
         if(stuck) {
             tryUnstuckStrategy(bot);
@@ -136,8 +136,8 @@ public class BotBrainTask extends BotTaskAutoParams<BotBrainTaskParams> {
     
             case 2: // Teleport with fallback
                 if (params.isAllowTeleport()) {
-                    BotLocation botPos = bot.getMemory().getCurrentLocation();
-                    BotSceneData sceneData = bot.getMemory().getSceneData();
+                    BotLocation botPos = bot.getBrain().getCurrentLocation();
+                    BotSceneData sceneData = bot.getBrain().getSceneData();
                     BotSceneContext context = BotNavigationPlannerWrapper.getSceneContext(sceneData.blocks, sceneData.entities, botPos);
                     
                     // tryTeleportFallback сам вернёт Optional<Runnable>

@@ -47,7 +47,7 @@ public class BotExploreTask extends BotTaskAutoParams<BotExploreTaskParams> {
      
         bot.pickupNearbyItems(params.isPickup());
 
-        BotSceneData sceneData = bot.getMemory().getSceneData();
+        BotSceneData sceneData = bot.getBrain().getSceneData();
 
         if (sceneData == null) {
             BotLogger.info("❌", isLogging(), bot.getId() + " No scene data available.");
@@ -55,7 +55,7 @@ public class BotExploreTask extends BotTaskAutoParams<BotExploreTaskParams> {
             return;
         }
 
-        BotLocation botPos = bot.getMemory().getCurrentLocation();
+        BotLocation botPos = bot.getBrain().getCurrentLocation();
 
 
 
@@ -72,7 +72,7 @@ public class BotExploreTask extends BotTaskAutoParams<BotExploreTaskParams> {
         if(totalGoals <= 1) {
             //the bot is stuck!
             
-            bot.getMemory().setStuck(true);
+            bot.getBrain().setStuck(true);
 
             BotLogger.info("🎯", this.isLogging(), "The bot "+bot.getId() + " is stuck!");
             
@@ -86,7 +86,7 @@ public class BotExploreTask extends BotTaskAutoParams<BotExploreTaskParams> {
             List<BotBlockData> goals = context.reachableGoals;
 
             for (BotBlockData goal : goals) {
-                boolean isCached = bot.getMemory().getCache().isCached(goal);
+                boolean isCached = bot.getBrain().getCache().isCached(goal);
                 if(isCached) { continue; 
                 } else {
                     navGoal = goal;
@@ -96,11 +96,11 @@ public class BotExploreTask extends BotTaskAutoParams<BotExploreTaskParams> {
         }
 
         BotLogger.info("🎯", isLogging(), bot.getId() + " Target: " + navGoal);
-        bot.getMemory().setTargetLocation(navGoal);
+        bot.getBrain().setTargetLocation(navGoal);
 
-        BotNavigationUtils.navigateTo(bot, bot.getMemory().getTargetLocation(), 1);
+        BotNavigationUtils.navigateTo(bot, bot.getBrain().getTargetLocation(), 1);
         
-        bot.getMemory().getCache().add(navGoal);
+        bot.getBrain().getCache().add(navGoal);
 
         if (getElapsedTime() > 3 * BotConstants.DEFAULT_TASK_TIMEOUT) {
             BotLogger.info("⏱️", isLogging(), bot.getId() + " Task timeout: " + getElapsedTime());

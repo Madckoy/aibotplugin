@@ -1,4 +1,4 @@
-package com.devone.bot.core.memory;
+package com.devone.bot.core.brain;
 
 import com.devone.bot.core.logic.navigation.BotCache;
 import java.util.ArrayList;
@@ -10,7 +10,7 @@ import com.devone.bot.utils.blocks.BotLocationHelper;
 import com.devone.bot.utils.logger.BotLogger;
 import com.devone.bot.utils.scene.BotSceneData;
 
-public class BotMemory {
+public class BotBrain {
 
     private Bot owner;
 
@@ -30,7 +30,7 @@ public class BotMemory {
 
     private BotCache cache = new BotCache();
 
-    public BotMemory(Bot bot) {
+    public BotBrain(Bot bot) {
         this.owner = bot;
         this.currentLocation = getCurrentLocation();  // Инициализируем с текущей локацией
         this.targetLocation = null;  // Начальное значение для targetLocation

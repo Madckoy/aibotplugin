@@ -73,8 +73,8 @@ public abstract class BotTask<T extends BotTaskParams> implements IBotTask, List
         if (isEnabled) {
 
             BotLogger.info("🚦", this.isLogging(), icon +" : "+ bot.getId() + " Status: " + isDone + " | " + isPaused +
-                    " 📍 xyz: " + bot.getMemory().getCurrentLocation() + " | " + 
-                    " 🎯 xyz: " + bot.getMemory().getTargetLocation());
+                    " 📍 xyz: " + bot.getBrain().getCurrentLocation() + " | " + 
+                    " 🎯 xyz: " + bot.getBrain().getTargetLocation());
 
         if (isPaused) return;
 

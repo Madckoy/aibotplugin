@@ -68,7 +68,7 @@ public class BotHandExcavateTask extends BotHandTask<BotHandExcavateTaskParams> 
                 animateHand();
                 BotUtils.playBlockBreakEffect(block.getLocation());
                 block.breakNaturally();
-                bot.getMemory().brokenBlocksIncrease(target.getType());
+                bot.getBrain().brokenBlocksIncrease(target.getType());
 
                 BotLogger.info("🧱", isLogging(), bot.getId() + " Block excavated: " + block);
             }
@@ -82,7 +82,7 @@ public class BotHandExcavateTask extends BotHandTask<BotHandExcavateTaskParams> 
             bukkitTask = null;
         }
 
-        bot.getMemory().setTargetLocation(null);
+        bot.getBrain().setTargetLocation(null);
 
         super.stop();
     }

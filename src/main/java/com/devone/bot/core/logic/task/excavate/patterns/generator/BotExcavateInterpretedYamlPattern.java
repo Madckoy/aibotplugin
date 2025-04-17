@@ -74,9 +74,9 @@ public class BotExcavateInterpretedYamlPattern implements IBotExcavatePattern {
         if (!initialized) {
             BotLogger.info("🔁 ", true, "Генерация точек по паттерну: " + yamlPath);
                                                                      
-            BotExcavatePatternGenerationParams params = new BotExcavatePatternGenerationParams(bot.getMemory().getCurrentLocation().getX(), 
-                                                                               bot.getMemory().getCurrentLocation().getY(), 
-                                                                               bot.getMemory().getCurrentLocation().getZ(), 
+            BotExcavatePatternGenerationParams params = new BotExcavatePatternGenerationParams(bot.getBrain().getCurrentLocation().getX(), 
+                                                                               bot.getBrain().getCurrentLocation().getY(), 
+                                                                               bot.getBrain().getCurrentLocation().getZ(), 
                                                                                offsetX, offsetY, offsetZ, outerRadius, innerRadius);
 
             BotLogger.info("Params:", true, params.toString());                                                                  

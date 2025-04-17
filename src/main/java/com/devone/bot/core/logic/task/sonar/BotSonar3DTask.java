@@ -41,7 +41,7 @@ public class BotSonar3DTask extends BotTaskAutoParams<BotSonarTaskParams> {
 
         BotSceneData sceneData = BotSceneScan3D.scan(bot, radius, height);
 
-        bot.getMemory().setSceneData(sceneData);
+        bot.getBrain().setSceneData(sceneData);
         
         stop();
     }

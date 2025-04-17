@@ -10,12 +10,12 @@ import org.bukkit.entity.Entity;
 
 import org.bukkit.entity.Player;
 
+import com.devone.bot.core.brain.BotBrain;
 import com.devone.bot.core.chat.BotChat;
 import com.devone.bot.core.inventory.BotInventory;
 import com.devone.bot.core.logic.lifecycle.BotLifeCycle;
 import com.devone.bot.core.logic.task.move.BotMoveTask;
 import com.devone.bot.core.logic.task.move.params.BotMoveTaskParams;
-import com.devone.bot.core.memory.BotMemory;
 import com.devone.bot.utils.blocks.BotLocation;
 import com.devone.bot.utils.logger.BotLogger;
 
@@ -29,7 +29,7 @@ public class Bot {
     private final BotLifeCycle lifeCycle; // Цикл жизни бота
     private final BotInventory inventory; // Инвентарь бота
     private final BotManager botManager; // Менеджер ботов
-    private BotMemory memory; // Память/Рантайм статус бота
+    private BotBrain brain; // Память/Рантайм статус бота
     private BotChat chat; // Создаем поле для общения бота
 
 
@@ -39,7 +39,7 @@ public class Bot {
         this.botManager = botManager;
         this.inventory = new BotInventory(this);
         this.lifeCycle = new BotLifeCycle(this);
-        this.memory = new BotMemory(this); // Инициализация рантайм статуса
+        this.brain = new BotBrain(this); // Инициализация рантайм статуса
         this.chat = new BotChat(this); // Инициализация BotCommunicator
         BotLogger.info("➕", true, "Has been CREATED AND SPAWNED: " + id);
     }
@@ -71,8 +71,8 @@ public class Bot {
         }
     }
 
-    public BotMemory getMemory() {
-        return memory;
+    public BotBrain getBrain() {
+        return brain;
     }
 
     public void despawnNPC() {

@@ -20,7 +20,7 @@ public class BotLifecycleLogger {
 
     public static void write(Bot bot) {
         // Получаем текущую локацию через BotRuntimeStatus
-        BotLocation loc = bot.getMemory().getCurrentLocation();
+        BotLocation loc = bot.getBrain().getCurrentLocation();
         if (loc == null) return;
 
         String botName = bot.getId();
@@ -36,7 +36,7 @@ public class BotLifecycleLogger {
         try (FileWriter writer = new FileWriter(filename, true);
              BufferedWriter bw = new BufferedWriter(writer)) {
 
-            BotTask<?> task = bot.getMemory().getCurrentTask();
+            BotTask<?> task = bot.getBrain().getCurrentTask();
 
             String t_name = "N/A";
             String e_time = "N/A";
