@@ -8,7 +8,7 @@ public class BotHandExcavateTaskParams extends BotHandTaskParams {
     public BotHandExcavateTaskParams() {
         super();
         setIcon("⛏");
-        setObjective("Excavate");
+        setObjective("Hit");
     }
 
     public BotHandExcavateTaskParams(BotBlockData target) {

@@ -248,13 +248,11 @@ public class BotExcavateTask extends BotTaskAutoParams<BotExcavateTaskParams> {
                 }
             }
 
-            setObjective("Excavating: " + BotUtils.getBlockName(targetBlock));
-
+            
+            BotBlockData block = BotWorldHelper.worldBlockToBotBlock(targetBlock);
             BotHandExcavateTask handTask = new BotHandExcavateTask(bot);
             BotHandExcavateTaskParams params = new BotHandExcavateTaskParams();
-            BotBlockData block = BotWorldHelper.worldBlockToBotBlock(targetBlock);
-            params.setTarget(targetBlock);
-
+            params.setTarget(block);
             handTask.setParams(params);
             bot.getLifeCycle().getTaskStackManager().pushTask(handTask);
 

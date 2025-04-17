@@ -17,6 +17,7 @@ import com.devone.bot.utils.world.BotWorldHelper;
 public class BotHandExcavateTask extends BotHandTask<BotHandExcavateTaskParams> {
 
     private BukkitTask bukkitTask;
+    private BotBlockData target;
 
     public BotHandExcavateTask(Bot bot) {
         super(bot, BotHandExcavateTaskParams.class);
@@ -24,6 +25,9 @@ public class BotHandExcavateTask extends BotHandTask<BotHandExcavateTaskParams> 
 
     public BotHandExcavateTask setParams(BotHandExcavateTaskParams params) {
         super.setParams(params); // вызовет BotHandTask.setParams()
+        this.target = params.getTarget();
+        bot.getBrain().setTargetLocation(target);
+
         return this;
     }
 
@@ -31,7 +35,6 @@ public class BotHandExcavateTask extends BotHandTask<BotHandExcavateTaskParams> 
     public void execute() {
         super.execute();
 
-        BotBlockData target = getTarget();
         if (target == null) {
             BotLogger.info("❌", isLogging(), bot.getId() + " BotHandExcavateTask: Target is null.");
             this.stop();
@@ -39,7 +42,8 @@ public class BotHandExcavateTask extends BotHandTask<BotHandExcavateTaskParams> 
         }
 
         BotLogger.info("🔶", isLogging(), bot.getId() + " Executing BotHandExcavateTask");
-        setObjective(params.getObjective() + ": " + target);
+
+        setObjective(params.getObjective() + " " + target.getType() +" at "+target.getLocation());
 
         bukkitTask = new BukkitRunnable() {
             @Override
