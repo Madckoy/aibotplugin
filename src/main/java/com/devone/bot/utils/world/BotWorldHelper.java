@@ -40,8 +40,19 @@ public class BotWorldHelper {
         Location spawnLocation = getWorld().getSpawnLocation();
         BotBlockData blockData = new BotBlockData();
         blockData.setX(spawnLocation.getBlockX());
-        blockData.setX(spawnLocation.getBlockY());
+        blockData.setY(spawnLocation.getBlockY());
         blockData.setZ(spawnLocation.getBlockZ());
+
+        return blockData;
+    }
+
+    public static BotBlockData worldBlockToBotBlock(Block block) {
+        BotBlockData blockData = new BotBlockData();
+        blockData.setX(block.getX());
+        blockData.setY(block.getY());
+        blockData.setZ(block.getZ());
+        blockData.setType(block.getType().toString());
+        blockData.setBot(false);
 
         return blockData;
     }

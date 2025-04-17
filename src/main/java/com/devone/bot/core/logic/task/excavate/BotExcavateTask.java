@@ -22,6 +22,7 @@ import com.devone.bot.core.zone.BotZoneManager;
 import com.devone.bot.utils.BotConstants;
 import com.devone.bot.utils.BotUtils;
 import com.devone.bot.utils.blocks.BotAxisDirection.AxisDirection;
+import com.devone.bot.utils.blocks.BotBlockData;
 import com.devone.bot.utils.blocks.BotLocation;
 import com.devone.bot.utils.logger.BotLogger;
 import com.devone.bot.utils.world.BotWorldHelper;
@@ -220,7 +221,7 @@ public class BotExcavateTask extends BotTaskAutoParams<BotExcavateTaskParams> {
 
         if (bot.getBrain().getTargetLocation() != null) {
 
-            setObjective(params.getObjective() + BotUtils.getBlockName(targetBlock)
+            setObjective(params.getObjective() + " " + BotUtils.getBlockName(targetBlock)
                     + " at " + targetLocation);
 
             if (isInProtectedZone(bot.getBrain().getTargetLocation())) {
@@ -250,7 +251,11 @@ public class BotExcavateTask extends BotTaskAutoParams<BotExcavateTaskParams> {
             setObjective("Excavating: " + BotUtils.getBlockName(targetBlock));
 
             BotHandExcavateTask handTask = new BotHandExcavateTask(bot);
-            handTask.setParams(new BotHandExcavateTaskParams());
+            BotHandExcavateTaskParams params = new BotHandExcavateTaskParams();
+            BotBlockData block = BotWorldHelper.worldBlockToBotBlock(targetBlock);
+            params.setTarget(targetBlock);
+
+            handTask.setParams(params);
             bot.getLifeCycle().getTaskStackManager().pushTask(handTask);
 
         } else {
