@@ -66,7 +66,7 @@ public class BotBrainTask extends BotTaskAutoParams<BotBrainTaskParams> {
         // осматриваемся и обновляем картинку мира
         //
         //
-        if(currentTime-lastScanTime > 1000) {
+        if(currentTime-lastScanTime > 5000) {
             BotSonar3DTask sonar = new BotSonar3DTask(bot);
             push(bot, sonar);
             lastScanTime = System.currentTimeMillis();
@@ -89,45 +89,38 @@ public class BotBrainTask extends BotTaskAutoParams<BotBrainTaskParams> {
     }
 
     private Runnable determineBehaviorScenario(Bot bot) {
-        // check if stuck
         boolean stuck = bot.getBrain().isStuck();
-
-        if(stuck) {
-            tryUnstuckStrategy(bot);
-        } else {
-            if(params.isAllowExploration()) {
-                return () -> {
-                    BotLogger.info(icon, this.isLogging(), bot.getId() + " Started Exploration!");
-                    push(bot, new BotExploreTask(bot));
-                };
-            }
-            // do something else
+    
+        if (stuck) {
+            Optional<Runnable> unstuck = tryUnstuckStrategy(bot);
+            if (unstuck.isPresent()) return unstuck.get();
+    
+            // fallback если ни одна стратегия не сработала
+            return () -> {
+                BotLogger.info(icon, this.isLogging(), bot.getId() + " 💤 Невозможно выбрать стратегию. Уходим в Idle.");
+                push(bot, new BotIdleTask(bot));
+            };
         }
-
+    
+        if (params.isAllowExploration()) {
+            return () -> {
+                BotLogger.info(icon, this.isLogging(), bot.getId() + " 🧭 Начата разведка!");
+                push(bot, new BotExploreTask(bot));
+            };
+        }
+    
         if (params.isAllowExcavation()) {
-            // scanario #1 - do excavation
-            // try to excavate blocks around to find a way out
-            BotLogger.info(icon, this.isLogging(), bot.getId() + " The bot is stuck. Starting Excavation to unstuck");
-
-            BotExcavateTask excacate = new BotExcavateTask(bot);
-            BotExcavateTaskParams params  = new BotExcavateTaskParams();
-            excacate.setParams(params);
-            push(bot, excacate);
+            return () -> {
+                BotLogger.info(icon, this.isLogging(), bot.getId() + " ⛏ Начато копание!");
+                BotExcavateTask task = new BotExcavateTask(bot);
+                task.setParams(new BotExcavateTaskParams());
+                push(bot, task);
+            };
         }
-
-        if (params.isAllowTeleport()) {
-            // scanario #2 - do teleport
-            // try to excavate blocks around to find a way out
-            BotLogger.info(icon, this.isLogging(), bot.getId() + " The bot is stuck. Starting Teleport to unstuck");
-
-            BotExcavateTask excacate = new BotExcavateTask(bot);
-            BotExcavateTaskParams params  = new BotExcavateTaskParams();
-            excacate.setParams(params);
-            push(bot, excacate);
-        }
-
+    
+        // Если ни одно поведение не выбрано — fallback
         return () -> {
-            BotLogger.info(icon, this.isLogging(), "Decided to do nothing");
+            BotLogger.info(icon, this.isLogging(), bot.getId() + " 💤 Нет подходящего поведения. Переход в Idle.");
             push(bot, new BotIdleTask(bot));
         };
     }
