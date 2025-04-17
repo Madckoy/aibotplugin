@@ -5,14 +5,12 @@ import java.io.InputStream;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.*;
-import java.util.stream.Collectors;
-
 import com.devone.bot.core.bot.Bot;
 import com.devone.bot.core.logic.task.excavate.patterns.IBotExcavatePattern;
 import com.devone.bot.core.logic.task.excavate.patterns.generator.params.BotExcavatePatternGenerationParams;
-import com.devone.bot.utils.blocks.BotLocation;
-import com.devone.bot.utils.blocks.BotCoordinateComparators;
 import com.devone.bot.utils.blocks.BotAxisDirection.AxisDirection;
+import com.devone.bot.utils.blocks.BotLocation;
+import com.devone.bot.utils.blocks.BotLocationComparators;
 import com.devone.bot.utils.logger.BotLogger;
 
 /**
@@ -27,7 +25,6 @@ public class BotExcavateInterpretedYamlPattern implements IBotExcavatePattern {
 
     private boolean initialized = false;
 
-    private AxisDirection breakDirection = null;
     private int offsetX, offsetY, offsetZ, outerRadius, innerRadius;  
 
     private final Queue<BotLocation> blocksToBreak = new LinkedList<>();
@@ -37,7 +34,7 @@ public class BotExcavateInterpretedYamlPattern implements IBotExcavatePattern {
         }
      
         @Override    
-        public IBotExcavatePattern configure(int offsetX, int offsetY, int offsetZ, int outerRadius, int innerRadius, AxisDirection breakDirection) {
+        public IBotExcavatePattern configure(int offsetX, int offsetY, int offsetZ, int outerRadius, int innerRadius) {
 
             this.offsetX = offsetX;
             this.offsetY = offsetY;
@@ -45,8 +42,6 @@ public class BotExcavateInterpretedYamlPattern implements IBotExcavatePattern {
             
             this.outerRadius = outerRadius;
             this.innerRadius = innerRadius;
-
-            this.breakDirection = breakDirection;
 
     
             BotLogger.info("🛠️", true, "Начинаем загрузку YAML-паттерна: " + yamlPath);
@@ -83,9 +78,9 @@ public class BotExcavateInterpretedYamlPattern implements IBotExcavatePattern {
 
             List<BotLocation> inner_points = generator.generateInnerPoints(params);
             
-            String pointsLog = inner_points.stream()
-            .map(p -> String.format("%d, %d, %d", p.getX(), p.getY(), p.getZ()))
-            .collect(Collectors.joining(", "));
+            //String pointsLog = inner_points.stream()
+            //.map(p -> String.format("%d, %d, %d", p.getX(), p.getY(), p.getZ()))
+            //.collect(Collectors.joining(", "));
         
             //BotLogger.info("🔢", true, String.format("Generated %d points: [%s]", inner_points.size(), pointsLog));        
             BotLogger.info("🔢", true, String.format("Generated %d points", inner_points.size()));     
@@ -107,7 +102,7 @@ public class BotExcavateInterpretedYamlPattern implements IBotExcavatePattern {
             List<BotLocation> toBeRemoved = new ArrayList<>(result);
 
             // ✅ Сортировка по направлению
-            Comparator<BotLocation> sortingComparator = BotCoordinateComparators.byAxisDirection(breakDirection);
+            Comparator<BotLocation> sortingComparator = BotLocationComparators.byAxisDirection(AxisDirection.DOWN);
             if (sortingComparator != null) {
                 toBeRemoved.sort(sortingComparator);
             }

@@ -21,7 +21,6 @@ import com.devone.bot.core.logic.task.hand.excavate.params.BotHandExcavateTaskPa
 import com.devone.bot.core.zone.BotZoneManager;
 import com.devone.bot.utils.BotConstants;
 import com.devone.bot.utils.BotUtils;
-import com.devone.bot.utils.blocks.BotAxisDirection.AxisDirection;
 import com.devone.bot.utils.blocks.BotBlockData;
 import com.devone.bot.utils.blocks.BotLocation;
 import com.devone.bot.utils.logger.BotLogger;
@@ -36,7 +35,6 @@ public class BotExcavateTask extends BotTaskAutoParams<BotExcavateTaskParams> {
     private Set<Material> targetMaterials = null;
     private String patternName = BotConstants.DEFAULT_PATTERN_BREAK;
     private IBotExcavatePattern breakPatternImpl = null;
-    private AxisDirection axisDirection = AxisDirection.CENTER;
 
     private int offsetX, offsetY, offsetZ = 0;
 
@@ -56,7 +54,6 @@ public class BotExcavateTask extends BotTaskAutoParams<BotExcavateTaskParams> {
         this.outerRadius = params.getOuterRadius();
         this.innerRadius = params.getInnerRadius();
         this.shouldPickup = params.isShouldPickup();
-        this.axisDirection = params.getAxisDirection();
 
         this.offsetX = params.getOffsetX();
         this.offsetY = params.getOffsetY();
@@ -86,7 +83,6 @@ public class BotExcavateTask extends BotTaskAutoParams<BotExcavateTaskParams> {
      * 4 - Boolean shouldPickup (nullable) — собирать ли предметы после разрушения.
      * 5 - Boolean destroyAllIfNoTarget (nullable) — если нет подходящих блоков,
      * разрушать всё подряд.
-     * 6 - AxisDirection breakDirection - в какую сторону разрушаем
      * 7 - int offsetX
      * 8 - int offsetY
      * 9 - int offsetZ
@@ -96,14 +92,6 @@ public class BotExcavateTask extends BotTaskAutoParams<BotExcavateTaskParams> {
      *
      * Если параметры не заданы, используются значения по умолчанию.
      */
-
-    public void setAxisDirection(AxisDirection direction) {
-        this.axisDirection = direction;
-    }
-
-    public AxisDirection getAxisDirection(){
-        return this.axisDirection;
-    }
 
     public void setOffsetX(int oX) {
         this.offsetX = oX;
@@ -174,7 +162,7 @@ public class BotExcavateTask extends BotTaskAutoParams<BotExcavateTaskParams> {
 
                 Path ptrnPath = Paths.get(BotConstants.PLUGIN_PATH_PATTERNS_BREAK, patternName);
                 this.breakPatternImpl = new BotExcavateInterpretedYamlPattern(ptrnPath).configure(offsetX, offsetY,
-                        offsetZ, outerRadius, innerRadius, axisDirection);
+                        offsetZ, outerRadius, innerRadius);
 
                 BotLogger.info("📐", isLogging(),
                         "ℹ Используется YAML-паттерн: " + this.breakPatternImpl.getName());
@@ -184,7 +172,7 @@ public class BotExcavateTask extends BotTaskAutoParams<BotExcavateTaskParams> {
                         BotConstants.DEFAULT_PATTERN_BREAK);
 
                 this.breakPatternImpl = new BotExcavateInterpretedYamlPattern(fallbackPath).configure(offsetX, offsetY,
-                        offsetZ, outerRadius, innerRadius, axisDirection);
+                        offsetZ, outerRadius, innerRadius);
 
                 BotLogger.info("📐", isLogging(),
                         "Используется дефолтный YAML-паттерн: " + BotConstants.DEFAULT_PATTERN_BREAK);

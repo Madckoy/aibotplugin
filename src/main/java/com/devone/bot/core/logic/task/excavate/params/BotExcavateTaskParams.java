@@ -7,7 +7,6 @@ import org.bukkit.Material;
 
 import com.devone.bot.core.logic.task.params.BotTaskParams;
 import com.devone.bot.utils.BotConstants;
-import com.devone.bot.utils.blocks.BotAxisDirection.AxisDirection;
 
 public class BotExcavateTaskParams extends BotTaskParams {
     private Set<Material> targetMaterials;
@@ -15,9 +14,8 @@ public class BotExcavateTaskParams extends BotTaskParams {
     private int outerRadius = BotConstants.DEFAULT_OUTER_RADIUS;
     private int innerRadius = BotConstants.DEFAULT_INNER_RADIUS;
     private boolean shouldPickup = true;
-    private AxisDirection axisDirection = AxisDirection.CENTER;
     private int offsetX = 0;
-    private int offsetY = 0;
+    private int offsetY = -1*(BotConstants.DEFAULT_OUTER_RADIUS-1);
     private int offsetZ = 0;
     private String patternName = BotConstants.DEFAULT_PATTERN_BREAK;
 
@@ -67,14 +65,6 @@ public class BotExcavateTaskParams extends BotTaskParams {
         this.shouldPickup = shouldPickup;
     }
 
-    public AxisDirection getAxisDirection() {
-        return axisDirection;
-    }
-
-    public void setAxisDirection(AxisDirection direction) {
-        this.axisDirection = direction;
-    }
-
     public int getOffsetX() {
         return offsetX;
     }
@@ -115,7 +105,6 @@ public class BotExcavateTaskParams extends BotTaskParams {
                 ", outerRadius=" + outerRadius +
                 ", innerRadius=" + innerRadius +
                 ", shouldPickup=" + shouldPickup +
-                ", breakDirection=" + axisDirection +
                 ", offsetX=" + offsetX +
                 ", offsetY=" + offsetY +
                 ", offsetZ=" + offsetZ +

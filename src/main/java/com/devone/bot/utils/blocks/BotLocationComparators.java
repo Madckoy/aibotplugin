@@ -2,7 +2,7 @@ package com.devone.bot.utils.blocks;
 
 import java.util.Comparator;
 
-public class BotCoordinateComparators {
+public class BotLocationComparators {
 
     public static final Comparator<BotLocation> X_ASC = new Comparator<>() {
         @Override public int compare(BotLocation a, BotLocation b) {
