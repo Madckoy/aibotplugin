@@ -15,7 +15,7 @@ public class BotExcavateTaskParams extends BotTaskParams {
     private int outerRadius = BotConstants.DEFAULT_OUTER_RADIUS;
     private int innerRadius = BotConstants.DEFAULT_INNER_RADIUS;
     private boolean shouldPickup = true;
-    private AxisDirection breakDirection = AxisDirection.DOWN;
+    private AxisDirection axisDirection = AxisDirection.CENTER;
     private int offsetX = 0;
     private int offsetY = 0;
     private int offsetZ = 0;
@@ -67,12 +67,12 @@ public class BotExcavateTaskParams extends BotTaskParams {
         this.shouldPickup = shouldPickup;
     }
 
-    public AxisDirection getBreakDirection() {
-        return breakDirection;
+    public AxisDirection getAxisDirection() {
+        return axisDirection;
     }
 
-    public void setBreakDirection(AxisDirection breakDirection) {
-        this.breakDirection = breakDirection;
+    public void setAxisDirection(AxisDirection direction) {
+        this.axisDirection = direction;
     }
 
     public int getOffsetX() {
@@ -115,7 +115,7 @@ public class BotExcavateTaskParams extends BotTaskParams {
                 ", outerRadius=" + outerRadius +
                 ", innerRadius=" + innerRadius +
                 ", shouldPickup=" + shouldPickup +
-                ", breakDirection=" + breakDirection +
+                ", breakDirection=" + axisDirection +
                 ", offsetX=" + offsetX +
                 ", offsetY=" + offsetY +
                 ", offsetZ=" + offsetZ +

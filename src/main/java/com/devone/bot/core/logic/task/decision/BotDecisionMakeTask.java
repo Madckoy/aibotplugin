@@ -4,6 +4,8 @@ import com.devone.bot.core.bot.Bot;
 import com.devone.bot.core.logic.task.BotTaskAutoParams;
 import com.devone.bot.core.logic.task.IBotTaskParameterized;
 import com.devone.bot.core.logic.task.decision.params.BotDecisionMakeTaskParams;
+import com.devone.bot.core.logic.task.excavate.BotExcavateTask;
+import com.devone.bot.core.logic.task.excavate.params.BotExcavateTaskParams;
 import com.devone.bot.core.logic.task.explore.BotExploreTask;
 import com.devone.bot.utils.logger.BotLogger;
 
@@ -25,8 +27,17 @@ public class BotDecisionMakeTask extends BotTaskAutoParams<BotDecisionMakeTaskPa
         // 📌 Начать исследование
         BotLogger.info(icon, this.isLogging(), bot.getId() + " Starting Exploration");
         BotExploreTask explore = new BotExploreTask(bot);
-
         bot.getLifeCycle().getTaskStackManager().pushTask(explore);
+
+        if (bot.getRuntimeStatus().isStuck()) {
+            // try to excavate blocks around to find a way out
+            BotLogger.info(icon, this.isLogging(), bot.getId() + " The bot is stuck. Starting Excavation to unstuck");
+
+            BotExcavateTask excacate = new BotExcavateTask(bot);
+            BotExcavateTaskParams params  = new BotExcavateTaskParams();
+            excacate.setParams(params);
+            bot.getLifeCycle().getTaskStackManager().pushTask(excacate);
+        }
         return;
 
     }

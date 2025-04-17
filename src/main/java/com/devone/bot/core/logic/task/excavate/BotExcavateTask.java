@@ -36,7 +36,7 @@ public class BotExcavateTask extends BotTaskAutoParams<BotExcavateTaskParams> {
     private Set<Material> targetMaterials = null;
     private String patternName = BotConstants.DEFAULT_PATTERN_BREAK;
     private IBotExcavatePattern breakPatternImpl = null;
-    private AxisDirection breakDirection = AxisDirection.DOWN;
+    private AxisDirection axisDirection = AxisDirection.CENTER;
 
     private int offsetX, offsetY, offsetZ = 0;
 
@@ -56,7 +56,7 @@ public class BotExcavateTask extends BotTaskAutoParams<BotExcavateTaskParams> {
         this.outerRadius = params.getOuterRadius();
         this.innerRadius = params.getInnerRadius();
         this.shouldPickup = params.isShouldPickup();
-        this.breakDirection = params.getBreakDirection();
+        this.axisDirection = params.getAxisDirection();
 
         this.offsetX = params.getOffsetX();
         this.offsetY = params.getOffsetY();
@@ -97,9 +97,12 @@ public class BotExcavateTask extends BotTaskAutoParams<BotExcavateTaskParams> {
      * Если параметры не заданы, используются значения по умолчанию.
      */
 
-    public void setBreakDirection(AxisDirection direction) {
-        this.breakDirection = direction;
+    public void setAxisDirection(AxisDirection direction) {
+        this.axisDirection = direction;
+    }
 
+    public AxisDirection getAxisDirection(){
+        return this.axisDirection;
     }
 
     public void setOffsetX(int oX) {
@@ -171,7 +174,7 @@ public class BotExcavateTask extends BotTaskAutoParams<BotExcavateTaskParams> {
 
                 Path ptrnPath = Paths.get(BotConstants.PLUGIN_PATH_PATTERNS_BREAK, patternName);
                 this.breakPatternImpl = new BotExcavateInterpretedYamlPattern(ptrnPath).configure(offsetX, offsetY,
-                        offsetZ, outerRadius, innerRadius, breakDirection);
+                        offsetZ, outerRadius, innerRadius, axisDirection);
 
                 BotLogger.info("📐", isLogging(),
                         "ℹ Используется YAML-паттерн: " + this.breakPatternImpl.getName());
@@ -181,7 +184,7 @@ public class BotExcavateTask extends BotTaskAutoParams<BotExcavateTaskParams> {
                         BotConstants.DEFAULT_PATTERN_BREAK);
 
                 this.breakPatternImpl = new BotExcavateInterpretedYamlPattern(fallbackPath).configure(offsetX, offsetY,
-                        offsetZ, outerRadius, innerRadius, breakDirection);
+                        offsetZ, outerRadius, innerRadius, axisDirection);
 
                 BotLogger.info("📐", isLogging(),
                         "Используется дефолтный YAML-паттерн: " + BotConstants.DEFAULT_PATTERN_BREAK);

@@ -83,6 +83,7 @@ public class BotExploreTask extends BotTaskAutoParams<BotExploreTaskParams> {
 
                 stop();
                 return;
+                
             } else {
                 BotLogger.info("❌", this.isLogging(), bot.getId() + " No animal found to unstuck.");
                 if (getElapsedTime() > BotConstants.DEFAULT_TASK_TIMEOUT) {
