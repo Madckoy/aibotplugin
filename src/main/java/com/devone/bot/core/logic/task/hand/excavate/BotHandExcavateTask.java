@@ -58,7 +58,14 @@ public class BotHandExcavateTask extends BotHandTask<BotHandExcavateTaskParams> 
                     return;
                 }
 
-                if (!block.getType().toString().equals(target.getType().toString())) {
+                Material actualMaterial = block.getType(); // org.bukkit.Material
+                String expectedType = target.getType();    // String
+                
+                if (expectedType == null && actualMaterial == null) {
+                    return; // оба отсутствуют — считаем, что всё ок
+                }
+                
+                if (expectedType == null || actualMaterial == null || !actualMaterial.name().equalsIgnoreCase(expectedType)) {
                     BotLogger.info("⚠️", isLogging(), bot.getId() + " Block changed type before excavation. Skipping.");
                     stop();
                     cancel();
@@ -70,7 +77,7 @@ public class BotHandExcavateTask extends BotHandTask<BotHandExcavateTaskParams> 
                 block.breakNaturally();
                 bot.getBrain().brokenBlocksIncrease(target.getType());
 
-                BotLogger.info("🧱", isLogging(), bot.getId() + " Block excavated: " + block);
+                BotLogger.info("🪨", isLogging(), bot.getId() + " Block excavated: " + block);
             }
         }.runTaskTimer(AIBotPlugin.getInstance(), 0L, 10L);
     }
