@@ -1,50 +1,61 @@
 package com.devone.bot.core.brain.memory;
+
 import com.devone.bot.utils.blocks.BotLocation;
 import com.devone.bot.utils.blocks.BotBlockData;
 
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
+import java.util.EnumMap;
 
 public class BotMemory {
 
-    Map<BotLocation, BotMemoryItem> visitedPlaces = new HashMap<BotLocation, BotMemoryItem>();
+    // Карта для хранения типов памяти, каждый тип имеет свой набор посещённых мест
+    private final Map<MemoryType, Map<BotLocation, BotMemoryItem>> memoryMap;
 
-    public BotMemory(){
-        super();
-    }
-
-    public void memorize(BotBlockData block) {
-        BotMemoryItem bv = new BotMemoryItem(block);
-        visitedPlaces.put(block.getLocation(),bv);
-    }
-
-    public boolean isMemorized(BotBlockData block){
-        BotMemoryItem bv = visitedPlaces.get(block.getLocation());
-        if(bv!=null) {
-            return true;
-        }
-        else {
-            return false;
+    public BotMemory() {
+        memoryMap = new EnumMap<>(MemoryType.class); // Используем EnumMap для лучшей производительности при работе с перечислениями
+        for (MemoryType type : MemoryType.values()) {
+            memoryMap.put(type, new HashMap<>());
         }
     }
 
-    public long cleanup() {
+    // Запоминаем блок для конкретного типа памяти
+    public void memorize(BotBlockData block, MemoryType memoryType) {
+        BotMemoryItem item = new BotMemoryItem(block);
+        memoryMap.get(memoryType).put(block.getLocation(), item);
+    }
+
+    // Проверка, был ли блок запомнен для определённого типа памяти
+    public boolean isMemorized(BotBlockData block, MemoryType memoryType) {
+        return memoryMap.get(memoryType).containsKey(block.getLocation());
+    }
+
+    // Очистка устаревших записей по всем типам памяти
+    public long cleanup(long expirationMillis) {
         long removed = 0;
-        long currTime = System.currentTimeMillis();
-    
-        Iterator<Map.Entry<BotLocation, BotMemoryItem>> it = visitedPlaces.entrySet().iterator();
-        while (it.hasNext()) {
-            Map.Entry<BotLocation, BotMemoryItem> entry = it.next();
-            long age = currTime - entry.getValue().getAge();
-    
-            if (age > 30 * 60 * 1000) { // 30 минут
-                it.remove(); // ✅ безопасное удаление
-                removed++;
+        long currentTime = System.currentTimeMillis();
+
+        // Перебираем все типы памяти
+        for (Map<BotLocation, BotMemoryItem> memory : memoryMap.values()) {
+            Iterator<Map.Entry<BotLocation, BotMemoryItem>> it = memory.entrySet().iterator();
+            while (it.hasNext()) {
+                Map.Entry<BotLocation, BotMemoryItem> entry = it.next();
+                BotMemoryItem item = entry.getValue();
+                
+                // Если элемент устарел, удаляем его
+                if (item.isExpired(expirationMillis, currentTime)) {
+                    it.remove();
+                    removed++;
+                }
             }
         }
-    
+
         return removed;
     }
-
+    
+    // Получить все данные для конкретного типа памяти
+    public Map<BotLocation, BotMemoryItem> getMemoryForType(MemoryType memoryType) {
+        return memoryMap.get(memoryType);
+    }
 }

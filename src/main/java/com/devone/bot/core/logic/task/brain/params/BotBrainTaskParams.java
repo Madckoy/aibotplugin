@@ -31,6 +31,7 @@ public class BotBrainTaskParams extends BotTaskParams {
     private boolean allowExcavation  = true;
     private boolean allowExploration = true;
     //
+    private long memoryExpirationMillis = 30 * 60 * 1000; // по умолчанию 30 минут
 
     public BotBrainTaskParams() {
         super();
@@ -39,10 +40,28 @@ public class BotBrainTaskParams extends BotTaskParams {
     }
 
     public static BotBrainTaskParams clone(BotBrainTaskParams source) {
+        if (source == null) return new BotBrainTaskParams();
+    
         BotBrainTaskParams target = new BotBrainTaskParams();
+        target.setAllowPickupItems(source.isAllowPickupItems());
+        target.setAllowExploration(source.isAllowExploration());
+        target.setAllowExcavation(source.isAllowExcavation());
+        target.setAllowTeleport(source.isAllowTeleport());
+        target.setAllowBroadcast(source.isAllowBroadcast());
+        target.setAllowViolence(source.isAllowViolence());
+        target.setKillAggressives(source.isKillAggressives());
+        target.setKillPassives(source.isKillPassives());
+        target.setUnstuckStrategy(source.getUnstuckStrategy());
         return target;
     }
-
+    public long getMemoryExpirationMillis() {
+        return memoryExpirationMillis;
+    }
+    
+    public void setMemoryExpirationMillis(long memoryExpirationMillis) {
+        this.memoryExpirationMillis = memoryExpirationMillis;
+    }
+    
     public boolean isAllowPickupItems() {
         return allowPickupItems;
     }

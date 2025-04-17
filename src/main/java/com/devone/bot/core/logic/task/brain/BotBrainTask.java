@@ -35,8 +35,25 @@ public class BotBrainTask extends BotTaskAutoParams<BotBrainTaskParams> {
 
     @Override
     public IBotTaskParameterized<BotBrainTaskParams> setParams(BotBrainTaskParams params) {
-        setIcon(params.getIcon());
-        setObjective(params.getObjective());
+        if (params == null) {
+            throw new IllegalArgumentException("BotBrainTask: setParams(...) получил null");
+        }
+    
+        super.setParams(params); // 🔑 обязательно вызываем суперкласс
+    
+        // 🎯 Устанавливаем визуальные атрибуты
+        setIcon(params.getIcon() != null ? params.getIcon() : "🧠");
+        setObjective(params.getObjective() != null ? params.getObjective() : "Think");
+    
+        // 🎯 Визуально можно логировать флаги (опционально для отладки)
+        BotLogger.debug("🧠 BotBrainTask", isLogging(), bot.getId() + " параметры загружены: " +
+            "pickup=" + params.isAllowPickupItems() + ", " +
+            "explore=" + params.isAllowExploration() + ", " +
+            "excavate=" + params.isAllowExcavation() + ", " +
+            "violence=" + params.isAllowViolence() + ", " +
+            "teleport=" + params.isAllowTeleport()
+        );
+    
         return this;
     }
 
@@ -59,23 +76,33 @@ public class BotBrainTask extends BotTaskAutoParams<BotBrainTaskParams> {
         //
         long currentTime = System.currentTimeMillis();
         //
-        long removed = bot.getBrain().getMemory().cleanup();
-        //
-        BotLogger.info(icon, this.isLogging(), bot.getId() + "Removed outdated navigation points:"+removed);
+        long removed = bot.getBrain().getMemory().cleanup(params.getMemoryExpirationMillis());
+        
+        BotLogger.info(icon, this.isLogging(), bot.getId() + "Removed outdated navigation points: " + removed);
+        
         //
         // осматриваемся и обновляем картинку мира
         //
         //
-        if(currentTime-lastScanTime > 5000) {
+        if(currentTime-lastScanTime > 10000) {
             BotSonar3DTask sonar = new BotSonar3DTask(bot);
             push(bot, sonar);
             lastScanTime = System.currentTimeMillis();
             return;
         }
+        // 💡 Блокируем мышление, если сцена не готова
+        if (bot.getBrain().getSceneData() == null) {
+            BotLogger.info(icon, isLogging(), bot.getId() + " ⛔ Ожидаем результаты сканирования...");
+            return;
+        }
         //
         // 📌  Start Thinking
         //
-        determineBehaviorScenario(bot);
+        Runnable decision = determineBehaviorScenario(bot);
+        
+        if (decision != null) {
+            decision.run();
+        }
         //
         //
         //

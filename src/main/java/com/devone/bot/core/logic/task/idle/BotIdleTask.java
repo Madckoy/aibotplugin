@@ -10,6 +10,8 @@ import org.bukkit.scheduler.BukkitRunnable;
 
 public class BotIdleTask extends BotTaskAutoParams<BotIdleTaskParams> {
 
+    private boolean isWaiting = false;
+
     public BotIdleTask(Bot bot) {
         super(bot, BotIdleTaskParams.class);
     }
@@ -24,14 +26,18 @@ public class BotIdleTask extends BotTaskAutoParams<BotIdleTaskParams> {
 
     @Override
     public void execute() {
-        long delayTicks = params.getTimeout(); // уже в тиках
+        if (isWaiting) return; // ✅ уже в режиме ожидания
 
+        isWaiting = true;
+
+        long delayTicks = params.getTimeout(); // уже в тиках
         BotLogger.info("🍹", isLogging(), bot.getId() + " Entering idle mode for " + delayTicks + " ticks.");
 
         new BukkitRunnable() {
             @Override
             public void run() {
                 BotLogger.info("✅", isLogging(), bot.getId() + " Idle timeout finished.");
+                isWaiting = false; // (на всякий случай)
                 stop();
             }
         }.runTaskLater(AIBotPlugin.getInstance(), delayTicks);

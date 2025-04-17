@@ -81,6 +81,6 @@ public class BotBlockData extends BotLocation {
     }
 
     public BotLocation getLocation(){
-        return (BotLocation)this;
+        return new BotLocation(getX(), getY(), getZ());
     }
 }

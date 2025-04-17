@@ -11,6 +11,10 @@ public class BotNavigationUtils {
 
 
     public static void navigateTo(Bot bot, BotLocation target, float multiplier) {
+        if(target==null) {
+            BotLogger.info("🏃🏻‍♂️‍➡️ ", true, bot.getId() + "Target navigation is null. Can't navigate!");
+            return;
+        }
         navigate(bot, target, multiplier);
     }
 
