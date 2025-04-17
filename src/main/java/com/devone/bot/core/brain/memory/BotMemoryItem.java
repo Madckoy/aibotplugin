@@ -1,11 +1,11 @@
-package com.devone.bot.core.logic.navigation;
+package com.devone.bot.core.brain.memory;
 import com.devone.bot.utils.blocks.BotBlockData;
 
-public class BotCacheItem {
+public class BotMemoryItem {
     private long timestamp = System.currentTimeMillis();
     private BotBlockData block;
 
-    public BotCacheItem(BotBlockData block) {
+    public BotMemoryItem(BotBlockData block) {
         this.block = block;
     }
 

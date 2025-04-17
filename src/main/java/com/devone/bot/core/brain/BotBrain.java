@@ -1,9 +1,9 @@
 package com.devone.bot.core.brain;
 
-import com.devone.bot.core.logic.navigation.BotCache;
 import java.util.ArrayList;
 
 import com.devone.bot.core.bot.Bot;
+import com.devone.bot.core.brain.memory.BotMemory;
 import com.devone.bot.core.logic.task.BotTask;
 import com.devone.bot.utils.blocks.BotLocation;
 import com.devone.bot.utils.blocks.BotLocationHelper;
@@ -28,7 +28,7 @@ public class BotBrain {
     private long teleportUsed;
     protected BotSceneData sceneData;
 
-    private BotCache cache = new BotCache();
+    private BotMemory memory = new BotMemory();
 
     public BotBrain(Bot bot) {
         this.owner = bot;
@@ -140,7 +140,7 @@ public class BotBrain {
         return this.sceneData;
     }
 
-    public BotCache getCache(){
-        return cache;
+    public BotMemory getMemory(){
+        return memory;
     }
 }

@@ -1,27 +1,26 @@
-package com.devone.bot.core.logic.navigation;
+package com.devone.bot.core.brain.memory;
 import com.devone.bot.utils.blocks.BotLocation;
-
 import com.devone.bot.utils.blocks.BotBlockData;
 
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
 
-public class BotCache {
+public class BotMemory {
 
-    Map<BotLocation, BotCacheItem> cached = new HashMap<BotLocation, BotCacheItem>();
+    Map<BotLocation, BotMemoryItem> visitedPlaces = new HashMap<BotLocation, BotMemoryItem>();
 
-    public BotCache(){
+    public BotMemory(){
         super();
     }
 
-    public void add(BotBlockData block) {
-        BotCacheItem bv = new BotCacheItem(block);
-        cached.put(block.getLocation(),bv);
+    public void memorize(BotBlockData block) {
+        BotMemoryItem bv = new BotMemoryItem(block);
+        visitedPlaces.put(block.getLocation(),bv);
     }
 
-    public boolean isCached(BotBlockData block){
-        BotCacheItem bv = cached.get(block.getLocation());
+    public boolean isMemorized(BotBlockData block){
+        BotMemoryItem bv = visitedPlaces.get(block.getLocation());
         if(bv!=null) {
             return true;
         }
@@ -34,9 +33,9 @@ public class BotCache {
         long removed = 0;
         long currTime = System.currentTimeMillis();
     
-        Iterator<Map.Entry<BotLocation, BotCacheItem>> it = cached.entrySet().iterator();
+        Iterator<Map.Entry<BotLocation, BotMemoryItem>> it = visitedPlaces.entrySet().iterator();
         while (it.hasNext()) {
-            Map.Entry<BotLocation, BotCacheItem> entry = it.next();
+            Map.Entry<BotLocation, BotMemoryItem> entry = it.next();
             long age = currTime - entry.getValue().getAge();
     
             if (age > 30 * 60 * 1000) { // 30 минут

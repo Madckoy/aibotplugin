@@ -45,7 +45,7 @@ public class BotBrainTask extends BotTaskAutoParams<BotBrainTaskParams> {
         BotLogger.info(icon, this.isLogging(), bot.getId() + "The bot "+ bot.getId() + " and makes a decision...");
         long currentTime = System.currentTimeMillis();
         //
-        long removed = bot.getBrain().getCache().cleanup();
+        long removed = bot.getBrain().getMemory().cleanup();
         //
         BotLogger.info(icon, this.isLogging(), bot.getId() + "Removed outdated navigation points:"+removed);
         //

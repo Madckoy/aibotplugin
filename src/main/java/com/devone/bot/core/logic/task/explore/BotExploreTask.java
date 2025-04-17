@@ -86,7 +86,7 @@ public class BotExploreTask extends BotTaskAutoParams<BotExploreTaskParams> {
             List<BotBlockData> goals = context.reachableGoals;
 
             for (BotBlockData goal : goals) {
-                boolean isCached = bot.getBrain().getCache().isCached(goal);
+                boolean isCached = bot.getBrain().getMemory().isMemorized(goal);
                 if(isCached) { continue; 
                 } else {
                     navGoal = goal;
@@ -100,7 +100,7 @@ public class BotExploreTask extends BotTaskAutoParams<BotExploreTaskParams> {
 
         BotNavigationUtils.navigateTo(bot, bot.getBrain().getTargetLocation(), 1);
         
-        bot.getBrain().getCache().add(navGoal);
+        bot.getBrain().getMemory().memorize(navGoal);
 
         if (getElapsedTime() > 3 * BotConstants.DEFAULT_TASK_TIMEOUT) {
             BotLogger.info("⏱️", isLogging(), bot.getId() + " Task timeout: " + getElapsedTime());
