@@ -41,7 +41,7 @@ public class BotMoveTask extends BotTaskAutoParams<BotMoveTaskParams> {
         setObjective(params.getObjective());
 
         if (loc != null) {
-            bot.getRuntimeStatus().setTargetLocation(loc);
+            bot.getMemory().setTargetLocation(loc);
             BotLogger.info("✅", isLogging(), bot.getId() + " Цель движения установлена: " + loc);
         } else {
             BotLogger.info("❌", isLogging(), bot.getId() + " Target Location is null! Invalid parameters.");
@@ -62,7 +62,7 @@ public class BotMoveTask extends BotTaskAutoParams<BotMoveTaskParams> {
             return;
         }
 
-        BotLocation targetCoord = bot.getRuntimeStatus().getTargetLocation();
+        BotLocation targetCoord = bot.getMemory().getTargetLocation();
         if (targetCoord == null) {
             BotLogger.info("❌", isLogging(), bot.getId() + "Нет цели для движения.");
             this.stop();
@@ -100,7 +100,7 @@ public class BotMoveTask extends BotTaskAutoParams<BotMoveTaskParams> {
                 long elapsed = System.currentTimeMillis() - startTime;
                 if (elapsed > BotConstants.DEFAULT_TASK_TIMEOUT) {
                     BotLogger.info("⏱️", isLogging(), bot.getId() + " Тайм-аут навигации.");
-                    bot.getRuntimeStatus().setStuck(true);
+                    bot.getMemory().setStuck(true);
                     stopTaskHandle();
                     this.stop();
                 }
@@ -121,7 +121,7 @@ public class BotMoveTask extends BotTaskAutoParams<BotMoveTaskParams> {
     @Override
     public void stop() {
         isMoving = false;
-        bot.getRuntimeStatus().setTargetLocation(null);
+        bot.getMemory().setTargetLocation(null);
         BotLogger.info("🛑", isLogging(), bot.getId() + " Move task завершён");
 
         stopTaskHandle();

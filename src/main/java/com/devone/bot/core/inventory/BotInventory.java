@@ -99,7 +99,7 @@ public class BotInventory {
     }
 
     public void pickupAll(Boolean shouldPickup) {
-        BotLogger.info("🛒", true, bot.getId() + " Pickup parameters: " + shouldPickup +" | "+bot.getRuntimeStatus().getAutoPickupItems());
+        BotLogger.info("🛒", true, bot.getId() + " Pickup parameters: " + shouldPickup +" | "+bot.getMemory().getAutoPickupItems());
 
         if (!bot.isNPCSpawned() || bot.getNPC() == null) {
             BotLogger.info("🛒", true, bot.getId() + " NPC issue! Can't pickup items. Pickup parameters");
@@ -109,8 +109,8 @@ public class BotInventory {
         logInventory();
 
 
-        if (!shouldPickup && !bot.getRuntimeStatus().getAutoPickupItems() ) {
-            BotLogger.info("🛒", true, bot.getId() + " Will not pickup items. Pickup parameters: " + shouldPickup +" | "+bot.getRuntimeStatus().getAutoPickupItems());
+        if (!shouldPickup && !bot.getMemory().getAutoPickupItems() ) {
+            BotLogger.info("🛒", true, bot.getId() + " Will not pickup items. Pickup parameters: " + shouldPickup +" | "+bot.getMemory().getAutoPickupItems());
             return;
         }
 
@@ -118,14 +118,14 @@ public class BotInventory {
 
         BotScanNatural.logScanNatural(bot, BotConstants.DEFAULT_SCAN_RANGE);
 
-        if (bot.getRuntimeStatus().getAutoPickupItems()) {
+        if (bot.getMemory().getAutoPickupItems()) {
             pullAllItemsinRadius(2.0);
         }
 
 
 
         try {
-            Location botLocation = BotWorldHelper.getWorldLocation(bot.getRuntimeStatus().getCurrentLocation());
+            Location botLocation = BotWorldHelper.getWorldLocation(bot.getMemory().getCurrentLocation());
 
             List<Entity> nearbyEntities = BotWorldHelper.getWorld().getEntities();
 

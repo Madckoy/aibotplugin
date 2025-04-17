@@ -1,5 +1,6 @@
-package com.devone.bot.core.status;
+package com.devone.bot.core.memory;
 
+import com.devone.bot.core.logic.navigation.BotCache;
 import java.util.ArrayList;
 
 import com.devone.bot.core.bot.Bot;
@@ -9,7 +10,7 @@ import com.devone.bot.utils.blocks.BotLocationHelper;
 import com.devone.bot.utils.logger.BotLogger;
 import com.devone.bot.utils.scene.BotSceneData;
 
-public class BotStatusRuntime {
+public class BotMemory {
 
     private Bot owner;
 
@@ -27,7 +28,9 @@ public class BotStatusRuntime {
     private long teleportUsed;
     protected BotSceneData sceneData;
 
-    public BotStatusRuntime(Bot bot) {
+    private BotCache cache = new BotCache();
+
+    public BotMemory(Bot bot) {
         this.owner = bot;
         this.currentLocation = getCurrentLocation();  // Инициализируем с текущей локацией
         this.targetLocation = null;  // Начальное значение для targetLocation
@@ -135,5 +138,9 @@ public class BotStatusRuntime {
 
     public BotSceneData getSceneData() {
         return this.sceneData;
+    }
+
+    public BotCache getCache(){
+        return cache;
     }
 }

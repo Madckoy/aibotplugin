@@ -6,7 +6,7 @@ import org.bukkit.event.Listener;
 
 import com.devone.bot.AIBotPlugin;
 import com.devone.bot.core.bot.Bot;
-import com.devone.bot.core.logic.task.decision.BotDecisionMakeTask;
+import com.devone.bot.core.logic.task.brain.BotBrainTask;
 import com.devone.bot.core.logic.task.params.BotTaskParams;
 import com.devone.bot.utils.BotUtils;
 import com.devone.bot.utils.blocks.BotLocation;
@@ -73,8 +73,8 @@ public abstract class BotTask<T extends BotTaskParams> implements IBotTask, List
         if (isEnabled) {
 
             BotLogger.info("🚦", this.isLogging(), icon +" : "+ bot.getId() + " Status: " + isDone + " | " + isPaused +
-                    " 📍 xyz: " + bot.getRuntimeStatus().getCurrentLocation() + " | " + 
-                    " 🎯 xyz: " + bot.getRuntimeStatus().getTargetLocation());
+                    " 📍 xyz: " + bot.getMemory().getCurrentLocation() + " | " + 
+                    " 🎯 xyz: " + bot.getMemory().getTargetLocation());
 
         if (isPaused) return;
 
@@ -147,7 +147,7 @@ public abstract class BotTask<T extends BotTaskParams> implements IBotTask, List
         BotLogger.info("🚨", this.isLogging(), "Игрок " + player.getName() + " вышел! Бот " + bot.getId() + " переходит в автономный режим.");
         this.bot.getLifeCycle().getTaskStackManager().clearTasks();
 
-        BotDecisionMakeTask task = new BotDecisionMakeTask(bot);
+        BotBrainTask task = new BotBrainTask(bot);
 
         bot.getLifeCycle().getTaskStackManager().pushTask(task);
 

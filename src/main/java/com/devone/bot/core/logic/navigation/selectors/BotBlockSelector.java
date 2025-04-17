@@ -13,7 +13,7 @@ import com.devone.bot.utils.blocks.BotLocation;
 import com.devone.bot.utils.logger.BotLogger;
 import com.devone.bot.utils.world.BotWorldHelper;
 
-public class BotGeoSelector {
+public class BotBlockSelector {
 
     private static final Random RANDOM = new Random();
 
@@ -68,7 +68,7 @@ public class BotGeoSelector {
         }
 
         // ⛔ Fallback на спавн
-        BotLogger.info("⚠️ ", true, "EmergencyTeleport: fallback to world spawn!");
+        BotLogger.info("⚠️", true, "EmergencyTeleport: fallback to world spawn!");
 
         BotLocation spawn = BotWorldHelper.getWorldSpawnLocation();
 

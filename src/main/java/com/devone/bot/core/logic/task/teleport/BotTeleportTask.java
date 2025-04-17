@@ -54,8 +54,8 @@ public class BotTeleportTask extends BotTaskAutoParams<BotTeleportTaskParams> {
             Location safeOffset = baseLocation.clone().add(0.5, 0, 0.5);
 
             bot.getNPCEntity().teleport(safeOffset);
-            bot.getRuntimeStatus().setStuck(false);
-            bot.getRuntimeStatus().teleportUsedIncrease();
+            bot.getMemory().setStuck(false);
+            bot.getMemory().teleportUsedIncrease();
 
             BotLogger.info("⚡", this.isLogging(),
                     bot.getId() + " Телепорт с " + baseLocation.toVector() + " → " + safeOffset.toVector());

@@ -35,10 +35,14 @@ public class BotSonar3DTask extends BotTaskAutoParams<BotSonarTaskParams> {
 
     @Override
     public void execute() {
+
         BotLogger.info("📡", isLogging(),
                 bot.getId() + " Performing 3D sonar scan with radius=" + radius + ", height=" + height);
-        BotSceneData scene = BotSceneScan3D.scan(bot, radius, height);
-        bot.getRuntimeStatus().setSceneData(scene);
+
+        BotSceneData sceneData = BotSceneScan3D.scan(bot, radius, height);
+
+        bot.getMemory().setSceneData(sceneData);
+        
         stop();
     }
 

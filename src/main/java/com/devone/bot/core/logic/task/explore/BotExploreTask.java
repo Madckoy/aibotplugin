@@ -1,20 +1,13 @@
 package com.devone.bot.core.logic.task.explore;
 
+import java.util.List;
+
 import com.devone.bot.core.bot.Bot;
 import com.devone.bot.core.logic.navigation.BotNavigationPlannerWrapper;
 import com.devone.bot.core.logic.navigation.scene.BotSceneContext;
-import com.devone.bot.core.logic.navigation.selectors.BotBioSelector;
-import com.devone.bot.core.logic.navigation.selectors.BotGeoSelector;
 import com.devone.bot.core.logic.task.BotTaskAutoParams;
 import com.devone.bot.core.logic.task.IBotTaskParameterized;
-import com.devone.bot.core.logic.task.attack.survival.BotSurvivalAttackTask;
-import com.devone.bot.core.logic.task.attack.survival.params.BotSurvivalAttackTaskParams;
 import com.devone.bot.core.logic.task.explore.params.BotExploreTaskParams;
-import com.devone.bot.core.logic.task.hand.attack.BotHandAttackTask;
-import com.devone.bot.core.logic.task.hand.attack.params.BotHandAttackTaskParams;
-import com.devone.bot.core.logic.task.sonar.BotSonar3DTask;
-import com.devone.bot.core.logic.task.teleport.BotTeleportTask;
-import com.devone.bot.core.logic.task.teleport.params.BotTeleportTaskParams;
 import com.devone.bot.utils.BotConstants;
 import com.devone.bot.utils.blocks.BotBlockData;
 import com.devone.bot.utils.blocks.BotLocation;
@@ -44,92 +37,70 @@ public class BotExploreTask extends BotTaskAutoParams<BotExploreTaskParams> {
 
     @Override
     public void execute() {
+
         if (isPaused)
             return;
 
         BotLogger.info("🔶", isLogging(), bot.getId() + " Exploring with radius: " + scanRadius);
 
-        BotSonar3DTask sonar = new BotSonar3DTask(bot, scanRadius, scanRadius);
-        sonar.execute();
-
         setObjective(params.getObjective());
+     
         bot.pickupNearbyItems(params.isPickup());
 
-        BotSceneData sceneData = bot.getRuntimeStatus().getSceneData();
+        BotSceneData sceneData = bot.getMemory().getSceneData();
+
         if (sceneData == null) {
             BotLogger.info("❌", isLogging(), bot.getId() + " No scene data available.");
             this.stop();
             return;
         }
 
-        BotLocation botPos = bot.getRuntimeStatus().getCurrentLocation();
+        BotLocation botPos = bot.getMemory().getCurrentLocation();
+
+
+
         BotSceneContext context = BotNavigationPlannerWrapper.getSceneContext(sceneData.blocks, sceneData.entities,
                 botPos);
 
-        BotBlockData goal = BotGeoSelector.pickRandomTarget(context.reachableGoals);
-        BotBlockData animal = BotBioSelector.pickNearestTarget(context.entities, botPos);
+        //BotBlockData navGoal = BotGeoSelector.pickRandomTarget(context.reachableGoals);
 
-        BotLogger.info("🎯", this.isLogging(), bot.getId() + " Total nav targets: " + context.reachableGoals);
+        // check if has more than one block to visit
+        int totalGoals = context.reachableGoals.size();
+        
+        BotBlockData navGoal = null;
+        
+        if(totalGoals <= 1) {
+            //the bot is stuck!
+            
+            bot.getMemory().setStuck(true);
 
-        if (bot.getRuntimeStatus().isStuck()) {
-            BotLogger.info("⦻", this.isLogging(), bot.getId() + " Bot is stuck.");
-            if (animal != null) {
-                BotLogger.info("⚔️", this.isLogging(), bot.getId() + " Inflicting Survival Strike to unstuck!");
-                BotSurvivalAttackTaskParams params = new BotSurvivalAttackTaskParams(animal, 5.0);
-                BotSurvivalAttackTask strikeTask = new BotSurvivalAttackTask(bot);
-                strikeTask.setParams(params);
+            BotLogger.info("🎯", this.isLogging(), "The bot "+bot.getId() + " is stuck!");
+            
+            stop();
+            
+            return;
 
-                bot.getLifeCycle().getTaskStackManager().pushTask(strikeTask);
+        } else {
 
-                stop();
-                return;
+            // check all the goals if visited recently
+            List<BotBlockData> goals = context.reachableGoals;
 
-            } else {
-                BotLogger.info("❌", this.isLogging(), bot.getId() + " No animal found to unstuck.");
-                if (getElapsedTime() > BotConstants.DEFAULT_TASK_TIMEOUT) {
-                    BotLogger.info("⏱️", this.isLogging(), bot.getId() + " Task timeout.");
-                    BotBlockData fallback = BotGeoSelector.pickEmergencyTeleportTarget(
-                            bot.getRuntimeStatus().getCurrentLocation(),
-                            context.reachableGoals, context.reachable, context.navigable, context.walkable);
-                    if (fallback != null) {
-                        BotLogger.info("🌀", isLogging(),
-                                bot.getId() + " Navigation impossible, fallback teleporting to: " + fallback);
-
-                        // Создание параметров
-                        BotTeleportTaskParams tpParams = new BotTeleportTaskParams(fallback);
-
-                        // Создание задачи и передача параметров
-                        BotTeleportTask tpTask = new BotTeleportTask(bot, null);
-                        tpTask.setParams(tpParams); // Теперь параметры корректно передаются
-
-                        bot.getLifeCycle().getTaskStackManager().pushTask(tpTask);
-
-                        BotLogger.info("💡", this.isLogging(),
-                                bot.getId() + " Teleporting to fallback location: " + fallback);
-                        this.stop();
-                        return;
-                    }
+            for (BotBlockData goal : goals) {
+                boolean isCached = bot.getMemory().getCache().isCached(goal);
+                if(isCached) { continue; 
+                } else {
+                    navGoal = goal;
+                    break;
                 }
-                return;
             }
         }
 
-        if (animal != null) {
-            BotLogger.info("⚔️", this.isLogging(), bot.getId() + " Inflicting Attack to bring justice on: " + animal);
+        BotLogger.info("🎯", isLogging(), bot.getId() + " Target: " + navGoal);
+        bot.getMemory().setTargetLocation(navGoal);
 
-            // Создание параметров
-            BotHandAttackTaskParams handParams = new BotHandAttackTaskParams(animal, 5.0);
-
-            // Создание задачи и передача параметров
-            BotHandAttackTask handTask = new BotHandAttackTask(bot);
-            handTask.setParams(handParams); // Теперь параметры корректно передаются
-            bot.getLifeCycle().getTaskStackManager().pushTask(handTask);
-            return;
-        }
-
-        BotLogger.info("🎯", isLogging(), bot.getId() + " Target: " + goal);
-        bot.getRuntimeStatus().setTargetLocation(goal);
-        BotNavigationUtils.navigateTo(bot, bot.getRuntimeStatus().getTargetLocation(), 1);
+        BotNavigationUtils.navigateTo(bot, bot.getMemory().getTargetLocation(), 1);
+        
+        bot.getMemory().getCache().add(navGoal);
 
         if (getElapsedTime() > 3 * BotConstants.DEFAULT_TASK_TIMEOUT) {
             BotLogger.info("⏱️", isLogging(), bot.getId() + " Task timeout: " + getElapsedTime());

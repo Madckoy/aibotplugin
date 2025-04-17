@@ -38,7 +38,7 @@ public class BotHandAttackTask extends BotHandTask<BotHandAttackTaskParams> {
 
         attempts = 0;
         hits = 0;
-        startPos = new BotLocation(bot.getRuntimeStatus().getCurrentLocation());
+        startPos = new BotLocation(bot.getMemory().getCurrentLocation());
     }
 
     public BotHandAttackTask setParams(BotHandAttackTaskParams params) {
@@ -50,7 +50,7 @@ public class BotHandAttackTask extends BotHandTask<BotHandAttackTaskParams> {
         this.target = params.getTarget();
         this.damage = params.getDamage();
 
-        bot.getRuntimeStatus().setTargetLocation(target);
+        bot.getMemory().setTargetLocation(target);
 
         BotLogger.info("✅", isLogging(), bot.getId() + " Parameters for BotHandAttackTask set.");
         return this;
@@ -97,14 +97,14 @@ public class BotHandAttackTask extends BotHandTask<BotHandAttackTaskParams> {
                         BotLogger.info("💀", isLogging(), bot.getId() + " Target is dead or unreachable.");
                         target.setUUID(null);
                         target = null;
-                        bot.getRuntimeStatus().setTargetLocation(null);
+                        bot.getMemory().setTargetLocation(null);
                         stop();
                         cancel();
                         return;
                     }
 
                     // 🔄 Обновляем targetLocation
-                    bot.getRuntimeStatus().setTargetLocation(BotLocationHelper.convertFrom(living.getLocation()));
+                    bot.getMemory().setTargetLocation(BotLocationHelper.convertFrom(living.getLocation()));
                     BotUtils.lookAt(bot, BotLocationHelper.convertFrom(living.getLocation()));
                     bot.getNPCNavigator().setTarget(living.getLocation());
                     double distance = bot.getNPCEntity().getLocation().distance(living.getLocation());
@@ -114,7 +114,7 @@ public class BotHandAttackTask extends BotHandTask<BotHandAttackTaskParams> {
 
                         if (pursuitTicks % 20 == 0) {
                             bot.getNPCNavigator().setTarget(living.getLocation());
-                            bot.getRuntimeStatus()
+                            bot.getMemory()
                                     .setTargetLocation(BotLocationHelper.convertFrom(living.getLocation()));
                             BotUtils.lookAt(bot, BotLocationHelper.convertFrom(living.getLocation()));
                             BotLogger.info("🏃🏻‍➡️", isLogging(),
@@ -141,10 +141,10 @@ public class BotHandAttackTask extends BotHandTask<BotHandAttackTaskParams> {
                     }
 
                     if (attempts > MAX_ATTEMPTS) { // застряли
-                        BotLocation endPos = bot.getRuntimeStatus().getCurrentLocation();
+                        BotLocation endPos = bot.getMemory().getCurrentLocation();
                         if (endPos.equals(startPos) && hits == 0) {
                             BotLogger.info("⏱️", isLogging(), bot.getId() + " ⏱️ Seems like the bot got stuck.");
-                            bot.getRuntimeStatus().setStuck(true);
+                            bot.getMemory().setStuck(true);
                             stop();
                             cancel();
                             return;

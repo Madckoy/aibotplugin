@@ -52,37 +52,37 @@ public class BotStatusServlet extends HttpServlet {
 
         for (Bot bot : bots) {
             JsonObject botJson = new JsonObject();
-            BotLocation loc = bot.getRuntimeStatus().getCurrentLocation();
+            BotLocation loc = bot.getMemory().getCurrentLocation();
             if (loc != null) {
                 botJson.addProperty("skin", "http://" + BotWebService.getServerHost() + ":"+BotWebService.getServerPort()+"/skins/" + bot.getUuid() + ".png");
                 
                 botJson.addProperty("id", bot.getId());
                 botJson.addProperty("name", bot.getNPC().getName());
 
-                botJson.addProperty("stuck", bot.getRuntimeStatus().isStuck());
-                botJson.addProperty("stuckCount", bot.getRuntimeStatus().getStuckCount());
+                botJson.addProperty("stuck", bot.getMemory().isStuck());
+                botJson.addProperty("stuckCount", bot.getMemory().getStuckCount());
 
-                botJson.addProperty("blocks_broken_size", bot.getRuntimeStatus().getBlocksBroken().size());
-                botJson.addProperty("blocks_broken",  bot.getRuntimeStatus().getBlocksBroken().toString());
-                botJson.addProperty("mobs_killed_size", bot.getRuntimeStatus().getMobsKilled().size());
-                botJson.addProperty("mobs_killed", bot.getRuntimeStatus().getMobsKilled().toString());
-                botJson.addProperty("teleport_used", bot.getRuntimeStatus().getTeleportUsed());
-                botJson.addProperty("auto_pick_up_items", bot.getRuntimeStatus().getAutoPickupItems());
+                botJson.addProperty("blocks_broken_size", bot.getMemory().getBlocksBroken().size());
+                botJson.addProperty("blocks_broken",  bot.getMemory().getBlocksBroken().toString());
+                botJson.addProperty("mobs_killed_size", bot.getMemory().getMobsKilled().size());
+                botJson.addProperty("mobs_killed", bot.getMemory().getMobsKilled().toString());
+                botJson.addProperty("teleport_used", bot.getMemory().getTeleportUsed());
+                botJson.addProperty("auto_pick_up_items", bot.getMemory().getAutoPickupItems());
 
                 String currLoc = " " + loc.getX() + ", " + loc.getY() + ", " + loc.getZ();   
 
                 botJson.addProperty("position", currLoc);
 
-                botJson.addProperty("task", bot.getRuntimeStatus().getCurrentTask().getIcon());
+                botJson.addProperty("task", bot.getMemory().getCurrentTask().getIcon());
                 
                 botJson.addProperty("object", getCurrentObjective(bot));
 
-                BotLocation tgtLoc = bot.getRuntimeStatus().getTargetLocation();
+                BotLocation tgtLoc = bot.getMemory().getTargetLocation();
 
                 botJson.addProperty("target", tgtLoc != null ? " " + tgtLoc.getX() + ", " + tgtLoc.getY() + ", " + tgtLoc.getZ() : "");
 
 
-                botJson.addProperty("elapsedTime", BotUtils.formatTime(bot.getRuntimeStatus().getCurrentTask().getElapsedTime()));
+                botJson.addProperty("elapsedTime", BotUtils.formatTime(bot.getMemory().getCurrentTask().getElapsedTime()));
 
                 List<BotTask<?>> taskStack = (bot.getLifeCycle() != null && bot.getLifeCycle().getTaskStackManager() != null)
                     ? new ArrayList<>(bot.getLifeCycle().getTaskStackManager().getTaskStack())
@@ -127,7 +127,7 @@ public class BotStatusServlet extends HttpServlet {
     }
     
     private static String getCurrentObjective(Bot bot) {
-        BotTask<?> currentTask = bot.getRuntimeStatus().getCurrentTask();
+        BotTask<?> currentTask = bot.getMemory().getCurrentTask();
         return (currentTask != null) ? currentTask.getObjective() : "";
     }
 }

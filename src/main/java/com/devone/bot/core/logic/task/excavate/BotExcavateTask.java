@@ -221,24 +221,24 @@ public class BotExcavateTask extends BotTaskAutoParams<BotExcavateTaskParams> {
 
         Block targetBlock = BotWorldHelper.getBlockAt(targetLocation);
 
-        bot.getRuntimeStatus().setTargetLocation(targetLocation);
+        bot.getMemory().setTargetLocation(targetLocation);
 
-        if (bot.getRuntimeStatus().getTargetLocation() != null) {
+        if (bot.getMemory().getTargetLocation() != null) {
 
             setObjective(params.getObjective() + BotUtils.getBlockName(targetBlock)
                     + " at " + targetLocation);
 
-            if (isInProtectedZone(bot.getRuntimeStatus().getTargetLocation())) {
+            if (isInProtectedZone(bot.getMemory().getTargetLocation())) {
                 BotLogger.info("⛔", isLogging(), bot.getId() + " в запретной зоне, НЕ будет разрушать блок: " +
-                        bot.getRuntimeStatus().getTargetLocation());
+                        bot.getMemory().getTargetLocation());
                 this.stop();
                 return;
             }
 
             if (!BotUtils.isBreakableBlock(targetBlock)) {
                 BotLogger.info("⛔", isLogging(), "Неразрушаемый блок: "
-                        + bot.getRuntimeStatus().getTargetLocation());
-                bot.getRuntimeStatus().setTargetLocation(null);
+                        + bot.getMemory().getTargetLocation());
+                bot.getMemory().setTargetLocation(null);
                 return;
             }
 
@@ -247,7 +247,7 @@ public class BotExcavateTask extends BotTaskAutoParams<BotExcavateTaskParams> {
             if (BotUtils.requiresTool(mat)) {
                 if (!BotInventory.equipRequiredTool(bot, mat)) {
                     BotLogger.info("🙈", isLogging(), "Не удалось взять инструмент в руку. Пропускаем.");
-                    bot.getRuntimeStatus().setTargetLocation(null);
+                    bot.getMemory().setTargetLocation(null);
                     return;
                 }
             }
@@ -267,7 +267,7 @@ public class BotExcavateTask extends BotTaskAutoParams<BotExcavateTaskParams> {
     }
 
     private void handleNoTargetFound() {
-        bot.getRuntimeStatus().setTargetLocation(null);
+        bot.getMemory().setTargetLocation(null);
 
         setObjective("");
         BotLogger.info("❌", isLogging(), bot.getId() + " Нет подходящих блоков. Завершаем.");
@@ -298,7 +298,7 @@ public class BotExcavateTask extends BotTaskAutoParams<BotExcavateTaskParams> {
     @Override
     public void stop() {
         this.breakPatternImpl = null;
-        bot.getRuntimeStatus().setTargetLocation(null);
+        bot.getMemory().setTargetLocation(null);
         BotLogger.info("🛑", isLogging(), "Задача разрушения остановлена.");
         super.stop();
     }

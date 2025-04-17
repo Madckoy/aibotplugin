@@ -24,7 +24,7 @@ public abstract class BotHandTask<T extends BotHandTaskParams> extends BotTaskAu
         this.target = params.getTarget();
 
         if (target != null) {
-            bot.getRuntimeStatus().setTargetLocation(target);
+            bot.getMemory().setTargetLocation(target);
             BotLogger.info("✅", isLogging(), bot.getId() + " Target for BotHandTask is set: " + target);
         } else {
             BotLogger.info("⚠️", isLogging(), bot.getId() + " Target is null in BotHandTask.");
@@ -48,7 +48,7 @@ public abstract class BotHandTask<T extends BotHandTaskParams> extends BotTaskAu
 
     @Override
     public void stop() {
-        bot.getRuntimeStatus().setTargetLocation(null);
+        bot.getMemory().setTargetLocation(null);
         super.stop();
     }
 
