@@ -18,7 +18,6 @@ import com.devone.bot.core.logic.task.excavate.patterns.IBotExcavatePattern;
 import com.devone.bot.core.logic.task.excavate.patterns.generator.BotExcavateInterpretedYamlPattern;
 import com.devone.bot.core.logic.task.hand.excavate.BotHandExcavateTask;
 import com.devone.bot.core.logic.task.hand.excavate.params.BotHandExcavateTaskParams;
-import com.devone.bot.core.logic.task.sonar.BotSonar3DTask;
 import com.devone.bot.core.zone.BotZoneManager;
 import com.devone.bot.utils.BotConstants;
 import com.devone.bot.utils.BotUtils;
@@ -204,10 +203,6 @@ public class BotExcavateTask extends BotTaskAutoParams<BotExcavateTaskParams> {
         }
 
         bot.pickupNearbyItems(shouldPickup);
-
-        BotLogger.info("🔍", isLogging(), "Запускаем 3D-сканирование окружающей среды.");
-        BotSonar3DTask scanTask = new BotSonar3DTask(bot, outerRadius, outerRadius);
-        bot.getLifeCycle().getTaskStackManager().pushTask(scanTask);
 
         BotLocation location = breakPatternImpl.findNextBlock(bot);
 

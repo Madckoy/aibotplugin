@@ -71,6 +71,7 @@ public class BotExploreTask extends BotTaskAutoParams<BotExploreTaskParams> {
 
         // Если осталась только одна или меньше цели, бот застрял
         int totalGoals = validGoals.size();
+        BotLogger.info(icon, isLogging(), "Valid Navigation Goals:" + totalGoals);
 
         BotBlockData navGoal = null;
 
