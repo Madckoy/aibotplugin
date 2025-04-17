@@ -1,8 +1,8 @@
-# cube
-
+#cone
 filters:
   - "x >= cx - r && x <= cx + r"
-  - "y >= cy - r && y <= cy + r"
+  - "y >= cy && y <= cy + r"
   - "z >= cz - r && z <= cz + r"
+  - "math.max(math.abs(x - cx), math.abs(z - cz)) <= (y - cy)"
 sort:
   - "y"
