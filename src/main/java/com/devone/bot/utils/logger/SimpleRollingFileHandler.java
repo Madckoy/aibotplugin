@@ -17,10 +17,15 @@ public class SimpleRollingFileHandler extends Handler {
     private OutputStream outputStream;
     private final SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
 
-    public SimpleRollingFileHandler(String filePath, int maxFileSize, int maxBackupCount) throws IOException {
+    public SimpleRollingFileHandler(String filePath, int maxFileSize, int maxBackupCount, boolean clearOnStart) throws IOException {
         this.logFile = new File(filePath);
         this.maxFileSize = maxFileSize;
         this.maxBackupCount = maxBackupCount;
+
+        if (clearOnStart && logFile.exists()) {
+            new FileOutputStream(logFile, false).close(); // 💥 очищаем
+        }
+    
         openStream();
         setFormatter(new SimpleFormatter());
     }
