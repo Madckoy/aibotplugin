@@ -1,6 +1,6 @@
 package com.devone.bot.core.logic.task.excavate.utils;
 
-public class RelativeBotPosition {
+public class BotRelativePosition {
 
     public enum Horizontal {
         CENTER, NORTH, SOUTH, EAST, WEST
@@ -17,11 +17,11 @@ public class RelativeBotPosition {
     private int deltaY;
     private int deltaZ;
 
-    public RelativeBotPosition(Horizontal horizontal, Vertical vertical) {
+    public BotRelativePosition(Horizontal horizontal, Vertical vertical) {
         this(horizontal, vertical, 0, 0, 0);
     }
 
-    public RelativeBotPosition(Horizontal horizontal, Vertical vertical, int deltaX, int deltaY, int deltaZ) {
+    public BotRelativePosition(Horizontal horizontal, Vertical vertical, int deltaX, int deltaY, int deltaZ) {
         this.horizontal = horizontal;
         this.vertical = vertical;
         this.deltaX = deltaX;
