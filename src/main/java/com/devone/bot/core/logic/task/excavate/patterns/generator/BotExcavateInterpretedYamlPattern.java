@@ -87,7 +87,8 @@ public class BotExcavateInterpretedYamlPattern implements IBotExcavatePattern {
             .map(p -> String.format("%d, %d, %d", p.getX(), p.getY(), p.getZ()))
             .collect(Collectors.joining(", "));
         
-            BotLogger.info("🔢", true, String.format("Generated %d points: [%s]", inner_points.size(), pointsLog));        
+            //BotLogger.info("🔢", true, String.format("Generated %d points: [%s]", inner_points.size(), pointsLog));        
+            BotLogger.info("🔢", true, String.format("Generated %d points", inner_points.size()));     
 
             boolean isInverted = generator.getInverted();
 
