@@ -52,7 +52,7 @@ public class BotBrainTask extends BotTaskAutoParams<BotBrainTaskParams> {
         // осматриваемся и обновляем картинку мира
         //
         //
-        if(currentTime-lastScanTime > 1) {
+        if(currentTime-lastScanTime > 3) {
             BotSonar3DTask sonar = new BotSonar3DTask(bot);
             push(bot, sonar);
             lastScanTime = System.currentTimeMillis();
@@ -66,7 +66,6 @@ public class BotBrainTask extends BotTaskAutoParams<BotBrainTaskParams> {
         //
         //
         return;
-
     }
     
     private void push(Bot bot, BotTask<?> task) {
