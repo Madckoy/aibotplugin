@@ -32,6 +32,10 @@ public class BotBrainTaskParams extends BotTaskParams {
     private boolean allowExploration = true;
     //
     private long memoryExpirationMillis = 30 * 60 * 1000; // по умолчанию 30 минут
+    //
+    private double explorationWeight = 0.7;
+    private double excavationWeight = 0.3;
+    //
 
     public BotBrainTaskParams() {
         super();
@@ -54,6 +58,23 @@ public class BotBrainTaskParams extends BotTaskParams {
         target.setUnstuckStrategy(source.getUnstuckStrategy());
         return target;
     }
+
+    public double getExplorationWeight() {
+        return explorationWeight;
+    }
+
+    public void setExplorationWeight(double explorationWeight) {
+        this.explorationWeight = explorationWeight;
+    }
+
+    public void setExcavationWeight(double excavationWeight) {
+        this.excavationWeight = excavationWeight;
+    }
+
+    public double getExcavationWeight() {
+        return excavationWeight;
+    }
+
     public long getMemoryExpirationMillis() {
         return memoryExpirationMillis;
     }

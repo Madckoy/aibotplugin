@@ -9,10 +9,25 @@ import org.bukkit.block.Block;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.LivingEntity;
 
+import com.devone.bot.core.bot.Bot;
 import com.devone.bot.utils.blocks.BotBlockData;
 import com.devone.bot.utils.blocks.BotLocation;
 
 public class BotWorldHelper {
+
+    /**
+     * Проверяет, является ли текущее время в мире бота ночным.
+     * @param bot Бот
+     * @return true, если ночь (в Minecraft ночь — это время с 13000 до 23999 включительно)
+     */
+    public static boolean isNight(Bot bot) {
+        if (bot == null || bot.getNPCEntity() == null) return false;
+
+        World world = getWorld();
+        long time = world.getTime();
+
+        return time >= 13000 && time <= 23999;
+    }
 
     public static World getWorld() {
         return Bukkit.getWorlds().get(0);

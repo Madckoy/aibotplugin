@@ -7,6 +7,7 @@ import java.util.function.Supplier;
 import com.devone.bot.core.bot.Bot;
 import com.devone.bot.core.logic.navigation.BotNavigationPlannerWrapper;
 import com.devone.bot.core.logic.navigation.scene.BotSceneContext;
+import com.devone.bot.core.logic.navigation.selectors.BotBioSelector;
 import com.devone.bot.core.logic.navigation.selectors.BotBlockSelector;
 import com.devone.bot.core.logic.task.BotTask;
 import com.devone.bot.core.logic.task.BotTaskAutoParams;
@@ -15,6 +16,8 @@ import com.devone.bot.core.logic.task.brain.params.BotBrainTaskParams;
 import com.devone.bot.core.logic.task.excavate.BotExcavateTask;
 import com.devone.bot.core.logic.task.excavate.params.BotExcavateTaskParams;
 import com.devone.bot.core.logic.task.explore.BotExploreTask;
+import com.devone.bot.core.logic.task.hand.attack.BotHandAttackTask;
+import com.devone.bot.core.logic.task.hand.attack.params.BotHandAttackTaskParams;
 import com.devone.bot.core.logic.task.idle.BotIdleTask;
 import com.devone.bot.core.logic.task.sonar.BotSonar3DTask;
 import com.devone.bot.core.logic.task.teleport.BotTeleportTask;
@@ -28,6 +31,8 @@ import com.devone.bot.utils.world.BotWorldHelper;
 public class BotBrainTask extends BotTaskAutoParams<BotBrainTaskParams> {
 
     private long lastScanTime;
+    private double explorationWeight = 0.7;
+    private double excavationWeight = 0.3;
 
     public BotBrainTask(Bot bot) {
         super(bot, null, BotBrainTaskParams.class);
@@ -122,35 +127,77 @@ public class BotBrainTask extends BotTaskAutoParams<BotBrainTaskParams> {
             Optional<Runnable> unstuck = tryUnstuckStrategy(bot);
             if (unstuck.isPresent()) return unstuck.get();
     
-            // fallback если ни одна стратегия не сработала
             return () -> {
-                BotLogger.info(icon, this.isLogging(), bot.getId() + " 💤 Невозможно выбрать стратегию. Уходим в Idle.");
+                BotLogger.info(icon, isLogging(), bot.getId() + " 💤 Бот застрял. Уходим в Idle.");
                 push(bot, new BotIdleTask(bot));
             };
         }
     
-        if (params.isAllowExploration()) {
-            return () -> {
-                BotLogger.info(icon, this.isLogging(), bot.getId() + " 🧭 Начата разведка!");
-                push(bot, new BotExploreTask(bot));
-            };
-        }
+        Runnable weighted = pickWeightedTask(bot);
+        if (weighted != null) return weighted;
     
-        if (params.isAllowExcavation()) {
-            return () -> {
-                BotLogger.info(icon, this.isLogging(), bot.getId() + " ⛏ Начато копание!");
-                BotExcavateTask task = new BotExcavateTask(bot);
-                task.setParams(new BotExcavateTaskParams());
-                push(bot, task);
-            };
-        }
-    
-        // Если ни одно поведение не выбрано — fallback
         return () -> {
-            BotLogger.info(icon, this.isLogging(), bot.getId() + " 💤 Нет подходящего поведения. Переход в Idle.");
+            BotLogger.info(icon, isLogging(), bot.getId() + " 💤 Нет задач. Уходим в Idle.");
             push(bot, new BotIdleTask(bot));
         };
     }
+    
+
+
+    private Runnable pickWeightedTask(Bot bot) {
+        boolean isNight = BotWorldHelper.isNight(bot);
+    
+        double rand = Math.random();
+    
+        if (isNight) {
+            // Ночь: 50% охота, 50% разведка
+            if (rand < 0.5 && params.isAllowViolence()) {
+                BotSceneData data = bot.getBrain().getSceneData();
+                BotLocation botPos = bot.getBrain().getCurrentLocation();
+                BotBlockData target = BotBioSelector.pickNearestTarget(data.entities, botPos);
+                if (target != null) {
+                    return () -> {
+                        BotLogger.info("🌙⚔️", isLogging(), bot.getId() + " Ночная охота на: " + target);
+                        BotHandAttackTaskParams handParams = new BotHandAttackTaskParams(target, 5.0);
+                        BotHandAttackTask attackTask = new BotHandAttackTask(bot);
+                        attackTask.setParams(handParams);
+                        push(bot, attackTask);
+                    };
+                }
+            }
+    
+            if (params.isAllowExploration()) {
+                return () -> {
+                    BotLogger.info("🌙🧭", isLogging(), bot.getId() + " Ночная разведка");
+                    push(bot, new BotExploreTask(bot));
+                };
+            }
+    
+        } else {
+            // День: разведка и копка по весам
+            double total = params.getExplorationWeight() + params.getExcavationWeight();
+            double normExplore = params.getExplorationWeight() / total;
+    
+            if (rand < normExplore && params.isAllowExploration()) {
+                return () -> {
+                    BotLogger.info("🌞🧭", isLogging(), bot.getId() + " Дневная разведка");
+                    push(bot, new BotExploreTask(bot));
+                };
+            }
+    
+            if (params.isAllowExcavation()) {
+                return () -> {
+                    BotLogger.info("🌞⛏", isLogging(), bot.getId() + " Дневная копка");
+                    BotExcavateTask task = new BotExcavateTask(bot);
+                    task.setParams(new BotExcavateTaskParams());
+                    push(bot, task);
+                };
+            }
+        }
+    
+        return null;
+    }
+    
 
     private Optional<Runnable> tryUnstuckStrategy(Bot bot) {
         int strategy = params.getUnstuckStrategy();
