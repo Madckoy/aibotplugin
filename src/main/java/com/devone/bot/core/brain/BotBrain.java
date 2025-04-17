@@ -30,6 +30,10 @@ public class BotBrain {
 
     private BotMemory memory = new BotMemory();
 
+    private int thinkingTicks = 0;
+    private long lastThinkingTimestamp = 0;
+
+
     public BotBrain(Bot bot) {
         this.owner = bot;
         this.currentLocation = getCurrentLocation();  // Инициализируем с текущей локацией
@@ -143,4 +147,22 @@ public class BotBrain {
     public BotMemory getMemory(){
         return memory;
     }
+
+    public void markThinkingCycle() {
+        thinkingTicks++;
+        lastThinkingTimestamp = System.currentTimeMillis();
+    }
+    
+    public void resetThinkingCycle() {
+        thinkingTicks = 0;
+    }
+    
+    public int getThinkingTicks() {
+        return thinkingTicks;
+    }
+    
+    public long getLastThinkingTimestamp() {
+        return lastThinkingTimestamp;
+    }
+    
 }

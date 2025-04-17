@@ -43,6 +43,20 @@ public class BotBrainTask extends BotTaskAutoParams<BotBrainTaskParams> {
     @Override
     public void execute() {
         BotLogger.info(icon, this.isLogging(), bot.getId() + "The bot "+ bot.getId() + " and makes a decision...");
+        //
+        int thinkingTicks = bot.getBrain().getThinkingTicks();
+
+        if (thinkingTicks > 50) {
+            BotLogger.warn(icon, this.isLogging(), bot.getId() + 
+                " 🧠 Бот думает слишком долго (" + thinkingTicks + " тиков). Сброс в Idle.");
+            
+            push(bot, new BotIdleTask(bot));
+            bot.getBrain().resetThinkingCycle(); // сбросим счётчик
+            return; // выходим из execute()
+        }
+        //
+        bot.getBrain().markThinkingCycle();
+        //
         long currentTime = System.currentTimeMillis();
         //
         long removed = bot.getBrain().getMemory().cleanup();
@@ -52,7 +66,7 @@ public class BotBrainTask extends BotTaskAutoParams<BotBrainTaskParams> {
         // осматриваемся и обновляем картинку мира
         //
         //
-        if(currentTime-lastScanTime > 3) {
+        if(currentTime-lastScanTime > 1000) {
             BotSonar3DTask sonar = new BotSonar3DTask(bot);
             push(bot, sonar);
             lastScanTime = System.currentTimeMillis();
@@ -70,6 +84,7 @@ public class BotBrainTask extends BotTaskAutoParams<BotBrainTaskParams> {
     
     private void push(Bot bot, BotTask<?> task) {
         bot.getLifeCycle().getTaskStackManager().pushTask(task);
+        bot.getBrain().resetThinkingCycle();
         BotLogger.info(icon, this.isLogging(), "The task is pushed to stack ");
     }
 
