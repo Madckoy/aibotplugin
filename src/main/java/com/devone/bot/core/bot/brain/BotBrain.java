@@ -9,7 +9,7 @@ public class BotBrain {
 
     private transient Bot owner;
 
-    private BotMemory memory = new BotMemory();
+    private transient BotMemory memory = new BotMemory();
 
     private int thinkingTicks = 0;
     private long lastThinkingTimestamp = 0;

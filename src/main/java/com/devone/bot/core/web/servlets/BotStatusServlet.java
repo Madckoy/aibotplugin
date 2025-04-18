@@ -81,7 +81,6 @@ public class BotStatusServlet extends HttpServlet {
 
                 botJson.addProperty("target", tgtLoc != null ? " " + tgtLoc.getX() + ", " + tgtLoc.getY() + ", " + tgtLoc.getZ() : "");
 
-
                 botJson.addProperty("elapsedTime", BotUtils.formatTime(bot.getBrain().getCurrentTask().getElapsedTime()));
 
                 List<BotTask<?>> taskStack = (bot.getLifeCycle() != null && bot.getLifeCycle().getTaskStackManager() != null)

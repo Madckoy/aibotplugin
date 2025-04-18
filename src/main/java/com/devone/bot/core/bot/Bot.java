@@ -35,12 +35,13 @@ public class Bot {
 
     private final String id; // Уникальное имя бота
     private NPC npc; // Связанный NPC
-    private final BotLifeCycle lifeCycle; // Цикл жизни бота
+    private transient final BotLifeCycle lifeCycle; // Цикл жизни бота
     private final BotInventory inventory; // Инвентарь бота
-    private final BotManager botManager; // Менеджер ботов
-    private BotBrain brain; // Память/Рантайм статус бота
-    private BotSpeaker speaker; // Создаем поле для общения бота
-    private BotState state;
+    private transient final BotManager botManager; // Менеджер ботов
+
+    private transient BotBrain brain; // Память/Рантайм статус бота
+    private transient BotSpeaker speaker; // Создаем поле для общения бота
+    private transient BotState state;
 
     private BotNavigation navigation;
 
