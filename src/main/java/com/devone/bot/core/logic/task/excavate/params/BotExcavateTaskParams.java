@@ -13,7 +13,7 @@ public class BotExcavateTaskParams extends BotTaskParams {
     private int maxBlocks = 64;
     private int outerRadius = BotConstants.DEFAULT_OUTER_RADIUS;
     private int innerRadius = BotConstants.DEFAULT_INNER_RADIUS;
-    private boolean shouldPickup = true;
+    private boolean pickup = true;
     private int offsetX = 0;
     private int offsetY = -1*(BotConstants.DEFAULT_OUTER_RADIUS-1);
     private int offsetZ = 0;
@@ -24,6 +24,15 @@ public class BotExcavateTaskParams extends BotTaskParams {
         setIcon("🪨");
         setObjective("Excavate");
     }
+
+    public void setPickup(boolean pickup) {
+        this.pickup = pickup;
+    }
+
+    public boolean isPickup() {
+        return pickup;
+    }
+
 
     public Set<Material> getTargetMaterials() {
         return targetMaterials;
@@ -55,14 +64,6 @@ public class BotExcavateTaskParams extends BotTaskParams {
 
     public void setInnerRadius(int innerRadius) {
         this.innerRadius = innerRadius;
-    }
-
-    public boolean isShouldPickup() {
-        return shouldPickup;
-    }
-
-    public void setShouldPickup(boolean shouldPickup) {
-        this.shouldPickup = shouldPickup;
     }
 
     public int getOffsetX() {
@@ -104,7 +105,7 @@ public class BotExcavateTaskParams extends BotTaskParams {
                 ", maxBlocks=" + maxBlocks +
                 ", outerRadius=" + outerRadius +
                 ", innerRadius=" + innerRadius +
-                ", shouldPickup=" + shouldPickup +
+                ", shouldPickup=" + pickup +
                 ", offsetX=" + offsetX +
                 ", offsetY=" + offsetY +
                 ", offsetZ=" + offsetZ +

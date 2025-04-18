@@ -31,7 +31,6 @@ public class BotExcavateTask extends BotTaskAutoParams<BotExcavateTaskParams> {
     private int maxBlocks;
     private int outerRadius = BotConstants.DEFAULT_SCAN_RANGE;
     private int innerRadius = BotConstants.DEFAULT_SCAN_RANGE;
-    private boolean shouldPickup = true;
     private Set<Material> targetMaterials = null;
     private String patternName = BotConstants.DEFAULT_PATTERN_BREAK;
     private IBotExcavatePattern breakPatternImpl = null;
@@ -53,7 +52,6 @@ public class BotExcavateTask extends BotTaskAutoParams<BotExcavateTaskParams> {
         this.maxBlocks = params.getMaxBlocks();
         this.outerRadius = params.getOuterRadius();
         this.innerRadius = params.getInnerRadius();
-        this.shouldPickup = params.isShouldPickup();
 
         this.offsetX = params.getOffsetX();
         this.offsetY = params.getOffsetY();
@@ -191,7 +189,9 @@ public class BotExcavateTask extends BotTaskAutoParams<BotExcavateTaskParams> {
             return;
         }
 
-        bot.pickupNearbyItems(shouldPickup);
+        if(params.isPickup()) {
+            bot.pickupNearbyItems();
+        }
 
         BotLocation location = breakPatternImpl.findNextBlock(bot);
 

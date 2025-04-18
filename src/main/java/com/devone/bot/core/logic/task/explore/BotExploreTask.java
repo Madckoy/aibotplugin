@@ -44,7 +44,9 @@ public class BotExploreTask extends BotTaskAutoParams<BotExploreTaskParams> {
 
         setObjective(params.getObjective());
 
-        bot.pickupNearbyItems(params.isPickup());
+        if(params.isPickup()) {
+            bot.pickupNearbyItems();
+        }
 
         BotSceneData sceneData = bot.getBrain().getSceneData();
 

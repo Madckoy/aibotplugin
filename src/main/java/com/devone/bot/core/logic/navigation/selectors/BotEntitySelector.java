@@ -15,7 +15,7 @@ public class BotEntitySelector {
      * @param botOrigin координаты бота
      * @return ближайшая цель или null, если список пуст
      */
-    public static BotBlockData pickNearestTarget(List<BotBlockData> targets, BotLocation botOrigin) {
+    public static BotBlockData pickNearestTarget(List<BotBlockData> targets, BotLocation botOrigin, double distance) {
         if (targets == null || targets.isEmpty() || botOrigin == null) return null;
 
         return targets.stream()
@@ -26,24 +26,44 @@ public class BotEntitySelector {
     /**
      * Выбирает ближайшую враждебную сущность.
      */
-    public static BotBlockData pickNearestHostile(List<BotBlockData> entities, BotLocation botOrigin, int distance) {
+    public static BotBlockData pickNearestHostile(List<BotBlockData> entities, BotLocation botOrigin, double distance) {
         return pickNearestTarget(
             entities.stream()
                     .filter(BotBlockData::isHostileMob)
                     .toList(),
-            botOrigin
+
+            botOrigin,
+            distance
         );
     }
 
     /**
      * Выбирает ближайшую пассивную сущность.
      */
-    public static BotBlockData pickNearestPassive(List<BotBlockData> entities, BotLocation botOrigin) {
+    public static BotBlockData pickNearestPassive(List<BotBlockData> entities, BotLocation botOrigin, double distance) {
         return pickNearestTarget(
             entities.stream()
                     .filter(BotBlockData::isPassiveMob)
                     .toList(),
-            botOrigin
+            botOrigin,
+            distance
         );
+    }
+
+    
+    /**
+     * Выбирает ближайшую пассивную сущность.
+     */
+    public static boolean hasHostilesNearby(List<BotBlockData> entities, BotLocation botOrigin, double distance) {
+        return true;
+        /* *
+        return pickNearestTarget(
+            entities.stream()
+                    .filter(BotBlockData::isPassiveMob)
+                    .toList(),
+            botOrigin,
+            distance
+        );
+        */
     }
 }

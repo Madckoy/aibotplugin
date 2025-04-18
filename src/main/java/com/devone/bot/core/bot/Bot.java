@@ -23,6 +23,12 @@ import net.citizensnpcs.api.ai.Navigator;
 import net.citizensnpcs.api.npc.NPC;
 
 public class Bot {
+    private boolean isLogging = true;
+    private boolean allowPickupItems = true;
+
+    public boolean isLogging() {
+        return isLogging;
+    }
 
     private final String id; // Уникальное имя бота
     private NPC npc; // Связанный NPC
@@ -44,6 +50,17 @@ public class Bot {
         BotLogger.info("➕", true, "Has been CREATED AND SPAWNED: " + id);
     }
 
+    public boolean isAllowPickupItems() {
+        return allowPickupItems;
+    }
+
+    public void setAllowPickupItems(boolean pickupItems) {
+        this.allowPickupItems = pickupItems;
+    }
+
+    public void setLogging(boolean isLogging) {
+        this.isLogging = isLogging;
+    }
 
     public void setHealth(double health) {
         this.health = health;
@@ -134,8 +151,8 @@ public class Bot {
         return npc.isSpawned();
     }
 
-    public void pickupNearbyItems(boolean shouldPickup) {
-        getInventory().pickupAll(shouldPickup);
+    public void pickupNearbyItems() {
+        getInventory().pickupAll(this.allowPickupItems);
     }    
     // под вопросом, стоит ли перенести в BotUtils или в BotInventory
     public void checkAndSelfMove(Location lastBrokenBlock) {
