@@ -9,7 +9,7 @@ import com.devone.bot.core.logic.task.hand.attack.BotHandAttackTask;
 import com.devone.bot.core.logic.task.hand.attack.params.BotHandAttackTaskParams;
 import com.devone.bot.core.logic.task.teleport.BotTeleportTask;
 import com.devone.bot.core.logic.task.teleport.params.BotTeleportTaskParams;
-import com.devone.bot.utils.logger.BotLogger;
+import com.devone.bot.core.utils.logger.BotLogger;
 
 public class BotSurvivalAttackTask extends BotTaskAutoParams<BotSurvivalAttackTaskParams> {
 

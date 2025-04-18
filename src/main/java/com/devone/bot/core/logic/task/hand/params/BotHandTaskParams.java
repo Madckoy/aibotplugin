@@ -2,7 +2,7 @@ package com.devone.bot.core.logic.task.hand.params;
 
 import com.devone.bot.core.bot.blocks.BotBlockData;
 import com.devone.bot.core.logic.task.params.BotTaskParams;
-import com.devone.bot.utils.BotConstants;
+import com.devone.bot.core.utils.BotConstants;
 
 public class BotHandTaskParams extends BotTaskParams {
 

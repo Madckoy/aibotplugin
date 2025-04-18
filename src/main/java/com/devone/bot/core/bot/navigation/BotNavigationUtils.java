@@ -7,7 +7,7 @@ import com.devone.bot.core.logic.navigation.BotNavigationPlannerWrapper;
 import com.devone.bot.core.logic.navigation.scene.BotSceneContext;
 import com.devone.bot.core.logic.task.move.BotMoveTask;
 import com.devone.bot.core.logic.task.move.params.BotMoveTaskParams;
-import com.devone.bot.utils.logger.BotLogger;
+import com.devone.bot.core.utils.logger.BotLogger;
 
 public class BotNavigationUtils {
 

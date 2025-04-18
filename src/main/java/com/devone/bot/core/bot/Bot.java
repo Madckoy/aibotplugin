@@ -19,7 +19,7 @@ import com.devone.bot.core.bot.state.BotState;
 import com.devone.bot.core.logic.lifecycle.BotLifeCycle;
 import com.devone.bot.core.logic.task.move.BotMoveTask;
 import com.devone.bot.core.logic.task.move.params.BotMoveTaskParams;
-import com.devone.bot.utils.logger.BotLogger;
+import com.devone.bot.core.utils.logger.BotLogger;
 
 import net.citizensnpcs.api.ai.Navigator;
 import net.citizensnpcs.api.npc.NPC;

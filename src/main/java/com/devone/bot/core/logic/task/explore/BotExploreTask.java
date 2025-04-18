@@ -11,8 +11,8 @@ import com.devone.bot.core.logic.navigation.selectors.BotBlockSelector;
 import com.devone.bot.core.logic.task.BotTaskAutoParams;
 import com.devone.bot.core.logic.task.IBotTaskParameterized;
 import com.devone.bot.core.logic.task.explore.params.BotExploreTaskParams;
-import com.devone.bot.utils.BotConstants;
-import com.devone.bot.utils.logger.BotLogger;
+import com.devone.bot.core.utils.BotConstants;
+import com.devone.bot.core.utils.logger.BotLogger;
 
 public class BotExploreTask extends BotTaskAutoParams<BotExploreTaskParams> {
 

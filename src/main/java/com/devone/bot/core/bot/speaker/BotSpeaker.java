@@ -3,7 +3,7 @@ package com.devone.bot.core.bot.speaker;
 import org.bukkit.entity.Player;
 
 import com.devone.bot.core.bot.Bot;
-import com.devone.bot.utils.world.BotWorldHelper;
+import com.devone.bot.core.utils.world.BotWorldHelper;
 
 
 public class BotSpeaker {

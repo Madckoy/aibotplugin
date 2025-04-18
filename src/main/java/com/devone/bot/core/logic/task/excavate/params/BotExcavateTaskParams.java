@@ -6,7 +6,7 @@ import java.util.Set;
 import org.bukkit.Material;
 
 import com.devone.bot.core.logic.task.params.BotTaskParams;
-import com.devone.bot.utils.BotConstants;
+import com.devone.bot.core.utils.BotConstants;
 
 public class BotExcavateTaskParams extends BotTaskParams {
     private Set<Material> targetMaterials;

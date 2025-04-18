@@ -4,7 +4,7 @@ import java.io.File;
 import java.util.HashMap;
 import java.util.Map;
 
-import com.devone.bot.core.plugin.config.AIBotBaseJsonConfig;
+import com.devone.bot.plugin.config.AIBotBaseJsonConfig;
 
 public class BotZoneConfig extends AIBotBaseJsonConfig<BotZoneConfig.Data> {
 

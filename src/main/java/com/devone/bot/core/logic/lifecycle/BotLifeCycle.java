@@ -5,9 +5,9 @@ import org.bukkit.Bukkit;
 import com.devone.bot.core.bot.Bot;
 import com.devone.bot.core.logic.task.BotTaskManager;
 import com.devone.bot.core.logic.task.brain.BotBrainTask;
-import com.devone.bot.core.plugin.AIBotPlugin;
-import com.devone.bot.utils.logger.BotLogger;
-import com.devone.bot.utils.server.ServerUtils;
+import com.devone.bot.core.utils.logger.BotLogger;
+import com.devone.bot.core.utils.server.ServerUtils;
+import com.devone.bot.plugin.AIBotPlugin;
 
 public class BotLifeCycle {
     private final Bot bot;

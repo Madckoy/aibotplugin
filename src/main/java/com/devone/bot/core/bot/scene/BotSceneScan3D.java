@@ -3,8 +3,8 @@ package com.devone.bot.core.bot.scene;
 import com.devone.bot.core.bot.Bot;
 import com.devone.bot.core.bot.blocks.BotBlockData;
 import com.devone.bot.core.bot.blocks.BotLocation;
-import com.devone.bot.utils.BotConstants;
-import com.devone.bot.utils.world.BotWorldHelper;
+import com.devone.bot.core.utils.BotConstants;
+import com.devone.bot.core.utils.world.BotWorldHelper;
 
 import org.bukkit.Location;
 import org.bukkit.Material;

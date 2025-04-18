@@ -13,10 +13,10 @@ import com.devone.bot.core.logic.task.BotTaskAutoParams;
 import com.devone.bot.core.logic.task.IBotTaskParameterized;
 import com.devone.bot.core.logic.task.move.listeners.BotMoveTaskListener;
 import com.devone.bot.core.logic.task.move.params.BotMoveTaskParams;
-import com.devone.bot.core.plugin.AIBotPlugin;
-import com.devone.bot.utils.*;
-import com.devone.bot.utils.logger.BotLogger;
-import com.devone.bot.utils.world.BotWorldHelper;
+import com.devone.bot.core.utils.*;
+import com.devone.bot.core.utils.logger.BotLogger;
+import com.devone.bot.core.utils.world.BotWorldHelper;
+import com.devone.bot.plugin.AIBotPlugin;
 
 import net.citizensnpcs.api.ai.event.NavigationCompleteEvent;
 

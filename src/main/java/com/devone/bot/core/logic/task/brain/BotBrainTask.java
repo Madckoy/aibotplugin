@@ -24,8 +24,8 @@ import com.devone.bot.core.logic.task.idle.BotIdleTask;
 import com.devone.bot.core.logic.task.sonar.BotSonar3DTask;
 import com.devone.bot.core.logic.task.teleport.BotTeleportTask;
 import com.devone.bot.core.logic.task.teleport.params.BotTeleportTaskParams;
-import com.devone.bot.utils.logger.BotLogger;
-import com.devone.bot.utils.world.BotWorldHelper;
+import com.devone.bot.core.utils.logger.BotLogger;
+import com.devone.bot.core.utils.world.BotWorldHelper;
 
 public class BotBrainTask extends BotTaskAutoParams<BotBrainTaskParams> {
 

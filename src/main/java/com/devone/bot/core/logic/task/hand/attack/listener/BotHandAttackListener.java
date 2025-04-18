@@ -2,7 +2,8 @@ package com.devone.bot.core.logic.task.hand.attack.listener;
 
 import com.devone.bot.core.bot.Bot;
 import com.devone.bot.core.logic.task.hand.attack.BotHandAttackTask;
-import com.devone.bot.utils.logger.BotLogger;
+import com.devone.bot.core.utils.logger.BotLogger;
+
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.entity.EntityDeathEvent;

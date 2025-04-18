@@ -20,11 +20,11 @@ import com.devone.bot.core.logic.task.excavate.patterns.IBotExcavatePattern;
 import com.devone.bot.core.logic.task.excavate.patterns.generator.BotExcavateInterpretedYamlPattern;
 import com.devone.bot.core.logic.task.hand.excavate.BotHandExcavateTask;
 import com.devone.bot.core.logic.task.hand.excavate.params.BotHandExcavateTaskParams;
-import com.devone.bot.utils.BotConstants;
-import com.devone.bot.utils.BotUtils;
-import com.devone.bot.utils.logger.BotLogger;
-import com.devone.bot.utils.world.BotWorldHelper;
-import com.devone.bot.utils.zone.BotZoneManager;
+import com.devone.bot.core.utils.BotConstants;
+import com.devone.bot.core.utils.BotUtils;
+import com.devone.bot.core.utils.logger.BotLogger;
+import com.devone.bot.core.utils.world.BotWorldHelper;
+import com.devone.bot.core.utils.zone.BotZoneManager;
 
 public class BotExcavateTask extends BotTaskAutoParams<BotExcavateTaskParams> {
 

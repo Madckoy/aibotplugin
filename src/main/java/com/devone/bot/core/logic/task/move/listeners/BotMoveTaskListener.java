@@ -5,7 +5,7 @@ import org.bukkit.event.Listener;
 import org.bukkit.event.HandlerList;
 
 import com.devone.bot.core.logic.task.move.BotMoveTask;
-import com.devone.bot.utils.logger.BotLogger;
+import com.devone.bot.core.utils.logger.BotLogger;
 
 import net.citizensnpcs.api.ai.event.NavigationCancelEvent;
 import net.citizensnpcs.api.ai.event.NavigationCompleteEvent;

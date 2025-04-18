@@ -11,7 +11,7 @@ import com.devone.bot.core.bot.blocks.BotLocationComparators;
 import com.devone.bot.core.bot.blocks.BotAxisDirection.AxisDirection;
 import com.devone.bot.core.logic.task.excavate.patterns.IBotExcavatePattern;
 import com.devone.bot.core.logic.task.excavate.patterns.generator.params.BotExcavatePatternGenerationParams;
-import com.devone.bot.utils.logger.BotLogger;
+import com.devone.bot.core.utils.logger.BotLogger;
 
 /**
  * Реализация разрушительного паттерна, загружаемого из YAML.

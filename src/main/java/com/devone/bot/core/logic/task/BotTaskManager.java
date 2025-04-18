@@ -4,8 +4,8 @@ import java.util.Stack;
 
 import com.devone.bot.core.bot.Bot;
 import com.devone.bot.core.logic.task.params.BotTaskParams;
-import com.devone.bot.utils.logger.BotLifecycleLogger;
-import com.devone.bot.utils.logger.BotLogger;
+import com.devone.bot.core.utils.logger.BotLifecycleLogger;
+import com.devone.bot.core.utils.logger.BotLogger;
 
 public class BotTaskManager {
 

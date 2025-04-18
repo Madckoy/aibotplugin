@@ -4,8 +4,8 @@ import com.devone.bot.core.bot.Bot;
 import com.devone.bot.core.bot.blocks.BotBlockData;
 import com.devone.bot.core.logic.task.BotTaskAutoParams;
 import com.devone.bot.core.logic.task.hand.params.BotHandTaskParams;
+import com.devone.bot.core.utils.logger.BotLogger;
 import com.devone.bot.core.logic.task.IBotTaskParameterized;
-import com.devone.bot.utils.logger.BotLogger;
 
 public abstract class BotHandTask<T extends BotHandTaskParams> extends BotTaskAutoParams<T> {
 

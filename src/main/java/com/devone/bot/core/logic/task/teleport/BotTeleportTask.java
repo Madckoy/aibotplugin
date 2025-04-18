@@ -9,9 +9,9 @@ import com.devone.bot.core.bot.blocks.BotLocation;
 import com.devone.bot.core.logic.task.BotTaskAutoParams;
 import com.devone.bot.core.logic.task.IBotTaskParameterized;
 import com.devone.bot.core.logic.task.teleport.params.BotTeleportTaskParams;
-import com.devone.bot.core.plugin.AIBotPlugin;
-import com.devone.bot.utils.logger.BotLogger;
-import com.devone.bot.utils.world.BotWorldHelper;
+import com.devone.bot.core.utils.logger.BotLogger;
+import com.devone.bot.core.utils.world.BotWorldHelper;
+import com.devone.bot.plugin.AIBotPlugin;
 
 public class BotTeleportTask extends BotTaskAutoParams<BotTeleportTaskParams> {
 

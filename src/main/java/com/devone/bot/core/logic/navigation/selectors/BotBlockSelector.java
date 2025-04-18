@@ -10,8 +10,8 @@ import java.util.stream.Collectors;
 
 import com.devone.bot.core.bot.blocks.BotBlockData;
 import com.devone.bot.core.bot.blocks.BotLocation;
-import com.devone.bot.utils.logger.BotLogger;
-import com.devone.bot.utils.world.BotWorldHelper;
+import com.devone.bot.core.utils.logger.BotLogger;
+import com.devone.bot.core.utils.world.BotWorldHelper;
 
 public class BotBlockSelector {
 

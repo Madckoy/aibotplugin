@@ -9,10 +9,10 @@ import com.devone.bot.core.bot.Bot;
 import com.devone.bot.core.bot.blocks.BotBlockData;
 import com.devone.bot.core.logic.task.hand.BotHandTask;
 import com.devone.bot.core.logic.task.hand.excavate.params.BotHandExcavateTaskParams;
-import com.devone.bot.core.plugin.AIBotPlugin;
-import com.devone.bot.utils.BotUtils;
-import com.devone.bot.utils.logger.BotLogger;
-import com.devone.bot.utils.world.BotWorldHelper;
+import com.devone.bot.core.utils.BotUtils;
+import com.devone.bot.core.utils.logger.BotLogger;
+import com.devone.bot.core.utils.world.BotWorldHelper;
+import com.devone.bot.plugin.AIBotPlugin;
 
 public class BotHandExcavateTask extends BotHandTask<BotHandExcavateTaskParams> {
 

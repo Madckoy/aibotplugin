@@ -1,7 +1,7 @@
 #!/bin/bash
 
 # Variables
-PLUGIN_NAME="AIBotPlugin-1.2-SNAPSHOT.jar"
+PLUGIN_NAME="AIBotPlugin-1.3-SNAPSHOT.jar"
 LOCAL_PATH="target/$PLUGIN_NAME"
 REMOTE_HOST="192.168.3.33"
 REMOTE_USER="serge"  # Change this if needed

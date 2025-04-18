@@ -1,6 +1,6 @@
 package com.devone.bot.core.logic.task.params;
 
-import com.devone.bot.utils.BotConstants;
+import com.devone.bot.core.utils.BotConstants;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 

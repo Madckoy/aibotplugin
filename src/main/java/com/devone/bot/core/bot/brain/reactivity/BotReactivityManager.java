@@ -4,7 +4,7 @@ package com.devone.bot.core.bot.brain.reactivity;
 import com.devone.bot.core.bot.Bot;
 import com.devone.bot.core.bot.brain.reactivity.reactions.LowHealthReaction;
 import com.devone.bot.core.bot.brain.reactivity.reactions.NearbyHostileReaction;
-import com.devone.bot.utils.logger.BotLogger;
+import com.devone.bot.core.utils.logger.BotLogger;
 
 import java.util.ArrayList;
 import java.util.List;

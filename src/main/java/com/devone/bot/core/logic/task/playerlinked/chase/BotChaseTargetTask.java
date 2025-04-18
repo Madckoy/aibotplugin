@@ -7,9 +7,9 @@ import com.devone.bot.core.bot.blocks.BotBlockData;
 import com.devone.bot.core.logic.task.BotTaskAutoParams;
 import com.devone.bot.core.logic.task.IBotTaskParameterized;
 import com.devone.bot.core.logic.task.playerlinked.chase.params.BotChaseTaskParams;
-import com.devone.bot.core.plugin.AIBotPlugin;
-import com.devone.bot.utils.BotUtils;
-import com.devone.bot.utils.logger.BotLogger;
+import com.devone.bot.core.utils.BotUtils;
+import com.devone.bot.core.utils.logger.BotLogger;
+import com.devone.bot.plugin.AIBotPlugin;
 
 public class BotChaseTargetTask extends BotTaskAutoParams<BotChaseTaskParams> {
 

@@ -9,9 +9,9 @@ import com.devone.bot.core.bot.blocks.BotLocation;
 import com.devone.bot.core.bot.brain.reactivity.BotReactivityManager;
 import com.devone.bot.core.logic.task.brain.BotBrainTask;
 import com.devone.bot.core.logic.task.params.BotTaskParams;
-import com.devone.bot.core.plugin.AIBotPlugin;
-import com.devone.bot.utils.BotUtils;
-import com.devone.bot.utils.logger.BotLogger;
+import com.devone.bot.core.utils.BotUtils;
+import com.devone.bot.core.utils.logger.BotLogger;
+import com.devone.bot.plugin.AIBotPlugin;
 
 import java.util.Optional;
 import java.util.UUID;
