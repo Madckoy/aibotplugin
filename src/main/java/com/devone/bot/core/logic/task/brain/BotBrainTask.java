@@ -7,7 +7,7 @@ import java.util.function.Supplier;
 import com.devone.bot.core.bot.Bot;
 import com.devone.bot.core.logic.navigation.BotNavigationPlannerWrapper;
 import com.devone.bot.core.logic.navigation.scene.BotSceneContext;
-import com.devone.bot.core.logic.navigation.selectors.BotBioSelector;
+import com.devone.bot.core.logic.navigation.selectors.BotEntitySelector;
 import com.devone.bot.core.logic.navigation.selectors.BotBlockSelector;
 import com.devone.bot.core.logic.task.BotTask;
 import com.devone.bot.core.logic.task.BotTaskAutoParams;
@@ -153,7 +153,7 @@ public class BotBrainTask extends BotTaskAutoParams<BotBrainTaskParams> {
             if (rand < 0.5 && params.isAllowViolence()) {
                 BotSceneData data = bot.getBrain().getSceneData();
                 BotLocation botPos = bot.getBrain().getCurrentLocation();
-                BotBlockData target = BotBioSelector.pickNearestTarget(data.entities, botPos);
+                BotBlockData target = BotEntitySelector.pickNearestTarget(data.entities, botPos);
                 if (target != null) {
                     return () -> {
                         BotLogger.info("🌙⚔️", isLogging(), bot.getId() + " Ночная охота на: " + target);
@@ -209,6 +209,9 @@ public class BotBrainTask extends BotTaskAutoParams<BotBrainTaskParams> {
                         BotExcavateTask task = new BotExcavateTask(bot);
                         BotExcavateTaskParams params = new BotExcavateTaskParams();
                         params.setOffsetY(params.getOuterRadius()-1);
+
+
+
                         params.setPatternName("cone.yml");
                         task.setParams(params);
                         push(bot, task);

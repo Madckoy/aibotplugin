@@ -6,11 +6,14 @@ import org.bukkit.event.Listener;
 
 import com.devone.bot.AIBotPlugin;
 import com.devone.bot.core.bot.Bot;
+import com.devone.bot.core.brain.reactivity.BotReactivityManager;
 import com.devone.bot.core.logic.task.brain.BotBrainTask;
 import com.devone.bot.core.logic.task.params.BotTaskParams;
 import com.devone.bot.utils.BotUtils;
 import com.devone.bot.utils.blocks.BotLocation;
 import com.devone.bot.utils.logger.BotLogger;
+
+import java.util.Optional;
 import java.util.UUID;
 
 public abstract class BotTask<T extends BotTaskParams> implements IBotTask, Listener, IBotTaskParameterized<T> {
@@ -70,6 +73,7 @@ public abstract class BotTask<T extends BotTaskParams> implements IBotTask, List
     }
 
     public void update() {
+
         if (isEnabled) {
 
             BotLogger.info("🚦", this.isLogging(), icon +" : "+ bot.getId() + " Status: " + isDone + " | " + isPaused +
@@ -82,7 +86,16 @@ public abstract class BotTask<T extends BotTaskParams> implements IBotTask, List
             handlePlayerDisconnect();
         }
 
-        execute();
+            Optional<Runnable> reaction = BotReactivityManager.checkReactions(bot);
+            if (reaction.isPresent()) {
+
+                setPaused(true);
+                
+                reaction.get().run();
+                return;
+            }
+
+            execute();
 
         }
     }

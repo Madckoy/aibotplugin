@@ -6,7 +6,7 @@ import com.devone.bot.utils.blocks.BotLocation;
 import java.util.Comparator;
 import java.util.List;
 
-public class BotBioSelector {
+public class BotEntitySelector {
 
     /**
      * Выбирает ближайшую цель из списка.
@@ -26,7 +26,7 @@ public class BotBioSelector {
     /**
      * Выбирает ближайшую враждебную сущность.
      */
-    public static BotBlockData pickNearestHostile(List<BotBlockData> entities, BotLocation botOrigin) {
+    public static BotBlockData pickNearestHostile(List<BotBlockData> entities, BotLocation botOrigin, int distance) {
         return pickNearestTarget(
             entities.stream()
                     .filter(BotBlockData::isHostileMob)

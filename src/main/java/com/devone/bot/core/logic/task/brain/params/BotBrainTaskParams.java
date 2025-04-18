@@ -35,7 +35,9 @@ public class BotBrainTaskParams extends BotTaskParams {
     //
     private double explorationWeight = 0.7;
     private double excavationWeight = 0.3;
+    private double violenceWeight   = 1;
     //
+
 
     public BotBrainTaskParams() {
         super();
@@ -56,7 +58,18 @@ public class BotBrainTaskParams extends BotTaskParams {
         target.setKillAggressives(source.isKillAggressives());
         target.setKillPassives(source.isKillPassives());
         target.setUnstuckStrategy(source.getUnstuckStrategy());
+        target.setExplorationWeight(source.getExplorationWeight());
+        target.setExcavationWeight(source.getExcavationWeight());
+        target.setViolenceWeight(source.getViolenceWeight());
         return target;
+    }
+
+    public void setViolenceWeight(double violenceWeight) {
+        this.violenceWeight = violenceWeight;
+    }
+
+    public double getViolenceWeight() {
+        return violenceWeight;
     }
 
     public double getExplorationWeight() {

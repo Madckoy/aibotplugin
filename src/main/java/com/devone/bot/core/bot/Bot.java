@@ -31,7 +31,7 @@ public class Bot {
     private final BotManager botManager; // Менеджер ботов
     private BotBrain brain; // Память/Рантайм статус бота
     private BotChat chat; // Создаем поле для общения бота
-
+    private double health = 100;
 
     public Bot(String id, NPC an_npc, BotManager botManager) {
         this.id = id;
@@ -42,6 +42,23 @@ public class Bot {
         this.brain = new BotBrain(this); // Инициализация рантайм статуса
         this.chat = new BotChat(this); // Инициализация BotCommunicator
         BotLogger.info("➕", true, "Has been CREATED AND SPAWNED: " + id);
+    }
+
+
+    public void setHealth(double health) {
+        this.health = health;
+    }
+
+    public NPC getNpc() {
+        return npc;
+    }
+
+    public BotChat getChat() {
+        return chat;
+    }
+
+    public double getHealth() {
+        return health;
     }
 
     // Getter для общения
