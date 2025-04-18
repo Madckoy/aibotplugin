@@ -3,7 +3,7 @@ package com.devone.bot.core.logic.task.drop;
 import org.bukkit.entity.Player;
 
 import com.devone.bot.core.bot.Bot;
-import com.devone.bot.core.inventory.BotInventory;
+import com.devone.bot.core.bot.inventory.BotInventory;
 import com.devone.bot.core.logic.task.IBotTaskParameterized;
 import com.devone.bot.core.logic.task.drop.params.BotDropAllTaskParams;
 import com.devone.bot.core.logic.task.playerlinked.BotPlayerLinkedTask;

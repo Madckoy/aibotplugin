@@ -26,7 +26,7 @@ public class BotHandExcavateTask extends BotHandTask<BotHandExcavateTaskParams> 
     public BotHandExcavateTask setParams(BotHandExcavateTaskParams params) {
         super.setParams(params); // вызовет BotHandTask.setParams()
         this.target = params.getTarget();
-        bot.getBrain().setTargetLocation(target);
+        bot.getNavigation().setTarget(target);
 
         return this;
     }
@@ -93,7 +93,7 @@ public class BotHandExcavateTask extends BotHandTask<BotHandExcavateTaskParams> 
             bukkitTask = null;
         }
 
-        bot.getBrain().setTargetLocation(null);
+        bot.getNavigation().setTarget(null);
 
         super.stop();
     }

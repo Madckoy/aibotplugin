@@ -28,7 +28,7 @@ public class BotListCommand implements CommandExecutor {
         player.sendMessage("§aActive Bots:");
 
         for (Bot bot : botManager.getAllBots()) {
-            BotLocation loc = bot.getBrain().getCurrentLocation();
+            BotLocation loc = bot.getNavigation().getLocation();
             player.sendMessage(bot.getId() + " " + loc );
         }
 

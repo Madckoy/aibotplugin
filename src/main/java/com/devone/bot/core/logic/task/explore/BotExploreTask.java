@@ -1,6 +1,7 @@
 package com.devone.bot.core.logic.task.explore;
 
 import com.devone.bot.core.bot.Bot;
+import com.devone.bot.core.bot.navigation.BotNavigationUtils;
 import com.devone.bot.core.logic.navigation.BotNavigationPlannerWrapper;
 import com.devone.bot.core.logic.navigation.scene.BotSceneContext;
 import com.devone.bot.core.logic.navigation.selectors.BotBlockSelector;
@@ -11,7 +12,6 @@ import com.devone.bot.utils.BotConstants;
 import com.devone.bot.utils.blocks.BotBlockData;
 import com.devone.bot.utils.blocks.BotLocation;
 import com.devone.bot.utils.logger.BotLogger;
-import com.devone.bot.utils.navigation.BotNavigationUtils;
 import com.devone.bot.utils.scene.BotSceneData;
 
 public class BotExploreTask extends BotTaskAutoParams<BotExploreTaskParams> {
@@ -56,7 +56,7 @@ public class BotExploreTask extends BotTaskAutoParams<BotExploreTaskParams> {
             return;
         }
 
-        BotLocation botPos = bot.getBrain().getCurrentLocation();
+        BotLocation botPos = bot.getNavigation().getLocation();
 
         BotSceneContext context = BotNavigationPlannerWrapper.getSceneContext(sceneData.blocks, sceneData.entities, botPos);
 
@@ -90,8 +90,8 @@ public class BotExploreTask extends BotTaskAutoParams<BotExploreTaskParams> {
 
         if (target != null) {
             BotLogger.info("🎯", isLogging(), bot.getId() + " Target: " + target);
-            bot.getBrain().setTargetLocation(target);
-            BotNavigationUtils.navigateTo(bot, bot.getBrain().getTargetLocation(), 1);
+            bot.getNavigation().setTarget(target);
+            BotNavigationUtils.navigateTo(bot, bot.getNavigation().getTarget(), 1);
 
             // bot.getBrain().getMemory().memorize(navGoal, MemoryType.VISITED); // Запоминаем посещенную цель
         

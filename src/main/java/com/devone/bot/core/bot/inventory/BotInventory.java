@@ -1,4 +1,4 @@
-package com.devone.bot.core.inventory;
+package com.devone.bot.core.bot.inventory;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -125,7 +125,7 @@ public class BotInventory {
 
 
         try {
-            Location botLocation = BotWorldHelper.getWorldLocation(bot.getBrain().getCurrentLocation());
+            Location botLocation = BotWorldHelper.getWorldLocation(bot.getNavigation().getLocation());
 
             List<Entity> nearbyEntities = BotWorldHelper.getWorld().getEntities();
 

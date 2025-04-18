@@ -33,7 +33,7 @@ public class BotChaseTargetTask extends BotTaskAutoParams<BotChaseTaskParams> {
         setObjective(params.getObjective());
 
         if (target != null) {
-            bot.getBrain().setTargetLocation(target);
+            bot.getNavigation().setTarget(target);
         }
 
         BotLogger.info("✅", this.isLogging(),

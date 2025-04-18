@@ -1,4 +1,4 @@
-package com.devone.bot.core.brain.behaviour;
+package com.devone.bot.core.bot.brain.behaviour;
 
 import java.util.*;
 import com.devone.bot.core.bot.Bot;
@@ -20,7 +20,7 @@ public class BotTaskCandidatesFactory {
     public static List<BotTaskCandidate> createCandidates(Bot bot, BotBrainTaskParams params) {
         boolean isNight = BotWorldHelper.isNight(bot);
         BotSceneData data = bot.getBrain().getMemory().getSceneData();
-        BotLocation botPos = bot.getBrain().getCurrentLocation();
+        BotLocation botPos = bot.getNavigation().getLocation();
 
         List<BotTaskCandidate> candidates = new ArrayList<>();
 

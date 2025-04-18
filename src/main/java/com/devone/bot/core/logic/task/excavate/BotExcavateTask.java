@@ -9,7 +9,7 @@ import org.bukkit.block.Block;
 import org.eclipse.jetty.util.StringUtil;
 
 import com.devone.bot.core.bot.Bot;
-import com.devone.bot.core.inventory.BotInventory;
+import com.devone.bot.core.bot.inventory.BotInventory;
 import com.devone.bot.core.logic.task.BotTaskAutoParams;
 import com.devone.bot.core.logic.task.IBotTaskParameterized;
 import com.devone.bot.core.logic.task.excavate.BotExcavateTask;
@@ -182,7 +182,7 @@ public class BotExcavateTask extends BotTaskAutoParams<BotExcavateTaskParams> {
             this.stop();
             return;
         }
-        
+
         if(params.isPickup()) {
             if (isInventoryFull() || isEnoughBlocksCollected()) {
                 BotLogger.info("⛔", isLogging(), "Задача завершена: инвентарь полон или ресурсов достаточно");
@@ -207,24 +207,24 @@ public class BotExcavateTask extends BotTaskAutoParams<BotExcavateTaskParams> {
 
         Block targetBlock = BotWorldHelper.getBlockAt(targetLocation);
 
-        bot.getBrain().setTargetLocation(targetLocation);
+        bot.getNavigation().setTarget(targetLocation);
 
-        if (bot.getBrain().getTargetLocation() != null) {
+        if (bot.getNavigation().getTarget() != null) {
 
             setObjective(params.getObjective() + " " + BotUtils.getBlockName(targetBlock)
                     + " at " + targetLocation);
 
-            if (isInProtectedZone(bot.getBrain().getTargetLocation())) {
+            if (isInProtectedZone(bot.getNavigation().getTarget())) {
                 BotLogger.info("⛔", isLogging(), bot.getId() + " в запретной зоне, НЕ будет разрушать блок: " +
-                        bot.getBrain().getTargetLocation());
+                        bot.getNavigation().getTarget());
                 this.stop();
                 return;
             }
 
             if (!BotUtils.isBreakableBlock(targetBlock)) {
                 BotLogger.info("⛔", isLogging(), "Неразрушаемый блок: "
-                        + bot.getBrain().getTargetLocation());
-                bot.getBrain().setTargetLocation(null);
+                        + bot.getNavigation().getTarget());
+                bot.getNavigation().setTarget(null);
                 return;
             }
 
@@ -233,7 +233,7 @@ public class BotExcavateTask extends BotTaskAutoParams<BotExcavateTaskParams> {
             if (BotUtils.requiresTool(mat)) {
                 if (!BotInventory.equipRequiredTool(bot, mat)) {
                     BotLogger.info("🙈", isLogging(), "Не удалось взять инструмент в руку. Пропускаем.");
-                    bot.getBrain().setTargetLocation(null);
+                    bot.getNavigation().setTarget(null);
                     return;
                 }
             }
@@ -255,7 +255,7 @@ public class BotExcavateTask extends BotTaskAutoParams<BotExcavateTaskParams> {
     }
 
     private void handleNoTargetFound() {
-        bot.getBrain().setTargetLocation(null);
+        bot.getNavigation().setTarget(null);
 
         setObjective("");
         BotLogger.info("❌", isLogging(), bot.getId() + " Нет подходящих блоков. Завершаем.");
@@ -286,7 +286,7 @@ public class BotExcavateTask extends BotTaskAutoParams<BotExcavateTaskParams> {
     @Override
     public void stop() {
         this.breakPatternImpl = null;
-        bot.getBrain().setTargetLocation(null);
+        bot.getNavigation().setTarget(null);
         BotLogger.info("🛑", isLogging(), "Задача разрушения остановлена.");
         super.stop();
     }

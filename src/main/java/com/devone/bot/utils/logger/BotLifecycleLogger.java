@@ -20,7 +20,7 @@ public class BotLifecycleLogger {
 
     public static void write(Bot bot) {
         // Получаем текущую локацию через BotRuntimeStatus
-        BotLocation loc = bot.getBrain().getCurrentLocation();
+        BotLocation loc = bot.getNavigation().getLocation();
         if (loc == null) return;
 
         String botName = bot.getId();

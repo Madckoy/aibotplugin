@@ -1,8 +1,8 @@
 
-package com.devone.bot.core.brain.reactivity.reactions;
+package com.devone.bot.core.bot.brain.reactivity.reactions;
 
 import com.devone.bot.core.bot.Bot;
-import com.devone.bot.core.brain.reactivity.IBotReactionStrategy;
+import com.devone.bot.core.bot.brain.reactivity.IBotReactionStrategy;
 import com.devone.bot.utils.logger.BotLogger;
 
 import java.util.Optional;

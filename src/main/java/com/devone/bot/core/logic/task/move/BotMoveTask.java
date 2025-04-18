@@ -41,7 +41,7 @@ public class BotMoveTask extends BotTaskAutoParams<BotMoveTaskParams> {
         setObjective(params.getObjective());
 
         if (loc != null) {
-            bot.getBrain().setTargetLocation(loc);
+            bot.getNavigation().setTarget(loc);
             BotLogger.info("✅", isLogging(), bot.getId() + " Цель движения установлена: " + loc);
         } else {
             BotLogger.info("❌", isLogging(), bot.getId() + " Target Location is null! Invalid parameters.");
@@ -62,7 +62,7 @@ public class BotMoveTask extends BotTaskAutoParams<BotMoveTaskParams> {
             return;
         }
 
-        BotLocation targetCoord = bot.getBrain().getTargetLocation();
+        BotLocation targetCoord = bot.getNavigation().getTarget();
         if (targetCoord == null) {
             BotLogger.info("❌", isLogging(), bot.getId() + "Нет цели для движения.");
             this.stop();
@@ -121,7 +121,7 @@ public class BotMoveTask extends BotTaskAutoParams<BotMoveTaskParams> {
     @Override
     public void stop() {
         isMoving = false;
-        bot.getBrain().setTargetLocation(null);
+        bot.getNavigation().setTarget(null);
         BotLogger.info("🛑", isLogging(), bot.getId() + " Move task завершён");
 
         stopTaskHandle();

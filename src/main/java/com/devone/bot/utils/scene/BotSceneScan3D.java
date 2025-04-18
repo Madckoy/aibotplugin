@@ -24,7 +24,7 @@ public class BotSceneScan3D {
         World world = BotWorldHelper.getWorld();
 
         // Центр сканирования
-        BotLocation botLoc = bot.getBrain().getCurrentLocation();
+        BotLocation botLoc = bot.getNavigation().getLocation();
 
         int centerX = botLoc.getX();
         int centerY = botLoc.getY();

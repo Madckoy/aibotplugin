@@ -7,7 +7,7 @@ import org.bukkit.Location;
 import org.bukkit.entity.Entity;
 
 import com.devone.bot.AIBotPlugin;
-import com.devone.bot.core.config.BotManagerConfig;
+import com.devone.bot.core.bot.config.BotManagerConfig;
 import com.devone.bot.utils.BotConstants;
 import com.devone.bot.utils.BotUtils;
 import com.devone.bot.utils.blocks.BotLocation;

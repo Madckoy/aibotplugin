@@ -6,7 +6,7 @@ import org.bukkit.event.Listener;
 
 import com.devone.bot.AIBotPlugin;
 import com.devone.bot.core.bot.Bot;
-import com.devone.bot.core.brain.reactivity.BotReactivityManager;
+import com.devone.bot.core.bot.brain.reactivity.BotReactivityManager;
 import com.devone.bot.core.logic.task.brain.BotBrainTask;
 import com.devone.bot.core.logic.task.params.BotTaskParams;
 import com.devone.bot.utils.BotUtils;
@@ -77,8 +77,8 @@ public abstract class BotTask<T extends BotTaskParams> implements IBotTask, List
         if (isEnabled) {
 
             BotLogger.info("🚦", this.isLogging(), icon +" : "+ bot.getId() + " Status: " + isDone + " | " + isPaused +
-                    " 📍 xyz: " + bot.getBrain().getCurrentLocation() + " | " + 
-                    " 🎯 xyz: " + bot.getBrain().getTargetLocation());
+                    " 📍 xyz: " + bot.getNavigation().getLocation() + " | " + 
+                    " 🎯 xyz: " + bot.getNavigation().getTarget());
 
         if (isPaused) return;
 

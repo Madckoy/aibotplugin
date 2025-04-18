@@ -5,9 +5,9 @@ import java.util.Optional;
 import java.util.function.Supplier;
 
 import com.devone.bot.core.bot.Bot;
-import com.devone.bot.core.brain.behaviour.BotBehaviorSelector;
-import com.devone.bot.core.brain.behaviour.BotTaskCandidate;
-import com.devone.bot.core.brain.behaviour.BotTaskCandidatesFactory;
+import com.devone.bot.core.bot.brain.behaviour.BotBehaviorSelector;
+import com.devone.bot.core.bot.brain.behaviour.BotTaskCandidate;
+import com.devone.bot.core.bot.brain.behaviour.BotTaskCandidatesFactory;
 import com.devone.bot.core.logic.navigation.BotNavigationPlannerWrapper;
 import com.devone.bot.core.logic.navigation.scene.BotSceneContext;
 import com.devone.bot.core.logic.navigation.selectors.BotBlockSelector;
@@ -172,7 +172,7 @@ public class BotBrainTask extends BotTaskAutoParams<BotBrainTaskParams> {
     
             case 2: // Teleport with fallback
                 if (params.isAllowTeleport()) {
-                    BotLocation botPos = bot.getBrain().getCurrentLocation();
+                    BotLocation botPos = bot.getNavigation().getLocation();
                     BotSceneData sceneData = bot.getBrain().getMemory().getSceneData();
                     BotSceneContext context = BotNavigationPlannerWrapper.getSceneContext(sceneData.blocks, sceneData.entities, botPos);
                     

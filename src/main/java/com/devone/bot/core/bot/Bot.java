@@ -10,10 +10,11 @@ import org.bukkit.entity.Entity;
 
 import org.bukkit.entity.Player;
 
+import com.devone.bot.core.bot.brain.BotBrain;
+import com.devone.bot.core.bot.inventory.BotInventory;
+import com.devone.bot.core.bot.navigation.BotNavigation;
 import com.devone.bot.core.bot.state.BotState;
-import com.devone.bot.core.brain.BotBrain;
 import com.devone.bot.core.chat.BotChat;
-import com.devone.bot.core.inventory.BotInventory;
 import com.devone.bot.core.logic.lifecycle.BotLifeCycle;
 import com.devone.bot.core.logic.task.move.BotMoveTask;
 import com.devone.bot.core.logic.task.move.params.BotMoveTaskParams;
@@ -40,6 +41,32 @@ public class Bot {
     private BotBrain brain; // Память/Рантайм статус бота
     private BotChat chat; // Создаем поле для общения бота
     private BotState state;
+    private BotNavigation navigation;
+
+    public void setBrain(BotBrain brain) {
+        this.brain = brain;
+    }
+
+
+    public void setChat(BotChat chat) {
+        this.chat = chat;
+    }
+
+
+    public void setState(BotState state) {
+        this.state = state;
+    }
+
+
+    public BotNavigation getNavigation() {
+        return navigation;
+    }
+
+
+    public void setNavigation(BotNavigation nav) {
+        this.navigation = nav;
+    }
+
 
     public BotState getState() {
         return state;
@@ -55,6 +82,7 @@ public class Bot {
         this.brain = new BotBrain(this); // Инициализация рантайм статуса
         this.chat = new BotChat(this); // Инициализация BotCommunicator
         this.state = new BotState(this);
+        this.navigation = new BotNavigation(this);
 
         BotLogger.info("➕", true, "Has been CREATED AND SPAWNED: " + id);
     }

@@ -1,5 +1,5 @@
 
-package com.devone.bot.core.brain.reactivity;
+package com.devone.bot.core.bot.brain.reactivity;
 
 import com.devone.bot.core.bot.Bot;
 

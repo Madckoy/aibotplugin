@@ -1,7 +1,6 @@
-package com.devone.bot.core.brain.memory;
+package com.devone.bot.core.bot.brain.memory;
 
 import com.devone.bot.utils.blocks.BotLocation;
-import com.devone.bot.utils.logger.BotLogger;
 import com.devone.bot.utils.scene.BotSceneData;
 import com.devone.bot.utils.blocks.BotBlockData;
 

@@ -1,4 +1,4 @@
-package com.devone.bot.core.brain.memory;
+package com.devone.bot.core.bot.brain.memory;
 
 public enum MemoryType {
     VISITED("Посещённые места"),
