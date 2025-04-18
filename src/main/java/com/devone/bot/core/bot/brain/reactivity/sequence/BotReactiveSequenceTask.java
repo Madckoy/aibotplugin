@@ -3,19 +3,19 @@ package com.devone.bot.core.bot.brain.reactivity.sequence;
 import com.devone.bot.core.bot.Bot;
 import com.devone.bot.core.bot.behaviour.task.BotTask;
 import com.devone.bot.core.bot.behaviour.task.BotTaskAutoParams;
-import com.devone.bot.core.bot.behaviour.task.params.BotTaskParams;
 import com.devone.bot.core.bot.brain.logic.utils.logger.BotLogger;
+import com.devone.bot.core.bot.brain.reactivity.sequence.params.BotReactiveSequenceTaskParams;
 
 import java.util.LinkedList;
 import java.util.List;
 
-public class BotReactiveSequenceTask extends BotTaskAutoParams<BotTaskParams> {
+public class BotReactiveSequenceTask extends BotTaskAutoParams<BotReactiveSequenceTaskParams> {
 
     private final LinkedList<BotTask<?>> sequence = new LinkedList<>();
     private BotTask<?> currentTask;
 
     public BotReactiveSequenceTask(Bot bot, List<BotTask<?>> tasks) {
-        super(bot, null, BotTaskParams.class); // передаём пустой параметр + класс
+        super(bot, null, BotReactiveSequenceTaskParams.class); // передаём пустой параметр + класс
         this.sequence.addAll(tasks);
         setIcon("📦");
         setObjective("Реактивная цепочка задач");
