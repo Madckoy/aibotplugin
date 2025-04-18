@@ -22,6 +22,13 @@ public class NearbyHostileReaction implements IBotReactionStrategy {
 
     @Override
     public Optional<Runnable> check(Bot bot) {
+
+        if (bot.getBrain().isReactionInProgress()) {
+            return Optional.empty(); // уже в процессе реакции
+        }
+
+        bot.getBrain().setReactionInProgress(true);
+
         BotSceneData sceneData = bot.getBrain().getMemory().getSceneData();
         BotLocation botPos = bot.getNavigation().getLocation();
 

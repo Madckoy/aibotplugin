@@ -10,6 +10,7 @@ public class BotBrain {
     private transient Bot owner;
 
     private transient BotMemory memory = new BotMemory();
+    private transient boolean reactionInProgress = false;
 
     private int thinkingTicks = 0;
     private long lastThinkingTimestamp = 0;
@@ -57,4 +58,12 @@ public class BotBrain {
         return lastThinkingTimestamp;
     }
     
+    public boolean isReactionInProgress() {
+        return reactionInProgress;
+    }
+    
+    public void setReactionInProgress(boolean value) {
+        this.reactionInProgress = value;
+    }
+
 }
