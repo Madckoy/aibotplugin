@@ -207,7 +207,10 @@ public class BotBrainTask extends BotTaskAutoParams<BotBrainTaskParams> {
                     return Optional.of(() -> {
                         BotLogger.info(icon, this.isLogging(), bot.getId() + " The bot is stuck. Starting Excavation to unstuck");
                         BotExcavateTask task = new BotExcavateTask(bot);
-                        task.setParams(new BotExcavateTaskParams());
+                        BotExcavateTaskParams params = new BotExcavateTaskParams();
+                        params.setOffsetY(params.getOuterRadius()-1);
+                        params.setPatternName("cone.yml");
+                        task.setParams(params);
                         push(bot, task);
                     });
                 } else {
