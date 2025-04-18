@@ -20,6 +20,6 @@ public class BotConstants {
 
     public static final int     DEFAULT_OUTER_RADIUS = 4;
     public static final int     DEFAULT_INNER_RADIUS = 4;
-    public static final String  DEFAULT_PATTERN_BREAK = "default.yml";
+    public static final String  DEFAULT_PATTERN_BREAK = "cone.yml";
     
 }

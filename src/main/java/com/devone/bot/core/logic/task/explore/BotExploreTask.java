@@ -7,6 +7,7 @@ import com.devone.bot.core.bot.Bot;
 import com.devone.bot.core.brain.memory.MemoryType;
 import com.devone.bot.core.logic.navigation.BotNavigationPlannerWrapper;
 import com.devone.bot.core.logic.navigation.scene.BotSceneContext;
+import com.devone.bot.core.logic.navigation.selectors.BotBlockSelector;
 import com.devone.bot.core.logic.task.BotTaskAutoParams;
 import com.devone.bot.core.logic.task.IBotTaskParameterized;
 import com.devone.bot.core.logic.task.explore.params.BotExploreTaskParams;
@@ -62,35 +63,40 @@ public class BotExploreTask extends BotTaskAutoParams<BotExploreTaskParams> {
         BotSceneContext context = BotNavigationPlannerWrapper.getSceneContext(sceneData.blocks, sceneData.entities, botPos);
 
         // Фильтрация целей (без изменения оригинальной коллекции)
-        List<BotBlockData> validGoals = new ArrayList<>();
-        for (BotBlockData goal : context.reachableGoals) {
-            if (!bot.getBrain().getMemory().isMemorized(goal, MemoryType.VISITED)) {
-                validGoals.add(goal);
-            }
-        }
+        //List<BotBlockData> validGoals = new ArrayList<>();
+        //for (BotBlockData goal : context.reachableGoals) {
+        //    if (!bot.getBrain().getMemory().isMemorized(goal, MemoryType.VISITED)) {
+        //        validGoals.add(goal);
+        //    }
+        //}
+
 
         // Если осталась только одна или меньше цели, бот застрял
-        int totalGoals = validGoals.size();
-        BotLogger.info(icon, isLogging(), "Valid Navigation Goals:" + totalGoals);
+        //int totalGoals = validGoals.size();
+        //BotLogger.info(icon, isLogging(), "Valid Navigation Goals:" + totalGoals);
 
-        BotBlockData navGoal = null;
+        //BotBlockData navGoal = null;
 
-        if (totalGoals <= 1) {
-            // Бот застрял
-            bot.getBrain().setStuck(true);
-            BotLogger.info("🎯", this.isLogging(), "The bot " + bot.getId() + " is stuck!");
-            stop();
-            return;
-        } else {
-            // Выбираем первую цель из отфильтрованного списка
-            navGoal = validGoals.get(0);
-        }
+        //if (totalGoals <= 1) {
+        //    // Бот застрял
+        //    bot.getBrain().setStuck(true);
+        //    BotLogger.info("🎯", this.isLogging(), "The bot " + bot.getId() + " is stuck!");
+        //    stop();
+        //    return;
+        //} else {
+        //    // Выбираем первую цель из отфильтрованного списка
+        //    navGoal = validGoals.get(0);
+        //}
 
-        if (navGoal != null) {
-            BotLogger.info("🎯", isLogging(), bot.getId() + " Target: " + navGoal);
-            bot.getBrain().setTargetLocation(navGoal);
+        BotBlockData target = BotBlockSelector.pickRandomTarget(context.reachable);
+
+        if (target != null) {
+            BotLogger.info("🎯", isLogging(), bot.getId() + " Target: " + target);
+            bot.getBrain().setTargetLocation(target);
             BotNavigationUtils.navigateTo(bot, bot.getBrain().getTargetLocation(), 1);
-            bot.getBrain().getMemory().memorize(navGoal, MemoryType.VISITED); // Запоминаем посещенную цель
+
+            // bot.getBrain().getMemory().memorize(navGoal, MemoryType.VISITED); // Запоминаем посещенную цель
+        
         } else {
             BotLogger.info("🎯", isLogging(), bot.getId() + " No valid goal found.");
         }
