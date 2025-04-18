@@ -58,6 +58,10 @@ public class AIBotPlugin extends JavaPlugin {
     public void onDisable() {
         BotLogger.debug("♻️ AIBotPlugin: onDisable", true, "AI Bot Plugin is shutting down...");
 
+        if (botManager != null) {
+            botManager.saveBots(); // 💾 сохраняем всех ботов
+        }
+
         ServerUtils.onDisable();
 
         // Остановка HTTP сервера
