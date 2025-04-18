@@ -18,6 +18,7 @@ import com.devone.bot.core.bot.behaviour.task.idle.BotIdleTask;
 import com.devone.bot.core.bot.behaviour.task.sonar.BotSonar3DTask;
 import com.devone.bot.core.bot.behaviour.task.teleport.BotTeleportTask;
 import com.devone.bot.core.bot.behaviour.task.teleport.params.BotTeleportTaskParams;
+import com.devone.bot.core.bot.brain.logic.navigation.BotNavigationUtils;
 import com.devone.bot.core.bot.brain.logic.navigator.BotNavigationPlannerWrapper;
 import com.devone.bot.core.bot.brain.logic.navigator.scene.BotSceneContext;
 import com.devone.bot.core.bot.brain.logic.navigator.selectors.BotBlockSelector;
@@ -78,6 +79,9 @@ public class BotBrainTask extends BotTaskAutoParams<BotBrainTaskParams> {
             BotLogger.debug(icon, isLogging(), bot.getId() + " ⛔ Ожидаем результаты сканирования...");
             return;
         }
+
+        boolean isStuck = BotNavigationUtils.detectIfStuck(bot);
+        bot.getState().setStuck(isStuck);
 
         Runnable decision = determineBehaviorScenario(bot);
         if (decision != null) decision.run();
