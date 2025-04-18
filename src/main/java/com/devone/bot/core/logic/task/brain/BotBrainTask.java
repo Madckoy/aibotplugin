@@ -77,7 +77,7 @@ public class BotBrainTask extends BotTaskAutoParams<BotBrainTaskParams> {
         //
         bot.getBrain().markThinkingCycle();
         //
-        long currentTime = System.currentTimeMillis();
+        //long currentTime = System.currentTimeMillis();
         //
         long removed = bot.getBrain().getMemory().cleanup(params.getMemoryExpirationMillis());
         
@@ -87,12 +87,13 @@ public class BotBrainTask extends BotTaskAutoParams<BotBrainTaskParams> {
         // осматриваемся и обновляем картинку мира
         //
         //
-        if(currentTime-lastScanTime > 10000) {
+        //if(currentTime-lastScanTime > 1000) {
             BotSonar3DTask sonar = new BotSonar3DTask(bot);
-            push(bot, sonar);
+            sonar.execute();
+            //push(bot, sonar);
             lastScanTime = System.currentTimeMillis();
-            return;
-        }
+            //return;
+        //}
         // 💡 Блокируем мышление, если сцена не готова
         if (bot.getBrain().getSceneData() == null) {
             BotLogger.info(icon, isLogging(), bot.getId() + " ⛔ Ожидаем результаты сканирования...");
