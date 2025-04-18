@@ -74,7 +74,10 @@ public class BotMoveTask extends BotTaskAutoParams<BotMoveTaskParams> {
         String blockName = BotUtils.getBlockName(targetBlock);
         String coordsStr = " " + targetCoord.getX() + ", " + targetCoord.getY() + ", " + targetCoord.getZ();
 
-        setObjective(params.getObjective() + " to " + blockName + " at:" + coordsStr);
+        long elapsed = System.currentTimeMillis() - startTime;
+        long diff = BotConstants.DEFAULT_TASK_TIMEOUT - elapsed;
+        
+        setObjective(params.getObjective() + " to " + blockName + " at:" + coordsStr + " ("+ diff +")");
 
         if (!isMoving) {
             if (listener == null) {
@@ -90,6 +93,12 @@ public class BotMoveTask extends BotTaskAutoParams<BotMoveTaskParams> {
 
             taskHandle = Bukkit.getScheduler().runTaskTimer(AIBotPlugin.getInstance(), () -> {
 
+
+                long elapsed2 = System.currentTimeMillis() - startTime;
+                long diff2 = BotConstants.DEFAULT_TASK_TIMEOUT - elapsed2;
+                
+                setObjective(params.getObjective() + " to " + blockName + " at:" + coordsStr + " ("+ diff2 +")");
+
                 turnToTarget(new BotLocation(BotLocationHelper.convertFrom(targetLocation)));
 
                 if (done || bot.getNPCEntity() == null) {
@@ -97,7 +106,6 @@ public class BotMoveTask extends BotTaskAutoParams<BotMoveTaskParams> {
                     return;
                 }
 
-                long elapsed = System.currentTimeMillis() - startTime;
                 if (elapsed > BotConstants.DEFAULT_TASK_TIMEOUT) {
                     BotLogger.debug("⏱️", isLogging(), bot.getId() + " Тайм-аут навигации.");
                     bot.getState().setStuck(true);
@@ -109,6 +117,9 @@ public class BotMoveTask extends BotTaskAutoParams<BotMoveTaskParams> {
         } else {
             BotLogger.debug("⏳", isLogging(), bot.getId() + " Двигаюсь к " + targetLocation);
         }
+
+
+
     }
 
     private void stopTaskHandle() {
