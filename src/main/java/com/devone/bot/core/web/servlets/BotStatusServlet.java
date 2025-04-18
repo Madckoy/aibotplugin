@@ -89,13 +89,10 @@ public class BotStatusServlet extends HttpServlet {
                 String taskStackText = taskStack.isEmpty() ? "N/A" :
                     taskStack.stream().map(BotTask::getIcon).collect(Collectors.joining(" ➜ "));
                 botJson.addProperty("queue", taskStackText);
-                botsArray.add(botJson);
 
                 botJson.addProperty("memory", bot.getBrain().getMemory().toJson().toString());
 
                 botsArray.add(botJson);
-
-
             
                 ItemStack[] contents = null;
                 
