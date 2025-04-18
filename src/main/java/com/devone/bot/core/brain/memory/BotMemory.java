@@ -1,23 +1,70 @@
 package com.devone.bot.core.brain.memory;
 
 import com.devone.bot.utils.blocks.BotLocation;
+import com.devone.bot.utils.logger.BotLogger;
+import com.devone.bot.utils.scene.BotSceneData;
 import com.devone.bot.utils.blocks.BotBlockData;
 
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
+import java.util.ArrayList;
 import java.util.EnumMap;
 
 public class BotMemory {
+    
+    protected transient BotSceneData sceneData;
+
+    private ArrayList<String> killedMobs;
+    private ArrayList<String> brokenBlocks;
+    private long teleportUsed;
+
 
     // Карта для хранения типов памяти, каждый тип имеет свой набор посещённых мест
     private final Map<MemoryType, Map<BotLocation, BotMemoryItem>> memoryMap;
 
     public BotMemory() {
+        this.sceneData = null;
+        this.killedMobs   = new ArrayList<String>();
+        this.brokenBlocks = new ArrayList<String>();
+        this.teleportUsed = 0;
+
         memoryMap = new EnumMap<>(MemoryType.class); // Используем EnumMap для лучшей производительности при работе с перечислениями
         for (MemoryType type : MemoryType.values()) {
             memoryMap.put(type, new HashMap<>());
         }
+    }
+
+    public void killedMobsIncrease(String mobName) {
+        this.killedMobs.add(mobName);
+    }
+
+    public void brokenBlocksIncrease(String blockName) {
+        this.brokenBlocks.add(blockName);
+    }
+
+    public ArrayList<String> getMobsKilled() {
+        return killedMobs;
+    }
+
+    public ArrayList<String> getBlocksBroken() {
+        return brokenBlocks;
+    }
+
+    public void teleportUsedIncrease() {
+        this.teleportUsed = teleportUsed + 1;
+    }
+
+    public long getTeleportUsed() {
+        return teleportUsed;
+    }
+
+    public void setSceneData(BotSceneData sceneData) {
+        this.sceneData = sceneData;
+    }
+
+    public BotSceneData getSceneData() {
+        return this.sceneData;
     }
 
     // Запоминаем блок для конкретного типа памяти

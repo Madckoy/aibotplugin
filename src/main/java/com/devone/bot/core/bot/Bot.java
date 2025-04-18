@@ -10,6 +10,7 @@ import org.bukkit.entity.Entity;
 
 import org.bukkit.entity.Player;
 
+import com.devone.bot.core.bot.state.BotState;
 import com.devone.bot.core.brain.BotBrain;
 import com.devone.bot.core.chat.BotChat;
 import com.devone.bot.core.inventory.BotInventory;
@@ -38,7 +39,12 @@ public class Bot {
     private final BotManager botManager; // Менеджер ботов
     private BotBrain brain; // Память/Рантайм статус бота
     private BotChat chat; // Создаем поле для общения бота
-    private double health = 100;
+    private BotState state;
+
+    public BotState getState() {
+        return state;
+    }
+
 
     public Bot(String id, NPC an_npc, BotManager botManager) {
         this.id = id;
@@ -48,6 +54,8 @@ public class Bot {
         this.lifeCycle = new BotLifeCycle(this);
         this.brain = new BotBrain(this); // Инициализация рантайм статуса
         this.chat = new BotChat(this); // Инициализация BotCommunicator
+        this.state = new BotState(this);
+
         BotLogger.info("➕", true, "Has been CREATED AND SPAWNED: " + id);
     }
 
@@ -59,7 +67,7 @@ public class Bot {
     public boolean isEnabled() {
         return isEnabled;
     }
-    
+
     public boolean isAllowPickupItems() {
         return allowPickupItems;
     }
@@ -72,10 +80,6 @@ public class Bot {
         this.isLogging = isLogging;
     }
 
-    public void setHealth(double health) {
-        this.health = health;
-    }
-
     public NPC getNpc() {
         return npc;
     }
@@ -84,9 +88,6 @@ public class Bot {
         return chat;
     }
 
-    public double getHealth() {
-        return health;
-    }
 
     // Getter для общения
     public BotChat getCommunicator() {

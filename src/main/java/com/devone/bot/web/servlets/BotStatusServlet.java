@@ -59,14 +59,14 @@ public class BotStatusServlet extends HttpServlet {
                 botJson.addProperty("id", bot.getId());
                 botJson.addProperty("name", bot.getNPC().getName());
 
-                botJson.addProperty("stuck", bot.getBrain().isStuck());
-                botJson.addProperty("stuckCount", bot.getBrain().getStuckCount());
+                botJson.addProperty("stuck", bot.getState().isStuck());
+                botJson.addProperty("stuckCount", bot.getState().getStuckCount());
 
-                botJson.addProperty("blocks_broken_size", bot.getBrain().getBlocksBroken().size());
-                botJson.addProperty("blocks_broken",  bot.getBrain().getBlocksBroken().toString());
-                botJson.addProperty("mobs_killed_size", bot.getBrain().getMobsKilled().size());
-                botJson.addProperty("mobs_killed", bot.getBrain().getMobsKilled().toString());
-                botJson.addProperty("teleport_used", bot.getBrain().getTeleportUsed());
+                botJson.addProperty("blocks_broken_size", bot.getBrain().getMemory().getBlocksBroken().size());
+                botJson.addProperty("blocks_broken",  bot.getBrain().getMemory().getBlocksBroken().toString());
+                botJson.addProperty("mobs_killed_size", bot.getBrain().getMemory().getMobsKilled().size());
+                botJson.addProperty("mobs_killed", bot.getBrain().getMemory().getMobsKilled().toString());
+                botJson.addProperty("teleport_used", bot.getBrain().getMemory().getTeleportUsed());
                 botJson.addProperty("auto_pick_up_items", bot.getBrain().getAutoPickupItems());
 
                 String currLoc = " " + loc.getX() + ", " + loc.getY() + ", " + loc.getZ();   

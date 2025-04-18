@@ -23,7 +23,7 @@ public class BotMoveTaskListener implements Listener {
         if (task.getBot().getNPC().getId() != event.getNPC().getId()) return;
 
         BotLogger.info("✅", true, "Навигация завершена (BotMoveTaskListener), ID: " + task.getUUID());
-        task.getBot().getBrain().setStuck(false);
+        task.getBot().getState().setStuck(false);
 
         task.stop(); // Завершаем задачу движения
     }

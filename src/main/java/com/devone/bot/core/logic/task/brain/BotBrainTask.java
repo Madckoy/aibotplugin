@@ -91,7 +91,7 @@ public class BotBrainTask extends BotTaskAutoParams<BotBrainTaskParams> {
             //return;
         //}
         // 💡 Блокируем мышление, если сцена не готова
-        if (bot.getBrain().getSceneData() == null) {
+        if (bot.getBrain().getMemory().getSceneData() == null) {
             BotLogger.info(icon, isLogging(), bot.getId() + " ⛔ Ожидаем результаты сканирования...");
             return;
         }
@@ -116,7 +116,7 @@ public class BotBrainTask extends BotTaskAutoParams<BotBrainTaskParams> {
     }
 
     private Runnable determineBehaviorScenario(Bot bot) {
-        boolean stuck = bot.getBrain().isStuck();
+        boolean stuck = bot.getState().isStuck();
     
         if (stuck) {
             Optional<Runnable> unstuck = tryUnstuckStrategy(bot);
@@ -173,7 +173,7 @@ public class BotBrainTask extends BotTaskAutoParams<BotBrainTaskParams> {
             case 2: // Teleport with fallback
                 if (params.isAllowTeleport()) {
                     BotLocation botPos = bot.getBrain().getCurrentLocation();
-                    BotSceneData sceneData = bot.getBrain().getSceneData();
+                    BotSceneData sceneData = bot.getBrain().getMemory().getSceneData();
                     BotSceneContext context = BotNavigationPlannerWrapper.getSceneContext(sceneData.blocks, sceneData.entities, botPos);
                     
                     // tryTeleportFallback сам вернёт Optional<Runnable>

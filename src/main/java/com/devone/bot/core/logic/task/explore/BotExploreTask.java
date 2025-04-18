@@ -48,7 +48,7 @@ public class BotExploreTask extends BotTaskAutoParams<BotExploreTaskParams> {
             bot.pickupNearbyItems();
         }
 
-        BotSceneData sceneData = bot.getBrain().getSceneData();
+        BotSceneData sceneData = bot.getBrain().getMemory().getSceneData();
 
         if (sceneData == null) {
             BotLogger.info("❌", isLogging(), bot.getId() + " No scene data available.");

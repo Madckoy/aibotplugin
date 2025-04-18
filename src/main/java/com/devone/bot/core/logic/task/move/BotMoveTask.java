@@ -100,7 +100,7 @@ public class BotMoveTask extends BotTaskAutoParams<BotMoveTaskParams> {
                 long elapsed = System.currentTimeMillis() - startTime;
                 if (elapsed > BotConstants.DEFAULT_TASK_TIMEOUT) {
                     BotLogger.info("⏱️", isLogging(), bot.getId() + " Тайм-аут навигации.");
-                    bot.getBrain().setStuck(true);
+                    bot.getState().setStuck(true);
                     stopTaskHandle();
                     this.stop();
                 }

@@ -2,11 +2,13 @@ package com.devone.bot.config;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
+import com.google.gson.annotations.Expose;
 
 import java.io.*;
 import java.nio.charset.StandardCharsets;
 
 public class AIBotBaseJsonConfig<T> {
+    @Expose
     private final File file;
     private final Class<T> clazz;
     private final Gson gson;

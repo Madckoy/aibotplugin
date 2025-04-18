@@ -182,11 +182,13 @@ public class BotExcavateTask extends BotTaskAutoParams<BotExcavateTaskParams> {
             this.stop();
             return;
         }
-
-        if (isInventoryFull() || isEnoughBlocksCollected()) {
-            BotLogger.info("⛔", isLogging(), "Задача завершена: инвентарь полон или ресурсов достаточно");
-            this.stop();
-            return;
+        
+        if(params.isPickup()) {
+            if (isInventoryFull() || isEnoughBlocksCollected()) {
+                BotLogger.info("⛔", isLogging(), "Задача завершена: инвентарь полон или ресурсов достаточно");
+                this.stop();
+                return;
+            }
         }
 
         if(params.isPickup()) {

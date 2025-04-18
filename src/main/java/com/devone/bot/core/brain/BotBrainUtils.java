@@ -12,7 +12,7 @@ public class BotBrainUtils {
     public static boolean detectIfStuck(Bot bot) {
 
         BotLocation botPos = bot.getBrain().getCurrentLocation();
-        BotSceneData sceneData =  bot.getBrain().getSceneData();
+        BotSceneData sceneData =  bot.getBrain().getMemory().getSceneData();
 
         BotSceneContext context = BotNavigationPlannerWrapper.getSceneContext(sceneData.blocks, sceneData.entities,
                 botPos);
@@ -22,7 +22,7 @@ public class BotBrainUtils {
 
         if(totalGoals <= 1) {
             //the bot is stuck!
-            bot.getBrain().setStuck(true);
+            bot.getState().setStuck(true);
             BotLogger.info("🚨", true, "The bot "+bot.getId() + " is stuck!");
             return true;
         } else {

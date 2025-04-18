@@ -6,6 +6,7 @@ import java.util.Map;
 
 import com.devone.bot.config.AIBotBaseJsonConfig;
 import com.devone.bot.core.bot.Bot;
+import com.devone.bot.core.brain.BotBrain;
 import com.devone.bot.utils.blocks.BotLocation;
 
 public class BotManagerConfig extends AIBotBaseJsonConfig<BotManagerConfig.Data> {
@@ -20,17 +21,21 @@ public class BotManagerConfig extends AIBotBaseJsonConfig<BotManagerConfig.Data>
 
     public static class BotEntry {
         public boolean enabled = true;
+        public String id;
         public String uuid;
         public BotLocation position;
         public boolean allowPickup;
+        public BotBrain brain;
 
         public BotEntry() {}
 
         public BotEntry(Bot bot) {
+            this.id = bot.getId();
             this.enabled = bot.isEnabled();
             this.uuid = bot.getUuid().toString();
             this.position = bot.getBrain().getCurrentLocation();
             this.allowPickup = bot.isAllowPickupItems();
+            this.brain = bot.getBrain();
         }
     }
 }

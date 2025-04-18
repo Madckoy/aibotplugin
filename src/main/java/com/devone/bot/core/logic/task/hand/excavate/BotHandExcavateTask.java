@@ -79,7 +79,7 @@ public class BotHandExcavateTask extends BotHandTask<BotHandExcavateTaskParams> 
                 animateHand();
                 BotUtils.playBlockBreakEffect(block.getLocation());
                 block.breakNaturally();
-                bot.getBrain().brokenBlocksIncrease(target.getType());
+                bot.getBrain().getMemory().brokenBlocksIncrease(target.getType());
 
                 BotLogger.info("🪨", isLogging(), bot.getId() + " Block excavated: " + block);
             }

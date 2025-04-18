@@ -11,7 +11,6 @@ import com.devone.bot.core.config.BotManagerConfig;
 import com.devone.bot.utils.BotConstants;
 import com.devone.bot.utils.BotUtils;
 import com.devone.bot.utils.blocks.BotLocation;
-import com.devone.bot.utils.blocks.BotLocationHelper;
 import com.devone.bot.utils.bluemap.BlueMapMarkers;
 import com.devone.bot.utils.logger.BotLogger;
 import com.devone.bot.utils.world.BotWorldHelper;
@@ -82,8 +81,6 @@ public class BotManager {
         data.bots.clear();
 
         botsMap.forEach((name, bot) -> {
-
-            BotLocation loc = BotLocationHelper.convertFrom(bot.getNPCEntity().getLocation());
 
             data.bots.put(name, new BotManagerConfig.BotEntry(bot));
 

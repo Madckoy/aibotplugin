@@ -83,10 +83,10 @@ public class BotSceneScan3D {
             BotLocation botCoords = new BotLocation(centerX, centerY, centerZ);
             BotSceneData sceneData = new BotSceneData(scannedBlocks, scannedEntities, botCoords);
 
-            if(bot.getBrain().isStuck()) {
-                long currTime = System.currentTimeMillis(); 
+            if(bot.getState().isStuck()) {
+                // long currTime = System.currentTimeMillis(); 
                 // 4. Сохраняем всё в JSON если застряли
-                String fileName = BotConstants.PLUGIN_TMP + bot.getId() + "_stuck_scene_"+currTime+".json";
+                String fileName = BotConstants.PLUGIN_TMP + bot.getId() + "_stuck_scene.json";
 
                 try {
                     BotSceneSaver.saveToJsonFile(fileName, sceneData);
