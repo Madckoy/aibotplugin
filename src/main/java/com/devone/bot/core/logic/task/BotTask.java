@@ -128,7 +128,7 @@ public abstract class BotTask<T extends BotTaskParams> implements IBotTask, List
 
     public void setPaused(boolean paused) {
         this.isPaused = paused;
-        String status = isPaused ? "⏸️ Pausing..." : "▶️ Resuming...";
+        String status = isPaused ? this.icon+ " ⏸️ Pausing..." : " ▶️ Resuming...";
         BotLogger.info(status, this.isLogging(), bot.getId());
     }
 

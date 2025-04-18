@@ -2,6 +2,8 @@ package com.devone.bot.core.brain.behaviour;
 
 import java.util.*;
 
+import com.devone.bot.utils.logger.BotLogger;
+
 public class BotBehaviorSelector {
 
     public static Optional<Runnable> selectWeightedRandom(List<BotTaskCandidate> candidates) {
@@ -9,6 +11,12 @@ public class BotBehaviorSelector {
             .filter(BotTaskCandidate::isAvailable)
             .toList();
 
+        BotLogger.info("🧠", true, " Доступные кандидаты: " + candidates.size());
+
+        for (BotTaskCandidate c : candidates) {
+                BotLogger.info("🧠", true,  " Кандидат: weight=" + c.getWeight() + " available=" + c.isAvailable());
+        }    
+        
         if (available.isEmpty()) return Optional.empty();
 
         double totalWeight = available.stream().mapToDouble(BotTaskCandidate::getWeight).sum();

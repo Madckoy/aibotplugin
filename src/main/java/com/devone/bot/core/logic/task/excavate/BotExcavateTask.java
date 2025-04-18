@@ -152,7 +152,7 @@ public class BotExcavateTask extends BotTaskAutoParams<BotExcavateTaskParams> {
     @Override
     public void execute() {
 
-        BotLogger.info("🚀 ", isLogging(), "Запуск задачи разрушения блоков для бота " + bot.getId() +
+        BotLogger.info("🚀", isLogging(), "Запуск задачи разрушения блоков для бота " + bot.getId() +
                 " (Целевые блоки: " + (targetMaterials == null ? "ВСЕ" : targetMaterials) + ")");
 
         if (breakPatternImpl == null) {

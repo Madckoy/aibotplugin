@@ -85,7 +85,8 @@ public class BotManager {
 
             BotLocation loc = BotLocationHelper.convertFrom(bot.getNPCEntity().getLocation());
 
-            data.bots.put(name, new BotManagerConfig.BotEntry(bot.getUuid().toString(), loc));
+            data.bots.put(name, new BotManagerConfig.BotEntry(bot));
+
         });
 
         config.save();

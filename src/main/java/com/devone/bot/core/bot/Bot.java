@@ -23,6 +23,7 @@ import net.citizensnpcs.api.ai.Navigator;
 import net.citizensnpcs.api.npc.NPC;
 
 public class Bot {
+    private boolean isEnabled = true;
     private boolean isLogging = true;
     private boolean allowPickupItems = true;
 
@@ -50,6 +51,15 @@ public class Bot {
         BotLogger.info("➕", true, "Has been CREATED AND SPAWNED: " + id);
     }
 
+
+    public void setEnabled(boolean isEnabled) {
+        this.isEnabled = isEnabled;
+    }
+
+    public boolean isEnabled() {
+        return isEnabled;
+    }
+    
     public boolean isAllowPickupItems() {
         return allowPickupItems;
     }

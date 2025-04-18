@@ -15,7 +15,7 @@ public class BotConstants {
 
     public static final int     DEFAULT_SCAN_RANGE = 12;
     
-    public static final long    DEFAULT_TASK_TIMEOUT = 60_000; // 60 sec
+    public static final long    DEFAULT_TASK_TIMEOUT = 30_000; // 30 sec
     public static final double  DEFAULT_HAND_DAMAGE = 5.0;
 
     public static final int     DEFAULT_OUTER_RADIUS = 4;

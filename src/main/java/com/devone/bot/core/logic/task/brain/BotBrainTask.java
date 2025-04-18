@@ -59,7 +59,7 @@ public class BotBrainTask extends BotTaskAutoParams<BotBrainTaskParams> {
 
     @Override
     public void execute() {
-        BotLogger.info(icon, this.isLogging(), bot.getId() + "The bot "+ bot.getId() + " and makes a decision...");
+        BotLogger.info(icon, this.isLogging(), "The bot "+ bot.getId() + " is making a decision...");
         //
         int thinkingTicks = bot.getBrain().getThinkingTicks();
 
@@ -78,7 +78,7 @@ public class BotBrainTask extends BotTaskAutoParams<BotBrainTaskParams> {
         //
         long removed = bot.getBrain().getMemory().cleanup(params.getMemoryExpirationMillis());
         
-        BotLogger.info(icon, this.isLogging(), bot.getId() + "Removed outdated navigation points: " + removed);
+        BotLogger.info(icon, this.isLogging(), bot.getId() + " Removed outdated navigation points: " + removed);
         
         //
         // осматриваемся и обновляем картинку мира
