@@ -14,6 +14,7 @@ public class BotConstants {
 
 
     public static final int     DEFAULT_SCAN_RANGE = 12;
+    public static final int     DEFAULT_SCAN_DATA_SLICE_HEIGHT = 4;
     
     public static final long    DEFAULT_TASK_TIMEOUT = 30_000; // 30 sec
     public static final double  DEFAULT_HAND_DAMAGE = 5.0;
@@ -21,5 +22,7 @@ public class BotConstants {
     public static final int     DEFAULT_OUTER_RADIUS = 4;
     public static final int     DEFAULT_INNER_RADIUS = 4;
     public static final String  DEFAULT_PATTERN_BREAK = "cone.yml";
+
+
     
 }

@@ -8,6 +8,7 @@ import com.devone.bot.core.bot.brain.logic.navigator.filters.BotBlocksWalkableFi
 import com.devone.bot.core.bot.brain.logic.navigator.filters.BotEntitiesOnSurfaceFilter;
 import com.devone.bot.core.bot.brain.logic.navigator.resolvers.BotReachabilityResolver;
 import com.devone.bot.core.bot.brain.logic.navigator.scene.BotSceneContext;
+import com.devone.bot.core.bot.brain.logic.utils.BotConstants;
 import com.devone.bot.core.bot.brain.logic.utils.blocks.BotBlockData;
 import com.devone.bot.core.bot.brain.logic.utils.blocks.BotLocation;
 
@@ -25,7 +26,7 @@ public class BotNavigationPlannerWrapper {
 
         BotSceneContext context = new BotSceneContext();
 
-        List<BotBlockData> sliced = BotBlocksVerticalSliceFilter.filter(geoBlocks, botPosition.getY(), 2);// relative!!!
+        List<BotBlockData> sliced = BotBlocksVerticalSliceFilter.filter(geoBlocks, botPosition.getY(), BotConstants.DEFAULT_SCAN_DATA_SLICE_HEIGHT);// relative!!!
         if (sliced == null || sliced.isEmpty())
             return context;
 
