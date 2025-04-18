@@ -48,9 +48,17 @@ public class BotManager {
                 continue;
 
             String botName = npc.getName();
-
-            if (botExists(botName))
+            UUID npcUUID = npc.getUniqueId();
+            
+            // Доп. защита — сравнение UUID, если вдруг одинаковые имена
+            boolean alreadyRegistered = botsMap.values().stream()
+                    .anyMatch(b -> b.getNPCEntity().getUniqueId().equals(npcUUID));
+            
+            if (botExists(botName) || alreadyRegistered) {
+                BotLogger.warn("⚠", true, "Duplicate or already registered NPC: " + botName + " (UUID: " + npcUUID + ")");
                 continue;
+            }
+            
 
             BotLocation storedLocation = BotUtils.getFallbackLocation();
 
@@ -91,6 +99,10 @@ public class BotManager {
     }
 
     public void addBot(String name, Bot bot) {
+        if (botsMap.containsKey(name)) {
+            BotLogger.warn("⚠", true, "Bot already registered: " + name + ", skipping.");
+            return;
+        }
         botsMap.put(name, bot);
         saveBots();
         bm_markers.scheduleMarkerUpdate();
