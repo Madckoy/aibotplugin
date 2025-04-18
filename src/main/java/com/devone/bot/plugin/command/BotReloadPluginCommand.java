@@ -5,8 +5,8 @@ import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
-import com.devone.bot.core.utils.logger.BotLogger;
-import com.devone.bot.plugin.AIBotPlugin;
+import com.devone.bot.AIBotPlugin;
+import com.devone.bot.core.bot.brain.logic.utils.logger.BotLogger;
 
 public class BotReloadPluginCommand implements CommandExecutor {
     private final AIBotPlugin plugin;

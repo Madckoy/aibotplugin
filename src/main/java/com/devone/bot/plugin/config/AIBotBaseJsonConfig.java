@@ -42,12 +42,26 @@ public class AIBotBaseJsonConfig<T> {
     }
 
     public void save() {
-        try (Writer writer = new OutputStreamWriter(new FileOutputStream(file), StandardCharsets.UTF_8)) {
-            gson.toJson(config, writer);
+        try {
+            // ✅ Проверка и создание директории, если её нет
+            File parent = file.getParentFile();
+            if (parent != null && !parent.exists()) {
+                boolean created = parent.mkdirs();
+                if (created) {
+                    System.out.println("📁 Создана директория: " + parent.getAbsolutePath());
+                } else {
+                    System.err.println("❌ Не удалось создать директорию: " + parent.getAbsolutePath());
+                }
+            }
+    
+            try (Writer writer = new OutputStreamWriter(new FileOutputStream(file), StandardCharsets.UTF_8)) {
+                gson.toJson(config, writer);
+            }
         } catch (IOException e) {
             System.err.println("❌ Failed to save config: " + file.getName() + " → " + e.getMessage());
         }
     }
+
 
     public void deleteAndRegenerate() {
         if (file.exists()) {

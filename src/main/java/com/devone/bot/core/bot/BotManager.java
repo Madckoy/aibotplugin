@@ -6,14 +6,14 @@ import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.entity.Entity;
 
-import com.devone.bot.core.bot.blocks.BotLocation;
-import com.devone.bot.core.bot.config.BotManagerConfig;
-import com.devone.bot.core.utils.BotConstants;
-import com.devone.bot.core.utils.BotUtils;
-import com.devone.bot.core.utils.bluemap.BlueMapMarkers;
-import com.devone.bot.core.utils.logger.BotLogger;
-import com.devone.bot.core.utils.world.BotWorldHelper;
-import com.devone.bot.plugin.AIBotPlugin;
+import com.devone.bot.AIBotPlugin;
+import com.devone.bot.core.bot.brain.logic.utils.BotConstants;
+import com.devone.bot.core.bot.brain.logic.utils.BotUtils;
+import com.devone.bot.core.bot.brain.logic.utils.logger.BotLogger;
+import com.devone.bot.core.bot.brain.logic.utils.world.BotWorldHelper;
+import com.devone.bot.core.bot.utils.blocks.BotLocation;
+import com.devone.bot.core.bot.utils.config.BotManagerConfig;
+import com.devone.bot.core.web.bluemap.BlueMapMarkers;
 
 import java.io.File;
 import java.util.*;

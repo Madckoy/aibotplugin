@@ -1,6 +1,6 @@
 package com.devone.bot.core.bot.brain.memory;
 
-import com.devone.bot.core.bot.blocks.BotBlockData;
+import com.devone.bot.core.bot.utils.blocks.BotBlockData;
 
 public class BotMemoryItem {
     private long timestamp = System.currentTimeMillis();

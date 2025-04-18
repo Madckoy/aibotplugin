@@ -15,10 +15,10 @@ import org.bukkit.inventory.InventoryHolder;
 import org.bukkit.inventory.ItemStack;
 
 import com.devone.bot.core.bot.Bot;
-import com.devone.bot.core.bot.scene.BotScanNatural;
-import com.devone.bot.core.utils.BotConstants;
-import com.devone.bot.core.utils.logger.BotLogger;
-import com.devone.bot.core.utils.world.BotWorldHelper;
+import com.devone.bot.core.bot.brain.logic.utils.BotConstants;
+import com.devone.bot.core.bot.brain.logic.utils.logger.BotLogger;
+import com.devone.bot.core.bot.brain.logic.utils.world.BotWorldHelper;
+import com.devone.bot.core.bot.brain.memory.scene.BotScanNatural;
 
 public class BotInventory {
 

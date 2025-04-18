@@ -2,7 +2,7 @@ package com.devone.bot.core.bot.brain.behaviour;
 
 import java.util.*;
 
-import com.devone.bot.core.utils.logger.BotLogger;
+import com.devone.bot.core.bot.brain.logic.utils.logger.BotLogger;
 
 public class BotBehaviorSelector {
 

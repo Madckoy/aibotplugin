@@ -1,7 +1,7 @@
 package com.devone.bot.core.bot.state;
 
 import com.devone.bot.core.bot.Bot;
-import com.devone.bot.core.utils.logger.BotLogger;
+import com.devone.bot.core.bot.brain.logic.utils.logger.BotLogger;
 
 public class BotState {
 

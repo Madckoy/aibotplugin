@@ -10,16 +10,16 @@ import org.bukkit.entity.Entity;
 
 import org.bukkit.entity.Player;
 
-import com.devone.bot.core.bot.blocks.BotLocation;
 import com.devone.bot.core.bot.brain.BotBrain;
+import com.devone.bot.core.bot.brain.logic.navigation.BotNavigation;
+import com.devone.bot.core.bot.brain.logic.task.move.BotMoveTask;
+import com.devone.bot.core.bot.brain.logic.task.move.params.BotMoveTaskParams;
+import com.devone.bot.core.bot.brain.logic.utils.logger.BotLogger;
 import com.devone.bot.core.bot.inventory.BotInventory;
-import com.devone.bot.core.bot.navigation.BotNavigation;
 import com.devone.bot.core.bot.speaker.BotSpeaker;
 import com.devone.bot.core.bot.state.BotState;
-import com.devone.bot.core.logic.lifecycle.BotLifeCycle;
-import com.devone.bot.core.logic.task.move.BotMoveTask;
-import com.devone.bot.core.logic.task.move.params.BotMoveTaskParams;
-import com.devone.bot.core.utils.logger.BotLogger;
+import com.devone.bot.core.bot.utils.blocks.BotLocation;
+import com.devone.bot.core.bot.utils.lifecycle.BotLifeCycle;
 
 import net.citizensnpcs.api.ai.Navigator;
 import net.citizensnpcs.api.npc.NPC;
