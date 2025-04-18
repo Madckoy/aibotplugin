@@ -92,6 +92,10 @@ public class BotStatusServlet extends HttpServlet {
                 botJson.addProperty("queue", taskStackText);
                 botsArray.add(botJson);
 
+                botJson.addProperty("memory", bot.getBrain().getMemory().);
+
+                botsArray.add(botJson);
+
 
             
                 ItemStack[] contents = null;

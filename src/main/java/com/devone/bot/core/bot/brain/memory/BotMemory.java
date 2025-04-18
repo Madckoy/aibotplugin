@@ -9,6 +9,8 @@ import java.util.Iterator;
 import java.util.Map;
 import java.util.ArrayList;
 import java.util.EnumMap;
+import com.google.gson.JsonObject;
+import com.google.gson.JsonArray;
 
 public class BotMemory {
     
@@ -104,4 +106,35 @@ public class BotMemory {
     public Map<BotLocation, BotMemoryItem> getMemoryForType(MemoryType memoryType) {
         return memoryMap.get(memoryType);
     }
+
+    public JsonObject toJson() {
+        JsonObject memoryJson = new JsonObject();
+
+        // Убитые мобы
+        JsonArray mobsArray = new JsonArray();
+        for (String mob : killedMobs) {
+            mobsArray.add(mob);
+        }
+        memoryJson.add("killedMobs", mobsArray);
+
+        // Разрушенные блоки
+        JsonArray blocksArray = new JsonArray();
+        for (String block : brokenBlocks) {
+            blocksArray.add(block);
+        }
+        memoryJson.add("brokenBlocks", blocksArray);
+
+        // Количество телепортов
+        memoryJson.addProperty("teleportUsed", teleportUsed);
+
+        // Размеры памяти по типам
+        JsonObject types = new JsonObject();
+        for (MemoryType type : memoryMap.keySet()) {
+            types.addProperty(type.name(), memoryMap.get(type).size());
+        }
+        memoryJson.add("memoryTypes", types);
+
+        return memoryJson;
+    }
+
 }
