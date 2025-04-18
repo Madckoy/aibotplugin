@@ -10,7 +10,7 @@ public class BotState {
     private int stuckCount;
     private transient Bot owner;
     // auto pick ip items
-    
+
     public Bot getOwner() {
         return owner;
     }

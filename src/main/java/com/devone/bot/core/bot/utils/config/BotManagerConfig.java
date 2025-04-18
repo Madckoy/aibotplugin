@@ -6,6 +6,8 @@ import java.util.Map;
 
 import com.devone.bot.core.bot.Bot;
 import com.devone.bot.core.bot.brain.BotBrain;
+import com.devone.bot.core.bot.brain.logic.navigation.BotNavigation;
+import com.devone.bot.core.bot.state.BotState;
 import com.devone.bot.core.bot.utils.blocks.BotLocation;
 import com.devone.bot.plugin.config.AIBotBaseJsonConfig;
 
@@ -26,6 +28,8 @@ public class BotManagerConfig extends AIBotBaseJsonConfig<BotManagerConfig.Data>
         public BotLocation position;
         public boolean allowPickup;
         public BotBrain brain;
+        public BotState state;
+        public BotNavigation navigation;
 
         public BotEntry() {}
 
@@ -36,6 +40,8 @@ public class BotManagerConfig extends AIBotBaseJsonConfig<BotManagerConfig.Data>
             this.position = bot.getNavigation().getLocation();
             this.allowPickup = bot.isAllowPickupItems();
             this.brain = bot.getBrain();
+            this.state = bot.getState();
+            this.navigation = bot.getNavigation();
         }
     }
 }

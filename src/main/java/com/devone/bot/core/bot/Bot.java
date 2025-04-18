@@ -40,16 +40,8 @@ public class Bot {
     private final BotManager botManager; // Менеджер ботов
     private BotBrain brain; // Память/Рантайм статус бота
     private BotSpeaker speaker; // Создаем поле для общения бота
-    public BotSpeaker getSpeaker() {
-        return speaker;
-    }
-
-
-    public void setSpeaker(BotSpeaker speaker) {
-        this.speaker = speaker;
-    }
-
     private BotState state;
+    
     private BotNavigation navigation;
 
     public void setBrain(BotBrain brain) {
@@ -60,7 +52,14 @@ public class Bot {
     public void setState(BotState state) {
         this.state = state;
     }
+    public BotSpeaker getSpeaker() {
+        return speaker;
+    }
 
+
+    public void setSpeaker(BotSpeaker speaker) {
+        this.speaker = speaker;
+    }
 
     public BotNavigation getNavigation() {
         return navigation;
