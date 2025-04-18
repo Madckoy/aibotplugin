@@ -48,7 +48,7 @@ public class BotHandExcavateTask extends BotHandTask<BotHandExcavateTaskParams> 
         bukkitTask = new BukkitRunnable() {
             @Override
             public void run() {
-                if (isDone) {
+                if (done) {
                     stop();
                     cancel();
                     return;

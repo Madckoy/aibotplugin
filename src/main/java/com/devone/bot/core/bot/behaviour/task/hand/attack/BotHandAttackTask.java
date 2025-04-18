@@ -76,7 +76,7 @@ public class BotHandAttackTask extends BotHandTask<BotHandAttackTaskParams> {
         bukkitTask = new BukkitRunnable() {
             @Override
             public void run() {
-                if (isDone || bot.getNPCEntity() == null) {
+                if (done || bot.getNPCEntity() == null) {
                     BotLogger.debug("❌", isLogging(),
                             bot.getId() + " BotHandAttackTask: Task is done or Bot NPC is null.");
                     stop();

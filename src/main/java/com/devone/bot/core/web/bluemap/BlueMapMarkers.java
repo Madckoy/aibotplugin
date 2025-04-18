@@ -67,11 +67,11 @@ public class BlueMapMarkers {
                 BotLocation lastLocation = lastKnownLocations.get(botId);
 
                 if (lastLocation != null) {
-                    BotLogger.debug("💡", true,  bot.getId() + "Last known location on map: " + lastLocation);
+                    BotLogger.debug("💡", true,  bot.getId() + " Last known location on map: " + lastLocation);
 
                     // Если позиция не изменилась – пропускаем обновление
                     if (lastLocation.equals(loc)) {
-                        BotLogger.debug("💡", true, bot.getId() + "Locations are the same! ");
+                        BotLogger.debug("💡", true, bot.getId() + " Locations are the same! ");
                         continue;
                     }
                 }
@@ -80,10 +80,10 @@ public class BlueMapMarkers {
 
                 hasChanges = true;
 
-                BotLogger.debug("📍", true, bot.getId() + "Обновлён маркер бота : " + loc);
+                BotLogger.debug("📍", true, bot.getId() + " Обновлён маркер бота : " + loc);
 
             } else {
-                BotLogger.debug("📍", true, bot.getId() + "All Locations are unknown. Skip update.");
+                BotLogger.debug("📍", true, bot.getId() + " All Locations are unknown. Skip update.");
             }
 
         }

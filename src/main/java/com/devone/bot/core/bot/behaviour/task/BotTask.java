@@ -21,16 +21,18 @@ public abstract class BotTask<T extends BotTaskParams> implements IBotTask, List
     protected T params;
 
     //configurable
-    protected boolean isEnabled = true;
-    protected boolean isLogging = true;
+    protected boolean enabled = true;
+    protected boolean stopped = false;
+
+    protected boolean logging = true;
 
     // runtime
     protected Bot bot;
     protected Player player = null;
     protected long startTime = System.currentTimeMillis();
 
-    protected boolean isPaused = false;
-    protected boolean isDone = false;
+    protected boolean paused = false;
+    protected boolean done = false;
     protected final String uuid;
     
     //protected BotTaskParams params = new BotTaskParams(BotTaskParams.class.getSimpleName());
@@ -74,13 +76,13 @@ public abstract class BotTask<T extends BotTaskParams> implements IBotTask, List
 
     public void update() {
 
-        if (isEnabled) {
+        if (enabled) {
 
-            BotLogger.debug("🚦", this.isLogging(), icon +" : "+ bot.getId() + " Status: " + isDone + " | " + isPaused +
+            BotLogger.debug("🚦", this.isLogging(), icon +" : "+ bot.getId() + " Status: " + done + " | " + paused +
                     " 📍 xyz: " + bot.getNavigation().getLocation() + " | " + 
                     " 🎯 xyz: " + bot.getNavigation().getTarget());
 
-        if (isPaused) return;
+        if (paused) return;
 
         if (this.player != null && !isPlayerOnline()) {
             handlePlayerDisconnect();
@@ -107,7 +109,7 @@ public abstract class BotTask<T extends BotTaskParams> implements IBotTask, List
     public abstract void execute();
 
     public void stop() {
-        isDone = true;
+        done = true;
     }
 
     public String getUUID() {
@@ -115,20 +117,21 @@ public abstract class BotTask<T extends BotTaskParams> implements IBotTask, List
     }
 
     public boolean isDone() {
-        return isDone;
+        return done;
     }
 
     public boolean isEnabled() {
-        return isEnabled;
+        return enabled;
     }
 
     public boolean isLogging() {
-        return isLogging;
+        return logging;
     }
+    
 
     public void setPaused(boolean paused) {
-        this.isPaused = paused;
-        String status = isPaused ? this.icon+ " ⏸️ Pausing..." : " ▶️ Resuming...";
+        this.paused = paused;
+        String status = paused ? this.icon+ " ⏸️ Pausing..." : " ▶️ Resuming...";
         BotLogger.debug(status, this.isLogging(), bot.getId());
     }
 

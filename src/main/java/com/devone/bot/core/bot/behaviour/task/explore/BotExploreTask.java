@@ -41,7 +41,7 @@ public class BotExploreTask extends BotTaskAutoParams<BotExploreTaskParams> {
     @Override
     public void execute() {
 
-        if (isPaused)
+        if (paused)
             return;
 
         BotLogger.debug("🔶", isLogging(), bot.getId() + " Exploring with radius: " + scanRadius);
