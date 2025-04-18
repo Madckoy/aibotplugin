@@ -31,8 +31,6 @@ import com.devone.bot.utils.world.BotWorldHelper;
 public class BotBrainTask extends BotTaskAutoParams<BotBrainTaskParams> {
 
     private long lastScanTime;
-    private double explorationWeight = 0.7;
-    private double excavationWeight = 0.3;
 
     public BotBrainTask(Bot bot) {
         super(bot, null, BotBrainTaskParams.class);

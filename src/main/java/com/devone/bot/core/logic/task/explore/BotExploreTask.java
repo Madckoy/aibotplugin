@@ -1,10 +1,6 @@
 package com.devone.bot.core.logic.task.explore;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import com.devone.bot.core.bot.Bot;
-import com.devone.bot.core.brain.memory.MemoryType;
 import com.devone.bot.core.logic.navigation.BotNavigationPlannerWrapper;
 import com.devone.bot.core.logic.navigation.scene.BotSceneContext;
 import com.devone.bot.core.logic.navigation.selectors.BotBlockSelector;
