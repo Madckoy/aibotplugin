@@ -93,11 +93,18 @@ public class BotStatusServlet extends HttpServlet {
                 botsArray.add(botJson);
 
 
-                // 📦 Serialize inventory
-                ItemStack[] contents = bot.getInventory().getNPCInventory().getContents();
+            
+                ItemStack[] contents = null;
+                
+                if(bot.getInventory().getNPCInventory()!=null) {
+                    // 📦 Serialize inventory
+                    contents = bot.getInventory().getNPCInventory().getContents();
+                }
+
                 if (contents == null) {
                     continue;
                 }
+
                 JsonArray inventoryArray = new JsonArray();
 
                 for (ItemStack item : contents) {

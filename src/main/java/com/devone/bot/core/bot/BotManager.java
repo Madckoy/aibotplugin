@@ -52,7 +52,7 @@ public class BotManager {
             if (botExists(botName))
                 continue;
 
-            BotLocation storedLocation = BotUtils.getFallbackCoordinate3D();
+            BotLocation storedLocation = BotUtils.getFallbackLocation();
 
             if (loadedData.bots.containsKey(botName)) {
                 BotLocation coord = loadedData.bots.get(botName).position;

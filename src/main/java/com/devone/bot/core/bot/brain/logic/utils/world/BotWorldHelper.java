@@ -176,4 +176,21 @@ public class BotWorldHelper {
         };
     }
 
+    
+    public static boolean isBreakableBlock(Block block) {
+        if (block == null ) return false;
+    
+        Material type = block.getType();
+    
+        return switch (type) {
+            case AIR, CAVE_AIR, VOID_AIR,
+                 BEDROCK, BARRIER, WATER, 
+                 END_PORTAL, END_PORTAL_FRAME,
+                 STRUCTURE_BLOCK, STRUCTURE_VOID,
+                 COMMAND_BLOCK, CHAIN_COMMAND_BLOCK, REPEATING_COMMAND_BLOCK -> false;
+            default -> true;
+        };
+    }
+    
+
 }
