@@ -34,7 +34,7 @@ public class BotChaseCommand implements CommandExecutor {
             return true;
         }
 
-        BotLogger.info("📌", true,"/bot-chase: Бот " + bot.getId() + " следует за " + player.getName());
+        BotLogger.debug("📌", true,"/bot-chase: Бот " + bot.getId() + " следует за " + player.getName());
 
         // ✅ Очищаем стек задач
         bot.getLifeCycle().getTaskStackManager().clearTasks();

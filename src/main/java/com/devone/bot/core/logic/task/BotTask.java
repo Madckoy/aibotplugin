@@ -69,14 +69,14 @@ public abstract class BotTask<T extends BotTaskParams> implements IBotTask, List
 
     public void setObjective(String objctv) {
         objective = objctv;
-        BotLogger.info("🚩", this.isLogging(), icon +" : "+ bot.getId() + "  Set Objective: " + objctv);
+        BotLogger.debug("🚩", this.isLogging(), icon +" : "+ bot.getId() + "  Set Objective: " + objctv);
     }
 
     public void update() {
 
         if (isEnabled) {
 
-            BotLogger.info("🚦", this.isLogging(), icon +" : "+ bot.getId() + " Status: " + isDone + " | " + isPaused +
+            BotLogger.debug("🚦", this.isLogging(), icon +" : "+ bot.getId() + " Status: " + isDone + " | " + isPaused +
                     " 📍 xyz: " + bot.getNavigation().getLocation() + " | " + 
                     " 🎯 xyz: " + bot.getNavigation().getTarget());
 
@@ -129,7 +129,7 @@ public abstract class BotTask<T extends BotTaskParams> implements IBotTask, List
     public void setPaused(boolean paused) {
         this.isPaused = paused;
         String status = isPaused ? this.icon+ " ⏸️ Pausing..." : " ▶️ Resuming...";
-        BotLogger.info(status, this.isLogging(), bot.getId());
+        BotLogger.debug(status, this.isLogging(), bot.getId());
     }
 
     @Override
@@ -157,7 +157,7 @@ public abstract class BotTask<T extends BotTaskParams> implements IBotTask, List
 
     private void handlePlayerDisconnect() {
 
-        BotLogger.info("🚨", this.isLogging(), "Игрок " + player.getName() + " вышел! Бот " + bot.getId() + " переходит в автономный режим.");
+        BotLogger.debug("🚨", this.isLogging(), "Игрок " + player.getName() + " вышел! Бот " + bot.getId() + " переходит в автономный режим.");
         this.bot.getLifeCycle().getTaskStackManager().clearTasks();
 
         BotBrainTask task = new BotBrainTask(bot);
@@ -174,15 +174,15 @@ public abstract class BotTask<T extends BotTaskParams> implements IBotTask, List
             BotUtils.lookAt(bot, target);
         }, 1L); // ✅ Через тик, чтобы дать время на обновление
 
-        BotLogger.info("🔄", this.isLogging(), "TURNING: " + bot.getId() + " to look at the target: " + target);
+        BotLogger.debug("🔄", this.isLogging(), "TURNING: " + bot.getId() + " to look at the target: " + target);
     }
 
     public void animateHand() {
         if (bot.getNPCEntity() instanceof Player playerBot) {
             playerBot.swingMainHand();
-            BotLogger.info("✋🏻", this.isLogging(), "Анимация руки выполнена");
+            BotLogger.debug("✋🏻", this.isLogging(), "Анимация руки выполнена");
         } else {
-            BotLogger.info("✋🏻", this.isLogging(), "Анимация не выполнена: бот — не игрок");
+            BotLogger.debug("✋🏻", this.isLogging(), "Анимация не выполнена: бот — не игрок");
         }
     }
 }

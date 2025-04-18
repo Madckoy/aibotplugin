@@ -68,7 +68,7 @@ public class BotBlockSelector {
         }
 
         // ⛔ Fallback на спавн
-        BotLogger.info("⚠️", true, "EmergencyTeleport: fallback to world spawn!");
+        BotLogger.debug("⚠️", true, "EmergencyTeleport: fallback to world spawn!");
 
         BotLocation spawn = BotWorldHelper.getWorldSpawnLocation();
 

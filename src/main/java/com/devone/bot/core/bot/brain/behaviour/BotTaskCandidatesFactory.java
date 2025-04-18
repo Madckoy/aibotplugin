@@ -30,7 +30,7 @@ public class BotTaskCandidatesFactory {
                 BotBlockData target = BotEntitySelector.pickNearestTarget(data.entities, botPos, 2.0);
                 if (target == null) return null;
                 return () -> {
-                    BotLogger.info("⚔️", bot.isLogging(), bot.getId() + " Атака на: " + target);
+                    BotLogger.debug("⚔️", bot.isLogging(), bot.getId() + " Атака на: " + target);
                     BotHandAttackTaskParams p = new BotHandAttackTaskParams(target, 5.0);
                     BotHandAttackTask t = new BotHandAttackTask(bot);
                     t.setParams(p);
@@ -43,7 +43,7 @@ public class BotTaskCandidatesFactory {
         candidates.add(new BotTaskCandidate(
             () -> isNight ? params.getExplorationWeight() * 0.6 : params.getExplorationWeight(),
             () -> () -> {
-                BotLogger.info("🧭", bot.isLogging(), bot.getId() + " Разведка");
+                BotLogger.debug("🧭", bot.isLogging(), bot.getId() + " Разведка");
                 bot.getLifeCycle().getTaskStackManager().pushTask(new BotExploreTask(bot));
             },
             () -> params.isAllowExploration()
@@ -52,7 +52,7 @@ public class BotTaskCandidatesFactory {
         candidates.add(new BotTaskCandidate(
             () -> isNight ? params.getExcavationWeight() * 0.5 : params.getExcavationWeight(),
             () -> () -> {
-                BotLogger.info("⛏", bot.isLogging(), bot.getId() + " Копка");
+                BotLogger.debug("⛏", bot.isLogging(), bot.getId() + " Копка");
                 BotExcavateTask task = new BotExcavateTask(bot);
                 task.setParams(new BotExcavateTaskParams());
                 bot.getLifeCycle().getTaskStackManager().pushTask(task);

@@ -50,7 +50,7 @@ public class BotTeleportHereCommand implements CommandExecutor {
         
         bot.getLifeCycle().getTaskStackManager().pushTask(task);
 
-        BotLogger.info("📌", true,"/bot-tp-here: Бот " + bot.getId() + " Телепортируется в точку игрока" + 
+        BotLogger.debug("📌", true,"/bot-tp-here: Бот " + bot.getId() + " Телепортируется в точку игрока" + 
         taskParams.getLocation().toString());
 
         player.sendMessage("§aБот " + bot.getId() + " Телепортируется к игроку!");

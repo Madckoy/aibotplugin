@@ -15,7 +15,7 @@ public class MainPageServlet extends HttpServlet {
 
         File file = new File(BotConstants.PLUGIN_PATH + "/web/template.html");
         if (!file.exists()) {
-            BotLogger.info("⚠️", true, "template.html not found: " + file.getAbsolutePath());
+            BotLogger.debug("⚠️", true, "template.html not found: " + file.getAbsolutePath());
             resp.sendError(HttpServletResponse.SC_NOT_FOUND, "template.html not found");
             return;
         }

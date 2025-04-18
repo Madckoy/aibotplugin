@@ -52,7 +52,7 @@ public class BotHandAttackTask extends BotHandTask<BotHandAttackTaskParams> {
 
         bot.getNavigation().setTarget(target);
 
-        BotLogger.info("✅", isLogging(), bot.getId() + " Parameters for BotHandAttackTask set.");
+        BotLogger.debug("✅", isLogging(), bot.getId() + " Parameters for BotHandAttackTask set.");
         return this;
     }
 
@@ -60,10 +60,10 @@ public class BotHandAttackTask extends BotHandTask<BotHandAttackTaskParams> {
 
         super.execute();
 
-        BotLogger.info("🔶", isLogging(), bot.getId() + " Executing BotHandAttackTask");
+        BotLogger.debug("🔶", isLogging(), bot.getId() + " Executing BotHandAttackTask");
 
         if (target == null) {
-            BotLogger.info("❌", isLogging(), bot.getId() + " BotHandAttackTask: Target is null.");
+            BotLogger.debug("❌", isLogging(), bot.getId() + " BotHandAttackTask: Target is null.");
             this.stop();
             return;
         }
@@ -77,7 +77,7 @@ public class BotHandAttackTask extends BotHandTask<BotHandAttackTaskParams> {
             @Override
             public void run() {
                 if (isDone || bot.getNPCEntity() == null) {
-                    BotLogger.info("❌", isLogging(),
+                    BotLogger.debug("❌", isLogging(),
                             bot.getId() + " BotHandAttackTask: Task is done or Bot NPC is null.");
                     stop();
                     cancel();
@@ -94,7 +94,7 @@ public class BotHandAttackTask extends BotHandTask<BotHandAttackTaskParams> {
                     LivingEntity living = BotWorldHelper.findLivingEntityByUUID(target.getUUID());
 
                     if (living == null || living.isDead() || living.getHealth() <= 0) {
-                        BotLogger.info("💀", isLogging(), bot.getId() + " Target is dead or unreachable.");
+                        BotLogger.debug("💀", isLogging(), bot.getId() + " Target is dead or unreachable.");
                         target.setUUID(null);
                         target = null;
                         bot.getNavigation().setTarget(null);
@@ -117,12 +117,12 @@ public class BotHandAttackTask extends BotHandTask<BotHandAttackTaskParams> {
                             bot.getNavigation()
                                     .setTarget(BotLocationHelper.convertFrom(living.getLocation()));
                             BotUtils.lookAt(bot, BotLocationHelper.convertFrom(living.getLocation()));
-                            BotLogger.info("🏃🏻‍➡️", isLogging(),
+                            BotLogger.debug("🏃🏻‍➡️", isLogging(),
                                     bot.getId() + " Pursuing mob, correcting direction. Distance: "
                                             + String.format("%.2f", distance));
                         }
 
-                        BotLogger.info("🏃🏻‍➡️", isLogging(),
+                        BotLogger.debug("🏃🏻‍➡️", isLogging(),
                                 bot.getId() + " Pursuing mob, distance: " + String.format("%.2f", distance));
 
                     } else {
@@ -130,11 +130,11 @@ public class BotHandAttackTask extends BotHandTask<BotHandAttackTaskParams> {
                         living.damage(damage, bot.getNPCEntity());
                         hits++;
 
-                        BotLogger.info("⚔️", isLogging(), bot.getId() + " Attacked mob: " + living.getType());
+                        BotLogger.debug("⚔️", isLogging(), bot.getId() + " Attacked mob: " + living.getType());
                     }
 
                     if (++pursuitTicks > MAX_PURSUIT_TICKS) {
-                        BotLogger.info("⏱️", isLogging(), bot.getId() + " Pursuit timeout reached.");
+                        BotLogger.debug("⏱️", isLogging(), bot.getId() + " Pursuit timeout reached.");
                         stop();
                         cancel();
                         return;
@@ -143,7 +143,7 @@ public class BotHandAttackTask extends BotHandTask<BotHandAttackTaskParams> {
                     if (attempts > MAX_ATTEMPTS) { // застряли
                         BotLocation endPos = bot.getNavigation().getLocation();
                         if (endPos.equals(startPos) && hits == 0) {
-                            BotLogger.info("⏱️", isLogging(), bot.getId() + " ⏱️ Seems like the bot got stuck.");
+                            BotLogger.debug("⏱️", isLogging(), bot.getId() + " ⏱️ Seems like the bot got stuck.");
                             bot.getState().setStuck(true);
                             stop();
                             cancel();
@@ -167,9 +167,9 @@ public class BotHandAttackTask extends BotHandTask<BotHandAttackTaskParams> {
             bukkitTask = null;
         }
 
-        BotLogger.info("✍🏼", isLogging(), bot.getId() + " Hits made: " + hits);
-        BotLogger.info("✍🏼", isLogging(), bot.getId() + " Attempts made: " + attempts);
-        BotLogger.info("⛔", isLogging(), bot.getId() + " BotHandAttackTask: Task is stopped");
+        BotLogger.debug("✍🏼", isLogging(), bot.getId() + " Hits made: " + hits);
+        BotLogger.debug("✍🏼", isLogging(), bot.getId() + " Attempts made: " + attempts);
+        BotLogger.debug("⛔", isLogging(), bot.getId() + " BotHandAttackTask: Task is stopped");
 
         super.stop();
     }

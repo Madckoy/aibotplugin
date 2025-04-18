@@ -26,7 +26,7 @@ public class BotTaskManager {
 
         taskStack.push(task);
 
-        BotLogger.info("✚", true, "Добавлена задача: " + task.getClass().getSimpleName());
+        BotLogger.debug("✚", true, "Добавлена задача: " + task.getClass().getSimpleName());
     }
 
     public void popTask() {
@@ -34,7 +34,7 @@ public class BotTaskManager {
 
             BotLifecycleLogger.write(this.bot);
 
-            BotLogger.info("➖", true, "Удалена задача: " + taskStack.peek().getClass().getSimpleName());
+            BotLogger.debug("➖", true, "Удалена задача: " + taskStack.peek().getClass().getSimpleName());
             taskStack.pop();
 
             // ✅ Если осталась активность, снимаем с неё паузу
@@ -76,13 +76,13 @@ public class BotTaskManager {
 
             BotTask<?> currentTask = taskStack.peek();
 
-            BotLogger.info("✨", true, "Active task: " + currentTask.getClass().getSimpleName());
+            BotLogger.debug("✨", true, "Active task: " + currentTask.getClass().getSimpleName());
     
             if (currentTask.isDone()) {
                 popTask();
-                BotLogger.info("✨", true, "Deactivating task: " + currentTask.getClass().getSimpleName());
+                BotLogger.debug("✨", true, "Deactivating task: " + currentTask.getClass().getSimpleName());
             } else {
-                BotLogger.info("✨", true, "Updating task: " + currentTask.getClass().getSimpleName());
+                BotLogger.debug("✨", true, "Updating task: " + currentTask.getClass().getSimpleName());
                 currentTask.update();
             }
         }
@@ -93,7 +93,7 @@ public class BotTaskManager {
         while (!taskStack.isEmpty()) {
             BotTask<?> removedTask = taskStack.pop();
             removedTask.stop();
-            BotLogger.info("❌", true, "Удалена задача: " + removedTask.getClass().getSimpleName());
+            BotLogger.debug("❌", true, "Удалена задача: " + removedTask.getClass().getSimpleName());
         }
     }
 

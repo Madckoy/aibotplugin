@@ -11,10 +11,10 @@ public class BotBehaviorSelector {
             .filter(BotTaskCandidate::isAvailable)
             .toList();
 
-        BotLogger.info("🧠", true, " Доступные кандидаты: " + candidates.size());
+        BotLogger.debug("🧠", true, " Доступные кандидаты: " + candidates.size());
 
         for (BotTaskCandidate c : candidates) {
-                BotLogger.info("🧠", true,  " Кандидат: weight=" + c.getWeight() + " available=" + c.isAvailable());
+                BotLogger.debug("🧠", true,  " Кандидат: weight=" + c.getWeight() + " available=" + c.isAvailable());
         }    
         
         if (available.isEmpty()) return Optional.empty();

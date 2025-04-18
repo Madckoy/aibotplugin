@@ -36,7 +36,7 @@ public class BotChaseTargetTask extends BotTaskAutoParams<BotChaseTaskParams> {
             bot.getNavigation().setTarget(target);
         }
 
-        BotLogger.info("✅", this.isLogging(),
+        BotLogger.debug("✅", this.isLogging(),
                 "Chase parameters: " + target + " | " + chaseDistance + " | " + attackRange);
         return this;
     }
@@ -44,7 +44,7 @@ public class BotChaseTargetTask extends BotTaskAutoParams<BotChaseTaskParams> {
     @Override
     public void execute() {
         if (target == null) {
-            BotLogger.info("💀", this.isLogging(), "Цель исчезла. Завершаем преследование.");
+            BotLogger.debug("💀", this.isLogging(), "Цель исчезла. Завершаем преследование.");
             this.stop();
             return;
         }
@@ -56,14 +56,14 @@ public class BotChaseTargetTask extends BotTaskAutoParams<BotChaseTaskParams> {
         Bukkit.getScheduler().runTaskLater(AIBotPlugin.getInstance(), this::execute, updateIntervalTicks);
 
         if (getElapsedTime() > 120000) {
-            BotLogger.info("💀", this.isLogging(), "Не могу добраться до цели. Завершаю преследование.");
+            BotLogger.debug("💀", this.isLogging(), "Не могу добраться до цели. Завершаю преследование.");
             this.stop();
         }
     }
 
     private void updateFollowLogic() {
         BotUtils.lookAt(bot, target);
-        BotLogger.info("🏃", this.isLogging(), "Chasing: " + target);
+        BotLogger.debug("🏃", this.isLogging(), "Chasing: " + target);
         this.stop();
     }
 

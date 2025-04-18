@@ -6,7 +6,7 @@ public class AIBotPluginConfig {
 
     public static class LoggingConfig {
         public boolean enable = true;
-        public String level = "INFO";
+        public String level = "FINE";
     }
 
     public static class ServerConfig {

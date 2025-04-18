@@ -31,12 +31,12 @@ public class BotIdleTask extends BotTaskAutoParams<BotIdleTaskParams> {
         isWaiting = true;
 
         long delayTicks = params.getTimeout(); // уже в тиках
-        BotLogger.info("🍹", isLogging(), bot.getId() + " Entering idle mode for " + delayTicks + " ticks.");
+        BotLogger.debug("🍹", isLogging(), bot.getId() + " Entering idle mode for " + delayTicks + " ticks.");
 
         new BukkitRunnable() {
             @Override
             public void run() {
-                BotLogger.info("✅", isLogging(), bot.getId() + " Idle timeout finished.");
+                BotLogger.debug("✅", isLogging(), bot.getId() + " Idle timeout finished.");
                 isWaiting = false; // (на всякий случай)
                 stop();
             }

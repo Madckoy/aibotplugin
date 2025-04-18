@@ -58,7 +58,7 @@ public class BotBrainTask extends BotTaskAutoParams<BotBrainTaskParams> {
 
     @Override
     public void execute() {
-        BotLogger.info(icon, this.isLogging(), "The bot "+ bot.getId() + " is making a decision...");
+        BotLogger.debug(icon, this.isLogging(), "The bot "+ bot.getId() + " is making a decision...");
         //
         int thinkingTicks = bot.getBrain().getThinkingTicks();
 
@@ -77,7 +77,7 @@ public class BotBrainTask extends BotTaskAutoParams<BotBrainTaskParams> {
         //
         long removed = bot.getBrain().getMemory().cleanup(params.getMemoryExpirationMillis());
         
-        BotLogger.info(icon, this.isLogging(), bot.getId() + " Removed outdated navigation points: " + removed);
+        BotLogger.debug(icon, this.isLogging(), bot.getId() + " Removed outdated navigation points: " + removed);
         
         //
         // осматриваемся и обновляем картинку мира
@@ -91,7 +91,7 @@ public class BotBrainTask extends BotTaskAutoParams<BotBrainTaskParams> {
         //}
         // 💡 Блокируем мышление, если сцена не готова
         if (bot.getBrain().getMemory().getSceneData() == null) {
-            BotLogger.info(icon, isLogging(), bot.getId() + " ⛔ Ожидаем результаты сканирования...");
+            BotLogger.debug(icon, isLogging(), bot.getId() + " ⛔ Ожидаем результаты сканирования...");
             return;
         }
         //
@@ -111,7 +111,7 @@ public class BotBrainTask extends BotTaskAutoParams<BotBrainTaskParams> {
     private void push(Bot bot, BotTask<?> task) {
         bot.getLifeCycle().getTaskStackManager().pushTask(task);
         bot.getBrain().resetThinkingCycle();
-        BotLogger.info(icon, this.isLogging(), "The task is pushed to stack ");
+        BotLogger.debug(icon, this.isLogging(), "The task is pushed to stack ");
     }
 
     private Runnable determineBehaviorScenario(Bot bot) {
@@ -122,7 +122,7 @@ public class BotBrainTask extends BotTaskAutoParams<BotBrainTaskParams> {
             if (unstuck.isPresent()) return unstuck.get();
     
             return () -> {
-                BotLogger.info(icon, isLogging(), bot.getId() + " 💤 Бот застрял. Уходим в Idle.");
+                BotLogger.debug(icon, isLogging(), bot.getId() + " 💤 Бот застрял. Уходим в Idle.");
                 push(bot, new BotIdleTask(bot));
             };
         }
@@ -131,7 +131,7 @@ public class BotBrainTask extends BotTaskAutoParams<BotBrainTaskParams> {
         if (weighted != null) return weighted;
     
         return () -> {
-            BotLogger.info(icon, isLogging(), bot.getId() + " 💤 Нет задач. Уходим в Idle.");
+            BotLogger.debug(icon, isLogging(), bot.getId() + " 💤 Нет задач. Уходим в Idle.");
             push(bot, new BotIdleTask(bot));
         };
     }
@@ -154,7 +154,7 @@ public class BotBrainTask extends BotTaskAutoParams<BotBrainTaskParams> {
             case 1: // Excavation
                 if (params.isAllowExcavation()) {
                     return Optional.of(() -> {
-                        BotLogger.info(icon, this.isLogging(), bot.getId() + " The bot is stuck. Starting Excavation to unstuck");
+                        BotLogger.debug(icon, this.isLogging(), bot.getId() + " The bot is stuck. Starting Excavation to unstuck");
                         BotExcavateTask task = new BotExcavateTask(bot);
                         BotExcavateTaskParams params = new BotExcavateTaskParams();
                         params.setOffsetY(params.getOuterRadius()-1);
@@ -183,7 +183,7 @@ public class BotBrainTask extends BotTaskAutoParams<BotBrainTaskParams> {
     
             default:
                 return Optional.of(() -> {
-                    BotLogger.info(icon, isLogging(), bot.getId() + " Falling back to idle behavior.");
+                    BotLogger.debug(icon, isLogging(), bot.getId() + " Falling back to idle behavior.");
                     push(bot, new BotIdleTask(bot));
                 });
         }
@@ -203,7 +203,7 @@ public class BotBrainTask extends BotTaskAutoParams<BotBrainTaskParams> {
             if (result.isPresent()) return result;
         }
 
-        BotLogger.info("🚫", this.isLogging(), bot.getId() + " All teleport attempts were failed.");
+        BotLogger.debug("🚫", this.isLogging(), bot.getId() + " All teleport attempts were failed.");
         return Optional.empty();
     }
 
@@ -216,7 +216,7 @@ public class BotBrainTask extends BotTaskAutoParams<BotBrainTaskParams> {
 
         // Возврат задачи в виде Runnable
         return Optional.of(() -> {
-                    BotLogger.info("⚡", this.isLogging(), "Телепорт: любая достижимая точка навигации:" + bot.getId() + block);
+                    BotLogger.debug("⚡", this.isLogging(), "Телепорт: любая достижимая точка навигации:" + bot.getId() + block);
                     // Создание параметров
                     BotTeleportTaskParams tpParams = new BotTeleportTaskParams(block);
                     // Создание задачи и передача параметров
@@ -235,7 +235,7 @@ public class BotBrainTask extends BotTaskAutoParams<BotBrainTaskParams> {
 
         // Возврат задачи в виде Runnable
         return Optional.of(() -> {
-                    BotLogger.info("⚡", this.isLogging(), "Телепорт: любая точка навигации:" + bot.getId() + block);
+                    BotLogger.debug("⚡", this.isLogging(), "Телепорт: любая точка навигации:" + bot.getId() + block);
                     // Создание параметров
                     BotTeleportTaskParams tpParams = new BotTeleportTaskParams(block);
                     // Создание задачи и передача параметров
@@ -255,7 +255,7 @@ public class BotBrainTask extends BotTaskAutoParams<BotBrainTaskParams> {
 
         // Возврат задачи в виде Runnable
         return Optional.of(() -> {
-            BotLogger.info("⚡", this.isLogging(), "Телепорт: любая проходимая точка :" + bot.getId() + block);
+            BotLogger.debug("⚡", this.isLogging(), "Телепорт: любая проходимая точка :" + bot.getId() + block);
             // Создание параметров
             BotTeleportTaskParams tpParams = new BotTeleportTaskParams(block);
             // Создание задачи и передача параметров
@@ -274,7 +274,7 @@ public class BotBrainTask extends BotTaskAutoParams<BotBrainTaskParams> {
 
         // Возврат задачи в виде Runnable
         return Optional.of(() -> {
-            BotLogger.info("⚡", this.isLogging(), "Телепорт: существо в пределах доступности:" + bot.getId() + block);
+            BotLogger.debug("⚡", this.isLogging(), "Телепорт: существо в пределах доступности:" + bot.getId() + block);
             // Создание параметров
             BotTeleportTaskParams tpParams = new BotTeleportTaskParams(block);
             // Создание задачи и передача параметров
@@ -288,7 +288,7 @@ public class BotBrainTask extends BotTaskAutoParams<BotBrainTaskParams> {
         BotLocation spawnLocation = BotWorldHelper.getWorldSpawnLocation();
         // Возврат задачи в виде Runnable
         return Optional.of(() -> {
-            BotLogger.info("⚡", this.isLogging(), "Телепорт: точка респавна:" + bot.getId() + spawnLocation);
+            BotLogger.debug("⚡", this.isLogging(), "Телепорт: точка респавна:" + bot.getId() + spawnLocation);
             // Создание параметров
             BotTeleportTaskParams tpParams = new BotTeleportTaskParams(spawnLocation);
             // Создание задачи и передача параметров

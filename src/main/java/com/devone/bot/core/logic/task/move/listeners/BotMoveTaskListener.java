@@ -22,7 +22,7 @@ public class BotMoveTaskListener implements Listener {
     public void onNavigationComplete(NavigationCompleteEvent event) {
         if (task.getBot().getNPC().getId() != event.getNPC().getId()) return;
 
-        BotLogger.info("✅", true, "Навигация завершена (BotMoveTaskListener), ID: " + task.getUUID());
+        BotLogger.debug("✅", true, "Навигация завершена (BotMoveTaskListener), ID: " + task.getUUID());
         task.getBot().getState().setStuck(false);
 
         task.stop(); // Завершаем задачу движения
@@ -31,7 +31,7 @@ public class BotMoveTaskListener implements Listener {
     public void onNavigationCancel(NavigationCancelEvent event) {
         if(event.getNPC().getId() != task.getBot().getNPC().getId()) return;
         //task.getBot().getBrain().setStuck(true);
-        BotLogger.info("❌", true,"Навигация отменена (BotMoveTaskListener) — NPC не смог дойти");
+        BotLogger.debug("❌", true,"Навигация отменена (BotMoveTaskListener) — NPC не смог дойти");
         task.stop();
     }
     

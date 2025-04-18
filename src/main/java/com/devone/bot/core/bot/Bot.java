@@ -88,7 +88,7 @@ public class Bot {
         this.state = new BotState(this);
         this.navigation = new BotNavigation(this);
 
-        BotLogger.info("➕", true, "Has been CREATED AND SPAWNED: " + id);
+        BotLogger.debug("➕", true, "Has been CREATED AND SPAWNED: " + id);
     }
 
 
@@ -145,15 +145,15 @@ public class Bot {
     public void despawnNPC() {
         if (npc != null) {
             //stop all tasks!
-            BotLogger.info("➖", true, "Stopping ALL Tasks for: " + id);
+            BotLogger.debug("➖", true, "Stopping ALL Tasks for: " + id);
             getLifeCycle().getTaskStackManager().clearTasks();
 
-            BotLogger.info("➖", true, " Despawning and Destroying NPC for: "+id );
+            BotLogger.debug("➖", true, " Despawning and Destroying NPC for: "+id );
             npc.despawn();
             npc.destroy();
             npc = null;
         }
-        BotLogger.info("➖", true, "Has been DESPAWNED and DESTROYED: "+ id);
+        BotLogger.debug("➖", true, "Has been DESPAWNED and DESTROYED: "+ id);
     }  
 
     public BotInventory getInventory() {
@@ -194,12 +194,12 @@ public class Bot {
     
         // Если есть дроп в радиусе 2 блоков — бот остается на месте
         if (!nearbyItems.isEmpty()) {
-            BotLogger.info("✅",true, "В радиусе " + pickupRadius + " блоков от "+ getId() +" есть предметы, остаюсь на месте.");
+            BotLogger.debug("✅",true, "В радиусе " + pickupRadius + " блоков от "+ getId() +" есть предметы, остаюсь на месте.");
             return;
         }
     
         // Если предметов рядом нет, двигаем бота к последнему разрушенному блоку
-        BotLogger.info("✅ ", true, "Дроп подобран "+ getId() +" и двигается к последнему разрушенному блоку " + lastBrokenBlock);
+        BotLogger.debug("✅ ", true, "Дроп подобран "+ getId() +" и двигается к последнему разрушенному блоку " + lastBrokenBlock);
         
         BotMoveTask mv_task = new BotMoveTask(this);
         BotLocation loc = new BotLocation(lastBrokenBlock.getBlockX(), lastBrokenBlock.getBlockY(), lastBrokenBlock.getBlockZ());

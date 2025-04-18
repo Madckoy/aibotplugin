@@ -32,7 +32,7 @@ public class BotSurvivalAttackTask extends BotTaskAutoParams<BotSurvivalAttackTa
     @Override
     public void execute() {
         if (target == null || target.getUUID() == null) {
-            BotLogger.info("❌", isLogging(), bot.getId() + "Target is absent or does not contain UUID");
+            BotLogger.debug("❌", isLogging(), bot.getId() + "Target is absent or does not contain UUID");
             this.stop();
             return;
         }
@@ -51,7 +51,7 @@ public class BotSurvivalAttackTask extends BotTaskAutoParams<BotSurvivalAttackTa
         bot.getLifeCycle().getTaskStackManager().pushTask(handTask);
         bot.getLifeCycle().getTaskStackManager().pushTask(tpTask);
 
-        BotLogger.info(icon, isLogging(), bot.getId() + "Prepared Teleport and Attack on: " + target);
+        BotLogger.debug(icon, isLogging(), bot.getId() + "Prepared Teleport and Attack on: " + target);
         this.stop();
     }
 }

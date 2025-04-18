@@ -46,7 +46,7 @@ public class BotUtils {
     
         // ✅ Проверяем, что блок не AIR (иначе эффект не сработает)
         if (blockType == Material.AIR) {
-            BotLogger.info("⚠️", true, "Эффект разрушения отменён: блок уже AIR " + location.toString());
+            BotLogger.debug("⚠️", true, "Эффект разрушения отменён: блок уже AIR " + location.toString());
             return;
         }
     
@@ -58,7 +58,7 @@ public class BotUtils {
             location.getBlock().getBlockData() // Тип блока для эффекта
         );
     
-        BotLogger.info("🎇", true, "Эффект разрушения воспроизведён на " + location.toString());
+        BotLogger.debug("🎇", true, "Эффект разрушения воспроизведён на " + location.toString());
     }
 
     public static boolean requiresTool(Material blockType) {
@@ -135,7 +135,7 @@ public class BotUtils {
         String usedMB = String.format("%.2f", usedMemory / 1024.0 / 1024.0);
         String maxMB = String.format("%.2f", maxMemory / 1024.0 / 1024.0);
     
-        BotLogger.info("📦", true, context + " — Использовано памяти: " + usedMB + " MB / " + maxMB + " MB");
+        BotLogger.debug("📦", true, context + " — Использовано памяти: " + usedMB + " MB / " + maxMB + " MB");
     }
     
 }

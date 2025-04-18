@@ -36,12 +36,12 @@ public class BotHandExcavateTask extends BotHandTask<BotHandExcavateTaskParams> 
         super.execute();
 
         if (target == null) {
-            BotLogger.info("❌", isLogging(), bot.getId() + " BotHandExcavateTask: Target is null.");
+            BotLogger.debug("❌", isLogging(), bot.getId() + " BotHandExcavateTask: Target is null.");
             this.stop();
             return;
         }
 
-        BotLogger.info("🔶", isLogging(), bot.getId() + " Executing BotHandExcavateTask");
+        BotLogger.debug("🔶", isLogging(), bot.getId() + " Executing BotHandExcavateTask");
 
         setObjective(params.getObjective() + " " + target.getType() +" at "+target.getLocation());
 
@@ -56,7 +56,7 @@ public class BotHandExcavateTask extends BotHandTask<BotHandExcavateTaskParams> 
 
                 Block block = BotWorldHelper.getBlockAt(target);
                 if (block == null || block.getType() == Material.AIR) {
-                    BotLogger.info("✅", isLogging(), bot.getId() + " Block already excavated.");
+                    BotLogger.debug("✅", isLogging(), bot.getId() + " Block already excavated.");
                     stop();
                     cancel();
                     return;
@@ -70,7 +70,7 @@ public class BotHandExcavateTask extends BotHandTask<BotHandExcavateTaskParams> 
                 }
                 
                 if (expectedType == null || actualMaterial == null || !actualMaterial.name().equalsIgnoreCase(expectedType)) {
-                    BotLogger.info("⚠️", isLogging(), bot.getId() + " Block changed type before excavation. Skipping.");
+                    BotLogger.debug("⚠️", isLogging(), bot.getId() + " Block changed type before excavation. Skipping.");
                     stop();
                     cancel();
                     return;
@@ -81,7 +81,7 @@ public class BotHandExcavateTask extends BotHandTask<BotHandExcavateTaskParams> 
                 block.breakNaturally();
                 bot.getBrain().getMemory().brokenBlocksIncrease(target.getType());
 
-                BotLogger.info("🪨", isLogging(), bot.getId() + " Block excavated: " + block);
+                BotLogger.debug("🪨", isLogging(), bot.getId() + " Block excavated: " + block);
             }
         }.runTaskTimer(AIBotPlugin.getInstance(), 0L, 10L);
     }

@@ -33,7 +33,7 @@ public class BotProtectCommand implements CommandExecutor {
             return true;
         }
 
-        BotLogger.info("🛡️ ", true,"/bot-protect: Бот " + bot.getId() + " защищает " + player.getName());
+        BotLogger.debug("🛡️ ", true,"/bot-protect: Бот " + bot.getId() + " защищает " + player.getName());
 
         // ✅ Очищаем стек задач
         bot.getLifeCycle().getTaskStackManager().clearTasks();

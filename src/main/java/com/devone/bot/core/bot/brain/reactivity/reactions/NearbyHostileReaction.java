@@ -23,7 +23,7 @@ public class NearbyHostileReaction implements IBotReactionStrategy {
                     double dist = botPos.distanceTo(entity.getLocation());
                     if (dist < 5) {
                         return Optional.of(() -> {
-                            BotLogger.info("⚠️", true, "Враг слишком близко: " + entity);
+                            BotLogger.debug("⚠️", true, "Враг слишком близко: " + entity);
                         });
                     }
                 }

@@ -15,7 +15,7 @@ public class LowHealthReaction implements IBotReactionStrategy {
 
         if (health < 5.0) {
             return Optional.of(() -> {
-                BotLogger.info("💔", true, "Здоровье критически низкое. Ищу безопасное место...");
+                BotLogger.debug("💔", true, "Здоровье критически низкое. Ищу безопасное место...");
                         });
             }
 

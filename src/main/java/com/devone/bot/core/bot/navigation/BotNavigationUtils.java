@@ -21,12 +21,12 @@ public class BotNavigationUtils {
 
         // check if has more than one block to visit
         int totalGoals = context.reachableGoals.size();
-        BotLogger.info("", true, "Total reachable goals:" + totalGoals);
+        BotLogger.debug("", true, "Total reachable goals:" + totalGoals);
         
         if(totalGoals <= 1) {
             //the bot is stuck!
             bot.getState().setStuck(true);
-            BotLogger.info("🚨", true, "The bot "+bot.getId() + " is stuck!");
+            BotLogger.debug("🚨", true, "The bot "+bot.getId() + " is stuck!");
             return true;
         } else {
           return false;
@@ -34,7 +34,7 @@ public class BotNavigationUtils {
     }
     public static void navigateTo(Bot bot, BotLocation target, float multiplier) {
         if(target==null) {
-            BotLogger.info("🏃🏻‍♂️‍➡️ ", true, bot.getId() + "Target navigation is null. Can't navigate!");
+            BotLogger.debug("🏃🏻‍♂️‍➡️ ", true, bot.getId() + "Target navigation is null. Can't navigate!");
             return;
         }
         navigate(bot, target, multiplier);
@@ -43,8 +43,8 @@ public class BotNavigationUtils {
     private static void navigate(Bot bot, BotLocation target, float multiplier) {
 
         
-        BotLogger.info("🏃🏻‍♂️‍➡️ ", true, bot.getId() + "Wants to navigate to " + target.toString() + " [ID: " + bot.getBrain().getCurrentTask().getIcon() + "]");
-        BotLogger.info("🎯", true,  bot.getId() + "Runtime Target Location: " + bot.getNavigation().getTarget().toString() + " [ID: " + bot.getBrain().getCurrentTask().getIcon() + "]");
+        BotLogger.debug("🏃🏻‍♂️‍➡️ ", true, bot.getId() + "Wants to navigate to " + target.toString() + " [ID: " + bot.getBrain().getCurrentTask().getIcon() + "]");
+        BotLogger.debug("🎯", true,  bot.getId() + "Runtime Target Location: " + bot.getNavigation().getTarget().toString() + " [ID: " + bot.getBrain().getCurrentTask().getIcon() + "]");
 
 
         BotMoveTask moveTask = new BotMoveTask(bot);

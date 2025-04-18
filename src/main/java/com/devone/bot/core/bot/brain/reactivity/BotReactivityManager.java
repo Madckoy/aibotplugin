@@ -29,7 +29,7 @@ public class BotReactivityManager {
         for (IBotReactionStrategy strategy : strategies) {
             Optional<Runnable> reaction = strategy.check(bot);
             if (reaction.isPresent()) {
-                BotLogger.info("⚡", true, bot.getId() + " Реакция активирована: " + strategy.getName());
+                BotLogger.debug("⚡", true, bot.getId() + " Реакция активирована: " + strategy.getName());
                 return reaction;
             }
         }
