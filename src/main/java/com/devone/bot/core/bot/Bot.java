@@ -10,10 +10,10 @@ import org.bukkit.entity.Entity;
 
 import org.bukkit.entity.Player;
 
+import com.devone.bot.core.bot.behaviour.task.move.BotMoveTask;
+import com.devone.bot.core.bot.behaviour.task.move.params.BotMoveTaskParams;
 import com.devone.bot.core.bot.brain.BotBrain;
 import com.devone.bot.core.bot.brain.logic.navigation.BotNavigation;
-import com.devone.bot.core.bot.brain.logic.task.move.BotMoveTask;
-import com.devone.bot.core.bot.brain.logic.task.move.params.BotMoveTaskParams;
 import com.devone.bot.core.bot.brain.logic.utils.blocks.BotLocation;
 import com.devone.bot.core.bot.brain.logic.utils.lifecycle.BotLifeCycle;
 import com.devone.bot.core.bot.brain.logic.utils.logger.BotLogger;

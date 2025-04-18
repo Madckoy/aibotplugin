@@ -8,8 +8,8 @@ import org.bukkit.command.CommandSender;
 
 import com.devone.bot.core.bot.Bot;
 import com.devone.bot.core.bot.BotManager;
-import com.devone.bot.core.bot.brain.logic.task.teleport.BotTeleportTask;
-import com.devone.bot.core.bot.brain.logic.task.teleport.params.BotTeleportTaskParams;
+import com.devone.bot.core.bot.behaviour.task.teleport.BotTeleportTask;
+import com.devone.bot.core.bot.behaviour.task.teleport.params.BotTeleportTaskParams;
 import com.devone.bot.core.bot.brain.logic.utils.blocks.BotLocation;
 import com.devone.bot.core.bot.brain.logic.utils.logger.BotLogger;
 

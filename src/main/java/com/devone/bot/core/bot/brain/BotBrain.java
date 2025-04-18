@@ -1,7 +1,7 @@
 package com.devone.bot.core.bot.brain;
 
 import com.devone.bot.core.bot.Bot;
-import com.devone.bot.core.bot.brain.logic.task.BotTask;
+import com.devone.bot.core.bot.behaviour.task.BotTask;
 import com.devone.bot.core.bot.brain.memory.BotMemory;
 
 

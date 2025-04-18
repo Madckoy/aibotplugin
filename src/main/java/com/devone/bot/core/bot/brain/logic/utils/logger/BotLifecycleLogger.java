@@ -3,7 +3,7 @@ package com.devone.bot.core.bot.brain.logic.utils.logger;
 import org.bukkit.Bukkit;
 
 import com.devone.bot.core.bot.Bot;
-import com.devone.bot.core.bot.brain.logic.task.BotTask;
+import com.devone.bot.core.bot.behaviour.task.BotTask;
 import com.devone.bot.core.bot.brain.logic.utils.BotConstants;
 import com.devone.bot.core.bot.brain.logic.utils.BotUtils;
 import com.devone.bot.core.bot.brain.logic.utils.blocks.BotLocation;

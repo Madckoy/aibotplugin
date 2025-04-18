@@ -15,7 +15,7 @@ import org.bukkit.inventory.ItemStack;
 
 import com.devone.bot.core.bot.Bot;
 import com.devone.bot.core.bot.BotManager;
-import com.devone.bot.core.bot.brain.logic.task.BotTask;
+import com.devone.bot.core.bot.behaviour.task.BotTask;
 import com.devone.bot.core.bot.brain.logic.utils.BotUtils;
 import com.devone.bot.core.bot.brain.logic.utils.blocks.BotLocation;
 import com.devone.bot.core.web.BotWebService;
@@ -92,7 +92,7 @@ public class BotStatusServlet extends HttpServlet {
                 botJson.addProperty("queue", taskStackText);
                 botsArray.add(botJson);
 
-                botJson.addProperty("memory", bot.getBrain().getMemory().);
+                botJson.addProperty("memory", bot.getBrain().getMemory().toJson().toString());
 
                 botsArray.add(botJson);
 

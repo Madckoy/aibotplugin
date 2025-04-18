@@ -4,8 +4,8 @@ import org.bukkit.Bukkit;
 
 import com.devone.bot.AIBotPlugin;
 import com.devone.bot.core.bot.Bot;
-import com.devone.bot.core.bot.brain.logic.task.BotTaskManager;
-import com.devone.bot.core.bot.brain.logic.task.brain.BotBrainTask;
+import com.devone.bot.core.bot.behaviour.task.BotTaskManager;
+import com.devone.bot.core.bot.behaviour.task.brain.BotBrainTask;
 import com.devone.bot.core.bot.brain.logic.utils.logger.BotLogger;
 import com.devone.bot.core.bot.brain.logic.utils.server.ServerUtils;
 
