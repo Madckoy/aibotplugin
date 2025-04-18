@@ -1,13 +1,13 @@
 package com.devone.bot.core.bot.navigation;
 
 import com.devone.bot.core.bot.Bot;
+import com.devone.bot.core.bot.blocks.BotLocation;
+import com.devone.bot.core.bot.scene.BotSceneData;
 import com.devone.bot.core.logic.navigation.BotNavigationPlannerWrapper;
 import com.devone.bot.core.logic.navigation.scene.BotSceneContext;
 import com.devone.bot.core.logic.task.move.BotMoveTask;
 import com.devone.bot.core.logic.task.move.params.BotMoveTaskParams;
-import com.devone.bot.utils.blocks.BotLocation;
 import com.devone.bot.utils.logger.BotLogger;
-import com.devone.bot.utils.scene.BotSceneData;
 
 public class BotNavigationUtils {
 

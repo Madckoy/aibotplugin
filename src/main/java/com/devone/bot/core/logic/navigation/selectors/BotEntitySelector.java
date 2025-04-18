@@ -1,10 +1,10 @@
 package com.devone.bot.core.logic.navigation.selectors;
 
-import com.devone.bot.utils.blocks.BotBlockData;
-import com.devone.bot.utils.blocks.BotLocation;
-
 import java.util.Comparator;
 import java.util.List;
+
+import com.devone.bot.core.bot.blocks.BotBlockData;
+import com.devone.bot.core.bot.blocks.BotLocation;
 
 public class BotEntitySelector {
 

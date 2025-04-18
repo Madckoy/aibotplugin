@@ -6,11 +6,11 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.*;
 import com.devone.bot.core.bot.Bot;
+import com.devone.bot.core.bot.blocks.BotLocation;
+import com.devone.bot.core.bot.blocks.BotLocationComparators;
+import com.devone.bot.core.bot.blocks.BotAxisDirection.AxisDirection;
 import com.devone.bot.core.logic.task.excavate.patterns.IBotExcavatePattern;
 import com.devone.bot.core.logic.task.excavate.patterns.generator.params.BotExcavatePatternGenerationParams;
-import com.devone.bot.utils.blocks.BotAxisDirection.AxisDirection;
-import com.devone.bot.utils.blocks.BotLocation;
-import com.devone.bot.utils.blocks.BotLocationComparators;
 import com.devone.bot.utils.logger.BotLogger;
 
 /**

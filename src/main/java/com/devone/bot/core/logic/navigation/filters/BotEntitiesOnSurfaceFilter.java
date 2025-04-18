@@ -1,9 +1,9 @@
 package com.devone.bot.core.logic.navigation.filters;
 
-import com.devone.bot.utils.blocks.BotBlockData;
-
 import java.util.ArrayList;
 import java.util.List;
+
+import com.devone.bot.core.bot.blocks.BotBlockData;
 
 public class BotEntitiesOnSurfaceFilter {
 

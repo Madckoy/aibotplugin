@@ -10,8 +10,8 @@ import org.bukkit.entity.Entity;
 import org.bukkit.entity.LivingEntity;
 
 import com.devone.bot.core.bot.Bot;
-import com.devone.bot.utils.blocks.BotBlockData;
-import com.devone.bot.utils.blocks.BotLocation;
+import com.devone.bot.core.bot.blocks.BotBlockData;
+import com.devone.bot.core.bot.blocks.BotLocation;
 
 public class BotWorldHelper {
 

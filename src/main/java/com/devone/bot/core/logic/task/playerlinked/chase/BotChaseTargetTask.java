@@ -2,13 +2,13 @@ package com.devone.bot.core.logic.task.playerlinked.chase;
 
 import org.bukkit.Bukkit;
 
-import com.devone.bot.AIBotPlugin;
 import com.devone.bot.core.bot.Bot;
+import com.devone.bot.core.bot.blocks.BotBlockData;
 import com.devone.bot.core.logic.task.BotTaskAutoParams;
 import com.devone.bot.core.logic.task.IBotTaskParameterized;
 import com.devone.bot.core.logic.task.playerlinked.chase.params.BotChaseTaskParams;
+import com.devone.bot.core.plugin.AIBotPlugin;
 import com.devone.bot.utils.BotUtils;
-import com.devone.bot.utils.blocks.BotBlockData;
 import com.devone.bot.utils.logger.BotLogger;
 
 public class BotChaseTargetTask extends BotTaskAutoParams<BotChaseTaskParams> {

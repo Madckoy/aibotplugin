@@ -13,11 +13,11 @@
 
 package com.devone.bot.core.logic.navigation;
 
-import com.devone.bot.utils.blocks.BotBlockData;
-import com.devone.bot.utils.blocks.BotLocation;
-
 import java.util.*;
  import java.util.stream.Collectors;
+
+import com.devone.bot.core.bot.blocks.BotBlockData;
+import com.devone.bot.core.bot.blocks.BotLocation;
  
  public class BotExplorationTargetPlanner {
  

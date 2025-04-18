@@ -1,10 +1,10 @@
 package com.devone.bot.core.logic.task.idle;
 
-import com.devone.bot.AIBotPlugin;
 import com.devone.bot.core.bot.Bot;
 import com.devone.bot.core.logic.task.BotTaskAutoParams;
 import com.devone.bot.core.logic.task.IBotTaskParameterized;
 import com.devone.bot.core.logic.task.idle.params.BotIdleTaskParams;
+import com.devone.bot.core.plugin.AIBotPlugin;
 import com.devone.bot.utils.logger.BotLogger;
 import org.bukkit.scheduler.BukkitRunnable;
 

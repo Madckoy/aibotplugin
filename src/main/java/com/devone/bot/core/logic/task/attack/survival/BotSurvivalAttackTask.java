@@ -1,6 +1,7 @@
 package com.devone.bot.core.logic.task.attack.survival;
 
 import com.devone.bot.core.bot.Bot;
+import com.devone.bot.core.bot.blocks.BotBlockData;
 import com.devone.bot.core.logic.task.BotTaskAutoParams;
 import com.devone.bot.core.logic.task.IBotTaskParameterized;
 import com.devone.bot.core.logic.task.attack.survival.params.BotSurvivalAttackTaskParams;
@@ -8,7 +9,6 @@ import com.devone.bot.core.logic.task.hand.attack.BotHandAttackTask;
 import com.devone.bot.core.logic.task.hand.attack.params.BotHandAttackTaskParams;
 import com.devone.bot.core.logic.task.teleport.BotTeleportTask;
 import com.devone.bot.core.logic.task.teleport.params.BotTeleportTaskParams;
-import com.devone.bot.utils.blocks.BotBlockData;
 import com.devone.bot.utils.logger.BotLogger;
 
 public class BotSurvivalAttackTask extends BotTaskAutoParams<BotSurvivalAttackTaskParams> {

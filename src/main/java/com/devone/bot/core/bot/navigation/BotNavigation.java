@@ -1,8 +1,8 @@
 package com.devone.bot.core.bot.navigation;
 
 import com.devone.bot.core.bot.Bot;
-import com.devone.bot.utils.blocks.BotLocation;
-import com.devone.bot.utils.blocks.BotLocationHelper;
+import com.devone.bot.core.bot.blocks.BotLocation;
+import com.devone.bot.core.bot.blocks.BotLocationHelper;
 
 public class BotNavigation {
     private transient Bot owner;
@@ -39,7 +39,7 @@ public class BotNavigation {
     public void setLocation(BotLocation location) {
         this.currentLocation = location;
     }
-    
+
     // Геттер и Сеттер для targetLocation
     public BotLocation getTarget() {
         return targetLocation;

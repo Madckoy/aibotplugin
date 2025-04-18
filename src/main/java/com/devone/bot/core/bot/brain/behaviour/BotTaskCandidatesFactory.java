@@ -2,16 +2,16 @@ package com.devone.bot.core.bot.brain.behaviour;
 
 import java.util.*;
 import com.devone.bot.core.bot.Bot;
+import com.devone.bot.core.bot.blocks.BotBlockData;
+import com.devone.bot.core.bot.blocks.BotLocation;
+import com.devone.bot.core.bot.scene.BotSceneData;
 import com.devone.bot.core.logic.task.explore.BotExploreTask;
 import com.devone.bot.core.logic.task.excavate.BotExcavateTask;
 import com.devone.bot.core.logic.task.excavate.params.BotExcavateTaskParams;
 import com.devone.bot.core.logic.task.hand.attack.BotHandAttackTask;
 import com.devone.bot.core.logic.task.hand.attack.params.BotHandAttackTaskParams;
-import com.devone.bot.utils.blocks.BotBlockData;
-import com.devone.bot.utils.blocks.BotLocation;
 import com.devone.bot.core.logic.navigation.selectors.BotEntitySelector;
 import com.devone.bot.core.logic.task.brain.params.BotBrainTaskParams;
-import com.devone.bot.utils.scene.BotSceneData;
 import com.devone.bot.utils.world.BotWorldHelper;
 import com.devone.bot.utils.logger.BotLogger;
 

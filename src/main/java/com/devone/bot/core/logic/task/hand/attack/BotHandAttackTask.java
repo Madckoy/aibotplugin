@@ -5,16 +5,16 @@ import org.bukkit.entity.LivingEntity;
 import org.bukkit.scheduler.BukkitRunnable;
 import org.bukkit.scheduler.BukkitTask;
 
-import com.devone.bot.AIBotPlugin;
 import com.devone.bot.core.bot.Bot;
+import com.devone.bot.core.bot.blocks.BotBlockData;
+import com.devone.bot.core.bot.blocks.BotLocation;
+import com.devone.bot.core.bot.blocks.BotLocationHelper;
 import com.devone.bot.core.logic.task.hand.BotHandTask;
 import com.devone.bot.core.logic.task.hand.attack.listener.BotHandAttackListener;
 import com.devone.bot.core.logic.task.hand.attack.params.BotHandAttackTaskParams;
+import com.devone.bot.core.plugin.AIBotPlugin;
 import com.devone.bot.utils.BotConstants;
 import com.devone.bot.utils.BotUtils;
-import com.devone.bot.utils.blocks.BotBlockData;
-import com.devone.bot.utils.blocks.BotLocation;
-import com.devone.bot.utils.blocks.BotLocationHelper;
 import com.devone.bot.utils.logger.BotLogger;
 import com.devone.bot.utils.world.BotWorldHelper;
 

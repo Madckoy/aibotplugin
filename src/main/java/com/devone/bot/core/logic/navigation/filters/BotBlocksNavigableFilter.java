@@ -1,9 +1,9 @@
 package com.devone.bot.core.logic.navigation.filters;
 
-import com.devone.bot.utils.blocks.BotBlockData;
-import com.devone.bot.utils.blocks.BotLocation;
-
 import java.util.*;
+
+import com.devone.bot.core.bot.blocks.BotBlockData;
+import com.devone.bot.core.bot.blocks.BotLocation;
 
 public class BotBlocksNavigableFilter {
 

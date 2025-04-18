@@ -3,11 +3,11 @@ package com.devone.bot.utils.logger;
 import org.bukkit.Bukkit;
 
 import com.devone.bot.core.bot.Bot;
+import com.devone.bot.core.bot.blocks.BotLocation;
 import com.devone.bot.core.logic.task.BotTask;
 import com.devone.bot.utils.BotConstants;
 
 import com.devone.bot.utils.BotUtils;
-import com.devone.bot.utils.blocks.BotLocation;
 
 import java.io.*;
 import java.text.SimpleDateFormat;

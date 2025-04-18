@@ -5,9 +5,12 @@ import java.util.Optional;
 import java.util.function.Supplier;
 
 import com.devone.bot.core.bot.Bot;
+import com.devone.bot.core.bot.blocks.BotBlockData;
+import com.devone.bot.core.bot.blocks.BotLocation;
 import com.devone.bot.core.bot.brain.behaviour.BotBehaviorSelector;
 import com.devone.bot.core.bot.brain.behaviour.BotTaskCandidate;
 import com.devone.bot.core.bot.brain.behaviour.BotTaskCandidatesFactory;
+import com.devone.bot.core.bot.scene.BotSceneData;
 import com.devone.bot.core.logic.navigation.BotNavigationPlannerWrapper;
 import com.devone.bot.core.logic.navigation.scene.BotSceneContext;
 import com.devone.bot.core.logic.navigation.selectors.BotBlockSelector;
@@ -21,10 +24,7 @@ import com.devone.bot.core.logic.task.idle.BotIdleTask;
 import com.devone.bot.core.logic.task.sonar.BotSonar3DTask;
 import com.devone.bot.core.logic.task.teleport.BotTeleportTask;
 import com.devone.bot.core.logic.task.teleport.params.BotTeleportTaskParams;
-import com.devone.bot.utils.blocks.BotBlockData;
-import com.devone.bot.utils.blocks.BotLocation;
 import com.devone.bot.utils.logger.BotLogger;
-import com.devone.bot.utils.scene.BotSceneData;
 import com.devone.bot.utils.world.BotWorldHelper;
 
 public class BotBrainTask extends BotTaskAutoParams<BotBrainTaskParams> {
@@ -47,7 +47,6 @@ public class BotBrainTask extends BotTaskAutoParams<BotBrainTaskParams> {
     
         // 🎯 Визуально можно логировать флаги (опционально для отладки)
         BotLogger.debug("🧠 BotBrainTask", isLogging(), bot.getId() + " параметры загружены: " +
-            "pickup=" + params.isAllowPickupItems() + ", " +
             "explore=" + params.isAllowExploration() + ", " +
             "excavate=" + params.isAllowExcavation() + ", " +
             "violence=" + params.isAllowViolence() + ", " +

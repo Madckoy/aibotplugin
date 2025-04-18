@@ -15,9 +15,9 @@ import org.bukkit.inventory.ItemStack;
 
 import com.devone.bot.core.bot.Bot;
 import com.devone.bot.core.bot.BotManager;
+import com.devone.bot.core.bot.blocks.BotLocation;
 import com.devone.bot.core.logic.task.BotTask;
 import com.devone.bot.utils.BotUtils;
-import com.devone.bot.utils.blocks.BotLocation;
 import com.devone.bot.web.BotWebService;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;

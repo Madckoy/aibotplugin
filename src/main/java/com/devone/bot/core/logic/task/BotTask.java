@@ -4,13 +4,13 @@ import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 import org.bukkit.event.Listener;
 
-import com.devone.bot.AIBotPlugin;
 import com.devone.bot.core.bot.Bot;
+import com.devone.bot.core.bot.blocks.BotLocation;
 import com.devone.bot.core.bot.brain.reactivity.BotReactivityManager;
 import com.devone.bot.core.logic.task.brain.BotBrainTask;
 import com.devone.bot.core.logic.task.params.BotTaskParams;
+import com.devone.bot.core.plugin.AIBotPlugin;
 import com.devone.bot.utils.BotUtils;
-import com.devone.bot.utils.blocks.BotLocation;
 import com.devone.bot.utils.logger.BotLogger;
 
 import java.util.Optional;

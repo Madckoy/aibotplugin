@@ -1,7 +1,10 @@
 package com.devone.bot.core.logic.task.explore;
 
 import com.devone.bot.core.bot.Bot;
+import com.devone.bot.core.bot.blocks.BotBlockData;
+import com.devone.bot.core.bot.blocks.BotLocation;
 import com.devone.bot.core.bot.navigation.BotNavigationUtils;
+import com.devone.bot.core.bot.scene.BotSceneData;
 import com.devone.bot.core.logic.navigation.BotNavigationPlannerWrapper;
 import com.devone.bot.core.logic.navigation.scene.BotSceneContext;
 import com.devone.bot.core.logic.navigation.selectors.BotBlockSelector;
@@ -9,10 +12,7 @@ import com.devone.bot.core.logic.task.BotTaskAutoParams;
 import com.devone.bot.core.logic.task.IBotTaskParameterized;
 import com.devone.bot.core.logic.task.explore.params.BotExploreTaskParams;
 import com.devone.bot.utils.BotConstants;
-import com.devone.bot.utils.blocks.BotBlockData;
-import com.devone.bot.utils.blocks.BotLocation;
 import com.devone.bot.utils.logger.BotLogger;
-import com.devone.bot.utils.scene.BotSceneData;
 
 public class BotExploreTask extends BotTaskAutoParams<BotExploreTaskParams> {
 
@@ -86,7 +86,14 @@ public class BotExploreTask extends BotTaskAutoParams<BotExploreTaskParams> {
         //    navGoal = validGoals.get(0);
         //}
 
+        boolean isStuck = BotNavigationUtils.detectIfStuck(bot);
+
+        BotLogger.info("🎯", isLogging(), bot.getId() + " STUCK: " + isStuck);
+
+
         BotBlockData target = BotBlockSelector.pickRandomTarget(context.reachable);
+
+        BotLogger.info("🎯", isLogging(), bot.getId() + " TOTAL REACHABLE: " + context.reachable.size());
 
         if (target != null) {
             BotLogger.info("🎯", isLogging(), bot.getId() + " Target: " + target);

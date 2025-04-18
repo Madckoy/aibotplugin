@@ -2,10 +2,10 @@ package com.devone.bot.core.logic.lifecycle;
 
 import org.bukkit.Bukkit;
 
-import com.devone.bot.AIBotPlugin;
 import com.devone.bot.core.bot.Bot;
 import com.devone.bot.core.logic.task.BotTaskManager;
 import com.devone.bot.core.logic.task.brain.BotBrainTask;
+import com.devone.bot.core.plugin.AIBotPlugin;
 import com.devone.bot.utils.logger.BotLogger;
 import com.devone.bot.utils.server.ServerUtils;
 

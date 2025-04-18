@@ -1,5 +1,7 @@
 package com.devone.bot.core.logic.navigation;
 
+import com.devone.bot.core.bot.blocks.BotBlockData;
+import com.devone.bot.core.bot.blocks.BotLocation;
 import com.devone.bot.core.logic.navigation.BotExplorationTargetPlanner.Strategy;
 import com.devone.bot.core.logic.navigation.filters.BotBlocksNavigableFilter;
 import com.devone.bot.core.logic.navigation.filters.BotBlocksNoDangerousFilter;
@@ -8,8 +10,6 @@ import com.devone.bot.core.logic.navigation.filters.BotBlocksWalkableFilter;
 import com.devone.bot.core.logic.navigation.filters.BotEntitiesOnSurfaceFilter;
 import com.devone.bot.core.logic.navigation.resolvers.BotReachabilityResolver;
 import com.devone.bot.core.logic.navigation.scene.BotSceneContext;
-import com.devone.bot.utils.blocks.BotBlockData;
-import com.devone.bot.utils.blocks.BotLocation;
 
 import java.util.List;
 

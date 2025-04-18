@@ -1,8 +1,8 @@
 package com.devone.bot.core.logic.navigation.scene;
 import java.util.List;
 
-import com.devone.bot.utils.blocks.BotBlockData;
-import com.devone.bot.utils.scene.BotSceneData;
+import com.devone.bot.core.bot.blocks.BotBlockData;
+import com.devone.bot.core.bot.scene.BotSceneData;
 
 public class BotSceneContext extends BotSceneData {
     public List<BotBlockData> walkable;

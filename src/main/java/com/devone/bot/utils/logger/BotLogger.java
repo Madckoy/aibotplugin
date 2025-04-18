@@ -3,8 +3,8 @@ package com.devone.bot.utils.logger;
 import java.io.IOException;
 import java.util.logging.*;
 
-import com.devone.bot.AIBotPlugin;
-import com.devone.bot.config.AIBotPluginConfig;
+import com.devone.bot.core.plugin.AIBotPlugin;
+import com.devone.bot.core.plugin.config.AIBotPluginConfig;
 
 public class BotLogger {
 

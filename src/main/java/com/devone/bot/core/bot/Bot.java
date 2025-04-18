@@ -10,15 +10,15 @@ import org.bukkit.entity.Entity;
 
 import org.bukkit.entity.Player;
 
+import com.devone.bot.core.bot.blocks.BotLocation;
 import com.devone.bot.core.bot.brain.BotBrain;
 import com.devone.bot.core.bot.inventory.BotInventory;
 import com.devone.bot.core.bot.navigation.BotNavigation;
+import com.devone.bot.core.bot.speaker.BotSpeaker;
 import com.devone.bot.core.bot.state.BotState;
-import com.devone.bot.core.chat.BotChat;
 import com.devone.bot.core.logic.lifecycle.BotLifeCycle;
 import com.devone.bot.core.logic.task.move.BotMoveTask;
 import com.devone.bot.core.logic.task.move.params.BotMoveTaskParams;
-import com.devone.bot.utils.blocks.BotLocation;
 import com.devone.bot.utils.logger.BotLogger;
 
 import net.citizensnpcs.api.ai.Navigator;
@@ -39,17 +39,21 @@ public class Bot {
     private final BotInventory inventory; // Инвентарь бота
     private final BotManager botManager; // Менеджер ботов
     private BotBrain brain; // Память/Рантайм статус бота
-    private BotChat chat; // Создаем поле для общения бота
+    private BotSpeaker speaker; // Создаем поле для общения бота
+    public BotSpeaker getSpeaker() {
+        return speaker;
+    }
+
+
+    public void setSpeaker(BotSpeaker speaker) {
+        this.speaker = speaker;
+    }
+
     private BotState state;
     private BotNavigation navigation;
 
     public void setBrain(BotBrain brain) {
         this.brain = brain;
-    }
-
-
-    public void setChat(BotChat chat) {
-        this.chat = chat;
     }
 
 
@@ -80,7 +84,7 @@ public class Bot {
         this.inventory = new BotInventory(this);
         this.lifeCycle = new BotLifeCycle(this);
         this.brain = new BotBrain(this); // Инициализация рантайм статуса
-        this.chat = new BotChat(this); // Инициализация BotCommunicator
+        this.speaker = new BotSpeaker(this); // Инициализация BotCommunicator
         this.state = new BotState(this);
         this.navigation = new BotNavigation(this);
 
@@ -110,16 +114,6 @@ public class Bot {
 
     public NPC getNpc() {
         return npc;
-    }
-
-    public BotChat getChat() {
-        return chat;
-    }
-
-
-    // Getter для общения
-    public BotChat getCommunicator() {
-        return chat;
     }
 
     public NPC getNPC() {

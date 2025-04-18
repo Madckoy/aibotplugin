@@ -7,7 +7,7 @@ import org.bukkit.block.Block;
 import org.bukkit.util.Vector;
 
 import com.devone.bot.core.bot.Bot;
-import com.devone.bot.utils.blocks.BotLocation;
+import com.devone.bot.core.bot.blocks.BotLocation;
 import com.devone.bot.utils.logger.BotLogger;
 import com.devone.bot.utils.world.BotWorldHelper;
 

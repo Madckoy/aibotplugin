@@ -4,10 +4,10 @@ import java.io.File;
 import java.util.HashMap;
 import java.util.Map;
 
-import com.devone.bot.config.AIBotBaseJsonConfig;
 import com.devone.bot.core.bot.Bot;
+import com.devone.bot.core.bot.blocks.BotLocation;
 import com.devone.bot.core.bot.brain.BotBrain;
-import com.devone.bot.utils.blocks.BotLocation;
+import com.devone.bot.core.plugin.config.AIBotBaseJsonConfig;
 
 public class BotManagerConfig extends AIBotBaseJsonConfig<BotManagerConfig.Data> {
 

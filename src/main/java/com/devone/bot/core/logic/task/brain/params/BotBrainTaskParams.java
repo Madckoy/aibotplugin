@@ -4,8 +4,6 @@ import com.devone.bot.core.logic.task.params.BotTaskParams;
 
 public class BotBrainTaskParams extends BotTaskParams {
 
-    private boolean allowPickupItems = true;
-    //
     private boolean killAggressives = true;
     // 
     private boolean killPassives = true;
@@ -49,7 +47,6 @@ public class BotBrainTaskParams extends BotTaskParams {
         if (source == null) return new BotBrainTaskParams();
     
         BotBrainTaskParams target = new BotBrainTaskParams();
-        target.setAllowPickupItems(source.isAllowPickupItems());
         target.setAllowExploration(source.isAllowExploration());
         target.setAllowExcavation(source.isAllowExcavation());
         target.setAllowTeleport(source.isAllowTeleport());
@@ -95,10 +92,7 @@ public class BotBrainTaskParams extends BotTaskParams {
     public void setMemoryExpirationMillis(long memoryExpirationMillis) {
         this.memoryExpirationMillis = memoryExpirationMillis;
     }
-    
-    public boolean isAllowPickupItems() {
-        return allowPickupItems;
-    }
+
 
     public boolean isKillAggressives() {
         return killAggressives;
@@ -130,10 +124,6 @@ public class BotBrainTaskParams extends BotTaskParams {
 
     public boolean isAllowExploration() {
         return allowExploration;
-    }
-
-    public void setAllowPickupItems(boolean allowPickupItems) {
-        this.allowPickupItems = allowPickupItems;
     }
 
     public void setKillAggressives(boolean killAggressives) {

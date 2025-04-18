@@ -1,7 +1,7 @@
 package com.devone.bot.core.logic.task.move.params;
 
+import com.devone.bot.core.bot.blocks.BotLocation;
 import com.devone.bot.core.logic.task.params.BotTaskParams;
-import com.devone.bot.utils.blocks.BotLocation;
 
 public class BotMoveTaskParams extends BotTaskParams {
 

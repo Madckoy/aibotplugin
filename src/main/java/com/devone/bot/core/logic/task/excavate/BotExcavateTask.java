@@ -9,6 +9,8 @@ import org.bukkit.block.Block;
 import org.eclipse.jetty.util.StringUtil;
 
 import com.devone.bot.core.bot.Bot;
+import com.devone.bot.core.bot.blocks.BotBlockData;
+import com.devone.bot.core.bot.blocks.BotLocation;
 import com.devone.bot.core.bot.inventory.BotInventory;
 import com.devone.bot.core.logic.task.BotTaskAutoParams;
 import com.devone.bot.core.logic.task.IBotTaskParameterized;
@@ -18,13 +20,11 @@ import com.devone.bot.core.logic.task.excavate.patterns.IBotExcavatePattern;
 import com.devone.bot.core.logic.task.excavate.patterns.generator.BotExcavateInterpretedYamlPattern;
 import com.devone.bot.core.logic.task.hand.excavate.BotHandExcavateTask;
 import com.devone.bot.core.logic.task.hand.excavate.params.BotHandExcavateTaskParams;
-import com.devone.bot.core.zone.BotZoneManager;
 import com.devone.bot.utils.BotConstants;
 import com.devone.bot.utils.BotUtils;
-import com.devone.bot.utils.blocks.BotBlockData;
-import com.devone.bot.utils.blocks.BotLocation;
 import com.devone.bot.utils.logger.BotLogger;
 import com.devone.bot.utils.world.BotWorldHelper;
+import com.devone.bot.utils.zone.BotZoneManager;
 
 public class BotExcavateTask extends BotTaskAutoParams<BotExcavateTaskParams> {
 

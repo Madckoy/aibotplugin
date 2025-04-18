@@ -1,12 +1,12 @@
 package com.devone.bot.core.logic.task.sonar;
 
 import com.devone.bot.core.bot.Bot;
+import com.devone.bot.core.bot.scene.BotSceneData;
+import com.devone.bot.core.bot.scene.BotSceneScan3D;
 import com.devone.bot.core.logic.task.BotTaskAutoParams;
 import com.devone.bot.core.logic.task.IBotTaskParameterized;
 import com.devone.bot.core.logic.task.sonar.params.BotSonarTaskParams;
 import com.devone.bot.utils.logger.BotLogger;
-import com.devone.bot.utils.scene.BotSceneData;
-import com.devone.bot.utils.scene.BotSceneScan3D;
 
 public class BotSonar3DTask extends BotTaskAutoParams<BotSonarTaskParams> {
 

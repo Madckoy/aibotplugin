@@ -1,9 +1,9 @@
 package com.devone.bot.utils.bluemap;
 
-import com.devone.bot.AIBotPlugin;
 import com.devone.bot.core.bot.Bot;
 import com.devone.bot.core.bot.BotManager;
-import com.devone.bot.utils.blocks.BotLocation;
+import com.devone.bot.core.bot.blocks.BotLocation;
+import com.devone.bot.core.plugin.AIBotPlugin;
 import com.devone.bot.utils.image.BotImageUtils;
 import com.devone.bot.utils.logger.BotLogger;
 import com.devone.bot.web.BotWebService;
