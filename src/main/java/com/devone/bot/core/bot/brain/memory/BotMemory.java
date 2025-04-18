@@ -1,8 +1,8 @@
 package com.devone.bot.core.bot.brain.memory;
 
+import com.devone.bot.core.bot.brain.logic.utils.blocks.BotBlockData;
+import com.devone.bot.core.bot.brain.logic.utils.blocks.BotLocation;
 import com.devone.bot.core.bot.brain.memory.scene.BotSceneData;
-import com.devone.bot.core.bot.utils.blocks.BotBlockData;
-import com.devone.bot.core.bot.utils.blocks.BotLocation;
 
 import java.util.HashMap;
 import java.util.Iterator;

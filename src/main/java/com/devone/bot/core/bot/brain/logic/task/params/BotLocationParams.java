@@ -1,6 +1,6 @@
 package com.devone.bot.core.bot.brain.logic.task.params;
 
-import com.devone.bot.core.bot.utils.blocks.BotLocation;
+import com.devone.bot.core.bot.brain.logic.utils.blocks.BotLocation;
 
 public class BotLocationParams extends BotTaskParams {
 

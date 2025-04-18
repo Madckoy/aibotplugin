@@ -17,7 +17,7 @@ import com.devone.bot.core.bot.Bot;
 import com.devone.bot.core.bot.BotManager;
 import com.devone.bot.core.bot.brain.logic.task.BotTask;
 import com.devone.bot.core.bot.brain.logic.utils.BotUtils;
-import com.devone.bot.core.bot.utils.blocks.BotLocation;
+import com.devone.bot.core.bot.brain.logic.utils.blocks.BotLocation;
 import com.devone.bot.core.web.BotWebService;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;

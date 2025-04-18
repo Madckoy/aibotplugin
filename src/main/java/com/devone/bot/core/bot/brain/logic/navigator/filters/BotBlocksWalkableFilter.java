@@ -3,8 +3,8 @@ package com.devone.bot.core.bot.brain.logic.navigator.filters;
 
 import java.util.*;
 
-import com.devone.bot.core.bot.utils.blocks.BotBlockData;
-import com.devone.bot.core.bot.utils.blocks.BotLocation;
+import com.devone.bot.core.bot.brain.logic.utils.blocks.BotBlockData;
+import com.devone.bot.core.bot.brain.logic.utils.blocks.BotLocation;
 
 public class BotBlocksWalkableFilter {
 

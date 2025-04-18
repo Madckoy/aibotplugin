@@ -1,4 +1,4 @@
-package com.devone.bot.core.bot.utils.config;
+package com.devone.bot.core.bot.brain.logic.utils.config;
 
 import java.io.File;
 import java.util.HashMap;
@@ -7,8 +7,8 @@ import java.util.Map;
 import com.devone.bot.core.bot.Bot;
 import com.devone.bot.core.bot.brain.BotBrain;
 import com.devone.bot.core.bot.brain.logic.navigation.BotNavigation;
+import com.devone.bot.core.bot.brain.logic.utils.blocks.BotLocation;
 import com.devone.bot.core.bot.state.BotState;
-import com.devone.bot.core.bot.utils.blocks.BotLocation;
 import com.devone.bot.plugin.config.AIBotBaseJsonConfig;
 
 public class BotManagerConfig extends AIBotBaseJsonConfig<BotManagerConfig.Data> {

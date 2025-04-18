@@ -10,11 +10,11 @@ import com.devone.bot.core.bot.brain.logic.task.excavate.params.BotExcavateTaskP
 import com.devone.bot.core.bot.brain.logic.task.explore.BotExploreTask;
 import com.devone.bot.core.bot.brain.logic.task.hand.attack.BotHandAttackTask;
 import com.devone.bot.core.bot.brain.logic.task.hand.attack.params.BotHandAttackTaskParams;
+import com.devone.bot.core.bot.brain.logic.utils.blocks.BotBlockData;
+import com.devone.bot.core.bot.brain.logic.utils.blocks.BotLocation;
 import com.devone.bot.core.bot.brain.logic.utils.logger.BotLogger;
 import com.devone.bot.core.bot.brain.logic.utils.world.BotWorldHelper;
 import com.devone.bot.core.bot.brain.memory.scene.BotSceneData;
-import com.devone.bot.core.bot.utils.blocks.BotBlockData;
-import com.devone.bot.core.bot.utils.blocks.BotLocation;
 
 public class BotTaskCandidatesFactory {
 

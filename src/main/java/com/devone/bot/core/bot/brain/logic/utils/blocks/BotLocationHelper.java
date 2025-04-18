@@ -1,4 +1,4 @@
-package com.devone.bot.core.bot.utils.blocks;
+package com.devone.bot.core.bot.brain.logic.utils.blocks;
 
 import org.bukkit.Location;
 

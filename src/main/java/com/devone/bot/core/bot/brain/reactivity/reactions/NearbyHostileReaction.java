@@ -2,11 +2,11 @@
 package com.devone.bot.core.bot.brain.reactivity.reactions;
 
 import com.devone.bot.core.bot.Bot;
+import com.devone.bot.core.bot.brain.logic.utils.blocks.BotBlockData;
+import com.devone.bot.core.bot.brain.logic.utils.blocks.BotLocation;
 import com.devone.bot.core.bot.brain.logic.utils.logger.BotLogger;
 import com.devone.bot.core.bot.brain.memory.scene.BotSceneData;
 import com.devone.bot.core.bot.brain.reactivity.IBotReactionStrategy;
-import com.devone.bot.core.bot.utils.blocks.BotBlockData;
-import com.devone.bot.core.bot.utils.blocks.BotLocation;
 
 import java.util.Optional;
 

@@ -12,11 +12,11 @@ import com.devone.bot.core.bot.brain.logic.task.BotTaskAutoParams;
 import com.devone.bot.core.bot.brain.logic.task.IBotTaskParameterized;
 import com.devone.bot.core.bot.brain.logic.task.explore.params.BotExploreTaskParams;
 import com.devone.bot.core.bot.brain.logic.utils.BotConstants;
+import com.devone.bot.core.bot.brain.logic.utils.blocks.BotBlockData;
+import com.devone.bot.core.bot.brain.logic.utils.blocks.BotLocation;
 import com.devone.bot.core.bot.brain.logic.utils.logger.BotLogger;
 import com.devone.bot.core.bot.brain.memory.MemoryType;
 import com.devone.bot.core.bot.brain.memory.scene.BotSceneData;
-import com.devone.bot.core.bot.utils.blocks.BotBlockData;
-import com.devone.bot.core.bot.utils.blocks.BotLocation;
 
 public class BotExploreTask extends BotTaskAutoParams<BotExploreTaskParams> {
 

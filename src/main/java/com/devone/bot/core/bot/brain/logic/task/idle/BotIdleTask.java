@@ -1,17 +1,12 @@
 package com.devone.bot.core.bot.brain.logic.task.idle;
 
-import com.devone.bot.AIBotPlugin;
 import com.devone.bot.core.bot.Bot;
 import com.devone.bot.core.bot.brain.logic.task.BotTaskAutoParams;
 import com.devone.bot.core.bot.brain.logic.task.IBotTaskParameterized;
 import com.devone.bot.core.bot.brain.logic.task.idle.params.BotIdleTaskParams;
 import com.devone.bot.core.bot.brain.logic.utils.logger.BotLogger;
 
-import org.bukkit.scheduler.BukkitRunnable;
-
 public class BotIdleTask extends BotTaskAutoParams<BotIdleTaskParams> {
-
-    private boolean isWaiting = false;
 
     public BotIdleTask(Bot bot) {
         super(bot, BotIdleTaskParams.class);
@@ -27,20 +22,14 @@ public class BotIdleTask extends BotTaskAutoParams<BotIdleTaskParams> {
 
     @Override
     public void execute() {
-        if (isWaiting) return; // ✅ уже в режиме ожидания
-
-        isWaiting = true;
-
-        long delayTicks = params.getTimeout(); // уже в тиках
-        BotLogger.debug("🍹", isLogging(), bot.getId() + " Entering idle mode for " + delayTicks + " ticks.");
-
-        new BukkitRunnable() {
-            @Override
-            public void run() {
-                BotLogger.debug("✅", isLogging(), bot.getId() + " Idle timeout finished.");
-                isWaiting = false; // (на всякий случай)
-                stop();
-            }
-        }.runTaskLater(AIBotPlugin.getInstance(), delayTicks);
+        long timeout = params.getTimeout();
+        
+        if (getElapsedTime() >= timeout) {
+            BotLogger.debug("✅", isLogging(), bot.getId() + " Idle timeout passed. Ending idle.");
+            stop();
+        } else {
+            long remaining = timeout - getElapsedTime();
+            setObjective("Idle: " + remaining + " ticks");
+        }
     }
 }

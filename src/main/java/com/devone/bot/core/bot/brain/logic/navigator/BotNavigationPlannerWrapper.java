@@ -8,8 +8,8 @@ import com.devone.bot.core.bot.brain.logic.navigator.filters.BotBlocksWalkableFi
 import com.devone.bot.core.bot.brain.logic.navigator.filters.BotEntitiesOnSurfaceFilter;
 import com.devone.bot.core.bot.brain.logic.navigator.resolvers.BotReachabilityResolver;
 import com.devone.bot.core.bot.brain.logic.navigator.scene.BotSceneContext;
-import com.devone.bot.core.bot.utils.blocks.BotBlockData;
-import com.devone.bot.core.bot.utils.blocks.BotLocation;
+import com.devone.bot.core.bot.brain.logic.utils.blocks.BotBlockData;
+import com.devone.bot.core.bot.brain.logic.utils.blocks.BotLocation;
 
 import java.util.List;
 

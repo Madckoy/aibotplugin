@@ -8,8 +8,8 @@ import com.devone.bot.core.bot.brain.logic.task.BotTaskAutoParams;
 import com.devone.bot.core.bot.brain.logic.task.IBotTaskParameterized;
 import com.devone.bot.core.bot.brain.logic.task.playerlinked.chase.params.BotChaseTaskParams;
 import com.devone.bot.core.bot.brain.logic.utils.BotUtils;
+import com.devone.bot.core.bot.brain.logic.utils.blocks.BotBlockData;
 import com.devone.bot.core.bot.brain.logic.utils.logger.BotLogger;
-import com.devone.bot.core.bot.utils.blocks.BotBlockData;
 
 public class BotChaseTargetTask extends BotTaskAutoParams<BotChaseTaskParams> {
 

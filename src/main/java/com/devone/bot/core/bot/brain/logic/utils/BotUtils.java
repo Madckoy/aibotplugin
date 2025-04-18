@@ -7,9 +7,9 @@ import org.bukkit.block.Block;
 import org.bukkit.util.Vector;
 
 import com.devone.bot.core.bot.Bot;
+import com.devone.bot.core.bot.brain.logic.utils.blocks.BotLocation;
 import com.devone.bot.core.bot.brain.logic.utils.logger.BotLogger;
 import com.devone.bot.core.bot.brain.logic.utils.world.BotWorldHelper;
-import com.devone.bot.core.bot.utils.blocks.BotLocation;
 
 import java.util.concurrent.TimeUnit;
 import java.util.regex.Matcher;

@@ -60,5 +60,7 @@ public class BotState {
         this.stuckCount = 0;
     }
 
-
+    public boolean isLowHealth(double threshold) {
+        return this.health < threshold;
+    }
 }

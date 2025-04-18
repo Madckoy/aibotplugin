@@ -2,7 +2,7 @@ package com.devone.bot.core.bot.brain.logic.task.attack.survival.params;
 
 import com.devone.bot.core.bot.brain.logic.task.params.BotTaskParams;
 import com.devone.bot.core.bot.brain.logic.utils.BotConstants;
-import com.devone.bot.core.bot.utils.blocks.BotBlockData;
+import com.devone.bot.core.bot.brain.logic.utils.blocks.BotBlockData;
 
 public class BotSurvivalAttackTaskParams extends BotTaskParams {
     private BotBlockData target;

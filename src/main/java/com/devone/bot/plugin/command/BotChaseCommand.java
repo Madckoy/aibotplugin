@@ -8,8 +8,8 @@ import org.bukkit.entity.Player;
 import com.devone.bot.core.bot.Bot;
 import com.devone.bot.core.bot.BotManager;
 import com.devone.bot.core.bot.brain.logic.task.playerlinked.chase.BotChaseTargetTask;
+import com.devone.bot.core.bot.brain.logic.utils.blocks.BotBlockData;
 import com.devone.bot.core.bot.brain.logic.utils.logger.BotLogger;
-import com.devone.bot.core.bot.utils.blocks.BotBlockData;
 
 public class BotChaseCommand implements CommandExecutor {
 

@@ -1,4 +1,4 @@
-package com.devone.bot.core.bot.utils.lifecycle;
+package com.devone.bot.core.bot.brain.logic.utils.lifecycle;
 
 import org.bukkit.Bukkit;
 

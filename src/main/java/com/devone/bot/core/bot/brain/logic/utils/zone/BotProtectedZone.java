@@ -1,6 +1,6 @@
 package com.devone.bot.core.bot.brain.logic.utils.zone;
 
-import com.devone.bot.core.bot.utils.blocks.BotLocation;
+import com.devone.bot.core.bot.brain.logic.utils.blocks.BotLocation;
 
 public class BotProtectedZone {
     private final double x, y, z;

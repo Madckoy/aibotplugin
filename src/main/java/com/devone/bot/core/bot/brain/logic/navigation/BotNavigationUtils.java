@@ -5,9 +5,9 @@ import com.devone.bot.core.bot.brain.logic.navigator.BotNavigationPlannerWrapper
 import com.devone.bot.core.bot.brain.logic.navigator.scene.BotSceneContext;
 import com.devone.bot.core.bot.brain.logic.task.move.BotMoveTask;
 import com.devone.bot.core.bot.brain.logic.task.move.params.BotMoveTaskParams;
+import com.devone.bot.core.bot.brain.logic.utils.blocks.BotLocation;
 import com.devone.bot.core.bot.brain.logic.utils.logger.BotLogger;
 import com.devone.bot.core.bot.brain.memory.scene.BotSceneData;
-import com.devone.bot.core.bot.utils.blocks.BotLocation;
 
 public class BotNavigationUtils {
 

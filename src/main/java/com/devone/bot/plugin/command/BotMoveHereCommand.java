@@ -10,8 +10,8 @@ import com.devone.bot.core.bot.Bot;
 import com.devone.bot.core.bot.BotManager;
 import com.devone.bot.core.bot.brain.logic.task.move.BotMoveTask;
 import com.devone.bot.core.bot.brain.logic.task.move.params.BotMoveTaskParams;
+import com.devone.bot.core.bot.brain.logic.utils.blocks.BotLocation;
 import com.devone.bot.core.bot.brain.logic.utils.logger.BotLogger;
-import com.devone.bot.core.bot.utils.blocks.BotLocation;
 
 public class BotMoveHereCommand implements CommandExecutor {
 

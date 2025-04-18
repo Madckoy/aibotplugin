@@ -1,7 +1,7 @@
 package com.devone.bot.core.bot.brain.logic.task.hand.attack.params;
 
 import com.devone.bot.core.bot.brain.logic.task.hand.params.BotHandTaskParams;
-import com.devone.bot.core.bot.utils.blocks.BotBlockData;
+import com.devone.bot.core.bot.brain.logic.utils.blocks.BotBlockData;
 
 public class BotHandAttackTaskParams extends BotHandTaskParams {
 

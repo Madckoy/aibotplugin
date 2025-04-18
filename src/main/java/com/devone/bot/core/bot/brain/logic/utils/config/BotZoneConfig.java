@@ -1,4 +1,4 @@
-package com.devone.bot.core.bot.utils.config;
+package com.devone.bot.core.bot.brain.logic.utils.config;
 
 import java.io.File;
 import java.util.HashMap;

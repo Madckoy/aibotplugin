@@ -8,8 +8,8 @@ import com.devone.bot.core.bot.brain.logic.task.hand.attack.BotHandAttackTask;
 import com.devone.bot.core.bot.brain.logic.task.hand.attack.params.BotHandAttackTaskParams;
 import com.devone.bot.core.bot.brain.logic.task.teleport.BotTeleportTask;
 import com.devone.bot.core.bot.brain.logic.task.teleport.params.BotTeleportTaskParams;
+import com.devone.bot.core.bot.brain.logic.utils.blocks.BotBlockData;
 import com.devone.bot.core.bot.brain.logic.utils.logger.BotLogger;
-import com.devone.bot.core.bot.utils.blocks.BotBlockData;
 
 public class BotSurvivalAttackTask extends BotTaskAutoParams<BotSurvivalAttackTaskParams> {
 

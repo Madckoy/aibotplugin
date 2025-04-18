@@ -9,10 +9,10 @@ import java.util.*;
 import com.devone.bot.core.bot.Bot;
 import com.devone.bot.core.bot.brain.logic.task.excavate.patterns.IBotExcavatePattern;
 import com.devone.bot.core.bot.brain.logic.task.excavate.patterns.generator.params.BotExcavatePatternGenerationParams;
+import com.devone.bot.core.bot.brain.logic.utils.blocks.BotLocation;
+import com.devone.bot.core.bot.brain.logic.utils.blocks.BotLocationComparators;
+import com.devone.bot.core.bot.brain.logic.utils.blocks.BotAxisDirection.AxisDirection;
 import com.devone.bot.core.bot.brain.logic.utils.logger.BotLogger;
-import com.devone.bot.core.bot.utils.blocks.BotLocation;
-import com.devone.bot.core.bot.utils.blocks.BotLocationComparators;
-import com.devone.bot.core.bot.utils.blocks.BotAxisDirection.AxisDirection;
 
 /**
  * Реализация разрушительного паттерна, загружаемого из YAML.

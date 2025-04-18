@@ -3,7 +3,7 @@ package com.devone.bot.core.bot.brain.memory.scene;
 
 import java.util.List;
 
-import com.devone.bot.core.bot.utils.blocks.BotBlockData;
+import com.devone.bot.core.bot.brain.logic.utils.blocks.BotBlockData;
 
 public class BotSceneUtils {
     public static int estimateHorizontalRadius(List<BotBlockData> blocks) {

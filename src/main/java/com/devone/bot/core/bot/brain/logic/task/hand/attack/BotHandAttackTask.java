@@ -12,11 +12,11 @@ import com.devone.bot.core.bot.brain.logic.task.hand.attack.listener.BotHandAtta
 import com.devone.bot.core.bot.brain.logic.task.hand.attack.params.BotHandAttackTaskParams;
 import com.devone.bot.core.bot.brain.logic.utils.BotConstants;
 import com.devone.bot.core.bot.brain.logic.utils.BotUtils;
+import com.devone.bot.core.bot.brain.logic.utils.blocks.BotBlockData;
+import com.devone.bot.core.bot.brain.logic.utils.blocks.BotLocation;
+import com.devone.bot.core.bot.brain.logic.utils.blocks.BotLocationHelper;
 import com.devone.bot.core.bot.brain.logic.utils.logger.BotLogger;
 import com.devone.bot.core.bot.brain.logic.utils.world.BotWorldHelper;
-import com.devone.bot.core.bot.utils.blocks.BotBlockData;
-import com.devone.bot.core.bot.utils.blocks.BotLocation;
-import com.devone.bot.core.bot.utils.blocks.BotLocationHelper;
 
 public class BotHandAttackTask extends BotHandTask<BotHandAttackTaskParams> {
 

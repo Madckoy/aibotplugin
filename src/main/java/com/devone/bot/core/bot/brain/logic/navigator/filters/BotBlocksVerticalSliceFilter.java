@@ -4,7 +4,7 @@ package com.devone.bot.core.bot.brain.logic.navigator.filters;
 import java.util.ArrayList;
 import java.util.List;
 
-import com.devone.bot.core.bot.utils.blocks.BotBlockData;
+import com.devone.bot.core.bot.brain.logic.utils.blocks.BotBlockData;
 
 public class BotBlocksVerticalSliceFilter {
     public static List<BotBlockData> filter(List<BotBlockData> blocks, int botY, int range) {

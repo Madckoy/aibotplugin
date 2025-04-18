@@ -16,8 +16,8 @@ package com.devone.bot.core.bot.brain.logic.navigator;
 import java.util.*;
  import java.util.stream.Collectors;
 
-import com.devone.bot.core.bot.utils.blocks.BotBlockData;
-import com.devone.bot.core.bot.utils.blocks.BotLocation;
+import com.devone.bot.core.bot.brain.logic.utils.blocks.BotBlockData;
+import com.devone.bot.core.bot.brain.logic.utils.blocks.BotLocation;
  
  public class BotExplorationTargetPlanner {
  

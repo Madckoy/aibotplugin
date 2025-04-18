@@ -2,9 +2,9 @@ package com.devone.bot.core.bot.brain.memory.scene;
 
 import com.devone.bot.core.bot.Bot;
 import com.devone.bot.core.bot.brain.logic.utils.BotConstants;
+import com.devone.bot.core.bot.brain.logic.utils.blocks.BotBlockData;
+import com.devone.bot.core.bot.brain.logic.utils.blocks.BotLocation;
 import com.devone.bot.core.bot.brain.logic.utils.world.BotWorldHelper;
-import com.devone.bot.core.bot.utils.blocks.BotBlockData;
-import com.devone.bot.core.bot.utils.blocks.BotLocation;
 
 import org.bukkit.Location;
 import org.bukkit.Material;

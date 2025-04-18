@@ -19,12 +19,12 @@ import com.devone.bot.core.bot.brain.logic.task.hand.excavate.BotHandExcavateTas
 import com.devone.bot.core.bot.brain.logic.task.hand.excavate.params.BotHandExcavateTaskParams;
 import com.devone.bot.core.bot.brain.logic.utils.BotConstants;
 import com.devone.bot.core.bot.brain.logic.utils.BotUtils;
+import com.devone.bot.core.bot.brain.logic.utils.blocks.BotBlockData;
+import com.devone.bot.core.bot.brain.logic.utils.blocks.BotLocation;
 import com.devone.bot.core.bot.brain.logic.utils.logger.BotLogger;
 import com.devone.bot.core.bot.brain.logic.utils.world.BotWorldHelper;
 import com.devone.bot.core.bot.brain.logic.utils.zone.BotZoneManager;
 import com.devone.bot.core.bot.inventory.BotInventory;
-import com.devone.bot.core.bot.utils.blocks.BotBlockData;
-import com.devone.bot.core.bot.utils.blocks.BotLocation;
 
 public class BotExcavateTask extends BotTaskAutoParams<BotExcavateTaskParams> {
 
@@ -154,6 +154,13 @@ public class BotExcavateTask extends BotTaskAutoParams<BotExcavateTaskParams> {
 
         BotLogger.debug("🚀", isLogging(), "Запуск задачи разрушения блоков для бота " + bot.getId() +
                 " (Целевые блоки: " + (targetMaterials == null ? "ВСЕ" : targetMaterials) + ")");
+
+        // 🚨 Проверка на опасную жидкость
+        if (BotWorldHelper.isInDangerousLiquid(bot)) {
+            BotLogger.debug("💧", isLogging(), bot.getId() + " оказался в опасной жидкости. Завершаем копку.");
+            this.stop();
+            return;
+        }
 
         if (breakPatternImpl == null) {
             if (!StringUtil.isEmpty(patternName)) {

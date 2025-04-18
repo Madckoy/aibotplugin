@@ -12,7 +12,7 @@ import java.util.stream.Collectors;
 import org.yaml.snakeyaml.Yaml;
 
 import com.devone.bot.core.bot.brain.logic.task.excavate.patterns.generator.params.BotExcavatePatternGenerationParams;
-import com.devone.bot.core.bot.utils.blocks.BotLocation;
+import com.devone.bot.core.bot.brain.logic.utils.blocks.BotLocation;
 import com.googlecode.aviator.AviatorEvaluator;
 import com.googlecode.aviator.Expression;
 
