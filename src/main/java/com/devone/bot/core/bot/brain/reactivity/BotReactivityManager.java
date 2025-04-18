@@ -5,6 +5,7 @@ import com.devone.bot.core.bot.Bot;
 import com.devone.bot.core.bot.brain.logic.utils.logger.BotLogger;
 import com.devone.bot.core.bot.brain.reactivity.reactions.LowHealthReaction;
 import com.devone.bot.core.bot.brain.reactivity.reactions.NearbyHostileReaction;
+import com.devone.bot.core.bot.brain.reactivity.reactions.NearbyPlayerReaction;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -22,6 +23,7 @@ public class BotReactivityManager {
         // Добавляем предустановленные стратегии
         strategies.add(new NearbyHostileReaction());
         strategies.add(new LowHealthReaction());
+        strategies.add(new NearbyPlayerReaction());
         // сюда можно добавить новые стратегии
     }
 

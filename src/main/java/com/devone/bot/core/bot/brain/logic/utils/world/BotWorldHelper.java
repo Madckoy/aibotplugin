@@ -49,6 +49,10 @@ public class BotWorldHelper {
         return blockData;
     }
 
+    public static BotLocation worldLocationToBotLocation(Location loc) {
+        BotLocation location = new BotLocation((int)loc.getX(), (int)loc.getY(), (int)loc.getZ());
+        return location;
+    }
     public static BotBlockData worldBlockToBotBlock(Block block) {
         BotBlockData blockData = new BotBlockData();
         blockData.setX(block.getX());

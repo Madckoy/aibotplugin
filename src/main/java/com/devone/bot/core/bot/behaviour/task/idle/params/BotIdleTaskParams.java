@@ -5,7 +5,7 @@ import com.devone.bot.core.bot.brain.logic.utils.BotConstants;
 
 public class BotIdleTaskParams extends BotTaskParams {
 
-    private long timeout = BotConstants.DEFAULT_TASK_TIMEOUT;
+    private long timeout = BotConstants.DEFAULT_TASK_TIMEOUT / 2;
 
     public BotIdleTaskParams() {
         super();
