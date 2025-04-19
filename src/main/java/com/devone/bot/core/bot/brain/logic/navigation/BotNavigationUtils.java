@@ -6,6 +6,7 @@ import com.devone.bot.core.bot.brain.logic.navigator.scene.BotSceneContext;
 import com.devone.bot.core.bot.brain.memory.scene.BotSceneData;
 import com.devone.bot.core.bot.task.active.move.BotMoveTask;
 import com.devone.bot.core.bot.task.active.move.params.BotMoveTaskParams;
+import com.devone.bot.core.utils.BotUtils;
 import com.devone.bot.core.utils.blocks.BotLocation;
 import com.devone.bot.core.utils.logger.BotLogger;
 
@@ -53,8 +54,7 @@ public class BotNavigationUtils {
         moveTaskParams.setTarget(target);
         moveTaskParams.setSpeed(multiplier);
         moveTask.setParams(moveTaskParams);
-        
-        bot.getLifeCycle().getTaskStackManager().pushTask(moveTask);
+        BotUtils.pushTask(bot, moveTask);
 
     }
 

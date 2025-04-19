@@ -8,6 +8,7 @@ import org.bukkit.entity.Player;
 import com.devone.bot.core.bot.Bot;
 import com.devone.bot.core.bot.BotManager;
 import com.devone.bot.core.bot.task.active.brain.BotBrainTask;
+import com.devone.bot.core.utils.BotUtils;
 
 public class BotStopCommand implements CommandExecutor {
 
@@ -37,7 +38,7 @@ public class BotStopCommand implements CommandExecutor {
 
         // ✅ Добавляем задачу на ожидание 5 минут
         BotBrainTask idleTask = new BotBrainTask(bot);
-        bot.getLifeCycle().getTaskStackManager().pushTask(idleTask);
+        BotUtils.pushTask(bot, idleTask);
 
         player.sendMessage("§aБот " + bot.getId() + " Остановился и ждет!");
 

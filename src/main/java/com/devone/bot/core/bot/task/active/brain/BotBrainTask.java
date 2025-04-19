@@ -25,6 +25,7 @@ import com.devone.bot.core.bot.task.passive.BotTask;
 import com.devone.bot.core.bot.task.passive.BotTaskAutoParams;
 import com.devone.bot.core.bot.task.passive.IBotTaskParameterized;
 import com.devone.bot.core.utils.BotConstants;
+import com.devone.bot.core.utils.BotUtils;
 import com.devone.bot.core.utils.blocks.BotBlockData;
 import com.devone.bot.core.utils.blocks.BotLocation;
 import com.devone.bot.core.utils.logger.BotLogger;
@@ -88,8 +89,11 @@ public class BotBrainTask extends BotTaskAutoParams<BotBrainTaskParams> {
     }
 
     private void push(Bot bot, BotTask<?> task) {
-        bot.getLifeCycle().getTaskStackManager().pushTask(task);
+
+        BotUtils.pushTask(bot, task);
+        
         bot.getBrain().resetThinkingCycle();
+
         BotLogger.debug(icon, isLogging(), "The task is pushed to stack ");
     }
 

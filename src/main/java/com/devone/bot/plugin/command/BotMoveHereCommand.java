@@ -10,6 +10,7 @@ import com.devone.bot.core.bot.Bot;
 import com.devone.bot.core.bot.BotManager;
 import com.devone.bot.core.bot.task.active.move.BotMoveTask;
 import com.devone.bot.core.bot.task.active.move.params.BotMoveTaskParams;
+import com.devone.bot.core.utils.BotUtils;
 import com.devone.bot.core.utils.blocks.BotLocation;
 import com.devone.bot.core.utils.logger.BotLogger;
 
@@ -49,7 +50,7 @@ public class BotMoveHereCommand implements CommandExecutor {
         BotMoveTaskParams moveTaskParams = new BotMoveTaskParams();
         moveTaskParams.setTarget(new BotLocation(targetLocation.getBlockX(), targetLocation.getBlockY(), targetLocation.getBlockZ()));
         moveTask.setParams(moveTaskParams);
-        bot.getLifeCycle().getTaskStackManager().pushTask(moveTask);
+        BotUtils.pushTask(bot, moveTask);
 
         player.sendMessage("§aБот " + bot.getId() + " Идет к игроку!");
 

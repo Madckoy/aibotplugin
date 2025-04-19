@@ -18,6 +18,7 @@ import com.devone.bot.core.bot.speaker.BotSpeaker;
 import com.devone.bot.core.bot.state.BotState;
 import com.devone.bot.core.bot.task.active.move.BotMoveTask;
 import com.devone.bot.core.bot.task.active.move.params.BotMoveTaskParams;
+import com.devone.bot.core.utils.BotUtils;
 import com.devone.bot.core.utils.blocks.BotLocation;
 import com.devone.bot.core.utils.logger.BotLogger;
 
@@ -206,6 +207,6 @@ public class Bot {
         BotMoveTaskParams mv_taskParams = new BotMoveTaskParams(loc);
         mv_task.setParams(mv_taskParams);
 
-        getLifeCycle().getTaskStackManager().pushTask(mv_task);
+        BotUtils.pushTask(this, mv_task);
     }
 }

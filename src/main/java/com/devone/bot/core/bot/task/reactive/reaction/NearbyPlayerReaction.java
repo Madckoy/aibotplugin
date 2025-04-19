@@ -9,6 +9,7 @@ import com.devone.bot.core.bot.task.reactive.BotReactiveUtils;
 import com.devone.bot.core.bot.task.reactive.IBotReactionStrategy;
 import com.devone.bot.core.bot.task.reactive.sequence.BotReactiveSequenceTask;
 import com.devone.bot.core.utils.BotConstants;
+import com.devone.bot.core.utils.BotUtils;
 import com.devone.bot.core.utils.blocks.BotLocation;
 import com.devone.bot.core.utils.logger.BotLogger;
 import com.devone.bot.core.utils.world.BotWorldHelper;
@@ -55,7 +56,7 @@ public class NearbyPlayerReaction implements IBotReactionStrategy {
                     tasks.add(dropTask);
 
                     BotReactiveSequenceTask sequence = new BotReactiveSequenceTask(bot, tasks);
-                    bot.getLifeCycle().getTaskStackManager().pushTask(sequence);
+                    BotUtils.pushTask(bot, sequence);
                 });
             }
         }

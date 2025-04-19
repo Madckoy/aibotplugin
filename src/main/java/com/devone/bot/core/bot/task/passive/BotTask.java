@@ -166,7 +166,7 @@ public abstract class BotTask<T extends BotTaskParams> implements IBotTask, List
 
         BotBrainTask task = new BotBrainTask(bot);
 
-        bot.getLifeCycle().getTaskStackManager().pushTask(task);
+        BotUtils.pushTask(bot, task);
 
         this.stop();
     }

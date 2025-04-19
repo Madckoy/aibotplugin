@@ -4,6 +4,7 @@ import com.devone.bot.core.bot.Bot;
 import com.devone.bot.core.bot.task.passive.BotTask;
 import com.devone.bot.core.bot.task.passive.BotTaskAutoParams;
 import com.devone.bot.core.bot.task.reactive.sequence.params.BotReactiveSequenceTaskParams;
+import com.devone.bot.core.utils.BotUtils;
 import com.devone.bot.core.utils.logger.BotLogger;
 
 import java.util.LinkedList;
@@ -33,7 +34,7 @@ public class BotReactiveSequenceTask extends BotTaskAutoParams<BotReactiveSequen
             // Забираем следующую задачу
             currentTask = sequence.poll();
             BotLogger.debug("📦", isLogging(), bot.getId() + " ▶ Запускаем задачу: " + currentTask.getClass().getSimpleName());
-            bot.getLifeCycle().getTaskStackManager().pushTask(currentTask);
+            BotUtils.pushTask(bot, currentTask);
         }
     }
 

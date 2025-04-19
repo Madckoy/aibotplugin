@@ -7,6 +7,7 @@ import org.bukkit.command.CommandSender;
 import com.devone.bot.core.bot.Bot;
 import com.devone.bot.core.bot.BotManager;
 import com.devone.bot.core.bot.task.active.drop.BotDropAllTask;
+import com.devone.bot.core.utils.BotUtils;
 
 public class BotDropAllCommand implements CommandExecutor {
 
@@ -34,7 +35,7 @@ public class BotDropAllCommand implements CommandExecutor {
 
         // ✅ Добавляем задачу на перемещение
         BotDropAllTask dropAllTask = new BotDropAllTask(bot, null);
-        bot.getLifeCycle().getTaskStackManager().pushTask(dropAllTask);
+        BotUtils.pushTask(bot, dropAllTask);
 
         // Подтверждение для игрока
         sender.sendMessage("✅ Инвентарь бота '" + botName + "' был сброшен на месте.");

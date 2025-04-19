@@ -11,6 +11,7 @@ import com.devone.bot.core.bot.task.active.excavate.BotExcavateTask;
 import com.devone.bot.core.bot.task.active.excavate.params.BotExcavateTaskParams;
 import com.devone.bot.core.bot.task.active.hand.attack.BotHandAttackTask;
 import com.devone.bot.core.bot.task.active.hand.attack.params.BotHandAttackTaskParams;
+import com.devone.bot.core.utils.BotUtils;
 import com.devone.bot.core.utils.blocks.BotBlockData;
 import com.devone.bot.core.utils.blocks.BotLocation;
 import com.devone.bot.core.utils.logger.BotLogger;
@@ -36,7 +37,7 @@ public class BotTaskCandidatesFactory {
                     BotHandAttackTaskParams p = new BotHandAttackTaskParams(target, 5.0);
                     BotHandAttackTask t = new BotHandAttackTask(bot);
                     t.setParams(p);
-                    bot.getLifeCycle().getTaskStackManager().pushTask(t);
+                    BotUtils.pushTask(bot, t);
                 };
             },
             () -> params.isAllowViolence() && BotEntitySelector.hasHostilesNearby(data.entities, botPos, 2.0)
@@ -46,7 +47,7 @@ public class BotTaskCandidatesFactory {
             () -> isNight ? params.getExplorationWeight() * 0.6 : params.getExplorationWeight(),
             () -> () -> {
                 BotLogger.debug("🧭", bot.isLogging(), bot.getId() + " Разведка");
-                bot.getLifeCycle().getTaskStackManager().pushTask(new BotExploreTask(bot));
+                BotUtils.pushTask(bot, new BotExploreTask(bot));
             },
             () -> params.isAllowExploration()
         ));
@@ -57,7 +58,7 @@ public class BotTaskCandidatesFactory {
                 BotLogger.debug("⛏", bot.isLogging(), bot.getId() + " Копка");
                 BotExcavateTask task = new BotExcavateTask(bot);
                 task.setParams(new BotExcavateTaskParams());
-                bot.getLifeCycle().getTaskStackManager().pushTask(task);
+                BotUtils.pushTask(bot, task);
             },
             () -> params.isAllowExcavation()
         ));

@@ -6,6 +6,7 @@ import com.devone.bot.AIBotPlugin;
 import com.devone.bot.core.bot.Bot;
 import com.devone.bot.core.bot.task.active.brain.BotBrainTask;
 import com.devone.bot.core.bot.task.passive.BotTaskManager;
+import com.devone.bot.core.utils.BotUtils;
 import com.devone.bot.core.utils.logger.BotLogger;
 import com.devone.bot.core.utils.server.ServerUtils;
 
@@ -41,7 +42,7 @@ public class BotLifeCycle {
             if (!idleAdded) {
                 BotLogger.debug("😴", true, "Бот " + bot.getId() + " Без задач. Добавляем IdleTask.");
                 
-                taskStackManager.pushTask(new BotBrainTask(bot));
+                BotUtils.pushTask(bot, new BotBrainTask(bot));
                 
                 idleAdded = true; // ✅ Ставим флаг, что IdleActivity уже добавлена
             }

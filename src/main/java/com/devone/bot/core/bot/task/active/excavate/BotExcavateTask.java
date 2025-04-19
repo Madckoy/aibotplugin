@@ -251,7 +251,7 @@ public class BotExcavateTask extends BotTaskAutoParams<BotExcavateTaskParams> {
             BotHandExcavateTaskParams params = new BotHandExcavateTaskParams();
             params.setTarget(block);
             handTask.setParams(params);
-            bot.getLifeCycle().getTaskStackManager().pushTask(handTask);
+            BotUtils.pushTask(bot, handTask);
 
         } else {
 

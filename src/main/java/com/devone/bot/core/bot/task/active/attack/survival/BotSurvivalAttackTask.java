@@ -2,12 +2,14 @@ package com.devone.bot.core.bot.task.active.attack.survival;
 
 import com.devone.bot.core.bot.Bot;
 import com.devone.bot.core.bot.task.active.attack.survival.params.BotSurvivalAttackTaskParams;
+import com.devone.bot.core.bot.task.active.brain.BotBrainTask;
 import com.devone.bot.core.bot.task.active.hand.attack.BotHandAttackTask;
 import com.devone.bot.core.bot.task.active.hand.attack.params.BotHandAttackTaskParams;
 import com.devone.bot.core.bot.task.active.teleport.BotTeleportTask;
 import com.devone.bot.core.bot.task.active.teleport.params.BotTeleportTaskParams;
 import com.devone.bot.core.bot.task.passive.BotTaskAutoParams;
 import com.devone.bot.core.bot.task.passive.IBotTaskParameterized;
+import com.devone.bot.core.utils.BotUtils;
 import com.devone.bot.core.utils.blocks.BotBlockData;
 import com.devone.bot.core.utils.logger.BotLogger;
 
@@ -48,8 +50,9 @@ public class BotSurvivalAttackTask extends BotTaskAutoParams<BotSurvivalAttackTa
         handTask.setParams(new BotHandAttackTaskParams(target, this.damage));
 
         // 📋 Добавляем в очередь в обратном порядке: сначала атака, затем телепорт
-        bot.getLifeCycle().getTaskStackManager().pushTask(handTask);
-        bot.getLifeCycle().getTaskStackManager().pushTask(tpTask);
+        BotUtils.pushTask(bot, handTask);
+
+        BotUtils.pushTask(bot, tpTask);
 
         BotLogger.debug(icon, isLogging(), bot.getId() + "Prepared Teleport and Attack on: " + target);
         this.stop();

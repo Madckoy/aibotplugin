@@ -11,6 +11,7 @@ import com.devone.bot.core.bot.Bot;
 import com.devone.bot.core.bot.BotManager;
 import com.devone.bot.core.bot.task.active.move.BotMoveTask;
 import com.devone.bot.core.bot.task.active.move.params.BotMoveTaskParams;
+import com.devone.bot.core.utils.BotUtils;
 import com.devone.bot.core.utils.blocks.BotLocation;
 import com.devone.bot.core.utils.logger.BotLogger;
 
@@ -69,7 +70,7 @@ public class BotMoveCommand implements CommandExecutor {
         BotMoveTaskParams moveTaskParams = new BotMoveTaskParams();
         moveTaskParams.setTarget(new BotLocation(x, y, z)); 
         moveTask.setParams(moveTaskParams);
-        bot.getLifeCycle().getTaskStackManager().pushTask(moveTask);
+        BotUtils.pushTask(bot, moveTask);
 
         BotLogger.debug("📌 ", true, "/bot-move: Бот " + bot.getId() + " направляется в " + targetLocation);
         

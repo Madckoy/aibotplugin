@@ -7,6 +7,7 @@ import org.bukkit.block.Block;
 import org.bukkit.util.Vector;
 
 import com.devone.bot.core.bot.Bot;
+import com.devone.bot.core.bot.task.passive.BotTask;
 import com.devone.bot.core.utils.blocks.BotLocation;
 import com.devone.bot.core.utils.logger.BotLogger;
 import com.devone.bot.core.utils.world.BotWorldHelper;
@@ -129,4 +130,8 @@ public class BotUtils {
         return diff;
     }
     
+    public static void pushTask(Bot bot, BotTask<?> task) {
+        if (bot == null || task == null) return;
+        BotUtils.pushTask(bot, task);
+    }
 }
