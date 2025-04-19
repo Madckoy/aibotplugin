@@ -26,7 +26,7 @@ public class BotTaskManager {
 
         taskStack.push(task);
 
-        BotLogger.debug("🤖", true, "✚ Добавлена задача: " + task.getClass().getSimpleName());
+        BotLogger.debug("🤖", true, bot.getId()+ " ✚ Добавлена задача: " + task.getClass().getSimpleName());
     }
 
     public void popTask() {
@@ -34,7 +34,7 @@ public class BotTaskManager {
 
             BotLifecycleLogger.write(this.bot);
 
-            BotLogger.debug("🤖", true, "➖ Удалена задача: " + taskStack.peek().getClass().getSimpleName());
+            BotLogger.debug("🤖", true, bot.getId()+ " ➖ Удалена задача: " + taskStack.peek().getClass().getSimpleName());
             taskStack.pop();
 
             // ✅ Если осталась активность, снимаем с неё паузу
@@ -76,13 +76,13 @@ public class BotTaskManager {
 
             BotTask<?> currentTask = taskStack.peek();
 
-            BotLogger.debug("🤖", true, bot.getId() + " 🟩 Activate task: " + currentTask.getIcon() + currentTask.getClass().getSimpleName());
+            BotLogger.debug("🤖", true, bot.getId() +    " 🟢 Activate task: " + currentTask.getIcon() + " " +currentTask.getClass().getSimpleName());
     
             if (currentTask.isDone()) {
                 popTask();
-                BotLogger.debug("🤖", true, bot.getId() + " 🟥 Deactivating task: " + currentTask.getIcon() + currentTask.getClass().getSimpleName());
+                BotLogger.debug("🤖", true, bot.getId() + " ⭕ Deactivating task: " + currentTask.getIcon() +  " " +currentTask.getClass().getSimpleName());
             } else {
-                BotLogger.debug("🤖", true, bot.getId() + " 🟪 Updating task: " + currentTask.getIcon() + currentTask.getClass().getSimpleName());
+                BotLogger.debug("🤖", true, bot.getId() + " 🔵 Updating task: " + currentTask.getIcon() +  " " + currentTask.getClass().getSimpleName());
                 currentTask.update();
             }
         }
@@ -93,7 +93,7 @@ public class BotTaskManager {
         while (!taskStack.isEmpty()) {
             BotTask<?> removedTask = taskStack.pop();
             removedTask.stop();
-            BotLogger.debug("🤖", true, bot.getId() + " ⬛ Удалена задача: " + removedTask.getIcon() + removedTask.getClass().getSimpleName());
+            BotLogger.debug("🤖", true, bot.getId() + " ⚫ Удалена задача: " + removedTask.getIcon() + " " +removedTask.getClass().getSimpleName());
         }
     }
 

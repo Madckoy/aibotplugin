@@ -101,20 +101,20 @@ public abstract class BotTask<T extends BotTaskParams> implements IBotTask, List
     
         if (!BotReactiveUtils.isAlreadyReacting(bot)) {
 
-            BotLogger.debug(icon, this.isLogging(), bot.getId() + " 🚨 Не Выполняет текущее реактивное задание.");
+            BotLogger.debug("🧠", this.isLogging(), bot.getId() + " 🚨 Не Выполняет текущее реактивное задание.");
             
             Optional<Runnable> reaction = BotReactivityManager.checkReactions(bot);
 
             if (reaction.isPresent()) {
 
                 setPause(true); // current task
-                BotLogger.debug(icon, this.isLogging(), bot.getId() + " 🚨 Нужно срочно выполнить реактивное задание!");
+                BotLogger.debug("🧠", this.isLogging(), bot.getId() + " 🚨 Нужно срочно выполнить реактивное задание!");
                 reaction.get().run();
                 return;
             }
         }
 
-        BotLogger.debug(icon, this.isLogging(), bot.getId() + " ▶ Запуск задания: " + getIcon() + " "+ this.getClass().getSimpleName() );
+        BotLogger.debug("🧠", this.isLogging(), bot.getId() + " 🟡 Запуск задания: " + getIcon() + " "+ this.getClass().getSimpleName() );
 
         execute();
     }    
@@ -190,7 +190,7 @@ public abstract class BotTask<T extends BotTaskParams> implements IBotTask, List
 
     private void handlePlayerDisconnect() {
 
-        BotLogger.debug("🚨", this.isLogging(), "Игрок " + player.getName() + " вышел! Бот " + bot.getId() + " переходит в автономный режим.");
+        BotLogger.debug("🧠", this.isLogging(), bot.getId() + " 🚨 Игрок " + player.getName() + " вышел! Бот переходит в автономный режим.");
         
         BotUtils.clearTasks(bot);
 

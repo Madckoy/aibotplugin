@@ -158,9 +158,9 @@ public class BotUtils {
     public static void animateHand(BotTask<?> task, Bot bot) {
         if (bot.getNPCEntity() instanceof Player playerBot) {
             playerBot.swingMainHand();
-            BotLogger.debug(task.getIcon(), true,bot.getId() + " ✋🏻 Анимация руки выполнена");
+            BotLogger.debug(task.getIcon(), true,bot.getId() + " 👋🏻 Анимация руки выполнена");
         } else {
-            BotLogger.debug(task.getIcon(), true, bot.getId() +" ✋🏻 Анимация не выполнена: бот — не игрок");
+            BotLogger.debug(task.getIcon(), true, bot.getId() +" 🖐🏻 Анимация не выполнена: бот — не игрок");
         }
     }
 

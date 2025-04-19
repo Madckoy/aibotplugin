@@ -73,14 +73,14 @@ public class BotBrain {
     }
     
     public boolean isReactionInProgress() {
-        BotLogger.debug(owner.getActiveTask().getIcon(), true, owner.getId()+ " ✳️ Get Reactive reaction in progress status: " + this.reactionInProgress);
+        BotLogger.debug(owner.getActiveTask().getIcon(), true, owner.getId()+ " ⚛️ Get Reactive reaction in progress status: " + this.reactionInProgress);
         return reactionInProgress;
         
     }
     
     public void setReactionInProgress(boolean value) {
         this.reactionInProgress = value;
-        BotLogger.debug(owner.getActiveTask().getIcon(), true, owner.getId()+ " ✳️ Set Reactive reaction in progress status: " + this.reactionInProgress);
+        BotLogger.debug(owner.getActiveTask().getIcon(), true, owner.getId()+ " ⚛️ Set Reactive reaction in progress status: " + this.reactionInProgress);
     }
 
 }

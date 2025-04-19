@@ -66,7 +66,7 @@ function renderBotTable(data) {
         <div class="bot-position-cell">
             <div><span>${bot.task}</span></div>
             <div class="bot-objective-divider"></div>
-            <div><span>${bot.taskIsReactive}</span></div>
+            <div><span>${getTaskStatusEmoji(bot.taskIsReactive)}</span></div>
         </div>`; 
         
         let objCell = row.insertCell(5);
@@ -94,15 +94,28 @@ function renderBotTable(data) {
                <button class="cmd-btn" data-bot="${bot.id}" data-cmd="bot-move">Move</button>
                <button class="cmd-btn" data-bot="${bot.id}" data-cmd="bot-drop-all">Drop All</button
                <div class="bot-objective-divider"></div>
-               <button class="cmd-btn" data-bot="${bot.id}" data-cmd="bot-tp">1</button>
-               <button class="cmd-btn" data-bot="${bot.id}" data-cmd="bot-move">2</button>
-               <button class="cmd-btn" data-bot="${bot.id}" data-cmd="bot-drop-all">3</button
+               <button class="cmd-btn" data-bot="${bot.id}" >1</button>
+               <button class="cmd-btn" data-bot="${bot.id}" >2</button>
+               <button class="cmd-btn" data-bot="${bot.id}" >3</button
+               <button class="cmd-btn" data-bot="${bot.id}" >4</button
+               <button class="cmd-btn" data-bot="${bot.id}" >5</button
             </div>   
         `;
     });
 
     setupButtonHandlers();
 
+}
+
+
+function getTaskStatusEmoji(isReactive) {
+    if (isReactive === true || isReactive === "true") {
+        return "🟩"; // реактивная задача
+    } else if (isReactive === false || isReactive === "false") {
+        return "⬛"; // обычная
+    } else {
+        return "❔"; // не определено / fallback
+    }
 }
 
 function generateInventoryGrid(slots, autoPickupEnabled) {
