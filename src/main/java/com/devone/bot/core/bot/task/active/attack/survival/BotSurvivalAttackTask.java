@@ -2,7 +2,6 @@ package com.devone.bot.core.bot.task.active.attack.survival;
 
 import com.devone.bot.core.bot.Bot;
 import com.devone.bot.core.bot.task.active.attack.survival.params.BotSurvivalAttackTaskParams;
-import com.devone.bot.core.bot.task.active.brain.BotBrainTask;
 import com.devone.bot.core.bot.task.active.hand.attack.BotHandAttackTask;
 import com.devone.bot.core.bot.task.active.hand.attack.params.BotHandAttackTaskParams;
 import com.devone.bot.core.bot.task.active.teleport.BotTeleportTask;
