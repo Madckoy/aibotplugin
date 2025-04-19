@@ -26,7 +26,7 @@ public class BotTaskManager {
 
         taskStack.push(task);
 
-        BotLogger.debug("✚", true, "Добавлена задача: " + task.getClass().getSimpleName());
+        BotLogger.debug("🤖", true, " ✚ Добавлена задача: " + task.getClass().getSimpleName());
     }
 
     public void popTask() {
@@ -34,7 +34,7 @@ public class BotTaskManager {
 
             BotLifecycleLogger.write(this.bot);
 
-            BotLogger.debug("➖", true, "Удалена задача: " + taskStack.peek().getClass().getSimpleName());
+            BotLogger.debug("🤖", true, " ➖ Удалена задача: " + taskStack.peek().getClass().getSimpleName());
             taskStack.pop();
 
             // ✅ Если осталась активность, снимаем с неё паузу

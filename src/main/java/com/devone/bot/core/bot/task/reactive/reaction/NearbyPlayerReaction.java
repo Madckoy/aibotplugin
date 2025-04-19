@@ -44,7 +44,7 @@ public class NearbyPlayerReaction implements IBotReactionStrategy {
 
             if (dist < BotConstants.DEFAULT_DETECTION_RADIUS) {
                 return Optional.of(() -> {
-                    BotLogger.debug(bot.getActiveTask().getIcon(), true, bot.getId() + " 🎒 Игрок рядом: " + player.getName() + ". Передаём дары.");
+                    BotLogger.debug(bot.getActiveTask().getIcon(), true, bot.getId() + " ❤️ Игрок рядом: " + player.getName() + ". Передаём дары.");
 
                     List<BotTask<?>> tasks = new ArrayList<>();
 
@@ -56,7 +56,7 @@ public class NearbyPlayerReaction implements IBotReactionStrategy {
 
                     // 2. Выброс всего
                     BotDropAllTask dropTask = new BotDropAllTask(bot, player);
-                    dropTask.setObjective(" 🧤 Передаём ресурсы");
+                    dropTask.setObjective(" 📦 Передаём ресурсы");
 
                     tasks.add(walkTask);
                     tasks.add(dropTask);

@@ -7,6 +7,7 @@ import com.devone.bot.core.bot.inventory.BotInventory;
 import com.devone.bot.core.bot.task.active.drop.params.BotDropAllTaskParams;
 import com.devone.bot.core.bot.task.active.playerlinked.BotPlayerLinkedTask;
 import com.devone.bot.core.bot.task.passive.IBotTaskParameterized;
+import com.devone.bot.core.utils.logger.BotLogger;
 
 public class BotDropAllTask extends BotPlayerLinkedTask<BotDropAllTaskParams> {
 
@@ -25,7 +26,7 @@ public class BotDropAllTask extends BotPlayerLinkedTask<BotDropAllTaskParams> {
 
     @Override
     public void execute() {
-        
+        BotLogger.debug(icon, isLogging(), bot.getId()+ " 🎁 Dropping all loot... ");
         BotInventory.dropAllItems(bot);
 
         this.stop();

@@ -32,7 +32,7 @@ public class BotTeleportTask extends BotTaskAutoParams<BotTeleportTaskParams> {
         setObjective(params.getObjective());
 
         if (this.target == null) {
-            BotLogger.debug("❌", this.isLogging(), bot.getId() + " Целевая точка не задана. Остановка задачи.");
+            BotLogger.debug(icon, this.isLogging(), bot.getId() + " ❌ Целевая точка не задана. Остановка задачи.");
             this.stop();
         }
 
@@ -42,7 +42,7 @@ public class BotTeleportTask extends BotTaskAutoParams<BotTeleportTaskParams> {
     @Override
     public void execute() {
         if (this.target == null) {
-            BotLogger.debug("❌", this.isLogging(), bot.getId() + " Нет координат для телепортации.");
+            BotLogger.debug(icon, this.isLogging(), bot.getId() + " ❌ Нет координат для телепортации.");
             stop();
             return;
         }
@@ -57,8 +57,8 @@ public class BotTeleportTask extends BotTaskAutoParams<BotTeleportTaskParams> {
             bot.getState().setStuck(false);
             bot.getBrain().getMemory().teleportUsedIncrease();
 
-            BotLogger.debug("⚡", this.isLogging(),
-                    bot.getId() + " Телепорт с " + baseLocation.toVector() + " → " + safeOffset.toVector());
+            BotLogger.debug(icon, this.isLogging(),
+                    bot.getId() + " ⚡ Телепорт с " + baseLocation.toVector() + " → " + safeOffset.toVector());
         });
 
         stop();
