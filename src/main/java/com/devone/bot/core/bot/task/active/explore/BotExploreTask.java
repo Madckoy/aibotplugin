@@ -44,7 +44,7 @@ public class BotExploreTask extends BotTaskAutoParams<BotExploreTaskParams> {
         if (isPause())
             return;
 
-        BotLogger.debug("🔶", isLogging(), bot.getId() + " Exploring with radius: " + scanRadius);
+        BotLogger.debug("🔶", isLogging(), bot.getId() + " Exploring "+ icon +" with distance: " + scanRadius);
 
         long rmt = BotUtils.getRemainingTime(startTime);
         setObjective(params.getObjective() + " ("+ rmt +")");

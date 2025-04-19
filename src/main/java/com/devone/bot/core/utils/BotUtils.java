@@ -149,15 +149,15 @@ public class BotUtils {
             BotUtils.lookAt(bot, target);
         }, 1L); // ✅ Через тик, чтобы дать время на обновление
     
-        BotLogger.debug("🔄", true, bot.getId() + "TURNING to look at the target: " + target);
+        BotLogger.debug("🔄", true, bot.getId() + " TURNING to look at the target: " + target);
     }
 
     public static void animateHand(Bot bot) {
         if (bot.getNPCEntity() instanceof Player playerBot) {
             playerBot.swingMainHand();
-            BotLogger.debug("✋🏻", true, "Анимация руки выполнена");
+            BotLogger.debug("✋🏻", true, " Анимация руки выполнена");
         } else {
-            BotLogger.debug("✋🏻", true, "Анимация не выполнена: бот — не игрок");
+            BotLogger.debug("✋🏻", true, " Анимация не выполнена: бот — не игрок");
         }
     }
 

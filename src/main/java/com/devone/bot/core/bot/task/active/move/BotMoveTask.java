@@ -14,7 +14,6 @@ import com.devone.bot.core.bot.task.passive.BotTaskAutoParams;
 import com.devone.bot.core.bot.task.passive.IBotTaskParameterized;
 import com.devone.bot.core.utils.*;
 import com.devone.bot.core.utils.blocks.BotLocation;
-import com.devone.bot.core.utils.blocks.BotLocationHelper;
 import com.devone.bot.core.utils.logger.BotLogger;
 import com.devone.bot.core.utils.world.BotWorldHelper;
 
@@ -42,9 +41,9 @@ public class BotMoveTask extends BotTaskAutoParams<BotMoveTaskParams> {
 
         if (loc != null) {
             bot.getNavigation().setTarget(loc);
-            BotLogger.debug("✅", isLogging(), bot.getId() + " Цель движения установлена: " + loc);
+            BotLogger.debug(icon, isLogging(), bot.getId() + " ✅ Цель движения установлена: " + loc);
         } else {
-            BotLogger.debug("❌", isLogging(), bot.getId() + " Target Location is null! Invalid parameters.");
+            BotLogger.debug(icon, isLogging(), bot.getId() + " ❌ Target Location is null! Invalid parameters.");
             this.stop();
         }
 
@@ -57,14 +56,14 @@ public class BotMoveTask extends BotTaskAutoParams<BotMoveTaskParams> {
         if (done || isPause()) return;
 
         if (!bot.getNPC().isSpawned()) {
-            BotLogger.debug("⚠️", isLogging(), bot.getId() + "NPC не заспавнен!");
+            BotLogger.debug(icon, isLogging(), bot.getId() + " ⚠️ NPC не заспавнен!");
             this.stop();
             return;
         }
 
         BotLocation targetCoord = bot.getNavigation().getTarget();
         if (targetCoord == null) {
-            BotLogger.debug("❌", isLogging(), bot.getId() + "Нет цели для движения.");
+            BotLogger.debug(icon, isLogging(), bot.getId() + " ❌ Нет цели для движения!");
             this.stop();
             return;
         }
@@ -86,7 +85,9 @@ public class BotMoveTask extends BotTaskAutoParams<BotMoveTaskParams> {
             bot.getNPCNavigator().setTarget(targetLocation);
             isMoving = true;
 
-            BotLogger.debug("🏃🏻‍♂️", isLogging(), bot.getId() + " Двигаюсь к " + targetLocation);
+            BotLocation loc = BotWorldHelper.worldLocationToBotLocation(targetLocation);
+
+            BotLogger.debug("🏃🏻‍♂️", isLogging(), bot.getId() + " Двигаюсь к " + loc);
 
             taskHandle = Bukkit.getScheduler().runTaskTimer(AIBotPlugin.getInstance(), () -> {
 
@@ -94,7 +95,7 @@ public class BotMoveTask extends BotTaskAutoParams<BotMoveTaskParams> {
 
                 setObjective(params.getObjective() + " to " + blockName + " at:" + coordsStr + " ("+ rmt +")");
 
-                turnToTarget(new BotLocation(BotLocationHelper.convertFrom(targetLocation)));
+                turnToTarget(loc);//new BotLocation(BotLocationHelper.convertFrom(targetLocation)));
 
                 if (done || bot.getNPCEntity() == null) {
                     stopTaskHandle();
@@ -108,9 +109,11 @@ public class BotMoveTask extends BotTaskAutoParams<BotMoveTaskParams> {
                     this.stop();
                 }
 
-            }, 0L, 20L); // раз в секунду
+            }, 0L, 40L); // раз в 2 секунд
         } else {
-            BotLogger.debug("⏳", isLogging(), bot.getId() + " Двигаюсь к " + targetLocation);
+
+            BotLocation loc = BotWorldHelper.worldLocationToBotLocation(targetLocation);
+            BotLogger.debug("⏳", isLogging(), bot.getId() + " Уже в движении в " + loc);
         }
 
 
@@ -128,7 +131,7 @@ public class BotMoveTask extends BotTaskAutoParams<BotMoveTaskParams> {
     public void stop() {
         isMoving = false;
         bot.getNavigation().setTarget(null);
-        BotLogger.debug("🛑", isLogging(), bot.getId() + " Move task завершён");
+        BotLogger.debug(icon, isLogging(), bot.getId() + " 🛑 Move task завершён");
 
         stopTaskHandle();
 
@@ -144,7 +147,7 @@ public class BotMoveTask extends BotTaskAutoParams<BotMoveTaskParams> {
     public void onNavigationComplete(NavigationCompleteEvent event) {
         if (event.getNPC().getId() != bot.getNPC().getId()) return;
 
-        BotLogger.debug("✅", isLogging(), bot.getId() + " Навигатор сообщил о завершении");
+        BotLogger.debug(icon, isLogging(), bot.getId() + " ✅ Навигатор сообщил о завершении");
         this.stop();
     }
 }

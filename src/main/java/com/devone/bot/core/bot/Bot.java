@@ -196,12 +196,12 @@ public class Bot {
     
         // Если есть дроп в радиусе 2 блоков — бот остается на месте
         if (!nearbyItems.isEmpty()) {
-            BotLogger.debug("✅",true, "В радиусе " + pickupRadius + " блоков от "+ getId() +" есть предметы, остаюсь на месте.");
+            BotLogger.debug("🔍",true, getId()+" В радиусе " + pickupRadius + " блоков от есть предметы, остаюсь на месте.");
             return;
         }
     
         // Если предметов рядом нет, двигаем бота к последнему разрушенному блоку
-        BotLogger.debug("✅ ", true, "Дроп подобран "+ getId() +" и двигается к последнему разрушенному блоку " + lastBrokenBlock);
+        BotLogger.debug("🔍", true, getId() + " Дроп подобран и двигается к последнему разрушенному блоку " + lastBrokenBlock);
         
         BotMoveTask mv_task = new BotMoveTask(this);
         BotLocation loc = new BotLocation(lastBrokenBlock.getBlockX(), lastBrokenBlock.getBlockY(), lastBrokenBlock.getBlockZ());

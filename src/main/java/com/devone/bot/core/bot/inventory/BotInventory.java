@@ -114,8 +114,6 @@ public class BotInventory {
             return;
         }
 
-        BotLogger.debug("🛒", true, bot.getId() + " Pickup parameters:: " + shouldPickup);
-
         BotScanNatural.logScanNatural(bot, BotConstants.DEFAULT_SCAN_RANGE);
 
         if (bot.getBrain().getAutoPickupItems()) {

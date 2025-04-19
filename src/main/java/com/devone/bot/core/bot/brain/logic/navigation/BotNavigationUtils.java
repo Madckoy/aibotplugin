@@ -22,7 +22,7 @@ public class BotNavigationUtils {
 
         // check if has more than one block to visit
         int totalGoals = context.reachableGoals.size();
-        BotLogger.debug("", true, "Total reachable goals:" + totalGoals);
+        BotLogger.debug("", true, bot.getId()+" Total reachable goals:" + totalGoals);
         
         if(totalGoals <= 1) {
             //the bot is stuck!
@@ -44,7 +44,7 @@ public class BotNavigationUtils {
     private static void navigate(Bot bot, BotLocation target, float multiplier) {
 
         
-        BotLogger.debug("🏃🏻‍♂️‍➡️ ", true, bot.getId() + " Wants to navigate to " + target.toString() + " [ID: " + bot.getBrain().getCurrentTask().getIcon() + "]");
+        BotLogger.debug("🏃🏻‍♂️‍➡️", true, bot.getId() + " Wants to navigate to " + target.toString() + " [ID: " + bot.getBrain().getCurrentTask().getIcon() + "]");
         BotLogger.debug("🎯", true,  bot.getId() + " Runtime Target Location: " + bot.getNavigation().getTarget().toString() + " [ID: " + bot.getBrain().getCurrentTask().getIcon() + "]");
 
 
