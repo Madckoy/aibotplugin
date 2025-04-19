@@ -355,4 +355,17 @@ public class BotInventory {
         };
     }
 
+    public static boolean isEmpty(Bot bot) {
+        Inventory inventory = bot.getInventory().getNPCInventory();
+        if (inventory == null)
+            return true; 
+
+        for (ItemStack item : inventory.getContents()) {
+            if (item != null && item.getType() != Material.AIR) {
+                return false;
+            }
+        }
+        return true;
+    }
+
 }
