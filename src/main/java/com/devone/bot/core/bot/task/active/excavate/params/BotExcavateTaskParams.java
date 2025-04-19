@@ -14,9 +14,11 @@ public class BotExcavateTaskParams extends BotTaskParams {
     private int outerRadius = BotConstants.DEFAULT_OUTER_RADIUS;
     private int innerRadius = BotConstants.DEFAULT_INNER_RADIUS;
     private boolean pickup = true;
-    private int offsetX = 0;
+
+    private int offsetX = -1*(BotConstants.DEFAULT_OUTER_RADIUS-2);
     private int offsetY = -1*(BotConstants.DEFAULT_OUTER_RADIUS-1);
-    private int offsetZ = 0;
+    private int offsetZ = -1*(BotConstants.DEFAULT_OUTER_RADIUS-2);
+    
     private String patternName = BotConstants.DEFAULT_PATTERN_BREAK;
 
     public BotExcavateTaskParams() {
