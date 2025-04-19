@@ -25,7 +25,7 @@ public class BotIdleTask extends BotTaskAutoParams<BotIdleTaskParams> {
     public void execute() { 
         long rmt = BotUtils.getRemainingTime(startTime);
 
-        setObjective(params.getObjective() + "("+ rmt +")");
+        setObjective(params.getObjective() + " ("+ rmt +")");
         
         if (rmt<=0) {
             BotLogger.debug("✅", isLogging(), bot.getId() + " Idle timeout passed. Ending idle.");
