@@ -1,11 +1,9 @@
 package com.devone.bot.core.bot.task.passive;
 
 
-import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 import org.bukkit.event.Listener;
 
-import com.devone.bot.AIBotPlugin;
 import com.devone.bot.core.bot.Bot;
 import com.devone.bot.core.bot.task.active.brain.BotBrainTask;
 import com.devone.bot.core.bot.task.passive.params.BotTaskParams;
