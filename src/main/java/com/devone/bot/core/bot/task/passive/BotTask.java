@@ -77,14 +77,14 @@ public abstract class BotTask<T extends BotTaskParams> implements IBotTask, List
 
     public void setObjective(String objctv) {
         objective = objctv;
-        BotLogger.debug("🚩", this.isLogging(), icon +" : "+ bot.getId() + "  Set Objective: " + objctv);
+        BotLogger.debug("🚩", this.isLogging(), bot.getId() + " "+ icon + " Set Objective: " + objctv);
     }
 
     public void update() {
 
         if (!enabled) return;
     
-        BotLogger.debug("🚦", this.isLogging(), bot.getId() +" "+icon + " : " + bot.getId() + " Status: done=" + done + " | paused=" + isPause() +
+        BotLogger.debug("🚦", this.isLogging(), bot.getId() +" "+icon + " Status: done=" + done + " | paused=" + isPause() +
                 " 📍: " + bot.getNavigation().getLocation() +" | 🎯: " + bot.getNavigation().getTarget());
     
         if (isPause()) return;
@@ -95,20 +95,21 @@ public abstract class BotTask<T extends BotTaskParams> implements IBotTask, List
         }
     
         if (!bot.getBrain().isReactionInProgress()) {
-            BotLogger.debug("🚨", this.isLogging(), bot.getId() + player.getName() + " Не Выполняет текущее реактивное задание.");
+            BotLogger.debug("🚨", this.isLogging(), bot.getId() + " Не Выполняет текущее реактивное задание.");
             
             Optional<Runnable> reaction = BotReactivityManager.checkReactions(bot);
 
             if (reaction.isPresent()) {
 
                 setPause(true); // current task
-                BotLogger.debug("🚨", this.isLogging(), bot.getId() + player.getName() + " Нужно срочно выполнить реактивное задание!");
+                BotLogger.debug("🚨", this.isLogging(), bot.getId() + " Нужно срочно выполнить реактивное задание!");
                 reaction.get().run();
                 return;
             }
         }
 
-        BotLogger.debug("🚨", this.isLogging(), bot.getId() + player.getName() + " Выполняет текущее задание.");
+        BotLogger.debug("🚨", this.isLogging(), bot.getId() + " Выполннение задания: " + getIcon());
+
         execute();
     }    
 
