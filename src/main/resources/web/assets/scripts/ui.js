@@ -45,12 +45,21 @@ function renderBotTable(data) {
                                     <div><span>⚡️</span><span>${bot.teleport_used}</span></div>
                                 </div>`; 
 
+        let objCellPos = row.insertCell(2);
+        objCellPos.innerHTML = `
+            <div class="bot-position-cell">
+                <div><span>📍</span><span>${bot.position}</span></div>
+                <div class="bot-objective-divider"></div>
+                <div><span>🎯</span><span>${bot.target}</span></div>
+            </div>`;
         row.insertCell(2).innerText = bot.position; 
+
+
         row.insertCell(3).innerText = bot.stuck;
         row.insertCell(4).innerText = bot.task;
-        row.insertCell(5).innerText = bot.target;
+        //row.insertCell(5).innerText = bot.target;
         
-        let objCell = row.insertCell(6);
+        let objCell = row.insertCell(5);
         objCell.innerHTML = `
             <div class="bot-objective-cell">
                 <div><span>ᯓ </span><span>${bot.queue}</span></div>
@@ -58,17 +67,17 @@ function renderBotTable(data) {
                 <div><span>✴ </span><span>${bot.object}</span></div>
             </div>`;
 
-        row.insertCell(7).innerText = bot.elapsedTime;
+        row.insertCell(6).innerText = bot.elapsedTime;
 
         // 📦 Inventory
-        let invCell = row.insertCell(8);
+        let invCell = row.insertCell(7);
         invCell.className = "inventory-cell";
         invCell.title = `Items: ${bot.inventoryCount} / ${bot.inventoryMax}`;
         invCell.innerHTML = generateInventoryGrid(bot.inventorySlotsFilled, bot.auto_pick_up_items);
 
 
         // 🎮 Control Buttons
-        let cmdCell = row.insertCell(9);
+        let cmdCell = row.insertCell(8);
         cmdCell.innerHTML = `
             <div class="command-cell">
                <button class="cmd-btn" data-bot="${bot.id}" data-cmd="bot-tp">TP</button>
