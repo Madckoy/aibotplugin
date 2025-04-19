@@ -54,7 +54,7 @@ public class BotMoveTask extends BotTaskAutoParams<BotMoveTaskParams> {
     @Override
     public void execute() {
         if (taskHandle != null && !taskHandle.isCancelled()) return;
-        if (done || paused) return;
+        if (done || isPause()) return;
 
         if (!bot.getNPC().isSpawned()) {
             BotLogger.debug("⚠️", isLogging(), bot.getId() + "NPC не заспавнен!");

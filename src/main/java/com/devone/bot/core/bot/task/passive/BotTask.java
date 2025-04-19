@@ -32,7 +32,12 @@ public abstract class BotTask<T extends BotTaskParams> implements IBotTask, List
     protected Player player = null;
     protected long startTime = System.currentTimeMillis();
 
-    protected boolean paused = false;
+    private boolean pause = false;
+    
+    public boolean isPause() {
+        return pause;
+    }
+
     protected boolean done = false;
     protected final String uuid;
     
@@ -79,11 +84,11 @@ public abstract class BotTask<T extends BotTaskParams> implements IBotTask, List
 
         if (!enabled) return;
     
-        BotLogger.debug("🚦", this.isLogging(), icon + " : " + bot.getId() + " Status: " + done + " | " + paused +
+        BotLogger.debug("🚦", this.isLogging(), icon + " : " + bot.getId() + " Status: " + done + " | " + isPause() +
                 " 📍 xyz: " + bot.getNavigation().getLocation() +
                 " | 🎯 xyz: " + bot.getNavigation().getTarget());
     
-        if (paused) return;
+        if (isPause()) return;
     
         if (this.player != null && !isPlayerOnline()) {
             handlePlayerDisconnect();
@@ -91,15 +96,20 @@ public abstract class BotTask<T extends BotTaskParams> implements IBotTask, List
         }
     
         if (!bot.getBrain().isReactionInProgress()) {
+            BotLogger.debug("🚨", this.isLogging(), bot.getId() + player.getName() + " Не Выполняет текущее реактивное задание.");
+            
             Optional<Runnable> reaction = BotReactivityManager.checkReactions(bot);
-    
+
+            BotLogger.debug("🚨", this.isLogging(), bot.getId() + player.getName() + " Нужно срочно выполнить реактивное задание!");
             if (reaction.isPresent()) {
-                setPaused(true); // current task
+
+                setPause(true); // current task
+
                 reaction.get().run();
                 return;
             }
         }
-    
+        BotLogger.debug("🚨", this.isLogging(), bot.getId() + player.getName() + " Выполняет текущее задание.");
         execute();
     }    
 
@@ -130,9 +140,9 @@ public abstract class BotTask<T extends BotTaskParams> implements IBotTask, List
     }
     
 
-    public void setPaused(boolean paused) {
-        this.paused = paused;
-        String status = paused ? this.icon+ " ⏸️ Pausing..." : " ▶️ Resuming...";
+    public void setPause(boolean pause) {
+        this.pause = pause; 
+        String status = this.pause ? this.icon + " ( "+this.getClass().getSimpleName()+" ) "+ " ⏸️ Pause" : " ▶️ Resume";
         BotLogger.debug(status, this.isLogging(), bot.getId());
     }
 

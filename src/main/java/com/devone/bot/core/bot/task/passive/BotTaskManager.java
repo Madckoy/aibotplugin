@@ -21,7 +21,7 @@ public class BotTaskManager {
     public <T extends BotTaskParams> void pushTask(BotTask<T> task) {
         if (!taskStack.isEmpty()) {
             BotTask<?> currentTask = taskStack.peek();
-            currentTask.setPaused(true); // Ставим текущую задачу на паузу
+            currentTask.setPause(true); // Ставим текущую задачу на паузу
         }
 
         taskStack.push(task);
@@ -39,7 +39,7 @@ public class BotTaskManager {
 
             // ✅ Если осталась активность, снимаем с неё паузу
             if (!taskStack.isEmpty()) {
-                taskStack.peek().setPaused(false);
+                taskStack.peek().setPause(false);
             }
         }
     }
