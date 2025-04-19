@@ -29,8 +29,11 @@ public class NearbyPlayerReaction implements IBotReactionStrategy {
         BotLogger.debug("🤖", true, bot.getId()+" 🙋🏻‍♂️ Проверка реакции бота на игрока");
 
         if(BotReactiveUtils.isAlreadyReacting(bot)){
+            BotLogger.debug("🤖", true, bot.getId() + " 🙋🏻‍♂️ [NearbyPlayerReaction] Уже реагирует — выходим");
             return BotReactiveUtils.avoidOverReaction(bot);
         };
+        
+        BotLogger.debug("🤖", true, bot.getId() + " 🙋🏻‍♂️ [NearbyPlayerReaction] Старт реакции");
 
         BotReactiveUtils.activateReaction(bot);
 
