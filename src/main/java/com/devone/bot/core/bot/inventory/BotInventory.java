@@ -99,10 +99,10 @@ public class BotInventory {
     }
 
     public void pickupAll(Boolean shouldPickup) {
-        BotLogger.debug("🛒", true, bot.getId() + " Pickup parameters: " + shouldPickup +" | "+bot.getBrain().getAutoPickupItems());
+        BotLogger.debug(bot.getActiveTask().getIcon(), true, bot.getId() + " Pickup parameters: " + shouldPickup +" | "+bot.getBrain().getAutoPickupItems());
 
         if (!bot.isNPCSpawned() || bot.getNPC() == null) {
-            BotLogger.debug("🛒", true, bot.getId() + " NPC issue! Can't pickup items. Pickup parameters");
+            BotLogger.debug(bot.getActiveTask().getIcon(), true, bot.getId() + " ❌ NPC issue! Can't pickup items. Pickup parameters");
             return;
         }
 
@@ -110,7 +110,7 @@ public class BotInventory {
 
 
         if (!shouldPickup && !bot.getBrain().getAutoPickupItems() ) {
-            BotLogger.debug("🛒", true, bot.getId() + " Will not pickup items. Pickup parameters: " + shouldPickup +" | "+bot.getBrain().getAutoPickupItems());
+            BotLogger.debug(bot.getActiveTask().getIcon(), true, bot.getId() + " ❌ Will not pickup items. Pickup parameters: " + shouldPickup +" | "+bot.getBrain().getAutoPickupItems());
             return;
         }
 
@@ -137,7 +137,7 @@ public class BotInventory {
                         addItem(material, amount); // Передаём два параметра в инвентарь
 
                         item.remove(); // Удаляем предмет с земли
-                        BotLogger.debug("🛒", true, bot.getId() + " Подобрал " + amount + " x " + material);
+                        BotLogger.debug(bot.getActiveTask().getIcon(), true, bot.getId() + " 🛒 Подобрал " + amount + " x " + material);
                     }
                 }
             }
@@ -151,7 +151,7 @@ public class BotInventory {
     public static boolean hasEnoughBlocks(Bot bot, Set<Material> targetMaterials, int maxBlocksPerMaterial) {
 
         if (bot.getInventory().getNPCInventory() == null) {
-            BotLogger.debug("🛒", true, bot.getId() + " Has no inventory yet!");
+            BotLogger.debug(bot.getActiveTask().getIcon(), true, bot.getId() + " ⛔ Has no inventory yet!");
             return true;
         } // not yet created
 
@@ -178,8 +178,8 @@ public class BotInventory {
             // Проверяем, достигнуто ли нужное количество для любого из целевых материалов
             for (Material material : targetMaterials) {
                 int count = collectedCounts.getOrDefault(material, 0);
-                BotLogger.debug("📦 ", true, 
-                        bot.getId() + " | " + material + ": ( " + count + "/" + maxBlocksPerMaterial + ")");
+                BotLogger.debug(bot.getActiveTask().getIcon(), true, 
+                        bot.getId() + " 📦 " + material + ": ( " + count + "/" + maxBlocksPerMaterial + ")");
 
                 if (count >= maxBlocksPerMaterial) {
                     return true; // Достигнута цель по какому-то материалу → завершаем задачу
@@ -193,7 +193,7 @@ public class BotInventory {
     public static boolean hasFreeInventorySpace(Bot bot, Set<Material> targetMaterials) {
 
         if (bot.getInventory().getNPCInventory() == null) {
-            BotLogger.debug("🛒", true,  bot.getId() + " Has no inventory yet!");
+            BotLogger.debug(bot.getActiveTask().getIcon(), true,  bot.getId() + " ⛔ Has no inventory yet!");
             return true;
         } // not yet created
 
@@ -225,7 +225,7 @@ public class BotInventory {
 
         Inventory inventory = bot.getInventory().getNPCInventory();
         if (inventory == null) {
-            BotLogger.debug("🛒 ", true,  bot.getId() + " Has no inventory yet!");
+            BotLogger.debug(bot.getActiveTask().getIcon(), true,  bot.getId() + " ⛔ Has no inventory yet!");
             return;
         } // not yet created
 
@@ -236,7 +236,7 @@ public class BotInventory {
         }
 
         inventory.clear(); // Полностью очищаем инвентарь после выброса
-        BotLogger.debug("🚮", true, bot.getId() + " Выбросил все предметы из инвентаря!");
+        BotLogger.debug(bot.getActiveTask().getIcon(), true, bot.getId() + " 🚮 Выбросил все предметы из инвентаря!");
     }
 
     public void pullAllItemsinRadius(double radius) {
@@ -245,7 +245,7 @@ public class BotInventory {
         for (Entity entity : nearbyItems) {
             if (entity instanceof Item) {
                 entity.teleport(bot.getNPCEntity().getLocation()); // Притягиваем предмет
-                BotLogger.debug("🛒", true, bot.getId() + " Pulled up a near item!");
+                BotLogger.debug(bot.getActiveTask().getIcon(), true, bot.getId() + " 🧲 Pulled up a near item!");
             }
         }
     }
@@ -339,7 +339,7 @@ public class BotInventory {
             }
         }
 
-        BotLogger.debug("🧰", true, "Инструмент " + requiredTool + " не найден в инвентаре");
+        BotLogger.debug(bot.getActiveTask().getIcon(), true, "🧰 Инструмент " + requiredTool + " не найден в инвентаре");
         return false;
     }
 

@@ -76,13 +76,13 @@ public class BotTaskManager {
 
             BotTask<?> currentTask = taskStack.peek();
 
-            BotLogger.debug(bot.getActiveTask().getIcon(), true, bot.getId() + " 🟩 Active task: " + currentTask.getIcon() + currentTask.getClass().getSimpleName());
+            BotLogger.debug("🤖", true, bot.getId() + " 🟩 Activate task: " + currentTask.getIcon() + currentTask.getClass().getSimpleName());
     
             if (currentTask.isDone()) {
                 popTask();
-                BotLogger.debug(bot.getActiveTask().getIcon(), true, bot.getId() + " 🟥 Deactivating task: " + currentTask.getIcon() + currentTask.getClass().getSimpleName());
+                BotLogger.debug("🤖", true, bot.getId() + " 🟥 Deactivating task: " + currentTask.getIcon() + currentTask.getClass().getSimpleName());
             } else {
-                BotLogger.debug(bot.getActiveTask().getIcon(), true, bot.getId() + " 🟪 Updating task: " + currentTask.getIcon() + currentTask.getClass().getSimpleName());
+                BotLogger.debug("🤖", true, bot.getId() + " 🟪 Updating task: " + currentTask.getIcon() + currentTask.getClass().getSimpleName());
                 currentTask.update();
             }
         }

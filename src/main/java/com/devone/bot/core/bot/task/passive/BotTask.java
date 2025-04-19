@@ -75,15 +75,15 @@ public abstract class BotTask<T extends BotTaskParams> implements IBotTask, List
 
     public void setObjective(String objctv) {
         objective = objctv;
-        BotLogger.debug(icon, this.isLogging(), bot.getId() + " "+ icon + " Set Objective: " + objctv);
+        BotLogger.debug(icon, this.isLogging(), bot.getId() + " 𖣠 Set Objective: " + objctv);
     }
 
     public void update() {
 
         if (!enabled) return;
     
-        BotLogger.debug("🚦", this.isLogging(), bot.getId() + " " + icon + " Status : done=" + done + " | paused=" + isPause() +
-                " 📍: " + bot.getNavigation().getLocation() +" | 🎯: " + bot.getNavigation().getTarget());
+        BotLogger.debug(icon, this.isLogging(), bot.getId() + " ❓ Status : done=" + done + " | paused=" + isPause() +
+                " 📍: " + bot.getNavigation().getLocation() + " | 🎯: " + bot.getNavigation().getTarget());
     
         if (isPause()) return;
     

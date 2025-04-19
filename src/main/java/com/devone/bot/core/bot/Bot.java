@@ -91,7 +91,7 @@ public class Bot {
         this.state = new BotState(this);
         this.navigation = new BotNavigation(this);
 
-        BotLogger.debug("➕", true, "Has been CREATED AND SPAWNED: " + id);
+        BotLogger.debug("🤖", true, id + " ➕ Has been created and spawned");
     }
 
     public static BotTask<?> getActiveTask(Bot bot) {
@@ -151,7 +151,7 @@ public class Bot {
     public void despawnNPC() {
         if (npc != null) {
             //stop all tasks!
-            BotLogger.debug("🤖", true, id + " ➖ Stopping ALL Tasks");
+            BotLogger.debug("🤖", true, id + " ➖ Stopping All Tasks");
             
             BotUtils.clearTasks(this);
 

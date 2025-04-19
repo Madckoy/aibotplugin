@@ -25,15 +25,10 @@ public class BotState {
         this.health = health;
     }
 
-    public BotState() {
+    public BotState(Bot bot) {
+        this.owner = bot;
         this.stuck = false;
         this.stuckCount = 0;
-    }
-
-    public BotState(Bot bot) {
-        this();
-        this.owner = bot;
-
     }
 
     // Флаг застревания
@@ -43,7 +38,7 @@ public class BotState {
 
     public void setStuck(boolean stuck) {
         this.stuck = stuck;
-        BotLogger.debug(owner.getActiveTask().getIcon(), true, " ❓ BotState: set Stuck="+stuck);
+        BotLogger.debug(owner.getActiveTask().getIcon(), true, owner.getId() + " ❓ BotState: set Stuck="+stuck);
         incrementStuckCount();
     }
 
