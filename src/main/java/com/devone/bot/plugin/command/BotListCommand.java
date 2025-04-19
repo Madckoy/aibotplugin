@@ -7,7 +7,7 @@ import org.bukkit.entity.Player;
 
 import com.devone.bot.core.bot.Bot;
 import com.devone.bot.core.bot.BotManager;
-import com.devone.bot.core.bot.brain.logic.utils.blocks.BotLocation;
+import com.devone.bot.core.utils.blocks.BotLocation;
 
 public class BotListCommand implements CommandExecutor {
 

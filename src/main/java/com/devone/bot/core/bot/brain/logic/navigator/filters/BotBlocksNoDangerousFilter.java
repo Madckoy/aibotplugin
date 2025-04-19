@@ -2,7 +2,7 @@ package com.devone.bot.core.bot.brain.logic.navigator.filters;
 
 import java.util.*;
 
-import com.devone.bot.core.bot.brain.logic.utils.blocks.BotBlockData;
+import com.devone.bot.core.utils.blocks.BotBlockData;
 
 public class BotBlocksNoDangerousFilter {
     public static List<BotBlockData> filter(List<BotBlockData> blocks) {

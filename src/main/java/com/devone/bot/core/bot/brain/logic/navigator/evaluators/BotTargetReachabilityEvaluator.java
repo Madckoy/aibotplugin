@@ -5,8 +5,8 @@ package com.devone.bot.core.bot.brain.logic.navigator.evaluators;
 import java.util.*;
 import java.util.stream.Collectors;
 
-import com.devone.bot.core.bot.brain.logic.utils.blocks.BotBlockData;
-import com.devone.bot.core.bot.brain.logic.utils.blocks.BotLocation;
+import com.devone.bot.core.utils.blocks.BotBlockData;
+import com.devone.bot.core.utils.blocks.BotLocation;
 
 public class BotTargetReachabilityEvaluator {
 

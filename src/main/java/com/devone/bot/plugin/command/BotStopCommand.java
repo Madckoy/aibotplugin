@@ -7,7 +7,7 @@ import org.bukkit.entity.Player;
 
 import com.devone.bot.core.bot.Bot;
 import com.devone.bot.core.bot.BotManager;
-import com.devone.bot.core.bot.behaviour.task.brain.BotBrainTask;
+import com.devone.bot.core.bot.task.active.brain.BotBrainTask;
 
 public class BotStopCommand implements CommandExecutor {
 

@@ -1,8 +1,8 @@
 package com.devone.bot.core.bot.brain;
 
 import com.devone.bot.core.bot.Bot;
-import com.devone.bot.core.bot.behaviour.task.BotTask;
 import com.devone.bot.core.bot.brain.memory.BotMemory;
+import com.devone.bot.core.bot.task.passive.BotTask;
 
 
 public class BotBrain {

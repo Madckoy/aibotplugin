@@ -6,8 +6,8 @@ import java.io.*;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 
-import com.devone.bot.core.bot.brain.logic.utils.BotConstants;
-import com.devone.bot.core.bot.brain.logic.utils.logger.BotLogger;
+import com.devone.bot.core.utils.BotConstants;
+import com.devone.bot.core.utils.logger.BotLogger;
 
 public class MainPageServlet extends HttpServlet {
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {

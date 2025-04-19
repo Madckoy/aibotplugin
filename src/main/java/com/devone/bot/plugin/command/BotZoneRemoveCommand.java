@@ -5,7 +5,7 @@ import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
-import com.devone.bot.core.bot.brain.logic.utils.zone.BotZoneManager;
+import com.devone.bot.core.utils.zone.BotZoneManager;
 
 public class BotZoneRemoveCommand implements CommandExecutor {
     private final BotZoneManager zoneManager;

@@ -1,20 +1,21 @@
 package com.devone.bot.core.bot.behaviour;
 
+import com.devone.bot.core.bot.task.active.explore.BotExploreTask;
 import java.util.*;
 
 import com.devone.bot.core.bot.Bot;
-import com.devone.bot.core.bot.behaviour.task.brain.params.BotBrainTaskParams;
-import com.devone.bot.core.bot.behaviour.task.excavate.BotExcavateTask;
-import com.devone.bot.core.bot.behaviour.task.excavate.params.BotExcavateTaskParams;
-import com.devone.bot.core.bot.behaviour.task.explore.BotExploreTask;
-import com.devone.bot.core.bot.behaviour.task.hand.attack.BotHandAttackTask;
-import com.devone.bot.core.bot.behaviour.task.hand.attack.params.BotHandAttackTaskParams;
 import com.devone.bot.core.bot.brain.logic.navigator.selectors.BotEntitySelector;
-import com.devone.bot.core.bot.brain.logic.utils.blocks.BotBlockData;
-import com.devone.bot.core.bot.brain.logic.utils.blocks.BotLocation;
-import com.devone.bot.core.bot.brain.logic.utils.logger.BotLogger;
-import com.devone.bot.core.bot.brain.logic.utils.world.BotWorldHelper;
 import com.devone.bot.core.bot.brain.memory.scene.BotSceneData;
+import com.devone.bot.core.bot.task.active.brain.params.BotBrainTaskParams;
+import com.devone.bot.core.bot.task.active.excavate.BotExcavateTask;
+import com.devone.bot.core.bot.task.active.excavate.params.BotExcavateTaskParams;
+import com.devone.bot.core.bot.task.active.hand.attack.BotHandAttackTask;
+import com.devone.bot.core.bot.task.active.hand.attack.params.BotHandAttackTaskParams;
+import com.devone.bot.core.utils.blocks.BotBlockData;
+import com.devone.bot.core.utils.blocks.BotLocation;
+import com.devone.bot.core.utils.logger.BotLogger;
+import com.devone.bot.core.utils.world.BotWorldHelper;
+
 
 public class BotTaskCandidatesFactory {
 

@@ -1,7 +1,7 @@
 package com.devone.bot.core.bot.brain.analysis;
 
 import com.devone.bot.core.bot.Bot;
-import com.devone.bot.core.bot.brain.logic.utils.world.BotWorldHelper;
+import com.devone.bot.core.utils.world.BotWorldHelper;
 
 public class BotBrainAnalysis {
     public static boolean isInRiskyEnvironment(Bot bot) {

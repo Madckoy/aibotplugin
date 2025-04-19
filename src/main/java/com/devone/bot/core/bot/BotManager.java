@@ -7,12 +7,12 @@ import org.bukkit.Location;
 import org.bukkit.entity.Entity;
 
 import com.devone.bot.AIBotPlugin;
-import com.devone.bot.core.bot.brain.logic.utils.BotConstants;
-import com.devone.bot.core.bot.brain.logic.utils.BotUtils;
-import com.devone.bot.core.bot.brain.logic.utils.blocks.BotLocation;
-import com.devone.bot.core.bot.brain.logic.utils.config.BotManagerConfig;
-import com.devone.bot.core.bot.brain.logic.utils.logger.BotLogger;
-import com.devone.bot.core.bot.brain.logic.utils.world.BotWorldHelper;
+import com.devone.bot.core.utils.BotConstants;
+import com.devone.bot.core.utils.BotUtils;
+import com.devone.bot.core.utils.blocks.BotLocation;
+import com.devone.bot.core.utils.config.BotManagerConfig;
+import com.devone.bot.core.utils.logger.BotLogger;
+import com.devone.bot.core.utils.world.BotWorldHelper;
 import com.devone.bot.core.web.bluemap.BlueMapMarkers;
 
 import java.io.File;

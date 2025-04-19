@@ -4,7 +4,7 @@ import jakarta.servlet.http.*;
 import java.io.*;
 import java.nio.file.Files;
 
-import com.devone.bot.core.bot.brain.logic.utils.BotConstants;
+import com.devone.bot.core.utils.BotConstants;
 
 public class StaticFileServlet extends HttpServlet {
     private static final String ASSETS_PATH = BotConstants.PLUGIN_PATH + "/web/assets/";

@@ -8,10 +8,10 @@ import org.bukkit.entity.Player;
 
 import com.devone.bot.core.bot.Bot;
 import com.devone.bot.core.bot.BotManager;
-import com.devone.bot.core.bot.behaviour.task.move.BotMoveTask;
-import com.devone.bot.core.bot.behaviour.task.move.params.BotMoveTaskParams;
-import com.devone.bot.core.bot.brain.logic.utils.blocks.BotLocation;
-import com.devone.bot.core.bot.brain.logic.utils.logger.BotLogger;
+import com.devone.bot.core.bot.task.active.move.BotMoveTask;
+import com.devone.bot.core.bot.task.active.move.params.BotMoveTaskParams;
+import com.devone.bot.core.utils.blocks.BotLocation;
+import com.devone.bot.core.utils.logger.BotLogger;
 
 public class BotMoveHereCommand implements CommandExecutor {
 

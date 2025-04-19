@@ -11,8 +11,8 @@ import java.util.UUID;
 
 import javax.imageio.ImageIO;
 
-import com.devone.bot.core.bot.brain.logic.utils.BotConstants;
-import com.devone.bot.core.bot.brain.logic.utils.logger.BotLogger;
+import com.devone.bot.core.utils.BotConstants;
+import com.devone.bot.core.utils.logger.BotLogger;
 
 
 public class BotImageUtils {

@@ -7,8 +7,8 @@ import org.bukkit.plugin.java.JavaPlugin;
 
 import com.devone.bot.AIBotPlugin;
 import com.devone.bot.core.bot.BotManager;
-import com.devone.bot.core.bot.brain.logic.utils.logger.BotLogger;
-import com.devone.bot.core.bot.brain.logic.utils.zone.BotZoneManager;
+import com.devone.bot.core.utils.logger.BotLogger;
+import com.devone.bot.core.utils.zone.BotZoneManager;
 
 import java.util.HashMap;
 import java.util.Map;

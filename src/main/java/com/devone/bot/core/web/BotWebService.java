@@ -6,8 +6,8 @@ import org.eclipse.jetty.servlet.ServletHolder;
 
 import com.devone.bot.AIBotPlugin;
 import com.devone.bot.core.bot.BotManager;
-import com.devone.bot.core.bot.brain.logic.utils.BotConstants;
-import com.devone.bot.core.bot.brain.logic.utils.logger.BotLogger;
+import com.devone.bot.core.utils.BotConstants;
+import com.devone.bot.core.utils.logger.BotLogger;
 import com.devone.bot.core.web.servlets.BlueMapProxyServlet;
 import com.devone.bot.core.web.servlets.BotStatusServlet;
 import com.devone.bot.core.web.servlets.CommandServlet;

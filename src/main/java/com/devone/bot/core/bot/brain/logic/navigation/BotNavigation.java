@@ -1,8 +1,8 @@
 package com.devone.bot.core.bot.brain.logic.navigation;
 
 import com.devone.bot.core.bot.Bot;
-import com.devone.bot.core.bot.brain.logic.utils.blocks.BotLocation;
-import com.devone.bot.core.bot.brain.logic.utils.blocks.BotLocationHelper;
+import com.devone.bot.core.utils.blocks.BotLocation;
+import com.devone.bot.core.utils.blocks.BotLocationHelper;
 
 public class BotNavigation {
     private transient Bot owner;

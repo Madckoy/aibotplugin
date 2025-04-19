@@ -8,11 +8,11 @@ import org.bukkit.plugin.java.JavaPlugin;
 
 import com.devone.bot.core.bot.BotManager;
 import com.devone.bot.core.bot.brain.logic.math.BotMathMaxFunction;
-import com.devone.bot.core.bot.brain.logic.utils.BotConstants;
-import com.devone.bot.core.bot.brain.logic.utils.logger.BotLogger;
-import com.devone.bot.core.bot.brain.logic.utils.server.BotResourceExtractor;
-import com.devone.bot.core.bot.brain.logic.utils.server.ServerUtils;
-import com.devone.bot.core.bot.brain.logic.utils.zone.BotZoneManager;
+import com.devone.bot.core.utils.BotConstants;
+import com.devone.bot.core.utils.logger.BotLogger;
+import com.devone.bot.core.utils.server.BotResourceExtractor;
+import com.devone.bot.core.utils.server.ServerUtils;
+import com.devone.bot.core.utils.zone.BotZoneManager;
 import com.devone.bot.core.web.BotWebService;
 import com.devone.bot.plugin.command.BotCommandsDispatcher;
 import com.devone.bot.plugin.config.AIBotPluginConfig;

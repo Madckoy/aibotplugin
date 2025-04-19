@@ -3,8 +3,8 @@ package com.devone.bot.core.bot.brain.logic.navigator.selectors;
 import java.util.Comparator;
 import java.util.List;
 
-import com.devone.bot.core.bot.brain.logic.utils.blocks.BotBlockData;
-import com.devone.bot.core.bot.brain.logic.utils.blocks.BotLocation;
+import com.devone.bot.core.utils.blocks.BotBlockData;
+import com.devone.bot.core.utils.blocks.BotLocation;
 
 public class BotEntitySelector {
 

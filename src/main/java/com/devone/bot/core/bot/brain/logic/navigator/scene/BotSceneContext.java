@@ -1,8 +1,8 @@
 package com.devone.bot.core.bot.brain.logic.navigator.scene;
 import java.util.List;
 
-import com.devone.bot.core.bot.brain.logic.utils.blocks.BotBlockData;
 import com.devone.bot.core.bot.brain.memory.scene.BotSceneData;
+import com.devone.bot.core.utils.blocks.BotBlockData;
 
 public class BotSceneContext extends BotSceneData {
     public List<BotBlockData> entities;
