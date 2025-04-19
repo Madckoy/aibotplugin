@@ -83,8 +83,8 @@ public class BotHandExcavateTask extends BotHandTask<BotHandExcavateTaskParams> 
 
                 block.breakNaturally();
                 bot.getBrain().getMemory().brokenBlocksIncrease(target.getType());
-
-                BotLogger.debug(icon, isLogging(), bot.getId() + " 🪨 Block is excavated: " + block);
+                BotBlockData bl = BotWorldHelper.worldBlockToBotBlock(block);
+                BotLogger.debug(icon, isLogging(), bot.getId() + " 🪨 Block is excavated: " + bl);
             }
         }.runTaskTimer(AIBotPlugin.getInstance(), 0L, 10L);
     }

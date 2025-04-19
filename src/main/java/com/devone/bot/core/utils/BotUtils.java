@@ -147,7 +147,9 @@ public class BotUtils {
         
         // ✅ Принудительно обновляем положение, если поворот сбрасывается
         Bukkit.getScheduler().runTaskLater(AIBotPlugin.getInstance(), () -> {
+            
             BotUtils.lookAt(bot, target);
+
         }, 1L); // ✅ Через тик, чтобы дать время на обновление
     
         BotLogger.debug(task.getIcon(), true, bot.getId() + " 🔄 Turned to look at the target: " + target);
