@@ -18,7 +18,7 @@ public class BotTaskManager {
     }
 
     // Метод теперь работает с обобщённым типом T
-    public <T extends BotTaskParams> void pushTask_(BotTask<T> task) {
+    public <T extends BotTaskParams> void pushTask(BotTask<T> task) {
         if (!taskStack.isEmpty()) {
             BotTask<?> currentTask = taskStack.peek();
             currentTask.setPaused(true); // Ставим текущую задачу на паузу

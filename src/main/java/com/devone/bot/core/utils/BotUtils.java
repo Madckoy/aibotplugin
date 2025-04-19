@@ -132,6 +132,6 @@ public class BotUtils {
     
     public static void pushTask(Bot bot, BotTask<?> task) {
         if (bot == null || task == null) return;
-        BotUtils.pushTask(bot, task);
+        bot.getLifeCycle().getTaskStackManager().pushTask(task);
     }
 }
