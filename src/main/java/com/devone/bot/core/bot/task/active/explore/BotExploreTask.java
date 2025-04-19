@@ -111,7 +111,7 @@ public class BotExploreTask extends BotTaskAutoParams<BotExploreTaskParams> {
         } else {
             BotLogger.debug(icon, isLogging(), bot.getId() + " ⛔ No valid goal found.");
             bot.getState().setStuck(true);
-            BotLogger.debug(getIcon(), isLogging(), bot.getId() + " ⛔ STUCK!! ");
+            BotLogger.debug(getIcon(), isLogging(), bot.getId() + " ⛔ Stuck! ");
             stop();
             return;
         }
@@ -120,7 +120,7 @@ public class BotExploreTask extends BotTaskAutoParams<BotExploreTaskParams> {
 
     @Override
     public void stop() {
-        BotLogger.debug(icon, isLogging(), " ✅ Exploration task completed for " + bot.getId());
+        BotLogger.debug(icon, isLogging(),  bot.getId() +" ✅ Exploration task completed");
         super.stop();
     }
 
