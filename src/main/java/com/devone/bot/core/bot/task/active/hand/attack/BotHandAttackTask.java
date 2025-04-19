@@ -73,6 +73,8 @@ public class BotHandAttackTask extends BotHandTask<BotHandAttackTaskParams> {
             Bukkit.getPluginManager().registerEvents(listener, AIBotPlugin.getInstance());
         }
 
+        BotHandAttackTask haTask = this;
+
         bukkitTask = new BukkitRunnable() {
             @Override
             public void run() {
@@ -126,7 +128,9 @@ public class BotHandAttackTask extends BotHandTask<BotHandAttackTaskParams> {
                                 bot.getId() + " Pursuing mob, distance: " + String.format("%.2f", distance));
 
                     } else {
-                        animateHand();
+                        
+                        animateHand(haTask, bot);
+
                         living.damage(damage, bot.getNPCEntity());
                         hits++;
 

@@ -87,7 +87,9 @@ public class BotMoveTask extends BotTaskAutoParams<BotMoveTaskParams> {
 
             BotLocation loc = BotWorldHelper.worldLocationToBotLocation(targetLocation);
 
-            BotLogger.debug("🏃🏻‍♂️", isLogging(), bot.getId() + " Двигаюсь к " + loc);
+            BotLogger.debug(icon, isLogging(), bot.getId() + " 🏃🏻‍♂️ Двигаюсь к " + loc);
+
+            BotMoveTask mTask = this;
 
             taskHandle = Bukkit.getScheduler().runTaskTimer(AIBotPlugin.getInstance(), () -> {
 
@@ -95,7 +97,7 @@ public class BotMoveTask extends BotTaskAutoParams<BotMoveTaskParams> {
 
                 setObjective(params.getObjective() + " to " + blockName + " at:" + coordsStr + " ("+ rmt +")");
 
-                turnToTarget(loc);//new BotLocation(BotLocationHelper.convertFrom(targetLocation)));
+                turnToTarget(mTask, loc);//new BotLocation(BotLocationHelper.convertFrom(targetLocation)));
 
                 if (done || bot.getNPCEntity() == null) {
                     stopTaskHandle();
@@ -103,7 +105,7 @@ public class BotMoveTask extends BotTaskAutoParams<BotMoveTaskParams> {
                 }
 
                 if (rmt <= 0) {
-                    BotLogger.debug("⏱️", isLogging(), bot.getId() + " Тайм-аут навигации.");
+                    BotLogger.debug(icon, isLogging(), bot.getId() + " ⏱️ Тайм-аут навигации.");
                     bot.getState().setStuck(true);
                     stopTaskHandle();
                     this.stop();
@@ -113,7 +115,7 @@ public class BotMoveTask extends BotTaskAutoParams<BotMoveTaskParams> {
         } else {
 
             BotLocation loc = BotWorldHelper.worldLocationToBotLocation(targetLocation);
-            BotLogger.debug("⏳", isLogging(), bot.getId() + " Уже в движении в " + loc);
+            BotLogger.debug(icon, isLogging(), bot.getId() + " ⏳ Уже в движении в " + loc);
         }
 
 

@@ -25,6 +25,11 @@ public class NearbyPlayerReaction implements IBotReactionStrategy {
 
     @Override
     public Optional<Runnable> check(Bot bot) {
+        
+
+        if(BotReactiveUtils.isAlreadyReacting(bot)){
+            return BotReactiveUtils.avoidOverReaction(bot);
+        };
 
         BotReactiveUtils.activateReaction(bot);
 

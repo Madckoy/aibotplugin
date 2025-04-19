@@ -17,6 +17,10 @@ public class LowHealthReaction implements IBotReactionStrategy {
     @Override
     public Optional<Runnable> check(Bot bot) {
         
+        if(BotReactiveUtils.isAlreadyReacting(bot)){
+            return BotReactiveUtils.avoidOverReaction(bot);
+        };
+
         BotReactiveUtils.activateReaction(bot);
 
         double health = bot.getState().getHealth(); // Пример: нужно иметь метод getHealth()

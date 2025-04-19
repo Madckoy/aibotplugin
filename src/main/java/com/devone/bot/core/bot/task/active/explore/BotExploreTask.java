@@ -44,10 +44,16 @@ public class BotExploreTask extends BotTaskAutoParams<BotExploreTaskParams> {
         if (isPause())
             return;
 
-        BotLogger.debug("🔶", isLogging(), bot.getId() + " Exploring "+ icon +" with distance: " + scanRadius);
+        BotLogger.debug(icon, isLogging(), bot.getId() + " 🧭 Explore with distance: " + scanRadius);
 
         long rmt = BotUtils.getRemainingTime(startTime);
         setObjective(params.getObjective() + " ("+ rmt +")");
+
+        if (rmt<=0) {
+            BotLogger.debug(icon, isLogging(), bot.getId() + " ⏱️ Task timeout: " + getElapsedTime());
+            this.stop();
+            return;
+        }
 
         if(params.isPickup()) {
             bot.pickupNearbyItems();
@@ -56,7 +62,7 @@ public class BotExploreTask extends BotTaskAutoParams<BotExploreTaskParams> {
         BotSceneData sceneData = bot.getBrain().getMemory().getSceneData();
 
         if (sceneData == null) {
-            BotLogger.debug("❌", isLogging(), bot.getId() + " No scene data available.");
+            BotLogger.debug(icon, isLogging(), bot.getId() + " ❌ No scene data available.");
             this.stop();
             return;
         }
@@ -67,17 +73,17 @@ public class BotExploreTask extends BotTaskAutoParams<BotExploreTaskParams> {
 
         boolean isStuck = BotNavigationUtils.detectIfStuck(bot);
 
-        BotLogger.debug(icon, isLogging(), bot.getId() + " STUCK: " + isStuck);
+        BotLogger.debug(icon, isLogging(), bot.getId() + " ❓ Stuck status: " + isStuck);
 
 
         BotBlockData target = BotBlockSelector.pickRandomTarget(context.reachableGoals);
 
-        BotLogger.debug(icon, isLogging(), bot.getId() + " TOTAL REACHABLE: " + context.reachableGoals.size());
+        BotLogger.debug(icon, isLogging(), bot.getId() + " ❓ Total reachable points: " + context.reachableGoals.size());
         
         if (context.reachableGoals.size() <= 1) {
                 // Бот застрял
                 bot.getState().setStuck(true);
-                BotLogger.debug("🎯", this.isLogging(), "The bot " + bot.getId() + " is stuck!");
+                BotLogger.debug(icon, this.isLogging(), bot.getId() + " ⛔ The bot is stuck!");
                 stop();
                 return;
             } else {
@@ -97,32 +103,24 @@ public class BotExploreTask extends BotTaskAutoParams<BotExploreTaskParams> {
         }
 
         if (target != null) {
-            BotLogger.debug(icon, isLogging(), bot.getId() + " Target: " + target);
-
+            BotLogger.debug(icon, isLogging(), bot.getId() + " 🎯 Target: " + target);
             bot.getNavigation().setTarget(target);
-
             BotNavigationUtils.navigateTo(bot, bot.getNavigation().getTarget(), 1);
-
             bot.getBrain().getMemory().memorize(target, MemoryType.VISITED); // Запоминаем на ~30 минут посещенную цель навигации
 
         } else {
-            BotLogger.debug(icon, isLogging(), bot.getId() + " No valid goal found.");
+            BotLogger.debug(icon, isLogging(), bot.getId() + " ⛔ No valid goal found.");
             bot.getState().setStuck(true);
-            BotLogger.debug(getIcon(), isLogging(), bot.getId() + " STUCK!! ");
+            BotLogger.debug(getIcon(), isLogging(), bot.getId() + " ⛔ STUCK!! ");
             stop();
             return;
-        }
-
-        if (rmt<=0) {
-            BotLogger.debug("⏱️", isLogging(), bot.getId() + " Task timeout: " + getElapsedTime());
-            this.stop();
         }
     }
 
 
     @Override
     public void stop() {
-        BotLogger.debug("✅", isLogging(), "Exploration task completed for " + bot.getId());
+        BotLogger.debug(icon, isLogging(), " ✅ Exploration task completed for " + bot.getId());
         super.stop();
     }
 

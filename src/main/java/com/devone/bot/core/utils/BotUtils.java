@@ -43,14 +43,14 @@ public class BotUtils {
         return result; 
     }
 
-    public static void playBlockBreakEffect(Location location) {
+    public static void playBlockBreakEffect(BotTask<?> task, Bot bot, Location location) {
         if (location == null || location.getWorld() == null) return;
     
         Material blockType = location.getBlock().getType();
     
         // ✅ Проверяем, что блок не AIR (иначе эффект не сработает)
         if (blockType == Material.AIR) {
-            BotLogger.debug("⚠️", true, "Эффект разрушения отменён: блок уже AIR " + location.toString());
+            BotLogger.debug(task.getIcon(), true, bot.getId()+" ⚠️ Эффект разрушения отменён: блок уже AIR " + location.toString());
             return;
         }
     
@@ -62,7 +62,8 @@ public class BotUtils {
             location.getBlock().getBlockData() // Тип блока для эффекта
         );
     
-        BotLogger.debug("🎇", true, "Эффект разрушения воспроизведён на " + location.toString());
+        BotLocation loc = BotWorldHelper.worldLocationToBotLocation(location);
+        BotLogger.debug(task.getIcon(), true, bot.getId()+" 🎇 Эффект разрушения воспроизведён на " + loc);
     }
 
     public static boolean requiresTool(Material blockType) {
@@ -142,22 +143,22 @@ public class BotUtils {
         bot.getLifeCycle().getTaskStackManager().pushTask(task);
     }
 
-    public static void turnToTarget(Bot bot, BotLocation target) {
+    public static void turnToTarget(BotTask<?> task, Bot bot, BotLocation target) {
         
         // ✅ Принудительно обновляем положение, если поворот сбрасывается
         Bukkit.getScheduler().runTaskLater(AIBotPlugin.getInstance(), () -> {
             BotUtils.lookAt(bot, target);
         }, 1L); // ✅ Через тик, чтобы дать время на обновление
     
-        BotLogger.debug("🔄", true, bot.getId() + " TURNING to look at the target: " + target);
+        BotLogger.debug(task.getIcon(), true, bot.getId() + " 🔄 Turned to look at the target: " + target);
     }
 
-    public static void animateHand(Bot bot) {
+    public static void animateHand(BotTask<?> task, Bot bot) {
         if (bot.getNPCEntity() instanceof Player playerBot) {
             playerBot.swingMainHand();
-            BotLogger.debug("✋🏻", true, " Анимация руки выполнена");
+            BotLogger.debug(task.getIcon(), true,bot.getId() + " ✋🏻 Анимация руки выполнена");
         } else {
-            BotLogger.debug("✋🏻", true, " Анимация не выполнена: бот — не игрок");
+            BotLogger.debug(task.getIcon(), true, bot.getId() +" ✋🏻 Анимация не выполнена: бот — не игрок");
         }
     }
 

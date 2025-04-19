@@ -25,6 +25,10 @@ public class NearbyHostileReaction implements IBotReactionStrategy {
     @Override
     public Optional<Runnable> check(Bot bot) {
 
+        if(BotReactiveUtils.isAlreadyReacting(bot)){
+            return BotReactiveUtils.avoidOverReaction(bot);
+        };
+
         BotReactiveUtils.activateReaction(bot);
 
         BotSceneData sceneData = bot.getBrain().getMemory().getSceneData();

@@ -7,6 +7,7 @@ import org.bukkit.event.Listener;
 import com.devone.bot.core.bot.Bot;
 import com.devone.bot.core.bot.task.active.brain.BotBrainTask;
 import com.devone.bot.core.bot.task.passive.params.BotTaskParams;
+import com.devone.bot.core.bot.task.reactive.BotReactiveUtils;
 import com.devone.bot.core.bot.task.reactive.BotReactivityManager;
 import com.devone.bot.core.utils.BotUtils;
 import com.devone.bot.core.utils.blocks.BotLocation;
@@ -91,7 +92,8 @@ public abstract class BotTask<T extends BotTaskParams> implements IBotTask, List
             return;
         }
     
-        if (!bot.getBrain().isReactionInProgress()) {
+        if (!BotReactiveUtils.isAlreadyReacting(bot)) {
+
             BotLogger.debug("🚨", this.isLogging(), bot.getId() + " Не Выполняет текущее реактивное задание.");
             
             Optional<Runnable> reaction = BotReactivityManager.checkReactions(bot);
@@ -179,11 +181,11 @@ public abstract class BotTask<T extends BotTaskParams> implements IBotTask, List
         this.stop();
     }
 
-    public void turnToTarget(BotLocation target) {
-        BotUtils.turnToTarget(bot, target);
+    public void turnToTarget(BotTask<?> task, BotLocation target) {
+        BotUtils.turnToTarget(task, bot, target);
     }
 
-    public void animateHand() {
-        BotUtils.animateHand(bot);
+    public void animateHand(BotTask<?> task, Bot bot) {
+        BotUtils.animateHand(task, bot);
     }
 }
