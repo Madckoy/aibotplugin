@@ -29,13 +29,13 @@ public class BotReactivityManager {
     }
 
     public static Optional<Runnable> checkReactions(Bot bot) {
-        BotLogger.debug("⚙️", true, bot.getId() + " Проверка всех реакций...");
+        BotLogger.debug("⚙️", true, bot.getId() + " 💫 Проверка всех реакций...");
         for (IBotReactionStrategy strategy : strategies) {
-            BotLogger.debug("🔍", true, bot.getId() + " Пробуем стратегию: " + strategy.getName());
+            BotLogger.debug("🔍", true, bot.getId() + " 💫 Пробуем стратегию: " + strategy.getName());
             Optional<Runnable> reaction = strategy.check(bot);
             if (reaction.isPresent()) {
                 BotLogger.debug(bot.getActiveTask().getIcon(), 
-                true, bot.getId() + " ✨ Реакция активирована: " + strategy.getName());
+                true, bot.getId() + " 💫 Реакция активирована: " + strategy.getName());
                 return reaction;
             }
         }

@@ -2,6 +2,7 @@ package com.devone.bot.core.bot.task.active.idle;
 
 import com.devone.bot.core.bot.Bot;
 import com.devone.bot.core.bot.task.active.idle.params.BotIdleTaskParams;
+import com.devone.bot.core.bot.task.active.sonar.BotSonar3DTask;
 import com.devone.bot.core.bot.task.passive.BotTaskAutoParams;
 import com.devone.bot.core.bot.task.passive.IBotTaskParameterized;
 import com.devone.bot.core.utils.BotUtils;
@@ -27,6 +28,12 @@ public class BotIdleTask extends BotTaskAutoParams<BotIdleTaskParams> {
 
         setObjective(params.getObjective() + " ("+ rmt +")");
         
+        long removed = bot.getBrain().getMemory().cleanup();//params.getMemoryExpirationMillis());
+        BotLogger.debug(icon, isLogging(), bot.getId() + " 🗑️ Removed outdated navigation points: " + removed);
+
+        BotSonar3DTask sonar = new BotSonar3DTask(bot);
+        sonar.execute();
+
         if (rmt<=0) {
             BotLogger.debug("✅", isLogging(), bot.getId() + " Idle timeout passed. Ending idle.");
             stop();

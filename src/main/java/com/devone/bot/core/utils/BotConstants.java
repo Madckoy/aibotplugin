@@ -26,6 +26,7 @@ public class BotConstants {
     public static final String  DEFAULT_PATTERN_BREAK = "cone.yml";
 
     public static final double  DEFAULT_DETECTION_RADIUS = 10.0;
+    public static final long    DEFAULT_MEMORY_EXPIRATION = 300_000; // 30 min
 
 
     

@@ -47,6 +47,8 @@ public class BotBrainTask extends BotTaskAutoParams<BotBrainTaskParams> {
         setIcon(params.getIcon() != null ? params.getIcon() : "🧠");
         setObjective(params.getObjective() != null ? params.getObjective() : "Think");
 
+        bot.getBrain().setMemoryExpirationMillis(params.getMemoryExpirationMillis());
+
         BotLogger.debug(icon, isLogging(), bot.getId() + " ⚙️ Параметры загружены: " +
                 "explore=" + params.isAllowExploration() + ", " +
                 "excavate=" + params.isAllowExcavation() + ", " +
@@ -69,9 +71,6 @@ public class BotBrainTask extends BotTaskAutoParams<BotBrainTaskParams> {
         }
 
         bot.getBrain().markThinkingCycle();
-
-        long removed = bot.getBrain().getMemory().cleanup(params.getMemoryExpirationMillis());
-        BotLogger.debug(icon, isLogging(), bot.getId() + " 🗑️ Removed outdated navigation points: " + removed);
 
         BotSonar3DTask sonar = new BotSonar3DTask(bot);
         sonar.execute();

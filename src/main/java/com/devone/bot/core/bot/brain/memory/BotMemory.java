@@ -1,5 +1,6 @@
 package com.devone.bot.core.bot.brain.memory;
 
+import com.devone.bot.core.bot.brain.BotBrain;
 import com.devone.bot.core.bot.brain.memory.scene.BotSceneData;
 import com.devone.bot.core.utils.blocks.BotBlockData;
 import com.devone.bot.core.utils.blocks.BotLocation;
@@ -19,12 +20,13 @@ public class BotMemory {
     private ArrayList<String> killedMobs;
     private ArrayList<String> brokenBlocks;
     private long teleportUsed;
-
+    private transient BotBrain brain;
 
     // Карта для хранения типов памяти, каждый тип имеет свой набор посещённых мест
     private final Map<MemoryType, Map<BotLocation, BotMemoryItem>> memoryMap;
 
-    public BotMemory() {
+    public BotMemory(BotBrain brain) {
+        this.brain = brain;
         this.sceneData = null;
         this.killedMobs   = new ArrayList<String>();
         this.brokenBlocks = new ArrayList<String>();
@@ -100,6 +102,12 @@ public class BotMemory {
         }
 
         return removed;
+    }
+
+    public long cleanup() {
+        long expiration = brain.getMemoryExpirationMillis();
+        
+        return cleanup(expiration);
     }
     
     // Получить все данные для конкретного типа памяти
