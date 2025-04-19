@@ -56,6 +56,7 @@ public class NearbyPlayerReaction implements IBotReactionStrategy {
                     tasks.add(dropTask);
 
                     BotReactiveSequenceTask sequence = new BotReactiveSequenceTask(bot, tasks);
+                    
                     BotUtils.pushTask(bot, sequence);
                 });
             }

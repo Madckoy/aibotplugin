@@ -77,31 +77,31 @@ public abstract class BotTask<T extends BotTaskParams> implements IBotTask, List
 
     public void update() {
 
-        if (enabled) {
-
-            BotLogger.debug("🚦", this.isLogging(), icon +" : "+ bot.getId() + " Status: " + done + " | " + paused +
-                    " 📍 xyz: " + bot.getNavigation().getLocation() + " | " + 
-                    " 🎯 xyz: " + bot.getNavigation().getTarget());
-
+        if (!enabled) return;
+    
+        BotLogger.debug("🚦", this.isLogging(), icon + " : " + bot.getId() + " Status: " + done + " | " + paused +
+                " 📍 xyz: " + bot.getNavigation().getLocation() +
+                " | 🎯 xyz: " + bot.getNavigation().getTarget());
+    
         if (paused) return;
-
+    
         if (this.player != null && !isPlayerOnline()) {
             handlePlayerDisconnect();
+            return;
         }
-
+    
+        if (!bot.getBrain().isReactionInProgress()) {
             Optional<Runnable> reaction = BotReactivityManager.checkReactions(bot);
+    
             if (reaction.isPresent()) {
-
-                setPaused(true);
-                
+                setPaused(true); // current task
                 reaction.get().run();
                 return;
             }
-
-            execute();
-
         }
-    }
+    
+        execute();
+    }    
 
     public Bot getBot() {
         return bot;

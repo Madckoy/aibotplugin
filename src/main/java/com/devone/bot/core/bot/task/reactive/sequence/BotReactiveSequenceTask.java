@@ -34,6 +34,7 @@ public class BotReactiveSequenceTask extends BotTaskAutoParams<BotReactiveSequen
             // Забираем следующую задачу
             currentTask = sequence.poll();
             BotLogger.debug("📦", isLogging(), bot.getId() + " ▶ Запускаем задачу: " + currentTask.getClass().getSimpleName());
+            
             BotUtils.pushTask(bot, currentTask);
         }
     }
