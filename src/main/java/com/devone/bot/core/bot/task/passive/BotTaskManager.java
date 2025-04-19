@@ -93,7 +93,7 @@ public class BotTaskManager {
         while (!taskStack.isEmpty()) {
             BotTask<?> removedTask = taskStack.pop();
             removedTask.stop();
-            BotLogger.debug(bot.getActiveTask().getIcon(), true, bot.getId() + " ⬛ Удалена задача: " + removedTask.getIcon() + removedTask.getClass().getSimpleName());
+            BotLogger.debug("🤖", true, bot.getId() + " ⬛ Удалена задача: " + removedTask.getIcon() + removedTask.getClass().getSimpleName());
         }
     }
 
