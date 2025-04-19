@@ -36,12 +36,12 @@ public class BotHandExcavateTask extends BotHandTask<BotHandExcavateTaskParams> 
         super.execute();
 
         if (target == null) {
-            BotLogger.debug("❌", isLogging(), bot.getId() + " BotHandExcavateTask: Target is null.");
+            BotLogger.debug(icon, isLogging(), bot.getId() + " ❌ BotHandExcavateTask: Target is null.");
             this.stop();
             return;
         }
 
-        BotLogger.debug("🔶", isLogging(), bot.getId() + " Executing BotHandExcavateTask");
+        BotLogger.debug(icon, isLogging(), bot.getId() + " 🔶 Executing BotHandExcavateTask");
 
         setObjective(params.getObjective() + " " + target.getType() +" at "+target.getLocation());
         BotHandExcavateTask heTask = this;
@@ -82,6 +82,7 @@ public class BotHandExcavateTask extends BotHandTask<BotHandExcavateTaskParams> 
                 BotUtils.playBlockBreakEffect(heTask, bot, block.getLocation());
 
                 block.breakNaturally();
+
                 bot.getBrain().getMemory().brokenBlocksIncrease(target.getType());
                 BotBlockData bl = BotWorldHelper.worldBlockToBotBlock(block);
                 BotLogger.debug(icon, isLogging(), bot.getId() + " 🪨 Block is excavated: " + bl);
