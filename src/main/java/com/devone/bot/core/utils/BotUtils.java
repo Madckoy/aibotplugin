@@ -1,11 +1,14 @@
 package com.devone.bot.core.utils;
 
+import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.World;
 import org.bukkit.block.Block;
+import org.bukkit.entity.Player;
 import org.bukkit.util.Vector;
 
+import com.devone.bot.AIBotPlugin;
 import com.devone.bot.core.bot.Bot;
 import com.devone.bot.core.bot.task.passive.BotTask;
 import com.devone.bot.core.utils.blocks.BotLocation;
@@ -138,4 +141,24 @@ public class BotUtils {
         if (bot == null || task == null) return;
         bot.getLifeCycle().getTaskStackManager().pushTask(task);
     }
+
+    public static void turnToTarget(Bot bot, BotLocation target) {
+        
+        // ✅ Принудительно обновляем положение, если поворот сбрасывается
+        Bukkit.getScheduler().runTaskLater(AIBotPlugin.getInstance(), () -> {
+            BotUtils.lookAt(bot, target);
+        }, 1L); // ✅ Через тик, чтобы дать время на обновление
+    
+        BotLogger.debug("🔄", true, bot.getId() + "TURNING to look at the target: " + target);
+    }
+
+    public static void animateHand(Bot bot) {
+        if (bot.getNPCEntity() instanceof Player playerBot) {
+            playerBot.swingMainHand();
+            BotLogger.debug("✋🏻", true, "Анимация руки выполнена");
+        } else {
+            BotLogger.debug("✋🏻", true, "Анимация не выполнена: бот — не игрок");
+        }
+    }
+
 }

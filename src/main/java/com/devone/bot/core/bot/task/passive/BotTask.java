@@ -41,7 +41,6 @@ public abstract class BotTask<T extends BotTaskParams> implements IBotTask, List
     protected boolean done = false;
     protected final String uuid;
     
-    //protected BotTaskParams params = new BotTaskParams(BotTaskParams.class.getSimpleName());
     protected String icon = "";
     protected String objective = "";
 
@@ -183,21 +182,10 @@ public abstract class BotTask<T extends BotTaskParams> implements IBotTask, List
     }
 
     public void turnToTarget(BotLocation target) {
-        
-        // ✅ Принудительно обновляем положение, если поворот сбрасывается
-        Bukkit.getScheduler().runTaskLater(AIBotPlugin.getInstance(), () -> {
-            BotUtils.lookAt(bot, target);
-        }, 1L); // ✅ Через тик, чтобы дать время на обновление
-
-        BotLogger.debug("🔄", this.isLogging(), "TURNING: " + bot.getId() + " to look at the target: " + target);
+        BotUtils.turnToTarget(bot, target);
     }
 
     public void animateHand() {
-        if (bot.getNPCEntity() instanceof Player playerBot) {
-            playerBot.swingMainHand();
-            BotLogger.debug("✋🏻", this.isLogging(), "Анимация руки выполнена");
-        } else {
-            BotLogger.debug("✋🏻", this.isLogging(), "Анимация не выполнена: бот — не игрок");
-        }
+        BotUtils.animateHand(bot);
     }
 }
