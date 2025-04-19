@@ -43,7 +43,7 @@ public class BotState {
 
     public void setStuck(boolean stuck) {
         this.stuck = stuck;
-        BotLogger.debug("🔔", true, "BotState: set Stuck="+stuck);
+        BotLogger.debug(owner.getActiveTask().getIcon(), true, " ❓ BotState: set Stuck="+stuck);
         incrementStuckCount();
     }
 

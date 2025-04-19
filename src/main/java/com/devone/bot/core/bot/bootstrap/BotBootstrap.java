@@ -24,7 +24,7 @@ public class BotBootstrap {
     }
 
     private void startLifeCycle() {
-        BotLogger.debug("💥", true, " 💥 Запускаем Bootstrap для бота " + bot.getId());
+        BotLogger.debug("🤖", true, "💥 Запускаем Bootstrap для бота " + bot.getId());
 
         Bukkit.getScheduler().runTaskTimer(AIBotPlugin.getInstance(), () -> {
 
@@ -44,7 +44,7 @@ public class BotBootstrap {
         
         } else {
             if (!brainStarted) {
-                BotLogger.debug("💥", true, " 😴 Бот " + bot.getId() + " Без задач. Добавляем BotBrainTask.");
+                BotLogger.debug("💥", true, bot.getId() +" 😴 Бот без задач. Добавляем BotBrainTask.");
                 
                 BotUtils.pushTask(bot, new BotBrainTask(bot));
                 

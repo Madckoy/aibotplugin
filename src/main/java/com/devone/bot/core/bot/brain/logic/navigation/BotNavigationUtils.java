@@ -22,12 +22,12 @@ public class BotNavigationUtils {
 
         // check if has more than one block to visit
         int totalGoals = context.reachableGoals.size();
-        BotLogger.debug("", true, bot.getId()+" Total reachable goals:" + totalGoals);
+        BotLogger.debug(bot.getActiveTask().getIcon(), true, bot.getId()+" ❓ Total reachable goals:" + totalGoals);
         
         if(totalGoals <= 1) {
             //the bot is stuck!
             bot.getState().setStuck(true);
-            BotLogger.debug("🚨", true, "The bot "+bot.getId() + " is stuck!");
+            BotLogger.debug(bot.getActiveTask().getIcon(), true, bot.getId() + " 🚨 The bot is stuck!");
             return true;
         } else {
           return false;
@@ -35,17 +35,17 @@ public class BotNavigationUtils {
     }
     public static void navigateTo(Bot bot, BotLocation target, float multiplier) {
         if(target==null) {
-            BotLogger.debug("🏃🏻‍♂️‍➡️ ", true, bot.getId() + " Target navigation is null. Can't navigate!");
+            BotLogger.debug(bot.getActiveTask().getIcon(), true, bot.getId() + " ⛔ Target navigation is null. Can't navigate!");
             return;
         }
         navigate(bot, target, multiplier);
     }
 
     private static void navigate(Bot bot, BotLocation target, float multiplier) {
-
         
-        BotLogger.debug("🏃🏻‍♂️‍➡️", true, bot.getId() + " Wants to navigate to " + target.toString() + " [ID: " + bot.getBrain().getCurrentTask().getIcon() + "]");
-        BotLogger.debug("🎯", true,  bot.getId() + " Runtime Target Location: " + bot.getNavigation().getTarget().toString() + " [ID: " + bot.getBrain().getCurrentTask().getIcon() + "]");
+        
+        BotLogger.debug(bot.getActiveTask().getIcon(), true, bot.getId() + " 🏃🏻‍♂️‍➡️ Wants to navigate to " + target.toString() + " [ID: " + bot.getBrain().getCurrentTask().getIcon() + "]");
+        BotLogger.debug(bot.getActiveTask().getIcon(), true,  bot.getId() + " 🎯 Runtime Target Location: " + bot.getNavigation().getTarget().toString() + " [ID: " + bot.getBrain().getCurrentTask().getIcon() + "]");
 
 
         BotMoveTask moveTask = new BotMoveTask(bot);

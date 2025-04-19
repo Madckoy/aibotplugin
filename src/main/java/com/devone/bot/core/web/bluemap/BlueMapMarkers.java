@@ -105,7 +105,7 @@ public class BlueMapMarkers {
     public void scheduleMarkerUpdate() {
 
         Bukkit.getScheduler().runTaskTimer(AIBotPlugin.getInstance(), () -> {
-            BotLogger.debug("✅ ", true, "Обновление маркеров запущено.");
+            BotLogger.debug("🤖", true, "✅ Обновление маркеров запущено.");
 
             updateAllMarkers();
 
@@ -128,11 +128,11 @@ public class BlueMapMarkers {
                 map.getMarkerSets().put(MARKERS_SET_ID, markerSet);
             }
 
-            BotLogger.debug("📚 ",true, "BlueMap marker set initialized.");
+            BotLogger.debug("🤖",true, "📚 BlueMap marker set initialized.");
 
             return markerSet;
         } else {
-            BotLogger.debug("❌", true, "No valid map found!");
+            BotLogger.debug("🤖", true, "❌ No valid map found!");
             return null;
         }
     }
@@ -140,12 +140,12 @@ public class BlueMapMarkers {
     public void updateBlueMapMarkers(List<Bot> bots,  Map<String, BotLocation> lastKnownLocations) {
 
         if (mSet == null) {
-            BotLogger.debug("❌", true, "MarkerSet set is not initialized yet!");
+            BotLogger.debug("🤖", true, "❌ MarkerSet set is not initialized yet!");
             return;
         }
 
         if (bots.isEmpty()) {
-            BotLogger.debug("❌", true, "No bots on the Map, skipping update.");
+            BotLogger.debug("🤖", true, "❌ No bots on the Map, skipping update.");
             return;
         }
 
@@ -181,7 +181,7 @@ public class BlueMapMarkers {
 
             mSet.put(botId, marker);
 
-            BotLogger.debug("🔄", true, "Updating BlueMap Markers for bot: " + botId + " at " + loc);
+            BotLogger.debug("🤖", true, botId +" 🔄 Updating BlueMap Markers for bot: " +  " at " + loc);
 
         }
     }

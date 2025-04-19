@@ -87,7 +87,7 @@ public class BotMoveTask extends BotTaskAutoParams<BotMoveTaskParams> {
 
             BotLocation loc = BotWorldHelper.worldLocationToBotLocation(targetLocation);
 
-            BotLogger.debug(icon, isLogging(), bot.getId() + " 🏃🏻‍♂️ Двигаюсь к " + loc);
+            BotLogger.debug(icon, isLogging(), bot.getId() + " 🏃🏻‍♂️‍➡️ Двигаюсь к " + loc);
 
             BotMoveTask mTask = this;
 

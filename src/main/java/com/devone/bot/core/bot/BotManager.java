@@ -33,9 +33,9 @@ public class BotManager {
         this.config = new BotManagerConfig(botsFile);
 
         Bukkit.getScheduler().runTaskLater(plugin, () -> {
-            BotLogger.debug("🤖", true, " 💡Loading bots...");
+            BotLogger.debug("🤖", true, "💡Loading bots...");
             loadExistingBots();
-            BotLogger.debug("🤖 ", true, " ✅ All bots loaded.");
+            BotLogger.debug("🤖 ", true, "✅ All bots loaded.");
         }, 600L);
     }
 
@@ -55,7 +55,7 @@ public class BotManager {
                     .anyMatch(b -> b.getNPCEntity().getUniqueId().equals(npcUUID));
             
             if (botExists(botName) || alreadyRegistered) {
-                BotLogger.warn("🤖", true, " 🚨 Duplicate or already registered NPC: " + botName + " (UUID: " + npcUUID + ")");
+                BotLogger.warn("🤖", true, "🚨 Duplicate or already registered NPC: " + botName + " (UUID: " + npcUUID + ")");
                 continue;
             }
             
@@ -81,7 +81,7 @@ public class BotManager {
         bm_markers = new BlueMapMarkers(this);
         bm_markers.scheduleMarkerUpdate();
 
-        BotLogger.debug("✅" , true, "Loaded NPC bots: " + botsMap.size());
+        BotLogger.debug("🤖" , true, "✅ Loaded NPC bots: " + botsMap.size());
     }
 
     public void saveBots() {
@@ -95,12 +95,12 @@ public class BotManager {
         });
 
         config.save();
-        BotLogger.debug("🤖" , true, " ✅ Bots saved to bots.json.");
+        BotLogger.debug("🤖" , true, "✅ Bots saved to bots.json.");
     }
 
     public void addBot(String name, Bot bot) {
         if (botsMap.containsKey(name)) {
-            BotLogger.warn("🤖", true, " 📢❗🚨 Bot already registered: " + name + ", skipping.");
+            BotLogger.warn("🤖", true, "🚨 Bot already registered: " + name + ", skipping.");
             return;
         }
         botsMap.put(name, bot);
@@ -115,13 +115,13 @@ public class BotManager {
             botsMap.remove(name);
             bm_markers.removeMarker(name);
             saveBots();
-            BotLogger.debug("🤖", true,  name + " ➖ has been removed.");
+            BotLogger.debug("🤖", true,  name + "➖ has been removed.");
         }
     }
 
     public void removeAllBots() {
         new ArrayList<>(botsMap.keySet()).forEach(this::removeBot);
-        BotLogger.debug("🤖", true, " ✅ All bots removed.");
+        BotLogger.debug("🤖", true, "✅ All bots removed.");
     }
 
     public Bot getBot(String name) {

@@ -107,7 +107,7 @@ public abstract class BotTask<T extends BotTaskParams> implements IBotTask, List
             }
         }
 
-        BotLogger.debug(icon, this.isLogging(), bot.getId() + " ❇️ Выполнение задания: " + getIcon());
+        BotLogger.debug(icon, this.isLogging(), bot.getId() + " ▶ Запуск задания: " + getIcon() + " "+ this.getClass().getSimpleName() );
 
         execute();
     }    
@@ -141,7 +141,7 @@ public abstract class BotTask<T extends BotTaskParams> implements IBotTask, List
 
     public void setPause(boolean pause) {
         this.pause = pause; 
-        String status = this.pause ? this.icon + " ( "+this.getClass().getSimpleName()+" ) "+ " ⏸️ Pause" : " ▶️ Resume";
+        String status = this.pause ? this.icon + " ( "+this.getClass().getSimpleName()+" ) "+ "⏸️ Pause" : "▶️ Resume";
         BotLogger.debug(icon, this.isLogging(), bot.getId()+" "+status);
     }
 

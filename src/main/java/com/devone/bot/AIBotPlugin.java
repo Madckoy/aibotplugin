@@ -121,7 +121,7 @@ public class AIBotPlugin extends JavaPlugin {
         //
         getServer().getPluginManager().registerEvents(new BotListener(botManager), this);
 
-        BotLogger.debug("✅ ", true, "AI Bot Plugin перезагружен успешно!");
+        BotLogger.debug("✅", true, "AI Bot Plugin перезагружен успешно!");
 
     }
 
