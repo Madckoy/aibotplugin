@@ -22,14 +22,14 @@ public class BotIdleTask extends BotTaskAutoParams<BotIdleTaskParams> {
     }
 
     @Override
-    public void execute() {
-        long timeout = BotUtils.getRemainingTime(startTime);
+    public void execute() { 
+        long rmt = BotUtils.getRemainingTime(startTime);
+
+        setObjective(params.getObjective() + "("+ rmt +")");
         
-        if (timeout<=0) {
+        if (rmt<=0) {
             BotLogger.debug("✅", isLogging(), bot.getId() + " Idle timeout passed. Ending idle.");
             stop();
-        } else {
-            setObjective(getObjective() + "("+BotUtils.getRemainingTime(timeout)+")");
         }
     }
 }

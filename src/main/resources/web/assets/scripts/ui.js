@@ -52,8 +52,6 @@ function renderBotTable(data) {
                 <div class="bot-objective-divider"></div>
                 <div><span>🎯</span><span>${bot.target}</span></div>
             </div>`;
-        row.insertCell(2).innerText = bot.position; 
-
 
         row.insertCell(3).innerText = bot.stuck;
         row.insertCell(4).innerText = bot.task;
