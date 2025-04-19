@@ -134,7 +134,7 @@ table td:last-child, table th:last-child {
 
 /* === COLUMN WIDTHS === */
 th:nth-child(1), td:nth-child(1) { width: 90px; text-align: center; }    /* Name */
-th:nth-child(2), td:nth-child(2) { width: 80px; text-align: center; }    /* Stats */
+th:nth-child(2), td:nth-child(2) { width: 100px; text-align: center;}    /* Stats */
 th:nth-child(3), td:nth-child(3) { width: 90px; text-align: center; }    /* Position */
 th:nth-child(4), td:nth-child(4) { width: 40px; text-align: center; }    /* Stuck */
 th:nth-child(5), td:nth-child(5) { width: 30px; text-align: center; }    /* Task */
@@ -149,7 +149,7 @@ th:nth-child(6), td:nth-child(6) {  /* Objective */ /* Queue */
 }
 
 
-th:nth-child(7), td:nth-child(7) { width: 80px; text-align: center; }    /* Duration */
+th:nth-child(7), td:nth-child(7) { width: 90px; text-align: center; }    /* Duration */
 th:nth-child(8), td:nth-child(8) { width: 100px; text-align: center; }   /* Inventory */
 th:nth-child(9), td:nth-child(9) { width: 150px; text-align: center; }   /* CMD */
 
