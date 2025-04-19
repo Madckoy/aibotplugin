@@ -31,7 +31,7 @@ public class BotBlockSelector {
         return targets.get(index);
     }
 
-    public static BotBlockData pickEmergencyTeleportTarget(
+    public static BotBlockData pickEmergencyRelocationTarget(
             BotLocation botPos,
             List<BotBlockData> reachableGoals,
             List<BotBlockData> reachable,

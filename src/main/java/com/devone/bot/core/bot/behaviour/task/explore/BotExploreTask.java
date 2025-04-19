@@ -46,7 +46,10 @@ public class BotExploreTask extends BotTaskAutoParams<BotExploreTaskParams> {
 
         BotLogger.debug("🔶", isLogging(), bot.getId() + " Exploring with radius: " + scanRadius);
 
-        setObjective(params.getObjective());
+        long elapsed = getElapsedTime();
+        long diff = BotConstants.DEFAULT_TASK_TIMEOUT - elapsed;
+        
+        setObjective(params.getObjective() + " ("+ diff +")");
 
         if(params.isPickup()) {
             bot.pickupNearbyItems();
@@ -84,21 +87,32 @@ public class BotExploreTask extends BotTaskAutoParams<BotExploreTaskParams> {
                 List<BotBlockData> validGoals = new ArrayList<>();
                 for (BotBlockData goal : context.reachableGoals) {
                 if (!bot.getBrain().getMemory().isMemorized(goal, MemoryType.VISITED)) {
-                validGoals.add(goal);
+                  validGoals.add(goal);
+                }
+                if(validGoals.size()>0) {
+                    target = validGoals.get(0);
+                } else {
+                    target = BotBlockSelector.pickEmergencyRelocationTarget(botPos, context.reachableGoals, context.reachable, context.navigable, context.walkable);
                 }
             }
-            target = validGoals.get(0);
+            
         }
 
         if (target != null) {
             BotLogger.debug(icon, isLogging(), bot.getId() + " Target: " + target);
+            
             bot.getNavigation().setTarget(target);
+
             BotNavigationUtils.navigateTo(bot, bot.getNavigation().getTarget(), 1);
 
             bot.getBrain().getMemory().memorize(target, MemoryType.VISITED); // Запоминаем на ~30 минут посещенную цель навигации
 
         } else {
             BotLogger.debug(icon, isLogging(), bot.getId() + " No valid goal found.");
+            bot.getState().setStuck(true);
+            BotLogger.debug(getIcon(), isLogging(), bot.getId() + " STUCK!! ");
+            stop();
+            return;
         }
 
         if (getElapsedTime() > 3 * BotConstants.DEFAULT_TASK_TIMEOUT) {
