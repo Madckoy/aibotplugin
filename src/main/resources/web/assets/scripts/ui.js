@@ -47,15 +47,22 @@ function renderBotTable(data) {
 
         let objCellPos = row.insertCell(2);
         objCellPos.innerHTML = `
-            <div class="bot-position-cell">
+            <div class="bot-stats-cell">
                 <div><span>📍</span><span>${bot.position}</span></div>
                 <div class="bot-objective-divider"></div>
                 <div><span>🎯</span><span>${bot.target}</span></div>
             </div>`;
 
-        row.insertCell(3).innerText = bot.stuck;
+        let objCellStuck = row.insertCell(3);
+        objCellStuck.innerHTML = `
+            <div class="bot-position-cell">
+                <div><span>${bot.stuck}</span></div>
+                <div class="bot-objective-divider"></div>
+                <div><span>${bot.stuckCount}</span></div>
+            </div>`;
+
+
         row.insertCell(4).innerText = bot.task;
-        //row.insertCell(5).innerText = bot.target;
         
         let objCell = row.insertCell(5);
         objCell.innerHTML = `
