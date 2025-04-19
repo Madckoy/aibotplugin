@@ -96,9 +96,9 @@ function renderBotTable(data) {
                <div class="bot-objective-divider"></div>
                <button class="cmd-btn" data-bot="${bot.id}" >1</button>
                <button class="cmd-btn" data-bot="${bot.id}" >2</button>
-               <button class="cmd-btn" data-bot="${bot.id}" >3</button
-               <button class="cmd-btn" data-bot="${bot.id}" >4</button
-               <button class="cmd-btn" data-bot="${bot.id}" >5</button
+               <button class="cmd-btn" data-bot="${bot.id}" >3</button>
+               <button class="cmd-btn" data-bot="${bot.id}" >4</button>
+               <button class="cmd-btn" data-bot="${bot.id}" >5</button>
             </div>   
         `;
     });
