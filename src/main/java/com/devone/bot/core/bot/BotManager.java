@@ -35,7 +35,7 @@ public class BotManager {
         Bukkit.getScheduler().runTaskLater(plugin, () -> {
             BotLogger.debug("🤖", true, "💡Loading bots...");
             loadExistingBots();
-            BotLogger.debug("🤖 ", true, "✅ All bots loaded.");
+            BotLogger.debug("🤖", true, "✅ All bots loaded.");
         }, 600L);
     }
 

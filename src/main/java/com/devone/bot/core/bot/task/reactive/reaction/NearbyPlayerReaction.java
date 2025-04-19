@@ -14,8 +14,8 @@ import com.devone.bot.core.utils.blocks.BotLocation;
 import com.devone.bot.core.utils.logger.BotLogger;
 import com.devone.bot.core.utils.world.BotWorldHelper;
 
-import org.bukkit.entity.Player;
 import org.bukkit.Bukkit;
+import org.bukkit.entity.Player;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -26,16 +26,7 @@ public class NearbyPlayerReaction implements IBotReactionStrategy {
     @Override
     public Optional<Runnable> check(Bot bot) {
 
-        BotLogger.debug("🤖", true, bot.getId()+" 🙋🏻‍♂️ Проверка реакции бота на игрока");
-
-        if(BotReactiveUtils.isAlreadyReacting(bot)){
-            BotLogger.debug("🤖", true, bot.getId() + " 🙋🏻‍♂️ [NearbyPlayerReaction] Уже реагирует — выходим");
-            return BotReactiveUtils.avoidOverReaction(bot);
-        };
-        
-        BotLogger.debug("🤖", true, bot.getId() + " 🙋🏻‍♂️ [NearbyPlayerReaction] Старт реакции");
-
-        BotReactiveUtils.activateReaction(bot);
+        BotLogger.debug("🤖", true, bot.getId() + " 🙋🏻‍♂️ Проверка реакции бота на игрока");
 
         BotLocation botLoc = bot.getNavigation().getLocation();
 
@@ -46,8 +37,19 @@ public class NearbyPlayerReaction implements IBotReactionStrategy {
             double dist = botLoc.distanceTo(playerLoc);
 
             if (dist < BotConstants.DEFAULT_DETECTION_RADIUS) {
+
+                BotLogger.debug("🤖", true, bot.getId() + " 🙋🏻‍♂️ Обнаружен игрок " + player.getName() +
+                        " на расстоянии " + String.format("%.1f", dist) + " м");
+
+                if (BotReactiveUtils.isAlreadyReacting(bot)) {
+                    BotLogger.debug("🤖", true, bot.getId() + " 🙋🏻‍♂️ Уже выполняется реакция — прерываем");
+                    return BotReactiveUtils.avoidOverReaction(bot);
+                }
+
+                BotReactiveUtils.activateReaction(bot);
+
                 return Optional.of(() -> {
-                    BotLogger.debug(bot.getActiveTask().getIcon(), true, bot.getId() + " ❤️ Игрок рядом: " + player.getName() + ". Передаём дары.");
+                    BotLogger.debug("🤖", true, bot.getId() + " 🙌 Реакция: отдаём ресурсы игроку " + player.getName());
 
                     List<BotTask<?>> tasks = new ArrayList<>();
 
@@ -55,17 +57,16 @@ public class NearbyPlayerReaction implements IBotReactionStrategy {
                     BotMoveTaskParams walkParams = new BotMoveTaskParams(playerLoc);
                     BotMoveTask walkTask = new BotMoveTask(bot);
                     walkTask.setParams(walkParams);
-                    walkTask.setObjective(" 🥾 Идём к игроку");
+                    walkTask.setObjective("🥾 Идём к игроку");
 
                     // 2. Выброс всего
                     BotDropAllTask dropTask = new BotDropAllTask(bot, player);
-                    dropTask.setObjective(" 📦 Передаём ресурсы");
+                    dropTask.setObjective("📦 Передаём ресурсы");
 
                     tasks.add(walkTask);
                     tasks.add(dropTask);
 
                     BotReactiveSequenceTask sequence = new BotReactiveSequenceTask(bot, tasks);
-                    
                     BotUtils.pushTask(bot, sequence);
                 });
             }

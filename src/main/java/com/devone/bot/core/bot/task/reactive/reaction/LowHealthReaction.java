@@ -16,30 +16,30 @@ public class LowHealthReaction implements IBotReactionStrategy {
 
     @Override
     public Optional<Runnable> check(Bot bot) {
-        
-        if(BotReactiveUtils.isAlreadyReacting(bot)){
-            return BotReactiveUtils.avoidOverReaction(bot);
-        };
-
-        BotReactiveUtils.activateReaction(bot);
-
-        double health = bot.getState().getHealth(); // Пример: нужно иметь метод getHealth()
+        double health = bot.getState().getHealth();
+        BotLogger.debug("🤖", true, bot.getId() + " 💔 Проверка реакции на здоровье. HP = " + health);
 
         if (health < 5.0) {
-            return Optional.of(() -> {
-                BotLogger.debug("💔", true, "Здоровье критически низкое. Ищу безопасное место...");
-                                        // 1. Телепорт
-                        BotTeleportTask tpTask = new BotTeleportTask(bot, null); // w/o player
-                        BotTeleportTaskParams tpParams = new BotTeleportTaskParams();
-                        tpParams.setLocation(BotWorldHelper.getWorldSpawnLocation());
-                        tpTask.setParams(tpParams);
-                        BotUtils.pushTask(bot, tpTask);
-
-                    });
+            if (BotReactiveUtils.isAlreadyReacting(bot)) {
+                return BotReactiveUtils.avoidOverReaction(bot);
             }
+
+            BotReactiveUtils.activateReaction(bot);
+
+            return Optional.of(() -> {
+                BotLogger.debug("🤖", true, bot.getId() + " 💔 Здоровье критически низкое. Ищу безопасное место...");
+
+                BotTeleportTask tpTask = new BotTeleportTask(bot, null);
+                BotTeleportTaskParams tpParams = new BotTeleportTaskParams();
+                tpParams.setLocation(BotWorldHelper.getWorldSpawnLocation());
+                tpTask.setParams(tpParams);
+                BotUtils.pushTask(bot, tpTask);
+            });
+        }
 
         return Optional.empty();
     }
+
 
     @Override
     public String getName() {

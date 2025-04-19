@@ -33,25 +33,25 @@ public class BotLogger {
 
     public static void debug(String method, boolean enabled, String message) {
         if (enabled && loggingEnabled) {
-            logger.fine("🟡" +" "+ method + " "+message);
+            logger.fine("🟡" +" "+ method.trim() + " "+message);
         }
     }
 
     public static void info(String method, boolean enabled, String message) {
         if (enabled && loggingEnabled) {
-            logger.info("ℹ️"+" "+ method + " "+message);
+            logger.info("ℹ️"+" "+ method.trim() + " "+message);
         }
     }
 
     public static void warn(String method, boolean enabled, String message) {
         if (enabled && loggingEnabled) {
-            logger.warning("⚠️" +" "+ method + " "+message);
+            logger.warning("⚠️" +" "+ method.trim() + " "+message);
         }
     }
 
     public static void error(String method, boolean enabled, String message) {
         if (enabled && loggingEnabled) {
-            logger.severe("🚨"+" "+ method + " "+ message);
+            logger.severe("🚨"+" "+ method.trim() + " "+ message);
         }
     }
 }

@@ -25,13 +25,7 @@ public class NearbyHostileReaction implements IBotReactionStrategy {
     @Override
     public Optional<Runnable> check(Bot bot) {
 
-        BotLogger.debug("🤖", true, bot.getId()+ " 😈 Проверка реакции бота на моба");
-
-        if(BotReactiveUtils.isAlreadyReacting(bot)){
-            return BotReactiveUtils.avoidOverReaction(bot);
-        };
-
-        BotReactiveUtils.activateReaction(bot);
+        BotLogger.debug("🤖", true, bot.getId() + " 😈 Проверка реакции бота на моба");
 
         BotSceneData sceneData = bot.getBrain().getMemory().getSceneData();
         BotLocation botPos = bot.getNavigation().getLocation();
@@ -41,8 +35,18 @@ public class NearbyHostileReaction implements IBotReactionStrategy {
                 if (!entity.isHostileMob()) continue;
 
                 double dist = botPos.distanceTo(entity.getLocation());
+
                 if (dist < 5 && !BotWorldHelper.isInDangerousLiquid(entity)) {
-                    // 💡 Начинаем реакцию: телепорт → атака
+                    
+                    BotLogger.debug("🤖", true, bot.getId() + " 😈 Обнаружен враждебный моб: " + entity.getType()
+                            + " (" + String.format("%.1f", dist) + " м)");
+
+                    if (BotReactiveUtils.isAlreadyReacting(bot)) {
+                        return BotReactiveUtils.avoidOverReaction(bot);
+                    }
+
+                    BotReactiveUtils.activateReaction(bot);
+
                     return Optional.of(() -> {
                         BotLogger.debug("🤖", true, bot.getId() + " ⚠️ Враг слишком близко. Начинаем реактивную последовательность!");
 
@@ -57,7 +61,7 @@ public class NearbyHostileReaction implements IBotReactionStrategy {
                         atkParams.setTarget(entity);
                         atkTask.setParams(atkParams);
 
-                        // ⛓️ Создаём цепочку
+                        // ⛓️ Цепочка
                         List<BotTask<?>> tasks = new ArrayList<>();
                         tasks.add(tpTask);
                         tasks.add(atkTask);
