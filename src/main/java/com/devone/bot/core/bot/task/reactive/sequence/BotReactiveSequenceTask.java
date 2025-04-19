@@ -26,14 +26,14 @@ public class BotReactiveSequenceTask extends BotTaskAutoParams<BotReactiveSequen
     public void execute() {
         if (currentTask == null || currentTask.isDone()) {
             if (sequence.isEmpty()) {
-                BotLogger.debug("📦", isLogging(), bot.getId() + " ✅ Все задачи цепочки выполнены.");
+                BotLogger.debug(icon, isLogging(), bot.getId() + " ✅ Все задачи цепочки выполнены.");
                 this.stop(); // всё выполнено
                 return;
             }
 
             // Забираем следующую задачу
             currentTask = sequence.poll();
-            BotLogger.debug("📦", isLogging(), bot.getId() + " ▶ Запускаем задачу: " + currentTask.getClass().getSimpleName());
+            BotLogger.debug(icon, isLogging(), bot.getId() + " ▶ Запускаем задачу: " + currentTask.getClass().getSimpleName());
             
             BotUtils.pushTask(bot, currentTask);
         }
@@ -43,7 +43,7 @@ public class BotReactiveSequenceTask extends BotTaskAutoParams<BotReactiveSequen
     public void stop() {
         currentTask = null;
         sequence.clear();
-        BotLogger.debug("📦", isLogging(), bot.getId() + " ⛔ Цепочка реактивных задач остановлена.");
+        BotLogger.debug(icon, isLogging(), bot.getId() + " ⛔ Цепочка реактивных задач остановлена.");
         super.stop();
     }
 }

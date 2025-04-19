@@ -135,12 +135,12 @@ public class BotUtils {
     }
     
     public static void clearTasks(Bot bot) {
-        bot.getLifeCycle().getTaskStackManager().clearTasks();
+        bot.getBootstrap().getTaskStackManager().clearTasks();
     }
 
     public static void pushTask(Bot bot, BotTask<?> task) {
         if (bot == null || task == null) return;
-        bot.getLifeCycle().getTaskStackManager().pushTask(task);
+        bot.getBootstrap().getTaskStackManager().pushTask(task);
     }
 
     public static void turnToTarget(BotTask<?> task, Bot bot, BotLocation target) {

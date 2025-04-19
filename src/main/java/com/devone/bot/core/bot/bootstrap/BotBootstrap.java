@@ -1,4 +1,4 @@
-package com.devone.bot.core.bot.lifecycle;
+package com.devone.bot.core.bot.bootstrap;
 
 import org.bukkit.Bukkit;
 
@@ -10,12 +10,13 @@ import com.devone.bot.core.utils.BotUtils;
 import com.devone.bot.core.utils.logger.BotLogger;
 import com.devone.bot.core.utils.server.ServerUtils;
 
-public class BotLifeCycle {
+public class BotBootstrap {
     private final Bot bot;
     private final BotTaskManager taskStackManager;
-    private boolean idleAdded = false; // ✅ Флаг, чтобы не добавлять IdleActivity несколько раз
 
-    public BotLifeCycle(Bot bot) {
+    private boolean brainStarted = false; // ✅ Флаг, чтобы не добавлять Brain Task несколько раз
+
+    public BotBootstrap(Bot bot) {
         this.bot = bot;
         this.taskStackManager = new BotTaskManager(bot);
 
@@ -23,7 +24,7 @@ public class BotLifeCycle {
     }
 
     private void startLifeCycle() {
-        BotLogger.debug("🎲", true, "Запускаем LifeCycle для бота " + bot.getId());
+        BotLogger.debug("💥", true, " 💥 Запускаем Bootstrap для бота " + bot.getId());
 
         Bukkit.getScheduler().runTaskTimer(AIBotPlugin.getInstance(), () -> {
 
@@ -36,15 +37,18 @@ public class BotLifeCycle {
         if (ServerUtils.isServerStopping()) return;
 
         if (!taskStackManager.isEmpty()) {
-            idleAdded = false; // ✅ Если есть активность, сбрасываем флаг
+        
+            brainStarted = false; // ✅ Если есть активность, сбрасываем флаг
+        
             taskStackManager.updateActiveTask();
+        
         } else {
-            if (!idleAdded) {
-                BotLogger.debug("😴", true, "Бот " + bot.getId() + " Без задач. Добавляем IdleTask.");
+            if (!brainStarted) {
+                BotLogger.debug("💥", true, " 😴 Бот " + bot.getId() + " Без задач. Добавляем BotBrainTask.");
                 
                 BotUtils.pushTask(bot, new BotBrainTask(bot));
                 
-                idleAdded = true; // ✅ Ставим флаг, что IdleActivity уже добавлена
+                brainStarted = true; // ✅ Ставим флаг, что IdleActivity уже добавлена
             }
         }
     }

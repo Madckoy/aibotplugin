@@ -22,7 +22,7 @@ public class BotBrain {
     }
 
     public BotTask<?> getCurrentTask() {
-        BotTask<?> task = owner.getLifeCycle().getTaskStackManager().getActiveTask();
+        BotTask<?> task = owner.getActiveTask();
         if (task != null) {
             return task; // Нам не нужно дополнительное приведение типов
         }

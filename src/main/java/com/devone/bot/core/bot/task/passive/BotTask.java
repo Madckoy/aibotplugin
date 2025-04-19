@@ -75,7 +75,7 @@ public abstract class BotTask<T extends BotTaskParams> implements IBotTask, List
 
     public void setObjective(String objctv) {
         objective = objctv;
-        BotLogger.debug("🚩", this.isLogging(), bot.getId() + " "+ icon + " Set Objective: " + objctv);
+        BotLogger.debug(icon, this.isLogging(), bot.getId() + " "+ icon + " Set Objective: " + objctv);
     }
 
     public void update() {
@@ -94,20 +94,20 @@ public abstract class BotTask<T extends BotTaskParams> implements IBotTask, List
     
         if (!BotReactiveUtils.isAlreadyReacting(bot)) {
 
-            BotLogger.debug("🚨", this.isLogging(), bot.getId() + " Не Выполняет текущее реактивное задание.");
+            BotLogger.debug(icon, this.isLogging(), bot.getId() + " 🚨 Не Выполняет текущее реактивное задание.");
             
             Optional<Runnable> reaction = BotReactivityManager.checkReactions(bot);
 
             if (reaction.isPresent()) {
 
                 setPause(true); // current task
-                BotLogger.debug("🚨", this.isLogging(), bot.getId() + " Нужно срочно выполнить реактивное задание!");
+                BotLogger.debug(icon, this.isLogging(), bot.getId() + " 🚨 Нужно срочно выполнить реактивное задание!");
                 reaction.get().run();
                 return;
             }
         }
 
-        BotLogger.debug("🚨", this.isLogging(), bot.getId() + " Выполнение задания: " + getIcon());
+        BotLogger.debug(icon, this.isLogging(), bot.getId() + " ❇️ Выполнение задания: " + getIcon());
 
         execute();
     }    

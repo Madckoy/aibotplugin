@@ -10,14 +10,15 @@ import org.bukkit.entity.Entity;
 
 import org.bukkit.entity.Player;
 
+import com.devone.bot.core.bot.bootstrap.BotBootstrap;
 import com.devone.bot.core.bot.brain.BotBrain;
 import com.devone.bot.core.bot.brain.logic.navigation.BotNavigation;
 import com.devone.bot.core.bot.inventory.BotInventory;
-import com.devone.bot.core.bot.lifecycle.BotLifeCycle;
 import com.devone.bot.core.bot.speaker.BotSpeaker;
 import com.devone.bot.core.bot.state.BotState;
 import com.devone.bot.core.bot.task.active.move.BotMoveTask;
 import com.devone.bot.core.bot.task.active.move.params.BotMoveTaskParams;
+import com.devone.bot.core.bot.task.passive.BotTask;
 import com.devone.bot.core.utils.BotUtils;
 import com.devone.bot.core.utils.blocks.BotLocation;
 import com.devone.bot.core.utils.logger.BotLogger;
@@ -36,7 +37,7 @@ public class Bot {
 
     private final String id; // Уникальное имя бота
     private NPC npc; // Связанный NPC
-    private transient final BotLifeCycle lifeCycle; // Цикл жизни бота
+    private transient final BotBootstrap bootstrap; // Цикл жизни бота
     private final BotInventory inventory; // Инвентарь бота
     private transient final BotManager botManager; // Менеджер ботов
 
@@ -83,7 +84,7 @@ public class Bot {
         this.npc = an_npc;
         this.botManager = botManager;
         this.inventory = new BotInventory(this);
-        this.lifeCycle = new BotLifeCycle(this);
+        this.bootstrap = new BotBootstrap(this);
         this.brain = new BotBrain(this); // Инициализация рантайм статуса
         this.speaker = new BotSpeaker(this); // Инициализация BotCommunicator
         this.state = new BotState(this);
@@ -92,6 +93,9 @@ public class Bot {
         BotLogger.debug("➕", true, "Has been CREATED AND SPAWNED: " + id);
     }
 
+    public static BotTask<?> getActiveTask(Bot bot) {
+        return bot.getBootstrap().getTaskStackManager().getActiveTask();
+    }
 
     public void setEnabled(boolean isEnabled) {
         this.isEnabled = isEnabled;
@@ -170,8 +174,8 @@ public class Bot {
         return id;
     }
 
-    public BotLifeCycle getLifeCycle() {
-        return lifeCycle;
+    public BotBootstrap getBootstrap() {
+        return bootstrap;
     }
 
     public Entity getNPCEntity() {
@@ -189,6 +193,12 @@ public class Bot {
     public void pickupNearbyItems() {
         getInventory().pickupAll(this.allowPickupItems);
     }    
+
+    public BotTask<?> getActiveTask() {
+        BotTask<?> task = Bot.getActiveTask(this);
+        return task;
+
+    }
     // под вопросом, стоит ли перенести в BotUtils или в BotInventory
     public void checkAndSelfMove(Location lastBrokenBlock) {
         double pickupRadius = 2.0; // Радиус, в котором проверяем предметы
