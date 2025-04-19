@@ -99,6 +99,7 @@ function renderBotTable(data) {
                <button class="cmd-btn" bot-cmd="${bot.id}" >3</button>
                <button class="cmd-btn" bot-cmd="${bot.id}" >4</button>
                <button class="cmd-btn" bot-cmd="${bot.id}" >5</button>
+               <button class="cmd-btn" bot-cmd="${bot.id}" >⚙️</button>
             </div>   
         `;
     });
