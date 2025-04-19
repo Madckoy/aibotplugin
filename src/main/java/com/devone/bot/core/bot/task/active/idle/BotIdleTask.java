@@ -4,6 +4,7 @@ import com.devone.bot.core.bot.Bot;
 import com.devone.bot.core.bot.task.active.idle.params.BotIdleTaskParams;
 import com.devone.bot.core.bot.task.passive.BotTaskAutoParams;
 import com.devone.bot.core.bot.task.passive.IBotTaskParameterized;
+import com.devone.bot.core.utils.BotUtils;
 import com.devone.bot.core.utils.logger.BotLogger;
 
 public class BotIdleTask extends BotTaskAutoParams<BotIdleTaskParams> {
@@ -22,14 +23,13 @@ public class BotIdleTask extends BotTaskAutoParams<BotIdleTaskParams> {
 
     @Override
     public void execute() {
-        long timeout = params.getTimeout();
+        long timeout = BotUtils.getRemainingTime(startTime);
         
-        if (getElapsedTime() >= timeout) {
+        if (timeout<=0) {
             BotLogger.debug("✅", isLogging(), bot.getId() + " Idle timeout passed. Ending idle.");
             stop();
         } else {
-            long remaining = timeout - getElapsedTime();
-            setObjective("Idle: " + remaining + " ticks");
+            setObjective(getObjective() + "("+BotUtils.getRemainingTime(timeout)+")");
         }
     }
 }
