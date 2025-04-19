@@ -62,7 +62,7 @@ public class BotMoveCommand implements CommandExecutor {
             return false;
         }
 
-        bot.getLifeCycle().getTaskStackManager().clearTasks();
+        BotUtils.clearTasks(bot);
 
         Location targetLocation = new Location(bot.getNPCEntity().getWorld(), x, y, z);
         // ✅ Добавляем задачу на перемещение

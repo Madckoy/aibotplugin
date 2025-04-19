@@ -7,6 +7,7 @@ import org.bukkit.entity.Player;
 
 import com.devone.bot.core.bot.Bot;
 import com.devone.bot.core.bot.BotManager;
+import com.devone.bot.core.utils.BotUtils;
 import com.devone.bot.core.utils.logger.BotLogger;
 
 public class BotCancelCommand implements CommandExecutor {
@@ -33,7 +34,8 @@ public class BotCancelCommand implements CommandExecutor {
         }
 
         // ✅ Очищаем стек задач
-        bot.getLifeCycle().getTaskStackManager().clearTasks();
+
+        BotUtils.clearTasks(bot);
 
     
         player.sendMessage("§aВсе задачи бота " + bot.getId() + " отменены!");

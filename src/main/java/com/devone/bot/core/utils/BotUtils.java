@@ -130,6 +130,10 @@ public class BotUtils {
         return diff;
     }
     
+    public static void clearTasks(Bot bot) {
+        bot.getLifeCycle().getTaskStackManager().clearTasks();
+    }
+
     public static void pushTask(Bot bot, BotTask<?> task) {
         if (bot == null || task == null) return;
         bot.getLifeCycle().getTaskStackManager().pushTask(task);

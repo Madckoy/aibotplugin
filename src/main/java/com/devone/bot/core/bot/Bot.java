@@ -147,7 +147,8 @@ public class Bot {
         if (npc != null) {
             //stop all tasks!
             BotLogger.debug("➖", true, "Stopping ALL Tasks for: " + id);
-            getLifeCycle().getTaskStackManager().clearTasks();
+            
+            BotUtils.clearTasks(this);
 
             BotLogger.debug("➖", true, " Despawning and Destroying NPC for: "+id );
             npc.despawn();

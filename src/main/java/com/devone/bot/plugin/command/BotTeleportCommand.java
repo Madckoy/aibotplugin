@@ -61,8 +61,7 @@ public class BotTeleportCommand implements CommandExecutor {
             return false;
         }
 
-        bot.getLifeCycle().getTaskStackManager().clearTasks();
-
+        BotUtils.clearTasks(bot);
 
         BotTeleportTask task = new BotTeleportTask(bot, null);
         BotTeleportTaskParams tpParams = new BotTeleportTaskParams();

@@ -43,7 +43,7 @@ public class BotMoveHereCommand implements CommandExecutor {
 
 
         // ✅ Очищаем стек задач
-        bot.getLifeCycle().getTaskStackManager().clearTasks();
+        BotUtils.clearTasks(bot);
 
         // ✅ Добавляем задачу на перемещение
         BotMoveTask moveTask = new BotMoveTask(bot);

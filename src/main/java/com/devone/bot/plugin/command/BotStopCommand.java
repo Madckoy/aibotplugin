@@ -34,7 +34,7 @@ public class BotStopCommand implements CommandExecutor {
         }
 
         // ✅ Очищаем стек задач
-        bot.getLifeCycle().getTaskStackManager().clearTasks();
+        BotUtils.clearTasks(bot);
 
         // ✅ Добавляем задачу на ожидание 5 минут
         BotBrainTask idleTask = new BotBrainTask(bot);

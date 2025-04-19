@@ -37,7 +37,7 @@ public class BotTeleportHereCommand implements CommandExecutor {
         }
 
         // ✅ Очищаем стек задач
-        bot.getLifeCycle().getTaskStackManager().clearTasks();
+        BotUtils.clearTasks(bot);
 
         BotLocation targetLocation = new BotLocation(player.getLocation().getBlockX(),
                                                              player.getLocation().getBlockY(),
