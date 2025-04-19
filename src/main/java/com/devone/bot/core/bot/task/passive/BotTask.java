@@ -45,6 +45,9 @@ public abstract class BotTask<T extends BotTaskParams> implements IBotTask, List
 
     protected boolean isListenerRegistered = false;
 
+    private   boolean isReactive = false;
+
+
     public BotTask(Bot bot) {
         this.bot = bot;
         this.uuid = UUID.randomUUID().toString();
@@ -79,6 +82,10 @@ public abstract class BotTask<T extends BotTaskParams> implements IBotTask, List
     }
 
     public void update() {
+
+        if (isReactive && !BotReactiveUtils.isAlreadyReacting(bot)) {
+            BotReactiveUtils.activateReaction(bot, true);
+        } 
 
         if (!enabled) return;
     
@@ -120,6 +127,11 @@ public abstract class BotTask<T extends BotTaskParams> implements IBotTask, List
 
     public void stop() {
         done = true;
+        if(isReactive) {
+            if(BotReactiveUtils.isAlreadyReacting(bot)) {
+                BotReactiveUtils.activateReaction(bot, false);
+            }
+        }
     }
 
     public String getUUID() {
@@ -166,6 +178,14 @@ public abstract class BotTask<T extends BotTaskParams> implements IBotTask, List
 
     private boolean isPlayerOnline() {
         return player.isOnline();
+    }
+
+    public boolean isReactive() {
+        return isReactive;
+    }
+
+    public void setReactive(boolean isReactive) {
+        this.isReactive = isReactive;
     }
 
     private void handlePlayerDisconnect() {

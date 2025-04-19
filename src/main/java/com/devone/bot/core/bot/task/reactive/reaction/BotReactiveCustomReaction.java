@@ -42,7 +42,7 @@ public class BotReactiveCustomReaction implements IBotReactionStrategy {
             return BotReactiveUtils.avoidOverReaction(bot);
         }
 
-        BotReactiveUtils.activateReaction(bot);
+        BotReactiveUtils.activateReaction(bot, true);
 
         return Optional.of(() -> {
             BotLogger.debug("🤖", true, bot.getId() + " 🔥 [Custom] Реакция активирована: " + getName());
@@ -53,6 +53,7 @@ public class BotReactiveCustomReaction implements IBotReactionStrategy {
             // tasks.add(...);
 
             BotReactiveSequenceTask sequence = new BotReactiveSequenceTask(bot, tasks);
+            sequence.setReactive(true);
             BotUtils.pushTask(bot, sequence);
         });
     }

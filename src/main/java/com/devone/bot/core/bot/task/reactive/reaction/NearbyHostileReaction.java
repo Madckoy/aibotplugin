@@ -45,7 +45,7 @@ public class NearbyHostileReaction implements IBotReactionStrategy {
                         return BotReactiveUtils.avoidOverReaction(bot);
                     }
 
-                    BotReactiveUtils.activateReaction(bot);
+                    BotReactiveUtils.activateReaction(bot, true);
 
                     return Optional.of(() -> {
                         BotLogger.debug("🤖", true, bot.getId() + " ⚠️ Враг слишком близко. Начинаем реактивную последовательность!");
@@ -53,12 +53,14 @@ public class NearbyHostileReaction implements IBotReactionStrategy {
                         // 1. Телепорт
                         BotTeleportTask tpTask = new BotTeleportTask(bot, null); // w/o player
                         BotTeleportTaskParams tpParams = new BotTeleportTaskParams(entity);
+                        tpTask.setReactive(true);
                         tpTask.setParams(tpParams);
 
                         // 2. Атака
                         BotHandAttackTask atkTask = new BotHandAttackTask(bot);
                         BotHandAttackTaskParams atkParams = new BotHandAttackTaskParams();
                         atkParams.setTarget(entity);
+                        atkTask.setReactive(true);
                         atkTask.setParams(atkParams);
 
                         // ⛓️ Цепочка

@@ -7,8 +7,8 @@ import com.devone.bot.core.bot.Bot;
 public class BotReactiveUtils {
 
 
-    public static void activateReaction(Bot bot) {
-        bot.getBrain().setReactionInProgress(true);
+    public static void activateReaction(Bot bot, boolean status) {
+        bot.getBrain().setReactionInProgress(status);
     }
 
     public static Optional<Runnable> avoidOverReaction(Bot bot) {
@@ -18,4 +18,5 @@ public class BotReactiveUtils {
     public static boolean isAlreadyReacting(Bot bot) {
         return bot.getBrain().isReactionInProgress();
     }
+
 }

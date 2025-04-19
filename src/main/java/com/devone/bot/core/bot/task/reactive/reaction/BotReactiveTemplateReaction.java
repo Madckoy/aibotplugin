@@ -35,7 +35,7 @@ public class BotReactiveTemplateReaction implements IBotReactionStrategy {
         }
 
         // ✅ Активация реакции
-        BotReactiveUtils.activateReaction(bot);
+        BotReactiveUtils.activateReaction(bot, true);
 
         return Optional.of(() -> {
             BotLogger.debug("🤖", true, bot.getId() + " 🚀 Запуск реактивной цепочки: " + getName());
@@ -47,6 +47,7 @@ public class BotReactiveTemplateReaction implements IBotReactionStrategy {
             // tasks.add(new YourTask2(...));
 
             BotReactiveSequenceTask sequence = new BotReactiveSequenceTask(bot, tasks);
+            sequence.setReactive(true);
             BotUtils.pushTask(bot, sequence);
         });
     }

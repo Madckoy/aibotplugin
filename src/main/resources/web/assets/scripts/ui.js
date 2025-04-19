@@ -40,9 +40,9 @@ function renderBotTable(data) {
         let botCell_1 = row.insertCell(1); 
         botCell_1.innerHTML = `
                                 <div class="bot-stats-cell">
-                                    <div><span>🪨</span><span>${bot.blocks_broken_size}</span></div>
-                                    <div><span>💀</span><span>${bot.mobs_killed_size}</span></div>
-                                    <div><span>⚡️</span><span>${bot.teleport_used}</span></div>
+                                    <div><span>🪨</span><span>${bot.blocksBrokenSize}</span></div>
+                                    <div><span>💀</span><span>${bot.mobsKilledSize}</span></div>
+                                    <div><span>⚡️</span><span>${bot.teleportUsed}</span></div>
                                 </div>`; 
 
         let objCellPos = row.insertCell(2);
@@ -61,8 +61,13 @@ function renderBotTable(data) {
                 <div><span>${bot.stuckCount}</span></div>
             </div>`;
 
-
-        row.insertCell(4).innerText = bot.task;
+        let taskCell = row.insertCell(4);
+        taskCell.innerHTML = `
+        <div class="bot-position-cell">
+            <div><span>${bot.task}</span></div>
+            <div class="bot-objective-divider"></div>
+            <div><span>${bot.taskIsReactive}</span></div>
+        </div>`; 
         
         let objCell = row.insertCell(5);
         objCell.innerHTML = `
@@ -78,7 +83,7 @@ function renderBotTable(data) {
         let invCell = row.insertCell(7);
         invCell.className = "inventory-cell";
         invCell.title = `Items: ${bot.inventoryCount} / ${bot.inventoryMax}`;
-        invCell.innerHTML = generateInventoryGrid(bot.inventorySlotsFilled, bot.auto_pick_up_items);
+        invCell.innerHTML = generateInventoryGrid(bot.inventorySlotsFilled, bot.autoPickUpItems);
 
 
         // 🎮 Control Buttons
@@ -88,11 +93,16 @@ function renderBotTable(data) {
                <button class="cmd-btn" data-bot="${bot.id}" data-cmd="bot-tp">TP</button>
                <button class="cmd-btn" data-bot="${bot.id}" data-cmd="bot-move">Move</button>
                <button class="cmd-btn" data-bot="${bot.id}" data-cmd="bot-drop-all">Drop All</button
+               <div class="bot-objective-divider"></div>
+               <button class="cmd-btn" data-bot="${bot.id}" data-cmd="bot-tp">1</button>
+               <button class="cmd-btn" data-bot="${bot.id}" data-cmd="bot-move">2</button>
+               <button class="cmd-btn" data-bot="${bot.id}" data-cmd="bot-drop-all">3</button
             </div>   
         `;
     });
 
     setupButtonHandlers();
+
 }
 
 function generateInventoryGrid(slots, autoPickupEnabled) {

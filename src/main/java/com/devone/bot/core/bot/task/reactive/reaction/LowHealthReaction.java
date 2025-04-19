@@ -24,7 +24,7 @@ public class LowHealthReaction implements IBotReactionStrategy {
                 return BotReactiveUtils.avoidOverReaction(bot);
             }
 
-            BotReactiveUtils.activateReaction(bot);
+            BotReactiveUtils.activateReaction(bot, true);
 
             return Optional.of(() -> {
                 BotLogger.debug("🤖", true, bot.getId() + " 💔 Здоровье критически низкое. Ищу безопасное место...");
@@ -33,6 +33,7 @@ public class LowHealthReaction implements IBotReactionStrategy {
                 BotTeleportTaskParams tpParams = new BotTeleportTaskParams();
                 tpParams.setLocation(BotWorldHelper.getWorldSpawnLocation());
                 tpTask.setParams(tpParams);
+                tpTask.setReactive(true);
                 BotUtils.pushTask(bot, tpTask);
             });
         }

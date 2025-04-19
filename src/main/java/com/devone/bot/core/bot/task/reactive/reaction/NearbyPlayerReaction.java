@@ -41,7 +41,7 @@ public class NearbyPlayerReaction implements IBotReactionStrategy {
         }
     
         BotLogger.debug("🤖", true, bot.getId() + " 🙋🏻‍♂️ [NearbyPlayerReaction] Старт реакции");
-        BotReactiveUtils.activateReaction(bot);
+        BotReactiveUtils.activateReaction(bot, true);
     
         BotLocation botLoc = bot.getNavigation().getLocation();
     
@@ -61,9 +61,11 @@ public class NearbyPlayerReaction implements IBotReactionStrategy {
                     BotMoveTask walkTask = new BotMoveTask(bot);
                     walkTask.setParams(walkParams);
                     walkTask.setObjective(" 🥾 Идём к игроку");
+                    walkTask.setReactive(true);
     
                     BotDropAllTask dropTask = new BotDropAllTask(bot, player);
                     dropTask.setObjective(" 📦 Передаём ресурсы");
+                    dropTask.setReactive(true);
     
                     tasks.add(walkTask);
                     tasks.add(dropTask);
