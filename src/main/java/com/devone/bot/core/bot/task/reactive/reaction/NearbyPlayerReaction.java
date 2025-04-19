@@ -26,7 +26,7 @@ public class NearbyPlayerReaction implements IBotReactionStrategy {
     @Override
     public Optional<Runnable> check(Bot bot) {
 
-        BotLogger.debug("👥", true, "Проверка реакции на игрока для бота: " + bot.getId());
+        BotLogger.debug("🤖", true, bot.getId()+" 🙋🏻‍♂️ Проверка реакции бота на игрока");
 
         if(BotReactiveUtils.isAlreadyReacting(bot)){
             return BotReactiveUtils.avoidOverReaction(bot);

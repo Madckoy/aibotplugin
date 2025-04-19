@@ -47,7 +47,7 @@ public class BotBrainTask extends BotTaskAutoParams<BotBrainTaskParams> {
         setIcon(params.getIcon() != null ? params.getIcon() : "🧠");
         setObjective(params.getObjective() != null ? params.getObjective() : "Think");
 
-        BotLogger.debug("🧠 BotBrainTask", isLogging(), bot.getId() + " параметры загружены: " +
+        BotLogger.debug(icon, isLogging(), bot.getId() + " ⚙️ Параметры загружены: " +
                 "explore=" + params.isAllowExploration() + ", " +
                 "excavate=" + params.isAllowExcavation() + ", " +
                 "violence=" + params.isAllowViolence() + ", " +
@@ -58,11 +58,11 @@ public class BotBrainTask extends BotTaskAutoParams<BotBrainTaskParams> {
 
     @Override
     public void execute() {
-        BotLogger.debug(icon, isLogging(), bot.getId() + " 🧠 Is making a decision...");
+        BotLogger.debug(icon, isLogging(), bot.getId() + " 🎲 Is making a decision...");
 
         int thinkingTicks = bot.getBrain().getThinkingTicks();
         if (thinkingTicks > 50) {
-            BotLogger.warn(icon, isLogging(), bot.getId() + " 🧠 Бот думает слишком долго (" + thinkingTicks + " тиков). Сброс в Idle.");
+            BotLogger.warn(icon, isLogging(), bot.getId() + " 🎲 Бот думает слишком долго (" + thinkingTicks + " тиков). Сброс в Idle.");
             push(bot, new BotIdleTask(bot));
             bot.getBrain().resetThinkingCycle();
             return;

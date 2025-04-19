@@ -25,6 +25,8 @@ public class NearbyHostileReaction implements IBotReactionStrategy {
     @Override
     public Optional<Runnable> check(Bot bot) {
 
+        BotLogger.debug("🤖", true, bot.getId()+ " 😈 Проверка реакции бота на моба");
+
         if(BotReactiveUtils.isAlreadyReacting(bot)){
             return BotReactiveUtils.avoidOverReaction(bot);
         };
@@ -42,7 +44,7 @@ public class NearbyHostileReaction implements IBotReactionStrategy {
                 if (dist < 5 && !BotWorldHelper.isInDangerousLiquid(entity)) {
                     // 💡 Начинаем реакцию: телепорт → атака
                     return Optional.of(() -> {
-                        BotLogger.debug("⚠️", true, bot.getId() + " Враг слишком близко. Начинаем реактивную последовательность!");
+                        BotLogger.debug("🤖", true, bot.getId() + " ⚠️ Враг слишком близко. Начинаем реактивную последовательность!");
 
                         // 1. Телепорт
                         BotTeleportTask tpTask = new BotTeleportTask(bot, null); // w/o player

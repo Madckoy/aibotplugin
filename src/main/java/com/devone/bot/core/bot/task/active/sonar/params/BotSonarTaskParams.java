@@ -11,7 +11,7 @@ public class BotSonarTaskParams extends BotTaskParams {
     public BotSonarTaskParams() {
         super();
         // Устанавливаем значения по умолчанию
-        setIcon("𖣠");
+        setIcon("📡");
         setObjective("Scan Signatures");
     }
 
