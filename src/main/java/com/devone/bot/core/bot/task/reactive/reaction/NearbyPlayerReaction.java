@@ -50,6 +50,7 @@ public class NearbyPlayerReaction implements IBotReactionStrategy {
                 // ✅ Только теперь активируем реакцию
                 BotLogger.debug("🤖", true, bot.getId() + " 🙋🏻‍♂️ Обнаружен игрок " + player.getName() + " на расстоянии " + String.format("%.1f", dist) + " м");
                 BotLogger.debug("🤖", true, bot.getId() + " 🙋🏻‍♂️ [NearbyPlayerReaction] Старт реакции");
+                
                 BotReactiveUtils.activateReaction(bot, true);
 
                 return Optional.of(() -> {
