@@ -8,18 +8,17 @@ import com.devone.bot.core.utils.blocks.BotLocation;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
-import java.util.ArrayList;
 import java.util.EnumMap;
 import com.google.gson.JsonObject;
-import com.google.gson.JsonArray;
 
 public class BotMemory {
     
     protected transient BotSceneData sceneData;
+    private final Map<String, Integer> blockBreakSummary = new HashMap<>();
+    private final Map<String, Integer> EntitiesKilledSummary = new HashMap<>();
 
-    private ArrayList<String> killedMobs;
-    private ArrayList<String> brokenBlocks;
     private long teleportUsed;
+    @SuppressWarnings("unused")
     private transient BotBrain brain;
 
     // Карта для хранения типов памяти, каждый тип имеет свой набор посещённых мест
@@ -28,8 +27,6 @@ public class BotMemory {
     public BotMemory(BotBrain brain) {
         this.brain = brain;
         this.sceneData = null;
-        this.killedMobs   = new ArrayList<String>();
-        this.brokenBlocks = new ArrayList<String>();
         this.teleportUsed = 0;
 
         memoryMap = new EnumMap<>(MemoryType.class); // Используем EnumMap для лучшей производительности при работе с перечислениями
@@ -40,20 +37,47 @@ public class BotMemory {
     }
 
     public void killedMobsIncrease(String mobName) {
-        this.killedMobs.add(mobName);
+        EntitiesKilledSummary.merge(mobName, 1, Integer::sum);
     }
 
     public void brokenBlocksIncrease(String blockName) {
-        
-        this.brokenBlocks.add(blockName);
+
+        blockBreakSummary.merge(blockName, 1, Integer::sum);
+
     }
 
-    public ArrayList<String> getMobsKilled() {
-        return killedMobs;
+    public JsonObject getBlockBreakSummaryJson() {
+        JsonObject json = new JsonObject();
+        int total = 0;
+    
+        for (Map.Entry<String, Integer> entry : blockBreakSummary.entrySet()) {
+            json.addProperty(entry.getKey(), entry.getValue());
+            total += entry.getValue();
+        }
+    
+        json.addProperty("total", total); // Общая сумма всех блоков
+        return json;
     }
 
-    public ArrayList<String> getBlocksBroken() {
-        return brokenBlocks;
+    public JsonObject getMobsKilledSummaryJson() {
+        JsonObject json = new JsonObject();
+        int total = 0;
+    
+        for (Map.Entry<String, Integer> entry : EntitiesKilledSummary.entrySet()) {
+            json.addProperty(entry.getKey(), entry.getValue());
+            total += entry.getValue();
+        }
+    
+        json.addProperty("total", total); // Общая сумма всех убитых
+        return json;
+    }
+    
+    public long getMobsKilled() {
+        return blockBreakSummary.values().stream().mapToInt(Integer::intValue).sum();
+    }
+
+    public long getBlocksBroken() {
+         return blockBreakSummary.values().stream().mapToInt(Integer::intValue).sum();
     }
 
     public void teleportUsedIncrease() {
@@ -120,10 +144,17 @@ public class BotMemory {
         return removed;
     }
 
-    public void cleanup() {
+    public void cleanup(MemoryType type) {
  
-        memoryMap.clear();
+        cleanupMemoryType(type);
 
+    }
+
+    public void cleanupMemoryType(MemoryType type) {
+        Map<BotLocation, BotMemoryItem> target = memoryMap.get(type);
+        if (target != null) {
+            target.clear();
+        }
     }
     
     // Получить все данные для конкретного типа памяти
@@ -133,31 +164,31 @@ public class BotMemory {
 
     public JsonObject toJson() {
         JsonObject memoryJson = new JsonObject();
-
-        // Убитые мобы
-        JsonArray mobsArray = new JsonArray();
-        for (String mob : killedMobs) {
-            mobsArray.add(mob);
+    
+        // 🔹 Убитые мобы: summary { "ZOMBIE": 7, "CREEPER": 2, ... }
+        JsonObject mobsSummary = new JsonObject();
+        for (Map.Entry<String, Integer> entry : EntitiesKilledSummary.entrySet()) {
+            mobsSummary.addProperty(entry.getKey(), entry.getValue());
         }
-        memoryJson.add("killedMobs", mobsArray);
-
-        // Разрушенные блоки
-        JsonArray blocksArray = new JsonArray();
-        for (String block : brokenBlocks) {
-            blocksArray.add(block);
+        memoryJson.add("killedMobsSummary", mobsSummary);
+    
+        // 🔸 Разрушенные блоки: summary { "DIRT": 123, "STONE": 45, ... }
+        JsonObject blocksSummary = new JsonObject();
+        for (Map.Entry<String, Integer> entry : blockBreakSummary.entrySet()) {
+            blocksSummary.addProperty(entry.getKey(), entry.getValue());
         }
-        memoryJson.add("brokenBlocks", blocksArray);
-
-        // Количество телепортов
+        memoryJson.add("brokenBlocksSummary", blocksSummary);
+    
+        // 🔁 Количество телепортов
         memoryJson.addProperty("teleportUsed", teleportUsed);
-
-        // Размеры памяти по типам
+    
+        // 🧠 Размеры памяти по типам (как и было)
         JsonObject types = new JsonObject();
         for (MemoryType type : memoryMap.keySet()) {
             types.addProperty(type.name(), memoryMap.get(type).size());
         }
         memoryJson.add("memoryTypes", types);
-
+    
         return memoryJson;
     }
 

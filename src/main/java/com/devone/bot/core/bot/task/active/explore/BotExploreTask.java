@@ -90,9 +90,10 @@ public class BotExploreTask extends BotTaskAutoParams<BotExploreTaskParams> {
                 // Фильтрация целей (без изменения оригинальной коллекции)
                 List<BotBlockData> validGoals = new ArrayList<>();
                 for (BotBlockData goal : context.reachableGoals) {
-                if (!bot.getBrain().getMemory().isMemorized(goal, MemoryType.VISITED)) {
+                if (!bot.getBrain().getMemory().isMemorized(goal, MemoryType.VISITED_BLOCKS)) {
                   validGoals.add(goal);
                 }
+
                 if(validGoals.size()>0) {
                     target = validGoals.get(0);
                 } else {
@@ -106,7 +107,7 @@ public class BotExploreTask extends BotTaskAutoParams<BotExploreTaskParams> {
             BotLogger.debug(icon, isLogging(), bot.getId() + " 🎯 Target: " + target);
             bot.getNavigation().setTarget(target);
             BotNavigationUtils.navigateTo(bot, bot.getNavigation().getTarget(), 1);
-            bot.getBrain().getMemory().memorize(target, MemoryType.VISITED); // Запоминаем на ~30 минут посещенную цель навигации
+            bot.getBrain().getMemory().memorize(target, MemoryType.VISITED_BLOCKS); // Запоминаем на ~30 минут посещенную цель навигации
 
         } else {
             BotLogger.debug(icon, isLogging(), bot.getId() + " ⛔ No valid goal found.");

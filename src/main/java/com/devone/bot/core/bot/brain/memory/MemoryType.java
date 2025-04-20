@@ -1,11 +1,13 @@
 package com.devone.bot.core.bot.brain.memory;
 
 public enum MemoryType {
-    VISITED("Посещённые места"),
-    SPECIAL_BLOCK("Особые блоки"),
-    HOSTILE_ENCOUNTER("Враждебные мобы"),
-    ITEM_DROP("Сброшенные предметы"),
-    FRIENDLY_ENTITY("Дружелюбные мобы");
+    VISITED_BLOCKS("Visited "),
+    SPOTTED_SPECIAL_BLOCK("Special Blocks"),
+    SPOTTED_HOSTILE_ENCOUNTER("Hostile mobs"),
+    ITEM_DROP("Dropped Items"),
+    SPOTTED_FRIENDLY_ENTITY("Friendly Mobs"),
+    BLOCKS_BREAK_SUMMARY("Broken blocks"), 
+    ENTITIES_KILLED_SUMMARY("Killed Entities"); 
 
     private final String label;
 

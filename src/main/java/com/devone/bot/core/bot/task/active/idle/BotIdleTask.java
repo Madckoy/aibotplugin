@@ -1,6 +1,7 @@
 package com.devone.bot.core.bot.task.active.idle;
 
 import com.devone.bot.core.bot.Bot;
+import com.devone.bot.core.bot.brain.memory.MemoryType;
 import com.devone.bot.core.bot.task.active.idle.params.BotIdleTaskParams;
 import com.devone.bot.core.bot.task.active.sonar.BotSonar3DTask;
 import com.devone.bot.core.bot.task.passive.BotTaskAutoParams;
@@ -29,7 +30,8 @@ public class BotIdleTask extends BotTaskAutoParams<BotIdleTaskParams> {
 
         setObjective(params.getObjective() + " / Performing maintenance... " +" ("+ rmt +")");
         
-        bot.getBrain().getMemory().cleanup();//params.getMemoryExpirationMillis());
+        bot.getBrain().getMemory().cleanup(MemoryType.VISITED_BLOCKS);
+        
         BotLogger.debug(icon, isLogging(), bot.getId() + " 🗑️ Removed all visited navigation points");
 
         bot.getState().resetStuckCount();
