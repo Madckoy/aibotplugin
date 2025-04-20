@@ -2,6 +2,6 @@ package com.devone.bot.core.bot.task.reactive.container.params;
 
 import com.devone.bot.core.bot.task.passive.params.BotTaskParams;
 
-public class BotReactiveContainerParams extends BotTaskParams{
+public class BotEmptyReactiveContainerParams extends BotTaskParams {
 
 }

@@ -7,7 +7,7 @@ import org.bukkit.command.CommandSender;
 import com.devone.bot.core.bot.Bot;
 import com.devone.bot.core.bot.BotManager;
 import com.devone.bot.core.bot.task.active.drop.BotDropAllTask;
-import com.devone.bot.core.bot.task.reactive.container.BotReactiveContainer;
+import com.devone.bot.core.bot.task.reactive.container.BotEmptyReactiveContainer;
 import com.devone.bot.core.utils.BotUtils;
 
 public class BotDropAllCommand implements CommandExecutor {
@@ -34,7 +34,7 @@ public class BotDropAllCommand implements CommandExecutor {
             return false;
         }
 
-        BotReactiveContainer cont = new BotReactiveContainer(bot);
+        BotEmptyReactiveContainer cont = new BotEmptyReactiveContainer(bot);
         // ✅ Добавляем задачу на drop
         BotDropAllTask task = new BotDropAllTask(bot, null);
         cont.add(task);
