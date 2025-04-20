@@ -160,7 +160,7 @@ function showInfoPanel(bot) {
     document.getElementById("info-navpoints").textContent = bot.navPoints ?? "n/a";
     document.getElementById("info-reactive").textContent = getTaskStatusEmoji(bot.taskIsReactive);
 
-    const panel = document.getElementById("info-panel");
+    const panel = document.getElementById("bot-info-panel");
     panel.classList.remove("hidden");
     panel.classList.add("visible");
 }
