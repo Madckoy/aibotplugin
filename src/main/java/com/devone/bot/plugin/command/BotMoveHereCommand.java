@@ -10,7 +10,6 @@ import com.devone.bot.core.bot.Bot;
 import com.devone.bot.core.bot.BotManager;
 import com.devone.bot.core.bot.task.active.move.BotMoveTask;
 import com.devone.bot.core.bot.task.active.move.params.BotMoveTaskParams;
-import com.devone.bot.core.utils.BotUtils;
 import com.devone.bot.core.utils.blocks.BotLocation;
 import com.devone.bot.core.utils.logger.BotLogger;
 
@@ -38,23 +37,26 @@ public class BotMoveHereCommand implements CommandExecutor {
         }
 
         Location targetLocation = player.getLocation();
+        BotLocation botLoc = new BotLocation(
+            targetLocation.getBlockX(),
+            targetLocation.getBlockY(),
+            targetLocation.getBlockZ()
+        );
 
-        BotLogger.debug("📌 ", true,"/bot-move-here: Бот " + bot.getId() + " Идет к игроку в точкe " + targetLocation);
+        BotLogger.debug("🥾", true, "/bot-move-here: Бот " + bot.getId() + " идёт к игроку в точку " + botLoc);
 
+        BotMoveTaskParams params = new BotMoveTaskParams();
+        params.setTarget(botLoc);
 
-        // ✅ Очищаем стек задач
-        BotUtils.clearTasks(bot);
-
-        // ✅ Добавляем задачу на перемещение
         BotMoveTask moveTask = new BotMoveTask(bot);
-        BotMoveTaskParams moveTaskParams = new BotMoveTaskParams();
-        moveTaskParams.setTarget(new BotLocation(targetLocation.getBlockX(), targetLocation.getBlockY(), targetLocation.getBlockZ()));
-        moveTask.setParams(moveTaskParams);
-        BotUtils.pushTask(bot, moveTask);
+        moveTask.setParams(params);
+        moveTask.setObjective("Идём к игроку");
+        moveTask.setIcon("🥾");
 
-        player.sendMessage("§aБот " + bot.getId() + " Идет к игроку!");
+        bot.reactiveTaskStart(moveTask); // ✅ как реактивная задача
+
+        player.sendMessage("§aБот " + bot.getId() + " направляется к вам!");
 
         return true;
     }
-
 }

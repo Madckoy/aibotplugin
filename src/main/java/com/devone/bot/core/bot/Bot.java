@@ -202,7 +202,7 @@ public class Bot {
 
     }
 
-    public BotTaskManager getBotTaskManager() {
+    public BotTaskManager getTaskManager() {
         return this.bootstrap.getTaskStackManager();
     }
 
