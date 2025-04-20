@@ -27,7 +27,7 @@ public class BotIdleTask extends BotTaskAutoParams<BotIdleTaskParams> {
 
         long rmt = BotUtils.getRemainingTime(startTime);
 
-        setObjective(params.getObjective() + " / Performing maintenace... " +" ("+ rmt +")");
+        setObjective(params.getObjective() + " / Performing maintenance... " +" ("+ rmt +")");
         
         bot.getBrain().getMemory().cleanup();//params.getMemoryExpirationMillis());
         BotLogger.debug(icon, isLogging(), bot.getId() + " 🗑️ Removed all visited navigation points");
