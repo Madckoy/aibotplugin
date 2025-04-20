@@ -24,13 +24,14 @@ public class BotIdleTask extends BotTaskAutoParams<BotIdleTaskParams> {
 
     @Override
     public void execute() { 
+
         long rmt = BotUtils.getRemainingTime(startTime);
 
-        setObjective(params.getObjective() + " ("+ rmt +")");
+        setObjective(params.getObjective() + " Performing maintenace... " +" ("+ rmt +")");
         
         bot.getBrain().getMemory().cleanup();//params.getMemoryExpirationMillis());
         BotLogger.debug(icon, isLogging(), bot.getId() + " 🗑️ Removed all visited navigation points");
-        
+
         bot.getState().resetStuckCount();
 
         BotSonar3DTask sonar = new BotSonar3DTask(bot);
