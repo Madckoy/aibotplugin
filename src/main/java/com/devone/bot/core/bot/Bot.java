@@ -19,6 +19,7 @@ import com.devone.bot.core.bot.state.BotState;
 import com.devone.bot.core.bot.task.active.move.BotMoveTask;
 import com.devone.bot.core.bot.task.active.move.params.BotMoveTaskParams;
 import com.devone.bot.core.bot.task.passive.BotTask;
+import com.devone.bot.core.bot.task.passive.BotTaskManager;
 import com.devone.bot.core.utils.BotUtils;
 import com.devone.bot.core.utils.blocks.BotLocation;
 import com.devone.bot.core.utils.logger.BotLogger;
@@ -200,6 +201,11 @@ public class Bot {
         return task;
 
     }
+
+    public BotTaskManager getBotTaskManager() {
+        return this.bootstrap.getTaskStackManager();
+    }
+
     // под вопросом, стоит ли перенести в BotUtils или в BotInventory
     public void checkAndSelfMove(Location target) {
         double pickupRadius = 2.0; // Радиус, в котором проверяем предметы

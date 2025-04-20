@@ -30,8 +30,11 @@ public abstract class BotReactiveTaskContainer<T extends BotTaskParams> extends 
             enqueue(bot); // 👈 Реально вбрасываем задачи
             started = true;
 
-            BotLogger.debug(getIcon(), true, bot.getId() + " ✅ Контейнер завершает себя: " + this.getClass().getSimpleName());
-            stop();
+            // Завершить контейнер, если в стеке остался только он сам
+            if (bot.getBotTaskManager().getTaskStack().peek() == this) {
+                BotLogger.debug(getIcon(), isLogging(), bot.getId() + " ✅ Контейнер завершает себя: " + this.getClass().getSimpleName());
+                stop();
+            }
         }
     }
 
