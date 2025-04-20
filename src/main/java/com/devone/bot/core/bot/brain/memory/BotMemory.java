@@ -44,6 +44,7 @@ public class BotMemory {
     }
 
     public void brokenBlocksIncrease(String blockName) {
+        
         this.brokenBlocks.add(blockName);
     }
 
