@@ -66,6 +66,5 @@ public abstract class BotReactiveTaskContainer<T extends BotTaskParams> extends 
     public void stop() {
         super.stop();
         BotLogger.debug(getIcon(), true, bot.getId() + " 🔚 Контейнер снят: " + this.getClass().getSimpleName());
-        bot.pushReactiveTask(this);
     }
 }
