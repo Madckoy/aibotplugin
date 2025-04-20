@@ -13,6 +13,7 @@ import com.devone.bot.core.bot.task.active.move.BotMoveTask;
 import com.devone.bot.core.bot.task.active.move.params.BotMoveTaskParams;
 import com.devone.bot.core.bot.task.active.teleport.BotTeleportTask;
 import com.devone.bot.core.bot.task.active.teleport.params.BotTeleportTaskParams;
+import com.devone.bot.core.bot.task.passive.BotTaskManager;
 import com.devone.bot.core.bot.task.reactive.container.BotEmptyReactiveContainer;
 import com.devone.bot.core.utils.blocks.BotLocation;
 import com.devone.bot.core.utils.logger.BotLogger;
@@ -79,7 +80,7 @@ public class BotMoveHereCommand implements CommandExecutor {
         cont.add(moveTask);
 
         // ⏯ Старт как реактивная цепочка
-        bot.pushReactiveTask(cont);
+        BotTaskManager.push(bot, cont);
 
         player.sendMessage("§aБот " + bot.getId() + " телепортируется и идёт к вам!");
 

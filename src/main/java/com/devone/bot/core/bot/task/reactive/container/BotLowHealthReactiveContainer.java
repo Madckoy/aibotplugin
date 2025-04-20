@@ -25,7 +25,7 @@ public class BotLowHealthReactiveContainer extends BotReactiveTaskContainer<BotL
         BotTeleportTask tpTask = new BotTeleportTask(bot, null);
         tpTask.setParams(tpParams);
 
-        bot.pushReactiveTask(tpTask);
+        add(tpTask);
     }
 
 }

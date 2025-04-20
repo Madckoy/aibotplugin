@@ -2,6 +2,7 @@ package com.devone.bot.core.bot.task.reactive.strategy;
 
 import com.devone.bot.core.bot.Bot;
 import com.devone.bot.core.bot.inventory.BotInventory;
+import com.devone.bot.core.bot.task.passive.BotTaskManager;
 import com.devone.bot.core.bot.task.reactive.IBotReactionStrategy;
 import com.devone.bot.core.bot.task.reactive.container.BotNearbyPlayerReactiveContainer;
 import com.devone.bot.core.utils.BotConstants;
@@ -27,16 +28,18 @@ public class BotNearbyPlayerStrategy implements IBotReactionStrategy {
         BotLocation botLoc = bot.getNavigation().getLocation();
 
         for (Player player : Bukkit.getOnlinePlayers()) {
-            if (!player.isOnline() || player.isDead()) continue;
+            if (!player.isOnline() || player.isDead())
+                continue;
 
             BotLocation playerLoc = new BotLocation(BotWorldHelper.worldLocationToBotLocation(player.getLocation()));
             double dist = botLoc.distanceTo(playerLoc);
 
             if (dist < BotConstants.DEFAULT_DETECTION_RADIUS) {
-                BotLogger.debug("🤖", true, bot.getId() + " 🙋🏻‍♂️ Обнаружен игрок " + player.getName() + " на " + String.format("%.1f", dist) + " м");
+                BotLogger.debug("🤖", true, bot.getId() + " 🙋🏻‍♂️ Обнаружен игрок " + player.getName() + " на "
+                        + String.format("%.1f", dist) + " м");
 
                 return Optional.of(() -> {
-                    bot.pushReactiveTask(new BotNearbyPlayerReactiveContainer(bot, player));
+                    BotTaskManager.push(bot, new BotNearbyPlayerReactiveContainer(bot, player));
                 });
             }
         }

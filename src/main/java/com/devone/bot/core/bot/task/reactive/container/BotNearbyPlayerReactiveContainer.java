@@ -33,11 +33,11 @@ public class BotNearbyPlayerReactiveContainer extends BotReactiveTaskContainer<B
         BotMoveTask walkTask = new BotMoveTask(bot);
         walkTask.setParams(walkParams);
         walkTask.setObjective("🥾 Идём к игроку");
-        bot.pushReactiveTask(walkTask);
+        add(walkTask);
 
         // 2. Дропаем ресы
         BotDropAllTask dropTask = new BotDropAllTask(bot, player);
         dropTask.setObjective("🎁 Передаём ресурсы");
-        bot.pushReactiveTask(dropTask);
+        add(dropTask);
     }
 }

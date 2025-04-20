@@ -8,7 +8,7 @@ import org.bukkit.entity.Player;
 import com.devone.bot.core.bot.Bot;
 import com.devone.bot.core.bot.BotManager;
 import com.devone.bot.core.bot.task.active.playerlinked.protect.BotProtectTask;
-import com.devone.bot.core.utils.BotUtils;
+import com.devone.bot.core.bot.task.passive.BotTaskManager;
 import com.devone.bot.core.utils.logger.BotLogger;
 
 public class BotProtectCommand implements CommandExecutor {
@@ -34,14 +34,14 @@ public class BotProtectCommand implements CommandExecutor {
             return true;
         }
 
-        BotLogger.debug("🛡️ ", true,"/bot-protect: Бот " + bot.getId() + " защищает " + player.getName());
+        BotLogger.debug("🛡️ ", true, "/bot-protect: Бот " + bot.getId() + " защищает " + player.getName());
 
         // ✅ Очищаем стек задач
-        BotUtils.clearTasks(bot);
+        BotTaskManager.clear(bot);
 
         // ✅ Добавляем задачу на защиту
         BotProtectTask protectTask = new BotProtectTask(bot, player);
-        BotUtils.pushTask(bot, protectTask);
+        BotTaskManager.push(bot, protectTask);
 
         player.sendMessage("§aБот " + bot.getId() + " теперь защищает вас!");
 

@@ -2,6 +2,7 @@ package com.devone.bot.core.bot.task.reactive.strategy;
 
 import com.devone.bot.core.bot.Bot;
 import com.devone.bot.core.bot.brain.memory.scene.BotSceneData;
+import com.devone.bot.core.bot.task.passive.BotTaskManager;
 import com.devone.bot.core.bot.task.reactive.IBotReactionStrategy;
 import com.devone.bot.core.bot.task.reactive.container.BotNearbyHostileReactiveContainer;
 import com.devone.bot.core.utils.blocks.BotBlockData;
@@ -35,7 +36,7 @@ public class BotNearbyHostileStrategy implements IBotReactionStrategy {
                         + " (" + String.format("%.1f", dist) + " м)");
 
                 return Optional.of(() -> {
-                    bot.pushReactiveTask(new BotNearbyHostileReactiveContainer(bot, entity));
+                    BotTaskManager.push(bot, new BotNearbyHostileReactiveContainer(bot, entity));
                 });
             }
         }

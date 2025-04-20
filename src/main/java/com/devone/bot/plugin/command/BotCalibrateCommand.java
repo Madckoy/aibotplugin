@@ -7,14 +7,14 @@ import org.bukkit.entity.Player;
 
 import com.devone.bot.core.bot.Bot;
 import com.devone.bot.core.bot.BotManager;
-import com.devone.bot.core.bot.task.reactive.container.BotIdleReactiveContainer;
-import com.devone.bot.core.utils.BotUtils;
+import com.devone.bot.core.bot.task.passive.BotTaskManager;
+import com.devone.bot.core.bot.task.reactive.container.BotCalibrateReactiveContainer;
 
-public class BotIdleCommand implements CommandExecutor {
+public class BotCalibrateCommand implements CommandExecutor {
 
     private final BotManager botManager;
 
-    public BotIdleCommand(BotManager botManager) {
+    public BotCalibrateCommand(BotManager botManager) {
         this.botManager = botManager;
     }
 
@@ -34,11 +34,11 @@ public class BotIdleCommand implements CommandExecutor {
         }
 
         // ✅ Реактивная остановка с контейнером
-        BotUtils.clearTasks(bot);
+        BotTaskManager.clear(bot);
 
-        bot.pushReactiveTask(new BotIdleReactiveContainer(bot));
+        BotTaskManager.push(bot, new BotCalibrateReactiveContainer(bot));
 
-        player.sendMessage("§aБот " + bot.getId() + " остановлен и переходит в режим ожидания.");
+        player.sendMessage("§aБот " + bot.getId() + " остановлен и переходит в режим калибровки");
 
         return true;
     }

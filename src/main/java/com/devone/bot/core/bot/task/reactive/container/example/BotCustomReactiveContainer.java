@@ -15,6 +15,6 @@ public class BotCustomReactiveContainer extends BotReactiveTaskContainer<BotCust
     @Override
     protected void enqueue(Bot bot) {
         // Заменить на нужные тебе действия:
-        // bot.pushReactiveTask(new BotIdleTask(bot)); // for example
+        // bot.pushReactiveTask(new BotmyCustimTask(bot)); // for example
     }
 }

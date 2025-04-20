@@ -1,6 +1,7 @@
 package com.devone.bot.core.bot.task.reactive.strategy.example;
 
 import com.devone.bot.core.bot.Bot;
+import com.devone.bot.core.bot.task.passive.BotTaskManager;
 import com.devone.bot.core.bot.task.reactive.IBotReactionStrategy;
 import com.devone.bot.core.bot.task.reactive.container.example.BotCustomReactiveContainer;
 import com.devone.bot.core.utils.logger.BotLogger;
@@ -23,12 +24,13 @@ public class BotReactiveCustomStrategy implements IBotReactionStrategy {
     public Optional<Runnable> check(Bot bot) {
         BotLogger.debug("🤖", true, bot.getId() + " 🧪 Проверка кастомной реакции: " + getName());
 
-        if (bot.getState().getHealth() >= minHealth) return Optional.empty();
+        if (bot.getState().getHealth() >= minHealth)
+            return Optional.empty();
 
         BotLogger.debug("🤖", true, bot.getId() + " ✅ Условие выполнено, запускаем контейнер реакции.");
 
         return Optional.of(() -> {
-            bot.pushReactiveTask(new BotCustomReactiveContainer(bot));
+            BotTaskManager.push(bot, new BotCustomReactiveContainer(bot));
         });
     }
 

@@ -15,17 +15,17 @@ import com.devone.bot.core.bot.brain.logic.navigator.selectors.BotBlockSelector;
 import com.devone.bot.core.bot.brain.logic.navigator.selectors.BotEntitySelector;
 import com.devone.bot.core.bot.brain.memory.scene.BotSceneData;
 import com.devone.bot.core.bot.task.active.brain.params.BotBrainTaskParams;
+import com.devone.bot.core.bot.task.active.calibration.BotCalibrationTask;
 import com.devone.bot.core.bot.task.active.excavate.BotExcavateTask;
 import com.devone.bot.core.bot.task.active.excavate.params.BotExcavateTaskParams;
-import com.devone.bot.core.bot.task.active.idle.BotIdleTask;
 import com.devone.bot.core.bot.task.active.sonar.BotSonar3DTask;
 import com.devone.bot.core.bot.task.active.teleport.BotTeleportTask;
 import com.devone.bot.core.bot.task.active.teleport.params.BotTeleportTaskParams;
 import com.devone.bot.core.bot.task.passive.BotTask;
 import com.devone.bot.core.bot.task.passive.BotTaskAutoParams;
+import com.devone.bot.core.bot.task.passive.BotTaskManager;
 import com.devone.bot.core.bot.task.passive.IBotTaskParameterized;
 import com.devone.bot.core.utils.BotConstants;
-import com.devone.bot.core.utils.BotUtils;
 import com.devone.bot.core.utils.blocks.BotBlockData;
 import com.devone.bot.core.utils.blocks.BotLocation;
 import com.devone.bot.core.utils.logger.BotLogger;
@@ -64,8 +64,9 @@ public class BotBrainTask extends BotTaskAutoParams<BotBrainTaskParams> {
 
         int thinkingTicks = bot.getBrain().getThinkingTicks();
         if (thinkingTicks > 50) {
-            BotLogger.warn(icon, isLogging(), bot.getId() + " 🎲 Бот думает слишком долго (" + thinkingTicks + " тиков). Сброс в Idle.");
-            push(bot, new BotIdleTask(bot));
+            BotLogger.warn(icon, isLogging(),
+                    bot.getId() + " 🎲 Бот думает слишком долго (" + thinkingTicks + " тиков). Сброс в Calibration.");
+            push(bot, new BotCalibrationTask(bot));
             bot.getBrain().resetThinkingCycle();
             return;
         }
@@ -84,13 +85,14 @@ public class BotBrainTask extends BotTaskAutoParams<BotBrainTaskParams> {
         bot.getState().setStuck(isStuck);
 
         Runnable decision = determineBehaviorScenario(bot);
-        if (decision != null) decision.run();
+        if (decision != null)
+            decision.run();
     }
 
     private void push(Bot bot, BotTask<?> task) {
 
-        BotUtils.pushTask(bot, task);
-        
+        BotTaskManager.push(bot, task);
+
         bot.getBrain().resetThinkingCycle();
 
         BotLogger.debug(icon, isLogging(), "The task is pushed to stack ");
@@ -101,18 +103,19 @@ public class BotBrainTask extends BotTaskAutoParams<BotBrainTaskParams> {
 
         if (stuck) {
             Optional<Runnable> unstuck = tryUnstuckStrategy(bot);
-            if (unstuck.isPresent()) return unstuck.get();
+            if (unstuck.isPresent())
+                return unstuck.get();
 
             return () -> {
-                BotLogger.debug(icon, isLogging(), bot.getId() + " 💤 Бот застрял. Уходим в Idle.");
-                push(bot, new BotIdleTask(bot));
+                BotLogger.debug(icon, isLogging(), bot.getId() + " 💤 Бот застрял. Уходим в Calibration.");
+                push(bot, new BotCalibrationTask(bot));
             };
         }
 
         Runnable weighted = pickWeightedTask(bot);
         return weighted != null ? weighted : () -> {
-            BotLogger.debug(icon, isLogging(), bot.getId() + " 💤 Нет задач. Уходим в Idle.");
-            push(bot, new BotIdleTask(bot));
+            BotLogger.debug(icon, isLogging(), bot.getId() + " 💤 Нет задач. Уходим в Calibration.");
+            push(bot, new BotCalibrationTask(bot));
         };
     }
 
@@ -144,32 +147,33 @@ public class BotBrainTask extends BotTaskAutoParams<BotBrainTaskParams> {
                 if (params.isAllowTeleport()) {
                     BotLocation botPos = bot.getNavigation().getLocation();
                     BotSceneData sceneData = bot.getBrain().getMemory().getSceneData();
-                    BotSceneContext context = BotNavigationPlannerWrapper.getSceneContext(sceneData.blocks, sceneData.entities, botPos);
+                    BotSceneContext context = BotNavigationPlannerWrapper.getSceneContext(sceneData.blocks,
+                            sceneData.entities, botPos);
                     return tryTeleportFallback(bot, context);
                 }
                 return Optional.empty();
 
             default:
                 return Optional.of(() -> {
-                    BotLogger.debug(icon, isLogging(), bot.getId() + " ❌ Стратегия не определена. Idle.");
-                    push(bot, new BotIdleTask(bot));
+                    BotLogger.debug(icon, isLogging(), bot.getId() + " ❌ Стратегия не определена. Calibrate.");
+                    push(bot, new BotCalibrationTask(bot));
                 });
         }
     }
 
     private Optional<Runnable> tryTeleportFallback(Bot bot, BotSceneContext context) {
         List<Supplier<Optional<Runnable>>> attempts = List.of(
-            () -> tryTeleportToHostileEntity(bot, context.entities),
-            () -> tryTeleportToReachable(bot, context.reachable),
-            () -> tryTeleportToNavigable(bot, context.navigable),
-            () -> tryTeleportToEntity(bot, context.entities),
-            () -> tryTeleportToWalkable(bot, context.walkable),
-            () -> tryTeleportToSpawn(bot)
-        );
+                () -> tryTeleportToHostileEntity(bot, context.entities),
+                () -> tryTeleportToReachable(bot, context.reachable),
+                () -> tryTeleportToNavigable(bot, context.navigable),
+                () -> tryTeleportToEntity(bot, context.entities),
+                () -> tryTeleportToWalkable(bot, context.walkable),
+                () -> tryTeleportToSpawn(bot));
 
         for (Supplier<Optional<Runnable>> attempt : attempts) {
             Optional<Runnable> result = attempt.get();
-            if (result.isPresent()) return result;
+            if (result.isPresent())
+                return result;
         }
 
         BotLogger.debug(icon, isLogging(), bot.getId() + " 🚫 Все попытки телепортации провалились.");
@@ -177,22 +181,26 @@ public class BotBrainTask extends BotTaskAutoParams<BotBrainTaskParams> {
     }
 
     private Optional<Runnable> tryTeleportToHostileEntity(Bot bot, List<BotBlockData> data) {
-        if (data == null || data.isEmpty()) return Optional.empty();
+        if (data == null || data.isEmpty())
+            return Optional.empty();
 
         List<BotBlockData> filtered = data.stream()
-            .filter(target -> !BotWorldHelper.isInDangerousLiquid(target))
-            .toList();
+                .filter(target -> !BotWorldHelper.isInDangerousLiquid(target))
+                .toList();
 
         if (filtered.isEmpty()) {
             BotLogger.debug(icon, isLogging(), bot.getId() + " 🌊 Все цели для телепортации находятся в жидкости.");
             return Optional.empty();
         }
 
-        BotBlockData target = BotEntitySelector.pickNearestTarget(filtered, bot.getNavigation().getLocation(), BotConstants.DEFAULT_SCAN_RANGE);
-        if (target == null) return Optional.empty();
+        BotBlockData target = BotEntitySelector.pickNearestTarget(filtered, bot.getNavigation().getLocation(),
+                BotConstants.DEFAULT_SCAN_RANGE);
+        if (target == null)
+            return Optional.empty();
 
         return Optional.of(() -> {
-            BotLogger.debug(icon, isLogging(), "⚡Телепорт на враждебную сущность вне жидкости: " + bot.getId() + " → " + target);
+            BotLogger.debug(icon, isLogging(),
+                    "⚡Телепорт на враждебную сущность вне жидкости: " + bot.getId() + " → " + target);
             BotTeleportTaskParams tpParams = new BotTeleportTaskParams(target);
             BotTeleportTask tpTask = new BotTeleportTask(bot, null);
             tpTask.setParams(tpParams);
@@ -201,7 +209,8 @@ public class BotBrainTask extends BotTaskAutoParams<BotBrainTaskParams> {
     }
 
     private Optional<Runnable> tryTeleportToReachable(Bot bot, List<BotBlockData> data) {
-        if (data == null || data.isEmpty()) return Optional.empty();
+        if (data == null || data.isEmpty())
+            return Optional.empty();
         BotBlockData block = BotBlockSelector.pickRandomTarget(data);
         return Optional.of(() -> {
             BotLogger.debug(icon, isLogging(), "⚡Телепорт: достижимая точка " + bot.getId() + " → " + block);
@@ -213,7 +222,8 @@ public class BotBrainTask extends BotTaskAutoParams<BotBrainTaskParams> {
     }
 
     private Optional<Runnable> tryTeleportToNavigable(Bot bot, List<BotBlockData> data) {
-        if (data == null || data.isEmpty()) return Optional.empty();
+        if (data == null || data.isEmpty())
+            return Optional.empty();
         BotBlockData block = BotBlockSelector.pickRandomTarget(data);
         return Optional.of(() -> {
             BotLogger.debug(icon, isLogging(), "⚡Телепорт: точка навигации " + bot.getId() + " → " + block);
@@ -225,7 +235,8 @@ public class BotBrainTask extends BotTaskAutoParams<BotBrainTaskParams> {
     }
 
     private Optional<Runnable> tryTeleportToEntity(Bot bot, List<BotBlockData> data) {
-        if (data == null || data.isEmpty()) return Optional.empty();
+        if (data == null || data.isEmpty())
+            return Optional.empty();
         BotBlockData block = BotBlockSelector.pickRandomTarget(data);
         return Optional.of(() -> {
             BotLogger.debug(icon, isLogging(), "⚡Телепорт к сущности " + bot.getId() + " → " + block);
@@ -237,7 +248,8 @@ public class BotBrainTask extends BotTaskAutoParams<BotBrainTaskParams> {
     }
 
     private Optional<Runnable> tryTeleportToWalkable(Bot bot, List<BotBlockData> data) {
-        if (data == null || data.isEmpty()) return Optional.empty();
+        if (data == null || data.isEmpty())
+            return Optional.empty();
         BotBlockData block = BotBlockSelector.pickRandomTarget(data);
         return Optional.of(() -> {
             BotLogger.debug(icon, isLogging(), "⚡Телепорт: проходимая точка " + bot.getId() + " → " + block);

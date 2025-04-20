@@ -26,9 +26,10 @@ public abstract class BotReactiveTaskContainer<T extends BotTaskParams> extends 
 
         BotLogger.debug(getIcon(), true,
                 bot.getId() + " ⚡ Запущен реактивный контейнер: " + this.getClass().getSimpleName());
-        started = true;
 
         enqueue(bot); // 👈 Добавление кастомных подзадач (если нужно переопределить)
+
+        started = true;
 
         for (BotTask<?> task : subtasks) {
             BotLogger.debug(getIcon(), true,

@@ -58,7 +58,8 @@ public abstract class BotTask<T extends BotTaskParams> implements IBotTask, List
     }
 
     public void update() {
-        if (!enabled || isPause()) return;
+        if (!enabled || isPause())
+            return;
 
         logTaskStatus();
 
@@ -67,16 +68,17 @@ public abstract class BotTask<T extends BotTaskParams> implements IBotTask, List
             return;
         }
 
-        if (handleReactiveLogic()) return;
+        if (handleReactiveLogic())
+            return;
 
         runTaskExecution();
     }
 
     private void logTaskStatus() {
         BotLogger.debug(icon, logging, bot.getId() +
-            " ❓ Status: done=" + done + ", paused=" + pause +
-            " 📍: " + bot.getNavigation().getLocation() +
-            " | 🎯: " + bot.getNavigation().getTarget());
+                " ❓ Status: done=" + done + ", paused=" + pause +
+                " 📍: " + bot.getNavigation().getLocation() +
+                " | 🎯: " + bot.getNavigation().getTarget());
     }
 
     private boolean playerDisconnected() {
@@ -85,7 +87,8 @@ public abstract class BotTask<T extends BotTaskParams> implements IBotTask, List
 
     private boolean handleReactiveLogic() {
         if (isReactive && !BotReactiveUtils.isAlreadyReacting(bot)) {
-            BotLogger.debug("🧠", logging, bot.getId() + " ⚠️ Форсируем реактивный режим (task = " + getClass().getSimpleName() + ")");
+            BotLogger.debug("🧠", logging,
+                    bot.getId() + " ⚠️ Форсируем реактивный режим (task = " + getClass().getSimpleName() + ")");
             BotReactiveUtils.activateReaction(bot, true);
         }
 
@@ -113,7 +116,8 @@ public abstract class BotTask<T extends BotTaskParams> implements IBotTask, List
         done = true;
 
         if (isReactive && BotReactiveUtils.isReactionOwnedBy(bot, this)) {
-            BotLogger.debug("🧠", logging, bot.getId() + " 🧹 Завершена реактивная задача: " + getClass().getSimpleName());
+            BotLogger.debug("🧠", logging,
+                    bot.getId() + " 🧹 Завершена реактивная задача: " + getClass().getSimpleName());
             BotReactiveUtils.activateReaction(bot, false);
         }
     }
@@ -125,9 +129,10 @@ public abstract class BotTask<T extends BotTaskParams> implements IBotTask, List
     }
 
     private void handlePlayerDisconnect() {
-        BotLogger.debug("🧠", logging, bot.getId() + " 🚨 Игрок " + player.getName() + " отключился. Возврат к BrainTask.");
-        BotUtils.clearTasks(bot);
-        BotUtils.pushTask(bot, new BotBrainTask(bot));
+        BotLogger.debug("🧠", logging,
+                bot.getId() + " 🚨 Игрок " + player.getName() + " отключился. Возврат к BrainTask.");
+        BotTaskManager.clear(bot);
+        BotTaskManager.push(bot, new BotBrainTask(bot));
         this.stop();
     }
 

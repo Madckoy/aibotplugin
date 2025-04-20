@@ -27,6 +27,6 @@ public class BotTeleportToLocationReactiveContainer
         BotTeleportTaskParams params = new BotTeleportTaskParams();
         params.setLocation(location);
         tp.setParams(params);
-        bot.pushReactiveTask(tp);
+        add(tp);
     }
 }

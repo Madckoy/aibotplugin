@@ -1,6 +1,7 @@
 package com.devone.bot.core.bot.task.reactive.strategy;
 
 import com.devone.bot.core.bot.Bot;
+import com.devone.bot.core.bot.task.passive.BotTaskManager;
 import com.devone.bot.core.bot.task.reactive.IBotReactionStrategy;
 import com.devone.bot.core.bot.task.reactive.container.BotLowHealthReactiveContainer;
 import com.devone.bot.core.utils.logger.BotLogger;
@@ -19,7 +20,7 @@ public class BotLowHealthStrategy implements IBotReactionStrategy {
 
         return Optional.of(() -> {
             BotLogger.debug("🤖", true, bot.getId() + " 💔 Срабатывает реакция на низкое здоровье!");
-            bot.pushReactiveTask(new BotLowHealthReactiveContainer(bot));
+            BotTaskManager.push(bot, new BotLowHealthReactiveContainer(bot));
         });
     }
 

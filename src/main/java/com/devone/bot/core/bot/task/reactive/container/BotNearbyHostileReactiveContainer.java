@@ -29,12 +29,14 @@ public class BotNearbyHostileReactiveContainer
         BotMoveTask walkTask = new BotMoveTask(bot);
         walkTask.setParams(walkParams);
         walkTask.setObjective("🥾 Идём к мобу");
-        bot.pushReactiveTask(walkTask);
+        add(walkTask);
+
         // 2. Атакуем
         BotHandAttackTask task = new BotHandAttackTask(bot);
         BotHandAttackTaskParams params = new BotHandAttackTaskParams();
         params.setTarget(target);
         task.setParams(params);
-        bot.pushReactiveTask(task);
+
+        add(task);
     }
 }

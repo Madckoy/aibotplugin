@@ -6,7 +6,6 @@ import com.devone.bot.AIBotPlugin;
 import com.devone.bot.core.bot.Bot;
 import com.devone.bot.core.bot.task.active.brain.BotBrainTask;
 import com.devone.bot.core.bot.task.passive.BotTaskManager;
-import com.devone.bot.core.utils.BotUtils;
 import com.devone.bot.core.utils.logger.BotLogger;
 import com.devone.bot.core.utils.server.ServerUtils;
 
@@ -34,21 +33,22 @@ public class BotBootstrap {
     }
 
     public void update() {
-        if (ServerUtils.isServerStopping()) return;
+        if (ServerUtils.isServerStopping())
+            return;
 
         if (!taskManager.isEmpty()) {
-        
+
             brainStarted = false; // ✅ Если есть активность, сбрасываем флаг
-        
+
             taskManager.updateActiveTask();
-        
+
         } else {
             if (!brainStarted) {
-                BotLogger.debug("💥", true, bot.getId() +" 😴 Бот без задач. Добавляем BotBrainTask.");
-                
-                BotUtils.pushTask(bot, new BotBrainTask(bot));
-                
-                brainStarted = true; // ✅ Ставим флаг, что IdleActivity уже добавлена
+                BotLogger.debug("💥", true, bot.getId() + " 😴 Бот без задач. Добавляем BotBrainTask.");
+
+                BotTaskManager.push(bot, new BotBrainTask(bot));
+
+                brainStarted = true; // ✅ Ставим флаг, что Calibration Tsk уже добавлен
             }
         }
     }

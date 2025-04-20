@@ -72,9 +72,9 @@ commands:
     usage: /bot-move-here
     permission: aibotplugin.bot.move.here
 
-  bot-stop:
+  bot-calibrate:
     description: Stops the selected bot from moving.
-    usage: /bot-stop
+    usage: /bot-calibrate
     permission: aibotplugin.bot.stop
 
   bot-chase:
@@ -86,11 +86,6 @@ commands:
     description: The bot will protect the player.
     usage: /bot-protect
     permission: aibotplugin.bot.protect
-
-  bot-cancel:
-    description: Clears the bot’s current task stack.
-    usage: /bot-cancel
-    permission: aibotplugin.bot.cancel
 
   bot-drop-all:
     description: Drops all items in inventory

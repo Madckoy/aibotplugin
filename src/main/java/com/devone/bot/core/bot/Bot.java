@@ -20,7 +20,6 @@ import com.devone.bot.core.bot.task.active.move.BotMoveTask;
 import com.devone.bot.core.bot.task.active.move.params.BotMoveTaskParams;
 import com.devone.bot.core.bot.task.passive.BotTask;
 import com.devone.bot.core.bot.task.passive.BotTaskManager;
-import com.devone.bot.core.utils.BotUtils;
 import com.devone.bot.core.utils.blocks.BotLocation;
 import com.devone.bot.core.utils.logger.BotLogger;
 import com.devone.bot.core.utils.world.BotWorldHelper;
@@ -150,7 +149,7 @@ public class Bot {
             // stop all tasks!
             BotLogger.debug("🤖", true, id + " ➖ Stopping All Tasks");
 
-            BotUtils.clearTasks(this);
+            BotTaskManager.clear(this);
 
             BotLogger.debug("🤖", true, id + " ➖ Despawning and Destroying NPC");
             npc.despawn();
@@ -222,18 +221,7 @@ public class Bot {
         BotMoveTaskParams mv_taskParams = new BotMoveTaskParams(loc);
         mv_task.setParams(mv_taskParams);
 
-        BotUtils.pushTask(this, mv_task);
+        BotTaskManager.push(this, mv_task);
     }
 
-    public void pushReactiveTask(BotTask<?> task) {
-
-        task.setReactive(true); // 🔁 флаг — обязательно!
-        getBootstrap().getTaskStackManager().pushTask(task);
-        BotLogger.debug("⚡", true, getId() + " ➕ Запуск реактивной подзадачи: " + task.getClass().getSimpleName());
-    }
-
-    public void pullReactiveTask(BotTask<?> task) {
-        BotLogger.debug("⚡", true, getId() + " ❌ Завершение реактивной задачи: " + task.getClass().getSimpleName());
-        getBootstrap().getTaskStackManager().popTask();
-    }
 }

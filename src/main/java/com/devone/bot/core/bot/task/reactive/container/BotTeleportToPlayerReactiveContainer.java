@@ -43,6 +43,6 @@ public class BotTeleportToPlayerReactiveContainer
         tp.setIcon("⚡");
         tp.setObjective("Телепорт к игроку сзади");
 
-        add(tp); // 📦 добавляем в контейнер
+        add(tp); // was add(tp) 📦 добавляем в контейнер
     }
 }
