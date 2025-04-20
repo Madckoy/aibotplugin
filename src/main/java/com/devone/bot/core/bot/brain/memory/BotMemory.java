@@ -80,9 +80,14 @@ public class BotMemory {
     // Проверка, был ли блок запомнен для определённого типа памяти
     public boolean isMemorized(BotBlockData block, MemoryType memoryType) {
         if(block==null) {
+            
             return false;
+
         } else {
-            return memoryMap.get(memoryType).containsKey(block.getLocation());
+
+            boolean res = memoryMap.get(memoryType).containsKey(block);
+            
+            return res;
         }
     }
 
