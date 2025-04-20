@@ -104,10 +104,10 @@ public class BotMemory {
         return removed;
     }
 
-    public long cleanup() {
-        long expiration = brain.getMemoryExpirationMillis();
-        
-        return cleanup(expiration);
+    public void cleanup() {
+ 
+        memoryMap.clear();
+
     }
     
     // Получить все данные для конкретного типа памяти

@@ -52,8 +52,16 @@ public class BotMoveTask extends BotTaskAutoParams<BotMoveTaskParams> {
 
     @Override
     public void execute() {
-        if (taskHandle != null && !taskHandle.isCancelled()) return;
-        if (done || isPause()) return;
+
+        if (taskHandle != null && !taskHandle.isCancelled()) {
+            BotLogger.debug(icon, isLogging(), bot.getId() + " ⏳ Bot is moving...");
+            return;
+        }
+
+        if (done || isPause()) {
+            BotLogger.debug(icon, isLogging(), bot.getId() + " ⭕ The task is done or paused...");
+            return;
+        }
 
         if (!bot.getNPC().isSpawned()) {
             BotLogger.debug(icon, isLogging(), bot.getId() + " ⚠️ NPC не заспавнен!");
@@ -87,7 +95,7 @@ public class BotMoveTask extends BotTaskAutoParams<BotMoveTaskParams> {
 
             BotLocation loc = BotWorldHelper.worldLocationToBotLocation(targetLocation);
 
-            BotLogger.debug(icon, isLogging(), bot.getId() + " 🏃🏻‍♂️‍➡️ Двигаюсь к " + loc);
+            BotLogger.debug(icon, isLogging(), bot.getId() + " 🏃🏻‍♂️‍➡️ Начинает движение к " + loc);
 
             BotMoveTask mTask = this;
 
@@ -106,7 +114,9 @@ public class BotMoveTask extends BotTaskAutoParams<BotMoveTaskParams> {
 
                 if (rmt <= 0) {
                     BotLogger.debug(icon, isLogging(), bot.getId() + " ⏱️ Тайм-аут навигации.");
+
                     bot.getState().setStuck(true);
+
                     stopTaskHandle();
                     this.stop();
                 }
@@ -133,7 +143,7 @@ public class BotMoveTask extends BotTaskAutoParams<BotMoveTaskParams> {
     public void stop() {
         isMoving = false;
         bot.getNavigation().setTarget(null);
-        BotLogger.debug(icon, isLogging(), bot.getId() + " 🛑 Move task завершён");
+        BotLogger.debug(icon, isLogging(), bot.getId() + " ⭕ Move task завершён");
 
         stopTaskHandle();
 

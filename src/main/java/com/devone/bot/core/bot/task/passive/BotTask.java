@@ -74,7 +74,7 @@ public abstract class BotTask<T extends BotTaskParams> implements IBotTask, List
 
     public String getObjective() {
         return objective;
-    }
+    }/*  */
 
     public void setObjective(String objctv) {
         objective = objctv;

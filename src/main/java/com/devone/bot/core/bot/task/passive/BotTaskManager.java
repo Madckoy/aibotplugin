@@ -26,7 +26,7 @@ public class BotTaskManager {
 
         taskStack.push(task);
 
-        BotLogger.debug("🤖", true, bot.getId()+ " ✚ Добавлена задача: " + task.getClass().getSimpleName());
+        BotLogger.debug("🤖", true, bot.getId()+ " ➕ Добавлена задача: " + task.getIcon() + " "+ task.getClass().getSimpleName());
     }
 
     public void popTask() {

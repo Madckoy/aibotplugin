@@ -28,14 +28,16 @@ public class BotIdleTask extends BotTaskAutoParams<BotIdleTaskParams> {
 
         setObjective(params.getObjective() + " ("+ rmt +")");
         
-        long removed = bot.getBrain().getMemory().cleanup();//params.getMemoryExpirationMillis());
-        BotLogger.debug(icon, isLogging(), bot.getId() + " 🗑️ Removed outdated navigation points: " + removed);
+        bot.getBrain().getMemory().cleanup();//params.getMemoryExpirationMillis());
+        BotLogger.debug(icon, isLogging(), bot.getId() + " 🗑️ Removed all visited navigation points");
+        
+        bot.getState().resetStuckCount();
 
         BotSonar3DTask sonar = new BotSonar3DTask(bot);
         sonar.execute();
 
         if (rmt<=0) {
-            BotLogger.debug("✅", isLogging(), bot.getId() + " Idle timeout passed. Ending idle.");
+            BotLogger.debug(icon, isLogging(), bot.getId() + " ✅ Idle timeout passed. Ending idle.");
             stop();
         }
     }
