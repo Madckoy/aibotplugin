@@ -72,13 +72,18 @@ public class BotMemory {
 
     // Запоминаем блок для конкретного типа памяти
     public void memorize(BotBlockData block, MemoryType memoryType) {
+        if(block==null) return;
         BotMemoryItem item = new BotMemoryItem(block);
         memoryMap.get(memoryType).put(block.getLocation(), item);
     }
 
     // Проверка, был ли блок запомнен для определённого типа памяти
     public boolean isMemorized(BotBlockData block, MemoryType memoryType) {
-        return memoryMap.get(memoryType).containsKey(block.getLocation());
+        if(block==null) {
+            return false;
+        } else {
+            return memoryMap.get(memoryType).containsKey(block.getLocation());
+        }
     }
 
     // Очистка устаревших записей по всем типам памяти
