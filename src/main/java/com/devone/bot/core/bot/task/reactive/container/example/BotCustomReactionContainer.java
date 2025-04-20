@@ -1,4 +1,4 @@
-package com.devone.bot.core.bot.task.reactive.container;
+package com.devone.bot.core.bot.task.reactive.container.example;
 
 import com.devone.bot.core.bot.Bot;
 import com.devone.bot.core.bot.task.active.idle.BotIdleTask;
