@@ -34,7 +34,7 @@ public class BotCalibrateCommand implements CommandExecutor {
         }
 
         // ✅ Реактивная остановка с контейнером
-        BotTaskManager.clear(bot);
+        //BotTaskManager.clear(bot);
 
         BotTaskManager.push(bot, new BotCalibrateReactiveContainer(bot));
 

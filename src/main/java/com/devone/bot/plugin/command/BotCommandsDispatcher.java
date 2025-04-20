@@ -41,7 +41,7 @@ public class BotCommandsDispatcher implements CommandExecutor {
         registerCommand("bot-move", new BotMoveCommand(botManager));
         registerCommand("bot-move-here", new BotMoveHereCommand(botManager));
 
-        registerCommand("bot-stop", new BotCalibrateCommand(botManager));
+        //registerCommand("bot-stop", new BotCalibrateCommand(botManager));
         registerCommand("bot-chase", new BotChaseCommand(botManager));
         registerCommand("bot-protect", new BotProtectCommand(botManager));
         registerCommand("bot-calibrate", new BotCalibrateCommand(botManager));

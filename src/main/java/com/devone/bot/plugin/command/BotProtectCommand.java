@@ -37,7 +37,7 @@ public class BotProtectCommand implements CommandExecutor {
         BotLogger.debug("🛡️ ", true, "/bot-protect: Бот " + bot.getId() + " защищает " + player.getName());
 
         // ✅ Очищаем стек задач
-        BotTaskManager.clear(bot);
+        //BotTaskManager.clear(bot);
 
         // ✅ Добавляем задачу на защиту
         BotProtectTask protectTask = new BotProtectTask(bot, player);
