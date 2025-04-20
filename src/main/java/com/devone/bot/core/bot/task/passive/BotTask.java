@@ -1,6 +1,5 @@
 package com.devone.bot.core.bot.task.passive;
 
-
 import org.bukkit.entity.Player;
 import org.bukkit.event.Listener;
 
@@ -20,33 +19,23 @@ public abstract class BotTask<T extends BotTaskParams> implements IBotTask, List
 
     protected T params;
 
-    //configurable
     protected boolean enabled = true;
     protected boolean stopped = false;
-
     protected boolean logging = true;
 
-    // runtime
     protected Bot bot;
     protected Player player = null;
     protected long startTime = System.currentTimeMillis();
 
     private boolean pause = false;
-    
-    public boolean isPause() {
-        return pause;
-    }
-
     protected boolean done = false;
+
     protected final String uuid;
-    
     protected String icon = "";
     protected String objective = "";
 
     protected boolean isListenerRegistered = false;
-
-    private   boolean isReactive = false;
-
+    private boolean isReactive = false;
 
     public BotTask(Bot bot) {
         this.bot = bot;
@@ -54,92 +43,118 @@ public abstract class BotTask<T extends BotTaskParams> implements IBotTask, List
     }
 
     public BotTask(Bot bot, String icn) {
-        this.bot = bot;
+        this(bot);
         this.icon = icn;
-        this.uuid = UUID.randomUUID().toString();
     }
 
     public BotTask(Bot bot, Player player) {
-        this.bot = bot;
+        this(bot);
         this.player = player;
-        this.uuid = UUID.randomUUID().toString();
     }
 
     public BotTask(Bot bot, Player player, String icn) {
-        this.bot = bot;
-        this.player = player;
+        this(bot, player);
         this.icon = icn;
-        this.uuid = UUID.randomUUID().toString();
-    }
-
-    public String getObjective() {
-        return objective;
-    }/*  */
-
-    public void setObjective(String objctv) {
-        objective = objctv;
-        BotLogger.debug(icon, this.isLogging(), bot.getId() + " 𖣠 Set Objective: " + objctv);
     }
 
     public void update() {
+        if (!enabled || isPause()) return;
 
-        if (isReactive && !BotReactiveUtils.isAlreadyReacting(bot)) {
-            BotReactiveUtils.activateReaction(bot, true);
-        } 
+        logTaskStatus();
 
-        if (!enabled) return;
-    
-        BotLogger.debug(icon, this.isLogging(), bot.getId() + " ❓ Status : done=" + done + " | paused=" + isPause() +
-                " 📍: " + bot.getNavigation().getLocation() + " | 🎯: " + bot.getNavigation().getTarget());
-    
-        if (isPause()) return;
-    
-        if (this.player != null && !isPlayerOnline()) {
+        if (playerDisconnected()) {
             handlePlayerDisconnect();
             return;
         }
-    
+
+        if (handleReactiveLogic()) return;
+
+        runTaskExecution();
+    }
+
+    private void logTaskStatus() {
+        BotLogger.debug(icon, logging, bot.getId() +
+            " ❓ Status: done=" + done + ", paused=" + pause +
+            " 📍: " + bot.getNavigation().getLocation() +
+            " | 🎯: " + bot.getNavigation().getTarget());
+    }
+
+    private boolean playerDisconnected() {
+        return player != null && !player.isOnline();
+    }
+
+    private boolean handleReactiveLogic() {
+        if (isReactive && !BotReactiveUtils.isAlreadyReacting(bot)) {
+            BotLogger.debug("🧠", logging, bot.getId() + " ⚠️ Форсируем реактивный режим (task = " + getClass().getSimpleName() + ")");
+            BotReactiveUtils.activateReaction(bot, true);
+        }
+
         if (!BotReactiveUtils.isAlreadyReacting(bot)) {
-
-            BotLogger.debug("🧠", this.isLogging(), bot.getId() + " 🚨 Не Выполняет текущее реактивное задание.");
-            
             Optional<Runnable> reaction = BotReactivityManager.checkReactions(bot);
-
             if (reaction.isPresent()) {
-
-                setPause(true); // current task
-                BotLogger.debug("🧠", this.isLogging(), bot.getId() + " 🚨 Нужно срочно выполнить реактивное задание!");
+                setPause(true);
+                BotLogger.debug("🧠", logging, bot.getId() + " 🚨 Обнаружена реакция. Текущая задача приостановлена.");
                 reaction.get().run();
-                return;
+                return true;
             }
         }
 
-        BotLogger.debug("🧠", this.isLogging(), bot.getId() + " 🟡 Запуск задания: " + getIcon() + " "+ this.getClass().getSimpleName() );
+        return false;
+    }
 
+    private void runTaskExecution() {
+        BotLogger.debug("🧠", logging, bot.getId() + " 🟡 Выполнение: " + icon + " " + getClass().getSimpleName());
+        onStart();
         execute();
-    }    
-
-    public Bot getBot() {
-        return bot;
-    }   
+    }
 
     public abstract void execute();
 
     public void stop() {
         done = true;
-        if(isReactive) {
-            if(BotReactiveUtils.isAlreadyReacting(bot)) {
-                BotReactiveUtils.activateReaction(bot, false);
-            }
+
+        if (isReactive && BotReactiveUtils.isReactionOwnedBy(bot, this)) {
+            BotLogger.debug("🧠", logging, bot.getId() + " 🧹 Завершена реактивная задача: " + getClass().getSimpleName());
+            BotReactiveUtils.activateReaction(bot, false);
         }
+
+        onEnd();
     }
 
-    public String getUUID() {
-        return uuid;
+    public void onStart() {
+        // Хук для переопределения (например: логика инициализации)
+    }
+
+    public void onEnd() {
+        // Хук для завершения задачи
+    }
+
+    public void setPause(boolean pause) {
+        this.pause = pause;
+        String status = pause ? "⏸️ Pause" : "▶️ Resume";
+        BotLogger.debug(icon, logging, bot.getId() + " " + status + " (" + getClass().getSimpleName() + ")");
+    }
+
+    private void handlePlayerDisconnect() {
+        BotLogger.debug("🧠", logging, bot.getId() + " 🚨 Игрок " + player.getName() + " отключился. Возврат к BrainTask.");
+        BotUtils.clearTasks(bot);
+        BotUtils.pushTask(bot, new BotBrainTask(bot));
+        this.stop();
+    }
+
+    @Override
+    public IBotTaskParameterized<T> setParams(T params) {
+        this.params = params;
+        this.startTime = System.currentTimeMillis();
+        return this;
     }
 
     public boolean isDone() {
         return done;
+    }
+
+    public boolean isPause() {
+        return pause;
     }
 
     public boolean isEnabled() {
@@ -149,21 +164,16 @@ public abstract class BotTask<T extends BotTaskParams> implements IBotTask, List
     public boolean isLogging() {
         return logging;
     }
-    
 
-    public void setPause(boolean pause) {
-        this.pause = pause; 
-        String status = this.pause ? this.icon + " ( "+this.getClass().getSimpleName()+" ) "+ "⏸️ Pause" : "▶️ Resume";
-        BotLogger.debug(icon, this.isLogging(), bot.getId()+" "+status);
+    public String getObjective() {
+        return objective;
     }
 
-    @Override
-    public IBotTaskParameterized<T> setParams(T params) {
-        this.params = params;
-        this.startTime = System.currentTimeMillis();
-        return this;
+    public void setObjective(String obj) {
+        this.objective = obj;
+        BotLogger.debug(icon, logging, bot.getId() + " 𖣠 Objective: " + obj);
     }
-    
+
     public String getIcon() {
         return icon;
     }
@@ -172,33 +182,24 @@ public abstract class BotTask<T extends BotTaskParams> implements IBotTask, List
         this.icon = icn;
     }
 
-    public long getElapsedTime() {
-        return System.currentTimeMillis() - startTime;
+    public Bot getBot() {
+        return bot;
     }
 
-    private boolean isPlayerOnline() {
-        return player.isOnline();
+    public String getUUID() {
+        return uuid;
+    }
+
+    public long getElapsedTime() {
+        return System.currentTimeMillis() - startTime;
     }
 
     public boolean isReactive() {
         return isReactive;
     }
 
-    public void setReactive(boolean isReactive) {
-        this.isReactive = isReactive;
-    }
-
-    private void handlePlayerDisconnect() {
-
-        BotLogger.debug("🧠", this.isLogging(), bot.getId() + " 🚨 Игрок " + player.getName() + " вышел! Бот переходит в автономный режим.");
-        
-        BotUtils.clearTasks(bot);
-
-        BotBrainTask task = new BotBrainTask(bot);
-
-        BotUtils.pushTask(bot, task);
-
-        this.stop();
+    public void setReactive(boolean reactive) {
+        this.isReactive = reactive;
     }
 
     public void turnToTarget(BotTask<?> task, BotLocation target) {

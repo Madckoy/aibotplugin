@@ -221,4 +221,17 @@ public class Bot {
 
         BotUtils.pushTask(this, mv_task);
     }
+   
+    public void reactiveTaskStart(BotTask<?> task) {
+
+        task.setReactive(true); // 🔁 флаг — обязательно!
+        getBootstrap().getTaskStackManager().pushTask(task);
+        BotLogger.debug("⚡", true, getId() + " ➕ Запуск реактивной подзадачи: " + task.getClass().getSimpleName());
+    }
+
+
+    public void reactiveTaskStop(BotTask<?> task) {
+        BotLogger.debug("⚡", true, getId() + " ❌ Завершение реактивной задачи: " + task.getClass().getSimpleName());
+        getBootstrap().getTaskStackManager().popTask();
+    }
 }
