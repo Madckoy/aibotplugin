@@ -12,13 +12,13 @@ import com.devone.bot.core.utils.server.ServerUtils;
 
 public class BotBootstrap {
     private final Bot bot;
-    private final BotTaskManager taskStackManager;
+    private final BotTaskManager taskManager;
 
     private boolean brainStarted = false; // ✅ Флаг, чтобы не добавлять Brain Task несколько раз
 
     public BotBootstrap(Bot bot) {
         this.bot = bot;
-        this.taskStackManager = new BotTaskManager(bot);
+        this.taskManager = new BotTaskManager(bot);
 
         startLifeCycle();
     }
@@ -36,11 +36,11 @@ public class BotBootstrap {
     public void update() {
         if (ServerUtils.isServerStopping()) return;
 
-        if (!taskStackManager.isEmpty()) {
+        if (!taskManager.isEmpty()) {
         
             brainStarted = false; // ✅ Если есть активность, сбрасываем флаг
         
-            taskStackManager.updateActiveTask();
+            taskManager.updateActiveTask();
         
         } else {
             if (!brainStarted) {
@@ -54,6 +54,6 @@ public class BotBootstrap {
     }
 
     public BotTaskManager getTaskStackManager() {
-        return taskStackManager;
+        return taskManager;
     }
 }

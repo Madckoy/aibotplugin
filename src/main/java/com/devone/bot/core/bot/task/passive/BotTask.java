@@ -104,7 +104,6 @@ public abstract class BotTask<T extends BotTaskParams> implements IBotTask, List
 
     private void runTaskExecution() {
         BotLogger.debug("🧠", logging, bot.getId() + " 🟡 Выполнение: " + icon + " " + getClass().getSimpleName());
-        onStart();
         execute();
     }
 
@@ -117,16 +116,6 @@ public abstract class BotTask<T extends BotTaskParams> implements IBotTask, List
             BotLogger.debug("🧠", logging, bot.getId() + " 🧹 Завершена реактивная задача: " + getClass().getSimpleName());
             BotReactiveUtils.activateReaction(bot, false);
         }
-
-        onEnd();
-    }
-
-    public void onStart() {
-        // Хук для переопределения (например: логика инициализации)
-    }
-
-    public void onEnd() {
-        // Хук для завершения задачи
     }
 
     public void setPause(boolean pause) {
