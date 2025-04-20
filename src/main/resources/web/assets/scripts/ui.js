@@ -101,7 +101,8 @@ function renderBotTable(data) {
         `;
     });
 
-    setupButtonHandlers();
+    setupButtonHandlers(data.bots);
+
     
     setupInfoPanel();
 
@@ -112,7 +113,7 @@ function getTaskStatusEmoji(isReactive) {
     if (isReactive === true || isReactive === "true") {
         return "🔸"; // реактивная задача
     } else if (isReactive === false || isReactive === "false") {
-        return " "; // обычная
+        return "▪️"; // обычная
     } else {
         return "❔"; // не определено / fallback
     }
