@@ -73,7 +73,7 @@ public class BotMemory {
     }
     
     public long getMobsKilled() {
-        return blockBreakSummary.values().stream().mapToInt(Integer::intValue).sum();
+        return EntitiesKilledSummary.values().stream().mapToInt(Integer::intValue).sum();
     }
 
     public long getBlocksBroken() {

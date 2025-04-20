@@ -1,148 +1,119 @@
-// ui.js
+
+// Optimized ui.js with selective DOM updates
+
+let previousBotData = {};
 
 function updateMonitoringHeader(data) {
     const mcTimeElem = document.getElementById("mc-time");
     const serverTimeElem = document.getElementById("server-time");
 
-    // ⛅ Minecraft Time (уже строка)
     const mcTime = data["mc-time"];
-    if (typeof mcTime === "string" && mcTime.trim() !== "") {
-        mcTimeElem.textContent = `⛅ ${mcTime}`;
-    } else {
-        mcTimeElem.textContent = "⛅ --:--";
-    }
+    mcTimeElem.textContent = `⛅ ${typeof mcTime === "string" && mcTime.trim() !== "" ? mcTime : "--:--"}`;
 
-    // 🕒 Server Time
     const serverTime = data["server-time"];
-    if (typeof serverTime === "string" && serverTime.trim() !== "") {
-        serverTimeElem.textContent = `🕒 ${serverTime}`;
-    } else {
-        serverTimeElem.textContent = "🕒 --:--";
-    }
+    serverTimeElem.textContent = `🕒 ${typeof serverTime === "string" && serverTime.trim() !== "" ? serverTime : "--:--"}`;
 }
 
 function renderBotTable(data) {
-    let table = document.getElementById("botTable");
-    let tbody = table.querySelector("tbody");
-    if (tbody) tbody.remove();
-    tbody = document.createElement("tbody");
-    table.appendChild(tbody);
+    const table = document.getElementById("botTable");
+    const tbody = table.querySelector("tbody") || table.appendChild(document.createElement("tbody"));
 
-    data.bots.forEach(bot => {
-        let row = tbody.insertRow();
-        row.style.height = "30px";
+    data.bots.forEach(bot => updateOrCreateBotRow(bot, tbody));
+    setupButtonHandlers(data.bots);
+    setupInfoPanel();
+}
 
-        // 📛 Bot ID + Skin
-        let botCell_0 = row.insertCell(0);
-        botCell_0.innerHTML = `<img src="${bot.skin}" width="20" height="20" style="border-radius: 4px; margin-right: 5px;"> ${bot.id}`;
-        botCell_0.style.padding = "6px";
+function updateOrCreateBotRow(bot, tbody) {
+    const rowId = `bot-row-${bot.id}`;
+    let row = document.getElementById(rowId);
 
-        let botCell_1 = row.insertCell(1); 
-        botCell_1.innerHTML = `
-                                <div class="bot-stats-cell">
-                                    <div><span>🪨</span><span>${bot.blocksBroken}</span></div>
-                                    <div><span>💀</span><span>${bot.mobsKilled}</span></div>
-                                    <div><span>⚡️</span><span>${bot.teleportUsed}</span></div>
-                                </div>`; 
+    if (!row) {
+        row = document.createElement("tr");
+        row.id = rowId;
+        row.innerHTML = `
+            <td><img src="${bot.skin}" width="20" height="20" style="border-radius: 4px; margin-right: 5px;"> ${bot.id}</td>
+            <td class="stats"></td>
+            <td class="pos"></td>
+            <td class="stuck"></td>
+            <td class="task"></td>
+            <td class="objective"></td>
+            <td class="elapsed"></td>
+            <td class="inventory-cell"></td>
+            <td class="commands"></td>`;
+        tbody.appendChild(row);
+    }
 
-        let objCellPos = row.insertCell(2);
-        objCellPos.innerHTML = `
-            <div class="bot-stats-cell">
-                <div><span>📍</span><span>${bot.position}</span></div>
-                <div class="bot-objective-divider"></div>
-                <div><span>🎯</span><span>${bot.target}</span></div>
-            </div>`;
+    const cells = row.children;
+    cells[1].innerHTML = `
+        <div class="bot-stats-cell">
+            <div><span>🪨</span><span>${bot.blocksBroken}</span></div>
+            <div><span>💀</span><span>${bot.mobsKilled}</span></div>
+            <div><span>⚡️</span><span>${bot.teleportUsed}</span></div>
+        </div>`;
 
-        let objCellStuck = row.insertCell(3);
-        objCellStuck.innerHTML = `
-            <div class="bot-position-cell">
-                <div><span>${bot.stuck}</span></div>
-                <div class="bot-objective-divider"></div>
-                <div><span>${bot.stuckCount}</span></div>
-            </div>`;
+    cells[2].innerHTML = `
+        <div class="bot-stats-cell">
+            <div><span>📍</span><span>${bot.position}</span></div>
+            <div class="bot-objective-divider"></div>
+            <div><span>🎯</span><span>${bot.target}</span></div>
+        </div>`;
 
-        let taskCell = row.insertCell(4);
-        taskCell.innerHTML = `
+    cells[3].innerHTML = `
+        <div class="bot-position-cell">
+            <div><span>${bot.stuck}</span></div>
+            <div class="bot-objective-divider"></div>
+            <div><span>${bot.stuckCount}</span></div>
+        </div>`;
+
+    cells[4].innerHTML = `
         <div class="bot-position-cell">
             <div><span>${bot.task}</span></div>
             <div class="bot-objective-divider"></div>
             <div><span>${getTaskStatusEmoji(bot.taskIsReactive)}</span></div>
-        </div>`; 
-        
-        let objCell = row.insertCell(5);
-        objCell.innerHTML = `
-            <div class="bot-objective-cell">
-                <div><span>ᯓ </span><span>${bot.queue}</span></div>
-                <div class="bot-objective-divider"></div>
-                <div><span>✴ </span><span>${bot.object}</span></div>
-            </div>`;
+        </div>`;
 
-        row.insertCell(6).innerText = bot.elapsedTime;
+    cells[5].innerHTML = `
+        <div class="bot-objective-cell">
+            <div><span>ᯓ </span><span>${bot.queue}</span></div>
+            <div class="bot-objective-divider"></div>
+            <div><span>✴ </span><span>${bot.object}</span></div>
+        </div>`;
 
-        // 📦 Inventory
-        let invCell = row.insertCell(7);
-        invCell.className = "inventory-cell";
-        invCell.title = `Items: ${bot.inventoryCount} / ${bot.inventoryMax}`;
-        invCell.innerHTML = generateInventoryGrid(bot.inventorySlotsFilled, bot.autoPickUpItems);
+    cells[6].textContent = bot.elapsedTime;
 
+    cells[7].title = `Items: ${bot.inventoryCount} / ${bot.inventoryMax}`;
+    cells[7].innerHTML = generateInventoryGrid(bot.inventorySlotsFilled, bot.autoPickUpItems);
 
-        // 🎮 Control Buttons
-        let cmdCell = row.insertCell(8);
-        cmdCell.innerHTML = `
-            <div class="bot-position-cell">
-   	            <button class="cmd-btn" data-bot="${bot.id}" data-cmd="bot-tp">⚡</button>
-                <button class="cmd-btn" data-bot="${bot.id}" data-cmd="bot-move">🚶‍♀️‍➡️</button>
-                <button class="cmd-btn" data-bot="${bot.id}" data-cmd="bot-drop-all">📦</button
-                <div class="bot-objective-divider"></div>
-   	            <button class="cmd-btn" data-bot="${bot.id}" data-cmd="bot-signal">📡</button>
-                <button class="cmd-btn" data-bot="${bot.id}" data-cmd="bot-home">🏡</button>
-                <button class="cmd-btn" data-bot="${bot.id}" data-cmd="bot-info">ℹ️</button>
-            </div>   
-        `;
-    });
-
-    setupButtonHandlers(data.bots);
-
-    
-    setupInfoPanel();
-
+    cells[8].innerHTML = `
+        <div class="bot-position-cell">
+            <button class="cmd-btn" data-bot="${bot.id}" data-cmd="bot-tp">⚡</button>
+            <button class="cmd-btn" data-bot="${bot.id}" data-cmd="bot-move">🚶‍♀️‍➡️</button>
+            <button class="cmd-btn" data-bot="${bot.id}" data-cmd="bot-drop-all">📦</button>
+            <div class="bot-objective-divider"></div>
+            <button class="cmd-btn" data-bot="${bot.id}" data-cmd="bot-signal">📡</button>
+            <button class="cmd-btn" data-bot="${bot.id}" data-cmd="bot-home">🏡</button>
+            <button class="cmd-btn" data-bot="${bot.id}" data-cmd="bot-info">ℹ️</button>
+        </div>`;
 }
 
-
 function getTaskStatusEmoji(isReactive) {
-    if (isReactive === true || isReactive === "true") {
-        return "🔸"; // реактивная задача
-    } else if (isReactive === false || isReactive === "false") {
-        return "▪️"; // обычная
-    } else {
-        return "❔"; // не определено / fallback
-    }
+    if (isReactive === true || isReactive === "true") return "🔸";
+    if (isReactive === false || isReactive === "false") return "▪️";
+    return "❔";
 }
 
 function generateInventoryGrid(slots, autoPickupEnabled) {
     const maxSlots = 36;
     slots = Array.isArray(slots) ? slots : [];
-
-    let html = '<div class="inv-bar">';
-    for (let i = 0; i < maxSlots; i++) {
+    return '<div class="inv-bar">' + Array.from({length: maxSlots}, (_, i) => {
         const slot = slots[i];
         let className = "inv-slot";
-
-        if (slot && slot.amount >= 64) {
-            className += " full";
-        } else if (slot && slot.amount > 0) {
-            className += " partial";
-        }
-
-        if (autoPickupEnabled) {
-            className += " pickup-enabled";
-        }
-
+        if (slot?.amount >= 64) className += " full";
+        else if (slot?.amount > 0) className += " partial";
+        if (autoPickupEnabled) className += " pickup-enabled";
         const tooltip = slot ? `${slot.amount}× ${slot.type}` : 'Empty';
-        html += `<div class="${className}" title="${tooltip}"></div>`;
-    }
-    html += '</div>';
-    return html;
+        return `<div class="${className}" title="${tooltip}"></div>`;
+    }).join('') + '</div>';
 }
 
 function setupInfoPanel() {
@@ -159,7 +130,6 @@ function showInfoPanel(bot) {
     document.getElementById("info-model").textContent = bot.model || "M-000.2";
     document.getElementById("info-navpoints").textContent = bot.navPoints ?? "n/a";
     document.getElementById("info-reactive").textContent = getTaskStatusEmoji(bot.taskIsReactive);
-
     const panel = document.getElementById("bot-info-panel");
     panel.classList.remove("hidden");
     panel.classList.add("visible");
