@@ -1,22 +1,22 @@
-package com.devone.bot.core.bot.task.active.calibration;
+package com.devone.bot.core.bot.task.active.calibrate;
 
 import com.devone.bot.core.bot.Bot;
 import com.devone.bot.core.bot.brain.memory.MemoryType;
-import com.devone.bot.core.bot.task.active.calibration.params.BotCalibrationTaskParams;
+import com.devone.bot.core.bot.task.active.calibrate.params.BotCalibrateTaskParams;
 import com.devone.bot.core.bot.task.active.sonar.BotSonar3DTask;
 import com.devone.bot.core.bot.task.passive.BotTaskAutoParams;
 import com.devone.bot.core.bot.task.passive.IBotTaskParameterized;
 import com.devone.bot.core.utils.BotUtils;
 import com.devone.bot.core.utils.logger.BotLogger;
 
-public class BotCalibrationTask extends BotTaskAutoParams<BotCalibrationTaskParams> {
+public class BotCalibrateTask extends BotTaskAutoParams<BotCalibrateTaskParams> {
 
-    public BotCalibrationTask(Bot bot) {
-        super(bot, BotCalibrationTaskParams.class);
+    public BotCalibrateTask(Bot bot) {
+        super(bot, BotCalibrateTaskParams.class);
     }
 
     @Override
-    public IBotTaskParameterized<BotCalibrationTaskParams> setParams(BotCalibrationTaskParams params) {
+    public IBotTaskParameterized<BotCalibrateTaskParams> setParams(BotCalibrateTaskParams params) {
         super.setParams(params);
         setIcon(params.getIcon());
         setObjective(params.getObjective());

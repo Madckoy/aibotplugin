@@ -1,13 +1,13 @@
-package com.devone.bot.core.bot.task.active.calibration.params;
+package com.devone.bot.core.bot.task.active.calibrate.params;
 
 import com.devone.bot.core.bot.task.passive.params.BotTaskParams;
 import com.devone.bot.core.utils.BotConstants;
 
-public class BotCalibrationTaskParams extends BotTaskParams {
+public class BotCalibrateTaskParams extends BotTaskParams {
 
     private long timeout = BotConstants.DEFAULT_CALIBRATION_TIMEOUT;
 
-    public BotCalibrationTaskParams() {
+    public BotCalibrateTaskParams() {
         super();
 
         setIcon("🛠️");

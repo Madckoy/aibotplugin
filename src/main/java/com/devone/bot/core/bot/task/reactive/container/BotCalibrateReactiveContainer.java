@@ -1,8 +1,8 @@
 package com.devone.bot.core.bot.task.reactive.container;
 
 import com.devone.bot.core.bot.Bot;
-import com.devone.bot.core.bot.task.active.calibration.BotCalibrationTask;
-import com.devone.bot.core.bot.task.active.calibration.params.BotCalibrationTaskParams;
+import com.devone.bot.core.bot.task.active.calibrate.BotCalibrateTask;
+import com.devone.bot.core.bot.task.active.calibrate.params.BotCalibrateTaskParams;
 import com.devone.bot.core.bot.task.passive.BotReactiveTaskContainer;
 import com.devone.bot.core.bot.task.reactive.container.params.BotCalibrateReactiveContainerParams;
 
@@ -21,8 +21,8 @@ public class BotCalibrateReactiveContainer extends BotReactiveTaskContainer<BotC
     protected void enqueue(Bot bot) {
         BotLogger.debug(getIcon(), true, bot.getId() + " " + icon + " " + getObjective());
 
-        BotCalibrationTaskParams tpParams = new BotCalibrationTaskParams();
-        BotCalibrationTask tpTask = new BotCalibrationTask(bot);
+        BotCalibrateTaskParams tpParams = new BotCalibrateTaskParams();
+        BotCalibrateTask tpTask = new BotCalibrateTask(bot);
         tpTask.setParams(tpParams);
 
         add(tpTask);
