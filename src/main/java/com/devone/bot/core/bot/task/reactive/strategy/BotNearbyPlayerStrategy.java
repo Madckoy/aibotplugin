@@ -3,7 +3,7 @@ package com.devone.bot.core.bot.task.reactive.strategy;
 import com.devone.bot.core.bot.Bot;
 import com.devone.bot.core.bot.inventory.BotInventory;
 import com.devone.bot.core.bot.task.reactive.IBotReactionStrategy;
-import com.devone.bot.core.bot.task.reactive.container.BotNearbyPlayerReactionContainer;
+import com.devone.bot.core.bot.task.reactive.container.BotNearbyPlayerReactiveContainer;
 import com.devone.bot.core.utils.BotConstants;
 import com.devone.bot.core.utils.blocks.BotLocation;
 import com.devone.bot.core.utils.logger.BotLogger;
@@ -36,7 +36,7 @@ public class BotNearbyPlayerStrategy implements IBotReactionStrategy {
                 BotLogger.debug("🤖", true, bot.getId() + " 🙋🏻‍♂️ Обнаружен игрок " + player.getName() + " на " + String.format("%.1f", dist) + " м");
 
                 return Optional.of(() -> {
-                    bot.reactiveTaskStart(new BotNearbyPlayerReactionContainer(bot, player));
+                    bot.pushReactiveTask(new BotNearbyPlayerReactiveContainer(bot, player));
                 });
             }
         }

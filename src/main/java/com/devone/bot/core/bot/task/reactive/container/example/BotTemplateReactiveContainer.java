@@ -2,13 +2,13 @@ package com.devone.bot.core.bot.task.reactive.container.example;
 
 import com.devone.bot.core.bot.Bot;
 import com.devone.bot.core.bot.task.passive.BotReactiveTaskContainer;
-import com.devone.bot.core.bot.task.reactive.container.params.example.BotTemplateReactionContainerParams;
+import com.devone.bot.core.bot.task.reactive.container.params.example.BotTemplateReactiveContainerParams;
 import com.devone.bot.core.utils.logger.BotLogger;
 
-public class BotTemplateReactionContainer extends BotReactiveTaskContainer<BotTemplateReactionContainerParams> {
+public class BotTemplateReactiveContainer extends BotReactiveTaskContainer<BotTemplateReactiveContainerParams> {
 
-    public BotTemplateReactionContainer(Bot bot) {
-        super(bot, BotTemplateReactionContainerParams.class);
+    public BotTemplateReactiveContainer(Bot bot) {
+        super(bot, BotTemplateReactiveContainerParams.class);
         setIcon("📦");
         setObjective("Шаблон реактивного контейнера");
     }
@@ -18,6 +18,6 @@ public class BotTemplateReactionContainer extends BotReactiveTaskContainer<BotTe
         BotLogger.debug(getIcon(), true, bot.getId() + " 📦 enqueue() шаблонного контейнера");
 
         // ✅ Используем реактивный сахар внутри
-        // bot.reactiveTaskStart(new YourTask(bot));
+        // bot.pushReactiveTask(new YourTask(bot));
     }
 }

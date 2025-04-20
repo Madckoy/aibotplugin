@@ -143,6 +143,10 @@ public class BotUtils {
         bot.getBootstrap().getTaskStackManager().pushTask(task);
     }
 
+    public static void pushReactiveTask(Bot bot, BotTask<?> task) {
+        bot.pushReactiveTask(task);
+    }
+
     public static void turnToTarget(BotTask<?> task, Bot bot, BotLocation target) {
         
         // ✅ Принудительно обновляем положение, если поворот сбрасывается

@@ -20,6 +20,13 @@ public class BotTeleportTask extends BotTaskAutoParams<BotTeleportTaskParams> {
     public BotTeleportTask(Bot bot, Player player) {
         super(bot, player, BotTeleportTaskParams.class);
         // Загружаем дефолтные параметры из файла
+        BotTeleportTaskParams params = new BotTeleportTaskParams();
+        BotLocation loc = BotWorldHelper.worldLocationToBotLocation(player.getLocation());
+
+        if (player != null) {
+            params.setLocation(loc);
+        }
+
         setParams(new BotTeleportTaskParams());
     }
 
@@ -49,7 +56,7 @@ public class BotTeleportTask extends BotTaskAutoParams<BotTeleportTaskParams> {
 
         setObjective(params.getObjective() + " to: " + target);
 
-        BotLogger.debug(icon, this.isLogging(),bot.getId() + " ⚡ Телепорт в "+target );
+        BotLogger.debug(icon, this.isLogging(), bot.getId() + " ⚡ Телепорт в " + target);
 
         Bukkit.getScheduler().runTask(AIBotPlugin.getInstance(), () -> {
             Location baseLocation = BotWorldHelper.getWorldLocation(target);
@@ -62,9 +69,8 @@ public class BotTeleportTask extends BotTaskAutoParams<BotTeleportTaskParams> {
             BotLogger.debug(icon, this.isLogging(),
                     bot.getId() + " ⚡ Телепорт завершен с " + baseLocation.toVector() + " в " + safeOffset.toVector());
 
-                    stop();
+            stop();
         });
-
 
     }
 }

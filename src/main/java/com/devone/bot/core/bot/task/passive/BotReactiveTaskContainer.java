@@ -16,24 +16,29 @@ public abstract class BotReactiveTaskContainer<T extends BotTaskParams> extends 
         super(bot, null, paramClass);
         setReactive(true); // Включаем реактивный режим
         setIcon("📦");
+        setObjective("Reactive container for tasks");
     }
 
     @Override
     public void execute() {
-        if (started) return;
+        if (started)
+            return;
 
-        BotLogger.debug(getIcon(), true, bot.getId() + " ⚡ Запущен реактивный контейнер: " + this.getClass().getSimpleName());
+        BotLogger.debug(getIcon(), true,
+                bot.getId() + " ⚡ Запущен реактивный контейнер: " + this.getClass().getSimpleName());
         started = true;
 
         enqueue(bot); // 👈 Добавление кастомных подзадач (если нужно переопределить)
 
         for (BotTask<?> task : subtasks) {
-            BotLogger.debug(getIcon(), true, bot.getId() + " ➕ Запуск реактивной подзадачи: " + task.getClass().getSimpleName());
+            BotLogger.debug(getIcon(), true,
+                    bot.getId() + " ➕ Запуск реактивной подзадачи: " + task.getClass().getSimpleName());
             task.setReactive(true);
             bot.getTaskManager().pushTask(task);
         }
 
-        BotLogger.debug(getIcon(), true, bot.getId() + " ✅ Контейнер завершает себя: " + this.getClass().getSimpleName());
+        BotLogger.debug(getIcon(), true,
+                bot.getId() + " ✅ Контейнер завершает себя: " + this.getClass().getSimpleName());
         stop();
     }
 
@@ -42,7 +47,8 @@ public abstract class BotReactiveTaskContainer<T extends BotTaskParams> extends 
      */
     public BotReactiveTaskContainer<T> add(BotTask<?> task) {
         if (started) {
-            BotLogger.debug(getIcon(), true, bot.getId() + " ⚠️ Попытка добавить задачу после старта контейнера: " + task.getClass().getSimpleName());
+            BotLogger.debug(getIcon(), true, bot.getId() + " ⚠️ Попытка добавить задачу после старта контейнера: "
+                    + task.getClass().getSimpleName());
             return this;
         }
         subtasks.add(task);
@@ -60,6 +66,6 @@ public abstract class BotReactiveTaskContainer<T extends BotTaskParams> extends 
     public void stop() {
         super.stop();
         BotLogger.debug(getIcon(), true, bot.getId() + " 🔚 Контейнер снят: " + this.getClass().getSimpleName());
-        bot.reactiveTaskStop(this);
+        bot.pushReactiveTask(this);
     }
 }

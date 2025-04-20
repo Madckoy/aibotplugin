@@ -53,14 +53,13 @@ public class Bot {
         this.brain = brain;
     }
 
-
     public void setState(BotState state) {
         this.state = state;
     }
+
     public BotSpeaker getSpeaker() {
         return speaker;
     }
-
 
     public void setSpeaker(BotSpeaker speaker) {
         this.speaker = speaker;
@@ -70,16 +69,13 @@ public class Bot {
         return navigation;
     }
 
-
     public void setNavigation(BotNavigation nav) {
         this.navigation = nav;
     }
 
-
     public BotState getState() {
         return state;
     }
-
 
     public Bot(String id, NPC an_npc, BotManager botManager) {
         this.id = id;
@@ -126,7 +122,7 @@ public class Bot {
     public NPC getNPC() {
         return npc;
     }
-    
+
     public Player getPlayer() {
         if (this.npc != null && this.npc.isSpawned()) {
             Entity entity = this.npc.getEntity();
@@ -151,9 +147,9 @@ public class Bot {
 
     public void despawnNPC() {
         if (npc != null) {
-            //stop all tasks!
+            // stop all tasks!
             BotLogger.debug("🤖", true, id + " ➖ Stopping All Tasks");
-            
+
             BotUtils.clearTasks(this);
 
             BotLogger.debug("🤖", true, id + " ➖ Despawning and Destroying NPC");
@@ -162,7 +158,7 @@ public class Bot {
             npc = null;
         }
         BotLogger.debug("🤖", true, id + " ➖ Has been Despawned and Destroyed");
-    }  
+    }
 
     public BotInventory getInventory() {
         return inventory;
@@ -187,14 +183,14 @@ public class Bot {
     public Navigator getNPCNavigator() {
         return npc.getNavigator();
     }
-    
+
     public boolean isNPCSpawned() {
         return npc.isSpawned();
     }
 
     public void pickupNearbyItems() {
         getInventory().pickupAll(this.allowPickupItems);
-    }    
+    }
 
     public BotTask<?> getActiveTask() {
         BotTask<?> task = Bot.getActiveTask(this);
@@ -210,33 +206,33 @@ public class Bot {
     public void checkAndSelfMove(Location target) {
         double pickupRadius = 2.0; // Радиус, в котором проверяем предметы
         List<Entity> nearbyItems = getNPCEntity().getNearbyEntities(pickupRadius, pickupRadius, pickupRadius);
-    
+
         // Если есть дроп в радиусе 2 блоков — бот остается на месте
         if (!nearbyItems.isEmpty()) {
-            BotLogger.debug("🤖",true, getId()+" 🔍 В радиусе " + pickupRadius + " блоков от есть предметы, остаюсь на месте.");
+            BotLogger.debug("🤖", true,
+                    getId() + " 🔍 В радиусе " + pickupRadius + " блоков от есть предметы, остаюсь на месте.");
             return;
         }
-    
+
         // Если предметов рядом нет, двигаем бота к последнему разрушенному блоку
         BotLocation loc = BotWorldHelper.worldLocationToBotLocation(target);
         BotLogger.debug("🤖", true, getId() + " 📦 Дроп подобран. Двигается к цели:" + loc);
-        
+
         BotMoveTask mv_task = new BotMoveTask(this);
         BotMoveTaskParams mv_taskParams = new BotMoveTaskParams(loc);
         mv_task.setParams(mv_taskParams);
 
         BotUtils.pushTask(this, mv_task);
     }
-   
-    public void reactiveTaskStart(BotTask<?> task) {
+
+    public void pushReactiveTask(BotTask<?> task) {
 
         task.setReactive(true); // 🔁 флаг — обязательно!
         getBootstrap().getTaskStackManager().pushTask(task);
         BotLogger.debug("⚡", true, getId() + " ➕ Запуск реактивной подзадачи: " + task.getClass().getSimpleName());
     }
 
-
-    public void reactiveTaskStop(BotTask<?> task) {
+    public void pullReactiveTask(BotTask<?> task) {
         BotLogger.debug("⚡", true, getId() + " ❌ Завершение реактивной задачи: " + task.getClass().getSimpleName());
         getBootstrap().getTaskStackManager().popTask();
     }

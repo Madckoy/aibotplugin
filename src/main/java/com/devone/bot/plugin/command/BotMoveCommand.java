@@ -72,6 +72,8 @@ public class BotMoveCommand implements CommandExecutor {
         moveTask.setParams(moveTaskParams);
         BotUtils.pushTask(bot, moveTask);
 
+        
+
         BotLogger.debug("📌 ", true, "/bot-move: Бот " + bot.getId() + " направляется в " + targetLocation);
         
         sender.sendMessage("✅ Бот '" + botName + "' направляется в " + x + " " + y + " " + z);

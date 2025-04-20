@@ -2,7 +2,7 @@ package com.devone.bot.core.bot.task.reactive.strategy.example;
 
 import com.devone.bot.core.bot.Bot;
 import com.devone.bot.core.bot.task.reactive.IBotReactionStrategy;
-import com.devone.bot.core.bot.task.reactive.container.example.BotCustomReactionContainer;
+import com.devone.bot.core.bot.task.reactive.container.example.BotCustomReactiveContainer;
 import com.devone.bot.core.utils.logger.BotLogger;
 
 import java.util.Optional;
@@ -28,7 +28,7 @@ public class BotReactiveCustomStrategy implements IBotReactionStrategy {
         BotLogger.debug("🤖", true, bot.getId() + " ✅ Условие выполнено, запускаем контейнер реакции.");
 
         return Optional.of(() -> {
-            bot.reactiveTaskStart(new BotCustomReactionContainer(bot));
+            bot.pushReactiveTask(new BotCustomReactiveContainer(bot));
         });
     }
 

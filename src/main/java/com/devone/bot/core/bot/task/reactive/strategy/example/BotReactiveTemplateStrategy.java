@@ -2,7 +2,7 @@ package com.devone.bot.core.bot.task.reactive.strategy.example;
 
 import com.devone.bot.core.bot.Bot;
 import com.devone.bot.core.bot.task.reactive.IBotReactionStrategy;
-import com.devone.bot.core.bot.task.reactive.container.example.BotTemplateReactionContainer;
+import com.devone.bot.core.bot.task.reactive.container.example.BotTemplateReactiveContainer;
 import com.devone.bot.core.utils.logger.BotLogger;
 
 import java.util.Optional;
@@ -16,11 +16,12 @@ public class BotReactiveTemplateStrategy implements IBotReactionStrategy {
         // 💡 Здесь своё условие
         boolean condition = false;
 
-        if (!condition) return Optional.empty();
+        if (!condition)
+            return Optional.empty();
 
         return Optional.of(() -> {
             BotLogger.debug("🤖", true, bot.getId() + " 🚀 Триггер шаблонной реакции: " + getName());
-            bot.reactiveTaskStart(new BotTemplateReactionContainer(bot)); // ✅ Сахар
+            bot.pushReactiveTask(new BotTemplateReactiveContainer(bot)); // ✅ Сахар
         });
     }
 
