@@ -8,6 +8,19 @@ function setupButtonHandlers() {
             const botId = btn.dataset.bot;
             const command = btn.dataset.cmd;
 
+            // 👉 Обработка локальной команды
+            if (command === "bot-info") {
+                const bot = latestBotData.bots.find(b => b.id === botId);
+                if (bot) showInfoPanel(bot);
+                return; // ⛔ Не отправлять на сервер
+            }
+
+            if (command === "bot-home" || command === "bot-signal") {
+                alert("🕹️ Insert coin to continue...\n🚧 Not implemented yet.");
+                return;
+            }
+
+            // 👉 Обработка координатных команд
             const needsCoords = ["bot-tp", "bot-move"];
             if (needsCoords.includes(command)) {
                 const coords = getCoordinatesFromBlueMapPopup();

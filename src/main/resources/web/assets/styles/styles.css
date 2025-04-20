@@ -209,6 +209,32 @@ button.btn-sm:hover {
     align-items: center;
 }
 
+/**************/
+.cmd-btn {
+    background-color: #333;
+    color: #ccc;
+    border: none;
+    padding: 3px 6px;
+    font-size: 13px;
+    margin: 1px 2px;
+    border-radius: 3px;
+    cursor: pointer;
+    transition: box-shadow 0.2s ease, background-color 0.2s ease;
+}
+
+.cmd-btn:hover {
+    background-color: #444;
+    color: #fff;
+    box-shadow: 0 0 0 1px #666; /* Тонкая светлая рамка вокруг */
+}
+
+.cmd-btn:active {
+    background-color: #555;
+    box-shadow: 0 0 0 1px #888;
+}
+
+/*************/
+
 /* === STATS CELL === */
 .bot-stats-cell {
     display: flex;
@@ -284,4 +310,40 @@ button.btn-sm:hover {
     background-color: #444;
     opacity: 0.4;
     margin: 1px 0;
+}
+
+/***********************/
+.info-panel {
+    position: fixed;
+    top: 80px;
+    right: 0;
+    width: 250px;
+    height: auto;
+    background: rgba(30, 30, 30, 0.95);
+    border-left: 2px solid #444;
+    padding: 12px;
+    color: #ddd;
+    font-family: monospace;
+    z-index: 1000;
+    transition: transform 0.3s ease-in-out;
+    transform: translateX(100%);
+}
+
+.info-panel.visible {
+    transform: translateX(0);
+}
+
+.info-panel.hidden {
+    transform: translateX(100%);
+}
+
+#info-close-btn {
+    background: none;
+    border: none;
+    color: #aaa;
+    font-size: 14px;
+    position: absolute;
+    top: 6px;
+    right: 10px;
+    cursor: pointer;
 }

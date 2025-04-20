@@ -94,14 +94,16 @@ function renderBotTable(data) {
                 <button class="cmd-btn" data-bot="${bot.id}" data-cmd="bot-move">🚶‍♀️‍➡️</button>
                 <button class="cmd-btn" data-bot="${bot.id}" data-cmd="bot-drop-all">📦</button
                 <div class="bot-objective-divider"></div>
-   	            <button class="cmd-btn" data-bot="${bot.id}" data-cmd="bot-cmd">📡</button>
-                <button class="cmd-btn" data-bot="${bot.id}" data-cmd="bot-cmd">🏡</button>
-                <button class="cmd-btn" data-bot="${bot.id}" data-cmd="bot-cmd">ℹ️</button
+   	            <button class="cmd-btn" data-bot="${bot.id}" data-cmd="bot-signal">📡</button>
+                <button class="cmd-btn" data-bot="${bot.id}" data-cmd="bot-home">🏡</button>
+                <button class="cmd-btn" data-bot="${bot.id}" data-cmd="bot-info">ℹ️</button>
             </div>   
         `;
     });
 
     setupButtonHandlers();
+    
+    setupInfoPanel();
 
 }
 
@@ -140,4 +142,24 @@ function generateInventoryGrid(slots, autoPickupEnabled) {
     }
     html += '</div>';
     return html;
+}
+
+function setupInfoPanel() {
+    const panel = document.getElementById("bot-info-panel");
+    const closeBtn = document.getElementById("info-close-btn");
+    closeBtn.addEventListener("click", () => {
+        panel.classList.remove("visible");
+        panel.classList.add("hidden");
+    });
+}
+
+function showInfoPanel(bot) {
+    document.getElementById("info-id").textContent = bot.id;
+    document.getElementById("info-model").textContent = bot.model || "M-000.2";
+    document.getElementById("info-navpoints").textContent = bot.navPoints ?? "n/a";
+    document.getElementById("info-reactive").textContent = getTaskStatusEmoji(bot.taskIsReactive);
+
+    const panel = document.getElementById("info-panel");
+    panel.classList.remove("hidden");
+    panel.classList.add("visible");
 }
