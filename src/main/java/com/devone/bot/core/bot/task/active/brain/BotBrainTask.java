@@ -5,9 +5,9 @@ import java.util.Optional;
 import java.util.function.Supplier;
 
 import com.devone.bot.core.bot.Bot;
-import com.devone.bot.core.bot.behaviour.BotBehaviorSelector;
-import com.devone.bot.core.bot.behaviour.BotTaskCandidate;
-import com.devone.bot.core.bot.behaviour.BotTaskCandidatesFactory;
+import com.devone.bot.core.bot.brain.behaviour.BotBehaviorSelector;
+import com.devone.bot.core.bot.brain.behaviour.BotTaskCandidate;
+import com.devone.bot.core.bot.brain.behaviour.BotTaskCandidatesFactory;
 import com.devone.bot.core.bot.brain.logic.navigation.BotNavigationUtils;
 import com.devone.bot.core.bot.brain.logic.navigator.BotNavigationPlannerWrapper;
 import com.devone.bot.core.bot.brain.logic.navigator.scene.BotSceneContext;

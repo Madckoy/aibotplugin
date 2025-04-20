@@ -1,4 +1,4 @@
-package com.devone.bot.core.bot.behaviour;
+package com.devone.bot.core.bot.brain.behaviour;
 
 import com.devone.bot.core.bot.task.active.explore.BotExploreTask;
 import java.util.*;
