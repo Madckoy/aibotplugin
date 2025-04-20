@@ -1,4 +1,3 @@
-
 // Optimized ui.js with selective DOM updates
 
 let previousBotData = {};
@@ -84,16 +83,19 @@ function updateOrCreateBotRow(bot, tbody) {
     cells[7].title = `Items: ${bot.inventoryCount} / ${bot.inventoryMax}`;
     cells[7].innerHTML = generateInventoryGrid(bot.inventorySlotsFilled, bot.autoPickUpItems);
 
-    cells[8].innerHTML = `
-        <div class="bot-position-cell">
-            <button class="cmd-btn" data-bot="${bot.id}" data-cmd="bot-tp">⚡</button>
-            <button class="cmd-btn" data-bot="${bot.id}" data-cmd="bot-move">🚶‍♀️‍➡️</button>
-            <button class="cmd-btn" data-bot="${bot.id}" data-cmd="bot-drop-all">📦</button>
-            <div class="bot-objective-divider"></div>
-            <button class="cmd-btn" data-bot="${bot.id}" data-cmd="bot-signal">📡</button>
-            <button class="cmd-btn" data-bot="${bot.id}" data-cmd="bot-home">🏡</button>
-            <button class="cmd-btn" data-bot="${bot.id}" data-cmd="bot-info">ℹ️</button>
-        </div>`;
+    // Не пересоздавать кнопки, если они уже есть
+    if (!cells[8].innerHTML.trim()) {
+        cells[8].innerHTML = `
+            <div class="bot-position-cell">
+                <button class="cmd-btn" data-bot="${bot.id}" data-cmd="bot-tp">⚡</button>
+                <button class="cmd-btn" data-bot="${bot.id}" data-cmd="bot-move">🚶‍♀️‍➡️</button>
+                <button class="cmd-btn" data-bot="${bot.id}" data-cmd="bot-drop-all">📦</button>
+                <div class="bot-objective-divider"></div>
+                <button class="cmd-btn" data-bot="${bot.id}" data-cmd="bot-signal">📡</button>
+                <button class="cmd-btn" data-bot="${bot.id}" data-cmd="bot-home">🏡</button>
+                <button class="cmd-btn" data-bot="${bot.id}" data-cmd="bot-info">ℹ️</button>
+            </div>`;
+    }
 }
 
 function getTaskStatusEmoji(isReactive) {
