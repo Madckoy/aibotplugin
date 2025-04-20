@@ -1,0 +1,47 @@
+
+/* === CELL STYLES === */
+.bot-stats-cell, .bot-objective-cell {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: start;
+    gap: 3px;
+    font-size: 12.5px;
+    color: #ccc;
+    padding: 2px 4px;
+    white-space: nowrap;
+    line-height: 1.3;
+    margin: 0 auto;
+    min-width: 60px;
+}
+
+.bot-stats-cell div,
+.bot-objective-cell div {
+    display: flex;
+    align-items: center;
+    justify-content: flex-start;
+    gap: 6px;
+}
+
+.bot-stats-cell span:first-child,
+.bot-objective-cell span:first-child {
+    width: 18px;
+    text-align: left;
+    font-size: 13px;
+}
+
+.bot-stats-cell span:last-child,
+.bot-objective-cell span:last-child {
+    text-align: left;
+    flex-grow: 1;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.bot-objective-divider {
+    width: 100%;
+    height: 1px;
+    background-color: #444;
+    opacity: 0.4;
+    margin: 1px 0;
+}

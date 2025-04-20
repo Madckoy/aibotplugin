@@ -1,6 +1,6 @@
 // commands.js
 
-function setupButtonHandlers() {
+function setupButtonHandlers(botList = []) {
     const buttons = document.querySelectorAll(".cmd-btn");
 
     buttons.forEach(btn => {
@@ -16,8 +16,13 @@ function setupButtonHandlers() {
                     return;
                 }
                 sendBotCommand(botId, command, [coords.x, coords.y, coords.z]);
+            } else if (command === "bot-info") {
+                const bot = botList.find(b => b.id === botId);
+                if (bot) {
+                    showInfoPanel(bot);
+                }
             } else {
-                sendBotCommand(botId, command, []);
+                alert("🪙 Insert coin to continue.");
             }
         };
     });

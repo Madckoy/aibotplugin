@@ -1,0 +1,16 @@
+
+/* === GLOBAL === */
+body {
+    font-family: 'Inter', 'Roboto', Arial, sans-serif;
+    background-color: #1e1e1e;
+    color: #e2e2e2;
+    margin: 0;
+    padding: 20px;
+    font-size: 13px;
+    line-height: 1.6;
+}
+
+.container {
+    max-width: 1200px;
+    margin: auto;
+}

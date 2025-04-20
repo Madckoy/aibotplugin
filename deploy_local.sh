@@ -1,7 +1,7 @@
 #!/bin/bash
 
 # Variables
-PLUGIN_NAME="AIBotPlugin-1.2-SNAPSHOT.jar"
+PLUGIN_NAME="AIBotPlugin-1.3-SNAPSHOT.jar"
 LOCAL_PATH="target/$PLUGIN_NAME"
 LOCAL_PATH_TO_DEPLOY="/opt/apps/minecraft/paper/plugins"  # Local plugin directory
 LOG_FILE="deploy.log"

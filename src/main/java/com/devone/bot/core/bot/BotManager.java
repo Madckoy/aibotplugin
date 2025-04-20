@@ -7,14 +7,13 @@ import org.bukkit.Location;
 import org.bukkit.entity.Entity;
 
 import com.devone.bot.AIBotPlugin;
-import com.devone.bot.core.config.BotManagerConfig;
-import com.devone.bot.utils.BotConstants;
-import com.devone.bot.utils.BotUtils;
-import com.devone.bot.utils.blocks.BotLocation;
-import com.devone.bot.utils.blocks.BotLocationHelper;
-import com.devone.bot.utils.bluemap.BlueMapMarkers;
-import com.devone.bot.utils.logger.BotLogger;
-import com.devone.bot.utils.world.BotWorldHelper;
+import com.devone.bot.core.utils.BotConstants;
+import com.devone.bot.core.utils.BotUtils;
+import com.devone.bot.core.utils.blocks.BotLocation;
+import com.devone.bot.core.utils.config.BotManagerConfig;
+import com.devone.bot.core.utils.logger.BotLogger;
+import com.devone.bot.core.utils.world.BotWorldHelper;
+import com.devone.bot.core.web.bluemap.BlueMapMarkers;
 
 import java.io.File;
 import java.util.*;
@@ -34,9 +33,9 @@ public class BotManager {
         this.config = new BotManagerConfig(botsFile);
 
         Bukkit.getScheduler().runTaskLater(plugin, () -> {
-            BotLogger.info("💡", true, "Loading bots...");
+            BotLogger.debug("🤖", true, "💡Loading bots...");
             loadExistingBots();
-            BotLogger.info("✅ ", true, "All bots loaded.");
+            BotLogger.debug("🤖", true, "✅ All bots loaded.");
         }, 600L);
     }
 
@@ -49,11 +48,19 @@ public class BotManager {
                 continue;
 
             String botName = npc.getName();
-
-            if (botExists(botName))
+            UUID npcUUID = npc.getUniqueId();
+            
+            // Доп. защита — сравнение UUID, если вдруг одинаковые имена
+            boolean alreadyRegistered = botsMap.values().stream()
+                    .anyMatch(b -> b.getNPCEntity().getUniqueId().equals(npcUUID));
+            
+            if (botExists(botName) || alreadyRegistered) {
+                BotLogger.warn("🤖", true, "🚨 Duplicate or already registered NPC: " + botName + " (UUID: " + npcUUID + ")");
                 continue;
+            }
+            
 
-            BotLocation storedLocation = BotUtils.getFallbackCoordinate3D();
+            BotLocation storedLocation = BotUtils.getFallbackLocation();
 
             if (loadedData.bots.containsKey(botName)) {
                 BotLocation coord = loadedData.bots.get(botName).position;
@@ -63,18 +70,18 @@ public class BotManager {
             if (!npc.isSpawned()) {
                 Location spawnLocation = BotWorldHelper.getWorldLocation(storedLocation);
                 npc.spawn(spawnLocation);
-                BotLogger.info("✅", true, "Spawned NPC: " + botName);
+                BotLogger.debug("🤖", true, "✅ Spawned NPC: " + botName);
             }
 
             Bot bot = new Bot(botName, npc, this);
             botsMap.put(botName, bot);
-            BotLogger.info("✅", true, bot.getId() + " added to the map!");
+            BotLogger.debug("🤖", true, bot.getId() + " ✅ Added to the map!");
         }
 
         bm_markers = new BlueMapMarkers(this);
         bm_markers.scheduleMarkerUpdate();
 
-        BotLogger.info("✅" , true, "Loaded NPC bots: " + botsMap.size());
+        BotLogger.debug("🤖" , true, "✅ Loaded NPC bots: " + botsMap.size());
     }
 
     public void saveBots() {
@@ -83,16 +90,19 @@ public class BotManager {
 
         botsMap.forEach((name, bot) -> {
 
-            BotLocation loc = BotLocationHelper.convertFrom(bot.getNPCEntity().getLocation());
+            data.bots.put(name, new BotManagerConfig.BotEntry(bot));
 
-            data.bots.put(name, new BotManagerConfig.BotEntry(bot.getUuid().toString(), loc));
         });
 
         config.save();
-        BotLogger.info("✅" , true, "Bots saved to bots.json.");
+        BotLogger.debug("🤖" , true, "✅ Bots saved to bots.json.");
     }
 
     public void addBot(String name, Bot bot) {
+        if (botsMap.containsKey(name)) {
+            BotLogger.warn("🤖", true, "🚨 Bot already registered: " + name + ", skipping.");
+            return;
+        }
         botsMap.put(name, bot);
         saveBots();
         bm_markers.scheduleMarkerUpdate();
@@ -105,13 +115,13 @@ public class BotManager {
             botsMap.remove(name);
             bm_markers.removeMarker(name);
             saveBots();
-            BotLogger.info("➖", true,  name + " has been removed.");
+            BotLogger.debug("🤖", true,  name + "➖ has been removed.");
         }
     }
 
     public void removeAllBots() {
         new ArrayList<>(botsMap.keySet()).forEach(this::removeBot);
-        BotLogger.info("✅", true, "All bots removed.");
+        BotLogger.debug("🤖", true, "✅ All bots removed.");
     }
 
     public Bot getBot(String name) {

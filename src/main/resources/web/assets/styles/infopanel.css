@@ -1,0 +1,33 @@
+
+/* === INFO PANEL === */
+.info-panel {
+    position: fixed;
+    top: 50%;
+    right: 0;
+    transform: translate(100%, -50%);
+    width: 250px;
+    background: rgba(30, 30, 30, 0.95);
+    border-left: 2px solid #444;
+    padding: 12px;
+    color: #ddd;
+    font-family: 'Segoe UI', 'Roboto', 'Inter', sans-serif;
+    font-size: 13px;
+    z-index: 1000;
+    transition: transform 0.3s ease-in-out;
+}
+.info-panel.visible {
+    transform: translate(0, -50%);
+}
+.info-panel.hidden {
+    transform: translateX(100%);
+}
+#info-close-btn {
+    background: none;
+    border: none;
+    color: #aaa;
+    font-size: 14px;
+    position: absolute;
+    top: 6px;
+    right: 10px;
+    cursor: pointer;
+}
