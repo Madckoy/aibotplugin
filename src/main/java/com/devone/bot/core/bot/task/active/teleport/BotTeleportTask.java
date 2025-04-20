@@ -20,10 +20,11 @@ public class BotTeleportTask extends BotTaskAutoParams<BotTeleportTaskParams> {
     public BotTeleportTask(Bot bot, Player player) {
         super(bot, player, BotTeleportTaskParams.class);
         // Загружаем дефолтные параметры из файла
-        BotTeleportTaskParams params = new BotTeleportTaskParams();
-        BotLocation loc = BotWorldHelper.worldLocationToBotLocation(player.getLocation());
 
         if (player != null) {
+
+            BotTeleportTaskParams params = new BotTeleportTaskParams();
+            BotLocation loc = BotWorldHelper.worldLocationToBotLocation(player.getLocation());
             params.setLocation(loc);
         }
 
