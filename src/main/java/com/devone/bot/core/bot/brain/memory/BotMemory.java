@@ -33,6 +33,7 @@ public class BotMemory {
         this.teleportUsed = 0;
 
         memoryMap = new EnumMap<>(MemoryType.class); // Используем EnumMap для лучшей производительности при работе с перечислениями
+
         for (MemoryType type : MemoryType.values()) {
             memoryMap.put(type, new HashMap<>());
         }
@@ -79,16 +80,20 @@ public class BotMemory {
 
     // Проверка, был ли блок запомнен для определённого типа памяти
     public boolean isMemorized(BotBlockData block, MemoryType memoryType) {
-        if(block==null) {
-            
-            return false;
+        boolean res = false;
 
-        } else {
+        if(block!=null) {
 
-            boolean res = memoryMap.get(memoryType).containsKey(block);
-            
-            return res;
+            Map<BotLocation, BotMemoryItem> map = memoryMap.get(memoryType);
+
+            if(map!=null) {
+                BotMemoryItem m_item = map.get(block.getLocation());
+                if(m_item != null) {
+                    return true;
+                }  
+            }
         }
+        return res;
     }
 
     // Очистка устаревших записей по всем типам памяти
