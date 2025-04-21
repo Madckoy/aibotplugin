@@ -8,7 +8,7 @@ import java.util.*;
 
 import com.devone.bot.core.bot.Bot;
 import com.devone.bot.core.bot.task.active.excavate.patterns.IBotExcavatePatternRunner;
-import com.devone.bot.core.bot.task.active.excavate.patterns.generator.params.BotExcavatePatternGenerationParams;
+import com.devone.bot.core.bot.task.active.excavate.patterns.generator.params.BotExcavateTemplateRunnerParams;
 import com.devone.bot.core.utils.blocks.BotLocation;
 import com.devone.bot.core.utils.blocks.BotLocationComparators;
 import com.devone.bot.core.utils.blocks.BotAxisDirection.AxisDirection;
@@ -25,41 +25,37 @@ public class BotExcavateTemplateRunner implements IBotExcavatePatternRunner {
     private BotExcavateCoordinatesGenerator generator;
 
     private boolean initialized = false;
-
-    private int offsetOuterX, offsetOuterY, offsetOuterZ, outerRadius;
-    private int offsetInnerX, offsetInnerY, offsetInnerZ, innerRadius; 
-    private boolean inverted; 
-
+    
     private final Queue<BotLocation> blocksToBreak = new LinkedList<>();
-    
-        public BotExcavateTemplateRunner(Path path) {
-            this.yamlPath = path;
-        }
-     
-        @Override    
-        public IBotExcavatePatternRunner configure(int offsetOuterX, int offsetOuterY, int offsetOuterZ, int outerRadius, 
-                                             int offsetInnerX, int offsetInnerY, int offsetInnerZ, int innerRadius, boolean inverted) {
 
-            this.offsetOuterX = offsetOuterX;
-            this.offsetOuterY = offsetOuterY;
-            this.offsetOuterZ = offsetOuterZ;
+    private BotExcavateTemplateRunnerParams params;
 
-            this.offsetInnerX = offsetInnerX;
-            this.offsetInnerY = offsetInnerY;
-            this.offsetInnerZ = offsetInnerZ;
-            
-            this.outerRadius = outerRadius;
-            this.innerRadius = innerRadius;
+    public BotExcavateTemplateRunner(Path path) {
 
+        this.yamlPath = path;
+    }
+
+    @Override    
+    public IBotExcavatePatternRunner setParams(BotExcavateTemplateRunnerParams params) {
+
+        if(params==null) return this; 
     
-            BotLogger.debug("🛠️", true, "Начинаем загрузку YAML-паттерна: " + yamlPath);
+        this.params = params;
     
-            try (InputStream inputStream = Files.newInputStream(yamlPath)) {
+        BotLogger.debug("🛠️", true, "Начинаем загрузку YAML-паттерна: " + yamlPath);
+    
+        try (InputStream inputStream = Files.newInputStream(yamlPath)) {
+
                 this.generator = BotExcavateCoordinatesGenerator.loadYmlFromStream(inputStream);
+
             if (this.generator != null) {
+
                 BotLogger.debug("✅", true, "Паттерн успешно загружен из YAML: " + yamlPath.getFileName());
+
             } else {
+
                 BotLogger.debug("❌", true, "loadFromYaml() вернул null для файла: " + yamlPath);
+
             }
         } catch (IOException e) {
             BotLogger.debug("❌", true, "Ошибка при открытии YAML-файла: " + yamlPath + " — " + e.getMessage());
@@ -68,7 +64,7 @@ public class BotExcavateTemplateRunner implements IBotExcavatePatternRunner {
         return this;
     }
 
-    public BotLocation findNextBlock(Bot bot ) {
+    public BotLocation getNextBlock(Bot bot ) {
         if (this.generator == null) {
             BotLogger.debug("🚨 ", true, "Паттерн не инициализирован! YAML: " + yamlPath);
             return null;
@@ -77,24 +73,10 @@ public class BotExcavateTemplateRunner implements IBotExcavatePatternRunner {
         if (!initialized) {
             BotLogger.debug("🔁 ", true, "Генерация точек по паттерну: " + yamlPath);
 
-                                                                     
-            BotExcavatePatternGenerationParams params = new BotExcavatePatternGenerationParams(bot.getNavigation().getLocation().getX(), 
-                                                                               bot.getNavigation().getLocation().getY(), 
-                                                                               bot.getNavigation().getLocation().getZ(), 
-                                                                               offsetOuterX, offsetOuterY, offsetOuterZ, 
-                                                                               outerRadius, 
-                                                                               offsetInnerX, offsetInnerY, offsetInnerZ, 
-                                                                               innerRadius, inverted);
-
             BotLogger.debug("Params:", true, params.toString());                                                                  
 
-            List<BotLocation> inner_points = generator.generateInnerPoints(params);
-            
-            //String pointsLog = inner_points.stream()
-            //.map(p -> String.format("%d, %d, %d", p.getX(), p.getY(), p.getZ()))
-            //.collect(Collectors.joining(", "));
-        
-            //BotLogger.debug("🔢", true, String.format("Generated %d points: [%s]", inner_points.size(), pointsLog));        
+            List<BotLocation> inner_points = generator.generateInnerPoints(params);  
+
             BotLogger.debug("🔢", true, String.format("Generated %d points", inner_points.size()));     
 
             boolean isInverted = generator.getInverted();
@@ -103,13 +85,12 @@ public class BotExcavateTemplateRunner implements IBotExcavatePatternRunner {
 
             if(isInverted) {
                 List<BotLocation> all =  generator.generateOuterPoints(params);
-                result.addAll(all);  // Генерируем весь куб
+                result.addAll(all);              // Генерируем весь куб
                 result.removeAll(inner_points);  // Удаляем внутреннюю область
             } else {
                 // Если не inverted, просто генерируем яму
-                result.addAll(inner_points);  // Только внутренняя область
+                result.addAll(inner_points);     // Только внутренняя область
             }
-
             
             List<BotLocation> toBeRemoved = new ArrayList<>(result);
 
@@ -126,6 +107,7 @@ public class BotExcavateTemplateRunner implements IBotExcavatePatternRunner {
                 blocksToBreak.addAll(toBeRemoved);
                 
                 BotLogger.debug("✅", true, "Added " + blocksToBreak.size() + " coordinates");
+
             } else {
                 
                 BotLogger.debug("⚠️", true, "Паттерн YAML не вернул ни одной точки для разрушения.");

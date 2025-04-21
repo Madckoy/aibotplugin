@@ -14,6 +14,7 @@ import com.devone.bot.core.bot.task.active.excavate.BotExcavateTask;
 import com.devone.bot.core.bot.task.active.excavate.params.BotExcavateTaskParams;
 import com.devone.bot.core.bot.task.active.excavate.patterns.IBotExcavatePatternRunner;
 import com.devone.bot.core.bot.task.active.excavate.patterns.generator.BotExcavateTemplateRunner;
+import com.devone.bot.core.bot.task.active.excavate.patterns.generator.params.BotExcavateTemplateRunnerParams;
 import com.devone.bot.core.bot.task.active.hand.excavate.BotHandExcavateTask;
 import com.devone.bot.core.bot.task.active.hand.excavate.params.BotHandExcavateTaskParams;
 import com.devone.bot.core.bot.task.passive.BotTaskAutoParams;
@@ -35,10 +36,7 @@ public class BotExcavateTask extends BotTaskAutoParams<BotExcavateTaskParams> {
     private Set<Material> targetMaterials = null;
     private String patternName = BotConstants.DEFAULT_PATTERN_BREAK;
     private IBotExcavatePatternRunner patternRunner = null;
-
-    private int offsetOuterX, offsetOuterY, offsetOuterZ = 0;
-    private int offsetInnerX, offsetInnerY, offsetInnerZ = 0;
-    private boolean inverted = false;
+    private BotExcavateTemplateRunnerParams excavateParams = new BotExcavateTemplateRunnerParams();
 
     public BotExcavateTask(Bot bot) {
         super(bot, BotExcavateTaskParams.class);
@@ -50,21 +48,6 @@ public class BotExcavateTask extends BotTaskAutoParams<BotExcavateTaskParams> {
 
         setIcon(params.getIcon());
         setObjective(params.getObjective());
-
-        this.targetMaterials = params.getTargetMaterials();
-        this.maxBlocks    = params.getMaxBlocks();
-        this.outerRadius  = params.getOuterRadius();
-        this.innerRadius  = params.getInnerRadius();
-
-        this.offsetOuterX = params.getOffsetOuterX();
-        this.offsetOuterY = params.getOffsetOuterY();
-        this.offsetOuterZ = params.getOffsetOuterZ();
-
-        this.offsetInnerX = params.getOffsetInnerX();
-        this.offsetInnerY = params.getOffsetInnerY();
-        this.offsetInnerZ = params.getOffsetInnerZ();
-
-        this.inverted     = params.isInverted();
 
         if (params.getPatternName() != null) {
             this.patternName = params.getPatternName();
@@ -149,15 +132,7 @@ public class BotExcavateTask extends BotTaskAutoParams<BotExcavateTaskParams> {
             if (!StringUtil.isEmpty(patternName)) {
 
                 Path ptrnPath = Paths.get(BotConstants.PLUGIN_PATH_PATTERNS_BREAK, patternName);
-                this.patternRunner = new BotExcavateTemplateRunner(ptrnPath).configure(offsetOuterX, 
-                                                                                       offsetOuterY,
-                                                                                       offsetOuterZ, 
-                                                                                       outerRadius, 
-                                                                                       offsetInnerX, 
-                                                                                       offsetInnerY, 
-                                                                                       offsetInnerZ, 
-                                                                                       innerRadius,
-                                                                                       inverted);
+                this.patternRunner = new BotExcavateTemplateRunner(ptrnPath).setParams(null ); //null because we read from the template file
 
                 BotLogger.debug(icon, isLogging(), bot.getId() +
                         " 📐 Используется YAML-паттерн: " + this.patternRunner.getName());
@@ -166,15 +141,7 @@ public class BotExcavateTask extends BotTaskAutoParams<BotExcavateTaskParams> {
                 Path fallbackPath = Paths.get(BotConstants.PLUGIN_PATH_PATTERNS_BREAK,
                         BotConstants.DEFAULT_PATTERN_BREAK);
 
-                this.patternRunner = new BotExcavateTemplateRunner(fallbackPath).configure( offsetOuterX, 
-                                                                                            offsetOuterY,
-                                                                                            offsetOuterZ, 
-                                                                                            outerRadius, 
-                                                                                            offsetInnerX, 
-                                                                                            offsetInnerY, 
-                                                                                            offsetInnerZ, 
-                                                                                            innerRadius,
-                                                                                            inverted);
+                this.patternRunner = new BotExcavateTemplateRunner(fallbackPath).setParams( excavateParams );
 
                 BotLogger.debug(icon, isLogging(), bot.getId() +
                         " 📐 Используется дефолтный YAML-паттерн: " + BotConstants.DEFAULT_PATTERN_BREAK);
@@ -200,7 +167,7 @@ public class BotExcavateTask extends BotTaskAutoParams<BotExcavateTaskParams> {
             bot.pickupNearbyItems();
         }
         // -----------------
-        BotLocation location = patternRunner.findNextBlock(bot);
+        BotLocation location = patternRunner.getNextBlock(bot);
         // -----------------
         if (location == null) {
             this.stop();

@@ -11,7 +11,7 @@ import java.util.stream.Collectors;
 
 import org.yaml.snakeyaml.Yaml;
 
-import com.devone.bot.core.bot.task.active.excavate.patterns.generator.params.BotExcavatePatternGenerationParams;
+import com.devone.bot.core.bot.task.active.excavate.patterns.generator.params.BotExcavateTemplateRunnerParams;
 import com.devone.bot.core.utils.blocks.BotLocation;
 import com.googlecode.aviator.AviatorEvaluator;
 import com.googlecode.aviator.Expression;
@@ -75,7 +75,7 @@ public class BotExcavateCoordinatesGenerator {
         //BotExcavateInterpretedYamlPattern(x1, y1, z1, outerRadius, x2, y2, z2, innerRadius);
     }
 
-    public List<BotLocation> generateInnerPoints(BotExcavatePatternGenerationParams params) {
+    public List<BotLocation> generateInnerPoints(BotExcavateTemplateRunnerParams params) {
         int ox = params.observerX;
         int oy = params.observerY;
         int oz = params.observerZ;
@@ -133,7 +133,7 @@ public class BotExcavateCoordinatesGenerator {
         return result;
     }
 
-    public List<BotLocation> generateOuterPoints(BotExcavatePatternGenerationParams params) {
+    public List<BotLocation> generateOuterPoints(BotExcavateTemplateRunnerParams params) {
         int ox = params.observerX;
         int oy = params.observerY;
         int oz = params.observerZ;

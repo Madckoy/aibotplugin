@@ -90,7 +90,9 @@ public class BotNavigation {
     }
 
     public void setTarget(BotLocation targetLocation) {
+
         String locText = "";
+
         if (targetLocation != null) {
             locText = targetLocation.toString();
         }
@@ -205,7 +207,6 @@ public class BotNavigation {
     }
 
     public boolean navigate(float speed) {
-        // BotNavigationUtils.navigateTo(bot, bot.getNavigation().getTarget(), speed);
 
         BotLogger.debug(owner.getActiveTask().getIcon(), true,
                 owner.getId() + " 🎯 Runtime Target Location: " + owner.getNavigation().getTarget().toString()

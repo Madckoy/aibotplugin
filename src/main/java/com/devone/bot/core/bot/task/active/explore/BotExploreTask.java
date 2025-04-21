@@ -85,7 +85,9 @@ public class BotExploreTask extends BotTaskAutoParams<BotExploreTaskParams> {
             bot.getNavigation().setTarget(target);
 
             float speed = 1.5f;
-            bot.getNavigation().navigate(speed);
+
+            boolean canNavigate = bot.getNavigation().navigate(speed);
+            BotLogger.debug(icon, isLogging(), bot.getId() + " ❓ Navigation result:" + canNavigate);
 
             // bot.getBrain().getMemory().memorize(target, MemoryType.VISITED_BLOCKS); //
             // Запоминаем на ~30 минут посещенную цель навигации
