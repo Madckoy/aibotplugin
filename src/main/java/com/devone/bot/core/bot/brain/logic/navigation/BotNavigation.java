@@ -21,7 +21,7 @@ import com.devone.bot.core.utils.world.BotWorldHelper;
 
 public class BotNavigation {
 
-    public static enum NavigationRecomendation {
+    public static enum NavigationType {
         WALK,
         TELEPORT;
     }
@@ -29,7 +29,7 @@ public class BotNavigation {
     private transient Bot owner;
     private boolean stuck = false;
     private int stuckCount = 0;
-    private NavigationRecomendation recomendation;
+    private NavigationType suggestion;
 
     // Добавляем currentLocation, lastKnownLocation и targetLocation
     private BotLocation location;
@@ -166,23 +166,23 @@ public class BotNavigation {
                     if (walkable == 0) {
                         // hard stuck
                         hardStuck = true;
-                        recomendation = NavigationRecomendation.TELEPORT;
+                        suggestion = NavigationType.TELEPORT;
                     } else {
                         result = context.walkable;
-                        recomendation = NavigationRecomendation.TELEPORT;
+                        suggestion = NavigationType.TELEPORT;
                     }
                 } else {
                     result = context.navigable;
-                    recomendation = NavigationRecomendation.TELEPORT;
+                    suggestion = NavigationType.TELEPORT;
                 }
             } else {
                 softStuck = false;
                 result = context.reachable;
-                recomendation = NavigationRecomendation.WALK;
+                suggestion = NavigationType.WALK;
             }
         } else {
             result = context.targets;
-            recomendation = NavigationRecomendation.WALK;
+            suggestion = NavigationType.WALK;
         }
 
         if (hardStuck && softStuck) {
@@ -196,12 +196,12 @@ public class BotNavigation {
         return summary.get(key);
     }
 
-    public NavigationRecomendation getRecomendation() {
-        return recomendation;
+    public NavigationType getSuggestion() {
+        return suggestion;
     }
 
-    public void setRecomendation(NavigationRecomendation recomendation) {
-        this.recomendation = recomendation;
+    public void setRecomendation(NavigationType suggestion) {
+        this.suggestion = suggestion;
     }
 
     public boolean navigate(float speed) {

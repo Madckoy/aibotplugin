@@ -95,10 +95,10 @@ public class BotStatusServlet extends HttpServlet {
                 botJson.addProperty("memory", bot.getBrain().getMemory().toJson().toString());
 
                 // add navigation data
-                if (bot.getNavigation().getRecomendation() == BotNavigation.NavigationRecomendation.TELEPORT) {
-                    botJson.addProperty("navigationRecommendation", "Teleport");
+                if (bot.getNavigation().getSuggestion() == BotNavigation.NavigationType.TELEPORT) {
+                    botJson.addProperty("navigationSuggestion", "Teleport");
                 } else {
-                    botJson.addProperty("navigationRecommendation", "Walk");
+                    botJson.addProperty("navigationSuggestion", "Walk");
                 }
 
                 botJson.addProperty("reachableTargets",
@@ -109,8 +109,6 @@ public class BotStatusServlet extends HttpServlet {
                         bot.getNavigation().getNavigationSummaryItem("navigable").toString());
                 botJson.addProperty("walkableBlocks",
                         bot.getNavigation().getNavigationSummaryItem("walkable").toString());
-
-                bot.getNavigation().getRecomendation();
 
                 botsArray.add(botJson);
 
