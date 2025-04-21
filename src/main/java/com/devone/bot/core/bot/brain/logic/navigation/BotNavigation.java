@@ -16,7 +16,6 @@ import com.devone.bot.core.bot.task.active.move.params.BotMoveTaskParams;
 import com.devone.bot.core.bot.task.passive.BotTaskManager;
 import com.devone.bot.core.utils.blocks.BotBlockData;
 import com.devone.bot.core.utils.blocks.BotLocation;
-import com.devone.bot.core.utils.blocks.BotLocationHelper;
 import com.devone.bot.core.utils.logger.BotLogger;
 import com.devone.bot.core.utils.world.BotWorldHelper;
 
@@ -68,7 +67,7 @@ public class BotNavigation {
     public BotLocation getLocation() {
         if (owner.getNPC() != null) {
             // Получаем текущую локацию NPC
-            BotLocation newLocation = BotLocationHelper.convertFrom(owner.getNPC().getStoredLocation());
+            BotLocation newLocation = BotWorldHelper.worldLocationToBotLocation(owner.getNPC().getStoredLocation());
             location = newLocation;
         } else {
             // Если NPC не найден, возвращаем null
@@ -204,7 +203,8 @@ public class BotNavigation {
         // BotNavigationUtils.navigateTo(bot, bot.getNavigation().getTarget(), speed);
 
         BotLogger.debug(owner.getActiveTask().getIcon(), true,
-        owner.getId() + " 🎯 Runtime Target Location: " + owner.getNavigation().getTarget().toString() + " [ID: "
+                owner.getId() + " 🎯 Runtime Target Location: " + owner.getNavigation().getTarget().toString()
+                        + " [ID: "
                         + owner.getBrain().getCurrentTask().getIcon() + "]");
 
         BotMoveTask moveTask = new BotMoveTask(owner);

@@ -14,7 +14,6 @@ import com.devone.bot.core.utils.BotConstants;
 import com.devone.bot.core.utils.BotUtils;
 import com.devone.bot.core.utils.blocks.BotBlockData;
 import com.devone.bot.core.utils.blocks.BotLocation;
-import com.devone.bot.core.utils.blocks.BotLocationHelper;
 import com.devone.bot.core.utils.logger.BotLogger;
 import com.devone.bot.core.utils.world.BotWorldHelper;
 
@@ -106,8 +105,8 @@ public class BotHandAttackTask extends BotHandTask<BotHandAttackTaskParams> {
                     }
 
                     // 🔄 Обновляем targetLocation
-                    bot.getNavigation().setTarget(BotLocationHelper.convertFrom(living.getLocation()));
-                    BotUtils.lookAt(bot, BotLocationHelper.convertFrom(living.getLocation()));
+                    bot.getNavigation().setTarget(BotWorldHelper.worldLocationToBotLocation(living.getLocation()));
+                    BotUtils.lookAt(bot, BotWorldHelper.worldLocationToBotLocation(living.getLocation()));
                     bot.getNPCNavigator().setTarget(living.getLocation());
                     double distance = bot.getNPCEntity().getLocation().distance(living.getLocation());
 
@@ -117,8 +116,8 @@ public class BotHandAttackTask extends BotHandTask<BotHandAttackTaskParams> {
                         if (pursuitTicks % 20 == 0) {
                             bot.getNPCNavigator().setTarget(living.getLocation());
                             bot.getNavigation()
-                                    .setTarget(BotLocationHelper.convertFrom(living.getLocation()));
-                            BotUtils.lookAt(bot, BotLocationHelper.convertFrom(living.getLocation()));
+                                    .setTarget(BotWorldHelper.worldLocationToBotLocation(living.getLocation()));
+                            BotUtils.lookAt(bot, BotWorldHelper.worldLocationToBotLocation(living.getLocation()));
                             BotLogger.debug(icon, isLogging(),
                                     bot.getId() + " 🏃🏻‍➡️ Pursuing mob, correcting direction. Distance: "
                                             + String.format("%.2f", distance));
