@@ -229,6 +229,7 @@ public class BotExcavateTask extends BotTaskAutoParams<BotExcavateTaskParams> {
             if (isInProtectedZone(bot.getNavigation().getTarget())) {
                 BotLogger.debug(icon, isLogging(), bot.getId() + " ⛔ в запретной зоне, НЕ будет разрушать блок: " +
                         bot.getNavigation().getTarget());
+                        
                 this.stop();
                 return;
             }

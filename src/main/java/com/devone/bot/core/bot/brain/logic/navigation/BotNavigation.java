@@ -90,8 +90,13 @@ public class BotNavigation {
     }
 
     public void setTarget(BotLocation targetLocation) {
+        String locText = "";
+        if (targetLocation != null) {
+            locText = targetLocation.toString();
+        }
+
         BotLogger.debug(owner.getActiveTask().getIcon(), true, owner.getId() + " 🏃🏻‍♂️‍➡️ Wants to navigate to "
-                + target.toString() + " [ID: " + owner.getBrain().getCurrentTask().getIcon() + "]");
+                + locText + " [ID: " + owner.getBrain().getCurrentTask().getIcon() + "]");
 
         this.target = targetLocation;
     }
