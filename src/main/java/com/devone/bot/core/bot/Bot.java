@@ -19,7 +19,7 @@ import com.devone.bot.core.bot.state.BotState;
 import com.devone.bot.core.bot.task.active.move.BotMoveTask;
 import com.devone.bot.core.bot.task.active.move.params.BotMoveTaskParams;
 import com.devone.bot.core.bot.task.passive.BotTask;
-import com.devone.bot.core.utils.BotUtils;
+import com.devone.bot.core.bot.task.passive.BotTaskManager;
 import com.devone.bot.core.utils.blocks.BotLocation;
 import com.devone.bot.core.utils.logger.BotLogger;
 import com.devone.bot.core.utils.world.BotWorldHelper;
@@ -52,14 +52,13 @@ public class Bot {
         this.brain = brain;
     }
 
-
     public void setState(BotState state) {
         this.state = state;
     }
+
     public BotSpeaker getSpeaker() {
         return speaker;
     }
-
 
     public void setSpeaker(BotSpeaker speaker) {
         this.speaker = speaker;
@@ -69,16 +68,13 @@ public class Bot {
         return navigation;
     }
 
-
     public void setNavigation(BotNavigation nav) {
         this.navigation = nav;
     }
 
-
     public BotState getState() {
         return state;
     }
-
 
     public Bot(String id, NPC an_npc, BotManager botManager) {
         this.id = id;
@@ -125,7 +121,7 @@ public class Bot {
     public NPC getNPC() {
         return npc;
     }
-    
+
     public Player getPlayer() {
         if (this.npc != null && this.npc.isSpawned()) {
             Entity entity = this.npc.getEntity();
@@ -150,10 +146,10 @@ public class Bot {
 
     public void despawnNPC() {
         if (npc != null) {
-            //stop all tasks!
+            // stop all tasks!
             BotLogger.debug("🤖", true, id + " ➖ Stopping All Tasks");
-            
-            BotUtils.clearTasks(this);
+
+            BotTaskManager.clear(this);
 
             BotLogger.debug("🤖", true, id + " ➖ Despawning and Destroying NPC");
             npc.despawn();
@@ -161,7 +157,7 @@ public class Bot {
             npc = null;
         }
         BotLogger.debug("🤖", true, id + " ➖ Has been Despawned and Destroyed");
-    }  
+    }
 
     public BotInventory getInventory() {
         return inventory;
@@ -186,39 +182,46 @@ public class Bot {
     public Navigator getNPCNavigator() {
         return npc.getNavigator();
     }
-    
+
     public boolean isNPCSpawned() {
         return npc.isSpawned();
     }
 
     public void pickupNearbyItems() {
         getInventory().pickupAll(this.allowPickupItems);
-    }    
+    }
 
     public BotTask<?> getActiveTask() {
         BotTask<?> task = Bot.getActiveTask(this);
         return task;
 
     }
+
+    public BotTaskManager getTaskManager() {
+        return this.bootstrap.getTaskStackManager();
+    }
+
     // под вопросом, стоит ли перенести в BotUtils или в BotInventory
     public void checkAndSelfMove(Location target) {
         double pickupRadius = 2.0; // Радиус, в котором проверяем предметы
         List<Entity> nearbyItems = getNPCEntity().getNearbyEntities(pickupRadius, pickupRadius, pickupRadius);
-    
+
         // Если есть дроп в радиусе 2 блоков — бот остается на месте
         if (!nearbyItems.isEmpty()) {
-            BotLogger.debug("🤖",true, getId()+" 🔍 В радиусе " + pickupRadius + " блоков от есть предметы, остаюсь на месте.");
+            BotLogger.debug("🤖", true,
+                    getId() + " 🔍 В радиусе " + pickupRadius + " блоков от есть предметы, остаюсь на месте.");
             return;
         }
-    
+
         // Если предметов рядом нет, двигаем бота к последнему разрушенному блоку
         BotLocation loc = BotWorldHelper.worldLocationToBotLocation(target);
         BotLogger.debug("🤖", true, getId() + " 📦 Дроп подобран. Двигается к цели:" + loc);
-        
+
         BotMoveTask mv_task = new BotMoveTask(this);
         BotMoveTaskParams mv_taskParams = new BotMoveTaskParams(loc);
         mv_task.setParams(mv_taskParams);
 
-        BotUtils.pushTask(this, mv_task);
+        BotTaskManager.push(this, mv_task);
     }
+
 }

@@ -5,12 +5,16 @@ import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
+import org.bukkit.util.Vector;
 
 import com.devone.bot.core.bot.Bot;
 import com.devone.bot.core.bot.BotManager;
 import com.devone.bot.core.bot.task.active.move.BotMoveTask;
 import com.devone.bot.core.bot.task.active.move.params.BotMoveTaskParams;
-import com.devone.bot.core.utils.BotUtils;
+import com.devone.bot.core.bot.task.active.teleport.BotTeleportTask;
+import com.devone.bot.core.bot.task.active.teleport.params.BotTeleportTaskParams;
+import com.devone.bot.core.bot.task.passive.BotTaskManager;
+import com.devone.bot.core.bot.task.reactive.container.BotEmptyReactiveContainer;
 import com.devone.bot.core.utils.blocks.BotLocation;
 import com.devone.bot.core.utils.logger.BotLogger;
 
@@ -37,24 +41,49 @@ public class BotMoveHereCommand implements CommandExecutor {
             return true;
         }
 
-        Location targetLocation = player.getLocation();
+        Location playerLoc = player.getLocation();
+        Vector dirBackwards = playerLoc.getDirection().normalize().multiply(-15); // 👈 15 блоков за спиной
+        Location teleportLocation = playerLoc.clone().add(dirBackwards);
 
-        BotLogger.debug("📌 ", true,"/bot-move-here: Бот " + bot.getId() + " Идет к игроку в точкe " + targetLocation);
+        BotLocation tpLoc = new BotLocation(
+                teleportLocation.getBlockX(),
+                teleportLocation.getBlockY(),
+                teleportLocation.getBlockZ());
 
+        BotLocation moveTo = new BotLocation(
+                playerLoc.getBlockX(),
+                playerLoc.getBlockY(),
+                playerLoc.getBlockZ());
 
-        // ✅ Очищаем стек задач
-        BotUtils.clearTasks(bot);
+        BotLogger.debug("🥾", true,
+                "/bot-move-here: Бот " + bot.getId() + " телепортируется и направляется к игроку " + moveTo);
 
-        // ✅ Добавляем задачу на перемещение
+        // 📦 Контейнер
+        BotEmptyReactiveContainer cont = new BotEmptyReactiveContainer(bot);
+
+        // 1. Телепорт за спину
+        BotTeleportTask tp = new BotTeleportTask(bot, player);
+        BotTeleportTaskParams tpParams = new BotTeleportTaskParams();
+        tpParams.setLocation(tpLoc);
+        tp.setParams(tpParams);
+        tp.setObjective("Появление за спиной игрока");
+        tp.setIcon("⚡");
+        cont.add(tp);
+
+        // 2. Движение к игроку
         BotMoveTask moveTask = new BotMoveTask(bot);
-        BotMoveTaskParams moveTaskParams = new BotMoveTaskParams();
-        moveTaskParams.setTarget(new BotLocation(targetLocation.getBlockX(), targetLocation.getBlockY(), targetLocation.getBlockZ()));
-        moveTask.setParams(moveTaskParams);
-        BotUtils.pushTask(bot, moveTask);
+        BotMoveTaskParams moveParams = new BotMoveTaskParams();
+        moveParams.setTarget(moveTo);
+        moveTask.setParams(moveParams);
+        moveTask.setObjective("Идём к игроку");
+        moveTask.setIcon("🥾");
+        cont.add(moveTask);
 
-        player.sendMessage("§aБот " + bot.getId() + " Идет к игроку!");
+        // ⏯ Старт как реактивная цепочка
+        BotTaskManager.push(bot, cont);
+
+        player.sendMessage("§aБот " + bot.getId() + " телепортируется и идёт к вам!");
 
         return true;
     }
-
 }

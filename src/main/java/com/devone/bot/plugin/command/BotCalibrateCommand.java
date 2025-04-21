@@ -7,15 +7,14 @@ import org.bukkit.entity.Player;
 
 import com.devone.bot.core.bot.Bot;
 import com.devone.bot.core.bot.BotManager;
-import com.devone.bot.core.bot.task.active.playerlinked.protect.BotProtectTask;
 import com.devone.bot.core.bot.task.passive.BotTaskManager;
-import com.devone.bot.core.utils.logger.BotLogger;
+import com.devone.bot.core.bot.task.reactive.container.BotCalibrateReactiveContainer;
 
-public class BotProtectCommand implements CommandExecutor {
+public class BotCalibrateCommand implements CommandExecutor {
 
     private final BotManager botManager;
 
-    public BotProtectCommand(BotManager botManager) {
+    public BotCalibrateCommand(BotManager botManager) {
         this.botManager = botManager;
     }
 
@@ -34,16 +33,12 @@ public class BotProtectCommand implements CommandExecutor {
             return true;
         }
 
-        BotLogger.debug("🛡️ ", true, "/bot-protect: Бот " + bot.getId() + " защищает " + player.getName());
-
-        // ✅ Очищаем стек задач
+        // ✅ Реактивная остановка с контейнером
         //BotTaskManager.clear(bot);
 
-        // ✅ Добавляем задачу на защиту
-        BotProtectTask protectTask = new BotProtectTask(bot, player);
-        BotTaskManager.push(bot, protectTask);
+        BotTaskManager.push(bot, new BotCalibrateReactiveContainer(bot));
 
-        player.sendMessage("§aБот " + bot.getId() + " теперь защищает вас!");
+        player.sendMessage("§aБот " + bot.getId() + " остановлен и переходит в режим калибровки");
 
         return true;
     }

@@ -8,12 +8,10 @@ import org.bukkit.command.CommandSender;
 
 import com.devone.bot.core.bot.Bot;
 import com.devone.bot.core.bot.BotManager;
-import com.devone.bot.core.bot.task.active.teleport.BotTeleportTask;
-import com.devone.bot.core.bot.task.active.teleport.params.BotTeleportTaskParams;
-import com.devone.bot.core.utils.BotUtils;
+import com.devone.bot.core.bot.task.passive.BotTaskManager;
+import com.devone.bot.core.bot.task.reactive.container.BotTeleportToLocationReactiveContainer;
 import com.devone.bot.core.utils.blocks.BotLocation;
 import com.devone.bot.core.utils.logger.BotLogger;
-
 
 public class BotTeleportCommand implements CommandExecutor {
 
@@ -47,34 +45,34 @@ public class BotTeleportCommand implements CommandExecutor {
             sender.sendMessage("❌ Координаты должны быть целыми числами.");
 
             BotLogger.debug("❌", true, "Координаты должны быть целыми числами.");
-            
+
             return false;
         }
 
         Bot bot = botManager.getBot(botName);
-        
+
         if (bot == null) {
             sender.sendMessage("❌ Бот с именем " + botName + " не найден.");
-            
+
             BotLogger.debug("❌", true, "Бот с именем " + botName + " не найден.");
 
             return false;
         }
+        BotLocation loc = new BotLocation(x, y, z);
 
-        BotUtils.clearTasks(bot);
+        BotLogger.debug("📌", true, "/bot-tp: Бот " + bot.getId() + " телепортируется в " + loc);
 
-        BotTeleportTask task = new BotTeleportTask(bot, null);
-        BotTeleportTaskParams tpParams = new BotTeleportTaskParams();
-        tpParams.setLocation(new BotLocation(x, y, z));  
-        task.setParams(tpParams);
-        BotUtils.pushTask(bot, task);
+        // Удаляем все задачи
+        // BotUtils.clearTasks(bot);
 
-        BotLogger.debug("📌", true, "/bot-tp: Бот " + bot.getId() + " телепортируется в " + tpParams.getLocation());
-        
-        sender.sendMessage("✅ Бот '" + botName + "' телепортируется в " + x + " " + y + " " + z);
+        // Создаём и запускаем реактивный контейнер
+        BotTeleportToLocationReactiveContainer tpContainer = new BotTeleportToLocationReactiveContainer(bot, loc);
+        BotTaskManager.push(bot, tpContainer);
 
-        BotLogger.debug("✅", true,"Бот '" + botName + "' телепортируется в " + x + " " + y + " " + z);
-        
+        sender.sendMessage("✅ Бот '" + botName + "' телепортируется в " + loc);
+
+        BotLogger.debug("✅", true, "Бот '" + botName + "' телепортировался в " + loc);
+
         return true;
     }
 

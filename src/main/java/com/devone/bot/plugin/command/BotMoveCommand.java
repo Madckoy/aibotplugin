@@ -11,7 +11,7 @@ import com.devone.bot.core.bot.Bot;
 import com.devone.bot.core.bot.BotManager;
 import com.devone.bot.core.bot.task.active.move.BotMoveTask;
 import com.devone.bot.core.bot.task.active.move.params.BotMoveTaskParams;
-import com.devone.bot.core.utils.BotUtils;
+import com.devone.bot.core.bot.task.passive.BotTaskManager;
 import com.devone.bot.core.utils.blocks.BotLocation;
 import com.devone.bot.core.utils.logger.BotLogger;
 
@@ -26,11 +26,11 @@ public class BotMoveCommand implements CommandExecutor {
     @Override
     public boolean onCommand(CommandSender sender, Command command, String label, String[] args) {
 
-       BotLogger.debug("🔧 ", true, "Получена команда от сервера: " + Arrays.toString(args));
+        BotLogger.debug("🔧 ", true, "Получена команда от сервера: " + Arrays.toString(args));
 
         if (args.length < 4) {
             sender.sendMessage("❌ Недостаточно аргументов. Используйте: /bot-move <bot_id> <x> <y> <z>");
-            BotLogger.debug("❌" , true, "Недостаточно аргументов для /bot-move");
+            BotLogger.debug("❌", true, "Недостаточно аргументов для /bot-move");
             return false;
         }
 
@@ -48,35 +48,33 @@ public class BotMoveCommand implements CommandExecutor {
             sender.sendMessage("❌ Координаты должны быть целыми числами.");
 
             BotLogger.debug("❌ ", true, "Координаты должны быть целыми числами.");
-            
+
             return false;
         }
 
         Bot bot = botManager.getBot(botName);
-        
+
         if (bot == null) {
             sender.sendMessage("❌ Бот с именем " + botName + " не найден.");
-            
-            BotLogger.debug("❌",  true, "Бот с именем " + botName + " не найден.");
+
+            BotLogger.debug("❌", true, "Бот с именем " + botName + " не найден.");
 
             return false;
         }
 
-        BotUtils.clearTasks(bot);
+        // BotTaskManager.clear(bot);
 
         Location targetLocation = new Location(bot.getNPCEntity().getWorld(), x, y, z);
         // ✅ Добавляем задачу на перемещение
         BotMoveTask moveTask = new BotMoveTask(bot);
         BotMoveTaskParams moveTaskParams = new BotMoveTaskParams();
-        moveTaskParams.setTarget(new BotLocation(x, y, z)); 
+        moveTaskParams.setTarget(new BotLocation(x, y, z));
         moveTask.setParams(moveTaskParams);
-        BotUtils.pushTask(bot, moveTask);
-
+        BotTaskManager.push(bot, moveTask);
         BotLogger.debug("📌 ", true, "/bot-move: Бот " + bot.getId() + " направляется в " + targetLocation);
-        
         sender.sendMessage("✅ Бот '" + botName + "' направляется в " + x + " " + y + " " + z);
-        
-        return true; 
+
+        return true;
 
     }
 

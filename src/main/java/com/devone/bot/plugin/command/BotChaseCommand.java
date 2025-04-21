@@ -8,7 +8,7 @@ import org.bukkit.entity.Player;
 import com.devone.bot.core.bot.Bot;
 import com.devone.bot.core.bot.BotManager;
 import com.devone.bot.core.bot.task.active.playerlinked.chase.BotChaseTargetTask;
-import com.devone.bot.core.utils.BotUtils;
+import com.devone.bot.core.bot.task.passive.BotTaskManager;
 import com.devone.bot.core.utils.blocks.BotBlockData;
 import com.devone.bot.core.utils.logger.BotLogger;
 
@@ -35,22 +35,21 @@ public class BotChaseCommand implements CommandExecutor {
             return true;
         }
 
-        BotLogger.debug("📌", true,"/bot-chase: Бот " + bot.getId() + " следует за " + player.getName());
+        BotLogger.debug("📌", true, "/bot-chase: Бот " + bot.getId() + " следует за " + player.getName());
 
         // ✅ Очищаем стек задач
-        BotUtils.clearTasks(bot);
+        //BotTaskManager.clear(bot);
 
         BotBlockData block_data = new BotBlockData();
         block_data.setType("player");
         block_data.setX(player.getLocation().getBlockX());
         block_data.setY(player.getLocation().getBlockY());
         block_data.setZ(player.getLocation().getBlockZ());
-     
-        
+
         // ✅ Добавляем задачу на следование
         BotChaseTargetTask followTask = new BotChaseTargetTask(bot, block_data);
 
-        BotUtils.pushTask(bot, followTask);
+        BotTaskManager.push(bot, followTask);
 
         player.sendMessage("§aБот " + bot.getId() + " теперь следует за вами!");
 

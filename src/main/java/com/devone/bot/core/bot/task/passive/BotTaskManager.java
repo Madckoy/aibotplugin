@@ -10,44 +10,80 @@ import com.devone.bot.core.utils.logger.BotLogger;
 public class BotTaskManager {
 
     private final Stack<BotTask<?>> taskStack = new Stack<>();
+    // 👇 ДОБАВИМ ВВЕРХУ
+
+    private final Stack<BotTask<?>> reactiveStack = new Stack<>();
+    private BotTask<?> currentReactiveRoot = null;
+
+    public boolean isInReactiveMode() {
+        return !reactiveStack.isEmpty();
+    }
 
     private final Bot bot;
 
+    private BotReactivityController controller;
+
+    public Bot getBot() {
+        return bot;
+    }
+
+    public BotReactivityController getController() {
+        return controller;
+    }
+
+    public void setController(BotReactivityController controller) {
+        this.controller = controller;
+    }
+
     public BotTaskManager(Bot bot) {
         this.bot = bot;
+        controller = new BotReactivityController(this);
     }
 
     // Метод теперь работает с обобщённым типом T
     public <T extends BotTaskParams> void pushTask(BotTask<T> task) {
-        if (!taskStack.isEmpty()) {
-            BotTask<?> currentTask = taskStack.peek();
+        Stack<BotTask<?>> stack = task.isReactive() ? reactiveStack : taskStack;
+
+        if (!stack.isEmpty()) {
+            BotTask<?> currentTask = stack.peek();
             currentTask.setPause(true); // Ставим текущую задачу на паузу
         }
 
-        taskStack.push(task);
+        stack.push(task);
 
-        BotLogger.debug("🤖", true, bot.getId()+ " ➕ Добавлена задача: " + task.getIcon() + " "+ task.getClass().getSimpleName());
+        // если это первый реактивный — запоминаем
+        if (task.isReactive() && currentReactiveRoot == null) {
+            currentReactiveRoot = task;
+        }
+
+        BotLogger.debug("🤖", true,
+                bot.getId() + " ➕ Добавлена задача: " + task.getIcon() + " " + task.getClass().getSimpleName());
     }
 
     public void popTask() {
-        if (!taskStack.isEmpty()) {
+        Stack<BotTask<?>> stack = isInReactiveMode() ? reactiveStack : taskStack;
 
+        if (!stack.isEmpty()) {
             BotLifecycleLogger.write(this.bot);
+            BotTask<?> removed = stack.pop();
 
-            BotLogger.debug("🤖", true, bot.getId()+ " ➖ Удалена задача: " + taskStack.peek().getClass().getSimpleName());
-            taskStack.pop();
+            BotLogger.debug("🤖", true, bot.getId() + " ➖ Удалена задача: " + removed.getClass().getSimpleName());
 
-            // ✅ Если осталась активность, снимаем с неё паузу
-            if (!taskStack.isEmpty()) {
-                taskStack.peek().setPause(false);
+            if (removed == currentReactiveRoot) {
+                currentReactiveRoot = null; // реактивная сессия завершена
+            }
+
+            if (!stack.isEmpty()) {
+                stack.peek().setPause(false);
             }
         }
     }
 
     public BotTask<?> getActiveTask() {
-        if (!taskStack.isEmpty()) {
-            return  taskStack.peek();
-
+        if (isInReactiveMode() && !reactiveStack.isEmpty()) {
+            return reactiveStack.peek();
+        } else if (!taskStack.isEmpty()) {
+            return taskStack.peek();
         } else {
             return null;
         }
@@ -70,31 +106,59 @@ public class BotTaskManager {
         return taskStack;
     }
 
-
     public void updateActiveTask() {
-        if (!taskStack.isEmpty()) {
+        BotTask<?> currentTask = getActiveTask();
+        if (currentTask != null) {
+            BotLogger.debug("🤖", true, bot.getId() + " 🟢 Activate task: " + currentTask.getIcon() + " "
+                    + currentTask.getClass().getSimpleName());
 
-            BotTask<?> currentTask = taskStack.peek();
+            if (currentTask.isDone() && currentTask.isPause()) {
+                currentTask.setPause(false);
+            }
 
-            BotLogger.debug("🤖", true, bot.getId() +    " 🟢 Activate task: " + currentTask.getIcon() + " " +currentTask.getClass().getSimpleName());
-    
             if (currentTask.isDone()) {
                 popTask();
-                BotLogger.debug("🤖", true, bot.getId() + " ⭕ Deactivating task: " + currentTask.getIcon() +  " " +currentTask.getClass().getSimpleName());
+                BotLogger.debug("🤖", true, bot.getId() + " ⭕ Deactivating task: " + currentTask.getIcon() + " "
+                        + currentTask.getClass().getSimpleName());
             } else {
-                BotLogger.debug("🤖", true, bot.getId() + " 🔵 Updating task: " + currentTask.getIcon() +  " " + currentTask.getClass().getSimpleName());
+                BotLogger.debug("🤖", true, bot.getId() + " 🔵 Updating task: " + currentTask.getIcon() + " "
+                        + currentTask.getClass().getSimpleName());
+
                 currentTask.update();
             }
         }
     }
-    
-    // ✅ Функция для удаления всех задач с логированием
+
     public void clearTasks() {
+        while (!reactiveStack.isEmpty()) {
+            BotTask<?> removedTask = reactiveStack.pop();
+            removedTask.stop();
+            BotLogger.debug("🤖", true, bot.getId() + " ⚫ Удалена реактивная задача: " + removedTask.getIcon() + " "
+                    + removedTask.getClass().getSimpleName());
+        }
+
+        currentReactiveRoot = null;
+
         while (!taskStack.isEmpty()) {
             BotTask<?> removedTask = taskStack.pop();
             removedTask.stop();
-            BotLogger.debug("🤖", true, bot.getId() + " ⚫ Удалена задача: " + removedTask.getIcon() + " " +removedTask.getClass().getSimpleName());
+            BotLogger.debug("🤖", true, bot.getId() + " ⚫ Удалена задача: " + removedTask.getIcon() + " "
+                    + removedTask.getClass().getSimpleName());
         }
+    }
+
+    public Stack<BotTask<?>> getReactiveStack() {
+        return reactiveStack;
+    }
+
+    public static void push(Bot bot, BotTask<?> task) {
+        task.setReactive(task.isReactive()); // не переопределяем, если уже выставлено
+        bot.getTaskManager().pushTask(task);
+        BotLogger.debug(task.getIcon(), true, bot.getId() + " ➕ Добавлена задача: " + task.getClass().getSimpleName());
+    }
+
+    public static void clear(Bot bot) {
+        bot.getBootstrap().getTaskStackManager().clearTasks();
     }
 
 }

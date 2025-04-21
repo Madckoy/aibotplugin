@@ -7,10 +7,8 @@ import org.bukkit.entity.Player;
 
 import com.devone.bot.core.bot.Bot;
 import com.devone.bot.core.bot.BotManager;
-import com.devone.bot.core.bot.task.active.teleport.BotTeleportTask;
-import com.devone.bot.core.bot.task.active.teleport.params.BotTeleportTaskParams;
-import com.devone.bot.core.utils.BotUtils;
-import com.devone.bot.core.utils.blocks.BotLocation;
+import com.devone.bot.core.bot.task.passive.BotTaskManager;
+import com.devone.bot.core.bot.task.reactive.container.BotTeleportToPlayerReactiveContainer;
 import com.devone.bot.core.utils.logger.BotLogger;
 
 public class BotTeleportHereCommand implements CommandExecutor {
@@ -36,27 +34,12 @@ public class BotTeleportHereCommand implements CommandExecutor {
             return true;
         }
 
-        // ✅ Очищаем стек задач
-        BotUtils.clearTasks(bot);
+        BotLogger.debug("📌", true, "/bot-tp-here: Бот " + bot.getId() + " будет телепортирован к игроку");
 
-        BotLocation targetLocation = new BotLocation(player.getLocation().getBlockX(),
-                                                             player.getLocation().getBlockY(),
-                                                             player.getLocation().getBlockZ()); 
+        BotTaskManager.push(bot, new BotTeleportToPlayerReactiveContainer(bot, player));
 
-        // ✅ Добавляем задачу на мгновенное перемещение
-        BotTeleportTask task = new BotTeleportTask(bot, player);
-        BotTeleportTaskParams taskParams = new BotTeleportTaskParams();
-        taskParams.setLocation(targetLocation);
-        task.setParams(taskParams);
-        
-        BotUtils.pushTask(bot, task);
-
-        BotLogger.debug("📌", true,"/bot-tp-here: Бот " + bot.getId() + " Телепортируется в точку игрока" + 
-        taskParams.getLocation().toString());
-
-        player.sendMessage("§aБот " + bot.getId() + " Телепортируется к игроку!");
+        player.sendMessage("§aБот " + bot.getId() + " телепортируется к вам!");
 
         return true;
     }
-
 }
