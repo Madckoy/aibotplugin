@@ -125,14 +125,15 @@ function setupInfoPanel() {
         panel.classList.remove("visible");
         panel.classList.add("hidden");
     });
-}
+
+
 
 function showInfoPanel(bot) {
-    document.getElementById("info-nav-type").textContent = bot.id;
-    document.getElementById("info-nav-targets").textContent = bot.model;
-    document.getElementById("info-nav-reachable").textContent = bot.navPoints ?? "n/a";
-    document.getElementById("info-nav-navigable").textContent = bot.navPoints ?? "n/a";
-    document.getElementById("info-nav-walkable").textContent = bot.navPoints ?? "n/a";
+    document.getElementById("info-nav-type").textContent      = bot.navigationSuggestion ?? "N/A";
+    document.getElementById("info-nav-targets").textContent   = bot.reachableTargets     ?? "N/A";
+    document.getElementById("info-nav-reachable").textContent = bot.reachableBlocks      ?? "N/A";
+    document.getElementById("info-nav-navigable").textContent = bot.walkableBlocks       ?? "N/A";
+    document.getElementById("info-nav-walkable").textContent  = bot.walkableBlocks       ?? "N/A";
 
     const panel = document.getElementById("bot-info-panel");
     panel.classList.remove("hidden");
