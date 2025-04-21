@@ -79,6 +79,8 @@ public class BotExploreTask extends BotTaskAutoParams<BotExploreTaskParams> {
         BotBlockData target = BotBlockSelector.pickRandomTarget(candidates);
         BotLogger.debug(icon, isLogging(), bot.getId() + " ❓ Total reachable points: " + candidates.size());
 
+
+        
         if (target != null) {
             BotLogger.debug(icon, isLogging(), bot.getId() + " 🎯 Target: " + target);
 

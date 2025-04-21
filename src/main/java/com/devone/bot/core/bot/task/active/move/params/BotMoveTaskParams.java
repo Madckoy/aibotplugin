@@ -5,7 +5,7 @@ import com.devone.bot.core.utils.blocks.BotLocation;
 
 public class BotMoveTaskParams extends BotTaskParams {
 
-    private BotLocation target = new BotLocation(); // по умолчанию (0,0,0)
+    private BotLocation target = null;//new BotLocation(); // по умолчанию (0,0,0)
     private float speed = 1.0F;
 
     public BotMoveTaskParams() {
