@@ -38,6 +38,7 @@ public class BotExcavateCoordinatesGenerator {
     }
 
     public static BotExcavateCoordinatesGenerator loadYmlFromStream(InputStream input) {
+        
         Yaml yaml = new Yaml();
         Map<String, Object> data = yaml.load(input);
         @SuppressWarnings("unchecked")

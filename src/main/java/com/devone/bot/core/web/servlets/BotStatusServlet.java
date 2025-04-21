@@ -54,7 +54,10 @@ public class BotStatusServlet extends HttpServlet {
 
         for (Bot bot : bots) {
             JsonObject botJson = new JsonObject();
+
             BotLocation loc = bot.getNavigation().getLocation();
+            BotLocation tgt = bot.getNavigation().getTarget();
+
             if (loc != null) {
                 botJson.addProperty("skin", "http://" + BotWebService.getServerHost() + ":"
                         + BotWebService.getServerPort() + "/skins/" + bot.getUuid() + ".png");
@@ -71,7 +74,7 @@ public class BotStatusServlet extends HttpServlet {
 
                 botJson.addProperty("autoPickUpItems", bot.getBrain().getAutoPickupItems());
 
-                String currLoc = " " + loc.getX() + ", " + loc.getY() + ", " + loc.getZ();
+                String currLoc = loc.getX() + ", " + loc.getY() + ", " + loc.getZ();
 
                 botJson.addProperty("position", currLoc);
 
@@ -80,9 +83,13 @@ public class BotStatusServlet extends HttpServlet {
 
                 botJson.addProperty("object", getCurrentObjective(bot));
 
-                BotLocation tgtLoc = bot.getNavigation().getTarget();
+                String tgtLoc = "";
+                
+                if(tgt!=null) {
+                    tgtLoc = tgt.getX() + ", " + tgt.getY() + ", " + tgt.getZ();
+                }
 
-                botJson.addProperty("target", tgtLoc != null ? tgtLoc.toString() : "");
+                botJson.addProperty("target", tgtLoc );
 
                 botJson.addProperty("elapsedTime",
                         BotUtils.formatTime(bot.getBrain().getCurrentTask().getElapsedTime()));

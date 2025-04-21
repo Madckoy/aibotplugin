@@ -35,29 +35,47 @@ public class BotExcavateTemplateRunner implements IBotExcavatePatternRunner {
         this.yamlPath = path;
     }
 
-    public BotExcavateTemplateRunner init() {
+    public BotExcavateTemplateRunner init(int observerX, int observerY, int observerZ) {
 
         BotLogger.debug("🛠️", true, "Начинаем загрузку YAML-паттерна: " + yamlPath);
     
         try (InputStream inputStream = Files.newInputStream(yamlPath)) {
 
-                this.generator = BotExcavateCoordinatesGenerator.loadYmlFromStream(inputStream);
+            this.generator = BotExcavateCoordinatesGenerator.loadYmlFromStream(inputStream);
 
             if (this.generator != null) {
 
-                BotLogger.debug("✅", true, "Паттерн успешно загружен из YAML: " + yamlPath.getFileName());
+                BotLogger.debug("📐", true, " ✅ Паттерн успешно загружен из YAML: " + yamlPath.getFileName());
 
             } else {
 
-                BotLogger.debug("❌", true, "loadFromYaml() вернул null для файла: " + yamlPath);
+                BotLogger.debug("📐", true, " ❌ loadFromYaml() вернул null для файла: " + yamlPath);
 
             }
 
         } catch (IOException e) {
 
-            BotLogger.debug("❌", true, "Ошибка при открытии YAML-файла: " + yamlPath + " — " + e.getMessage());
+            BotLogger.debug("📐", true, " ❌ Ошибка при открытии YAML-файла: " + yamlPath + " — " + e.getMessage());
 
         }
+
+        BotExcavatePatternAttributes attributes = this.generator.getAttributes();
+
+        params = new BotExcavateTemplateRunnerParams(observerX, 
+                                                     observerY, 
+                                                     observerZ, 
+                                                     attributes.getOffsetOuterX(), 
+                                                     attributes.getOffsetOuterY(),
+                                                     attributes.getOffsetOuterZ(),
+                                                     attributes.getOuterRadius(),
+                                                     attributes.getOffsetInnerX(),
+                                                     attributes.getOffsetInnerY(),
+                                                     attributes.getOffsetInnerZ(),
+                                                     attributes.getInnerRadius(),
+                                                     attributes.isInverted());
+
+        
+
 
         return this;
     } 
@@ -74,18 +92,20 @@ public class BotExcavateTemplateRunner implements IBotExcavatePatternRunner {
 
     public BotLocation getNextBlock(Bot bot ) {
         if (this.generator == null) {
-            BotLogger.debug("🚨 ", true, "Паттерн не инициализирован! YAML: " + yamlPath);
+            BotLogger.debug("📐", true, " 🚨 Паттерн не инициализирован! YAML: " + yamlPath);
             return null;
         }
 
         if (!initialized) {
-            BotLogger.debug("🔁 ", true, "Генерация точек по паттерну: " + yamlPath);
-
-            BotLogger.debug("Params:", true, params.toString());                                                                  
+            BotLogger.debug("📐", true, " 🔁 Генерация точек по паттерну: " + yamlPath);
+            
+            if(params!=null) { 
+                BotLogger.debug("Params:", true, params.toString());
+            }                                                                  
 
             List<BotLocation> inner_points = generator.generateInnerPoints(params);  
 
-            BotLogger.debug("🔢", true, String.format("Generated %d points", inner_points.size()));     
+            BotLogger.debug("📐", true, " 🔢 " + String.format("Generated %d points", inner_points.size()));     
 
             boolean isInverted = generator.getInverted();
 
@@ -114,11 +134,11 @@ public class BotExcavateTemplateRunner implements IBotExcavatePatternRunner {
 
                 blocksToBreak.addAll(toBeRemoved);
                 
-                BotLogger.debug("✅", true, "Added " + blocksToBreak.size() + " coordinates");
+                BotLogger.debug("📐", true, " ✅ Added " + blocksToBreak.size() + " coordinates");
 
             } else {
                 
-                BotLogger.debug("⚠️", true, "Паттерн YAML не вернул ни одной точки для разрушения.");
+                BotLogger.debug("📐", true, " ⚠️ Паттерн YAML не вернул ни одной точки для разрушения.");
 
             }
 
@@ -130,7 +150,7 @@ public class BotExcavateTemplateRunner implements IBotExcavatePatternRunner {
         BotLocation next = blocksToBreak.poll();
 
         if (next != null) {
-            BotLogger.debug("🎯", true, "Next coordinate: " + next.getX() + ", " + next.getY() + ", " + next.getZ());
+            BotLogger.debug("📐", true, " 🎯 Next coordinate: " + next.getX() + ", " + next.getY() + ", " + next.getZ());
         }
         return next;
     }

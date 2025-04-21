@@ -132,13 +132,18 @@ public class BotExcavateTask extends BotTaskAutoParams<BotExcavateTaskParams> {
             if (!StringUtil.isEmpty(patternName)) {
 
                 Path ptrnPath = Paths.get(BotConstants.PLUGIN_PATH_PATTERNS_BREAK, patternName);
-                this.patternRunner = new BotExcavateTemplateRunner(ptrnPath).init();
+
+                this.patternRunner = new BotExcavateTemplateRunner(ptrnPath).init(bot.getNavigation().getLocation().getX(),
+                                                                                  bot.getNavigation().getLocation().getY(),
+                                                                                  bot.getNavigation().getLocation().getZ());
+
                 //setParams(null ); //null because we read from the template file
 
                 BotLogger.debug(icon, isLogging(), bot.getId() +
                         " 📐 Используется YAML-паттерн: " + this.patternRunner.getName());
 
             } else {
+                
                 Path fallbackPath = Paths.get(BotConstants.PLUGIN_PATH_PATTERNS_BREAK,
                         BotConstants.DEFAULT_PATTERN_BREAK);
 
