@@ -205,30 +205,28 @@ public class BotNavigation {
 
         if(this.navTarget==null) {
 
-            BotLogger.debug(owner.getActiveTask().getIcon(), true,
-            owner.getId() + " 🗺️ Target is null. Navigation is not possible " + " [ID: " + owner.getBrain().getCurrentTask().getIcon() + 
+            BotLogger.debug(owner.getActiveTask().getIcon(), true, 
+                owner.getId() + " 🗺️ Target is null. Navigation is not possible " + " [ID: " + owner.getBrain().getCurrentTask().getIcon() + 
                            " " + owner.getBrain().getCurrentTask().getClass().getSimpleName() +" ]");
             return false;
         }
 
         BotLogger.debug(owner.getActiveTask().getIcon(), true,
-                owner.getId() + " 🗺️ Runtime Target Location: " + owner.getNavigation().getTarget()
-                        + " [ID: "
-                        + owner.getBrain().getCurrentTask().getIcon() + " " + owner.getBrain().getCurrentTask().getClass().getSimpleName() +" ]");
+                owner.getId() + " 🗺️ Runtime Target Location: " + this.navTarget + " [ID: " + owner.getBrain().getCurrentTask().getIcon() + 
+                " " + owner.getBrain().getCurrentTask().getClass().getSimpleName() +" ]");
 
 
-        BotLocation target = owner.getNavigation().getTarget();
-
-        BotMoveTask moveTask = new BotMoveTask(owner);
         BotMoveTaskParams moveTaskParams = new BotMoveTaskParams();
-        moveTaskParams.setTarget(target);
+
+        moveTaskParams.setTarget(this.navTarget);
         moveTaskParams.setSpeed(speed);
 
+        BotMoveTask moveTask = new BotMoveTask(owner);
         moveTask.setParams(moveTaskParams);
 
         BotTaskManager.push(owner, moveTask);
 
-        Location loc = BotWorldHelper.getWorldLocation(target);
+        Location loc = BotWorldHelper.getWorldLocation(this.navTarget);
         boolean canNavigate = owner.getNPC().getNavigator().canNavigateTo(loc);
 
         return canNavigate;
