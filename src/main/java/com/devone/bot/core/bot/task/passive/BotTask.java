@@ -122,6 +122,10 @@ public abstract class BotTask<T extends BotTaskParams> implements IBotTask, List
                     bot.getId() + " 🧹 Завершена реактивная задача: " + getClass().getSimpleName());
             BotReactiveUtils.activateReaction(bot, false);
         }
+        // ✅ Снимаем паузу, если вдруг задача её не сняла сама
+        if (isPause()) {
+            setPause(false);
+        }
     }
 
     public void setPause(boolean pause) {
