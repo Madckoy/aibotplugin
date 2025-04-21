@@ -67,6 +67,8 @@ public class BotTeleportTask extends BotTaskAutoParams<BotTeleportTaskParams> {
             bot.getNPCEntity().teleport(safeOffset);
             bot.getBrain().getMemory().teleportUsedIncrease();
 
+            bot.getTaskManager().getActiveTask().stop();
+
             BotSonar3DTask sonar = new BotSonar3DTask(bot);
             sonar.execute();
             bot.getNavigation().calculate(bot.getBrain().getMemory().getSceneData());

@@ -33,4 +33,8 @@ public class BotNavigationSummaryItem {
         this.confirmed = confirmed;
     }
 
+    public String toString() {
+        return this.calculated + " / " + this.confirmed;
+    }
+
 }

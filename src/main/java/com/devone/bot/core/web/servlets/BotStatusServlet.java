@@ -15,6 +15,7 @@ import org.bukkit.inventory.ItemStack;
 
 import com.devone.bot.core.bot.Bot;
 import com.devone.bot.core.bot.BotManager;
+import com.devone.bot.core.bot.brain.logic.navigation.BotNavigation;
 import com.devone.bot.core.bot.task.passive.BotTask;
 import com.devone.bot.core.utils.BotUtils;
 import com.devone.bot.core.utils.blocks.BotLocation;
@@ -84,21 +85,32 @@ public class BotStatusServlet extends HttpServlet {
 
                 BotLocation tgtLoc = bot.getNavigation().getTarget();
 
-                botJson.addProperty("target",
-                        tgtLoc != null ? " " + tgtLoc.getX() + ", " + tgtLoc.getY() + ", " + tgtLoc.getZ() : "");
+                botJson.addProperty("target", tgtLoc != null ? tgtLoc.toString() : "");
 
                 botJson.addProperty("elapsedTime",
                         BotUtils.formatTime(bot.getBrain().getCurrentTask().getElapsedTime()));
 
-                List<BotTask<?>> taskStack = (bot.getBootstrap() != null
-                        && bot.getBootstrap().getTaskStackManager() != null)
-                                ? new ArrayList<>(bot.getBootstrap().getTaskStackManager().getTaskStack())
-                                : new ArrayList<>();
-                String taskStackText = taskStack.isEmpty() ? "N/A"
-                        : taskStack.stream().map(BotTask::getIcon).collect(Collectors.joining(" ➜ "));
-                botJson.addProperty("queue", taskStackText);
+                botJson.addProperty("queue", bot.getTaskManager().getQueueIcons());
 
                 botJson.addProperty("memory", bot.getBrain().getMemory().toJson().toString());
+
+                // add navigation data
+                if (bot.getNavigation().getRecomendation() == BotNavigation.NavigationRecomendation.TELEPORT) {
+                    botJson.addProperty("navigationRecommendation", "Teleport");
+                } else {
+                    botJson.addProperty("navigationRecommendation", "Walk");
+                }
+
+                botJson.addProperty("reachableTargets",
+                        bot.getNavigation().getNavigationSummaryItem("targets").toString());
+                botJson.addProperty("reachableBlocks",
+                        bot.getNavigation().getNavigationSummaryItem("reachable").toString());
+                botJson.addProperty("navigableBlocks",
+                        bot.getNavigation().getNavigationSummaryItem("navigable").toString());
+                botJson.addProperty("walkableBlocks",
+                        bot.getNavigation().getNavigationSummaryItem("walkable").toString());
+
+                bot.getNavigation().getRecomendation();
 
                 botsArray.add(botJson);
 

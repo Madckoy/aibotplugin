@@ -158,7 +158,23 @@ public class BotTaskManager {
     }
 
     public static void clear(Bot bot) {
-        bot.getBootstrap().getTaskStackManager().clearTasks();
+        bot.getBootstrap().getTaskManager().clearTasks();
+    }
+
+    public String getQueueIcons() {
+        if (this == null || getTaskStack() == null || getTaskStack().isEmpty()) {
+            return "N/A";
+        }
+
+        StringBuilder sb = new StringBuilder();
+        for (int i = 0; i < getTaskStack().size(); i++) {
+            BotTask<?> task = getTaskStack().get(i);
+            sb.append(task != null ? task.getIcon() : "?");
+            if (i < getTaskStack().size() - 1) {
+                sb.append(" ➜ ");
+            }
+        }
+        return sb.toString();
     }
 
 }

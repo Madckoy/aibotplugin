@@ -91,7 +91,7 @@ public class Bot {
     }
 
     public static BotTask<?> getActiveTask(Bot bot) {
-        return bot.getBootstrap().getTaskStackManager().getActiveTask();
+        return bot.getBootstrap().getTaskManager().getActiveTask();
     }
 
     public void setEnabled(boolean isEnabled) {
@@ -198,7 +198,7 @@ public class Bot {
     }
 
     public BotTaskManager getTaskManager() {
-        return this.bootstrap.getTaskStackManager();
+        return this.bootstrap.getTaskManager();
     }
 
     // под вопросом, стоит ли перенести в BotUtils или в BotInventory

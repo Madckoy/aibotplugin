@@ -21,7 +21,7 @@ import com.devone.bot.core.utils.world.BotWorldHelper;
 
 public class BotNavigation {
 
-    enum NavigationRecomendation {
+    public static enum NavigationRecomendation {
         WALK,
         TELEPORT;
     }

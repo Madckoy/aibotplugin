@@ -53,7 +53,7 @@ public class BotBootstrap {
         }
     }
 
-    public BotTaskManager getTaskStackManager() {
+    public BotTaskManager getTaskManager() {
         return taskManager;
     }
 }
