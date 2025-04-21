@@ -112,8 +112,8 @@ public class BotTaskManager {
             BotLogger.debug("🤖", true, bot.getId() + " 🟢 Activate task: " + currentTask.getIcon() + " "
                     + currentTask.getClass().getSimpleName());
 
-            if (currentTask.isDone() && currentTask.isPause()) {
-                currentTask.setPause(false);
+            if (currentTask.isPause()) {
+                currentTask.setPause(false); // будим акивную таску
             }
 
             if (currentTask.isDone()) {
