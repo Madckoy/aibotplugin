@@ -125,10 +125,12 @@ function setupInfoPanel() {
         panel.classList.remove("visible");
         panel.classList.add("hidden");
     });
+}
 
 
 
 function showInfoPanel(bot) {
+
     document.getElementById("info-nav-type").textContent      = bot.navigationSuggestion ?? "N/A";
     document.getElementById("info-nav-targets").textContent   = bot.reachableTargets     ?? "N/A";
     document.getElementById("info-nav-reachable").textContent = bot.reachableBlocks      ?? "N/A";
@@ -138,4 +140,5 @@ function showInfoPanel(bot) {
     const panel = document.getElementById("bot-info-panel");
     panel.classList.remove("hidden");
     panel.classList.add("visible");
+
 }
