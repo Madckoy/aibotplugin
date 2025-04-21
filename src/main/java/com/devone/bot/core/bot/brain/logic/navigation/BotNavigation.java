@@ -97,7 +97,7 @@ public class BotNavigation {
             locText = targetLocation.toString();
         }
 
-        BotLogger.debug(owner.getActiveTask().getIcon(), true, owner.getId() + " 🏃🏻‍♂️‍➡️ Wants to navigate to "
+        BotLogger.debug(owner.getActiveTask().getIcon(), true, owner.getId() + " 🗺️ Wants to navigate to "
                 + locText + " [ID: " + owner.getBrain().getCurrentTask().getIcon() + "]");
 
         this.target = targetLocation;

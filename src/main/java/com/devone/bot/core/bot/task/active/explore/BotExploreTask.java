@@ -80,7 +80,7 @@ public class BotExploreTask extends BotTaskAutoParams<BotExploreTaskParams> {
         BotLogger.debug(icon, isLogging(), bot.getId() + " ❓ Total reachable points: " + candidates.size());
 
 
-        
+
         if (target != null) {
             BotLogger.debug(icon, isLogging(), bot.getId() + " 🎯 Target: " + target);
 
@@ -89,6 +89,8 @@ public class BotExploreTask extends BotTaskAutoParams<BotExploreTaskParams> {
             float speed = 1.5f;
 
             boolean canNavigate = bot.getNavigation().navigate(speed);
+
+            
             BotLogger.debug(icon, isLogging(), bot.getId() + " ❓ Navigation result:" + canNavigate);
 
             // bot.getBrain().getMemory().memorize(target, MemoryType.VISITED_BLOCKS); //
