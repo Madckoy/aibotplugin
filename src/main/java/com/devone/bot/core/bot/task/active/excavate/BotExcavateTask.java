@@ -12,8 +12,8 @@ import com.devone.bot.core.bot.Bot;
 import com.devone.bot.core.bot.inventory.BotInventory;
 import com.devone.bot.core.bot.task.active.excavate.BotExcavateTask;
 import com.devone.bot.core.bot.task.active.excavate.params.BotExcavateTaskParams;
-import com.devone.bot.core.bot.task.active.excavate.patterns.IBotExcavatePattern;
-import com.devone.bot.core.bot.task.active.excavate.patterns.generator.BotExcavateInterpretedYamlPattern;
+import com.devone.bot.core.bot.task.active.excavate.patterns.IBotExcavatePatternRunner;
+import com.devone.bot.core.bot.task.active.excavate.patterns.generator.BotExcavateTemplateRunner;
 import com.devone.bot.core.bot.task.active.hand.excavate.BotHandExcavateTask;
 import com.devone.bot.core.bot.task.active.hand.excavate.params.BotHandExcavateTaskParams;
 import com.devone.bot.core.bot.task.passive.BotTaskAutoParams;
@@ -34,9 +34,11 @@ public class BotExcavateTask extends BotTaskAutoParams<BotExcavateTaskParams> {
     private int innerRadius = BotConstants.DEFAULT_SCAN_RANGE;
     private Set<Material> targetMaterials = null;
     private String patternName = BotConstants.DEFAULT_PATTERN_BREAK;
-    private IBotExcavatePattern breakPatternImpl = null;
+    private IBotExcavatePatternRunner patternRunner = null;
 
-    private int offsetX, offsetY, offsetZ = 0;
+    private int offsetOuterX, offsetOuterY, offsetOuterZ = 0;
+    private int offsetInnerX, offsetInnerY, offsetInnerZ = 0;
+    private boolean inverted = false;
 
     public BotExcavateTask(Bot bot) {
         super(bot, BotExcavateTaskParams.class);
@@ -50,13 +52,19 @@ public class BotExcavateTask extends BotTaskAutoParams<BotExcavateTaskParams> {
         setObjective(params.getObjective());
 
         this.targetMaterials = params.getTargetMaterials();
-        this.maxBlocks = params.getMaxBlocks();
-        this.outerRadius = params.getOuterRadius();
-        this.innerRadius = params.getInnerRadius();
+        this.maxBlocks    = params.getMaxBlocks();
+        this.outerRadius  = params.getOuterRadius();
+        this.innerRadius  = params.getInnerRadius();
 
-        this.offsetX = params.getOffsetX();
-        this.offsetY = params.getOffsetY();
-        this.offsetZ = params.getOffsetZ();
+        this.offsetOuterX = params.getOffsetOuterX();
+        this.offsetOuterY = params.getOffsetOuterY();
+        this.offsetOuterZ = params.getOffsetOuterZ();
+
+        this.offsetInnerX = params.getOffsetInnerX();
+        this.offsetInnerY = params.getOffsetInnerY();
+        this.offsetInnerZ = params.getOffsetInnerZ();
+
+        this.inverted     = params.isInverted();
 
         if (params.getPatternName() != null) {
             this.patternName = params.getPatternName();
@@ -92,25 +100,10 @@ public class BotExcavateTask extends BotTaskAutoParams<BotExcavateTaskParams> {
      * Если параметры не заданы, используются значения по умолчанию.
      */
 
-    public void setOffsetX(int oX) {
-        this.offsetX = oX;
-    }
-
-    public void setPatterName(String pName) {
-        this.patternName = pName;
-    }
-
     public String getPatternName() {
         return this.patternName;
     }
 
-    public void setOffsetY(int oY) {
-        this.offsetY = oY;
-    }
-
-    public void setOffsetZ(int oZ) {
-        this.offsetZ = oZ;
-    }
 
     public int getOuterRadius() {
         return outerRadius;
@@ -128,17 +121,6 @@ public class BotExcavateTask extends BotTaskAutoParams<BotExcavateTaskParams> {
         this.innerRadius = r;
     }
 
-    public int getOffsetX() {
-        return this.offsetX;
-    }
-
-    public int getOffsetY() {
-        return this.offsetY;
-    }
-
-    public int getOffsetZ() {
-        return this.offsetZ;
-    }
 
     public void setTargetMaterials(Set<Material> materials) {
         this.targetMaterials = materials;
@@ -163,29 +145,43 @@ public class BotExcavateTask extends BotTaskAutoParams<BotExcavateTaskParams> {
             return;
         }
 
-        if (breakPatternImpl == null) {
+        if (patternRunner == null) {
             if (!StringUtil.isEmpty(patternName)) {
 
                 Path ptrnPath = Paths.get(BotConstants.PLUGIN_PATH_PATTERNS_BREAK, patternName);
-                this.breakPatternImpl = new BotExcavateInterpretedYamlPattern(ptrnPath).configure(offsetX, offsetY,
-                        offsetZ, outerRadius, innerRadius);
+                this.patternRunner = new BotExcavateTemplateRunner(ptrnPath).configure(offsetOuterX, 
+                                                                                       offsetOuterY,
+                                                                                       offsetOuterZ, 
+                                                                                       outerRadius, 
+                                                                                       offsetInnerX, 
+                                                                                       offsetInnerY, 
+                                                                                       offsetInnerZ, 
+                                                                                       innerRadius,
+                                                                                       inverted);
 
                 BotLogger.debug(icon, isLogging(), bot.getId() +
-                        " 📐 Используется YAML-паттерн: " + this.breakPatternImpl.getName());
+                        " 📐 Используется YAML-паттерн: " + this.patternRunner.getName());
 
             } else {
                 Path fallbackPath = Paths.get(BotConstants.PLUGIN_PATH_PATTERNS_BREAK,
                         BotConstants.DEFAULT_PATTERN_BREAK);
 
-                this.breakPatternImpl = new BotExcavateInterpretedYamlPattern(fallbackPath).configure(offsetX, offsetY,
-                        offsetZ, outerRadius, innerRadius);
+                this.patternRunner = new BotExcavateTemplateRunner(fallbackPath).configure( offsetOuterX, 
+                                                                                            offsetOuterY,
+                                                                                            offsetOuterZ, 
+                                                                                            outerRadius, 
+                                                                                            offsetInnerX, 
+                                                                                            offsetInnerY, 
+                                                                                            offsetInnerZ, 
+                                                                                            innerRadius,
+                                                                                            inverted);
 
                 BotLogger.debug(icon, isLogging(), bot.getId() +
                         " 📐 Используется дефолтный YAML-паттерн: " + BotConstants.DEFAULT_PATTERN_BREAK);
             }
         }
 
-        if (breakPatternImpl.isFinished()) {
+        if (patternRunner.isFinished()) {
             BotLogger.debug(icon, isLogging(), " 🏁 Все блоки по паттерну обработаны. Завершаем задачу.");
             this.stop();
             return;
@@ -203,9 +199,9 @@ public class BotExcavateTask extends BotTaskAutoParams<BotExcavateTaskParams> {
         if (params.isPickup()) {
             bot.pickupNearbyItems();
         }
-
-        BotLocation location = breakPatternImpl.findNextBlock(bot);
-
+        // -----------------
+        BotLocation location = patternRunner.findNextBlock(bot);
+        // -----------------
         if (location == null) {
             this.stop();
             BotLogger.debug(icon, isLogging(),
@@ -299,7 +295,7 @@ public class BotExcavateTask extends BotTaskAutoParams<BotExcavateTaskParams> {
 
     @Override
     public void stop() {
-        this.breakPatternImpl = null;
+        this.patternRunner = null;
         bot.getNavigation().setTarget(null);
         BotLogger.debug(icon, isLogging(), bot.getId() + " 🛑 Задача разрушения остановлена.");
         super.stop();

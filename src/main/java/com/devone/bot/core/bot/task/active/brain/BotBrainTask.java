@@ -133,8 +133,7 @@ public class BotBrainTask extends BotTaskAutoParams<BotBrainTaskParams> {
                         BotLogger.debug(icon, isLogging(), bot.getId() + " ⛏️ Копаемся чтобы выбраться");
                         BotExcavateTask task = new BotExcavateTask(bot);
                         BotExcavateTaskParams exParams = new BotExcavateTaskParams();
-                        exParams.setOffsetY(exParams.getOuterRadius() - 1);
-                        exParams.setPatternName("cone.yml");
+                        exParams.setPatternName("default.yml");
                         task.setParams(exParams);
                         push(bot, task);
                     });

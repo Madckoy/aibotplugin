@@ -7,7 +7,7 @@ import java.nio.file.Path;
 import java.util.*;
 
 import com.devone.bot.core.bot.Bot;
-import com.devone.bot.core.bot.task.active.excavate.patterns.IBotExcavatePattern;
+import com.devone.bot.core.bot.task.active.excavate.patterns.IBotExcavatePatternRunner;
 import com.devone.bot.core.bot.task.active.excavate.patterns.generator.params.BotExcavatePatternGenerationParams;
 import com.devone.bot.core.utils.blocks.BotLocation;
 import com.devone.bot.core.utils.blocks.BotLocationComparators;
@@ -18,7 +18,7 @@ import com.devone.bot.core.utils.logger.BotLogger;
  * Реализация разрушительного паттерна, загружаемого из YAML.
  * Полностью заменяет старую Java-логику.
  */
-public class BotExcavateInterpretedYamlPattern implements IBotExcavatePattern {
+public class BotExcavateTemplateRunner implements IBotExcavatePatternRunner {
 
     private final Path yamlPath;
 
@@ -26,20 +26,27 @@ public class BotExcavateInterpretedYamlPattern implements IBotExcavatePattern {
 
     private boolean initialized = false;
 
-    private int offsetX, offsetY, offsetZ, outerRadius, innerRadius;  
+    private int offsetOuterX, offsetOuterY, offsetOuterZ, outerRadius;
+    private int offsetInnerX, offsetInnerY, offsetInnerZ, innerRadius; 
+    private boolean inverted; 
 
     private final Queue<BotLocation> blocksToBreak = new LinkedList<>();
     
-        public BotExcavateInterpretedYamlPattern(Path path) {
+        public BotExcavateTemplateRunner(Path path) {
             this.yamlPath = path;
         }
      
         @Override    
-        public IBotExcavatePattern configure(int offsetX, int offsetY, int offsetZ, int outerRadius, int innerRadius) {
+        public IBotExcavatePatternRunner configure(int offsetOuterX, int offsetOuterY, int offsetOuterZ, int outerRadius, 
+                                             int offsetInnerX, int offsetInnerY, int offsetInnerZ, int innerRadius, boolean inverted) {
 
-            this.offsetX = offsetX;
-            this.offsetY = offsetY;
-            this.offsetZ = offsetZ;
+            this.offsetOuterX = offsetOuterX;
+            this.offsetOuterY = offsetOuterY;
+            this.offsetOuterZ = offsetOuterZ;
+
+            this.offsetInnerX = offsetInnerX;
+            this.offsetInnerY = offsetInnerY;
+            this.offsetInnerZ = offsetInnerZ;
             
             this.outerRadius = outerRadius;
             this.innerRadius = innerRadius;
@@ -69,11 +76,15 @@ public class BotExcavateInterpretedYamlPattern implements IBotExcavatePattern {
 
         if (!initialized) {
             BotLogger.debug("🔁 ", true, "Генерация точек по паттерну: " + yamlPath);
+
                                                                      
             BotExcavatePatternGenerationParams params = new BotExcavatePatternGenerationParams(bot.getNavigation().getLocation().getX(), 
                                                                                bot.getNavigation().getLocation().getY(), 
                                                                                bot.getNavigation().getLocation().getZ(), 
-                                                                               offsetX, offsetY, offsetZ, outerRadius, innerRadius);
+                                                                               offsetOuterX, offsetOuterY, offsetOuterZ, 
+                                                                               outerRadius, 
+                                                                               offsetInnerX, offsetInnerY, offsetInnerZ, 
+                                                                               innerRadius, inverted);
 
             BotLogger.debug("Params:", true, params.toString());                                                                  
 

@@ -5,8 +5,10 @@ import java.util.List;
 import com.devone.bot.core.bot.Bot;
 import com.devone.bot.core.utils.blocks.BotLocation;
 
-public interface IBotExcavatePattern {
-    IBotExcavatePattern configure(int offsetX, int offsetY, int offsetZ, int outerRadius, int innerRadius);
+public interface IBotExcavatePatternRunner {
+    IBotExcavatePatternRunner configure(int offsetOuterX, int offsetOuterY, int offsetOuterZ, int outerRadius, 
+                                  int offsetInnerX, int offsetInnerY, int offsetInnerZ, int innerRadius, boolean invereted);
+
     BotLocation findNextBlock(Bot bot);
     boolean isFinished();
     String getName();

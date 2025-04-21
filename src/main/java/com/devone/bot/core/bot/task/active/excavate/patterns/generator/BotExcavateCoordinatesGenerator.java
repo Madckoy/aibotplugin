@@ -21,15 +21,20 @@ public class BotExcavateCoordinatesGenerator {
     private final List<Expression> filterExpressions;
     private final Expression sortExpression;
     private boolean inverted;
+    private final BotExcavatePatternAttributes attributes;
 
-    public BotExcavateCoordinatesGenerator(List<String> filterExpressions, String sortExpression, boolean inverted) {
+    public BotExcavatePatternAttributes getAttributes() {
+        return attributes;
+    }
+
+    public BotExcavateCoordinatesGenerator(List<String> filterExpressions, String sortExpression, BotExcavatePatternAttributes attr) {
+        attributes = attr;
+        
         this.filterExpressions = filterExpressions.stream()
                 .map(expr -> AviatorEvaluator.compile(expr, true))
                 .collect(Collectors.toList());
 
         this.sortExpression = AviatorEvaluator.compile(sortExpression, true);
-
-        this.inverted = inverted;
     }
 
     public static BotExcavateCoordinatesGenerator loadYmlFromStream(InputStream input) {
@@ -41,10 +46,33 @@ public class BotExcavateCoordinatesGenerator {
         List<String> sortList = (List<String>) data.getOrDefault("sort", Collections.singletonList("y"));
         String sort = sortList.get(0);
 
-        // Загрузка свойства inverted с значением по умолчанию false
+
+        BotExcavatePatternAttributes attributes = readPatternAttributes(data);
+
+        return new BotExcavateCoordinatesGenerator(filters, sort, attributes);
+    }
+
+    @SuppressWarnings("unchecked")
+    private static BotExcavatePatternAttributes readPatternAttributes(Map<String, Object> data) {
+
+        int innerRadius = ((Number) data.getOrDefault("innerRadius", 0)).intValue();
+        int outerRadius = ((Number) data.getOrDefault("outerRadius", 0)).intValue();
         boolean inverted = (boolean) data.getOrDefault("inverted", false);
 
-        return new BotExcavateCoordinatesGenerator(filters, sort, inverted);
+        Map<String, Object> outerOffsetMap = (Map<String, Object>) data.getOrDefault("offsetOuter", Collections.emptyMap());
+        Map<String, Object> innerOffsetMap = (Map<String, Object>) data.getOrDefault("offsetInner", Collections.emptyMap());
+
+        int x1 = ((Number) outerOffsetMap.getOrDefault("x", 0)).intValue();
+        int y1 = ((Number) outerOffsetMap.getOrDefault("y", 0)).intValue();
+        int z1 = ((Number) outerOffsetMap.getOrDefault("z", 0)).intValue();
+
+        int x2 = ((Number) innerOffsetMap.getOrDefault("x", 0)).intValue();
+        int y2 = ((Number) innerOffsetMap.getOrDefault("y", 0)).intValue();
+        int z2 = ((Number) innerOffsetMap.getOrDefault("z", 0)).intValue();
+
+        return new BotExcavatePatternAttributes(x1, y1, z1, outerRadius, x2, y2, z2, innerRadius, inverted);
+
+        //BotExcavateInterpretedYamlPattern(x1, y1, z1, outerRadius, x2, y2, z2, innerRadius);
     }
 
     public List<BotLocation> generateInnerPoints(BotExcavatePatternGenerationParams params) {
@@ -54,9 +82,9 @@ public class BotExcavateCoordinatesGenerator {
         
         int innerRadius = params.innerRadius;
         
-        int offsetX = params.offsetX;
-        int offsetY = params.offsetY;
-        int offsetZ = params.offsetZ;
+        int offsetX = params.offsetInnerX;
+        int offsetY = params.offsetInnerY;
+        int offsetZ = params.offsetInnerZ;
 
         int[] center = computeFigureCenter(ox, oy, oz, offsetX, offsetY, offsetZ);
 
@@ -113,9 +141,9 @@ public class BotExcavateCoordinatesGenerator {
 
         int outerRadius = params.outerRadius;
         
-        int offsetX = params.offsetX;
-        int offsetY = params.offsetY;
-        int offsetZ = params.offsetZ;
+        int offsetX = params.offsetOuterX;
+        int offsetY = params.offsetOuterY;
+        int offsetZ = params.offsetOuterZ;
 
         int[] center = computeFigureCenter(ox, oy, oz, offsetX, offsetY, offsetZ);
 

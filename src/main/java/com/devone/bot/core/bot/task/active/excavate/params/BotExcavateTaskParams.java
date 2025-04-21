@@ -10,15 +10,77 @@ import com.devone.bot.core.utils.BotConstants;
 
 public class BotExcavateTaskParams extends BotTaskParams {
     private Set<Material> targetMaterials;
-    private int maxBlocks = 64;
-    private int outerRadius = BotConstants.DEFAULT_OUTER_RADIUS;
-    private int innerRadius = BotConstants.DEFAULT_INNER_RADIUS;
-    private boolean pickup = true;
+    private int maxBlocks    = 64;
+    private int outerRadius  = BotConstants.DEFAULT_OUTER_RADIUS;
+    private int innerRadius  = BotConstants.DEFAULT_INNER_RADIUS;
+    private boolean pickup   = true;
 
-    private int offsetX = -1*(BotConstants.DEFAULT_OUTER_RADIUS-2);
-    private int offsetY = -1*(BotConstants.DEFAULT_OUTER_RADIUS-1);
-    private int offsetZ = -1*(BotConstants.DEFAULT_OUTER_RADIUS-2);
+    private boolean inverted = false;
+
+    private int offsetOuterX = 0;
+    private int offsetOuterY = 0;
+    private int offsetOuterZ = 0;
+
+    private int offsetInnerX = 0;
+    private int offsetInnerY = 0;
+    private int offsetInnerZ = 0;
     
+    public boolean isInverted() {
+        return inverted;
+    }
+
+    public void setInverted(boolean inverted) {
+        this.inverted = inverted;
+    }
+
+    public int getOffsetOuterX() {
+        return offsetOuterX;
+    }
+
+    public void setOffsetOuterX(int offsetOuterX) {
+        this.offsetOuterX = offsetOuterX;
+    }
+
+    public int getOffsetOuterY() {
+        return offsetOuterY;
+    }
+
+    public void setOffsetOuterY(int offsetOuterY) {
+        this.offsetOuterY = offsetOuterY;
+    }
+
+    public int getOffsetOuterZ() {
+        return offsetOuterZ;
+    }
+
+    public void setOffsetOuterZ(int offsetOuterZ) {
+        this.offsetOuterZ = offsetOuterZ;
+    }
+
+    public int getOffsetInnerX() {
+        return offsetInnerX;
+    }
+
+    public void setOffsetInnerX(int offsetInnerX) {
+        this.offsetInnerX = offsetInnerX;
+    }
+
+    public int getOffsetInnerY() {
+        return offsetInnerY;
+    }
+
+    public void setOffsetInnerY(int offsetInnerY) {
+        this.offsetInnerY = offsetInnerY;
+    }
+
+    public int getOffsetInnerZ() {
+        return offsetInnerZ;
+    }
+
+    public void setOffsetInnerZ(int offsetInnerZ) {
+        this.offsetInnerZ = offsetInnerZ;
+    }
+
     private String patternName = BotConstants.DEFAULT_PATTERN_BREAK;
 
     public BotExcavateTaskParams() {
@@ -68,30 +130,6 @@ public class BotExcavateTaskParams extends BotTaskParams {
         this.innerRadius = innerRadius;
     }
 
-    public int getOffsetX() {
-        return offsetX;
-    }
-
-    public void setOffsetX(int offsetX) {
-        this.offsetX = offsetX;
-    }
-
-    public int getOffsetY() {
-        return offsetY;
-    }
-
-    public void setOffsetY(int offsetY) {
-        this.offsetY = offsetY;
-    }
-
-    public int getOffsetZ() {
-        return offsetZ;
-    }
-
-    public void setOffsetZ(int offsetZ) {
-        this.offsetZ = offsetZ;
-    }
-
     public String getPatternName() {
         return patternName;
     }
@@ -108,9 +146,13 @@ public class BotExcavateTaskParams extends BotTaskParams {
                 ", outerRadius=" + outerRadius +
                 ", innerRadius=" + innerRadius +
                 ", shouldPickup=" + pickup +
-                ", offsetX=" + offsetX +
-                ", offsetY=" + offsetY +
-                ", offsetZ=" + offsetZ +
+                ", offsetOuterX=" + offsetOuterX +
+                ", offsetOuterY=" + offsetOuterY +
+                ", offsetOuterZ=" + offsetOuterZ +
+                ", offsetInnerX=" + offsetInnerX +
+                ", offsetInnerY=" + offsetInnerY +
+                ", offsetInnerZ=" + offsetInnerZ +
+                ", inverted    =" + inverted + 
                 ", patternName='" + patternName + "}";
     }
 }
