@@ -8,7 +8,6 @@ import com.devone.bot.core.bot.Bot;
 import com.devone.bot.core.bot.brain.behaviour.BotBehaviorSelector;
 import com.devone.bot.core.bot.brain.behaviour.BotTaskCandidate;
 import com.devone.bot.core.bot.brain.behaviour.BotTaskCandidatesFactory;
-import com.devone.bot.core.bot.brain.logic.navigation.BotNavigationUtils;
 import com.devone.bot.core.bot.brain.logic.navigator.BotNavigationPlannerWrapper;
 import com.devone.bot.core.bot.brain.logic.navigator.scene.BotSceneContext;
 import com.devone.bot.core.bot.brain.logic.navigator.selectors.BotBlockSelector;
@@ -81,8 +80,7 @@ public class BotBrainTask extends BotTaskAutoParams<BotBrainTaskParams> {
             return;
         }
 
-        boolean isStuck = BotNavigationUtils.detectIfStuck(bot);
-        bot.getState().setStuck(isStuck);
+        bot.getNavigation().calculate(bot.getBrain().getMemory().getSceneData());
 
         Runnable decision = determineBehaviorScenario(bot);
         if (decision != null)
@@ -99,7 +97,7 @@ public class BotBrainTask extends BotTaskAutoParams<BotBrainTaskParams> {
     }
 
     private Runnable determineBehaviorScenario(Bot bot) {
-        boolean stuck = bot.getState().isStuck();
+        boolean stuck = bot.getNavigation().isStuck();
 
         if (stuck) {
             Optional<Runnable> unstuck = tryUnstuckStrategy(bot);
@@ -147,8 +145,8 @@ public class BotBrainTask extends BotTaskAutoParams<BotBrainTaskParams> {
                 if (params.isAllowTeleport()) {
                     BotLocation botPos = bot.getNavigation().getLocation();
                     BotSceneData sceneData = bot.getBrain().getMemory().getSceneData();
-                    BotSceneContext context = BotNavigationPlannerWrapper.getSceneContext(sceneData.blocks,
-                            sceneData.entities, botPos);
+                    BotSceneContext context = BotNavigationPlannerWrapper.getSceneContext(botPos, sceneData.blocks,
+                            sceneData.entities);
                     return tryTeleportFallback(bot, context);
                 }
                 return Optional.empty();

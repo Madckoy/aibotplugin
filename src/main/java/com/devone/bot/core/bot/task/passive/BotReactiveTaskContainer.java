@@ -6,7 +6,6 @@ import java.util.List;
 
 import com.devone.bot.core.bot.Bot;
 import com.devone.bot.core.bot.task.passive.params.BotTaskParams;
-import com.devone.bot.core.bot.task.reactive.BotReactiveUtils;
 import com.devone.bot.core.utils.logger.BotLogger;
 
 public abstract class BotReactiveTaskContainer<T extends BotTaskParams> extends BotTaskAutoParams<T> {

@@ -12,6 +12,7 @@ import com.devone.bot.core.bot.BotManager;
 import com.devone.bot.core.bot.task.active.move.BotMoveTask;
 import com.devone.bot.core.bot.task.active.move.params.BotMoveTaskParams;
 import com.devone.bot.core.bot.task.passive.BotTaskManager;
+import com.devone.bot.core.bot.task.reactive.container.BotEmptyReactiveContainer;
 import com.devone.bot.core.utils.blocks.BotLocation;
 import com.devone.bot.core.utils.logger.BotLogger;
 
@@ -63,15 +64,20 @@ public class BotMoveCommand implements CommandExecutor {
         }
 
         // BotTaskManager.clear(bot);
-
-        Location targetLocation = new Location(bot.getNPCEntity().getWorld(), x, y, z);
+        
         // ✅ Добавляем задачу на перемещение
+        Location targetLocation = new Location(bot.getNPCEntity().getWorld(), x, y, z);
+        // создаем контейнер
+        BotEmptyReactiveContainer container = new BotEmptyReactiveContainer(bot);
         BotMoveTask moveTask = new BotMoveTask(bot);
         BotMoveTaskParams moveTaskParams = new BotMoveTaskParams();
         moveTaskParams.setTarget(new BotLocation(x, y, z));
         moveTask.setParams(moveTaskParams);
-        BotTaskManager.push(bot, moveTask);
+        container.add(moveTask);
+        BotTaskManager.push(bot, container);
+
         BotLogger.debug("📌 ", true, "/bot-move: Бот " + bot.getId() + " направляется в " + targetLocation);
+        
         sender.sendMessage("✅ Бот '" + botName + "' направляется в " + x + " " + y + " " + z);
 
         return true;

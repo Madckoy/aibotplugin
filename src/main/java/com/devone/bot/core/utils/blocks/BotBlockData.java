@@ -9,27 +9,38 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 public class BotBlockData extends BotLocation {
 
     private String type;
-    private UUID   uuid;
+    private UUID uuid;
+    private boolean targetable;
 
-    public void setType( String type){
+    @JsonIgnore
+    public boolean isTargetable() {
+        return targetable;
+    }
+
+    @JsonIgnore
+    public void setTargetable(boolean targetable) {
+        this.targetable = targetable;
+    }
+
+    public void setType(String type) {
         this.type = type;
     }
 
-    public String getType(){
+    public String getType() {
         return this.type;
     }
 
-    public void setUUID( UUID id){
+    public void setUUID(UUID id) {
         this.uuid = id;
     }
 
-    public UUID getUUID(){
+    public UUID getUUID() {
         return this.uuid;
     }
 
     @JsonIgnore
-    private boolean bot;  // из JSON  
-    
+    private boolean bot; // из JSON
+
     @JsonIgnore
     public boolean isBot() {
         return bot;
@@ -43,21 +54,22 @@ public class BotBlockData extends BotLocation {
     @JsonIgnore
     public boolean isAir() {
         return type != null && BlockMaterialUtils.AIR_TYPES.contains(type.toUpperCase());
-    } 
+    }
 
     @JsonIgnore
     public boolean isCover() {
         return type != null && BlockMaterialUtils.COVER_TYPES.contains(type.toUpperCase());
-    }   
+    }
 
-    @JsonIgnore   
+    @JsonIgnore
     public boolean isDangerous() {
-        return type != null && BlockMaterialUtils.UNSAFE_TYPES.contains(type.toUpperCase());  
-    } 
-    
+        return type != null && BlockMaterialUtils.UNSAFE_TYPES.contains(type.toUpperCase());
+    }
+
     @JsonIgnore
     public EntityType toEntityType() {
-        if (type == null) return null;
+        if (type == null)
+            return null;
         try {
             return EntityType.valueOf(type.toUpperCase());
         } catch (IllegalArgumentException e) {
@@ -74,13 +86,15 @@ public class BotBlockData extends BotLocation {
     public boolean isPassiveMob() {
         return BotEntityUtils.isPassiveMob(this.type);
     }
-    
+
     @JsonIgnore
     public String toString() {
-        return String.format("Block[x=%d, y=%d, z=%d, type=%s, bot=%b]", this.getX(), this.getY(), this.getZ(), type, bot);
+        return String.format("Block[x=%d, y=%d, z=%d, type=%s, bot=%b]", this.getX(), this.getY(), this.getZ(), type,
+                bot);
     }
+
     @JsonIgnore
-    public BotLocation getLocation(){
+    public BotLocation getLocation() {
         return new BotLocation(getX(), getY(), getZ());
     }
 }

@@ -96,6 +96,9 @@ public class BotUtils {
      */
     public static void lookAt(Bot bot, BotLocation target) {
 
+        if (bot.getNPCEntity() == null)
+            return;
+
         Location tgt = BotWorldHelper.getWorldLocation(target);
 
         Location from = bot.getNPCEntity().getLocation();

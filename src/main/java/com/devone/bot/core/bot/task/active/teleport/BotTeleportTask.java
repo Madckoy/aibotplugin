@@ -6,6 +6,7 @@ import org.bukkit.entity.Player;
 
 import com.devone.bot.AIBotPlugin;
 import com.devone.bot.core.bot.Bot;
+import com.devone.bot.core.bot.task.active.sonar.BotSonar3DTask;
 import com.devone.bot.core.bot.task.active.teleport.params.BotTeleportTaskParams;
 import com.devone.bot.core.bot.task.passive.BotTaskAutoParams;
 import com.devone.bot.core.bot.task.passive.IBotTaskParameterized;
@@ -64,8 +65,11 @@ public class BotTeleportTask extends BotTaskAutoParams<BotTeleportTaskParams> {
             Location safeOffset = baseLocation.clone().add(0.5, 0, 0.5);
 
             bot.getNPCEntity().teleport(safeOffset);
-            bot.getState().setStuck(false);
             bot.getBrain().getMemory().teleportUsedIncrease();
+
+            BotSonar3DTask sonar = new BotSonar3DTask(bot);
+            sonar.execute();
+            bot.getNavigation().calculate(bot.getBrain().getMemory().getSceneData());
 
             BotLogger.debug(icon, this.isLogging(),
                     bot.getId() + " ⚡ Телепорт завершен с " + baseLocation.toVector() + " в " + safeOffset.toVector());

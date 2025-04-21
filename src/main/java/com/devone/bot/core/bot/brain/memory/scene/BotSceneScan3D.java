@@ -78,22 +78,22 @@ public class BotSceneScan3D {
 
             scannedEntities.add(blockData);
         }
-        
-            // 3. Координаты бота
-            BotLocation botCoords = new BotLocation(centerX, centerY, centerZ);
-            BotSceneData sceneData = new BotSceneData(scannedBlocks, scannedEntities, botCoords);
 
-            if(bot.getState().isStuck()) {
-                // long currTime = System.currentTimeMillis(); 
-                // 4. Сохраняем всё в JSON если застряли
-                String fileName = BotConstants.PLUGIN_TMP + bot.getId() + "_stuck_scene.json";
+        // 3. Координаты бота
+        BotLocation botCoords = new BotLocation(centerX, centerY, centerZ);
+        BotSceneData sceneData = new BotSceneData(scannedBlocks, scannedEntities, botCoords);
 
-                try {
-                    BotSceneSaver.saveToJsonFile(fileName, sceneData);
-                } catch (IOException e) {
-                    System.err.println("Ошибка при сохранении карты: " + e.getMessage());
-                }
+        if (bot.getNavigation().isStuck()) {
+            // long currTime = System.currentTimeMillis();
+            // 4. Сохраняем всё в JSON если застряли
+            String fileName = BotConstants.PLUGIN_TMP + bot.getId() + "_stuck_scene.json";
+
+            try {
+                BotSceneSaver.saveToJsonFile(fileName, sceneData);
+            } catch (IOException e) {
+                System.err.println("Ошибка при сохранении карты: " + e.getMessage());
             }
+        }
 
         return sceneData;
     }

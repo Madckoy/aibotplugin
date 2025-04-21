@@ -28,19 +28,22 @@ public class BotCalibrateTask extends BotTaskAutoParams<BotCalibrateTaskParams> 
 
         long rmt = BotUtils.getRemainingTime(startTime);
 
-        setObjective(params.getObjective() + " / Performing maintenance " + " (" + rmt + ")");
+        setObjective(params.getObjective() + " (" + rmt + ")");
 
         bot.getBrain().getMemory().cleanup(MemoryType.VISITED_BLOCKS);
 
         BotLogger.debug(icon, isLogging(), bot.getId() + " 🗑️ Removed all visited navigation points");
 
-        bot.getState().resetStuckCount();
+        bot.getNavigation().resetStuckCount();
+
+        BotLogger.debug(icon, isLogging(), bot.getId() + " 📡 Scan");
 
         BotSonar3DTask sonar = new BotSonar3DTask(bot);
         sonar.execute();
+        bot.getNavigation().calculate(bot.getBrain().getMemory().getSceneData());
 
         if (rmt <= 0) {
-            BotLogger.debug(icon, isLogging(), bot.getId() + " ✅ Task timeout passed. Ending Task.");
+            BotLogger.debug(icon, isLogging(), bot.getId() + " ⏱️ Task timeout passed. Ending Task.");
             stop();
         }
     }

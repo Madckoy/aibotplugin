@@ -115,7 +115,7 @@ public class BotMoveTask extends BotTaskAutoParams<BotMoveTaskParams> {
                 if (rmt <= 0) {
                     BotLogger.debug(icon, isLogging(), bot.getId() + " ⏱️ Тайм-аут навигации.");
 
-                    bot.getState().setStuck(true);
+                    bot.getNavigation().setStuck(true);
 
                     stopTaskHandle();
                     this.stop();

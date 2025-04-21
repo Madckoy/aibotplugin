@@ -21,12 +21,13 @@ public class BotNavigationPlannerWrapper {
      * Если sectorCount == null, будет подобрано автоматически по площади.
      * scanRadius теперь тоже рассчитывается адаптивно.
      */
-    public static BotSceneContext getSceneContext(List<BotBlockData> geoBlocks, List<BotBlockData> bioBlocks,
-            BotLocation botPosition) {
+    public static BotSceneContext getSceneContext(BotLocation botPosition, List<BotBlockData> geoBlocks,
+            List<BotBlockData> bioBlocks) {
 
         BotSceneContext context = new BotSceneContext();
 
-        List<BotBlockData> sliced = BotBlocksVerticalSliceFilter.filter(geoBlocks, botPosition.getY(), BotConstants.DEFAULT_SCAN_DATA_SLICE_HEIGHT);// relative!!!
+        List<BotBlockData> sliced = BotBlocksVerticalSliceFilter.filter(geoBlocks, botPosition.getY(),
+                BotConstants.DEFAULT_SCAN_DATA_SLICE_HEIGHT);// relative!!!
         if (sliced == null || sliced.isEmpty())
             return context;
 
@@ -75,11 +76,11 @@ public class BotNavigationPlannerWrapper {
                 true,
                 scanRadius);
 
-        context.walkable = walkable;
+        context.walkable  = walkable;
         context.navigable = navigable;
         context.reachable = reachable;
-        context.reachableGoals = targets;
-        context.entities = livingTargets;
+        context.targets   = targets;
+        context.entities  = livingTargets;
 
         return context;
     }
