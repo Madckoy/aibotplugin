@@ -112,6 +112,10 @@ public class BotTaskManager {
             BotLogger.debug("🤖", true, bot.getId() + " 🟢 Activate task: " + currentTask.getIcon() + " "
                     + currentTask.getClass().getSimpleName());
 
+            if (currentTask.isDone() && currentTask.isPause()) {
+                currentTask.setPause(false);
+            }
+
             if (currentTask.isDone()) {
                 popTask();
                 BotLogger.debug("🤖", true, bot.getId() + " ⭕ Deactivating task: " + currentTask.getIcon() + " "
@@ -119,6 +123,7 @@ public class BotTaskManager {
             } else {
                 BotLogger.debug("🤖", true, bot.getId() + " 🔵 Updating task: " + currentTask.getIcon() + " "
                         + currentTask.getClass().getSimpleName());
+
                 currentTask.update();
             }
         }

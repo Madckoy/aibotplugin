@@ -58,10 +58,12 @@ public abstract class BotTask<T extends BotTaskParams> implements IBotTask, List
     }
 
     public void update() {
-        if (!enabled || isPause())
-            return;
 
         logTaskStatus();
+
+        if (!enabled || isPause()) {
+            return;
+        }
 
         if (playerDisconnected()) {
             handlePlayerDisconnect();
