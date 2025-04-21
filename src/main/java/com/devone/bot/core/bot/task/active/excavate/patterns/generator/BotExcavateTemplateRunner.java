@@ -35,13 +35,8 @@ public class BotExcavateTemplateRunner implements IBotExcavatePatternRunner {
         this.yamlPath = path;
     }
 
-    @Override    
-    public IBotExcavatePatternRunner setParams(BotExcavateTemplateRunnerParams params) {
+    public BotExcavateTemplateRunner init() {
 
-        if(params==null) return this; 
-    
-        this.params = params;
-    
         BotLogger.debug("🛠️", true, "Начинаем загрузку YAML-паттерна: " + yamlPath);
     
         try (InputStream inputStream = Files.newInputStream(yamlPath)) {
@@ -57,9 +52,22 @@ public class BotExcavateTemplateRunner implements IBotExcavatePatternRunner {
                 BotLogger.debug("❌", true, "loadFromYaml() вернул null для файла: " + yamlPath);
 
             }
+
         } catch (IOException e) {
+
             BotLogger.debug("❌", true, "Ошибка при открытии YAML-файла: " + yamlPath + " — " + e.getMessage());
+
         }
+
+        return this;
+    } 
+
+    @Override    
+    public IBotExcavatePatternRunner setParams(BotExcavateTemplateRunnerParams params) {
+
+        if(params==null) return this; 
+    
+        this.params = params;
 
         return this;
     }

@@ -51,10 +51,10 @@ public class BotExcavateTask extends BotTaskAutoParams<BotExcavateTaskParams> {
 
         if (params.getPatternName() != null) {
             this.patternName = params.getPatternName();
-            BotLogger.debug("📐", isLogging(), "Установлен паттерн разрушения: " + patternName);
+            BotLogger.debug(icon, isLogging(), bot.getId()+ " 📐 Установлен паттерн разрушения: " + patternName);
         }
 
-        BotLogger.debug("📐", isLogging(), "Установлен паттерн разрушения через setParams(): " + patternName);
+        BotLogger.debug(icon, isLogging(), bot.getId() + " 📐 Установлен паттерн разрушения через setParams(): " + patternName);
 
         return this;
     }
@@ -123,7 +123,7 @@ public class BotExcavateTask extends BotTaskAutoParams<BotExcavateTaskParams> {
 
         // 🚨 Проверка на опасную жидкость
         if (BotWorldHelper.isInDangerousLiquid(bot)) {
-            BotLogger.debug("💧", isLogging(), bot.getId() + " 💧 Оказался в опасной жидкости. Завершаем копку.");
+            BotLogger.debug(icon, isLogging(), bot.getId() + " 💧 Оказался в опасной жидкости. Завершаем копку.");
             this.stop();
             return;
         }
@@ -132,7 +132,8 @@ public class BotExcavateTask extends BotTaskAutoParams<BotExcavateTaskParams> {
             if (!StringUtil.isEmpty(patternName)) {
 
                 Path ptrnPath = Paths.get(BotConstants.PLUGIN_PATH_PATTERNS_BREAK, patternName);
-                this.patternRunner = new BotExcavateTemplateRunner(ptrnPath).setParams(null ); //null because we read from the template file
+                this.patternRunner = new BotExcavateTemplateRunner(ptrnPath).init();
+                //setParams(null ); //null because we read from the template file
 
                 BotLogger.debug(icon, isLogging(), bot.getId() +
                         " 📐 Используется YAML-паттерн: " + this.patternRunner.getName());
