@@ -128,10 +128,12 @@ function setupInfoPanel() {
 }
 
 function showInfoPanel(bot) {
-    document.getElementById("info-id").textContent = bot.id;
-    document.getElementById("info-model").textContent = bot.model || "M-000.2";
-    document.getElementById("info-navpoints").textContent = bot.navPoints ?? "n/a";
-    document.getElementById("info-reactive").textContent = getTaskStatusEmoji(bot.taskIsReactive);
+    document.getElementById("info-nav-type").textContent = bot.id;
+    document.getElementById("info-nav-targets").textContent = bot.model;
+    document.getElementById("info-nav-reachable").textContent = bot.navPoints ?? "n/a";
+    document.getElementById("info-nav-navigable").textContent = bot.navPoints ?? "n/a";
+    document.getElementById("info-nav-walkable").textContent = bot.navPoints ?? "n/a";
+
     const panel = document.getElementById("bot-info-panel");
     panel.classList.remove("hidden");
     panel.classList.add("visible");
