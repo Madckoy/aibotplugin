@@ -33,7 +33,7 @@ public class BotNavigation {
 
     // Добавляем currentLocation, lastKnownLocation и targetLocation
     private BotLocation location;
-    private transient BotLocation target; // Новое свойство для целевой локации
+    private transient BotLocation navTarget; // Новое свойство для целевой локации
 
     private BotNavigationSummaryItem targets = new BotNavigationSummaryItem("targets");
     private BotNavigationSummaryItem reachable = new BotNavigationSummaryItem("reachable");
@@ -48,7 +48,7 @@ public class BotNavigation {
 
     public BotNavigation() {
         this.location = null; // Инициализируем с текущей локацией
-        this.target = null; // Начальное значение для targetLocation
+        this.navTarget = null; // Начальное значение для targetLocation
         summary.put(targets.getId(), targets);
         summary.put(reachable.getId(), reachable);
         summary.put(navigable.getId(), navigable);
@@ -60,7 +60,7 @@ public class BotNavigation {
         this();
         this.owner = owner;
         this.location = getLocation(); // Инициализируем с текущей локацией
-        this.target = null; // Начальное значение для targetLocation
+        this.navTarget = null; // Начальное значение для targetLocation
     }
 
     // Получение и обновление currentLocation с проверкой на застревание
@@ -86,21 +86,16 @@ public class BotNavigation {
 
     // Геттер и Сеттер для targetLocation
     public BotLocation getTarget() {
-        return target;
+        return navTarget;
     }
 
-    public void setTarget(BotLocation targetLocation) {
-
-        String locText = "";
-
-        if (targetLocation != null) {
-            locText = targetLocation.toString();
-        }
+    public void setTarget(BotLocation target) {
+        if(target==null) {return; }
 
         BotLogger.debug(owner.getActiveTask().getIcon(), true, owner.getId() + " 🗺️ Wants to navigate to "
-                + locText + " [ID: " + owner.getBrain().getCurrentTask().getIcon() + "]");
+                + target + " [ID: " + owner.getBrain().getCurrentTask().getIcon() +  " " + owner.getBrain().getCurrentTask().getClass().getSimpleName() +"]");
 
-        this.target = targetLocation;
+        this.navTarget = target;
     }
 
     public void setStuck(boolean stuck) {
@@ -208,16 +203,27 @@ public class BotNavigation {
 
     public boolean navigate(float speed) {
 
+        if(this.navTarget==null) {
+
+            BotLogger.debug(owner.getActiveTask().getIcon(), true,
+            owner.getId() + " 🗺️ Target is null. Navigation is not possible " + " [ID: " + owner.getBrain().getCurrentTask().getIcon() + 
+                           " " + owner.getBrain().getCurrentTask().getClass().getSimpleName() +" ]");
+            return false;
+        }
+
         BotLogger.debug(owner.getActiveTask().getIcon(), true,
-                owner.getId() + " 🎯 Runtime Target Location: " + owner.getNavigation().getTarget().toString()
+                owner.getId() + " 🗺️ Runtime Target Location: " + owner.getNavigation().getTarget()
                         + " [ID: "
-                        + owner.getBrain().getCurrentTask().getIcon() + "]");
+                        + owner.getBrain().getCurrentTask().getIcon() + " " + owner.getBrain().getCurrentTask().getClass().getSimpleName() +" ]");
+
+
+        BotLocation target = owner.getNavigation().getTarget();
 
         BotMoveTask moveTask = new BotMoveTask(owner);
         BotMoveTaskParams moveTaskParams = new BotMoveTaskParams();
-
         moveTaskParams.setTarget(target);
         moveTaskParams.setSpeed(speed);
+
         moveTask.setParams(moveTaskParams);
 
         BotTaskManager.push(owner, moveTask);
