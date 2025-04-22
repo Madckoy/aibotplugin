@@ -6,7 +6,7 @@ import java.util.Map;
 
 import com.devone.bot.core.bot.Bot;
 import com.devone.bot.core.bot.brain.BotBrain;
-import com.devone.bot.core.bot.brain.logic.navigation.BotNavigator;
+import com.devone.bot.core.bot.brain.logic.navigator.BotNavigator;
 import com.devone.bot.core.bot.state.BotState;
 import com.devone.bot.core.utils.blocks.BotLocation;
 import com.devone.bot.plugin.config.AIBotBaseJsonConfig;

@@ -1,10 +1,10 @@
-package com.devone.bot.core.bot.brain.behaviour;
+package com.devone.bot.core.bot.brain.cortex;
 
 import com.devone.bot.core.bot.task.active.explore.BotExploreTask;
 import java.util.*;
 
 import com.devone.bot.core.bot.Bot;
-import com.devone.bot.core.bot.brain.logic.navigation.math.selector.BotEntitySelector;
+import com.devone.bot.core.bot.brain.logic.navigator.math.selector.BotEntitySelector;
 import com.devone.bot.core.bot.brain.memory.scene.BotSceneData;
 import com.devone.bot.core.bot.task.active.brain.params.BotBrainTaskParams;
 import com.devone.bot.core.bot.task.active.excavate.BotExcavateTask;
@@ -18,7 +18,7 @@ import com.devone.bot.core.utils.blocks.BotLocation;
 import com.devone.bot.core.utils.logger.BotLogger;
 import com.devone.bot.core.utils.world.BotWorldHelper;
 
-public class BotTaskCandidatesFactory {
+public class BotTaskCandidateFactory {
 
     public static List<BotTaskCandidate> createCandidates(Bot bot, BotBrainTaskParams params) {
         boolean isNight = BotWorldHelper.isNight(bot);

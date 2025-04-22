@@ -1,13 +1,13 @@
-package com.devone.bot.core.bot.brain.logic.navigation.context;
+package com.devone.bot.core.bot.brain.logic.navigator.context;
 
-import com.devone.bot.core.bot.brain.logic.navigation.math.filters.BotBlocksNavigableFilter;
-import com.devone.bot.core.bot.brain.logic.navigation.math.filters.BotBlocksNoDangerousFilter;
-import com.devone.bot.core.bot.brain.logic.navigation.math.filters.BotBlocksVerticalSliceFilter;
-import com.devone.bot.core.bot.brain.logic.navigation.math.filters.BotBlocksWalkableFilter;
-import com.devone.bot.core.bot.brain.logic.navigation.math.filters.BotEntitiesOnSurfaceFilter;
-import com.devone.bot.core.bot.brain.logic.navigation.math.resolver.BotReachabilityResolver;
-import com.devone.bot.core.bot.brain.logic.navigation.math.resolver.BotTargetReachabilityResolver;
-import com.devone.bot.core.bot.brain.logic.navigation.math.resolver.BotTargetReachabilityResolver.Strategy;
+import com.devone.bot.core.bot.brain.logic.navigator.math.filters.BotBlocksNavigableFilter;
+import com.devone.bot.core.bot.brain.logic.navigator.math.filters.BotBlocksNoDangerousFilter;
+import com.devone.bot.core.bot.brain.logic.navigator.math.filters.BotBlocksVerticalSliceFilter;
+import com.devone.bot.core.bot.brain.logic.navigator.math.filters.BotBlocksWalkableFilter;
+import com.devone.bot.core.bot.brain.logic.navigator.math.filters.BotEntitiesOnSurfaceFilter;
+import com.devone.bot.core.bot.brain.logic.navigator.math.resolver.BotReachabilityResolver;
+import com.devone.bot.core.bot.brain.logic.navigator.math.resolver.BotTargetReachabilityResolver;
+import com.devone.bot.core.bot.brain.logic.navigator.math.resolver.BotTargetReachabilityResolver.Strategy;
 import com.devone.bot.core.utils.BotConstants;
 import com.devone.bot.core.utils.blocks.BotBlockData;
 import com.devone.bot.core.utils.blocks.BotLocation;

@@ -1,4 +1,4 @@
-package com.devone.bot.core.bot.brain.logic.navigation;
+package com.devone.bot.core.bot.brain.logic.navigator;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -8,10 +8,10 @@ import java.util.Map;
 import org.bukkit.Location;
 
 import com.devone.bot.core.bot.Bot;
-import com.devone.bot.core.bot.brain.logic.navigation.context.BotNavigationContext;
-import com.devone.bot.core.bot.brain.logic.navigation.context.BotNavigationConextMaker;
-import com.devone.bot.core.bot.brain.logic.navigation.math.selector.BotBlockSelector;
-import com.devone.bot.core.bot.brain.logic.navigation.summary.BotNavigationSummaryItem;
+import com.devone.bot.core.bot.brain.logic.navigator.context.BotNavigationConextMaker;
+import com.devone.bot.core.bot.brain.logic.navigator.context.BotNavigationContext;
+import com.devone.bot.core.bot.brain.logic.navigator.math.selector.BotBlockSelector;
+import com.devone.bot.core.bot.brain.logic.navigator.summary.BotNavigationSummaryItem;
 import com.devone.bot.core.bot.brain.memory.scene.BotSceneData;
 import com.devone.bot.core.bot.task.active.move.BotMoveTask;
 import com.devone.bot.core.bot.task.active.move.params.BotMoveTaskParams;

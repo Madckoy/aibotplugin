@@ -1,17 +1,17 @@
-package com.devone.bot.core.bot.brain.behaviour;
+package com.devone.bot.core.bot.brain.cortex;
 
 import java.util.*;
 
 import com.devone.bot.core.utils.logger.BotLogger;
 
-public class BotBehaviorSelector {
+public class BotActionSelector {
 
     public static Optional<Runnable> selectWeightedRandom(List<BotTaskCandidate> candidates) {
         List<BotTaskCandidate> available = candidates.stream()
             .filter(BotTaskCandidate::isAvailable)
             .toList();
 
-        BotLogger.debug("⚙️", true, "🧠 Доступные поведенческие кандидаты: " + candidates.size());
+        BotLogger.debug("⚙️", true, "🧠 Доступные кандидаты на действие: " + candidates.size());
 
         for (BotTaskCandidate c : candidates) {
                 BotLogger.debug("⚙️", true,  "Кандидат: weight=" + c.getWeight() + " available=" + c.isAvailable());

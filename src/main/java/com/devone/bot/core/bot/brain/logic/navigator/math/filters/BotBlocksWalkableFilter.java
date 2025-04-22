@@ -1,4 +1,4 @@
-package com.devone.bot.core.bot.brain.logic.navigation.math.filters;
+package com.devone.bot.core.bot.brain.logic.navigator.math.filters;
 
 
 import java.util.*;

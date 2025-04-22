@@ -12,7 +12,7 @@ import org.bukkit.entity.Player;
 
 import com.devone.bot.core.bot.bootstrap.BotBootstrap;
 import com.devone.bot.core.bot.brain.BotBrain;
-import com.devone.bot.core.bot.brain.logic.navigation.BotNavigator;
+import com.devone.bot.core.bot.brain.logic.navigator.BotNavigator;
 import com.devone.bot.core.bot.inventory.BotInventory;
 import com.devone.bot.core.bot.speaker.BotSpeaker;
 import com.devone.bot.core.bot.state.BotState;

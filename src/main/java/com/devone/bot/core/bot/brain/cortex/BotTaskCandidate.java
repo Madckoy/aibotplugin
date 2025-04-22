@@ -1,4 +1,4 @@
-package com.devone.bot.core.bot.brain.behaviour;
+package com.devone.bot.core.bot.brain.cortex;
 
 import java.util.function.*;
 

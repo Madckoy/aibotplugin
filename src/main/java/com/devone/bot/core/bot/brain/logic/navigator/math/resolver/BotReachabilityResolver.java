@@ -1,4 +1,4 @@
-package com.devone.bot.core.bot.brain.logic.navigation.math.resolver;
+package com.devone.bot.core.bot.brain.logic.navigator.math.resolver;
 
 import java.util.*;
 

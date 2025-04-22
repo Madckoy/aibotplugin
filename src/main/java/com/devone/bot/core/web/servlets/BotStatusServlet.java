@@ -12,7 +12,7 @@ import org.bukkit.inventory.ItemStack;
 
 import com.devone.bot.core.bot.Bot;
 import com.devone.bot.core.bot.BotManager;
-import com.devone.bot.core.bot.brain.logic.navigation.BotNavigator;
+import com.devone.bot.core.bot.brain.logic.navigator.BotNavigator;
 import com.devone.bot.core.bot.task.passive.BotTask;
 import com.devone.bot.core.utils.BotUtils;
 import com.devone.bot.core.utils.blocks.BotLocation;

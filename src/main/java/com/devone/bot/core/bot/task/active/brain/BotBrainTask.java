@@ -5,13 +5,13 @@ import java.util.Optional;
 import java.util.function.Supplier;
 
 import com.devone.bot.core.bot.Bot;
-import com.devone.bot.core.bot.brain.behaviour.BotBehaviorSelector;
-import com.devone.bot.core.bot.brain.behaviour.BotTaskCandidate;
-import com.devone.bot.core.bot.brain.behaviour.BotTaskCandidatesFactory;
-import com.devone.bot.core.bot.brain.logic.navigation.context.BotNavigationContext;
-import com.devone.bot.core.bot.brain.logic.navigation.context.BotNavigationConextMaker;
-import com.devone.bot.core.bot.brain.logic.navigation.math.selector.BotBlockSelector;
-import com.devone.bot.core.bot.brain.logic.navigation.math.selector.BotEntitySelector;
+import com.devone.bot.core.bot.brain.cortex.BotActionSelector;
+import com.devone.bot.core.bot.brain.cortex.BotTaskCandidate;
+import com.devone.bot.core.bot.brain.cortex.BotTaskCandidateFactory;
+import com.devone.bot.core.bot.brain.logic.navigator.context.BotNavigationConextMaker;
+import com.devone.bot.core.bot.brain.logic.navigator.context.BotNavigationContext;
+import com.devone.bot.core.bot.brain.logic.navigator.math.selector.BotBlockSelector;
+import com.devone.bot.core.bot.brain.logic.navigator.math.selector.BotEntitySelector;
 import com.devone.bot.core.bot.brain.memory.scene.BotSceneData;
 import com.devone.bot.core.bot.task.active.brain.params.BotBrainTaskParams;
 import com.devone.bot.core.bot.task.active.calibrate.BotCalibrateTask;
@@ -116,8 +116,8 @@ public class BotBrainTask extends BotTaskAutoParams<BotBrainTaskParams> {
     }
 
     private Runnable pickWeightedTask(Bot bot) {
-        List<BotTaskCandidate> candidates = BotTaskCandidatesFactory.createCandidates(bot, params);
-        Optional<Runnable> selected = BotBehaviorSelector.selectWeightedRandom(candidates);
+        List<BotTaskCandidate> candidates = BotTaskCandidateFactory.createCandidates(bot, params);
+        Optional<Runnable> selected = BotActionSelector.selectWeightedRandom(candidates);
         return selected.orElse(null);
     }
 
