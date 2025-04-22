@@ -63,10 +63,12 @@
 <div id="botMap" class="map"></div>
 
 <div id="bot-info-panel" class="info-panel hidden">
-  <button id="close-info-panel" class="class="cmd-btn">×</button>
+  <div class="close-btn-container">
+    <button id="close-info-panel" class="cmd-btn">🗙</button>
+   &nbsp;🗺️ Navigation (calculated vs confirmed)
+  </div>
+ <hr class = "info-panel-hr-top">
   <div id="info-content"></div>
-      <p>🗺️ Navigation (calculated vs confirmed)</p>
-      <p><hr class = "info-panel-hr-top"></p>
       <p>🎯    Targets: <span id="info-nav-targets">N/A</span></p>
       <p>📍  Reachable: <span id="info-nav-reachable">N/A</span></p>
       <p>🧭  Navigable: <span id="info-nav-navigable">N/A</span></p>
@@ -77,6 +79,7 @@
       <p></p>
   </div>
 </div>
+
 
 </body>
 </html>

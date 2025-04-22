@@ -40,6 +40,11 @@ public class BotBlockSelector {
         double minDistance = Double.MAX_VALUE;
     
         for (BotBlockData target : targets) {
+            // Пропускаем, если координаты совпадают
+            if (fromLocation.equals(target)) {
+                continue;
+            }
+    
             double distance = fromLocation.distanceTo(target);
             if (distance < minDistance) {
                 minDistance = distance;
@@ -49,6 +54,7 @@ public class BotBlockSelector {
     
         return nearest;
     }
+    
 
     public static BotBlockData pickEmergencyRelocationTarget(
             BotLocation botPos,

@@ -5,7 +5,7 @@
     top: 50%;
     right: 0;
     transform: translate(100%, -50%);
-    width: 350px;
+    width: 300px;
     background: rgba(30, 30, 30, 0.95);
     border-left: 2px solid #444;
     padding: 12px;
@@ -35,3 +35,16 @@
     border-top: 1px dotted rgb(92, 86, 86);
 
 }  
+
+
+.close-btn-container {
+  position: relative;
+  height: 25px;
+  z-index: 10;
+}
+
+/* Переиспользуем cmd-btn, добавим уточнение для позиции */
+#bot-info-panel .close-btn {
+  position: relative;
+  z-index: 10;
+}
