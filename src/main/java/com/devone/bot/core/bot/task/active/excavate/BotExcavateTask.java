@@ -117,6 +117,7 @@ public class BotExcavateTask extends BotTaskAutoParams<BotExcavateTaskParams> {
 
     @Override
     public void execute() {
+        stop();
 
         BotLogger.debug(icon, isLogging(), bot.getId() + " 🚀 Запуск задачи разрушения блоков для бота " + bot.getId() +
                 " (Целевые блоки: " + (targetMaterials == null ? "ВСЕ" : targetMaterials) + ")");
@@ -204,7 +205,7 @@ public class BotExcavateTask extends BotTaskAutoParams<BotExcavateTaskParams> {
             }
 
             if (!BotWorldHelper.isBreakableBlock(targetBlock)) {
-                
+
                 BotLogger.debug(icon, isLogging(), bot.getId() + " ⛔ Неразрушаемый блок: "
                         + bot.getNavigation().getTarget());
 
