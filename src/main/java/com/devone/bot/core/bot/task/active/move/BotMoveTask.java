@@ -82,7 +82,7 @@ public class BotMoveTask extends BotTaskAutoParams<BotMoveTaskParams> {
         String blockName = BotUtils.getBlockName(targetBlock);
         String coordsStr = " " + targetCoord.getX() + ", " + targetCoord.getY() + ", " + targetCoord.getZ();
 
-        setObjective(params.getObjective() + " to " + blockName + " at:" + coordsStr + " ("+ BotUtils.getRemainingTime(startTime) +")");
+        setObjective(params.getObjective() + " to " + blockName + " at:" + coordsStr + " ("+ BotUtils.getRemainingTime(startTime, params.getTimeout()) +")");
 
         if (!isMoving) {
             if (listener == null) {
@@ -102,7 +102,7 @@ public class BotMoveTask extends BotTaskAutoParams<BotMoveTaskParams> {
 
             taskHandle = Bukkit.getScheduler().runTaskTimer(AIBotPlugin.getInstance(), () -> {
 
-                long rmt = BotUtils.getRemainingTime(startTime);
+                long rmt = BotUtils.getRemainingTime(startTime, params.getTimeout());
 
                 setObjective(params.getObjective() + " to " + blockName + " at:" + coordsStr + " ("+ rmt +")");
 

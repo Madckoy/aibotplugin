@@ -3,7 +3,6 @@ package com.devone.bot.core.bot.task.active.calibrate;
 import com.devone.bot.core.bot.Bot;
 import com.devone.bot.core.bot.brain.memory.MemoryType;
 import com.devone.bot.core.bot.task.active.calibrate.params.BotCalibrateTaskParams;
-import com.devone.bot.core.bot.task.active.sonar.BotSonar3DTask;
 import com.devone.bot.core.bot.task.passive.BotTaskAutoParams;
 import com.devone.bot.core.bot.task.passive.IBotTaskParameterized;
 import com.devone.bot.core.utils.BotUtils;
@@ -26,7 +25,7 @@ public class BotCalibrateTask extends BotTaskAutoParams<BotCalibrateTaskParams> 
     @Override
     public void execute() {
 
-        long rmt = BotUtils.getRemainingTime(startTime);
+        long rmt = BotUtils.getRemainingTime(startTime, params.getTimeout());
 
         setObjective(params.getObjective() + " (" + rmt + ")");
 

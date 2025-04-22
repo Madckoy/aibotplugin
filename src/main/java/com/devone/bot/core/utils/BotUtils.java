@@ -135,9 +135,9 @@ public class BotUtils {
         BotLogger.debug("📦", true, context + " — Использовано памяти: " + usedMB + " MB / " + maxMB + " MB");
     }
 
-    public static long getRemainingTime(long start) {
+    public static long getRemainingTime(long start, long timeout) {
         long elapsed = System.currentTimeMillis() - start;
-        long diff = (BotConstants.DEFAULT_TASK_TIMEOUT - elapsed) / 1000;
+        long diff = (timeout - elapsed) / 1000;
         return diff;
     }
 

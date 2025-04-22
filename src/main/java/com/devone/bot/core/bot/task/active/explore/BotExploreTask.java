@@ -9,6 +9,7 @@ import com.devone.bot.core.bot.task.active.explore.params.BotExploreTaskParams;
 import com.devone.bot.core.bot.task.active.sonar.BotSonar3DTask;
 import com.devone.bot.core.bot.task.passive.BotTaskAutoParams;
 import com.devone.bot.core.bot.task.passive.IBotTaskParameterized;
+import com.devone.bot.core.utils.BotConstants;
 import com.devone.bot.core.utils.BotUtils;
 import com.devone.bot.core.utils.blocks.BotBlockData;
 import com.devone.bot.core.utils.logger.BotLogger;
@@ -41,7 +42,7 @@ public class BotExploreTask extends BotTaskAutoParams<BotExploreTaskParams> {
 
         BotLogger.debug(icon, isLogging(), bot.getId() + " 🧭 Explore with distance: " + scanRadius);
 
-        long rmt = BotUtils.getRemainingTime(startTime);
+        long rmt = BotUtils.getRemainingTime(startTime, params.getTimeout());
         setObjective(params.getObjective() + " (" + rmt + ")");
 
         if (rmt <= 0) {

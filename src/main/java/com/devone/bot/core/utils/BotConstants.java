@@ -15,9 +15,7 @@ public class BotConstants {
     public static final int    DEFAULT_SCAN_RANGE = 10;
     public static final int    DEFAULT_SCAN_DATA_SLICE_HEIGHT = 10;
 
-    public static final long   DEFAULT_TASK_TIMEOUT = 30_000; // 30 sec
-    public static final long   DEFAULT_CALIBRATION_TIMEOUT = 5000; // 10 sec
-
+    public static final long   DEFAULT_TASK_TIMEOUT = 30_000;
     public static final double DEFAULT_HAND_DAMAGE = 5.0;
 
     public static final String DEFAULT_PATTERN_BREAK = "default.yml";

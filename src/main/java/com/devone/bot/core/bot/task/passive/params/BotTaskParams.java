@@ -16,7 +16,7 @@ public abstract class BotTaskParams implements IBotTaskParams {
     private String objective = "Do something abstract";
     private boolean isEnabled = true;
     private boolean isLogging = true;
-
+    private long timeout = BotConstants.DEFAULT_TASK_TIMEOUT;
 
     private transient File configFile;
 
@@ -100,5 +100,13 @@ public abstract class BotTaskParams implements IBotTaskParams {
 
     public void setIsLogging(boolean logging) {
         this.isLogging = logging;
+    }
+
+    public long getTimeout() {
+        return timeout;
+    }
+
+    public void setTimeout(long timeout) {
+        this.timeout = timeout;
     }
 }
