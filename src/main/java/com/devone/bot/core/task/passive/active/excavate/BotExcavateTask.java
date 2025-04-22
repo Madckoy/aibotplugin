@@ -134,9 +134,9 @@ public class BotExcavateTask extends BotTaskAutoParams<BotExcavateTaskParams> {
 
                 Path ptrnPath = Paths.get(BotConstants.PLUGIN_PATH_PATTERNS_BREAK, patternName);
 
-                this.patternRunner = new BotExcavateTemplateRunner(ptrnPath).init(bot.getNavigation().getLocation().getX(),
-                                                                                  bot.getNavigation().getLocation().getY(),
-                                                                                  bot.getNavigation().getLocation().getZ());
+                this.patternRunner = new BotExcavateTemplateRunner(ptrnPath).init(bot.getNavigator().getLocation().getX(),
+                                                                                  bot.getNavigator().getLocation().getY(),
+                                                                                  bot.getNavigator().getLocation().getZ());
 
                 //setParams(null ); //null because we read from the template file
 
@@ -187,18 +187,18 @@ public class BotExcavateTask extends BotTaskAutoParams<BotExcavateTaskParams> {
 
         Block targetBlock = BotWorldHelper.getBlockAt(targetLocation);
 
-        bot.getNavigation().setTarget(targetLocation);
+        bot.getNavigator().setTarget(targetLocation);
 
         turnToTarget(this, targetLocation);
 
-        if (bot.getNavigation().getTarget() != null) {
+        if (bot.getNavigator().getTarget() != null) {
 
             setObjective(params.getObjective() + " " + BotUtils.getBlockName(targetBlock)
                     + " at " + targetLocation);
 
-            if (isInProtectedZone(bot.getNavigation().getTarget())) {
+            if (isInProtectedZone(bot.getNavigator().getTarget())) {
                 BotLogger.debug(icon, isLogging(), bot.getId() + " ⛔ в запретной зоне, НЕ будет разрушать блок: " +
-                        bot.getNavigation().getTarget());
+                        bot.getNavigator().getTarget());
                         
                 this.stop();
                 return;
@@ -207,9 +207,9 @@ public class BotExcavateTask extends BotTaskAutoParams<BotExcavateTaskParams> {
             if (!BotWorldHelper.isBreakableBlock(targetBlock)) {
 
                 BotLogger.debug(icon, isLogging(), bot.getId() + " ⛔ Неразрушаемый блок: "
-                        + bot.getNavigation().getTarget());
+                        + bot.getNavigator().getTarget());
 
-                bot.getNavigation().setTarget(null);
+                bot.getNavigator().setTarget(null);
                 
                 return;
             }
@@ -220,7 +220,7 @@ public class BotExcavateTask extends BotTaskAutoParams<BotExcavateTaskParams> {
                 if (!BotInventory.equipRequiredTool(bot, mat)) {
                     BotLogger.debug(icon, isLogging(),
                             bot.getId() + " 🙈 Не удалось взять инструмент в руку. Пропускаем.");
-                    bot.getNavigation().setTarget(null);
+                    bot.getNavigator().setTarget(null);
                     return;
                 }
             }
@@ -241,7 +241,7 @@ public class BotExcavateTask extends BotTaskAutoParams<BotExcavateTaskParams> {
     }
 
     private void handleNoTargetFound() {
-        bot.getNavigation().setTarget(null);
+        bot.getNavigator().setTarget(null);
 
         setObjective("");
         BotLogger.debug(icon, isLogging(), bot.getId() + bot.getId() + " ❌ Нет подходящих блоков. Завершаем.");
@@ -273,7 +273,7 @@ public class BotExcavateTask extends BotTaskAutoParams<BotExcavateTaskParams> {
     @Override
     public void stop() {
         this.patternRunner = null;
-        bot.getNavigation().setTarget(null);
+        bot.getNavigator().setTarget(null);
         BotLogger.debug(icon, isLogging(), bot.getId() + " 🛑 Задача разрушения остановлена.");
         super.stop();
     }

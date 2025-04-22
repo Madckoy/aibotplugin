@@ -19,7 +19,7 @@ public class BotNearbyHostileStrategy implements IBotReactionStrategy {
         BotLogger.debug("🤖", true, bot.getId() + " 😈 Проверка реакции на близость враждебного моба");
 
         BotSceneData scene = bot.getBrain().getMemory().getSceneData();
-        BotLocation botPos = bot.getNavigation().getLocation();
+        BotLocation botPos = bot.getNavigator().getLocation();
 
         if (scene != null) {
             for (BotBlockData entity : scene.entities) {

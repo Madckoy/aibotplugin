@@ -46,7 +46,7 @@ public class Bot {
     private transient BotSpeaker speaker; // Создаем поле для общения бота
     private transient BotState state;
 
-    private BotNavigator navigation;
+    private BotNavigator navigator;
 
     public void setBrain(BotBrain brain) {
         this.brain = brain;
@@ -64,12 +64,12 @@ public class Bot {
         this.speaker = speaker;
     }
 
-    public BotNavigator getNavigation() {
-        return navigation;
+    public BotNavigator getNavigator() {
+        return navigator;
     }
 
     public void setNavigation(BotNavigator nav) {
-        this.navigation = nav;
+        this.navigator = nav;
     }
 
     public BotState getState() {
@@ -85,7 +85,7 @@ public class Bot {
         this.brain = new BotBrain(this); // Инициализация рантайм статуса
         this.speaker = new BotSpeaker(this); // Инициализация BotCommunicator
         this.state = new BotState(this);
-        this.navigation = new BotNavigator(this);
+        this.navigator = new BotNavigator(this);
 
         BotLogger.debug("🤖", true, id + " ➕ Has been created and spawned");
     }

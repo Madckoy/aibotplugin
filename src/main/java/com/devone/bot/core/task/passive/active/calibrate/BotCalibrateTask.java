@@ -33,7 +33,7 @@ public class BotCalibrateTask extends BotTaskAutoParams<BotCalibrateTaskParams> 
 
         BotLogger.debug(icon, isLogging(), bot.getId() + " 🗑️ Removed all visited navigation points");
 
-        bot.getNavigation().resetStuckCount();
+        bot.getNavigator().resetStuckCount();
 
         if (rmt <= 0) {
             BotLogger.debug(icon, isLogging(), bot.getId() + " ⏱️ Task timeout passed. Ending Task.");

@@ -18,7 +18,7 @@ public class BotLifecycleLogger {
     private static final String SESSION_ID = generateSessionId();
 
     public static void write(Bot bot) {
-        BotLocation loc = bot.getNavigation().getLocation();
+        BotLocation loc = bot.getNavigator().getLocation();
         if (loc == null) return;
     
         String botName = bot.getId();

@@ -23,12 +23,31 @@ public class BotBlockSelector {
      * @param targets список доступных точек
      * @return одна случайная точка или null, если список пуст или null
      */
-    public static BotBlockData pickRandomTarget(List<BotBlockData> targets) {
+    public static BotBlockData selectRandomTarget(List<BotBlockData> targets) {
         if (targets == null || targets.isEmpty()) {
             return null;
         }
         int index = RANDOM.nextInt(targets.size());
         return targets.get(index);
+    }
+
+    public static BotBlockData selectNearestTarget(List<BotBlockData> targets, BotLocation fromLocation) {
+        if (targets == null || targets.isEmpty() || fromLocation == null) {
+            return null;
+        }
+    
+        BotBlockData nearest = null;
+        double minDistance = Double.MAX_VALUE;
+    
+        for (BotBlockData target : targets) {
+            double distance = fromLocation.distanceTo(target);
+            if (distance < minDistance) {
+                minDistance = distance;
+                nearest = target;
+            }
+        }
+    
+        return nearest;
     }
 
     public static BotBlockData pickEmergencyRelocationTarget(

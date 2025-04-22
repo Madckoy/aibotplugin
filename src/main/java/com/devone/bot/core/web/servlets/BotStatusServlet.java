@@ -55,8 +55,8 @@ public class BotStatusServlet extends HttpServlet {
         for (Bot bot : bots) {
             JsonObject botJson = new JsonObject();
 
-            BotLocation loc = bot.getNavigation().getLocation();
-            BotLocation tgt = bot.getNavigation().getTarget();
+            BotLocation loc = bot.getNavigator().getLocation();
+            BotLocation tgt = bot.getNavigator().getTarget();
 
             if (loc != null) {
                 botJson.addProperty("skin", "http://" + BotWebService.getServerHost() + ":"
@@ -65,8 +65,8 @@ public class BotStatusServlet extends HttpServlet {
                 botJson.addProperty("id", bot.getId());
                 botJson.addProperty("name", bot.getNPC().getName());
 
-                botJson.addProperty("stuck", bot.getNavigation().isStuck());
-                botJson.addProperty("stuckCount", bot.getNavigation().getStuckCount());
+                botJson.addProperty("stuck", bot.getNavigator().isStuck());
+                botJson.addProperty("stuckCount", bot.getNavigator().getStuckCount());
 
                 botJson.addProperty("blocksBroken", bot.getBrain().getMemory().getBlocksBroken());
                 botJson.addProperty("mobsKilled", bot.getBrain().getMemory().getMobsKilled());
@@ -99,25 +99,25 @@ public class BotStatusServlet extends HttpServlet {
                 botJson.addProperty("memory", bot.getBrain().getMemory().toJson().toString());
 
                 // add navigation data
-                if (bot.getNavigation().getSuggestion() == BotNavigator.NavigationType.TELEPORT) {
+                if (bot.getNavigator().getSuggestion() == BotNavigator.NavigationType.TELEPORT) {
                     botJson.addProperty("navigationSuggestion", "Teleport");
                 } else {
                     botJson.addProperty("navigationSuggestion", "Walk");
                 }
 
                 botJson.addProperty("reachableTargets",
-                        bot.getNavigation().getNavigationSummaryItem("targets").toString());
+                        bot.getNavigator().getNavigationSummaryItem("targets").toString());
                 botJson.addProperty("reachableBlocks",
-                        bot.getNavigation().getNavigationSummaryItem("reachable").toString());
+                        bot.getNavigator().getNavigationSummaryItem("reachable").toString());
                 botJson.addProperty("navigableBlocks",
-                        bot.getNavigation().getNavigationSummaryItem("navigable").toString());
+                        bot.getNavigator().getNavigationSummaryItem("navigable").toString());
                 botJson.addProperty("walkableBlocks",
-                        bot.getNavigation().getNavigationSummaryItem("walkable").toString());
+                        bot.getNavigator().getNavigationSummaryItem("walkable").toString());
                 
-                Object obj = bot.getNavigation().getSuggested();
+                Object obj = bot.getNavigator().getSuggested();
                 if(obj!=null) {
                     botJson.addProperty("suggestedBlock",
-                        bot.getNavigation().getSuggested().getLocation().toString()+ " | " + bot.getNavigation().getSuggested().getType() );
+                        bot.getNavigator().getSuggested().getLocation().toString()+ " | " + bot.getNavigator().getSuggested().getType() );
                 }
                     
                 botsArray.add(botJson);

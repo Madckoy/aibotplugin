@@ -71,7 +71,7 @@ public class BotTeleportTask extends BotTaskAutoParams<BotTeleportTaskParams> {
 
             BotSonar3DTask sonar = new BotSonar3DTask(bot);
             sonar.execute();
-            bot.getNavigation().calculate(bot.getBrain().getMemory().getSceneData());
+            bot.getNavigator().calculate(bot.getBrain().getMemory().getSceneData());
 
             BotLogger.debug(icon, this.isLogging(),
                     bot.getId() + " ⚡ Телепорт завершен с " + baseLocation.toVector() + " в " + safeOffset.toVector());

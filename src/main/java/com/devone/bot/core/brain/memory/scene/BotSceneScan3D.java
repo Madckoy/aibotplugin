@@ -24,7 +24,7 @@ public class BotSceneScan3D {
         World world = BotWorldHelper.getWorld();
 
         // Центр сканирования
-        BotLocation botLoc = bot.getNavigation().getLocation();
+        BotLocation botLoc = bot.getNavigator().getLocation();
 
         int centerX = botLoc.getX();
         int centerY = botLoc.getY();
@@ -83,7 +83,7 @@ public class BotSceneScan3D {
         BotLocation botCoords = new BotLocation(centerX, centerY, centerZ);
         BotSceneData sceneData = new BotSceneData(scannedBlocks, scannedEntities, botCoords);
 
-        if (bot.getNavigation().isStuck()) {
+        if (bot.getNavigator().isStuck()) {
             // long currTime = System.currentTimeMillis();
             // 4. Сохраняем всё в JSON если застряли
             String fileName = BotConstants.PLUGIN_TMP + bot.getId() + "_stuck_scene.json";

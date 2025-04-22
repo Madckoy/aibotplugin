@@ -95,7 +95,7 @@ public class BotWorldHelper {
     }
 
     public static boolean isNearWater(Bot bot) {
-        BotLocation loc = bot.getNavigation().getLocation();
+        BotLocation loc = bot.getNavigator().getLocation();
         Block block = getBlockAt(loc);
         int radius = 2;
         for (int dx = -radius; dx <= radius; dx++) {
@@ -110,7 +110,7 @@ public class BotWorldHelper {
     }
 
     public static boolean isOnUnstableGround(Bot bot) {
-        BotLocation loc = bot.getNavigation().getLocation();
+        BotLocation loc = bot.getNavigator().getLocation();
         Block block = getBlockAt(new BotLocation(loc.getX(), loc.getY() - 1, loc.getZ()));
         Material ground = block.getType();
         return ground == Material.SAND || ground == Material.GRAVEL ||

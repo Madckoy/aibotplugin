@@ -32,8 +32,8 @@ public class BotMoveTaskListener implements Listener {
         BotLogger.debug(task.getIcon(), true,
                 task.getBot().getId() + " ✅ Навигация завершена (BotMoveTaskListener), ID: " + task.getUUID());
 
-        task.getBot().getNavigation().setStuck(false);
-        BotLocation loc = task.getBot().getNavigation().getLocation();
+        task.getBot().getNavigator().setStuck(false);
+        BotLocation loc = task.getBot().getNavigator().getLocation();
         Block wBlock = BotWorldHelper.getBlockAt(loc);
         BotBlockData block = new BotBlockData();
         block.setX(wBlock.getX());

@@ -37,11 +37,11 @@ public class BotManagerConfig extends AIBotBaseJsonConfig<BotManagerConfig.Data>
             this.id = bot.getId();
             this.enabled = bot.isEnabled();
             this.uuid = bot.getUuid().toString();
-            this.position = bot.getNavigation().getLocation();
+            this.position = bot.getNavigator().getLocation();
             this.allowPickup = bot.isAllowPickupItems();
             this.brain = bot.getBrain();
             this.state = bot.getState();
-            this.navigation = bot.getNavigation();
+            this.navigation = bot.getNavigator();
         }
     }
 }

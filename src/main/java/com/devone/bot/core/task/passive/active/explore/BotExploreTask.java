@@ -61,21 +61,21 @@ public class BotExploreTask extends BotTaskAutoParams<BotExploreTaskParams> {
             return;
         }
 
-        // BotLocation botPos = bot.getNavigation().getLocation();
+        // BotLocation botPos = bot.getNavigator().getLocation();
 
         // BotSceneContext context = BotNavigationPlannerWrapper.getSceneContext(botPos,
         // sceneData.blocks, sceneData.entities);
 
-        BotBlockData target = bot.getNavigation().getSuggested();
+        BotBlockData target = bot.getNavigator().getSuggested();
 
         if (target != null) {
             BotLogger.debug(icon, isLogging(), bot.getId() + " 🎯 Navigation - Set Target: " + target);
 
-            bot.getNavigation().setTarget(target);
+            bot.getNavigator().setTarget(target);
 
             float speed = 1.5f;
 
-            boolean canNavigate = bot.getNavigation().navigate(speed);
+            boolean canNavigate = bot.getNavigator().navigate(speed);
             
             BotLogger.debug(icon, isLogging(), bot.getId() + " ❓ Navigation - Can navigate: " + canNavigate);
 
@@ -84,7 +84,7 @@ public class BotExploreTask extends BotTaskAutoParams<BotExploreTaskParams> {
 
         } else {
             BotLogger.debug(icon, isLogging(), bot.getId() + " ⛔ Navigation - No valid target found. Possibly stuck?");
-            bot.getNavigation().setStuck(true);
+            bot.getNavigator().setStuck(true);
             stop();
             return;
         }

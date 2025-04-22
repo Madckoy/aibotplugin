@@ -23,7 +23,7 @@ public class BotTaskCandidateFactory {
     public static List<BotTaskCandidate> createCandidates(Bot bot, BotBrainTaskParams params) {
         boolean isNight = BotWorldHelper.isNight(bot);
         BotSceneData data = bot.getBrain().getMemory().getSceneData();
-        BotLocation botPos = bot.getNavigation().getLocation();
+        BotLocation botPos = bot.getNavigator().getLocation();
 
         List<BotTaskCandidate> candidates = new ArrayList<>();
 

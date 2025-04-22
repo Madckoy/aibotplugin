@@ -25,7 +25,7 @@ public class BotNearbyPlayerStrategy implements IBotReactionStrategy {
             return Optional.empty();
         }
 
-        BotLocation botLoc = bot.getNavigation().getLocation();
+        BotLocation botLoc = bot.getNavigator().getLocation();
 
         for (Player player : Bukkit.getOnlinePlayers()) {
             if (!player.isOnline() || player.isDead())

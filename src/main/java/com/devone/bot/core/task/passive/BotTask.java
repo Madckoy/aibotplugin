@@ -65,7 +65,7 @@ public abstract class BotTask<T extends BotTaskParams> implements IBotTask, List
         BotLogger.debug(icon, isLogging(), bot.getId() + " 📡 Scan");
         BotSonar3DTask sonar = new BotSonar3DTask(bot);
         sonar.execute();    
-        bot.getNavigation().calculate(bot.getBrain().getMemory().getSceneData()); 
+        bot.getNavigator().calculate(bot.getBrain().getMemory().getSceneData()); 
 
         if (!enabled || isPause()) {
             return;
@@ -85,8 +85,8 @@ public abstract class BotTask<T extends BotTaskParams> implements IBotTask, List
     private void logTaskStatus() {
         BotLogger.debug(icon, logging, bot.getId() +
                 " ❓ Status: done=" + done + ", paused=" + pause +
-                " 📍: " + bot.getNavigation().getLocation() +
-                " | 🎯: " + bot.getNavigation().getTarget());
+                " 📍: " + bot.getNavigator().getLocation() +
+                " | 🎯: " + bot.getNavigator().getTarget());
     }
 
     private boolean playerDisconnected() {

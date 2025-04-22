@@ -158,7 +158,7 @@ public class BotNavigator {
 
         List<BotBlockData> result = new ArrayList<BotBlockData>();
 
-        BotLocation botPos = owner.getNavigation().getLocation();
+        BotLocation botPos = getLocation();
 
         BotNavigationContext context = BotNavigationConextMaker.getSceneContext(botPos, scene.blocks, scene.entities);
 
@@ -215,7 +215,7 @@ public class BotNavigator {
 
         candidates = result;
         
-        suggested = BotBlockSelector.pickRandomTarget(candidates);
+        suggested = BotBlockSelector.selectNearestTarget(candidates, this.getLocation());
 
         return result;
     }
