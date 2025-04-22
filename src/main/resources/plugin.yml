@@ -112,7 +112,7 @@ commands:
     usage: /zone-list
     permission: aibotplugin.zone.list
 
-bot-dump:
-    description: Dump memery blocks to the file
-    usage: /bot-dump
+  bot-dump:
+    description: Dump memory blocks to the file
+    usage: /bot-dump <bot_name>
     permission: aibotplugin.bot.dump
