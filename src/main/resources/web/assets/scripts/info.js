@@ -40,14 +40,3 @@ function showInfoPanel(bot) {
     panel.classList.add("visible");
     panel.setAttribute("data-bot-id", bot.id);
 }
-
-function updateInfoPanel(bot) {
-    // Если инфопанель открыта и отображает того же бота — обновить её
-    const infoPanel = document.getElementById("bot-info-panel");
-    if (infoPanel.classList.contains("visible")) {
-        const currentBotId = infoPanel.getAttribute("data-bot-id");
-        if (currentBotId === bot.id) {
-            showInfoPanel(bot); // 🔄 обновляем содержимое
-        }
-    }
-}  
