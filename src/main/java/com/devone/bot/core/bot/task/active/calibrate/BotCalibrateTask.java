@@ -38,10 +38,6 @@ public class BotCalibrateTask extends BotTaskAutoParams<BotCalibrateTaskParams> 
 
         BotLogger.debug(icon, isLogging(), bot.getId() + " 📡 Scan");
 
-        BotSonar3DTask sonar = new BotSonar3DTask(bot);
-        sonar.execute();
-        bot.getNavigation().calculate(bot.getBrain().getMemory().getSceneData());
-
         if (rmt <= 0) {
             BotLogger.debug(icon, isLogging(), bot.getId() + " ⏱️ Task timeout passed. Ending Task.");
             stop();

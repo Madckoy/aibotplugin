@@ -63,6 +63,7 @@ public abstract class BotTask<T extends BotTaskParams> implements IBotTask, List
 
         logTaskStatus();
         
+        BotLogger.debug(icon, isLogging(), bot.getId() + " 📡 Scan");
         BotSonar3DTask sonar = new BotSonar3DTask(bot);
         sonar.execute();    
         bot.getNavigation().calculate(bot.getBrain().getMemory().getSceneData()); 
