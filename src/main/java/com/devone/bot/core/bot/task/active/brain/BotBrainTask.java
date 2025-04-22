@@ -93,7 +93,7 @@ public class BotBrainTask extends BotTaskAutoParams<BotBrainTaskParams> {
     }
 
     private Runnable determineBehaviorScenario(Bot bot) {
-        
+
         boolean stuck = bot.getNavigation().isStuck();
 
         if (stuck) {
@@ -108,6 +108,7 @@ public class BotBrainTask extends BotTaskAutoParams<BotBrainTaskParams> {
         }
 
         Runnable weighted = pickWeightedTask(bot);
+        
         return weighted != null ? weighted : () -> {
             BotLogger.debug(icon, isLogging(), bot.getId() + " 💤 Нет задач. Уходим в Calibration.");
             push(bot, new BotCalibrateTask(bot));

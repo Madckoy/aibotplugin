@@ -36,11 +36,11 @@ public class BotCalibrateTask extends BotTaskAutoParams<BotCalibrateTaskParams> 
 
         bot.getNavigation().resetStuckCount();
 
-        BotLogger.debug(icon, isLogging(), bot.getId() + " 📡 Scan");
+        //if (rmt <= 0) {
+        //    BotLogger.debug(icon, isLogging(), bot.getId() + " ⏱️ Task timeout passed. Ending Task.");
+        //    stop();
+        //}
 
-        if (rmt <= 0) {
-            BotLogger.debug(icon, isLogging(), bot.getId() + " ⏱️ Task timeout passed. Ending Task.");
-            stop();
-        }
+        stop();
     }
 }
