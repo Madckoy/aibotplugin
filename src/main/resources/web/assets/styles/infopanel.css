@@ -21,16 +21,6 @@
 .info-panel.hidden {
     transform: translateX(100%);
 }
-#info-close-btn {
-    background: none;
-    border: none;
-    color: #aaa;
-    font-size: 14px;
-    position: absolute;
-    top: 6px;
-    right: 10px;
-    cursor: pointer;
-}
 
 .info-panel-hr-top {
 
