@@ -159,7 +159,15 @@ public class BotNavigation {
 
         BotLocation botPos = owner.getNavigation().getLocation();
 
+        
         BotSceneContext context = BotNavigationPlannerWrapper.getSceneContext(botPos, scene.blocks, scene.entities);
+
+        if(context==null) {
+            // context does not present yet
+            BotLogger.debug(owner.getActiveTask().getIcon(), true, 
+                owner.getId() + " ⚠️ Navigation error: Scene Context is not ready");
+            return result;
+        }
 
         int targetable = loopTargets(botPos, "targets",   context.targets);
         int reachable  = loopTargets(botPos, "reachable", context.reachable);
