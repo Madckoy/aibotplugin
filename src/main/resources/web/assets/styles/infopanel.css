@@ -31,3 +31,17 @@
     right: 10px;
     cursor: pointer;
 }
+
+.info-panel-hr-top {
+    hr {
+        border: none;
+        border-top: 1px dotted rgb(206, 105, 105);
+      }
+}
+
+.info-panel-hr-bottom {
+    hr {
+        border: none;
+        border-top: 1px dotted rgb(92, 86, 86);
+      }
+}  
