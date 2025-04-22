@@ -40,6 +40,16 @@ function updateOrCreateBotRow(bot, tbody) {
             <td class="inventory-cell"></td>
             <td class="commands"></td>`;
         tbody.appendChild(row);
+
+
+        // Если инфопанель открыта и отображает того же бота — обновить её
+        const infoPanel = document.getElementById("bot-info-panel");
+        if (infoPanel.classList.contains("visible")) {
+            const currentBotId = infoPanel.getAttribute("data-bot-id");
+            if (currentBotId === bot.id) {
+                showInfoPanel(bot); // 🔄 обновляем содержимое
+            }
+        }
     }
 
     const cells = row.children;
@@ -130,6 +140,8 @@ function setupInfoPanel() {
 
 
 function showInfoPanel(bot) {
+
+    panel.setAttribute("data-bot-id", bot.id); // 💾 запоминаем ID бота
 
     document.getElementById("info-nav-type").textContent      = bot.navigationSuggestion ?? "N/A";
     document.getElementById("info-nav-targets").textContent   = bot.reachableTargets     ?? "N/A";
