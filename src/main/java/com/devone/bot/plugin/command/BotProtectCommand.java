@@ -8,7 +8,7 @@ import org.bukkit.entity.Player;
 import com.devone.bot.core.Bot;
 import com.devone.bot.core.BotManager;
 import com.devone.bot.core.task.passive.BotTaskManager;
-import com.devone.bot.core.task.passive.active.playerlinked.protect.BotProtectTask;
+import com.devone.bot.core.task.active.playerlinked.protect.BotProtectTask;
 import com.devone.bot.core.utils.logger.BotLogger;
 
 public class BotProtectCommand implements CommandExecutor {

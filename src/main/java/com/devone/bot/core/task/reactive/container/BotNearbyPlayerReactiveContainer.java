@@ -2,9 +2,9 @@ package com.devone.bot.core.task.reactive.container;
 
 import com.devone.bot.core.Bot;
 import com.devone.bot.core.task.passive.BotReactiveTaskContainer;
-import com.devone.bot.core.task.passive.active.drop.BotDropAllTask;
-import com.devone.bot.core.task.passive.active.move.BotMoveTask;
-import com.devone.bot.core.task.passive.active.move.params.BotMoveTaskParams;
+import com.devone.bot.core.task.active.drop.BotDropAllTask;
+import com.devone.bot.core.task.active.move.BotMoveTask;
+import com.devone.bot.core.task.active.move.params.BotMoveTaskParams;
 import com.devone.bot.core.task.reactive.container.params.BotNearbyPlayerReactiveContainerParams;
 import com.devone.bot.core.utils.blocks.BotLocation;
 import com.devone.bot.core.utils.logger.BotLogger;

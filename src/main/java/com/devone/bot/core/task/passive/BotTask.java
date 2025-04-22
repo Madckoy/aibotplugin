@@ -4,8 +4,8 @@ import org.bukkit.entity.Player;
 import org.bukkit.event.Listener;
 
 import com.devone.bot.core.Bot;
-import com.devone.bot.core.task.passive.active.brain.BotBrainTask;
-import com.devone.bot.core.task.passive.active.sonar.BotSonar3DTask;
+import com.devone.bot.core.task.active.brain.BotBrainTask;
+import com.devone.bot.core.task.active.sonar.BotSonar3DTask;
 import com.devone.bot.core.task.passive.params.BotTaskParams;
 import com.devone.bot.core.task.reactive.BotReactiveUtils;
 import com.devone.bot.core.task.reactive.BotReactivityManager;

@@ -2,8 +2,8 @@ package com.devone.bot.core.task.reactive.container;
 
 import com.devone.bot.core.Bot;
 import com.devone.bot.core.task.passive.BotReactiveTaskContainer;
-import com.devone.bot.core.task.passive.active.calibrate.BotCalibrateTask;
-import com.devone.bot.core.task.passive.active.calibrate.params.BotCalibrateTaskParams;
+import com.devone.bot.core.task.active.calibrate.BotCalibrateTask;
+import com.devone.bot.core.task.active.calibrate.params.BotCalibrateTaskParams;
 import com.devone.bot.core.task.reactive.container.params.BotCalibrateReactiveContainerParams;
 
 import com.devone.bot.core.utils.logger.BotLogger;

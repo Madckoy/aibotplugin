@@ -7,7 +7,7 @@ import org.bukkit.command.CommandSender;
 import com.devone.bot.core.Bot;
 import com.devone.bot.core.BotManager;
 import com.devone.bot.core.task.passive.BotTaskManager;
-import com.devone.bot.core.task.passive.active.drop.BotDropAllTask;
+import com.devone.bot.core.task.active.drop.BotDropAllTask;
 import com.devone.bot.core.task.reactive.container.BotEmptyReactiveContainer;
 
 public class BotDropAllCommand implements CommandExecutor {

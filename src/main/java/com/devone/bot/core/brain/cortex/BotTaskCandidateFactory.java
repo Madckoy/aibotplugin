@@ -1,17 +1,17 @@
 package com.devone.bot.core.brain.cortex;
 
+import com.devone.bot.core.task.active.explore.BotExploreTask;
 import java.util.*;
 
 import com.devone.bot.core.Bot;
 import com.devone.bot.core.brain.logic.navigator.math.selector.BotEntitySelector;
 import com.devone.bot.core.brain.memory.scene.BotSceneData;
 import com.devone.bot.core.task.passive.BotTaskManager;
-import com.devone.bot.core.task.passive.active.brain.params.BotBrainTaskParams;
-import com.devone.bot.core.task.passive.active.excavate.BotExcavateTask;
-import com.devone.bot.core.task.passive.active.excavate.params.BotExcavateTaskParams;
-import com.devone.bot.core.task.passive.active.explore.BotExploreTask;
-import com.devone.bot.core.task.passive.active.hand.attack.BotHandAttackTask;
-import com.devone.bot.core.task.passive.active.hand.attack.params.BotHandAttackTaskParams;
+import com.devone.bot.core.task.active.brain.params.BotBrainTaskParams;
+import com.devone.bot.core.task.active.excavate.BotExcavateTask;
+import com.devone.bot.core.task.active.excavate.params.BotExcavateTaskParams;
+import com.devone.bot.core.task.active.hand.attack.BotHandAttackTask;
+import com.devone.bot.core.task.active.hand.attack.params.BotHandAttackTaskParams;
 import com.devone.bot.core.utils.BotConstants;
 import com.devone.bot.core.utils.blocks.BotBlockData;
 import com.devone.bot.core.utils.blocks.BotLocation;
