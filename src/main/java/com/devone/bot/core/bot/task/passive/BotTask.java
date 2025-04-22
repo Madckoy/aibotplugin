@@ -4,7 +4,6 @@ import org.bukkit.entity.Player;
 import org.bukkit.event.Listener;
 
 import com.devone.bot.core.bot.Bot;
-import com.devone.bot.core.bot.brain.memory.scene.BotSceneData;
 import com.devone.bot.core.bot.task.active.brain.BotBrainTask;
 import com.devone.bot.core.bot.task.active.sonar.BotSonar3DTask;
 import com.devone.bot.core.bot.task.passive.params.BotTaskParams;
@@ -62,7 +61,7 @@ public abstract class BotTask<T extends BotTaskParams> implements IBotTask, List
     public void update() {
 
         logTaskStatus();
-        
+
         BotLogger.debug(icon, isLogging(), bot.getId() + " 📡 Scan");
         BotSonar3DTask sonar = new BotSonar3DTask(bot);
         sonar.execute();    
