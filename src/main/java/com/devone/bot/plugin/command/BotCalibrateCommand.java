@@ -5,10 +5,10 @@ import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
-import com.devone.bot.core.bot.Bot;
-import com.devone.bot.core.bot.BotManager;
-import com.devone.bot.core.bot.task.passive.BotTaskManager;
-import com.devone.bot.core.bot.task.reactive.container.BotCalibrateReactiveContainer;
+import com.devone.bot.core.Bot;
+import com.devone.bot.core.BotManager;
+import com.devone.bot.core.task.passive.BotTaskManager;
+import com.devone.bot.core.task.reactive.container.BotCalibrateReactiveContainer;
 
 public class BotCalibrateCommand implements CommandExecutor {
 

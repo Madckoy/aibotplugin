@@ -6,7 +6,7 @@ import org.bukkit.command.CommandSender;
 import org.bukkit.plugin.java.JavaPlugin;
 
 import com.devone.bot.AIBotPlugin;
-import com.devone.bot.core.bot.BotManager;
+import com.devone.bot.core.BotManager;
 import com.devone.bot.core.utils.logger.BotLogger;
 import com.devone.bot.core.utils.zone.BotZoneManager;
 

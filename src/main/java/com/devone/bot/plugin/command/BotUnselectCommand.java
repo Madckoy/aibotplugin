@@ -5,8 +5,8 @@ import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
-import com.devone.bot.core.bot.BotManager;
-import com.devone.bot.core.bot.speaker.BotSpeaker;
+import com.devone.bot.core.BotManager;
+import com.devone.bot.core.speaker.BotSpeaker;
 
 public class BotUnselectCommand implements CommandExecutor {
 

@@ -4,10 +4,10 @@ import java.io.File;
 import java.util.HashMap;
 import java.util.Map;
 
-import com.devone.bot.core.bot.Bot;
-import com.devone.bot.core.bot.brain.BotBrain;
-import com.devone.bot.core.bot.brain.logic.navigator.BotNavigator;
-import com.devone.bot.core.bot.state.BotState;
+import com.devone.bot.core.Bot;
+import com.devone.bot.core.brain.BotBrain;
+import com.devone.bot.core.brain.logic.navigator.BotNavigator;
+import com.devone.bot.core.state.BotState;
 import com.devone.bot.core.utils.blocks.BotLocation;
 import com.devone.bot.plugin.config.AIBotBaseJsonConfig;
 

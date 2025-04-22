@@ -9,8 +9,8 @@ import org.bukkit.command.CommandSender;
 import org.bukkit.entity.EntityType;
 import org.bukkit.entity.Player;
 
-import com.devone.bot.core.bot.Bot;
-import com.devone.bot.core.bot.BotManager;
+import com.devone.bot.core.Bot;
+import com.devone.bot.core.BotManager;
 
 import org.bukkit.Location;
 

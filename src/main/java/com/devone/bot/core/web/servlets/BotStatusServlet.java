@@ -10,10 +10,10 @@ import java.util.Objects;
 import org.bukkit.Bukkit;
 import org.bukkit.inventory.ItemStack;
 
-import com.devone.bot.core.bot.Bot;
-import com.devone.bot.core.bot.BotManager;
-import com.devone.bot.core.bot.brain.logic.navigator.BotNavigator;
-import com.devone.bot.core.bot.task.passive.BotTask;
+import com.devone.bot.core.Bot;
+import com.devone.bot.core.BotManager;
+import com.devone.bot.core.brain.logic.navigator.BotNavigator;
+import com.devone.bot.core.task.passive.BotTask;
 import com.devone.bot.core.utils.BotUtils;
 import com.devone.bot.core.utils.blocks.BotLocation;
 import com.devone.bot.core.web.BotWebService;

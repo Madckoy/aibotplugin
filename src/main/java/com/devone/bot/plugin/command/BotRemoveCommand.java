@@ -5,8 +5,8 @@ import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
-import com.devone.bot.core.bot.Bot;
-import com.devone.bot.core.bot.BotManager;
+import com.devone.bot.core.Bot;
+import com.devone.bot.core.BotManager;
 
 public class BotRemoveCommand implements CommandExecutor {
 

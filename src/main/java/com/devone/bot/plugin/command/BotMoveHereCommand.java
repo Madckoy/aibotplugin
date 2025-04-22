@@ -7,14 +7,14 @@ import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 import org.bukkit.util.Vector;
 
-import com.devone.bot.core.bot.Bot;
-import com.devone.bot.core.bot.BotManager;
-import com.devone.bot.core.bot.task.active.move.BotMoveTask;
-import com.devone.bot.core.bot.task.active.move.params.BotMoveTaskParams;
-import com.devone.bot.core.bot.task.active.teleport.BotTeleportTask;
-import com.devone.bot.core.bot.task.active.teleport.params.BotTeleportTaskParams;
-import com.devone.bot.core.bot.task.passive.BotTaskManager;
-import com.devone.bot.core.bot.task.reactive.container.BotEmptyReactiveContainer;
+import com.devone.bot.core.Bot;
+import com.devone.bot.core.BotManager;
+import com.devone.bot.core.task.passive.BotTaskManager;
+import com.devone.bot.core.task.passive.active.move.BotMoveTask;
+import com.devone.bot.core.task.passive.active.move.params.BotMoveTaskParams;
+import com.devone.bot.core.task.passive.active.teleport.BotTeleportTask;
+import com.devone.bot.core.task.passive.active.teleport.params.BotTeleportTaskParams;
+import com.devone.bot.core.task.reactive.container.BotEmptyReactiveContainer;
 import com.devone.bot.core.utils.blocks.BotLocation;
 import com.devone.bot.core.utils.logger.BotLogger;
 

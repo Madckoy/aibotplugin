@@ -2,8 +2,8 @@ package com.devone.bot.core.utils.logger;
 
 import org.bukkit.Bukkit;
 
-import com.devone.bot.core.bot.Bot;
-import com.devone.bot.core.bot.task.passive.BotTask;
+import com.devone.bot.core.Bot;
+import com.devone.bot.core.task.passive.BotTask;
 import com.devone.bot.core.utils.BotConstants;
 import com.devone.bot.core.utils.BotUtils;
 import com.devone.bot.core.utils.blocks.BotLocation;

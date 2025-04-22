@@ -9,8 +9,8 @@ import org.bukkit.entity.Player;
 import org.bukkit.util.Vector;
 
 import com.devone.bot.AIBotPlugin;
-import com.devone.bot.core.bot.Bot;
-import com.devone.bot.core.bot.task.passive.BotTask;
+import com.devone.bot.core.Bot;
+import com.devone.bot.core.task.passive.BotTask;
 import com.devone.bot.core.utils.blocks.BotLocation;
 import com.devone.bot.core.utils.logger.BotLogger;
 import com.devone.bot.core.utils.world.BotWorldHelper;

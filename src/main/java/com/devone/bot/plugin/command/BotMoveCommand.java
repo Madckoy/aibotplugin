@@ -7,12 +7,12 @@ import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
 
-import com.devone.bot.core.bot.Bot;
-import com.devone.bot.core.bot.BotManager;
-import com.devone.bot.core.bot.task.active.move.BotMoveTask;
-import com.devone.bot.core.bot.task.active.move.params.BotMoveTaskParams;
-import com.devone.bot.core.bot.task.passive.BotTaskManager;
-import com.devone.bot.core.bot.task.reactive.container.BotEmptyReactiveContainer;
+import com.devone.bot.core.Bot;
+import com.devone.bot.core.BotManager;
+import com.devone.bot.core.task.passive.BotTaskManager;
+import com.devone.bot.core.task.passive.active.move.BotMoveTask;
+import com.devone.bot.core.task.passive.active.move.params.BotMoveTaskParams;
+import com.devone.bot.core.task.reactive.container.BotEmptyReactiveContainer;
 import com.devone.bot.core.utils.blocks.BotLocation;
 import com.devone.bot.core.utils.logger.BotLogger;
 
