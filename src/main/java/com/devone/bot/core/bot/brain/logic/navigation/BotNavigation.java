@@ -165,6 +165,8 @@ public class BotNavigation {
 
         boolean hardStuck = false;
         boolean softStuck = false;
+        
+        setStuck(false);
 
         if (targetable == 0) {
             softStuck = true;
