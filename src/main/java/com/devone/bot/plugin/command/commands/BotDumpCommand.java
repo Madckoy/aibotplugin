@@ -29,7 +29,7 @@ public class BotDumpCommand implements CommandExecutor {
 
         BotLogger.debug("🔧", true, "Получена команда от сервера: " + Arrays.toString(args));
 
-        if (args.length < 2) {
+        if (args.length < 1) {
             sender.sendMessage("❌ Недостаточно аргументов. Используйте: /bot-dump <bot_id>");
             BotLogger.debug("❌", true, "Недостаточно аргументов для /bot-dump");
             return false;
