@@ -53,7 +53,7 @@ public class BotDumpCommand implements CommandExecutor {
 
         try {
             BotSceneSaver.saveToJsonFile(fileName, sceneData);
-            BotLogger.debug("🧠", true, " ✅ Бот скинул данные о сцене на диск" + fileName);
+            BotLogger.debug("🧠", true, " ✅ Бот скинул данные о сцене на диск: " + fileName);
         } catch (IOException e) {
             BotLogger.debug("🧠", true, " ❌ Ошибка сброса данных на диск");
         }
