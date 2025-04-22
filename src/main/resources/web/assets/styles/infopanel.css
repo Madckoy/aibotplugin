@@ -48,3 +48,24 @@
   position: relative;
   z-index: 10;
 }
+
+.cmd-btn-close {
+    background-color: #333;
+    color: #ccc;
+    border: none;
+    padding: 3px 6px;
+    font-size: 13px;
+    margin: 1px 2px;
+    border-radius: 3px;
+    cursor: pointer;
+    transition: box-shadow 0.2s ease, background-color 0.2s ease;
+}
+.cmd-btn-close:hover {
+    background-color: #444;
+    color: #fff;
+    box-shadow: 0 0 0 1px #666;
+}
+.cmd-btn-close:active {
+    background-color: #555;
+    box-shadow: 0 0 0 1px #888;
+}
