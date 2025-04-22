@@ -113,9 +113,13 @@ public class BotStatusServlet extends HttpServlet {
                         bot.getNavigation().getNavigationSummaryItem("navigable").toString());
                 botJson.addProperty("walkableBlocks",
                         bot.getNavigation().getNavigationSummaryItem("walkable").toString());
-                botJson.addProperty("suggestedBlock",
+                
+                Object obj = bot.getNavigation().getSuggested();
+                if(obj!=null) {
+                    botJson.addProperty("suggestedBlock",
                         bot.getNavigation().getSuggested().getLocation().toString()+ " | " + bot.getNavigation().getSuggested().getType() );
-
+                }
+                    
                 botsArray.add(botJson);
 
                 ItemStack[] contents = null;
