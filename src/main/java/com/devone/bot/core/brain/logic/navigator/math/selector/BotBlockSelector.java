@@ -40,8 +40,8 @@ public class BotBlockSelector {
         double minDistance = Double.MAX_VALUE;
     
         for (BotBlockData target : targets) {
-            // Пропускаем, если координаты совпадают
-            if (fromLocation.equals(target)) {
+            if (fromLocation.equals(target.getLocation())) {
+                System.out.println("From: " + fromLocation + " | Checking: " + target.getLocation());
                 continue;
             }
     
