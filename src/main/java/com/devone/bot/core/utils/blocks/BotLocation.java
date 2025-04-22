@@ -27,6 +27,7 @@ public class BotLocation {
     public boolean equals(Object o) {
         if (this == o) return true;
         if (!(o instanceof BotLocation)) return false;
+        
         BotLocation that = (BotLocation) o;
         return x == that.x && y == that.y && z == that.z;
     }

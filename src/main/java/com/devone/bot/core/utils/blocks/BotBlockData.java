@@ -1,5 +1,6 @@
 package com.devone.bot.core.utils.blocks;
 
+import java.util.Objects;
 import java.util.UUID;
 
 import org.bukkit.entity.EntityType;
@@ -95,5 +96,23 @@ public class BotBlockData extends BotLocation {
     @JsonIgnore
     public BotLocation getLocation() {
         return new BotLocation(getX(), getY(), getZ());
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+
+        // Сравниваем с чем угодно, что наследует BotLocation
+        if (!(o instanceof BotLocation)) return false;
+
+        BotLocation other = (BotLocation) o;
+        return this.getX() == other.getX()
+            && this.getY() == other.getY()
+            && this.getZ() == other.getZ();
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(getX(), getY(), getZ());
     }
 }
