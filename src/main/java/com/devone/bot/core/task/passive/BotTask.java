@@ -20,6 +20,10 @@ public abstract class BotTask<T extends BotTaskParams> implements IBotTask, List
 
     protected T params;
 
+    public T getParams() {
+        return params;
+    }
+
     protected boolean enabled = true;
     protected boolean stopped = false;
     protected boolean logging = true;

@@ -91,7 +91,9 @@ public class BotMoveTask extends BotTaskAutoParams<BotMoveTaskParams> {
             }
 
             bot.getNPCNavigator().getDefaultParameters().speedModifier(speed);
-            bot.getNPCNavigator().setTarget(targetLocation);
+
+            MoveTaskHelper.setTarget(bot, params.getTarget(), params.getSpeed(), isLogging()); //bot.getNPCNavigator().setTarget(targetLocation);
+            
             isMoving = true;
 
             BotLocation loc = BotWorldHelper.worldLocationToBotLocation(targetLocation);

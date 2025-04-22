@@ -6,6 +6,7 @@ import org.bukkit.event.Listener;
 
 import com.devone.bot.core.brain.memory.MemoryType;
 import com.devone.bot.core.task.active.move.BotMoveTask;
+import com.devone.bot.core.task.active.move.MoveTaskHelper;
 import com.devone.bot.core.utils.blocks.BlockUtils;
 import com.devone.bot.core.utils.blocks.BotBlockData;
 import com.devone.bot.core.utils.blocks.BotLocation;
@@ -33,33 +34,30 @@ public class BotMoveTaskListener implements Listener {
         BotLogger.debug(task.getIcon(), true,
                 task.getBot().getId() + " ✅ Навигация завершена (BotMoveTaskListener), ID: " + task.getUUID());
 
-        BotLocation target = task.getBot().getNavigator().getTarget();
-        BotLocation current = BotWorldHelper.worldLocationToBotLocation(task.getBot().getNPC().getEntity().getLocation());
+        BotLocation target = task.getParams().getTarget();
 
-        // Проверка — действительно ли бот дошёл
-        if (!BlockUtils.isSamePosition(current, target)) {
+        if (!MoveTaskHelper.isAtTarget(task.getBot(), target, 0)) {
             BotLogger.debug(task.getIcon(), true,
-                    task.getBot().getId() + " ❗ Навигация завершена, но координаты не совпадают! "
-                            + "Цель: " + target + " | Текущая: " + current);
+                    task.getBot().getId() + " ❌ Навигация завершилась, но NPC не достиг цели точно. Повторная попытка.");
 
-            // Пробуем повторно задать цель
-            task.getBot().getNPCNavigator().setTarget(BotWorldHelper.getWorldLocation(target));
+            MoveTaskHelper.setTarget(task.getBot(), target, task.getParams().getSpeed(), true);
+            
             return;
         }
 
+        // ✅ Реально дошёл — продолжаем как раньше
         task.getBot().getNavigator().setStuck(false);
 
-        // ✅ Дошли — можно запомнить блок
-        Block wBlock = BotWorldHelper.getBlockAt(current);
+        // логика запоминания блока
+        Block wBlock = BotWorldHelper.getBlockAt(target);
         BotBlockData block = new BotBlockData();
         block.setX(wBlock.getX());
         block.setY(wBlock.getY());
         block.setZ(wBlock.getZ());
         block.setType(wBlock.getType().toString());
-
         task.getBot().getBrain().getMemory().memorize(block, MemoryType.VISITED_BLOCKS);
 
-        task.stop(); // Завершаем только если точно дошли
+        task.stop();
     }
 
     public void onNavigationCancel(NavigationCancelEvent event) {

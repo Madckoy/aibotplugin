@@ -40,11 +40,7 @@ function showInfoPanel(bot) {
     panel.classList.add("visible");
     panel.setAttribute("data-bot-id", bot.id);
 
-    document.getElementById('close-info-panel').addEventListener('click', () => {
+    document.getElementById('close-info-btn').addEventListener('click', () => {
         document.getElementById('bot-info-panel').classList.add('hidden');
     });
 }
-
-document.getElementById('close-info-btn').addEventListener('click', () => {
-    document.getElementById('bot-info-panel').classList.add('hidden');
-});
