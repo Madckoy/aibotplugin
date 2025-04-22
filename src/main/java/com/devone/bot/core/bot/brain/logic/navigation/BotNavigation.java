@@ -10,6 +10,7 @@ import org.bukkit.Location;
 import com.devone.bot.core.bot.Bot;
 import com.devone.bot.core.bot.brain.logic.navigator.BotNavigationPlannerWrapper;
 import com.devone.bot.core.bot.brain.logic.navigator.scene.BotSceneContext;
+import com.devone.bot.core.bot.brain.logic.navigator.selectors.BotBlockSelector;
 import com.devone.bot.core.bot.brain.memory.scene.BotSceneData;
 import com.devone.bot.core.bot.task.active.move.BotMoveTask;
 import com.devone.bot.core.bot.task.active.move.params.BotMoveTaskParams;
@@ -30,6 +31,8 @@ public class BotNavigation {
     private boolean stuck = false;
     private int stuckCount = 0;
     private NavigationType suggestion;
+    private BotBlockData   suggested;
+
     private List<BotBlockData> candidates;
 
     // Добавляем currentLocation, lastKnownLocation и targetLocation
@@ -200,7 +203,9 @@ public class BotNavigation {
         }
 
         candidates = result;
-            
+        
+        suggested = BotBlockSelector.pickRandomTarget(candidates);
+
         return result;
     }
 
@@ -214,6 +219,14 @@ public class BotNavigation {
 
     public void setRecomendation(NavigationType suggestion) {
         this.suggestion = suggestion;
+    }
+
+    public BotBlockData getSuggested() {
+        return suggested;
+    }
+
+    public void setSuggested(BotBlockData suggested) {
+        this.suggested = suggested;
     }
 
     public boolean navigate(float speed) {

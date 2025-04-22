@@ -66,17 +66,7 @@ public class BotExploreTask extends BotTaskAutoParams<BotExploreTaskParams> {
         // BotSceneContext context = BotNavigationPlannerWrapper.getSceneContext(botPos,
         // sceneData.blocks, sceneData.entities);
 
-        boolean isStuck = bot.getNavigation().isStuck();
-
-        BotLogger.debug(icon, isLogging(), bot.getId() + " ❓ Navigation - Stuck status: " + isStuck);
-
-        List<BotBlockData> candidates = bot.getNavigation().getCandidates();
-
-        BotBlockData target = BotBlockSelector.pickRandomTarget(candidates);
-
-        BotLogger.debug(icon, isLogging(), bot.getId() + " ❓ Navigation - Total reachable points: " + candidates.size());
-
-
+        BotBlockData target = bot.getNavigation().getSuggested();
 
         if (target != null) {
             BotLogger.debug(icon, isLogging(), bot.getId() + " 🎯 Navigation - Set Target: " + target);

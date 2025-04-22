@@ -138,15 +138,15 @@ function setupInfoPanel() {
     });
 }
 
-
-
 function showInfoPanel(bot) {
 
-    document.getElementById("info-nav-type").textContent      = bot.navigationSuggestion ?? "N/A";
-    document.getElementById("info-nav-targets").textContent   = bot.reachableTargets     ?? "N/A";
-    document.getElementById("info-nav-reachable").textContent = bot.reachableBlocks      ?? "N/A";
-    document.getElementById("info-nav-navigable").textContent = bot.walkableBlocks       ?? "N/A";
-    document.getElementById("info-nav-walkable").textContent  = bot.walkableBlocks       ?? "N/A";
+    document.getElementById("info-nav-targets").textContent     = bot.reachableTargets     ?? "N/A";
+    document.getElementById("info-nav-reachable").textContent   = bot.reachableBlocks      ?? "N/A";
+    document.getElementById("info-nav-navigable").textContent   = bot.walkableBlocks       ?? "N/A";
+    document.getElementById("info-nav-walkable").textContent    = bot.walkableBlocks       ?? "N/A";
+
+    document.getElementById("info-nav-type").textContent        = bot.navigationSuggestion ?? "N/A";
+    document.getElementById("info-nav-suggestion").textContent  = bot.suggestedBlock     ?? "N/A";
 
     const panel = document.getElementById("bot-info-panel");
     panel.classList.remove("hidden");
