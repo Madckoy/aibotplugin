@@ -1,4 +1,4 @@
-package com.devone.bot.plugin.command;
+package com.devone.bot.plugin.command.commands;
 
 import java.util.Arrays;
 

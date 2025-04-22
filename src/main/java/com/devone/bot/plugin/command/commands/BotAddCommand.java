@@ -1,4 +1,4 @@
-package com.devone.bot.plugin.command;
+package com.devone.bot.plugin.command.commands;
 
 import net.citizensnpcs.api.CitizensAPI;
 import net.citizensnpcs.api.npc.NPC;

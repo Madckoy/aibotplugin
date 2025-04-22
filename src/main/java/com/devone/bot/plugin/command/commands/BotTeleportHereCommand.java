@@ -1,4 +1,4 @@
-package com.devone.bot.plugin.command;
+package com.devone.bot.plugin.command.commands;
 
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
@@ -8,13 +8,14 @@ import org.bukkit.entity.Player;
 import com.devone.bot.core.Bot;
 import com.devone.bot.core.BotManager;
 import com.devone.bot.core.task.passive.BotTaskManager;
-import com.devone.bot.core.task.reactive.container.BotCalibrateReactiveContainer;
+import com.devone.bot.core.task.reactive.container.BotTeleportToPlayerReactiveContainer;
+import com.devone.bot.core.utils.logger.BotLogger;
 
-public class BotCalibrateCommand implements CommandExecutor {
+public class BotTeleportHereCommand implements CommandExecutor {
 
     private final BotManager botManager;
 
-    public BotCalibrateCommand(BotManager botManager) {
+    public BotTeleportHereCommand(BotManager botManager) {
         this.botManager = botManager;
     }
 
@@ -33,12 +34,11 @@ public class BotCalibrateCommand implements CommandExecutor {
             return true;
         }
 
-        // ✅ Реактивная остановка с контейнером
-        //BotTaskManager.clear(bot);
+        BotLogger.debug("📌", true, "/bot-tp-here: Бот " + bot.getId() + " будет телепортирован к игроку");
 
-        BotTaskManager.push(bot, new BotCalibrateReactiveContainer(bot));
+        BotTaskManager.push(bot, new BotTeleportToPlayerReactiveContainer(bot, player));
 
-        player.sendMessage("§aБот " + bot.getId() + " остановлен и переходит в режим калибровки");
+        player.sendMessage("§aБот " + bot.getId() + " телепортируется к вам!");
 
         return true;
     }

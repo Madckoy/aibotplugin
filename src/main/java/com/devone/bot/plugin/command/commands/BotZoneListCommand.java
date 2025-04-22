@@ -1,4 +1,4 @@
-package com.devone.bot.plugin.command;
+package com.devone.bot.plugin.command.commands;
 
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;

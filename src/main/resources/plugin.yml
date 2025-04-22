@@ -111,3 +111,8 @@ commands:
     description: Lists all protected zones.
     usage: /zone-list
     permission: aibotplugin.zone.list
+
+bot-dump:
+    description: Dump memery blocks to the file
+    usage: /bot-dump
+    permission: aibotplugin.bot.dump
