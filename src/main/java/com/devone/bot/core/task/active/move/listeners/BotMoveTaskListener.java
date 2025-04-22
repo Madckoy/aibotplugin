@@ -7,7 +7,6 @@ import org.bukkit.event.Listener;
 import com.devone.bot.core.brain.memory.MemoryType;
 import com.devone.bot.core.task.active.move.BotMoveTask;
 import com.devone.bot.core.task.active.move.MoveTaskHelper;
-import com.devone.bot.core.utils.blocks.BlockUtils;
 import com.devone.bot.core.utils.blocks.BotBlockData;
 import com.devone.bot.core.utils.blocks.BotLocation;
 import com.devone.bot.core.utils.logger.BotLogger;
@@ -41,7 +40,7 @@ public class BotMoveTaskListener implements Listener {
                     task.getBot().getId() + " ❌ Навигация завершилась, но NPC не достиг цели точно. Повторная попытка.");
 
             MoveTaskHelper.setTarget(task.getBot(), target, task.getParams().getSpeed(), true);
-            
+
             return;
         }
 
