@@ -166,7 +166,10 @@ public class BotNavigation {
             // context does not present yet
             BotLogger.debug(owner.getActiveTask().getIcon(), true, 
                 owner.getId() + " ⚠️ Navigation error: Scene Context is not ready");
-            return result;
+
+                setStuck(true); // stuck somewhere
+            
+                return result;
         }
 
         int targetable = loopTargets(botPos, "targets",   context.targets);
