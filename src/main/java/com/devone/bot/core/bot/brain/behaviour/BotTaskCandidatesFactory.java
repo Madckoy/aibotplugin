@@ -12,6 +12,7 @@ import com.devone.bot.core.bot.task.active.excavate.params.BotExcavateTaskParams
 import com.devone.bot.core.bot.task.active.hand.attack.BotHandAttackTask;
 import com.devone.bot.core.bot.task.active.hand.attack.params.BotHandAttackTaskParams;
 import com.devone.bot.core.bot.task.passive.BotTaskManager;
+import com.devone.bot.core.utils.BotConstants;
 import com.devone.bot.core.utils.blocks.BotBlockData;
 import com.devone.bot.core.utils.blocks.BotLocation;
 import com.devone.bot.core.utils.logger.BotLogger;
@@ -27,9 +28,9 @@ public class BotTaskCandidatesFactory {
         List<BotTaskCandidate> candidates = new ArrayList<>();
 
         candidates.add(new BotTaskCandidate(
-                () -> isNight ? params.getViolenceWeight() : params.getViolenceWeight() * 0.3,
+                () -> params.getViolenceWeight(),
                 () -> {
-                    BotBlockData target = BotEntitySelector.pickNearestTarget(data.entities, botPos, 2.0);
+                    BotBlockData target = BotEntitySelector.pickNearestTarget(data.entities, botPos, BotConstants.DEFAULT_DETECTION_RADIUS);
                     if (target == null)
                         return null;
                     return () -> {
@@ -40,10 +41,10 @@ public class BotTaskCandidatesFactory {
                         BotTaskManager.push(bot, t);
                     };
                 },
-                () -> params.isAllowViolence() && BotEntitySelector.hasHostilesNearby(data.entities, botPos, 2.0)));
+                () -> params.isAllowViolence() && BotEntitySelector.hasHostilesNearby(data.entities, botPos, BotConstants.DEFAULT_DETECTION_RADIUS)));
 
         candidates.add(new BotTaskCandidate(
-                () -> isNight ? params.getExplorationWeight() * 0.6 : params.getExplorationWeight(),
+                () -> params.getExplorationWeight(),
                 () -> () -> {
                     BotLogger.debug("🧭", bot.isLogging(), bot.getId() + " Разведка");
                     BotTaskManager.push(bot, new BotExploreTask(bot));
@@ -51,7 +52,7 @@ public class BotTaskCandidatesFactory {
                 () -> params.isAllowExploration()));
 
         candidates.add(new BotTaskCandidate(
-                () -> isNight ? params.getExcavationWeight() * 0.5 : params.getExcavationWeight(),
+                () -> params.getExcavationWeight(),
                 () -> () -> {
                     BotLogger.debug("⛏", bot.isLogging(), bot.getId() + " Копка");
                     BotExcavateTask task = new BotExcavateTask(bot);

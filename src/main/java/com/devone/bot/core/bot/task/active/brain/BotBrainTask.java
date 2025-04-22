@@ -17,7 +17,6 @@ import com.devone.bot.core.bot.task.active.brain.params.BotBrainTaskParams;
 import com.devone.bot.core.bot.task.active.calibrate.BotCalibrateTask;
 import com.devone.bot.core.bot.task.active.excavate.BotExcavateTask;
 import com.devone.bot.core.bot.task.active.excavate.params.BotExcavateTaskParams;
-import com.devone.bot.core.bot.task.active.sonar.BotSonar3DTask;
 import com.devone.bot.core.bot.task.active.teleport.BotTeleportTask;
 import com.devone.bot.core.bot.task.active.teleport.params.BotTeleportTaskParams;
 import com.devone.bot.core.bot.task.passive.BotTask;
@@ -94,6 +93,7 @@ public class BotBrainTask extends BotTaskAutoParams<BotBrainTaskParams> {
     }
 
     private Runnable determineBehaviorScenario(Bot bot) {
+        
         boolean stuck = bot.getNavigation().isStuck();
 
         if (stuck) {

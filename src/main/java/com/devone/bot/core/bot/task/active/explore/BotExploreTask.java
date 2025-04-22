@@ -68,33 +68,33 @@ public class BotExploreTask extends BotTaskAutoParams<BotExploreTaskParams> {
         // sceneData.blocks, sceneData.entities);
 
         boolean isStuck = bot.getNavigation().isStuck();
-        BotLogger.debug(icon, isLogging(), bot.getId() + " ❓ Stuck status: " + isStuck);
+
+        BotLogger.debug(icon, isLogging(), bot.getId() + " ❓ Navigation - Stuck status: " + isStuck);
 
         List<BotBlockData> candidates = bot.getNavigation().getCandidates();
 
         BotBlockData target = BotBlockSelector.pickRandomTarget(candidates);
 
-        BotLogger.debug(icon, isLogging(), bot.getId() + " ❓ Total reachable points: " + candidates.size());
+        BotLogger.debug(icon, isLogging(), bot.getId() + " ❓ Navigation - Total reachable points: " + candidates.size());
 
 
 
         if (target != null) {
-            BotLogger.debug(icon, isLogging(), bot.getId() + " 🎯 Target: " + target);
+            BotLogger.debug(icon, isLogging(), bot.getId() + " 🎯 Navigation - Set Target: " + target);
 
             bot.getNavigation().setTarget(target);
 
             float speed = 1.5f;
 
             boolean canNavigate = bot.getNavigation().navigate(speed);
-
             
-            BotLogger.debug(icon, isLogging(), bot.getId() + " ❓ Navigation result:" + canNavigate);
+            BotLogger.debug(icon, isLogging(), bot.getId() + " ❓ Navigation - Can navigate: " + canNavigate);
 
             // bot.getBrain().getMemory().memorize(target, MemoryType.VISITED_BLOCKS); //
             // Запоминаем на ~30 минут посещенную цель навигации
 
         } else {
-            BotLogger.debug(icon, isLogging(), bot.getId() + " ⛔ No valid target found. Possibly stuck?");
+            BotLogger.debug(icon, isLogging(), bot.getId() + " ⛔ Navigation - No valid target found. Possibly stuck?");
             stop();
             return;
         }
