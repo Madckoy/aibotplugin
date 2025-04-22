@@ -18,8 +18,8 @@ function renderBotTable(data) {
     const tbody = table.querySelector("tbody") || table.appendChild(document.createElement("tbody"));
 
     data.bots.forEach(bot => updateOrCreateBotRow(bot, tbody));
+    
     setupButtonHandlers(data.bots);
-    setupInfoPanel();
 }
 
 function updateOrCreateBotRow(bot, tbody) {
