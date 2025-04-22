@@ -84,6 +84,7 @@ public class BotExploreTask extends BotTaskAutoParams<BotExploreTaskParams> {
 
         } else {
             BotLogger.debug(icon, isLogging(), bot.getId() + " ⛔ Navigation - No valid target found. Possibly stuck?");
+            bot.getNavigation().setStuck(true);
             stop();
             return;
         }
