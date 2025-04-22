@@ -44,3 +44,7 @@ function showInfoPanel(bot) {
         document.getElementById('bot-info-panel').classList.add('hidden');
     });
 }
+
+document.getElementById('close-info-btn').addEventListener('click', () => {
+    document.getElementById('bot-info-panel').classList.add('hidden');
+});
