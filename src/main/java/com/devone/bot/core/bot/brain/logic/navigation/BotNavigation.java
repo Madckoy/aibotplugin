@@ -30,6 +30,7 @@ public class BotNavigation {
     private boolean stuck = false;
     private int stuckCount = 0;
     private NavigationType suggestion;
+    private List<BotBlockData> candidates;
 
     // Добавляем currentLocation, lastKnownLocation и targetLocation
     private BotLocation location;
@@ -63,6 +64,10 @@ public class BotNavigation {
         this.navTarget = null; // Начальное значение для targetLocation
     }
 
+    public List<BotBlockData> getCandidates() {
+        return candidates;
+    }
+    
     // Получение и обновление currentLocation с проверкой на застревание
     public BotLocation getLocation() {
         if (owner.getNPC() != null) {
@@ -188,6 +193,8 @@ public class BotNavigation {
             setStuck(true);
         }
 
+        candidates = result;
+            
         return result;
     }
 

@@ -54,8 +54,6 @@ public class BotExploreTask extends BotTaskAutoParams<BotExploreTaskParams> {
             bot.pickupNearbyItems();
         }
 
-        BotSonar3DTask sonar = new BotSonar3DTask(bot);
-        sonar.execute();
         BotSceneData sceneData = bot.getBrain().getMemory().getSceneData();
 
         if (sceneData == null) {
@@ -63,8 +61,6 @@ public class BotExploreTask extends BotTaskAutoParams<BotExploreTaskParams> {
             this.stop();
             return;
         }
-
-        bot.getNavigation().calculate(sceneData);
 
         // BotLocation botPos = bot.getNavigation().getLocation();
 
@@ -74,10 +70,10 @@ public class BotExploreTask extends BotTaskAutoParams<BotExploreTaskParams> {
         boolean isStuck = bot.getNavigation().isStuck();
         BotLogger.debug(icon, isLogging(), bot.getId() + " ❓ Stuck status: " + isStuck);
 
-        List<BotBlockData> candidates = bot.getNavigation().calculate(sceneData);
+        List<BotBlockData> candidates = bot.getNavigation().getCandidates();
 
         BotBlockData target = BotBlockSelector.pickRandomTarget(candidates);
-        
+
         BotLogger.debug(icon, isLogging(), bot.getId() + " ❓ Total reachable points: " + candidates.size());
 
 

@@ -72,9 +72,6 @@ public class BotBrainTask extends BotTaskAutoParams<BotBrainTaskParams> {
 
         bot.getBrain().markThinkingCycle();
 
-        BotSonar3DTask sonar = new BotSonar3DTask(bot);
-        sonar.execute();
-
         if (bot.getBrain().getMemory().getSceneData() == null) {
             BotLogger.debug(icon, isLogging(), bot.getId() + " ⛔ Ожидаем результаты сканирования...");
             return;

@@ -4,7 +4,9 @@ import org.bukkit.entity.Player;
 import org.bukkit.event.Listener;
 
 import com.devone.bot.core.bot.Bot;
+import com.devone.bot.core.bot.brain.memory.scene.BotSceneData;
 import com.devone.bot.core.bot.task.active.brain.BotBrainTask;
+import com.devone.bot.core.bot.task.active.sonar.BotSonar3DTask;
 import com.devone.bot.core.bot.task.passive.params.BotTaskParams;
 import com.devone.bot.core.bot.task.reactive.BotReactiveUtils;
 import com.devone.bot.core.bot.task.reactive.BotReactivityManager;
@@ -60,6 +62,10 @@ public abstract class BotTask<T extends BotTaskParams> implements IBotTask, List
     public void update() {
 
         logTaskStatus();
+        
+        BotSonar3DTask sonar = new BotSonar3DTask(bot);
+        sonar.execute();    
+        bot.getNavigation().calculate(bot.getBrain().getMemory().getSceneData()); 
 
         if (!enabled || isPause()) {
             return;

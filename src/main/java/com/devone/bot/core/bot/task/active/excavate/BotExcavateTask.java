@@ -204,9 +204,12 @@ public class BotExcavateTask extends BotTaskAutoParams<BotExcavateTaskParams> {
             }
 
             if (!BotWorldHelper.isBreakableBlock(targetBlock)) {
+                
                 BotLogger.debug(icon, isLogging(), bot.getId() + " ⛔ Неразрушаемый блок: "
                         + bot.getNavigation().getTarget());
+
                 bot.getNavigation().setTarget(null);
+                
                 return;
             }
 
