@@ -40,17 +40,8 @@ function updateOrCreateBotRow(bot, tbody) {
             <td class="inventory-cell"></td>
             <td class="commands"></td>`;
         tbody.appendChild(row);
-
-
-        // Если инфопанель открыта и отображает того же бота — обновить её
-        const infoPanel = document.getElementById("bot-info-panel");
-        if (infoPanel.classList.contains("visible")) {
-            const currentBotId = infoPanel.getAttribute("data-bot-id");
-            if (currentBotId === bot.id) {
-                showInfoPanel(bot); // 🔄 обновляем содержимое
-            }
-        }
     }
+
 
     const cells = row.children;
     cells[1].innerHTML = `
@@ -106,6 +97,16 @@ function updateOrCreateBotRow(bot, tbody) {
                 <button class="cmd-btn" data-bot="${bot.id}" data-cmd="bot-info">ℹ️</button>
             </div>`;
     }
+
+
+    // Если инфопанель открыта и отображает того же бота — обновить её
+    const infoPanel = document.getElementById("bot-info-panel");
+    if (infoPanel.classList.contains("visible")) {
+        const currentBotId = infoPanel.getAttribute("data-bot-id");
+        if (currentBotId === bot.id) {
+            showInfoPanel(bot); // 🔄 обновляем содержимое
+        }
+    }       
 }
 
 function getTaskStatusEmoji(isReactive) {
