@@ -32,6 +32,9 @@ public class BotBlockSelector {
     }
 
     public static BotBlockData selectNearestTarget(List<BotBlockData> targets, BotLocation fromLocation) {
+
+        BotLogger.debug("🗺️", true, "📍Выбираем ближайшую току ");
+
         if (targets == null || targets.isEmpty() || fromLocation == null) {
             return null;
         }
@@ -41,7 +44,7 @@ public class BotBlockSelector {
     
         for (BotBlockData target : targets) {
             if (fromLocation.equals(target.getLocation())) {
-                System.out.println("From: " + fromLocation + " | Checking: " + target.getLocation());
+                BotLogger.debug("🗺️", true, "❌ Точка совпадает к текущей позицией, игнорируем.");
                 continue;
             }
     
