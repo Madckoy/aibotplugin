@@ -141,8 +141,6 @@ function setupInfoPanel() {
 
 function showInfoPanel(bot) {
 
-    panel.setAttribute("data-bot-id", bot.id); // 💾 запоминаем ID бота
-
     document.getElementById("info-nav-type").textContent      = bot.navigationSuggestion ?? "N/A";
     document.getElementById("info-nav-targets").textContent   = bot.reachableTargets     ?? "N/A";
     document.getElementById("info-nav-reachable").textContent = bot.reachableBlocks      ?? "N/A";
@@ -152,5 +150,6 @@ function showInfoPanel(bot) {
     const panel = document.getElementById("bot-info-panel");
     panel.classList.remove("hidden");
     panel.classList.add("visible");
+    panel.setAttribute("data-bot-id", bot.id); // 💾 запоминаем ID бота
 
 }
