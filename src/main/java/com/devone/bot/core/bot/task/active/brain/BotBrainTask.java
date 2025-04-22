@@ -9,7 +9,7 @@ import com.devone.bot.core.bot.brain.behaviour.BotBehaviorSelector;
 import com.devone.bot.core.bot.brain.behaviour.BotTaskCandidate;
 import com.devone.bot.core.bot.brain.behaviour.BotTaskCandidatesFactory;
 import com.devone.bot.core.bot.brain.logic.navigator.BotNavigationPlannerWrapper;
-import com.devone.bot.core.bot.brain.logic.navigator.scene.BotSceneContext;
+import com.devone.bot.core.bot.brain.logic.navigator.context.BotSceneContext;
 import com.devone.bot.core.bot.brain.logic.navigator.selectors.BotBlockSelector;
 import com.devone.bot.core.bot.brain.logic.navigator.selectors.BotEntitySelector;
 import com.devone.bot.core.bot.brain.memory.scene.BotSceneData;
@@ -108,7 +108,7 @@ public class BotBrainTask extends BotTaskAutoParams<BotBrainTaskParams> {
         }
 
         Runnable weighted = pickWeightedTask(bot);
-        
+
         return weighted != null ? weighted : () -> {
             BotLogger.debug(icon, isLogging(), bot.getId() + " 💤 Нет задач. Уходим в Calibration.");
             push(bot, new BotCalibrateTask(bot));

@@ -1,4 +1,4 @@
-package com.devone.bot.core.bot.brain.logic.navigator.scene;
+package com.devone.bot.core.bot.brain.logic.navigator.context;
 
 import java.util.List;
 

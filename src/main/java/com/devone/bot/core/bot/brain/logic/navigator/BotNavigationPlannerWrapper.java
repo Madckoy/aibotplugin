@@ -1,13 +1,13 @@
 package com.devone.bot.core.bot.brain.logic.navigator;
 
 import com.devone.bot.core.bot.brain.logic.navigator.BotExplorationTargetPlanner.Strategy;
+import com.devone.bot.core.bot.brain.logic.navigator.context.BotSceneContext;
 import com.devone.bot.core.bot.brain.logic.navigator.filters.BotBlocksNavigableFilter;
 import com.devone.bot.core.bot.brain.logic.navigator.filters.BotBlocksNoDangerousFilter;
 import com.devone.bot.core.bot.brain.logic.navigator.filters.BotBlocksVerticalSliceFilter;
 import com.devone.bot.core.bot.brain.logic.navigator.filters.BotBlocksWalkableFilter;
 import com.devone.bot.core.bot.brain.logic.navigator.filters.BotEntitiesOnSurfaceFilter;
 import com.devone.bot.core.bot.brain.logic.navigator.resolvers.BotReachabilityResolver;
-import com.devone.bot.core.bot.brain.logic.navigator.scene.BotSceneContext;
 import com.devone.bot.core.utils.BotConstants;
 import com.devone.bot.core.utils.blocks.BotBlockData;
 import com.devone.bot.core.utils.blocks.BotLocation;
@@ -45,14 +45,14 @@ public class BotNavigationPlannerWrapper {
         if (navigable == null || navigable.isEmpty())
             return context;
 
-        BotBlockData fakeBlockDirt = new BotBlockData();
+        // BotBlockData fakeBlockDirt = new BotBlockData();
 
-        fakeBlockDirt.setX(botPosition.getX());
-        fakeBlockDirt.setY(botPosition.getY() - 1);
-        fakeBlockDirt.setZ(botPosition.getZ());
-        fakeBlockDirt.setType("DIRT");
+        // fakeBlockDirt.setX(botPosition.getX());
+        // fakeBlockDirt.setY(botPosition.getY() - 1);
+        // fakeBlockDirt.setZ(botPosition.getZ());
+        // fakeBlockDirt.setType("DIRT");
 
-        navigable.add(fakeBlockDirt);
+        //navigable.add(fakeBlockDirt);
 
         // проверить есть ли мобы на navigable surface
         List<BotBlockData> livingTargets = BotEntitiesOnSurfaceFilter.filter(bioBlocks, navigable);

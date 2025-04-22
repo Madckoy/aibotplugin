@@ -9,7 +9,7 @@ import org.bukkit.Location;
 
 import com.devone.bot.core.bot.Bot;
 import com.devone.bot.core.bot.brain.logic.navigator.BotNavigationPlannerWrapper;
-import com.devone.bot.core.bot.brain.logic.navigator.scene.BotSceneContext;
+import com.devone.bot.core.bot.brain.logic.navigator.context.BotSceneContext;
 import com.devone.bot.core.bot.brain.logic.navigator.selectors.BotBlockSelector;
 import com.devone.bot.core.bot.brain.memory.scene.BotSceneData;
 import com.devone.bot.core.bot.task.active.move.BotMoveTask;

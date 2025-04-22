@@ -89,8 +89,7 @@ public class BotBlockData extends BotLocation {
 
     @JsonIgnore
     public String toString() {
-        return String.format("Block[x=%d, y=%d, z=%d, type=%s, bot=%b]", this.getX(), this.getY(), this.getZ(), type,
-                bot);
+        return String.format("Block[%d, %d, %d, %s, %b]", this.getX(), this.getY(), this.getZ(), type, bot);
     }
 
     @JsonIgnore
