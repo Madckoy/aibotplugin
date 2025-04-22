@@ -147,7 +147,6 @@ public class BotHandAttackTask extends BotHandTask<BotHandAttackTaskParams> {
                         BotLocation endPos = bot.getNavigation().getLocation();
                         if (endPos.equals(startPos) && hits == 0) {
                             BotLogger.debug(icon, isLogging(), bot.getId() + " ⏱️ Seems like the bot got stuck.");
-                            bot.getNavigation().setStuck(true);
                             stop();
                             cancel();
                             return;
