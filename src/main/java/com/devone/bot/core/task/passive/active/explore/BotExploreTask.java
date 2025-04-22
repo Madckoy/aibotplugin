@@ -1,9 +1,6 @@
 package com.devone.bot.core.task.passive.active.explore;
 
-import java.util.List;
-
 import com.devone.bot.core.Bot;
-import com.devone.bot.core.brain.logic.navigator.math.selector.BotBlockSelector;
 import com.devone.bot.core.brain.memory.scene.BotSceneData;
 import com.devone.bot.core.task.passive.BotTaskAutoParams;
 import com.devone.bot.core.task.passive.IBotTaskParameterized;

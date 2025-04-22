@@ -8,6 +8,7 @@ import java.util.List;
 import java.util.Random;
 import java.util.stream.Collectors;
 
+import com.devone.bot.core.utils.blocks.BlockUtils;
 import com.devone.bot.core.utils.blocks.BotBlockData;
 import com.devone.bot.core.utils.blocks.BotLocation;
 import com.devone.bot.core.utils.logger.BotLogger;
@@ -43,7 +44,11 @@ public class BotBlockSelector {
         double minDistance = Double.MAX_VALUE;
     
         for (BotBlockData target : targets) {
-            if (fromLocation.equals(target.getLocation())) {
+
+
+            boolean state = BlockUtils.isSamePosition(target.getLocation(), fromLocation);
+            
+            if(state) {
                 BotLogger.debug("🗺️", true, "❌ Блок совпадает с текущей позицией, игнорируем.");
                 continue;
             }
