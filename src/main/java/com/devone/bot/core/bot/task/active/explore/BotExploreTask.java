@@ -3,7 +3,7 @@ package com.devone.bot.core.bot.task.active.explore;
 import java.util.List;
 
 import com.devone.bot.core.bot.Bot;
-import com.devone.bot.core.bot.brain.logic.navigator.selectors.BotBlockSelector;
+import com.devone.bot.core.bot.brain.logic.navigation.math.selector.BotBlockSelector;
 import com.devone.bot.core.bot.brain.memory.scene.BotSceneData;
 import com.devone.bot.core.bot.task.active.explore.params.BotExploreTaskParams;
 import com.devone.bot.core.bot.task.passive.BotTaskAutoParams;

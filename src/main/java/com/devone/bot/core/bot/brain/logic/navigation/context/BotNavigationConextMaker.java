@@ -1,73 +1,70 @@
-package com.devone.bot.core.bot.brain.logic.navigator;
+package com.devone.bot.core.bot.brain.logic.navigation.context;
 
-import com.devone.bot.core.bot.brain.logic.navigator.BotExplorationTargetPlanner.Strategy;
-import com.devone.bot.core.bot.brain.logic.navigator.context.BotSceneContext;
-import com.devone.bot.core.bot.brain.logic.navigator.filters.BotBlocksNavigableFilter;
-import com.devone.bot.core.bot.brain.logic.navigator.filters.BotBlocksNoDangerousFilter;
-import com.devone.bot.core.bot.brain.logic.navigator.filters.BotBlocksVerticalSliceFilter;
-import com.devone.bot.core.bot.brain.logic.navigator.filters.BotBlocksWalkableFilter;
-import com.devone.bot.core.bot.brain.logic.navigator.filters.BotEntitiesOnSurfaceFilter;
-import com.devone.bot.core.bot.brain.logic.navigator.resolvers.BotReachabilityResolver;
+import com.devone.bot.core.bot.brain.logic.navigation.math.filters.BotBlocksNavigableFilter;
+import com.devone.bot.core.bot.brain.logic.navigation.math.filters.BotBlocksNoDangerousFilter;
+import com.devone.bot.core.bot.brain.logic.navigation.math.filters.BotBlocksVerticalSliceFilter;
+import com.devone.bot.core.bot.brain.logic.navigation.math.filters.BotBlocksWalkableFilter;
+import com.devone.bot.core.bot.brain.logic.navigation.math.filters.BotEntitiesOnSurfaceFilter;
+import com.devone.bot.core.bot.brain.logic.navigation.math.resolver.BotReachabilityResolver;
+import com.devone.bot.core.bot.brain.logic.navigation.math.resolver.BotTargetReachabilityResolver;
+import com.devone.bot.core.bot.brain.logic.navigation.math.resolver.BotTargetReachabilityResolver.Strategy;
 import com.devone.bot.core.utils.BotConstants;
 import com.devone.bot.core.utils.blocks.BotBlockData;
 import com.devone.bot.core.utils.blocks.BotLocation;
 
 import java.util.List;
 
-public class BotNavigationPlannerWrapper {
+public class BotNavigationConextMaker {
 
     /**
      * Выбирает цели разведки на основе достигнутых точек.
      * Если sectorCount == null, будет подобрано автоматически по площади.
      * scanRadius теперь тоже рассчитывается адаптивно.
      */
-    public static BotSceneContext getSceneContext(BotLocation botPosition, List<BotBlockData> geoBlocks,
+    public static BotNavigationContext getSceneContext(BotLocation botPosition, List<BotBlockData> geoBlocks,
             List<BotBlockData> bioBlocks) {
 
-        BotSceneContext context = new BotSceneContext();
+        BotNavigationContext context = new BotNavigationContext();
 
         List<BotBlockData> sliced = BotBlocksVerticalSliceFilter.filter(geoBlocks, botPosition.getY(),
                 BotConstants.DEFAULT_SCAN_DATA_SLICE_HEIGHT);// relative!!!
-        if (sliced == null || sliced.isEmpty())
-            return context;
 
-        List<BotBlockData> safe = BotBlocksNoDangerousFilter.filter(sliced);
+        if (sliced == null || sliced.isEmpty()) {
+            sliced = geoBlocks;
+        }
 
-        if (safe == null || safe.isEmpty())
-            return context;
+        List<BotBlockData> stable = BotBlocksNoDangerousFilter.filter(sliced);
 
-        List<BotBlockData> walkable = BotBlocksWalkableFilter.filter(safe);
-        if (walkable == null || walkable.isEmpty())
-            return context;
+        if (stable == null || stable.isEmpty()) {
+            stable = sliced;
+        }
+
+        List<BotBlockData> walkable = BotBlocksWalkableFilter.filter(stable);
+        if (walkable == null || walkable.isEmpty()) {
+            walkable = stable;
+        } 
 
         List<BotBlockData> navigable = BotBlocksNavigableFilter.filter(walkable);
 
-        if (navigable == null || navigable.isEmpty())
-            return context;
-
-        // BotBlockData fakeBlockDirt = new BotBlockData();
-
-        // fakeBlockDirt.setX(botPosition.getX());
-        // fakeBlockDirt.setY(botPosition.getY() - 1);
-        // fakeBlockDirt.setZ(botPosition.getZ());
-        // fakeBlockDirt.setType("DIRT");
-
-        //navigable.add(fakeBlockDirt);
+        if (navigable == null || navigable.isEmpty()) {
+            navigable = walkable;
+        }
 
         // проверить есть ли мобы на navigable surface
         List<BotBlockData> livingTargets = BotEntitiesOnSurfaceFilter.filter(bioBlocks, navigable);
 
         List<BotBlockData> reachable = BotReachabilityResolver.resolve(botPosition, navigable);
-        if (reachable == null || reachable.isEmpty())
-            return null;
+        if (reachable == null || reachable.isEmpty()) {
+            reachable = navigable;
+        }
 
         int sectorCount = estimateSectorCountByArea(reachable);
 
-        int scanRadius = estimateSafeScanRadius(botPosition, reachable);
+        int scanRadius  = estimateSafeScanRadius(botPosition, reachable);
 
-        int maxTargets = estimateAdaptiveMaxTargets(reachable, scanRadius);
+        int maxTargets  = estimateAdaptiveMaxTargets(reachable, scanRadius);
 
-        List<BotBlockData> targets = BotExplorationTargetPlanner.selectTargets(
+        List<BotBlockData> targets = BotTargetReachabilityResolver.selectTargets(
                 botPosition,
                 reachable,
                 Strategy.EVEN_DISTRIBUTED,

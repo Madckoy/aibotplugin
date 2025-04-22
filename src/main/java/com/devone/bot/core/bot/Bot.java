@@ -12,7 +12,7 @@ import org.bukkit.entity.Player;
 
 import com.devone.bot.core.bot.bootstrap.BotBootstrap;
 import com.devone.bot.core.bot.brain.BotBrain;
-import com.devone.bot.core.bot.brain.logic.navigation.BotNavigation;
+import com.devone.bot.core.bot.brain.logic.navigation.BotNavigator;
 import com.devone.bot.core.bot.inventory.BotInventory;
 import com.devone.bot.core.bot.speaker.BotSpeaker;
 import com.devone.bot.core.bot.state.BotState;
@@ -46,7 +46,7 @@ public class Bot {
     private transient BotSpeaker speaker; // Создаем поле для общения бота
     private transient BotState state;
 
-    private BotNavigation navigation;
+    private BotNavigator navigation;
 
     public void setBrain(BotBrain brain) {
         this.brain = brain;
@@ -64,11 +64,11 @@ public class Bot {
         this.speaker = speaker;
     }
 
-    public BotNavigation getNavigation() {
+    public BotNavigator getNavigation() {
         return navigation;
     }
 
-    public void setNavigation(BotNavigation nav) {
+    public void setNavigation(BotNavigator nav) {
         this.navigation = nav;
     }
 
@@ -85,7 +85,7 @@ public class Bot {
         this.brain = new BotBrain(this); // Инициализация рантайм статуса
         this.speaker = new BotSpeaker(this); // Инициализация BotCommunicator
         this.state = new BotState(this);
-        this.navigation = new BotNavigation(this);
+        this.navigation = new BotNavigator(this);
 
         BotLogger.debug("🤖", true, id + " ➕ Has been created and spawned");
     }

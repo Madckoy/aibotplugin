@@ -4,7 +4,7 @@ import com.devone.bot.core.bot.task.active.explore.BotExploreTask;
 import java.util.*;
 
 import com.devone.bot.core.bot.Bot;
-import com.devone.bot.core.bot.brain.logic.navigator.selectors.BotEntitySelector;
+import com.devone.bot.core.bot.brain.logic.navigation.math.selector.BotEntitySelector;
 import com.devone.bot.core.bot.brain.memory.scene.BotSceneData;
 import com.devone.bot.core.bot.task.active.brain.params.BotBrainTaskParams;
 import com.devone.bot.core.bot.task.active.excavate.BotExcavateTask;

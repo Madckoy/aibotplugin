@@ -8,9 +8,10 @@ import java.util.Map;
 import org.bukkit.Location;
 
 import com.devone.bot.core.bot.Bot;
-import com.devone.bot.core.bot.brain.logic.navigator.BotNavigationPlannerWrapper;
-import com.devone.bot.core.bot.brain.logic.navigator.context.BotSceneContext;
-import com.devone.bot.core.bot.brain.logic.navigator.selectors.BotBlockSelector;
+import com.devone.bot.core.bot.brain.logic.navigation.context.BotNavigationContext;
+import com.devone.bot.core.bot.brain.logic.navigation.context.BotNavigationConextMaker;
+import com.devone.bot.core.bot.brain.logic.navigation.math.selector.BotBlockSelector;
+import com.devone.bot.core.bot.brain.logic.navigation.summary.BotNavigationSummaryItem;
 import com.devone.bot.core.bot.brain.memory.scene.BotSceneData;
 import com.devone.bot.core.bot.task.active.move.BotMoveTask;
 import com.devone.bot.core.bot.task.active.move.params.BotMoveTaskParams;
@@ -20,7 +21,7 @@ import com.devone.bot.core.utils.blocks.BotLocation;
 import com.devone.bot.core.utils.logger.BotLogger;
 import com.devone.bot.core.utils.world.BotWorldHelper;
 
-public class BotNavigation {
+public class BotNavigator {
 
     public static enum NavigationType {
         WALK,
@@ -50,7 +51,7 @@ public class BotNavigation {
         return summary;
     }
 
-    public BotNavigation() {
+    public BotNavigator() {
         this.location = null; // Инициализируем с текущей локацией
         this.navTarget = null; // Начальное значение для targetLocation
         summary.put(targets.getId(), targets);
@@ -60,7 +61,7 @@ public class BotNavigation {
 
     }
 
-    public BotNavigation(Bot owner) {
+    public BotNavigator(Bot owner) {
         this();
         this.owner = owner;
         this.location = getLocation(); // Инициализируем с текущей локацией
@@ -159,8 +160,7 @@ public class BotNavigation {
 
         BotLocation botPos = owner.getNavigation().getLocation();
 
-        
-        BotSceneContext context = BotNavigationPlannerWrapper.getSceneContext(botPos, scene.blocks, scene.entities);
+        BotNavigationContext context = BotNavigationConextMaker.getSceneContext(botPos, scene.blocks, scene.entities);
 
         if(context==null) {
             // context does not present yet
@@ -172,7 +172,7 @@ public class BotNavigation {
                 return result;
         }
 
-        int targetable = loopTargets(botPos, "targets",   context.targets);
+        int targets    = loopTargets(botPos, "targets",   context.targets);
         int reachable  = loopTargets(botPos, "reachable", context.reachable);
         int navigable  = loopTargets(botPos, "navigable", context.navigable);
         int walkable   = loopTargets(botPos, "walkable",  context.walkable);
@@ -182,7 +182,7 @@ public class BotNavigation {
         
         setStuck(false);
 
-        if (targetable == 0) {
+        if (targets == 0) {
             softStuck = true;
             if (reachable == 0) {
                 softStuck = true;

@@ -12,7 +12,7 @@ import org.bukkit.inventory.ItemStack;
 
 import com.devone.bot.core.bot.Bot;
 import com.devone.bot.core.bot.BotManager;
-import com.devone.bot.core.bot.brain.logic.navigation.BotNavigation;
+import com.devone.bot.core.bot.brain.logic.navigation.BotNavigator;
 import com.devone.bot.core.bot.task.passive.BotTask;
 import com.devone.bot.core.utils.BotUtils;
 import com.devone.bot.core.utils.blocks.BotLocation;
@@ -99,7 +99,7 @@ public class BotStatusServlet extends HttpServlet {
                 botJson.addProperty("memory", bot.getBrain().getMemory().toJson().toString());
 
                 // add navigation data
-                if (bot.getNavigation().getSuggestion() == BotNavigation.NavigationType.TELEPORT) {
+                if (bot.getNavigation().getSuggestion() == BotNavigator.NavigationType.TELEPORT) {
                     botJson.addProperty("navigationSuggestion", "Teleport");
                 } else {
                     botJson.addProperty("navigationSuggestion", "Walk");

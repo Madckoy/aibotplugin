@@ -1,4 +1,4 @@
-package com.devone.bot.core.bot.brain.logic.navigator.selectors;
+package com.devone.bot.core.bot.brain.logic.navigation.math.selector;
 
 import java.util.Comparator;
 import java.util.List;

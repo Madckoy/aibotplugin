@@ -8,10 +8,10 @@ import com.devone.bot.core.bot.Bot;
 import com.devone.bot.core.bot.brain.behaviour.BotBehaviorSelector;
 import com.devone.bot.core.bot.brain.behaviour.BotTaskCandidate;
 import com.devone.bot.core.bot.brain.behaviour.BotTaskCandidatesFactory;
-import com.devone.bot.core.bot.brain.logic.navigator.BotNavigationPlannerWrapper;
-import com.devone.bot.core.bot.brain.logic.navigator.context.BotSceneContext;
-import com.devone.bot.core.bot.brain.logic.navigator.selectors.BotBlockSelector;
-import com.devone.bot.core.bot.brain.logic.navigator.selectors.BotEntitySelector;
+import com.devone.bot.core.bot.brain.logic.navigation.context.BotNavigationContext;
+import com.devone.bot.core.bot.brain.logic.navigation.context.BotNavigationConextMaker;
+import com.devone.bot.core.bot.brain.logic.navigation.math.selector.BotBlockSelector;
+import com.devone.bot.core.bot.brain.logic.navigation.math.selector.BotEntitySelector;
 import com.devone.bot.core.bot.brain.memory.scene.BotSceneData;
 import com.devone.bot.core.bot.task.active.brain.params.BotBrainTaskParams;
 import com.devone.bot.core.bot.task.active.calibrate.BotCalibrateTask;
@@ -142,7 +142,7 @@ public class BotBrainTask extends BotTaskAutoParams<BotBrainTaskParams> {
                 if (params.isAllowTeleport()) {
                     BotLocation botPos = bot.getNavigation().getLocation();
                     BotSceneData sceneData = bot.getBrain().getMemory().getSceneData();
-                    BotSceneContext context = BotNavigationPlannerWrapper.getSceneContext(botPos, sceneData.blocks,
+                    BotNavigationContext context = BotNavigationConextMaker.getSceneContext(botPos, sceneData.blocks,
                             sceneData.entities);
                     return tryTeleportFallback(bot, context);
                 }
@@ -156,7 +156,7 @@ public class BotBrainTask extends BotTaskAutoParams<BotBrainTaskParams> {
         }
     }
 
-    private Optional<Runnable> tryTeleportFallback(Bot bot, BotSceneContext context) {
+    private Optional<Runnable> tryTeleportFallback(Bot bot, BotNavigationContext context) {
         List<Supplier<Optional<Runnable>>> attempts = List.of(
                 () -> tryTeleportToHostileEntity(bot, context.entities),
                 () -> tryTeleportToReachable(bot, context.reachable),

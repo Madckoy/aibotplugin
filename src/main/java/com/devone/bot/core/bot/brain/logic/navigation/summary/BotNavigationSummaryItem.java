@@ -1,4 +1,4 @@
-package com.devone.bot.core.bot.brain.logic.navigation;
+package com.devone.bot.core.bot.brain.logic.navigation.summary;
 
 public class BotNavigationSummaryItem {
     private String id;

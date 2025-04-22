@@ -1,19 +1,21 @@
-package com.devone.bot.core.bot.brain.logic.navigator.filters;
+package com.devone.bot.core.bot.brain.logic.navigation.math.filters;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.List;
 
 import com.devone.bot.core.utils.blocks.BotBlockData;
 
-public class BotBlocksNoDangerousFilter {
+public class BotBlockNoAirFilter {
+
     public static List<BotBlockData> filter(List<BotBlockData> blocks) {
         List<BotBlockData> result = new ArrayList<>();
         for (BotBlockData block : blocks) {
-            if (block.isDangerous()) {
-                continue; 
+            if (block.isAir()) {
+                continue;
+            } else {
+                result.add(block);
             }
-            result.add(block);
         }
         return result;
     }
-
 }
