@@ -67,7 +67,7 @@ public class BotNavigation {
     public List<BotBlockData> getCandidates() {
         return candidates;
     }
-    
+
     // Получение и обновление currentLocation с проверкой на застревание
     public BotLocation getLocation() {
         if (owner.getNPC() != null) {
@@ -127,6 +127,10 @@ public class BotNavigation {
     private int loopTargets(BotLocation botPos, String key, List<BotBlockData> targets) {
 
         int targetable = 0;
+
+        if(targets==null) {
+            return targetable;
+        }
 
         for (int i = 0; i < targets.size(); i++) {
             BotBlockData target = targets.get(i);
@@ -189,7 +193,7 @@ public class BotNavigation {
             suggestion = NavigationType.WALK;
         }
 
-        if (hardStuck && softStuck) {
+        if (hardStuck) {
             setStuck(true);
         }
 
