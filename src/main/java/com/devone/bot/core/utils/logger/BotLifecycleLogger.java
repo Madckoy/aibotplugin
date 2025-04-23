@@ -54,7 +54,7 @@ public class BotLifecycleLogger {
             bw.newLine();
     
         } catch (IOException e) {
-            Bukkit.getLogger().warning("[BotMovementLogger] Ошибка записи в лог " + filename + ": " + e.getMessage());
+            Bukkit.getLogger().warning("[BotLifecycleLogger] Ошибка записи в лог " + filename + ": " + e.getMessage());
         }
     }
 
@@ -66,7 +66,7 @@ public class BotLifecycleLogger {
             bw.newLine();
 
         } catch (IOException e) {
-            Bukkit.getLogger().warning("[BotMovementLogger] Ошибка создания файла " + file.getName() + ": " + e.getMessage());
+            Bukkit.getLogger().warning("[BotLifecycleLogger] Ошибка создания файла " + file.getName() + ": " + e.getMessage());
         }
     }
 
