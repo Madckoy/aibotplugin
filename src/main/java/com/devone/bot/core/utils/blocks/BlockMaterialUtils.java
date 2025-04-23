@@ -27,6 +27,7 @@ public class BlockMaterialUtils {
     );
 
     public static final Set<String> COVER_TYPES = Set.of(
+        "SHORT_GRASS",
         "ICE",
         "SNOW",
         "CARPET",

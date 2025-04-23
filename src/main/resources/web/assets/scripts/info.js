@@ -14,16 +14,17 @@ function updateInfoPanel(bot) {
     }
 }  
 
+
 function showInfoPanel(bot) {
     const panel = document.getElementById("bot-info-panel");
     const currentBotId = panel.getAttribute("data-bot-id");
-    const isVisible = panel.classList.contains("visible");
+    const wasVisible = panel.getAttribute("data-visible") === "true";
 
-    // 🔁 Если нажали повторно на того же бота — скрыть панель
-    if (isVisible && currentBotId === bot.id) {
+    // 🔁 Если уже открыт на того же бота — закрыть
+    if (wasVisible && currentBotId === bot.id) {
         panel.classList.remove("visible");
         panel.classList.add("hidden");
-        panel.removeAttribute("data-bot-id");
+        panel.setAttribute("data-visible", "false");
         return;
     }
 
@@ -38,9 +39,24 @@ function showInfoPanel(bot) {
     // 📌 Показываем панель
     panel.classList.remove("hidden");
     panel.classList.add("visible");
+    panel.setAttribute("data-visible", "true");
     panel.setAttribute("data-bot-id", bot.id);
+}
 
-    document.getElementById('close-info-btn').addEventListener('click', () => {
-        document.getElementById('bot-info-panel').classList.add('hidden');
-    });
+// Закрытие через крестик
+document.getElementById('close-info-btn').addEventListener('click', () => {
+    const panel = document.getElementById("bot-info-panel");
+    panel.classList.remove("visible");
+    panel.classList.add("hidden");
+    panel.setAttribute("data-visible", "false");
+    panel.removeAttribute("data-bot-id");
+});
+
+
+function hideInfoPanel() {
+    const panel = document.getElementById("bot-info-panel");
+    panel.classList.remove("visible");
+    panel.classList.add("hidden");
+    panel.setAttribute("data-visible", "false");
+    panel.removeAttribute("data-bot-id");
 }

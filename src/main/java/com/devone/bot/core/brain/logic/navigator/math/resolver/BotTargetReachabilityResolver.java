@@ -15,6 +15,13 @@ public class BotTargetReachabilityResolver {
         EVEN_DISTRIBUTED
     }
 
+
+    private static boolean isBotStandingOn(BotLocation botPosition, BotLocation block) {
+        return block.getX() == botPosition.getX()
+            && block.getY() == botPosition.getY() - 1
+            && block.getZ() == botPosition.getZ();
+    }
+
     /**
      * Проверяет, достижима ли конкретная точка target из позиции botPosition,
      * основываясь на списке навигационно проходимых точек.
@@ -22,7 +29,10 @@ public class BotTargetReachabilityResolver {
     public static boolean isReachable(BotLocation botPosition,
                                       BotLocation target,
                                       List<BotBlockData> navigablePoints) {
-        if (botPosition.equals(target)) return true;
+
+        if(isBotStandingOn(botPosition, target)) { return false; }  // exclude a block the bot is standing on
+
+        //if (botPosition.equals(target)) return true;
 
         Set<String> visited = new HashSet<>();
         Queue<BotLocation> queue = new LinkedList<>();
