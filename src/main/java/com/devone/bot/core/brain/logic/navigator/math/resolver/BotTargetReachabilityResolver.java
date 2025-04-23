@@ -79,6 +79,7 @@ public class BotTargetReachabilityResolver {
                                                     boolean preferDistant,
                                                     int scanRadius) {
  
+                                                        
          if (reachable == null || reachable.isEmpty()) return null;
  
          switch (strategy) {

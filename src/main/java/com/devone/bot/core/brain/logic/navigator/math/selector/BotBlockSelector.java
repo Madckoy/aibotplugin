@@ -29,10 +29,26 @@ public class BotBlockSelector {
             return null;
         }
         int index = RANDOM.nextInt(targets.size());
+
+        BotLocation underBot = new BotLocation(targets.get(index));
+        underBot.setY(underBot.getY()-1);
+
+        if(BlockUtils.isSamePosition(targets.get(index), underBot)) {
+            if(targets.size()>1) {
+                return selectRandomTarget(targets); // recurse if we have several targets
+            } 
+        }
+        else { 
+           return targets.get(index);
+        }
+
         return targets.get(index);
     }
 
     public static BotBlockData selectNearestTarget(List<BotBlockData> targets, BotLocation fromLocation) {
+
+        BotLocation underBot = new BotLocation(fromLocation);
+        underBot.setY(underBot.getY()-1);
 
         BotLogger.debug("🗺️", true, "📍Выбираем ближайший блок ");
 
@@ -46,14 +62,14 @@ public class BotBlockSelector {
         for (BotBlockData target : targets) {
 
 
-            boolean state = BlockUtils.isSamePosition(target.getLocation(), fromLocation);
+            boolean state = BlockUtils.isSamePosition(target.getLocation(), underBot);
             
             if(state) {
                 BotLogger.debug("🗺️", true, "❌ Блок совпадает с текущей позицией, игнорируем.");
                 continue;
             }
     
-            double distance = fromLocation.distanceTo(target);
+            double distance = underBot.distanceTo(target);
             if (distance < minDistance) {
                 minDistance = distance;
                 nearest = target;
