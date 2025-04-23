@@ -8,9 +8,10 @@ import java.util.Map;
 import org.bukkit.Location;
 
 import com.devone.bot.core.Bot;
-import com.devone.bot.core.brain.logic.navigator.context.BotNavigationConextMaker;
+
 import com.devone.bot.core.brain.logic.navigator.context.BotNavigationContext;
-import com.devone.bot.core.brain.logic.navigator.math.selector.BotBlockSelector;
+import com.devone.bot.core.brain.logic.navigator.context.BotNavigationContextMaker;
+import com.devone.bot.core.brain.logic.navigator.math.selector.BotPOISelector;
 import com.devone.bot.core.brain.logic.navigator.summary.BotNavigationSummaryItem;
 import com.devone.bot.core.brain.memory.scene.BotSceneData;
 import com.devone.bot.core.task.passive.BotTaskManager;
@@ -166,7 +167,7 @@ public class BotNavigator {
 
         BotPosition botPos = getPosition();
 
-        BotNavigationContext context = BotNavigationConextMaker.getSceneContext(botPos, scene.blocks, scene.entities);
+        BotNavigationContext context = BotNavigationContextMaker.createSceneContext(botPos, scene.blocks, scene.entities);
 
         if(context==null) {
             // context does not present yet
@@ -221,7 +222,7 @@ public class BotNavigator {
 
         candidates = result;
         
-        suggested = BotBlockSelector.selectRandomTarget(candidates);
+        suggested = BotPOISelector.selectRandom(owner, candidates);
 
         return result;
     }

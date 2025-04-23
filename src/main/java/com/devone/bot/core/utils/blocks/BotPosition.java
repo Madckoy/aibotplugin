@@ -27,7 +27,6 @@ public class BotPosition {
     public boolean equals(Object o) {
         if (this == o) return true;
         if (!(o instanceof BotPosition)) return false;
-        
         BotPosition that = (BotPosition) o;
         return x == that.x && y == that.y && z == that.z;
     }
@@ -47,7 +46,7 @@ public class BotPosition {
  
     @Override
     public String toString() {
-        return String.format("%d, %d, %d", x, y, z);
+        return String.format("%d,%d,%d", x, y, z);
     }
 
     public int getX() { return x; }

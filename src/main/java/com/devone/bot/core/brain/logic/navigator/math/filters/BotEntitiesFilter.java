@@ -5,7 +5,7 @@ import java.util.List;
 
 import com.devone.bot.core.utils.blocks.BotBlockData;
 
-public class BotEntitiesOnSurfaceFilter {
+public class BotEntitiesFilter {
 
     /**
      * Возвращает все сущности, стоящие на навигационной поверхности.

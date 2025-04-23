@@ -5,7 +5,7 @@ import java.util.List;
 
 import com.devone.bot.core.utils.blocks.BotBlockData;
 
-public class BotBlocksNoCoverFilter {
+public class BotNoCoverFilter {
 
     public static List<BotBlockData> filter(List<BotBlockData> blocks) {
         List<BotBlockData> result = new ArrayList<>();

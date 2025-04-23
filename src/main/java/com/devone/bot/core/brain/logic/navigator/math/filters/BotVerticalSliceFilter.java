@@ -6,7 +6,7 @@ import java.util.List;
 
 import com.devone.bot.core.utils.blocks.BotBlockData;
 
-public class BotBlocksVerticalSliceFilter {
+public class BotVerticalSliceFilter {
     public static List<BotBlockData> filter(List<BotBlockData> blocks, int botY, int range) {
         List<BotBlockData> result = new ArrayList<>();
         

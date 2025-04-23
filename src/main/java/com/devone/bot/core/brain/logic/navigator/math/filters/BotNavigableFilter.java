@@ -5,7 +5,7 @@ import java.util.*;
 import com.devone.bot.core.utils.blocks.BotBlockData;
 import com.devone.bot.core.utils.blocks.BotPosition;
 
-public class BotBlocksNavigableFilter {
+public class BotNavigableFilter {
 
     /* 
      * Оставляет только те точки, к которым можно перейти хотя бы с одной соседней.

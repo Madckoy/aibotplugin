@@ -117,7 +117,7 @@ public class BotStatusServlet extends HttpServlet {
                 Object obj = bot.getNavigator().getSuggested();
                 if(obj!=null) {
                     botJson.addProperty("suggestedBlock",
-                        bot.getNavigator().getSuggested().getLocation().toString()+ " | " + bot.getNavigator().getSuggested().getType() );
+                        bot.getNavigator().getSuggested().getPosition().toString()+ " | " + bot.getNavigator().getSuggested().getType() );
                 }
                     
                 botsArray.add(botJson);

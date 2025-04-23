@@ -1,82 +1,97 @@
 package com.devone.bot.core.brain.logic.navigator.context;
 
-import com.devone.bot.core.brain.logic.navigator.math.filters.BotBlocksNavigableFilter;
-import com.devone.bot.core.brain.logic.navigator.math.filters.BotBlocksNoDangerousFilter;
-import com.devone.bot.core.brain.logic.navigator.math.filters.BotBlocksVerticalSliceFilter;
-import com.devone.bot.core.brain.logic.navigator.math.filters.BotBlocksWalkableFilter;
-import com.devone.bot.core.brain.logic.navigator.math.filters.BotEntitiesOnSurfaceFilter;
-import com.devone.bot.core.brain.logic.navigator.math.resolver.BotReachabilityResolver;
-import com.devone.bot.core.brain.logic.navigator.math.resolver.BotTargetReachabilityResolver;
-import com.devone.bot.core.brain.logic.navigator.math.resolver.BotTargetReachabilityResolver.Strategy;
-import com.devone.bot.core.utils.BotConstants;
+
+import com.devone.bot.core.brain.logic.navigator.math.filters.BotAddStartNavigationFilter;
+import java.util.List;
+import com.devone.bot.core.brain.logic.navigator.math.poi.BotPOIBuilder;
+import com.devone.bot.core.brain.logic.navigator.math.poi.BotPOIBuilder.BotPOIBuildStrategy;
+import com.devone.bot.core.brain.logic.navigator.math.builder.BotReachableSurfaceBuilder;
+import com.devone.bot.core.brain.logic.navigator.math.builder.BotWalkableSurfaceBuilder;
+import com.devone.bot.core.brain.logic.navigator.math.filters.BotEntitiesFilter;
+import com.devone.bot.core.brain.logic.navigator.math.filters.BotNavigableFilter;
+import com.devone.bot.core.brain.logic.navigator.math.filters.BotSafeBlocksFilter;
+import com.devone.bot.core.brain.logic.navigator.math.filters.BotVerticalSliceFilter;
 import com.devone.bot.core.utils.blocks.BotBlockData;
 import com.devone.bot.core.utils.blocks.BotPosition;
 
-import java.util.List;
-
-public class BotNavigationConextMaker {
+public class BotNavigationContextMaker {
 
     /**
      * Выбирает цели разведки на основе достигнутых точек.
      * Если sectorCount == null, будет подобрано автоматически по площади.
      * scanRadius теперь тоже рассчитывается адаптивно.
      */
-    public static BotNavigationContext getSceneContext(BotPosition botPosition, List<BotBlockData> geoBlocks,
+    public static BotNavigationContext createSceneContext(BotPosition botPosition, List<BotBlockData> geoBlocks,
             List<BotBlockData> bioBlocks) {
 
         BotNavigationContext context = new BotNavigationContext();
 
-        List<BotBlockData> sliced = BotBlocksVerticalSliceFilter.filter(geoBlocks, botPosition.getY(),
-                BotConstants.DEFAULT_SCAN_DATA_SLICE_HEIGHT);// relative!!!
+        List<BotBlockData> sliced = BotVerticalSliceFilter.filter(geoBlocks, botPosition.getY(), 10);// relative!!!
 
         if (sliced == null || sliced.isEmpty()) {
             sliced = geoBlocks;
         }
 
-        List<BotBlockData> stable = BotBlocksNoDangerousFilter.filter(sliced);
+        List<BotBlockData> safe = BotSafeBlocksFilter.filter(sliced);
 
-        if (stable == null || stable.isEmpty()) {
-            stable = sliced;
+        if (safe == null || safe.isEmpty()) {
+            safe = sliced;
         }
 
-        List<BotBlockData> walkable = BotBlocksWalkableFilter.filter(stable);
+        safe  = BotAddStartNavigationFilter.apply(botPosition, safe); // added a fake block
+
+        List<BotBlockData> walkable = BotWalkableSurfaceBuilder.build(safe);
         if (walkable == null || walkable.isEmpty()) {
-            walkable = stable;
+            walkable = safe;
         } 
 
-        List<BotBlockData> navigable = BotBlocksNavigableFilter.filter(walkable);
+        List<BotBlockData> navigable = BotNavigableFilter.filter(walkable);
 
         if (navigable == null || navigable.isEmpty()) {
             navigable = walkable;
         }
 
         // проверить есть ли мобы на navigable surface
-        List<BotBlockData> livingTargets = BotEntitiesOnSurfaceFilter.filter(bioBlocks, navigable);
+        List<BotBlockData> livingTargets = BotEntitiesFilter.filter(bioBlocks, navigable);
 
-        List<BotBlockData> reachable = BotReachabilityResolver.resolve(botPosition, navigable);
+        List<BotBlockData> reachable = BotReachableSurfaceBuilder.build(botPosition, navigable);
         if (reachable == null || reachable.isEmpty()) {
             reachable = navigable;
         }
 
         int sectorCount = estimateSectorCountByArea(reachable);
-
         int scanRadius  = estimateSafeScanRadius(botPosition, reachable);
-
         int maxTargets  = estimateAdaptiveMaxTargets(reachable, scanRadius);
 
-        List<BotBlockData> targets = BotTargetReachabilityResolver.selectTargets(
-                botPosition,
+        List<BotBlockData> poi = BotPOIBuilder.build(botPosition, 
                 reachable,
-                Strategy.EVEN_DISTRIBUTED,
+                BotPOIBuildStrategy.EVEN_DISTRIBUTED,
                 sectorCount,
                 maxTargets,
                 true,
                 scanRadius);
+        //--------------------------------------------------------------------------
+        // Строим debug-путь к одной цели по сетке reachable, а не по самим таргетам
+        // Set<BotPosition> navMesh = SimplePathUtils.toLocationSet(reachable); // 🆕 сетка движения
+        // BotSimplePathFinder pathfinder = new BotSimplePathFinder(navMesh);
 
+        // BotPosition debugLoc = new BotPosition(botPosition);
+        // debugLoc.setY(botPosition.getY()-1);
+        
+        //List<List<BotBlockData>> debugPaths = BotSimplePathFinder.buildAllDebugPathsV2(
+        //    botPosition,
+        //    poi,
+        //    pathfinder
+        //);
+        
+        //context.debugPaths = debugPaths;
+        //---------------------------------------------------------------------------
+        context.sliced    = sliced;
+        context.safe      = safe;               
         context.walkable  = walkable;
         context.navigable = navigable;
         context.reachable = reachable;
-        context.targets   = targets;
+        context.targets   = poi;
         context.entities  = livingTargets;
 
         return context;

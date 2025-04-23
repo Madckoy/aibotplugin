@@ -43,7 +43,7 @@ public class BotHandExcavateTask extends BotHandTask<BotHandExcavateTaskParams> 
 
         BotLogger.debug(icon, isLogging(), bot.getId() + " 🔶 Executing BotHandExcavateTask");
 
-        setObjective(params.getObjective() + " " + target.getType() +" at "+target.getLocation());
+        setObjective(params.getObjective() + " " + target.getType() +" at "+target.getPosition());
         BotHandExcavateTask heTask = this;
 
         bukkitTask = new BukkitRunnable() {

@@ -23,12 +23,12 @@ public class BotNearbyHostileStrategy implements IBotReactionStrategy {
 
         if (scene != null) {
             for (BotBlockData entity : scene.entities) {
-                if (!entity.isHostileMob())
+                if (!entity.isHostile())
                     continue;
                 if (BotWorldHelper.isInDangerousLiquid(entity))
                     continue;
 
-                double dist = botPos.distanceTo(entity.getLocation());
+                double dist = botPos.distanceTo(entity.getPosition());
                 if (dist >= 5)
                     continue;
 

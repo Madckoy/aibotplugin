@@ -29,7 +29,7 @@ public class BotEntitySelector {
     public static BotBlockData pickNearestHostile(List<BotBlockData> entities, BotPosition botOrigin, double distance) {
         return pickNearestTarget(
             entities.stream()
-                    .filter(BotBlockData::isHostileMob)
+                    .filter(BotBlockData::isHostile)
                     .toList(),
 
             botOrigin,
@@ -43,7 +43,7 @@ public class BotEntitySelector {
     public static BotBlockData pickNearestPassive(List<BotBlockData> entities, BotPosition botOrigin, double distance) {
         return pickNearestTarget(
             entities.stream()
-                    .filter(BotBlockData::isPassiveMob)
+                    .filter(BotBlockData::isPeaceful)
                     .toList(),
             botOrigin,
             distance

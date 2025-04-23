@@ -12,7 +12,6 @@ import com.devone.bot.core.utils.logger.BotLogger;
 import com.devone.bot.core.utils.world.BotWorldHelper;
 import net.citizensnpcs.api.ai.event.NavigationCompleteEvent;
 import org.bukkit.Bukkit;
-import org.bukkit.Location;
 import org.bukkit.block.Block;
 import org.bukkit.event.EventHandler;
 import org.bukkit.scheduler.BukkitTask;
@@ -75,7 +74,6 @@ public class BotMoveTask extends BotTaskAutoParams<BotMoveTaskParams> {
             return;
         }
 
-        Location targetLocation = BotWorldHelper.botPositionToWorldLocation(poi);
         Block targetBlock = BotWorldHelper.botPositionToWorldBlock(poi);
         String blockName = BotUtils.getBlockName(targetBlock);
         

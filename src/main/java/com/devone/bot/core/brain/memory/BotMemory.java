@@ -100,7 +100,7 @@ public class BotMemory {
     public void memorize(BotBlockData block, MemoryType memoryType) {
         if(block==null) return;
         BotMemoryItem item = new BotMemoryItem(block);
-        memoryMap.get(memoryType).put(block.getLocation(), item);
+        memoryMap.get(memoryType).put(block.getPosition(), item);
     }
 
     // Проверка, был ли блок запомнен для определённого типа памяти
@@ -112,7 +112,7 @@ public class BotMemory {
             Map<BotPosition, BotMemoryItem> map = memoryMap.get(memoryType);
 
             if(map!=null) {
-                BotMemoryItem m_item = map.get(block.getLocation());
+                BotMemoryItem m_item = map.get(block.getPosition());
                 if(m_item != null) {
                     return true;
                 }  
