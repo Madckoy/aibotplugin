@@ -6,7 +6,7 @@ import java.util.*;
 import java.util.stream.Collectors;
 
 import com.devone.bot.core.utils.blocks.BotBlockData;
-import com.devone.bot.core.utils.blocks.BotLocation;
+import com.devone.bot.core.utils.blocks.BotPosition;
 
 public class BotTargetReachabilityResolver {
     
@@ -16,7 +16,7 @@ public class BotTargetReachabilityResolver {
     }
 
 
-    private static boolean isBotStandingOn(BotLocation botPosition, BotLocation block) {
+    private static boolean isBotStandingOn(BotPosition botPosition, BotPosition block) {
         return block.getX() == botPosition.getX()
             && block.getY() == botPosition.getY() - 1
             && block.getZ() == botPosition.getZ();
@@ -26,8 +26,8 @@ public class BotTargetReachabilityResolver {
      * Проверяет, достижима ли конкретная точка target из позиции botPosition,
      * основываясь на списке навигационно проходимых точек.
      */
-    public static boolean isReachable(BotLocation botPosition,
-                                      BotLocation target,
+    public static boolean isReachable(BotPosition botPosition,
+                                      BotPosition target,
                                       List<BotBlockData> navigablePoints) {
 
         if(isBotStandingOn(botPosition, target)) { return false; }  // exclude a block the bot is standing on
@@ -35,7 +35,7 @@ public class BotTargetReachabilityResolver {
         //if (botPosition.equals(target)) return true;
 
         Set<String> visited = new HashSet<>();
-        Queue<BotLocation> queue = new LinkedList<>();
+        Queue<BotPosition> queue = new LinkedList<>();
         queue.add(botPosition);
         visited.add(coordKey(botPosition));
 
@@ -44,14 +44,14 @@ public class BotTargetReachabilityResolver {
                 .collect(Collectors.toSet());
 
         while (!queue.isEmpty()) {
-            BotLocation current = queue.poll();
+            BotPosition current = queue.poll();
 
             for (int dx = -1; dx <= 1; dx++) {
                 for (int dy = -1; dy <= 1; dy++) {
                     for (int dz = -1; dz <= 1; dz++) {
                         if (Math.abs(dx) + Math.abs(dy) + Math.abs(dz) != 1) continue;
 
-                        BotLocation neighbor = new BotLocation(
+                        BotPosition neighbor = new BotPosition(
                                 current.getX() + dx,
                                 current.getY() + dy,
                                 current.getZ() + dz);
@@ -71,7 +71,7 @@ public class BotTargetReachabilityResolver {
         return false;
     }
 
-    public static List<BotBlockData> selectTargets(BotLocation bot,
+    public static List<BotBlockData> selectTargets(BotPosition bot,
                                                     List<BotBlockData> reachable,
                                                     Strategy strategy,
                                                     int sectorCount,
@@ -92,7 +92,7 @@ public class BotTargetReachabilityResolver {
          }
      }
  
-     private static List<BotBlockData> selectAdaptiveSectorTargets(List<BotBlockData> reachable, BotLocation bot, int sectorCount) {
+     private static List<BotBlockData> selectAdaptiveSectorTargets(List<BotBlockData> reachable, BotPosition bot, int sectorCount) {
          Map<Integer, BotBlockData> bestInSector = new HashMap<>();
          Map<Integer, Double> maxDistances = new HashMap<>();
  
@@ -119,7 +119,7 @@ public class BotTargetReachabilityResolver {
  
      private static List<BotBlockData> findEvenlyDistributedTargets(
         List<BotBlockData> reachable,
-        BotLocation bot,
+        BotPosition bot,
         int sectors,
         int maxTargetsInput,
         boolean preferDistant,
@@ -191,7 +191,7 @@ public class BotTargetReachabilityResolver {
         return Math.max(1, Math.min(suggested, reachable.size()));
     }
     
-    private static double squaredDistance(BotBlockData a, BotLocation b) {
+    private static double squaredDistance(BotBlockData a, BotPosition b) {
         return Math.pow(a.getX() - b.getX(), 2) + Math.pow(a.getY() - b.getY(), 2) + Math.pow(a.getZ() - b.getZ(), 2);
     }
     
@@ -207,7 +207,7 @@ public class BotTargetReachabilityResolver {
         return result;
     }
 
-    private static String coordKey(BotLocation c) {
+    private static String coordKey(BotPosition c) {
         return c.toString();
     }
 }

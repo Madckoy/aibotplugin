@@ -25,7 +25,7 @@ import com.devone.bot.core.task.active.teleport.BotTeleportTask;
 import com.devone.bot.core.task.active.teleport.params.BotTeleportTaskParams;
 import com.devone.bot.core.utils.BotConstants;
 import com.devone.bot.core.utils.blocks.BotBlockData;
-import com.devone.bot.core.utils.blocks.BotLocation;
+import com.devone.bot.core.utils.blocks.BotPosition;
 import com.devone.bot.core.utils.logger.BotLogger;
 import com.devone.bot.core.utils.world.BotWorldHelper;
 
@@ -140,7 +140,7 @@ public class BotBrainTask extends BotTaskAutoParams<BotBrainTaskParams> {
 
             case 2:
                 if (params.isAllowTeleport()) {
-                    BotLocation botPos = bot.getNavigator().getLocation();
+                    BotPosition botPos = bot.getNavigator().getPosition();
                     BotSceneData sceneData = bot.getBrain().getMemory().getSceneData();
                     BotNavigationContext context = BotNavigationConextMaker.getSceneContext(botPos, sceneData.blocks,
                             sceneData.entities);
@@ -188,7 +188,7 @@ public class BotBrainTask extends BotTaskAutoParams<BotBrainTaskParams> {
             return Optional.empty();
         }
 
-        BotBlockData target = BotEntitySelector.pickNearestTarget(filtered, bot.getNavigator().getLocation(),
+        BotBlockData target = BotEntitySelector.pickNearestTarget(filtered, bot.getNavigator().getPosition(),
                 BotConstants.DEFAULT_SCAN_RANGE);
         if (target == null)
             return Optional.empty();
@@ -206,7 +206,7 @@ public class BotBrainTask extends BotTaskAutoParams<BotBrainTaskParams> {
     private Optional<Runnable> tryTeleportToReachable(Bot bot, List<BotBlockData> data) {
         if (data == null || data.isEmpty())
             return Optional.empty();
-        BotBlockData block = BotBlockSelector.selectNearestTarget(data, bot.getNavigator().getLocation());
+        BotBlockData block = BotBlockSelector.selectNearestTarget(data, bot.getNavigator().getPosition());
         return Optional.of(() -> {
             BotLogger.debug(icon, isLogging(), "⚡Телепорт: достижимая точка " + bot.getId() + " → " + block);
             BotTeleportTaskParams tpParams = new BotTeleportTaskParams(block);
@@ -219,7 +219,7 @@ public class BotBrainTask extends BotTaskAutoParams<BotBrainTaskParams> {
     private Optional<Runnable> tryTeleportToNavigable(Bot bot, List<BotBlockData> data) {
         if (data == null || data.isEmpty())
             return Optional.empty();
-        BotBlockData block = BotBlockSelector.selectNearestTarget(data, bot.getNavigator().getLocation());
+        BotBlockData block = BotBlockSelector.selectNearestTarget(data, bot.getNavigator().getPosition());
         return Optional.of(() -> {
             BotLogger.debug(icon, isLogging(), "⚡Телепорт: точка навигации " + bot.getId() + " → " + block);
             BotTeleportTaskParams tpParams = new BotTeleportTaskParams(block);
@@ -232,7 +232,7 @@ public class BotBrainTask extends BotTaskAutoParams<BotBrainTaskParams> {
     private Optional<Runnable> tryTeleportToEntity(Bot bot, List<BotBlockData> data) {
         if (data == null || data.isEmpty())
             return Optional.empty();
-        BotBlockData block = BotBlockSelector.selectNearestTarget(data,  bot.getNavigator().getLocation());
+        BotBlockData block = BotBlockSelector.selectNearestTarget(data,  bot.getNavigator().getPosition());
         return Optional.of(() -> {
             BotLogger.debug(icon, isLogging(), "⚡Телепорт к сущности " + bot.getId() + " → " + block);
             BotTeleportTaskParams tpParams = new BotTeleportTaskParams(block);
@@ -245,7 +245,7 @@ public class BotBrainTask extends BotTaskAutoParams<BotBrainTaskParams> {
     private Optional<Runnable> tryTeleportToWalkable(Bot bot, List<BotBlockData> data) {
         if (data == null || data.isEmpty())
             return Optional.empty();
-        BotBlockData block = BotBlockSelector.selectNearestTarget(data,  bot.getNavigator().getLocation());
+        BotBlockData block = BotBlockSelector.selectNearestTarget(data,  bot.getNavigator().getPosition());
         return Optional.of(() -> {
             BotLogger.debug(icon, isLogging(), "⚡Телепорт: проходимая точка " + bot.getId() + " → " + block);
             BotTeleportTaskParams tpParams = new BotTeleportTaskParams(block);
@@ -256,7 +256,7 @@ public class BotBrainTask extends BotTaskAutoParams<BotBrainTaskParams> {
     }
 
     private Optional<Runnable> tryTeleportToSpawn(Bot bot) {
-        BotLocation spawn = BotWorldHelper.getWorldSpawnLocation();
+        BotPosition spawn = BotWorldHelper.getWorldSpawnLocation();
         return Optional.of(() -> {
             BotLogger.debug(icon, isLogging(), "⚡Телепорт к спавну " + bot.getId() + " → " + spawn);
             BotTeleportTaskParams tpParams = new BotTeleportTaskParams(spawn);

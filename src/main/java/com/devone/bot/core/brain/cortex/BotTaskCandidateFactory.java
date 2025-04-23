@@ -14,7 +14,7 @@ import com.devone.bot.core.task.active.hand.attack.BotHandAttackTask;
 import com.devone.bot.core.task.active.hand.attack.params.BotHandAttackTaskParams;
 import com.devone.bot.core.utils.BotConstants;
 import com.devone.bot.core.utils.blocks.BotBlockData;
-import com.devone.bot.core.utils.blocks.BotLocation;
+import com.devone.bot.core.utils.blocks.BotPosition;
 import com.devone.bot.core.utils.logger.BotLogger;
 import com.devone.bot.core.utils.world.BotWorldHelper;
 
@@ -23,7 +23,7 @@ public class BotTaskCandidateFactory {
     public static List<BotTaskCandidate> createCandidates(Bot bot, BotBrainTaskParams params) {
         boolean isNight = BotWorldHelper.isNight(bot);
         BotSceneData data = bot.getBrain().getMemory().getSceneData();
-        BotLocation botPos = bot.getNavigator().getLocation();
+        BotPosition botPos = bot.getNavigator().getPosition();
 
         List<BotTaskCandidate> candidates = new ArrayList<>();
 

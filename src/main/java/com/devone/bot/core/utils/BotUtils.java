@@ -11,7 +11,7 @@ import org.bukkit.util.Vector;
 import com.devone.bot.AIBotPlugin;
 import com.devone.bot.core.Bot;
 import com.devone.bot.core.task.passive.BotTask;
-import com.devone.bot.core.utils.blocks.BotLocation;
+import com.devone.bot.core.utils.blocks.BotPosition;
 import com.devone.bot.core.utils.logger.BotLogger;
 import com.devone.bot.core.utils.world.BotWorldHelper;
 
@@ -64,7 +64,7 @@ public class BotUtils {
                 location.getBlock().getBlockData() // Тип блока для эффекта
         );
 
-        BotLocation loc = BotWorldHelper.worldLocationToBotLocation(location);
+        BotPosition loc = BotWorldHelper.locationToBotPosition(location);
         BotLogger.debug(task.getIcon(), true, bot.getId() + " 🎇 Эффект разрушения воспроизведён на " + loc);
     }
 
@@ -80,8 +80,8 @@ public class BotUtils {
         return world.getSpawnLocation();
     }
 
-    public static BotLocation getFallbackLocation() {
-        BotLocation coord = new BotLocation(getFallbackPos().getBlockX(), getFallbackPos().getBlockY(),
+    public static BotPosition getFallbackLocation() {
+        BotPosition coord = new BotPosition(getFallbackPos().getBlockX(), getFallbackPos().getBlockY(),
                 getFallbackPos().getBlockZ());
         return coord;
     }
@@ -94,12 +94,12 @@ public class BotUtils {
      * @param bot    Бот (CraftPlayer или NPC, поддерживающий teleport)
      * @param target Цель, к которой нужно повернуть лицо
      */
-    public static void lookAt(Bot bot, BotLocation target) {
+    public static void lookAt(Bot bot, BotPosition target) {
 
         if (bot.getNPCEntity() == null)
             return;
 
-        Location tgt = BotWorldHelper.getWorldLocation(target);
+        Location tgt = BotWorldHelper.botPositionToWorldLocation(target);
 
         Location from = bot.getNPCEntity().getLocation();
         Location to = tgt.clone().add(0.5, 0.5, 0.5); // центр блока
@@ -141,7 +141,7 @@ public class BotUtils {
         return diff;
     }
 
-    public static void turnToTarget(BotTask<?> task, Bot bot, BotLocation target) {
+    public static void turnToTarget(BotTask<?> task, Bot bot, BotPosition target) {
 
         // ✅ Принудительно обновляем положение, если поворот сбрасывается
         Bukkit.getScheduler().runTaskLater(AIBotPlugin.getInstance(), () -> {

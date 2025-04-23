@@ -1,7 +1,7 @@
 package com.devone.bot.core.task.active.teleport.params;
 
 import com.devone.bot.core.task.passive.params.BotLocationParams;
-import com.devone.bot.core.utils.blocks.BotLocation;
+import com.devone.bot.core.utils.blocks.BotPosition;
 
 public class BotTeleportTaskParams extends BotLocationParams {
 
@@ -21,7 +21,7 @@ public class BotTeleportTaskParams extends BotLocationParams {
     /**
      * Позволяет создать параметры и вручную переопределить точку телепортации.
      */
-    public BotTeleportTaskParams(BotLocation loc) {
+    public BotTeleportTaskParams(BotPosition loc) {
         this(); // загружаем всё остальное из JSON
         setLocation(loc);
     }

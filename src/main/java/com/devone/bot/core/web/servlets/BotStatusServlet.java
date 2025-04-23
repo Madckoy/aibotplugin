@@ -15,7 +15,7 @@ import com.devone.bot.core.BotManager;
 import com.devone.bot.core.brain.logic.navigator.BotNavigator;
 import com.devone.bot.core.task.passive.BotTask;
 import com.devone.bot.core.utils.BotUtils;
-import com.devone.bot.core.utils.blocks.BotLocation;
+import com.devone.bot.core.utils.blocks.BotPosition;
 import com.devone.bot.core.web.BotWebService;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
@@ -55,8 +55,8 @@ public class BotStatusServlet extends HttpServlet {
         for (Bot bot : bots) {
             JsonObject botJson = new JsonObject();
 
-            BotLocation loc = bot.getNavigator().getLocation();
-            BotLocation tgt = bot.getNavigator().getTarget();
+            BotPosition loc = bot.getNavigator().getPosition();
+            BotPosition tgt = bot.getNavigator().getPoi();
 
             if (loc != null) {
                 botJson.addProperty("skin", "http://" + BotWebService.getServerHost() + ":"

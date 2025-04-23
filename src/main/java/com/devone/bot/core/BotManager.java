@@ -9,7 +9,7 @@ import org.bukkit.entity.Entity;
 import com.devone.bot.AIBotPlugin;
 import com.devone.bot.core.utils.BotConstants;
 import com.devone.bot.core.utils.BotUtils;
-import com.devone.bot.core.utils.blocks.BotLocation;
+import com.devone.bot.core.utils.blocks.BotPosition;
 import com.devone.bot.core.utils.config.BotManagerConfig;
 import com.devone.bot.core.utils.logger.BotLogger;
 import com.devone.bot.core.utils.world.BotWorldHelper;
@@ -61,15 +61,15 @@ public class BotManager {
             }
             
 
-            BotLocation storedLocation = BotUtils.getFallbackLocation();
+            BotPosition storedPosition = BotUtils.getFallbackLocation();
 
             if (loadedData.bots.containsKey(botName)) {
-                BotLocation coord = loadedData.bots.get(botName).position;
-                storedLocation = coord;
+                BotPosition coord = loadedData.bots.get(botName).position;
+                storedPosition = coord;
             }
 
             if (!npc.isSpawned()) {
-                Location spawnLocation = BotWorldHelper.getWorldLocation(storedLocation);
+                Location spawnLocation = BotWorldHelper.botPositionToWorldLocation(storedPosition);
                 npc.spawn(spawnLocation);
                 BotLogger.debug("🤖", true, "✅ Spawned NPC: " + botName);
             }

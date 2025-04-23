@@ -23,7 +23,7 @@ import com.devone.bot.core.task.active.hand.excavate.params.BotHandExcavateTaskP
 import com.devone.bot.core.utils.BotConstants;
 import com.devone.bot.core.utils.BotUtils;
 import com.devone.bot.core.utils.blocks.BotBlockData;
-import com.devone.bot.core.utils.blocks.BotLocation;
+import com.devone.bot.core.utils.blocks.BotPosition;
 import com.devone.bot.core.utils.logger.BotLogger;
 import com.devone.bot.core.utils.world.BotWorldHelper;
 import com.devone.bot.core.utils.zone.BotZoneManager;
@@ -134,9 +134,9 @@ public class BotExcavateTask extends BotTaskAutoParams<BotExcavateTaskParams> {
 
                 Path ptrnPath = Paths.get(BotConstants.PLUGIN_PATH_PATTERNS_BREAK, patternName);
 
-                this.patternRunner = new BotExcavateTemplateRunner(ptrnPath).init(bot.getNavigator().getLocation().getX(),
-                                                                                  bot.getNavigator().getLocation().getY(),
-                                                                                  bot.getNavigator().getLocation().getZ());
+                this.patternRunner = new BotExcavateTemplateRunner(ptrnPath).init(bot.getNavigator().getPosition().getX(),
+                                                                                  bot.getNavigator().getPosition().getY(),
+                                                                                  bot.getNavigator().getPosition().getZ());
 
                 //setParams(null ); //null because we read from the template file
 
@@ -174,7 +174,7 @@ public class BotExcavateTask extends BotTaskAutoParams<BotExcavateTaskParams> {
             bot.pickupNearbyItems();
         }
         // -----------------
-        BotLocation location = patternRunner.getNextBlock(bot);
+        BotPosition location = patternRunner.getNextBlock(bot);
         // -----------------
         if (location == null) {
             this.stop();
@@ -183,22 +183,22 @@ public class BotExcavateTask extends BotTaskAutoParams<BotExcavateTaskParams> {
             return;
         }
 
-        BotLocation targetLocation = new BotLocation(location);
+        BotPosition targetLocation = new BotPosition(location);
 
-        Block targetBlock = BotWorldHelper.getBlockAt(targetLocation);
+        Block targetBlock = BotWorldHelper.botPositionToWorldBlock(targetLocation);
 
         bot.getNavigator().setTarget(targetLocation);
 
         turnToTarget(this, targetLocation);
 
-        if (bot.getNavigator().getTarget() != null) {
+        if (bot.getNavigator().getPoi() != null) {
 
             setObjective(params.getObjective() + " " + BotUtils.getBlockName(targetBlock)
                     + " at " + targetLocation);
 
-            if (isInProtectedZone(bot.getNavigator().getTarget())) {
+            if (isInProtectedZone(bot.getNavigator().getPoi())) {
                 BotLogger.debug(icon, isLogging(), bot.getId() + " ⛔ в запретной зоне, НЕ будет разрушать блок: " +
-                        bot.getNavigator().getTarget());
+                        bot.getNavigator().getPoi());
                         
                 this.stop();
                 return;
@@ -207,7 +207,7 @@ public class BotExcavateTask extends BotTaskAutoParams<BotExcavateTaskParams> {
             if (!BotWorldHelper.isBreakableBlock(targetBlock)) {
 
                 BotLogger.debug(icon, isLogging(), bot.getId() + " ⛔ Неразрушаемый блок: "
-                        + bot.getNavigator().getTarget());
+                        + bot.getNavigator().getPoi());
 
                 bot.getNavigator().setTarget(null);
                 
@@ -225,7 +225,7 @@ public class BotExcavateTask extends BotTaskAutoParams<BotExcavateTaskParams> {
                 }
             }
 
-            BotBlockData block = BotWorldHelper.worldBlockToBotBlock(targetBlock);
+            BotBlockData block = BotWorldHelper.blockToBotBlockData(targetBlock);
             BotHandExcavateTask handTask = new BotHandExcavateTask(bot);
             BotHandExcavateTaskParams params = new BotHandExcavateTaskParams();
             params.setTarget(block);
@@ -262,7 +262,7 @@ public class BotExcavateTask extends BotTaskAutoParams<BotExcavateTaskParams> {
         return enough;
     }
 
-    private boolean isInProtectedZone(BotLocation location) {
+    private boolean isInProtectedZone(BotPosition location) {
         boolean protectedZone = BotZoneManager.getInstance().isInProtectedZone(location);
         if (protectedZone) {
             BotLogger.debug(icon, isLogging(), bot.getId() + " 🛑 Блок в запретной зоне, разрушение запрещено.");

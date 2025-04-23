@@ -4,7 +4,7 @@ package com.devone.bot.core.brain.logic.navigator.math.filters;
 import java.util.*;
 
 import com.devone.bot.core.utils.blocks.BotBlockData;
-import com.devone.bot.core.utils.blocks.BotLocation;
+import com.devone.bot.core.utils.blocks.BotPosition;
 
 public class BotBlocksWalkableFilter {
 
@@ -15,15 +15,15 @@ public class BotBlocksWalkableFilter {
         List<BotBlockData> result = new ArrayList<>();
 
         // Создаем карту блоков по координатам
-        Map<BotLocation, BotBlockData> blockMap = new HashMap<>();
+        Map<BotPosition, BotBlockData> blockMap = new HashMap<>();
         for (BotBlockData b : blocks) {
-            blockMap.put(new BotLocation(b.getX(), b.getY(), b.getZ()), b);
+            blockMap.put(new BotPosition(b.getX(), b.getY(), b.getZ()), b);
         }
 
         for (BotBlockData block : blocks) {
 
-            BotLocation above1 = new BotLocation(block.getX(), block.getY() + 1, block.getZ());
-            BotLocation above2 = new BotLocation(block.getX(), block.getY() + 2, block.getZ());
+            BotPosition above1 = new BotPosition(block.getX(), block.getY() + 1, block.getZ());
+            BotPosition above2 = new BotPosition(block.getX(), block.getY() + 2, block.getZ());
 
             BotBlockData blockAbove1 = blockMap.get(above1);
             BotBlockData blockAbove2 = blockMap.get(above2);

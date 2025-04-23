@@ -7,7 +7,7 @@ import org.bukkit.entity.EntityType;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
-public class BotBlockData extends BotLocation {
+public class BotBlockData extends BotPosition {
 
     private String type;
     private UUID uuid;
@@ -94,8 +94,8 @@ public class BotBlockData extends BotLocation {
     }
 
     @JsonIgnore
-    public BotLocation getLocation() {
-        return new BotLocation(getX(), getY(), getZ());
+    public BotPosition getLocation() {
+        return new BotPosition(getX(), getY(), getZ());
     }
 
     @Override
@@ -103,9 +103,9 @@ public class BotBlockData extends BotLocation {
         if (this == o) return true;
 
         // Сравниваем с чем угодно, что наследует BotLocation
-        if (!(o instanceof BotLocation)) return false;
+        if (!(o instanceof BotPosition)) return false;
 
-        BotLocation other = (BotLocation) o;
+        BotPosition other = (BotPosition) o;
         return this.getX() == other.getX()
             && this.getY() == other.getY()
             && this.getZ() == other.getZ();

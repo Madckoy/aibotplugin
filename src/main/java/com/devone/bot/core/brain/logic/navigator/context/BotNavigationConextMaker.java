@@ -10,7 +10,7 @@ import com.devone.bot.core.brain.logic.navigator.math.resolver.BotTargetReachabi
 import com.devone.bot.core.brain.logic.navigator.math.resolver.BotTargetReachabilityResolver.Strategy;
 import com.devone.bot.core.utils.BotConstants;
 import com.devone.bot.core.utils.blocks.BotBlockData;
-import com.devone.bot.core.utils.blocks.BotLocation;
+import com.devone.bot.core.utils.blocks.BotPosition;
 
 import java.util.List;
 
@@ -21,7 +21,7 @@ public class BotNavigationConextMaker {
      * Если sectorCount == null, будет подобрано автоматически по площади.
      * scanRadius теперь тоже рассчитывается адаптивно.
      */
-    public static BotNavigationContext getSceneContext(BotLocation botPosition, List<BotBlockData> geoBlocks,
+    public static BotNavigationContext getSceneContext(BotPosition botPosition, List<BotBlockData> geoBlocks,
             List<BotBlockData> bioBlocks) {
 
         BotNavigationContext context = new BotNavigationContext();
@@ -86,7 +86,7 @@ public class BotNavigationConextMaker {
      * Расчёт безопасного радиуса сканирования:
      * среднее между средней и максимальной дистанцией до reachable-точек.
      */
-    private static int estimateSafeScanRadius(BotLocation bot, List<BotBlockData> reachable) {
+    private static int estimateSafeScanRadius(BotPosition bot, List<BotBlockData> reachable) {
         if (reachable.isEmpty())
             return 2;
 

@@ -3,7 +3,7 @@ package com.devone.bot.core.brain.memory;
 import com.devone.bot.core.brain.BotBrain;
 import com.devone.bot.core.brain.memory.scene.BotSceneData;
 import com.devone.bot.core.utils.blocks.BotBlockData;
-import com.devone.bot.core.utils.blocks.BotLocation;
+import com.devone.bot.core.utils.blocks.BotPosition;
 
 import java.util.HashMap;
 import java.util.Iterator;
@@ -22,7 +22,7 @@ public class BotMemory {
     private transient BotBrain brain;
 
     // Карта для хранения типов памяти, каждый тип имеет свой набор посещённых мест
-    private final Map<MemoryType, Map<BotLocation, BotMemoryItem>> memoryMap;
+    private final Map<MemoryType, Map<BotPosition, BotMemoryItem>> memoryMap;
 
     public BotMemory(BotBrain brain) {
         this.brain = brain;
@@ -109,7 +109,7 @@ public class BotMemory {
 
         if(block!=null) {
 
-            Map<BotLocation, BotMemoryItem> map = memoryMap.get(memoryType);
+            Map<BotPosition, BotMemoryItem> map = memoryMap.get(memoryType);
 
             if(map!=null) {
                 BotMemoryItem m_item = map.get(block.getLocation());
@@ -127,10 +127,10 @@ public class BotMemory {
         long currentTime = System.currentTimeMillis();
 
         // Перебираем все типы памяти
-        for (Map<BotLocation, BotMemoryItem> memory : memoryMap.values()) {
-            Iterator<Map.Entry<BotLocation, BotMemoryItem>> it = memory.entrySet().iterator();
+        for (Map<BotPosition, BotMemoryItem> memory : memoryMap.values()) {
+            Iterator<Map.Entry<BotPosition, BotMemoryItem>> it = memory.entrySet().iterator();
             while (it.hasNext()) {
-                Map.Entry<BotLocation, BotMemoryItem> entry = it.next();
+                Map.Entry<BotPosition, BotMemoryItem> entry = it.next();
                 BotMemoryItem item = entry.getValue();
                 
                 // Если элемент устарел, удаляем его
@@ -151,14 +151,14 @@ public class BotMemory {
     }
 
     public void cleanupMemoryType(MemoryType type) {
-        Map<BotLocation, BotMemoryItem> target = memoryMap.get(type);
+        Map<BotPosition, BotMemoryItem> target = memoryMap.get(type);
         if (target != null) {
             target.clear();
         }
     }
     
     // Получить все данные для конкретного типа памяти
-    public Map<BotLocation, BotMemoryItem> getMemoryForType(MemoryType memoryType) {
+    public Map<BotPosition, BotMemoryItem> getMemoryForType(MemoryType memoryType) {
         return memoryMap.get(memoryType);
     }
 

@@ -13,7 +13,7 @@ import com.devone.bot.core.task.passive.BotTaskManager;
 import com.devone.bot.core.task.active.move.BotMoveTask;
 import com.devone.bot.core.task.active.move.params.BotMoveTaskParams;
 import com.devone.bot.core.task.reactive.container.BotEmptyReactiveContainer;
-import com.devone.bot.core.utils.blocks.BotLocation;
+import com.devone.bot.core.utils.blocks.BotPosition;
 import com.devone.bot.core.utils.logger.BotLogger;
 
 public class BotMoveCommand implements CommandExecutor {
@@ -71,7 +71,7 @@ public class BotMoveCommand implements CommandExecutor {
         BotEmptyReactiveContainer container = new BotEmptyReactiveContainer(bot);
         BotMoveTask moveTask = new BotMoveTask(bot);
         BotMoveTaskParams moveTaskParams = new BotMoveTaskParams();
-        moveTaskParams.setTarget(new BotLocation(x, y, z));
+        moveTaskParams.setTarget(new BotPosition(x, y, z));
         moveTask.setParams(moveTaskParams);
         container.add(moveTask);
         BotTaskManager.push(bot, container);

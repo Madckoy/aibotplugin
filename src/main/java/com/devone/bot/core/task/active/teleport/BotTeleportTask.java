@@ -10,13 +10,13 @@ import com.devone.bot.core.task.passive.BotTaskAutoParams;
 import com.devone.bot.core.task.passive.IBotTaskParameterized;
 import com.devone.bot.core.task.active.sonar.BotSonar3DTask;
 import com.devone.bot.core.task.active.teleport.params.BotTeleportTaskParams;
-import com.devone.bot.core.utils.blocks.BotLocation;
+import com.devone.bot.core.utils.blocks.BotPosition;
 import com.devone.bot.core.utils.logger.BotLogger;
 import com.devone.bot.core.utils.world.BotWorldHelper;
 
 public class BotTeleportTask extends BotTaskAutoParams<BotTeleportTaskParams> {
 
-    private BotLocation target;
+    private BotPosition target;
 
     public BotTeleportTask(Bot bot, Player player) {
         super(bot, player, BotTeleportTaskParams.class);
@@ -25,7 +25,7 @@ public class BotTeleportTask extends BotTaskAutoParams<BotTeleportTaskParams> {
         if (player != null) {
 
             BotTeleportTaskParams params = new BotTeleportTaskParams();
-            BotLocation loc = BotWorldHelper.worldLocationToBotLocation(player.getLocation());
+            BotPosition loc = BotWorldHelper.locationToBotPosition(player.getLocation());
             params.setLocation(loc);
         }
 
@@ -61,7 +61,7 @@ public class BotTeleportTask extends BotTaskAutoParams<BotTeleportTaskParams> {
         BotLogger.debug(icon, this.isLogging(), bot.getId() + " ⚡ Телепорт в " + target);
 
         Bukkit.getScheduler().runTask(AIBotPlugin.getInstance(), () -> {
-            Location baseLocation = BotWorldHelper.getWorldLocation(target);
+            Location baseLocation = BotWorldHelper.botPositionToWorldLocation(target);
             Location safeOffset = baseLocation.clone().add(0.5, 0, 0.5);
 
             bot.getNPCEntity().teleport(safeOffset);

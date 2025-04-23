@@ -1,11 +1,11 @@
 package com.devone.bot.core.task.active.move.params;
 
 import com.devone.bot.core.task.passive.params.BotTaskParams;
-import com.devone.bot.core.utils.blocks.BotLocation;
+import com.devone.bot.core.utils.blocks.BotPosition;
 
 public class BotMoveTaskParams extends BotTaskParams {
 
-    private BotLocation target = new BotLocation(); 
+    private BotPosition target = new BotPosition(); 
     private float speed = 1.0F;
 
     public BotMoveTaskParams() {
@@ -14,22 +14,22 @@ public class BotMoveTaskParams extends BotTaskParams {
         setObjective("Move");
     }
 
-    public BotMoveTaskParams(BotLocation target) {
+    public BotMoveTaskParams(BotPosition target) {
         this(); // загружаем всё остальное
         this.target = target; // но вручную задаём координату
     }
 
-    public BotMoveTaskParams(BotLocation target, float speed) {
+    public BotMoveTaskParams(BotPosition target, float speed) {
         this(); // загружаем всё остальное
         this.target = target;
         this.speed = speed;
     }
 
-    public BotLocation getTarget() {
+    public BotPosition getTarget() {
         return target;
     }
 
-    public void setTarget(BotLocation target) {
+    public void setTarget(BotPosition target) {
         this.target = target;
     }
 

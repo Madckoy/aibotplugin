@@ -3,7 +3,7 @@ package com.devone.bot.core.task.active.move.listeners;
 import com.devone.bot.core.brain.memory.MemoryType;
 import com.devone.bot.core.task.active.move.BotMoveTask;
 import com.devone.bot.core.utils.blocks.BotBlockData;
-import com.devone.bot.core.utils.blocks.BotLocation;
+import com.devone.bot.core.utils.blocks.BotPosition;
 import com.devone.bot.core.utils.logger.BotLogger;
 import com.devone.bot.core.utils.world.BotWorldHelper;
 
@@ -29,26 +29,26 @@ public class BotMoveTaskListener implements Listener {
         BotLogger.debug(task.getIcon(), true,
                 task.getBot().getId() + " ✅ Навигация завершена, ID таски: " + task.getUUID());
 
-        BotLocation target = task.getParams().getTarget();
+        BotPosition pos = task.getParams().getTarget();
 
         // Валидация — для отладки и логов
-        boolean arrived = task.getBot().getNPC().getStoredLocation().getBlockX() == target.getX()
-                && task.getBot().getNPC().getStoredLocation().getBlockZ() == target.getZ();
+        boolean arrived = task.getBot().getNPC().getStoredLocation().getBlockX() == pos.getX()
+                && task.getBot().getNPC().getStoredLocation().getBlockZ() == pos.getZ();
 
         if (!arrived) {
             BotLogger.debug(task.getIcon(), true,
                     task.getBot().getId() + " ⚠️ Навигатор завершил, но NPC не в точке XZ. Завершаем всё равно.");
         }
-
-        // Запоминаем блок как VISITED
-        Block block = BotWorldHelper.getBlockAt(target);
-        BotBlockData data = new BotBlockData();
-        data.setX(block.getX());
-        data.setY(block.getY());
-        data.setZ(block.getZ());
-        data.setType(block.getType().toString());
-        task.getBot().getBrain().getMemory().memorize(data, MemoryType.VISITED_BLOCKS);
-
+        
+        Block block = BotWorldHelper.botPositionToWorldBlock(pos);
+        if(block!=null) {
+            BotBlockData data = new BotBlockData();
+            data.setX(block.getX());
+            data.setY(block.getY());
+            data.setZ(block.getZ());
+            data.setType(block.getType().toString());
+            task.getBot().getBrain().getMemory().memorize(data, MemoryType.VISITED_BLOCKS);
+        }
         task.stop();
     }
 

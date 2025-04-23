@@ -3,7 +3,7 @@ package com.devone.bot.core.brain.logic.navigator.math.filters;
 import java.util.*;
 
 import com.devone.bot.core.utils.blocks.BotBlockData;
-import com.devone.bot.core.utils.blocks.BotLocation;
+import com.devone.bot.core.utils.blocks.BotPosition;
 
 public class BotBlocksNavigableFilter {
 
@@ -11,9 +11,9 @@ public class BotBlocksNavigableFilter {
      * Оставляет только те точки, к которым можно перейти хотя бы с одной соседней.
      */
     public static List<BotBlockData> filter(List<BotBlockData> walkableBlocks) {
-        Map<BotLocation, BotBlockData> map = new HashMap<>();
+        Map<BotPosition, BotBlockData> map = new HashMap<>();
         for (BotBlockData block : walkableBlocks) {
-            map.put(new BotLocation(block.getX(), block.getY(), block.getZ()), block);
+            map.put(new BotPosition(block.getX(), block.getY(), block.getZ()), block);
         }
 
         List<BotBlockData> result = new ArrayList<>();
@@ -27,7 +27,7 @@ public class BotBlocksNavigableFilter {
         return result;
     }
 
-    private static boolean hasNavigableNeighbor(BotBlockData block, Map<BotLocation, BotBlockData> map) {
+    private static boolean hasNavigableNeighbor(BotBlockData block, Map<BotPosition, BotBlockData> map) {
         int x = block.getX();
         int y = block.getY();
         int z = block.getZ();
@@ -38,7 +38,7 @@ public class BotBlocksNavigableFilter {
                     if (dx == 0 && dy == 0 && dz == 0) continue; // Пропускаем саму точку
                     if (Math.abs(dy) > 1) continue; // Прыжки на 2 и более блоков запрещены
 
-                    BotLocation neighbor = new BotLocation(x + dx, y + dy, z + dz);
+                    BotPosition neighbor = new BotPosition(x + dx, y + dy, z + dz);
                     if (map.containsKey(neighbor)) {
                         return true;
                     }

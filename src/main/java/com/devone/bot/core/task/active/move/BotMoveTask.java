@@ -7,7 +7,7 @@ import com.devone.bot.core.task.passive.IBotTaskParameterized;
 import com.devone.bot.core.task.active.move.listeners.BotMoveTaskListener;
 import com.devone.bot.core.task.active.move.params.BotMoveTaskParams;
 import com.devone.bot.core.utils.*;
-import com.devone.bot.core.utils.blocks.BotLocation;
+import com.devone.bot.core.utils.blocks.BotPosition;
 import com.devone.bot.core.utils.logger.BotLogger;
 import com.devone.bot.core.utils.world.BotWorldHelper;
 import net.citizensnpcs.api.ai.event.NavigationCompleteEvent;
@@ -36,7 +36,7 @@ public class BotMoveTask extends BotTaskAutoParams<BotMoveTaskParams> {
         setIcon(params.getIcon());
         setObjective(params.getObjective());
 
-        BotLocation target = params.getTarget();
+        BotPosition target = params.getTarget();
 
         if (target == null) {
             BotLogger.debug(icon, isLogging(), bot.getId() + " ❌ Target is null. Остановка таски.");
@@ -68,19 +68,20 @@ public class BotMoveTask extends BotTaskAutoParams<BotMoveTaskParams> {
             return;
         }
 
-        BotLocation targetCoord = bot.getNavigator().getTarget();
-        if (targetCoord == null) {
+        BotPosition poi = bot.getNavigator().getPoi();
+        if (poi == null) {
             BotLogger.debug(icon, isLogging(), bot.getId() + " ❌ Цель навигации не найдена");
             stop();
             return;
         }
 
-        Location targetLocation = BotWorldHelper.getWorldLocation(targetCoord);
-        Block targetBlock = BotWorldHelper.getBlockAt(targetCoord);
+        Location targetLocation = BotWorldHelper.botPositionToWorldLocation(poi);
+        Block targetBlock = BotWorldHelper.botPositionToWorldBlock(poi);
         String blockName = BotUtils.getBlockName(targetBlock);
-        String coords = String.format(" %d, %d, %d", targetCoord.getX(), targetCoord.getY(), targetCoord.getZ());
+        
+        // String coords = String.format(" %d, %d, %d", poi.getX(), poi.getY(), poi.getZ());
 
-        setObjective(params.getObjective() + " to " + blockName + " at:" + coords);
+        setObjective(params.getObjective() + " to " + blockName + " at:" + poi.toString());
 
         // Навигация начинается
         if (listener == null) {
@@ -88,14 +89,15 @@ public class BotMoveTask extends BotTaskAutoParams<BotMoveTaskParams> {
             Bukkit.getPluginManager().registerEvents(listener, AIBotPlugin.getInstance());
         }
 
-        MoveTaskHelper.setTarget(bot, targetCoord, speed, isLogging());
+        MoveTaskHelper.setPoi(bot, poi, speed, isLogging());
+
         isMoving = true;
 
-        BotLogger.debug(icon, isLogging(), bot.getId() + " 🏃 Начинаем движение к " + targetCoord);
+        BotLogger.debug(icon, isLogging(), bot.getId() + " 🏃 Начинаем движение к " + poi);
 
         taskHandle = Bukkit.getScheduler().runTaskTimer(AIBotPlugin.getInstance(), () -> {
             long remaining = BotUtils.getRemainingTime(startTime, params.getTimeout());
-            setObjective(params.getObjective() + " to " + blockName + " at:" + coords + " (" + remaining + ")");
+            setObjective(params.getObjective() + " to " + blockName + " at:" + poi + " (" + remaining + ")");
 
             if (done || bot.getNPCEntity() == null) {
                 stop();

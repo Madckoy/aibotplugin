@@ -7,7 +7,7 @@ import org.bukkit.entity.Player;
 
 import com.devone.bot.core.Bot;
 import com.devone.bot.core.BotManager;
-import com.devone.bot.core.utils.blocks.BotLocation;
+import com.devone.bot.core.utils.blocks.BotPosition;
 
 public class BotListCommand implements CommandExecutor {
 
@@ -28,7 +28,7 @@ public class BotListCommand implements CommandExecutor {
         player.sendMessage("§aActive Bots:");
 
         for (Bot bot : botManager.getAllBots()) {
-            BotLocation loc = bot.getNavigator().getLocation();
+            BotPosition loc = bot.getNavigator().getPosition();
             player.sendMessage(bot.getId() + " " + loc );
         }
 

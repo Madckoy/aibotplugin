@@ -6,7 +6,7 @@ import com.devone.bot.core.task.passive.BotTaskManager;
 import com.devone.bot.core.task.reactive.IBotReactionStrategy;
 import com.devone.bot.core.task.reactive.container.BotNearbyPlayerReactiveContainer;
 import com.devone.bot.core.utils.BotConstants;
-import com.devone.bot.core.utils.blocks.BotLocation;
+import com.devone.bot.core.utils.blocks.BotPosition;
 import com.devone.bot.core.utils.logger.BotLogger;
 import com.devone.bot.core.utils.world.BotWorldHelper;
 import org.bukkit.Bukkit;
@@ -25,13 +25,13 @@ public class BotNearbyPlayerStrategy implements IBotReactionStrategy {
             return Optional.empty();
         }
 
-        BotLocation botLoc = bot.getNavigator().getLocation();
+        BotPosition botLoc = bot.getNavigator().getPosition();
 
         for (Player player : Bukkit.getOnlinePlayers()) {
             if (!player.isOnline() || player.isDead())
                 continue;
 
-            BotLocation playerLoc = new BotLocation(BotWorldHelper.worldLocationToBotLocation(player.getLocation()));
+            BotPosition playerLoc = new BotPosition(BotWorldHelper.locationToBotPosition(player.getLocation()));
             double dist = botLoc.distanceTo(playerLoc);
 
             if (dist < BotConstants.DEFAULT_DETECTION_RADIUS) {

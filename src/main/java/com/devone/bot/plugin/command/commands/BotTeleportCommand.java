@@ -10,7 +10,7 @@ import com.devone.bot.core.Bot;
 import com.devone.bot.core.BotManager;
 import com.devone.bot.core.task.passive.BotTaskManager;
 import com.devone.bot.core.task.reactive.container.BotTeleportToLocationReactiveContainer;
-import com.devone.bot.core.utils.blocks.BotLocation;
+import com.devone.bot.core.utils.blocks.BotPosition;
 import com.devone.bot.core.utils.logger.BotLogger;
 
 public class BotTeleportCommand implements CommandExecutor {
@@ -58,7 +58,7 @@ public class BotTeleportCommand implements CommandExecutor {
 
             return false;
         }
-        BotLocation loc = new BotLocation(x, y, z);
+        BotPosition loc = new BotPosition(x, y, z);
 
         BotLogger.debug("📌", true, "/bot-tp: Бот " + bot.getId() + " телепортируется в " + loc);
 

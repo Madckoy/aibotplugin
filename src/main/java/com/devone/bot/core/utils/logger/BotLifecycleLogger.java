@@ -6,7 +6,7 @@ import com.devone.bot.core.Bot;
 import com.devone.bot.core.task.passive.BotTask;
 import com.devone.bot.core.utils.BotConstants;
 import com.devone.bot.core.utils.BotUtils;
-import com.devone.bot.core.utils.blocks.BotLocation;
+import com.devone.bot.core.utils.blocks.BotPosition;
 
 import java.io.*;
 import java.text.SimpleDateFormat;
@@ -18,7 +18,7 @@ public class BotLifecycleLogger {
     private static final String SESSION_ID = generateSessionId();
 
     public static void write(Bot bot) {
-        BotLocation loc = bot.getNavigator().getLocation();
+        BotPosition loc = bot.getNavigator().getPosition();
         if (loc == null) return;
     
         String botName = bot.getId();

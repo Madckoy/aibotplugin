@@ -1,7 +1,7 @@
 package com.devone.bot.core.task.active.move;
 
 import com.devone.bot.core.Bot;
-import com.devone.bot.core.utils.blocks.BotLocation;
+import com.devone.bot.core.utils.blocks.BotPosition;
 import com.devone.bot.core.utils.logger.BotLogger;
 import com.devone.bot.core.utils.world.BotWorldHelper;
 import org.bukkit.Location;
@@ -19,19 +19,12 @@ public class MoveTaskHelper {
      * @param speed  множитель скорости
      * @param log    включить логирование
      */
-    public static void setTarget(Bot bot, BotLocation target, float speed, boolean log) {
+    public static void setPoi(Bot bot, BotPosition target, float speed, boolean log) {
         if (bot == null || target == null) return;
 
-        Location targetLoc = BotWorldHelper.getWorldLocation(target);
+        Location poi = BotWorldHelper.botPositionToWorldLocation(target);
 
-        // Устанавливаем цель в логике бота и NPC
-        bot.getNavigator().setTarget(target); // Внутренняя навигация бота
-        bot.getNPCNavigator()
-            .getLocalParameters()
-            .range(1.0f) // Чуть увеличили, чтобы не висло при неидеальной позиции
-            .speedModifier(speed);
-
-        bot.getNPCNavigator().setTarget(targetLoc);
+        bot.getNPCNavigator().setTarget(poi);
 
         if (log) {
             BotLogger.debug("🏁", true, bot.getId() + " ▶ Двигаемся к: " + target);
@@ -46,17 +39,17 @@ public class MoveTaskHelper {
      * @param yTolerance допустимая погрешность по Y
      * @return true, если бот в нужной позиции
      */
-    public static boolean isAtTarget(Bot bot, BotLocation target, double yTolerance) {
-        if (bot == null || target == null) return false;
+    public static boolean isAtPoi(Bot bot, BotPosition poi, double yTolerance) {
+        if (bot == null || poi == null) return false;
 
-        Location loc = bot.getNPC().getEntity().getLocation();
-        BotLocation current = new BotLocation(loc.getBlockX(), loc.getBlockY(), loc.getBlockZ());
+        Location botLoc = bot.getNPC().getEntity().getLocation();
+        Location poiLoc = BotWorldHelper.botPositionToWorldLocation(poi);
 
-        boolean match = current.getX() == target.getX()
-                && current.getZ() == target.getZ()
-                && Math.abs(current.getY() - target.getY()) <= yTolerance;
+        boolean match = botLoc.getX() == poiLoc.getX()
+                && botLoc.getZ() == poiLoc.getZ()
+                && Math.abs(botLoc.getY() - poiLoc.getY()) <= yTolerance;
 
-        BotLogger.debug("📍", true, bot.getId() + " Позиция: " + current + " | Цель: " + target + " | Совпадает: " + match);
+        BotLogger.debug("📍", true, bot.getId() + " Позиция: " + botLoc + " | Цель: " + poiLoc + " | Совпадает: " + match);
 
         return match;
     }

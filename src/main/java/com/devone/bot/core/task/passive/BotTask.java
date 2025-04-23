@@ -10,7 +10,7 @@ import com.devone.bot.core.task.passive.params.BotTaskParams;
 import com.devone.bot.core.task.reactive.BotReactiveUtils;
 import com.devone.bot.core.task.reactive.BotReactivityManager;
 import com.devone.bot.core.utils.BotUtils;
-import com.devone.bot.core.utils.blocks.BotLocation;
+import com.devone.bot.core.utils.blocks.BotPosition;
 import com.devone.bot.core.utils.logger.BotLogger;
 
 import java.util.Optional;
@@ -89,8 +89,8 @@ public abstract class BotTask<T extends BotTaskParams> implements IBotTask, List
     private void logTaskStatus() {
         BotLogger.debug(icon, logging, bot.getId() +
                 " ❓ Status: done=" + done + ", paused=" + pause +
-                " 📍: " + bot.getNavigator().getLocation() +
-                " | 🎯: " + bot.getNavigator().getTarget());
+                " 📍: " + bot.getNavigator().getPosition() +
+                " | 🎯: " + bot.getNavigator().getPoi());
     }
 
     private boolean playerDisconnected() {
@@ -212,7 +212,7 @@ public abstract class BotTask<T extends BotTaskParams> implements IBotTask, List
         this.isReactive = reactive;
     }
 
-    public void turnToTarget(BotTask<?> task, BotLocation target) {
+    public void turnToTarget(BotTask<?> task, BotPosition target) {
         BotUtils.turnToTarget(task, bot, target);
     }
 

@@ -123,7 +123,7 @@ public class BotInventory {
 
 
         try {
-            Location botLocation = BotWorldHelper.getWorldLocation(bot.getNavigator().getLocation());
+            Location botLocation = BotWorldHelper.botPositionToWorldLocation(bot.getNavigator().getPosition());
 
             List<Entity> nearbyEntities = BotWorldHelper.getWorld().getEntities();
 

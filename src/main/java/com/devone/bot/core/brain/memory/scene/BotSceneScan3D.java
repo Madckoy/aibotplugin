@@ -1,18 +1,15 @@
 package com.devone.bot.core.brain.memory.scene;
 
 import com.devone.bot.core.Bot;
-import com.devone.bot.core.utils.BotConstants;
 import com.devone.bot.core.utils.blocks.BotBlockData;
-import com.devone.bot.core.utils.blocks.BotLocation;
+import com.devone.bot.core.utils.blocks.BotPosition;
 import com.devone.bot.core.utils.world.BotWorldHelper;
-
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.World;
 import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
 
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -24,7 +21,7 @@ public class BotSceneScan3D {
         World world = BotWorldHelper.getWorld();
 
         // Центр сканирования
-        BotLocation botLoc = bot.getNavigator().getLocation();
+        BotPosition botLoc = bot.getNavigator().getPosition();
 
         int centerX = botLoc.getX();
         int centerY = botLoc.getY();
@@ -56,7 +53,7 @@ public class BotSceneScan3D {
         }
 
         // 2. Сканирование живых существ
-        Location botLocWorld = BotWorldHelper.getWorldLocation(botLoc);
+        Location botLocWorld = BotWorldHelper.botPositionToWorldLocation(botLoc);
 
         for (LivingEntity entity : world.getLivingEntities()) {
             if (entity == bot.getNPCEntity() || entity instanceof Player || entity.isDead())
@@ -80,7 +77,7 @@ public class BotSceneScan3D {
         }
 
         // 3. Координаты бота
-        BotLocation botCoords = new BotLocation(centerX, centerY, centerZ);
+        BotPosition botCoords = new BotPosition(centerX, centerY, centerZ);
         BotSceneData sceneData = new BotSceneData(scannedBlocks, scannedEntities, botCoords);
 
         //if (bot.getNavigator().isStuck()) {

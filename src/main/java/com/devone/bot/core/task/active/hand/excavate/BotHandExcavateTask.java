@@ -55,7 +55,7 @@ public class BotHandExcavateTask extends BotHandTask<BotHandExcavateTaskParams> 
                     return;
                 }
 
-                Block block = BotWorldHelper.getBlockAt(target);
+                Block block = BotWorldHelper.botPositionToWorldBlock(target);
                 if (block == null || block.getType() == Material.AIR) {
                     BotLogger.debug(icon, isLogging(), bot.getId() + " ✅ Block already excavated.");
                     stop();
@@ -84,7 +84,7 @@ public class BotHandExcavateTask extends BotHandTask<BotHandExcavateTaskParams> 
                 block.breakNaturally();
 
                 bot.getBrain().getMemory().brokenBlocksIncrease(target.getType());
-                BotBlockData bl = BotWorldHelper.worldBlockToBotBlock(block);
+                BotBlockData bl = BotWorldHelper.blockToBotBlockData(block);
                 BotLogger.debug(icon, isLogging(), bot.getId() + " 🪨 Block is excavated: " + bl);
             }
         }.runTaskTimer(AIBotPlugin.getInstance(), 0L, 10L);

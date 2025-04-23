@@ -8,7 +8,7 @@ import com.devone.bot.core.task.passive.BotReactiveTaskContainer;
 import com.devone.bot.core.task.active.teleport.BotTeleportTask;
 import com.devone.bot.core.task.active.teleport.params.BotTeleportTaskParams;
 import com.devone.bot.core.task.reactive.container.params.BotTeleportToPlayerReactiveContainerParams;
-import com.devone.bot.core.utils.blocks.BotLocation;
+import com.devone.bot.core.utils.blocks.BotPosition;
 
 public class BotTeleportToPlayerReactiveContainer
         extends BotReactiveTaskContainer<BotTeleportToPlayerReactiveContainerParams> {
@@ -33,7 +33,7 @@ public class BotTeleportToPlayerReactiveContainer
 
         BotTeleportTask tp = new BotTeleportTask(bot, player);
         BotTeleportTaskParams params = new BotTeleportTaskParams();
-        params.setLocation(new BotLocation(
+        params.setLocation(new BotPosition(
                 playerLoc.getBlockX(),
                 playerLoc.getBlockY(),
                 playerLoc.getBlockZ()));

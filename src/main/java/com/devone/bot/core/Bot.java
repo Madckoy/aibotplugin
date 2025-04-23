@@ -20,7 +20,7 @@ import com.devone.bot.core.task.passive.BotTask;
 import com.devone.bot.core.task.passive.BotTaskManager;
 import com.devone.bot.core.task.active.move.BotMoveTask;
 import com.devone.bot.core.task.active.move.params.BotMoveTaskParams;
-import com.devone.bot.core.utils.blocks.BotLocation;
+import com.devone.bot.core.utils.blocks.BotPosition;
 import com.devone.bot.core.utils.logger.BotLogger;
 import com.devone.bot.core.utils.world.BotWorldHelper;
 
@@ -214,11 +214,11 @@ public class Bot {
         }
 
         // Если предметов рядом нет, двигаем бота к последнему разрушенному блоку
-        BotLocation loc = BotWorldHelper.worldLocationToBotLocation(target);
-        BotLogger.debug("🤖", true, getId() + " 📦 Дроп подобран. Двигается к цели:" + loc);
+        BotPosition pos = BotWorldHelper.locationToBotPosition(target);
+        BotLogger.debug("🤖", true, getId() + " 📦 Дроп подобран. Двигается к цели:" + pos);
 
         BotMoveTask mv_task = new BotMoveTask(this);
-        BotMoveTaskParams mv_taskParams = new BotMoveTaskParams(loc);
+        BotMoveTaskParams mv_taskParams = new BotMoveTaskParams(pos);
         mv_task.setParams(mv_taskParams);
 
         BotTaskManager.push(this, mv_task);

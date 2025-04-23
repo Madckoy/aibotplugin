@@ -2,22 +2,22 @@ package com.devone.bot.core.utils.blocks;
 
 import java.util.Objects;
 
-public class BotLocation {
+public class BotPosition {
     private int x, y, z;
 
-    public BotLocation() {
+    public BotPosition() {
         this.x = 0;
         this.y = 0;
         this.z = 0;
     }
 
-    public BotLocation(int x, int y, int z) {
+    public BotPosition(int x, int y, int z) {
         this.x = x;
         this.y = y;
         this.z = z;
     }
 
-    public BotLocation(BotLocation other) {
+    public BotPosition(BotPosition other) {
         this.x = other.x;
         this.y = other.y;
         this.z = other.z;
@@ -26,13 +26,13 @@ public class BotLocation {
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
-        if (!(o instanceof BotLocation)) return false;
+        if (!(o instanceof BotPosition)) return false;
         
-        BotLocation that = (BotLocation) o;
+        BotPosition that = (BotPosition) o;
         return x == that.x && y == that.y && z == that.z;
     }
 
-    public double distanceTo(BotLocation other) {
+    public double distanceTo(BotPosition other) {
         if (other == null) return Double.MAX_VALUE;
         int dx = this.x - other.x;
         int dy = this.y - other.y;

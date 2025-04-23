@@ -3,7 +3,7 @@ package com.devone.bot.core.brain.logic.navigator.math.resolver;
 import java.util.*;
 
 import com.devone.bot.core.utils.blocks.BotBlockData;
-import com.devone.bot.core.utils.blocks.BotLocation;
+import com.devone.bot.core.utils.blocks.BotPosition;
 
 public class BotReachabilityResolver {
 
@@ -11,23 +11,23 @@ public class BotReachabilityResolver {
         {1, 0}, {-1, 0}, {0, 1}, {0, -1}
     };
 
-    public static List<BotBlockData> resolve(BotLocation botPos, List<BotBlockData> navigableBlocks) {
+    public static List<BotBlockData> resolve(BotPosition botPos, List<BotBlockData> navigableBlocks) {
         // Начинаем с блока под ботом
-        BotLocation start = new BotLocation(botPos.getX(), botPos.getY()-1, botPos.getZ());
+        BotPosition start = new BotPosition(botPos.getX(), botPos.getY()-1, botPos.getZ());
 
-        Map<BotLocation, BotBlockData> map = new HashMap<>();
+        Map<BotPosition, BotBlockData> map = new HashMap<>();
         for (BotBlockData b : navigableBlocks) {
-            map.put(new BotLocation(b.getX(), b.getY(), b.getZ()), b);
+            map.put(new BotPosition(b.getX(), b.getY(), b.getZ()), b);
         }
 
-        Set<BotLocation> visited = new HashSet<>();
-        Queue<BotLocation> queue = new LinkedList<>();
+        Set<BotPosition> visited = new HashSet<>();
+        Queue<BotPosition> queue = new LinkedList<>();
         queue.add(start);
 
         List<BotBlockData> reachable = new ArrayList<>();
 
         while (!queue.isEmpty()) {
-            BotLocation current = queue.poll();
+            BotPosition current = queue.poll();
             if (visited.contains(current)) continue;
             visited.add(current);
 
@@ -44,7 +44,7 @@ public class BotReachabilityResolver {
                         int ny = current.getY() + dy;
                         int nz = current.getZ() + dz;
 
-                        BotLocation neighbor = new BotLocation(nx, ny, nz);
+                        BotPosition neighbor = new BotPosition(nx, ny, nz);
                         if (!visited.contains(neighbor) && map.containsKey(neighbor)) {
                             queue.add(neighbor);
                         }

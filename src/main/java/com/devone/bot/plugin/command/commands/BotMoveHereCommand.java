@@ -15,7 +15,7 @@ import com.devone.bot.core.task.active.move.params.BotMoveTaskParams;
 import com.devone.bot.core.task.active.teleport.BotTeleportTask;
 import com.devone.bot.core.task.active.teleport.params.BotTeleportTaskParams;
 import com.devone.bot.core.task.reactive.container.BotEmptyReactiveContainer;
-import com.devone.bot.core.utils.blocks.BotLocation;
+import com.devone.bot.core.utils.blocks.BotPosition;
 import com.devone.bot.core.utils.logger.BotLogger;
 
 public class BotMoveHereCommand implements CommandExecutor {
@@ -45,12 +45,12 @@ public class BotMoveHereCommand implements CommandExecutor {
         Vector dirBackwards = playerLoc.getDirection().normalize().multiply(-15); // 👈 15 блоков за спиной
         Location teleportLocation = playerLoc.clone().add(dirBackwards);
 
-        BotLocation tpLoc = new BotLocation(
+        BotPosition tpLoc = new BotPosition(
                 teleportLocation.getBlockX(),
                 teleportLocation.getBlockY(),
                 teleportLocation.getBlockZ());
 
-        BotLocation moveTo = new BotLocation(
+        BotPosition moveTo = new BotPosition(
                 playerLoc.getBlockX(),
                 playerLoc.getBlockY(),
                 playerLoc.getBlockZ());

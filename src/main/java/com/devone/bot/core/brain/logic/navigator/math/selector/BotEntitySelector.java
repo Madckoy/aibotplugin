@@ -4,7 +4,7 @@ import java.util.Comparator;
 import java.util.List;
 
 import com.devone.bot.core.utils.blocks.BotBlockData;
-import com.devone.bot.core.utils.blocks.BotLocation;
+import com.devone.bot.core.utils.blocks.BotPosition;
 
 public class BotEntitySelector {
 
@@ -15,7 +15,7 @@ public class BotEntitySelector {
      * @param botOrigin координаты бота
      * @return ближайшая цель или null, если список пуст
      */
-    public static BotBlockData pickNearestTarget(List<BotBlockData> targets, BotLocation botOrigin, double distance) {
+    public static BotBlockData pickNearestTarget(List<BotBlockData> targets, BotPosition botOrigin, double distance) {
         if (targets == null || targets.isEmpty() || botOrigin == null) return null;
 
         return targets.stream()
@@ -26,7 +26,7 @@ public class BotEntitySelector {
     /**
      * Выбирает ближайшую враждебную сущность.
      */
-    public static BotBlockData pickNearestHostile(List<BotBlockData> entities, BotLocation botOrigin, double distance) {
+    public static BotBlockData pickNearestHostile(List<BotBlockData> entities, BotPosition botOrigin, double distance) {
         return pickNearestTarget(
             entities.stream()
                     .filter(BotBlockData::isHostileMob)
@@ -40,7 +40,7 @@ public class BotEntitySelector {
     /**
      * Выбирает ближайшую пассивную сущность.
      */
-    public static BotBlockData pickNearestPassive(List<BotBlockData> entities, BotLocation botOrigin, double distance) {
+    public static BotBlockData pickNearestPassive(List<BotBlockData> entities, BotPosition botOrigin, double distance) {
         return pickNearestTarget(
             entities.stream()
                     .filter(BotBlockData::isPassiveMob)
@@ -54,7 +54,7 @@ public class BotEntitySelector {
     /**
      * Выбирает ближайшую пассивную сущность.
      */
-    public static boolean hasHostilesNearby(List<BotBlockData> entities, BotLocation botOrigin, double distance) {
+    public static boolean hasHostilesNearby(List<BotBlockData> entities, BotPosition botOrigin, double distance) {
         return true;
         /* *
         return pickNearestTarget(

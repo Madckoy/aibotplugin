@@ -9,8 +9,8 @@ import java.util.*;
 import com.devone.bot.core.Bot;
 import com.devone.bot.core.task.active.excavate.patterns.IBotExcavatePatternRunner;
 import com.devone.bot.core.task.active.excavate.patterns.generator.params.BotExcavateTemplateRunnerParams;
-import com.devone.bot.core.utils.blocks.BotLocation;
-import com.devone.bot.core.utils.blocks.BotLocationComparators;
+import com.devone.bot.core.utils.blocks.BotPosition;
+import com.devone.bot.core.utils.blocks.BotPositionComparators;
 import com.devone.bot.core.utils.blocks.BotAxisDirection.AxisDirection;
 import com.devone.bot.core.utils.logger.BotLogger;
 
@@ -26,7 +26,7 @@ public class BotExcavateTemplateRunner implements IBotExcavatePatternRunner {
 
     private boolean initialized = false;
     
-    private final Queue<BotLocation> blocksToBreak = new LinkedList<>();
+    private final Queue<BotPosition> blocksToBreak = new LinkedList<>();
 
     private BotExcavateTemplateRunnerParams params;
 
@@ -90,7 +90,7 @@ public class BotExcavateTemplateRunner implements IBotExcavatePatternRunner {
         return this;
     }
 
-    public BotLocation getNextBlock(Bot bot ) {
+    public BotPosition getNextBlock(Bot bot ) {
         if (this.generator == null) {
             BotLogger.debug("📐", true, " 🚨 Паттерн не инициализирован! YAML: " + yamlPath);
             return null;
@@ -103,16 +103,16 @@ public class BotExcavateTemplateRunner implements IBotExcavatePatternRunner {
                 BotLogger.debug("Params:", true, params.toString());
             }                                                                  
 
-            List<BotLocation> inner_points = generator.generateInnerPoints(params);  
+            List<BotPosition> inner_points = generator.generateInnerPoints(params);  
 
             BotLogger.debug("📐", true, " 🔢 " + String.format("Generated %d points", inner_points.size()));     
 
             boolean isInverted = generator.getInverted();
 
-            Set<BotLocation> result = new HashSet<>();
+            Set<BotPosition> result = new HashSet<>();
 
             if(isInverted) {
-                List<BotLocation> all =  generator.generateOuterPoints(params);
+                List<BotPosition> all =  generator.generateOuterPoints(params);
                 result.addAll(all);              // Генерируем весь куб
                 result.removeAll(inner_points);  // Удаляем внутреннюю область
             } else {
@@ -120,10 +120,10 @@ public class BotExcavateTemplateRunner implements IBotExcavatePatternRunner {
                 result.addAll(inner_points);     // Только внутренняя область
             }
             
-            List<BotLocation> toBeRemoved = new ArrayList<>(result);
+            List<BotPosition> toBeRemoved = new ArrayList<>(result);
 
             // ✅ Сортировка по направлению
-            Comparator<BotLocation> sortingComparator = BotLocationComparators.byAxisDirection(AxisDirection.DOWN);
+            Comparator<BotPosition> sortingComparator = BotPositionComparators.byAxisDirection(AxisDirection.DOWN);
             if (sortingComparator != null) {
                 toBeRemoved.sort(sortingComparator);
             }
@@ -147,7 +147,7 @@ public class BotExcavateTemplateRunner implements IBotExcavatePatternRunner {
             initialized = true;
         }
 
-        BotLocation next = blocksToBreak.poll();
+        BotPosition next = blocksToBreak.poll();
 
         if (next != null) {
             BotLogger.debug("📐", true, " 🎯 Next coordinate: " + next.getX() + ", " + next.getY() + ", " + next.getZ());
@@ -166,7 +166,7 @@ public class BotExcavateTemplateRunner implements IBotExcavatePatternRunner {
     }
 
 
-    public List<BotLocation> getAllPlannedBlocks() {
+    public List<BotPosition> getAllPlannedBlocks() {
         return new ArrayList<>(blocksToBreak);
     }
 

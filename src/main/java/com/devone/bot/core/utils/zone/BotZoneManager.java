@@ -5,7 +5,7 @@ import org.bukkit.Location;
 
 import com.devone.bot.AIBotPlugin;
 import com.devone.bot.core.utils.BotConstants;
-import com.devone.bot.core.utils.blocks.BotLocation;
+import com.devone.bot.core.utils.blocks.BotPosition;
 import com.devone.bot.core.utils.config.BotZoneConfig;
 import com.devone.bot.core.utils.logger.BotLogger;
 
@@ -67,7 +67,7 @@ public class BotZoneManager {
         return false;
     }
 
-    public boolean isInProtectedZone(BotLocation location) {
+    public boolean isInProtectedZone(BotPosition location) {
         return protectedZones.values().stream().anyMatch(z -> z.isInside(location));
     }
 
@@ -84,7 +84,7 @@ public class BotZoneManager {
         return protectedZones.get(zoneName);
     }
 
-    public static boolean isLocationInProtectedZone(BotLocation location) {
+    public static boolean isLocationInProtectedZone(BotPosition location) {
         if (instance == null) {
             BotLogger.debug("❌",true, "ZoneManager not initialized!");
             return false;

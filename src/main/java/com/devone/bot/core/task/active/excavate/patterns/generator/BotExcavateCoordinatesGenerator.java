@@ -12,7 +12,7 @@ import java.util.stream.Collectors;
 import org.yaml.snakeyaml.Yaml;
 
 import com.devone.bot.core.task.active.excavate.patterns.generator.params.BotExcavateTemplateRunnerParams;
-import com.devone.bot.core.utils.blocks.BotLocation;
+import com.devone.bot.core.utils.blocks.BotPosition;
 import com.googlecode.aviator.AviatorEvaluator;
 import com.googlecode.aviator.Expression;
 
@@ -76,7 +76,7 @@ public class BotExcavateCoordinatesGenerator {
         //BotExcavateInterpretedYamlPattern(x1, y1, z1, outerRadius, x2, y2, z2, innerRadius);
     }
 
-    public List<BotLocation> generateInnerPoints(BotExcavateTemplateRunnerParams params) {
+    public List<BotPosition> generateInnerPoints(BotExcavateTemplateRunnerParams params) {
         int ox = params.observerX;
         int oy = params.observerY;
         int oz = params.observerZ;
@@ -102,8 +102,8 @@ public class BotExcavateCoordinatesGenerator {
     }
 
     
-    private List<BotLocation> generateInnerPoints(int cx, int cy, int cz, int inner_radius) {
-        List<BotLocation> result = new ArrayList<>();
+    private List<BotPosition> generateInnerPoints(int cx, int cy, int cz, int inner_radius) {
+        List<BotPosition> result = new ArrayList<>();
         Map<String, Object> env = new HashMap<>();
 
         for (int y = cy - inner_radius; y <= cy + inner_radius; y++) {
@@ -118,7 +118,7 @@ public class BotExcavateCoordinatesGenerator {
                     env.put("r", inner_radius);
 
                     if (applyFilters(env)) {
-                        result.add(new BotLocation(x, y, z));
+                        result.add(new BotPosition(x, y, z));
                     }
                 }
             }
@@ -134,7 +134,7 @@ public class BotExcavateCoordinatesGenerator {
         return result;
     }
 
-    public List<BotLocation> generateOuterPoints(BotExcavateTemplateRunnerParams params) {
+    public List<BotPosition> generateOuterPoints(BotExcavateTemplateRunnerParams params) {
         int ox = params.observerX;
         int oy = params.observerY;
         int oz = params.observerZ;
@@ -151,12 +151,12 @@ public class BotExcavateCoordinatesGenerator {
         return generateOuterPoints(center[0], center[1], center[2], outerRadius);
     }
 
-    private List<BotLocation> generateOuterPoints(int cx, int cy, int cz, int radius) {
-        List<BotLocation> result = new ArrayList<>();
+    private List<BotPosition> generateOuterPoints(int cx, int cy, int cz, int radius) {
+        List<BotPosition> result = new ArrayList<>();
         for (int y = cy - radius; y <= cy + radius; y++) {
             for (int x = cx - radius; x <= cx + radius; x++) {
                 for (int z = cz - radius; z <= cz + radius; z++) {
-                    result.add(new BotLocation(x, y, z));
+                    result.add(new BotPosition(x, y, z));
                 }
             }
         }

@@ -6,7 +6,7 @@ import com.devone.bot.core.task.active.drop.BotDropAllTask;
 import com.devone.bot.core.task.active.move.BotMoveTask;
 import com.devone.bot.core.task.active.move.params.BotMoveTaskParams;
 import com.devone.bot.core.task.reactive.container.params.BotNearbyPlayerReactiveContainerParams;
-import com.devone.bot.core.utils.blocks.BotLocation;
+import com.devone.bot.core.utils.blocks.BotPosition;
 import com.devone.bot.core.utils.logger.BotLogger;
 import com.devone.bot.core.utils.world.BotWorldHelper;
 
@@ -26,7 +26,7 @@ public class BotNearbyPlayerReactiveContainer extends BotReactiveTaskContainer<B
     protected void enqueue(Bot bot) {
         BotLogger.debug(getIcon(), true, bot.getId() + " " + icon + " " + getObjective());
 
-        BotLocation playerLoc = new BotLocation(BotWorldHelper.worldLocationToBotLocation(player.getLocation()));
+        BotPosition playerLoc = new BotPosition(BotWorldHelper.locationToBotPosition(player.getLocation()));
 
         // 1. Идём к игроку
         BotMoveTaskParams walkParams = new BotMoveTaskParams(playerLoc);

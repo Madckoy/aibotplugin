@@ -13,7 +13,7 @@ import com.devone.bot.core.task.active.hand.attack.params.BotHandAttackTaskParam
 import com.devone.bot.core.utils.BotConstants;
 import com.devone.bot.core.utils.BotUtils;
 import com.devone.bot.core.utils.blocks.BotBlockData;
-import com.devone.bot.core.utils.blocks.BotLocation;
+import com.devone.bot.core.utils.blocks.BotPosition;
 import com.devone.bot.core.utils.logger.BotLogger;
 import com.devone.bot.core.utils.world.BotWorldHelper;
 
@@ -25,7 +25,7 @@ public class BotHandAttackTask extends BotHandTask<BotHandAttackTaskParams> {
     private BotHandAttackListener listener;
     private long hits = 0;
     private long attempts = 0;
-    private BotLocation startPos = null;
+    private BotPosition startPos = null;
     private int pursuitTicks = 0;
 
     private final int MAX_PURSUIT_TICKS = 120;
@@ -37,7 +37,7 @@ public class BotHandAttackTask extends BotHandTask<BotHandAttackTaskParams> {
 
         attempts = 0;
         hits = 0;
-        startPos = new BotLocation(bot.getNavigator().getLocation());
+        startPos = new BotPosition(bot.getNavigator().getPosition());
     }
 
     public BotHandAttackTask setParams(BotHandAttackTaskParams params) {
@@ -105,8 +105,8 @@ public class BotHandAttackTask extends BotHandTask<BotHandAttackTaskParams> {
                     }
 
                     // 🔄 Обновляем targetLocation
-                    bot.getNavigator().setTarget(BotWorldHelper.worldLocationToBotLocation(living.getLocation()));
-                    BotUtils.lookAt(bot, BotWorldHelper.worldLocationToBotLocation(living.getLocation()));
+                    bot.getNavigator().setTarget(BotWorldHelper.locationToBotPosition(living.getLocation()));
+                    BotUtils.lookAt(bot, BotWorldHelper.locationToBotPosition(living.getLocation()));
                     bot.getNPCNavigator().setTarget(living.getLocation());
                     double distance = bot.getNPCEntity().getLocation().distance(living.getLocation());
 
@@ -116,8 +116,8 @@ public class BotHandAttackTask extends BotHandTask<BotHandAttackTaskParams> {
                         if (pursuitTicks % 20 == 0) {
                             bot.getNPCNavigator().setTarget(living.getLocation());
                             bot.getNavigator()
-                                    .setTarget(BotWorldHelper.worldLocationToBotLocation(living.getLocation()));
-                            BotUtils.lookAt(bot, BotWorldHelper.worldLocationToBotLocation(living.getLocation()));
+                                    .setTarget(BotWorldHelper.locationToBotPosition(living.getLocation()));
+                            BotUtils.lookAt(bot, BotWorldHelper.locationToBotPosition(living.getLocation()));
                             BotLogger.debug(icon, isLogging(),
                                     bot.getId() + " 🏃🏻‍➡️ Pursuing mob, correcting direction. Distance: "
                                             + String.format("%.2f", distance));
@@ -144,7 +144,7 @@ public class BotHandAttackTask extends BotHandTask<BotHandAttackTaskParams> {
                     }
 
                     if (attempts > MAX_ATTEMPTS) { // застряли
-                        BotLocation endPos = bot.getNavigator().getLocation();
+                        BotPosition endPos = bot.getNavigator().getPoi();
                         if (endPos.equals(startPos) && hits == 0) {
                             BotLogger.debug(icon, isLogging(), bot.getId() + " ⏱️ Seems like the bot got stuck.");
                             stop();

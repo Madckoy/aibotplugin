@@ -10,7 +10,7 @@ import java.util.stream.Collectors;
 
 import com.devone.bot.core.utils.blocks.BlockUtils;
 import com.devone.bot.core.utils.blocks.BotBlockData;
-import com.devone.bot.core.utils.blocks.BotLocation;
+import com.devone.bot.core.utils.blocks.BotPosition;
 import com.devone.bot.core.utils.logger.BotLogger;
 import com.devone.bot.core.utils.world.BotWorldHelper;
 
@@ -30,7 +30,7 @@ public class BotBlockSelector {
         }
         int index = RANDOM.nextInt(targets.size());
 
-        BotLocation underBot = new BotLocation(targets.get(index));
+        BotPosition underBot = new BotPosition(targets.get(index));
         underBot.setY(underBot.getY()-1);
 
         if(BlockUtils.isSamePosition(targets.get(index), underBot)) {
@@ -45,7 +45,7 @@ public class BotBlockSelector {
         return targets.get(index);
     }
 
-    public static BotBlockData selectNearestTarget(List<BotBlockData> targets, BotLocation fromLocation) {
+    public static BotBlockData selectNearestTarget(List<BotBlockData> targets, BotPosition fromLocation) {
 
         BotLogger.debug("🗺️", true, "📍Выбираем ближайший блок ");
 
@@ -53,7 +53,7 @@ public class BotBlockSelector {
             return null;
         }
 
-        BotLocation underBot = new BotLocation(fromLocation);
+        BotPosition underBot = new BotPosition(fromLocation);
         underBot.setY(underBot.getY()-1);
     
         BotBlockData nearest = null;
@@ -81,7 +81,7 @@ public class BotBlockSelector {
     
 
     public static BotBlockData pickEmergencyRelocationTarget(
-            BotLocation botPos,
+            BotPosition botPos,
             List<BotBlockData> reachableGoals,
             List<BotBlockData> reachable,
             List<BotBlockData> navigable,
@@ -119,7 +119,7 @@ public class BotBlockSelector {
         // ⛔ Fallback на спавн
         BotLogger.debug("⚠️", true, "EmergencyTeleport: fallback to world spawn!");
 
-        BotLocation spawn = BotWorldHelper.getWorldSpawnLocation();
+        BotPosition spawn = BotWorldHelper.getWorldSpawnLocation();
 
         BotBlockData fallback = new BotBlockData();
         fallback.setX(spawn.getX());
