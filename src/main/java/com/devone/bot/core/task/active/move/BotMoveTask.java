@@ -56,6 +56,7 @@ public class BotMoveTask extends BotTaskAutoParams<BotMoveTaskParams> {
 
         if (taskHandle != null && !taskHandle.isCancelled()) {
             BotLogger.debug(icon, isLogging(), bot.getId() + " ⏳ Bot is moving...");
+            stopTaskHandle();
             return;
         }
 

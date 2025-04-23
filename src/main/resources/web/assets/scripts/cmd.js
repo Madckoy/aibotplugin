@@ -4,18 +4,21 @@ function setupButtonHandlers(botList = []) {
     const buttons = document.querySelectorAll(".cmd-btn");
 
     const handlers = {
-        "bot-tp": handleCoordCommand,
-        "bot-move": handleCoordCommand,
-        "bot-info": (botId) => {
+        "bot-tp":       (botId) => handleCoordCommand(botId, "bot-tp"),
+        "bot-move":     (botId) => handleCoordCommand(botId, "bot-move"),
+        "bot-dump":     (botId) => sendBotCommand(botId, "bot-dump"),
+        "bot-drop-all": (botId) => sendBotCommand(botId, "bot-drop-all"),
+        "bot-signal":   (botId) => sendBotCommand(botId, "bot-signal"),
+        "bot-home":     (botId) => sendBotCommand(botId, "bot-home"),
+        "bot-info":     (botId) => {
             const bot = botList.find(b => b.id === botId);
             if (bot) showInfoPanel(bot);
         },
-        "bot-dump": (botId) => sendBotCommand(botId, "bot-dump"),
-        // сюда легко добавлять новые команды
+        "bot-close-info": () => hideInfoPanel(), // если будет кнопка с этим cmd
     };
 
     buttons.forEach(btn => {
-        btn.onclick = () => {
+        btn.onclick = (event) => {
             const botId = btn.dataset.bot;
             const command = btn.dataset.cmd;
 
@@ -28,14 +31,13 @@ function setupButtonHandlers(botList = []) {
         };
     });
 
-    // Координатные команды вынесены отдельно
-    function handleCoordCommand(botId) {
+    function handleCoordCommand(botId, command) {
         const coords = getCoordinatesFromBlueMapPopup();
         if (!coords) {
             alert("❌ Укажите координаты на карте.");
             return;
         }
-        sendBotCommand(botId, event.target.dataset.cmd, [coords.x, coords.y, coords.z]);
+        sendBotCommand(botId, command, [coords.x, coords.y, coords.z]);
     }
 }
 
