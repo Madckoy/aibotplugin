@@ -215,7 +215,7 @@ public class BotNavigator {
 
         candidates = result;
         
-        suggested = BotBlockSelector.selectNearestTarget(candidates, this.getLocation());
+        suggested = BotBlockSelector.selectRandomTarget(candidates);
 
         return result;
     }

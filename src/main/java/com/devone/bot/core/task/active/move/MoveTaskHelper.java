@@ -2,8 +2,8 @@ package com.devone.bot.core.task.active.move;
 
 import com.devone.bot.core.Bot;
 import com.devone.bot.core.utils.blocks.BotLocation;
-import com.devone.bot.core.utils.world.BotWorldHelper;
 import com.devone.bot.core.utils.logger.BotLogger;
+import com.devone.bot.core.utils.world.BotWorldHelper;
 import org.bukkit.Location;
 
 /**
@@ -12,31 +12,39 @@ import org.bukkit.Location;
 public class MoveTaskHelper {
 
     /**
-     * Устанавливает цель движения NPC через Citizens, с нужной точностью и скоростью.
+     * Устанавливает цель движения для NPC.
+     *
+     * @param bot    бот
+     * @param target целевая позиция
+     * @param speed  множитель скорости
+     * @param log    включить логирование
      */
     public static void setTarget(Bot bot, BotLocation target, float speed, boolean log) {
         if (bot == null || target == null) return;
 
-        bot.getNavigator().setTarget(target); // Для внутренней логики бота
-        bot.getNPCNavigator().getLocalParameters()
-            .range(0.5f) // максимальная допустимая дистанция до цели
+        Location targetLoc = BotWorldHelper.getWorldLocation(target);
+
+        // Устанавливаем цель в логике бота и NPC
+        bot.getNavigator().setTarget(target); // Внутренняя навигация бота
+        bot.getNPCNavigator()
+            .getLocalParameters()
+            .range(1.0f) // Чуть увеличили, чтобы не висло при неидеальной позиции
             .speedModifier(speed);
 
-        Location targetLoc = BotWorldHelper.getWorldLocation(target);
         bot.getNPCNavigator().setTarget(targetLoc);
 
         if (log) {
-            BotLogger.debug("🏁", true, bot.getId() + " ▶ Устанавливаем цель движения: " + target);
+            BotLogger.debug("🏁", true, bot.getId() + " ▶ Двигаемся к: " + target);
         }
     }
 
     /**
-     * Проверяет, действительно ли бот находится в целевой точке.
+     * Проверяет, находится ли бот в нужной точке.
      *
-     * @param bot       бот
-     * @param target    ожидаемая координата
-     * @param yTolerance допустимая разница по Y (например, 0 или 1)
-     * @return true, если бот стоит в нужной точке (с учётом Y-погрешности)
+     * @param bot        бот
+     * @param target     ожидаемая позиция
+     * @param yTolerance допустимая погрешность по Y
+     * @return true, если бот в нужной позиции
      */
     public static boolean isAtTarget(Bot bot, BotLocation target, double yTolerance) {
         if (bot == null || target == null) return false;
@@ -48,8 +56,7 @@ public class MoveTaskHelper {
                 && current.getZ() == target.getZ()
                 && Math.abs(current.getY() - target.getY()) <= yTolerance;
 
-        BotLogger.debug("📍", true, bot.getId() + " Сравнение позиции: текущая = " + current
-                + " | цель = " + target + " | совпадает: " + match);
+        BotLogger.debug("📍", true, bot.getId() + " Позиция: " + current + " | Цель: " + target + " | Совпадает: " + match);
 
         return match;
     }

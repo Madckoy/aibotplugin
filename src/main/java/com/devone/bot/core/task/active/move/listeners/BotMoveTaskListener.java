@@ -1,21 +1,18 @@
 package com.devone.bot.core.task.active.move.listeners;
 
-import org.bukkit.block.Block;
-import org.bukkit.event.EventHandler;
-import org.bukkit.event.Listener;
-
 import com.devone.bot.core.brain.memory.MemoryType;
 import com.devone.bot.core.task.active.move.BotMoveTask;
-import com.devone.bot.core.task.active.move.MoveTaskHelper;
 import com.devone.bot.core.utils.blocks.BotBlockData;
 import com.devone.bot.core.utils.blocks.BotLocation;
 import com.devone.bot.core.utils.logger.BotLogger;
 import com.devone.bot.core.utils.world.BotWorldHelper;
 
-import org.bukkit.event.HandlerList;
-
 import net.citizensnpcs.api.ai.event.NavigationCancelEvent;
 import net.citizensnpcs.api.ai.event.NavigationCompleteEvent;
+import org.bukkit.block.Block;
+import org.bukkit.event.EventHandler;
+import org.bukkit.event.HandlerList;
+import org.bukkit.event.Listener;
 
 public class BotMoveTaskListener implements Listener {
 
@@ -27,44 +24,40 @@ public class BotMoveTaskListener implements Listener {
 
     @EventHandler
     public void onNavigationComplete(NavigationCompleteEvent event) {
-        if (task.getBot().getNPC().getId() != event.getNPC().getId())
-            return;
+        if (event.getNPC().getId() != task.getBot().getNPC().getId()) return;
 
         BotLogger.debug(task.getIcon(), true,
-                task.getBot().getId() + " ✅ Навигация завершена (BotMoveTaskListener), ID: " + task.getUUID());
+                task.getBot().getId() + " ✅ Навигация завершена, ID таски: " + task.getUUID());
 
         BotLocation target = task.getParams().getTarget();
 
-        if (!MoveTaskHelper.isAtTarget(task.getBot(), target, 0)) {
+        // Валидация — для отладки и логов
+        boolean arrived = task.getBot().getNPC().getStoredLocation().getBlockX() == target.getX()
+                && task.getBot().getNPC().getStoredLocation().getBlockZ() == target.getZ();
+
+        if (!arrived) {
             BotLogger.debug(task.getIcon(), true,
-                    task.getBot().getId() + " ❌ Навигация завершилась, но NPC не достиг цели точно. Повторная попытка.");
-
-            MoveTaskHelper.setTarget(task.getBot(), target, task.getParams().getSpeed(), true);
-
-            return;
+                    task.getBot().getId() + " ⚠️ Навигатор завершил, но NPC не в точке XZ. Завершаем всё равно.");
         }
 
-        // ✅ Реально дошёл — продолжаем как раньше
-        task.getBot().getNavigator().setStuck(false);
-
-        // логика запоминания блока
-        Block wBlock = BotWorldHelper.getBlockAt(target);
-        BotBlockData block = new BotBlockData();
-        block.setX(wBlock.getX());
-        block.setY(wBlock.getY());
-        block.setZ(wBlock.getZ());
-        block.setType(wBlock.getType().toString());
-        task.getBot().getBrain().getMemory().memorize(block, MemoryType.VISITED_BLOCKS);
+        // Запоминаем блок как VISITED
+        Block block = BotWorldHelper.getBlockAt(target);
+        BotBlockData data = new BotBlockData();
+        data.setX(block.getX());
+        data.setY(block.getY());
+        data.setZ(block.getZ());
+        data.setType(block.getType().toString());
+        task.getBot().getBrain().getMemory().memorize(data, MemoryType.VISITED_BLOCKS);
 
         task.stop();
     }
 
+    @EventHandler
     public void onNavigationCancel(NavigationCancelEvent event) {
-        if (event.getNPC().getId() != task.getBot().getNPC().getId())
-            return;
+        if (event.getNPC().getId() != task.getBot().getNPC().getId()) return;
 
         BotLogger.debug(task.getIcon(), true,
-                task.getBot().getId() + " ❌ Навигация отменена (BotMoveTaskListener) — NPC не смог дойти");
+                task.getBot().getId() + " ❌ Навигация отменена — NPC не смог дойти");
         task.stop();
     }
 
