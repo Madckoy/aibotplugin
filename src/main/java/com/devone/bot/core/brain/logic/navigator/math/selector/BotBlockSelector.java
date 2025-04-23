@@ -47,14 +47,14 @@ public class BotBlockSelector {
 
     public static BotBlockData selectNearestTarget(List<BotBlockData> targets, BotLocation fromLocation) {
 
-        BotLocation underBot = new BotLocation(fromLocation);
-        underBot.setY(underBot.getY()-1);
-
         BotLogger.debug("🗺️", true, "📍Выбираем ближайший блок ");
 
         if (targets == null || targets.isEmpty() || fromLocation == null) {
             return null;
         }
+
+        BotLocation underBot = new BotLocation(fromLocation);
+        underBot.setY(underBot.getY()-1);
     
         BotBlockData nearest = null;
         double minDistance = Double.MAX_VALUE;

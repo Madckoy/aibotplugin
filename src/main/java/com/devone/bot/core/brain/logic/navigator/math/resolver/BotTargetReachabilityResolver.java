@@ -99,8 +99,9 @@ public class BotTargetReachabilityResolver {
          for (BotBlockData point : reachable) {
              int dx = point.getX() - bot.getX();
              int dz = point.getZ() - bot.getZ();
+             int dy = point.getY() - bot.getY();
  
-             if (dx == 0 && dz == 0) continue;
+             if (dx == 0 && dz == 0 && dy <0) continue;
  
              double angle = Math.atan2(dz, dx);
              int sector = (int) ((angle + Math.PI) / (2 * Math.PI) * sectorCount) % sectorCount;
