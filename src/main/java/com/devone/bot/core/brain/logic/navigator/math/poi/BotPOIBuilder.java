@@ -41,9 +41,8 @@ public class BotPOIBuilder {
         List<BotBlockData> result = new ArrayList<>();
         for (BotBlockData original : targets) {
             BotBlockData copy = new BotBlockData(); // клонируем
-            copy.setX(original.getX());
-            copy.setY(original.getY());
-            copy.setZ(original.getZ());
+            BotPosition pos = new BotPosition(original.getX(), original.getY(), original.getZ());
+            copy.setPosition(pos);
             copy.setType("POI");
             copy.setTag("poi:end");
             result.add(copy);

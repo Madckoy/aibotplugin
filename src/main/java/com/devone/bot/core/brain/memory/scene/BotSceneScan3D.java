@@ -42,9 +42,7 @@ public class BotSceneScan3D {
                     Material material = world.getBlockAt(loc).getType();
 
                     BotBlockData blockData = new BotBlockData();
-                    blockData.setX(loc.getBlockX());
-                    blockData.setY(loc.getBlockY());
-                    blockData.setZ(loc.getBlockZ());
+                    blockData.setPosition(new BotPosition(loc.getBlockX(), loc.getBlockY(), loc.getBlockZ()));
                     blockData.setType(material.toString());
 
                     scannedBlocks.add(blockData);
@@ -66,12 +64,11 @@ public class BotSceneScan3D {
             ;
 
             BotBlockData blockData = new BotBlockData();
-            blockData.setX(loc.getBlockX());
-            blockData.setY(loc.getBlockY());
-            blockData.setZ(loc.getBlockZ());
+            blockData.setPosition(new BotPosition(loc.getBlockX(), loc.getBlockY(), loc.getBlockZ()));
             blockData.setType(type);
             blockData.setUUID(entity.getUniqueId());
             scannedEntities.add(blockData);
+
         }
 
         // 3. Координаты бота

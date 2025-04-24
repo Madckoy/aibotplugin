@@ -41,11 +41,8 @@ public class BotMoveTaskListener implements Listener {
         }
         
         Block block = BotWorldHelper.botPositionToWorldBlock(pos);
-        if(block!=null) {
-            BotBlockData data = new BotBlockData();
-            data.setX(block.getX());
-            data.setY(block.getY());
-            data.setZ(block.getZ());
+        if (block != null) {
+            BotBlockData data = new BotBlockData(block.getX(), block.getY(), block.getZ());
             data.setType(block.getType().toString());
             task.getBot().getBrain().getMemory().memorize(data, MemoryType.VISITED_BLOCKS);
         }

@@ -46,10 +46,9 @@ public class BotWorldHelper {
     }
 
     public static BotBlockData blockToBotBlockData(Block block) {
+        BotPosition pos = new BotPosition(block.getX(), block.getY(), block.getZ());
         BotBlockData blockData = new BotBlockData();
-        blockData.setX(block.getX());
-        blockData.setY(block.getY());
-        blockData.setZ(block.getZ());
+        blockData.setPosition(pos);
         blockData.setType(block.getType().toString());
         return blockData;
     }
