@@ -22,7 +22,6 @@ public class BotReachableSurfaceBuilder {
             BotPosition pos = new BotPosition(b.getX(), b.getY(), b.getZ());
             if ("poi:start".equals(b.getTag())) {
                 start = pos;
-                continue;
             }
             map.put(pos, b);
         }

@@ -54,7 +54,6 @@ public class BotWorldHelper {
         blockData.setY(block.getY());
         blockData.setZ(block.getZ());
         blockData.setType(block.getType().toString());
-        blockData.setBot(false);
         return blockData;
     }
 

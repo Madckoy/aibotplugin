@@ -81,7 +81,8 @@ public class BotSimplePathFinder {
             block.setX(loc.getX());
             block.setY(loc.getY());
             block.setZ(loc.getZ());
-            block.setType("DEBUG_PATH");
+            block.setType("DUMMY");
+            block.setTag("debug:path");
             result.add(block);
         }
 
@@ -113,7 +114,8 @@ public class BotSimplePathFinder {
                 block.setX(loc.getX());
                 block.setY(loc.getY());
                 block.setZ(loc.getZ());
-                block.setType("DEBUG_PATH");
+                block.setType("DUMMY");
+                block.setTag("debug:path");
                 result.add(block);
             }
 
@@ -129,7 +131,9 @@ public class BotSimplePathFinder {
         placeholder.setX(from.getX());
         placeholder.setY(from.getY());
         placeholder.setZ(from.getZ());
-        placeholder.setType("DEBUG_PATH_FAKE");
+        placeholder.setType("DUMMY");
+        placeholder.setTag("debug:path");
+
 
         result.add(placeholder);
         System.out.println("⚠️ No valid path found — inserting placeholder block for debug.");
@@ -164,7 +168,8 @@ public static List<List<BotBlockData>> buildAllDebugPathsV2(
                 block.setX(loc.getX());
                 block.setY(loc.getY());
                 block.setZ(loc.getZ());
-                block.setType("DEBUG_PATH");
+                block.setType("DUMMY");
+                block.setTag("debug:path");
                 debugBlocks.add(block);
             }
             allPaths.add(debugBlocks);

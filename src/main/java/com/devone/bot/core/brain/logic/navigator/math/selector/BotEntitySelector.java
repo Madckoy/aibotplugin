@@ -23,33 +23,6 @@ public class BotEntitySelector {
             .orElse(null);
     }
 
-    /**
-     * Выбирает ближайшую враждебную сущность.
-     */
-    public static BotBlockData pickNearestHostile(List<BotBlockData> entities, BotPosition botOrigin, double distance) {
-        return pickNearestTarget(
-            entities.stream()
-                    .filter(BotBlockData::isHostile)
-                    .toList(),
-
-            botOrigin,
-            distance
-        );
-    }
-
-    /**
-     * Выбирает ближайшую пассивную сущность.
-     */
-    public static BotBlockData pickNearestPassive(List<BotBlockData> entities, BotPosition botOrigin, double distance) {
-        return pickNearestTarget(
-            entities.stream()
-                    .filter(BotBlockData::isPeaceful)
-                    .toList(),
-            botOrigin,
-            distance
-        );
-    }
-
     
     /**
      * Выбирает ближайшую пассивную сущность.

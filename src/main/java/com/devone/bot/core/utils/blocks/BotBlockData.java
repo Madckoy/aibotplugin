@@ -37,19 +37,6 @@ public class BotBlockData extends BotPosition {
     }
 
     @JsonIgnore
-    private boolean bot;  // из JSON  
-    
-    @JsonIgnore
-    public boolean isBot() {
-        return bot;
-    }
-
-    @JsonIgnore
-    public void setBot(boolean bot) {
-        this.bot = bot;
-    }
-
-    @JsonIgnore
     public boolean isAir() {
         return type != null && BlockMaterialUtils.AIR_TYPES.contains(type.toUpperCase());
     } 
@@ -67,7 +54,7 @@ public class BotBlockData extends BotPosition {
 
     @JsonIgnore
     public String toString() {
-        return String.format("Block[x=%d, y=%d, z=%d, type=%s, bot=%b]", this.getX(), this.getY(), this.getZ(), type, bot);
+        return String.format("Block: [ x=%d, y=%d, z=%d, type=%s, bot=%s ]", this.getX(), this.getY(), this.getZ(), type, tag);
     }
     @JsonIgnore
     public BotPosition getPosition(){
@@ -83,7 +70,6 @@ public class BotBlockData extends BotPosition {
         copy.setType(this.getType());
         copy.setUUID(this.getUUID());
         copy.setTag(this.getTag());
-        copy.setBot(this.isBot());
         return copy;
     }
 

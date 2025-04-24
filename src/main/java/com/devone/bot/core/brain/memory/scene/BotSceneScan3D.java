@@ -71,8 +71,6 @@ public class BotSceneScan3D {
             blockData.setZ(loc.getBlockZ());
             blockData.setType(type);
             blockData.setUUID(entity.getUniqueId());
-            blockData.setBot(false);
-
             scannedEntities.add(blockData);
         }
 

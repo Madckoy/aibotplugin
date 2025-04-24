@@ -1,6 +1,8 @@
 package com.devone.bot.core.brain.logic.navigator.context;
 
 
+import com.devone.bot.core.brain.logic.navigator.finder.BotSimplePathFinder;
+import com.devone.bot.core.brain.logic.navigator.finder.SimplePathUtils;
 import com.devone.bot.core.brain.logic.navigator.math.filters.BotAddDummyBlock;
 import java.util.List;
 import com.devone.bot.core.brain.logic.navigator.math.poi.BotPOIBuilder;
@@ -13,7 +15,7 @@ import com.devone.bot.core.brain.logic.navigator.math.filters.BotSafeBlocksFilte
 import com.devone.bot.core.brain.logic.navigator.math.filters.BotVerticalSliceFilter;
 import com.devone.bot.core.utils.blocks.BotBlockData;
 import com.devone.bot.core.utils.blocks.BotPosition;
-import com.devone.bot.core.utils.logger.BotLogger;
+import java.util.Set;
 
 public class BotNavigationContextMaker {
 
@@ -39,9 +41,7 @@ public class BotNavigationContextMaker {
             safe = sliced;
         }
 
-        List<BotBlockData> safe_with_dummy  = BotAddDummyBlock.apply(botPosition, safe); // added a fake block
-
-        List<BotBlockData> walkable = BotWalkableSurfaceBuilder.build(safe_with_dummy);
+        List<BotBlockData> walkable = BotWalkableSurfaceBuilder.build(safe);
         if (walkable == null || walkable.isEmpty()) {
             walkable = safe;
         } 
@@ -51,6 +51,8 @@ public class BotNavigationContextMaker {
         if (navigable == null || navigable.isEmpty()) {
             navigable = walkable;
         }
+
+        navigable = BotAddDummyBlock.apply(botPosition, navigable);
 
         // проверить есть ли мобы на navigable surface
         List<BotBlockData> livingTargets = BotEntitiesFilter.filter(bioBlocks, navigable);
@@ -75,19 +77,22 @@ public class BotNavigationContextMaker {
         // BotLogger.debug("📜", true,  " POI BLOCKS = " + poi);
         //--------------------------------------------------------------------------
         // Строим debug-путь к одной цели по сетке reachable, а не по самим таргетам
-        // Set<BotPosition> navMesh = SimplePathUtils.toLocationSet(reachable); // 🆕 сетка движения
-        // BotSimplePathFinder pathfinder = new BotSimplePathFinder(navMesh);
+        //
+        /* 
+        Set<BotPosition> navMesh = SimplePathUtils.toLocationSet(reachable); // 🆕 сетка движения
+        BotSimplePathFinder pathfinder = new BotSimplePathFinder(navMesh);
 
-        // BotPosition debugLoc = new BotPosition(botPosition);
-        // debugLoc.setY(botPosition.getY()-1);
+        BotPosition debugLoc = new BotPosition(botPosition);
+        debugLoc.setY(botPosition.getY()-1);
         
-        //List<List<BotBlockData>> debugPaths = BotSimplePathFinder.buildAllDebugPathsV2(
-        //    debugLoc,
-        //    poi,
-        //    pathfinder
-        //);
+        List<List<BotBlockData>> debugPaths = BotSimplePathFinder.buildAllDebugPathsV2(
+            debugLoc,
+            poi,
+            pathfinder
+        );
         
-        //context.debugPaths = debugPaths;
+        context.debugPaths = debugPaths;
+        */
         //---------------------------------------------------------------------------
         context.sliced    = sliced;
         context.safe      = safe;               

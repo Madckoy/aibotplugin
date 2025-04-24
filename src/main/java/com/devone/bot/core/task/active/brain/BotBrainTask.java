@@ -209,7 +209,7 @@ public class BotBrainTask extends BotTaskAutoParams<BotBrainTaskParams> {
     private Optional<Runnable> tryTeleportToReachable(Bot bot, List<BotBlockData> data) {
         if (data == null || data.isEmpty())
             return Optional.empty();
-            BotPosition block = BotPOISelector.selectRandom(bot, BlockUtils.fromBlocks(data));
+            BotPosition block = BotPOISelector.selectRandom( BlockUtils.fromBlocks(data));
         return Optional.of(() -> {
             BotLogger.debug(icon, isLogging(), "⚡Телепорт: достижимая точка " + bot.getId() + " → " + block);
             BotTeleportTaskParams tpParams = new BotTeleportTaskParams(block);
@@ -222,7 +222,7 @@ public class BotBrainTask extends BotTaskAutoParams<BotBrainTaskParams> {
     private Optional<Runnable> tryTeleportToNavigable(Bot bot, List<BotBlockData> data) {
         if (data == null || data.isEmpty())
             return Optional.empty();
-            BotPosition block = BotPOISelector.selectRandom(bot, BlockUtils.fromBlocks(data));
+            BotPosition block = BotPOISelector.selectRandom( BlockUtils.fromBlocks(data));
         return Optional.of(() -> {
             BotLogger.debug(icon, isLogging(), "⚡Телепорт: точка навигации " + bot.getId() + " → " + block);
             BotTeleportTaskParams tpParams = new BotTeleportTaskParams(block);
@@ -235,7 +235,7 @@ public class BotBrainTask extends BotTaskAutoParams<BotBrainTaskParams> {
     private Optional<Runnable> tryTeleportToEntity(Bot bot, List<BotBlockData> data) {
         if (data == null || data.isEmpty())
             return Optional.empty();
-            BotPosition block = BotPOISelector.selectRandom(bot, BlockUtils.fromBlocks(data));
+            BotPosition block = BotPOISelector.selectRandom(BlockUtils.fromBlocks(data));
         return Optional.of(() -> {
             BotLogger.debug(icon, isLogging(), "⚡Телепорт к сущности " + bot.getId() + " → " + block);
             BotTeleportTaskParams tpParams = new BotTeleportTaskParams(block);
@@ -248,7 +248,7 @@ public class BotBrainTask extends BotTaskAutoParams<BotBrainTaskParams> {
     private Optional<Runnable> tryTeleportToWalkable(Bot bot, List<BotBlockData> data) {
         if (data == null || data.isEmpty())
             return Optional.empty();
-            BotPosition block = BotPOISelector.selectRandom(bot, BlockUtils.fromBlocks(data));
+            BotPosition block = BotPOISelector.selectRandom(BlockUtils.fromBlocks(data));
         return Optional.of(() -> {
             BotLogger.debug(icon, isLogging(), "⚡Телепорт: проходимая точка " + bot.getId() + " → " + block);
             BotTeleportTaskParams tpParams = new BotTeleportTaskParams(block);

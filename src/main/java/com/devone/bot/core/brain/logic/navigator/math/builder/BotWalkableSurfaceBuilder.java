@@ -10,7 +10,7 @@ public class BotWalkableSurfaceBuilder {
      * Возвращает только искусственные блоки, с пометками (notes), исключая воздух.
      */
     public static List<BotBlockData> build(List<BotBlockData> blocks) {
-        List<BotBlockData> result = new ArrayList<>(blocks);
+        List<BotBlockData> result = new ArrayList<>();
     
         for (BotBlockData block : blocks) {
             if (block.isAir()) continue;
@@ -23,17 +23,27 @@ public class BotWalkableSurfaceBuilder {
             BotBlockData above2 = findBlockAt(blocks, x, y + 2, z);
     
             if (block.isCover()) {
-                if (isAirOrBot(above1)) {
-                    result.add(createFakeBlock(block, y, "DUMMY", "walkable:cover"));
+                if (isAir(above1)) {
+                    result.add(createFakeBlock(x, y, z, "DUMMY", "walkable:cover"));
                 }
             } else {
-                if (isAirOrBot(above1) && isAirOrBot(above2)) {
-                    result.add(createFakeBlock(block, y, "DUMMY", "walkable:solid"));
+                if (isAir(above1) && isAir(above2)) {
+                    result.add(createFakeBlock(x, y, z, "DUMMY", "walkable:solid"));
                 }
             }
         }
     
         return result;
+    }
+    
+    private static BotBlockData createFakeBlock(int x, int y, int z, String type, String tag) {
+        BotBlockData fake = new BotBlockData();
+        fake.setX(x);
+        fake.setY(y);
+        fake.setZ(z);
+        fake.setType(type);
+        fake.setTag(tag);
+        return fake;
     }
     
     private static BotBlockData findBlockAt(List<BotBlockData> blocks, int x, int y, int z) {
@@ -45,15 +55,8 @@ public class BotWalkableSurfaceBuilder {
         return null;
     }
 
-    private static boolean isAirOrBot(BotBlockData block) {
-        return block != null && (block.isAir() || block.isBot());
+    private static boolean isAir(BotBlockData block) {
+        return block != null && (block.isAir() );
     }
 
-    private static BotBlockData createFakeBlock(BotBlockData base, int y, String type, String notes) {
-        BotBlockData fake = base.clone();
-        fake.setY(y);
-        fake.setType(type);
-        fake.setTag(notes);
-        return fake;
-    }
 }

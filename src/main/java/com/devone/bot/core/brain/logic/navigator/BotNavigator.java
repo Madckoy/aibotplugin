@@ -236,7 +236,7 @@ public class BotNavigator {
 
         candidates = result;
         
-        suggested = BotPOISelector.selectRandom(owner, candidates);
+        suggested = BotPOISelector.selectRandom(candidates);
 
         return result;
     }
