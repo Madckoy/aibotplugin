@@ -34,7 +34,7 @@ public class BotStrategyNearbyPlayer implements IBotStrategyReaction {
             BotPosition playerLoc = new BotPosition(BotWorldHelper.locationToBotPosition(player.getLocation()));
             double dist = botLoc.distanceTo(playerLoc);
 
-            if (dist < BotConstants.DEFAULT_DETECTION_RADIUS) {
+            if (dist < BotConstants.DEFAULT_PLAYER_DETECTION_RADIUS) {
                 BotLogger.debug("🤖", true, bot.getId() + " 🙋🏻‍♂️ Обнаружен игрок " + player.getName() + " на "
                         + String.format("%.1f", dist) + " м");
 
