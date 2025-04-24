@@ -101,36 +101,27 @@ public class BotExcavateTemplateRunner implements IBotExcavatePatternRunner {
             
             if(params!=null) { 
                 BotLogger.debug("Params:", true, params.toString());
-            }                                                                  
-
-            List<BotPosition> inner_points = generator.generateInnerPoints(params);  
-
-            BotLogger.debug("📐", true, " 🔢 " + String.format("Generated %d points", inner_points.size()));     
+            }        
 
             boolean isInverted = generator.getInverted();
 
-            Set<BotPosition> result = new HashSet<>();
-
-            if(isInverted) {
-                List<BotPosition> all =  generator.generateOuterPoints(params);
-                result.addAll(all);              // Генерируем весь куб
-                result.removeAll(inner_points);  // Удаляем внутреннюю область
-            } else {
-                // Если не inverted, просто генерируем яму
-                result.addAll(inner_points);     // Только внутренняя область
-            }
+            List<BotPosition> outerPts =  generator.generateOuterPoints(params);
+            List<BotPosition> innerPts = generator.generateInnerPoints(params);
+            List<BotPosition> removedPts = new ArrayList<>(outerPts);
             
-            List<BotPosition> toBeRemoved = new ArrayList<>(result);
+            if(isInverted) {
+                removedPts.removeAll(innerPts);
+            }
 
             // ✅ Сортировка по направлению
             Comparator<BotPosition> sortingComparator = BotPositionComparators.byAxisDirection(AxisDirection.DOWN);
             if (sortingComparator != null) {
-                toBeRemoved.sort(sortingComparator);
+                removedPts.sort(sortingComparator);
             }
 
-            if (toBeRemoved != null && !toBeRemoved.isEmpty()) {
+            if (removedPts != null && !removedPts.isEmpty()) {
 
-                blocksToBreak.addAll(toBeRemoved);
+                blocksToBreak.addAll(removedPts);
                 
                 BotLogger.debug("📐", true, " ✅ Added " + blocksToBreak.size() + " coordinates");
                 BotLogger.debug("📐", true, " ✅ Added " + blocksToBreak);
