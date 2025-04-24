@@ -39,9 +39,9 @@ public class BotNavigationContextMaker {
             safe = sliced;
         }
 
-        safe  = BotAddStartNavigationFilter.apply(botPosition, safe); // added a fake block
+        List<BotBlockData> safe_with_fake  = BotAddStartNavigationFilter.apply(botPosition, safe); // added a fake block
 
-        List<BotBlockData> walkable = BotWalkableSurfaceBuilder.build(safe);
+        List<BotBlockData> walkable = BotWalkableSurfaceBuilder.build(safe_with_fake);
         if (walkable == null || walkable.isEmpty()) {
             walkable = safe;
         } 
@@ -82,7 +82,7 @@ public class BotNavigationContextMaker {
         // debugLoc.setY(botPosition.getY()-1);
         
         //List<List<BotBlockData>> debugPaths = BotSimplePathFinder.buildAllDebugPathsV2(
-        //    botPosition,
+        //    debugLoc,
         //    poi,
         //    pathfinder
         //);
