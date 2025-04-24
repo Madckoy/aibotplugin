@@ -116,3 +116,8 @@ commands:
     description: Dump memory blocks to the file
     usage: /bot-dump <bot_name>
     permission: aibotplugin.bot.dump
+
+  bot-excavate:
+    description: Dump memory blocks to the file
+    usage: /bot-excavate <bot_name>
+    permission: aibotplugin.bot.excavate

@@ -13,7 +13,7 @@ offsetInner:
 outerRadius: 1
 innerRadius: 1
 
-inverted: false
+inverted: true
 
 filters:
   - "x == cx"

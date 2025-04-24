@@ -1,7 +1,7 @@
 package com.devone.bot.core.brain.memory;
 
 public enum MemoryType {
-    VISITED_BLOCKS("Visited "),
+    VISITED_BLOCKS("Visited"),
     SPOTTED_SPECIAL_BLOCK("Special Blocks"),
     SPOTTED_HOSTILE_ENCOUNTER("Hostile mobs"),
     ITEM_DROP("Dropped Items"),

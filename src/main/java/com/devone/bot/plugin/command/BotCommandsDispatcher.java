@@ -14,6 +14,7 @@ import com.devone.bot.plugin.command.commands.BotCalibrateCommand;
 import com.devone.bot.plugin.command.commands.BotChaseCommand;
 import com.devone.bot.plugin.command.commands.BotDropAllCommand;
 import com.devone.bot.plugin.command.commands.BotDumpCommand;
+import com.devone.bot.plugin.command.commands.BotExcavateCommand;
 import com.devone.bot.plugin.command.commands.BotListCommand;
 import com.devone.bot.plugin.command.commands.BotMoveCommand;
 import com.devone.bot.plugin.command.commands.BotMoveHereCommand;
@@ -61,6 +62,7 @@ public class BotCommandsDispatcher implements CommandExecutor {
         registerCommand("bot-move-here", new BotMoveHereCommand(botManager));
 
         registerCommand("bot-dump", new BotDumpCommand(botManager));
+        registerCommand("bot-excavate", new BotExcavateCommand(botManager));
 
         registerCommand("bot-chase", new BotChaseCommand(botManager));
         registerCommand("bot-protect", new BotProtectCommand(botManager));
