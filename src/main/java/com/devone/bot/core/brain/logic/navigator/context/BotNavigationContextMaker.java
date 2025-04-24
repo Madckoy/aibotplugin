@@ -72,7 +72,7 @@ public class BotNavigationContextMaker {
                 true,
                 scanRadius);
 
-        BotLogger.debug("📜", true,  " POI BLOCKS = " + poi);
+        // BotLogger.debug("📜", true,  " POI BLOCKS = " + poi);
         //--------------------------------------------------------------------------
         // Строим debug-путь к одной цели по сетке reachable, а не по самим таргетам
         // Set<BotPosition> navMesh = SimplePathUtils.toLocationSet(reachable); // 🆕 сетка движения

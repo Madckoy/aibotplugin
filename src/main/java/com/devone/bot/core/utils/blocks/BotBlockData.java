@@ -8,7 +8,7 @@ public class BotBlockData extends BotPosition {
 
     private String type;
     private UUID   uuid;
-    private String notes;
+    private String tag;
 
     public void setType( String type){
         this.type = type;
@@ -27,13 +27,13 @@ public class BotBlockData extends BotPosition {
     }
 
     @JsonIgnore
-    public String getNotes() {
-        return notes;
+    public String getTag() {
+        return tag;
     }
 
     @JsonIgnore
-    public void setNotes(String notes) {
-        this.notes = notes;
+    public void setTag(String tag) {
+        this.tag = tag;
     }
 
     @JsonIgnore
@@ -82,7 +82,7 @@ public class BotBlockData extends BotPosition {
         copy.setZ(this.getZ());
         copy.setType(this.getType());
         copy.setUUID(this.getUUID());
-        copy.setNotes(this.getNotes());
+        copy.setTag(this.getTag());
         copy.setBot(this.isBot());
         return copy;
     }

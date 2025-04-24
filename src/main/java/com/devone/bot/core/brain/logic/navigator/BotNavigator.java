@@ -176,8 +176,7 @@ public class BotNavigator {
 
         BotNavigationContext context = BotNavigationContextMaker.createSceneContext(botPos, scene.blocks, scene.entities);
 
-        BotLogger.debug(owner.getActiveTask().getIcon(), true, 
-                owner.getId() + " ⚠️ Context=" + context);
+        //BotLogger.debug(owner.getActiveTask().getIcon(), true, owner.getId() + " ⚠️ Context=" + context);
 
 
 
@@ -193,7 +192,7 @@ public class BotNavigator {
 
         List<BotPosition> pois       = loopTargets(botPos, "poi",       context.poi);
 
-        BotLogger.debug(owner.getActiveTask().getIcon(), true, owner.getId() + " ⚠️ POIs = " + pois);
+        //BotLogger.debug(owner.getActiveTask().getIcon(), true, owner.getId() + " ⚠️ POIs = " + pois);
         
         List<BotPosition> reachable  = loopTargets(botPos, "reachable", context.reachable);
         List<BotPosition> navigable  = loopTargets(botPos, "navigable", context.navigable);

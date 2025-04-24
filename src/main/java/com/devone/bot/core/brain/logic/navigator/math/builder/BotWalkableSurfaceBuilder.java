@@ -2,7 +2,6 @@ package com.devone.bot.core.brain.logic.navigator.math.builder;
 
 import java.util.*;
 import com.devone.bot.core.utils.blocks.BotBlockData;
-import com.devone.bot.core.utils.blocks.BotPosition;
 
 public class BotWalkableSurfaceBuilder {
 
@@ -54,7 +53,7 @@ public class BotWalkableSurfaceBuilder {
         BotBlockData fake = base.clone();
         fake.setY(y);
         fake.setType(type);
-        fake.setNotes(notes);
+        fake.setTag(notes);
         return fake;
     }
 }

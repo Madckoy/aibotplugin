@@ -19,7 +19,7 @@ public class BotAddDummyBlock {
         start.setY(botPosition.getY()-1);
         start.setZ(botPosition.getZ());
         start.setType("DUMMY");
-        start.setNotes("navigator:start");
+        start.setTag("poi:start");
 
         result.add(start);
     

@@ -45,7 +45,7 @@ public class BotPOIBuilder {
             copy.setY(original.getY());
             copy.setZ(original.getZ());
             copy.setType("POI");
-            copy.setNotes("poi:end");
+            copy.setTag("poi:end");
             result.add(copy);
         }
 
