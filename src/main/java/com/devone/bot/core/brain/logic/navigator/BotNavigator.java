@@ -17,8 +17,6 @@ import com.devone.bot.core.brain.memory.scene.BotSceneData;
 import com.devone.bot.core.task.passive.BotTaskManager;
 import com.devone.bot.core.task.reactive.container.BotReactiveExcavateContainer;
 import com.devone.bot.core.task.reactive.container.params.BotReactiveExcavateContainerParams;
-import com.devone.bot.core.task.active.move.BotMoveTask;
-import com.devone.bot.core.task.active.move.params.BotMoveTaskParams;
 import com.devone.bot.core.utils.blocks.BlockUtils;
 import com.devone.bot.core.utils.blocks.BotBlockData;
 import com.devone.bot.core.utils.blocks.BotPosition;
@@ -201,14 +199,10 @@ public class BotNavigator {
         List<BotPosition> walkable   = loopTargets(botPos, "walkable",  context.walkable);
 
         boolean hardStuck = false;
-        boolean softStuck = false;
-        
         setStuck(false);
 
         if (pois.size() == 0) {
-            softStuck = true;
             if (reachable.size() == 0) {
-                softStuck = true;
                 if (navigable.size() == 0) {
                     if (walkable.size() == 0) {
                         // hard stuck
@@ -223,7 +217,6 @@ public class BotNavigator {
                     suggestion = NavigationType.TELEPORT;
                 }
             } else {
-                softStuck = false;
                 result = reachable;
                 suggestion = NavigationType.WALK;
             }
