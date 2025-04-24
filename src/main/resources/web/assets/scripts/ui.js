@@ -47,7 +47,7 @@ function updateOrCreateBotRow(bot, tbody) {
     cells[1].innerHTML = `
         <div class="bot-stats-cell">
             <div><span>🪨</span><span>${bot.blocksBroken}</span></div>
-            <div><span>💀</span><span>${bot.mobsKilled}</span></div>
+            <div><span>☠️</span><span>${bot.mobsKilled}</span></div>
             <div><span>⚡️</span><span>${bot.teleportUsed}</span></div>
         </div>`;
 
@@ -90,9 +90,9 @@ function updateOrCreateBotRow(bot, tbody) {
             <div class="bot-position-cell">
                 <button class="cmd-btn" data-bot="${bot.id}" data-cmd="bot-tp">⚡</button>
                 <button class="cmd-btn" data-bot="${bot.id}" data-cmd="bot-move">🏃🏻‍♂️‍➡️</button>
-                <button class="cmd-btn" data-bot="${bot.id}" data-cmd="bot-drop-all">📦</button>
+                <button class="cmd-btn" data-bot="${bot.id}" data-cmd="bot-drop-all">🔵</button>
                 <div class="bot-objective-divider"></div>
-                <button class="cmd-btn" data-bot="${bot.id}" data-cmd="bot-signal">📡</button>
+                <button class="cmd-btn" data-bot="${bot.id}" data-cmd="bot-signal">🔵</button>
                 <button class="cmd-btn" data-bot="${bot.id}" data-cmd="bot-dump">🧊</button>
                 <button class="cmd-btn" data-bot="${bot.id}" data-cmd="bot-info">ℹ️</button>
             </div>`;
