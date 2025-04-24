@@ -10,58 +10,73 @@ public class BotReachableSurfaceBuilder {
         {1, 0}, {-1, 0}, {0, 1}, {0, -1}
     };
 
-    /**
-     * Находит все блоки, достижимые с позиции бота по навигационной поверхности.
-     * Возвращает новые объекты с пометками.
-     */
-    public static List<BotBlockData> build(BotPosition botPos, List<BotBlockData> navigableBlocks) {
-        BotPosition start = new BotPosition(botPos.getX(), botPos.getY()-1, botPos.getZ());
-
-        Map<BotPosition, BotBlockData> map = new HashMap<>();
-        for (BotBlockData b : navigableBlocks) {
-            map.put(new BotPosition(b.getX(), b.getY(), b.getZ()), b);
-        }
-
-        if (!map.containsKey(start)) {
-            System.out.println("❌ Start position not found in navigable surface: " + start);
+    public static List<BotBlockData> build(List<BotBlockData> navigableBlocks) {
+        Optional<BotBlockData> optionalStart = navigableBlocks.stream()
+            .filter(b -> "navigator:start".equals(b.getNotes()))
+            .findFirst();
+    
+        if (optionalStart.isEmpty()) {
+            System.out.println("❌ Start block with notes=navigator:start not found.");
             return List.of();
         }
-
+    
+        BotBlockData startBlock = optionalStart.get();
+        BotPosition start = new BotPosition(startBlock.getX(), startBlock.getY(), startBlock.getZ());
+    
         Set<BotPosition> visited = new HashSet<>();
         Queue<BotPosition> queue = new LinkedList<>();
         List<BotBlockData> reachable = new ArrayList<>();
-
+    
         queue.add(start);
-
+    
         while (!queue.isEmpty()) {
             BotPosition current = queue.poll();
             if (!visited.add(current)) continue;
-
-            BotBlockData data = map.get(current);
-            if (data != null) {
+    
+            List<BotBlockData> blocksAtCurrent = findBlocksAt(navigableBlocks, current);
+            for (BotBlockData data : blocksAtCurrent) {
                 BotBlockData copy = cloneAndMarkAsReachable(data);
                 reachable.add(copy);
-
-                for (int[] d : DELTAS) {
-                    int dx = d[0];
-                    int dz = d[1];
-
-                    for (int dy = -1; dy <= 1; dy++) {
-                        BotPosition neighbor = new BotPosition(
-                            current.getX() + dx,
-                            current.getY() + dy,
-                            current.getZ() + dz
-                        );
-
-                        if (!visited.contains(neighbor) && map.containsKey(neighbor)) {
-                            queue.add(neighbor);
-                        }
+            }
+    
+            for (int[] d : DELTAS) {
+                int dx = d[0];
+                int dz = d[1];
+    
+                for (int dy = -1; dy <= 1; dy++) {
+                    BotPosition neighbor = new BotPosition(
+                        current.getX() + dx,
+                        current.getY() + dy,
+                        current.getZ() + dz
+                    );
+    
+                    if (!visited.contains(neighbor) && hasBlockAt(navigableBlocks, neighbor)) {
+                        queue.add(neighbor);
                     }
                 }
             }
         }
-
+    
         return reachable;
+    }
+
+    private static boolean hasBlockAt(List<BotBlockData> list, BotPosition pos) {
+        return list.stream().anyMatch(b ->
+            b.getX() == pos.getX() &&
+            b.getY() == pos.getY() &&
+            b.getZ() == pos.getZ());
+    }
+
+    private static List<BotBlockData> findBlocksAt(List<BotBlockData> list, BotPosition pos) {
+        List<BotBlockData> result = new ArrayList<>();
+        for (BotBlockData b : list) {
+            if (b.getX() == pos.getX() &&
+                b.getY() == pos.getY() &&
+                b.getZ() == pos.getZ()) {
+                result.add(b);
+            }
+        }
+        return result;
     }
 
     private static BotBlockData cloneAndMarkAsReachable(BotBlockData original) {

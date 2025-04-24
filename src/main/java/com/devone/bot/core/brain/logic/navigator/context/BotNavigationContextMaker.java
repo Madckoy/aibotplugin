@@ -1,7 +1,7 @@
 package com.devone.bot.core.brain.logic.navigator.context;
 
 
-import com.devone.bot.core.brain.logic.navigator.math.filters.BotAddStartNavigationFilter;
+import com.devone.bot.core.brain.logic.navigator.math.filters.BotAddDummyBlock;
 import java.util.List;
 import com.devone.bot.core.brain.logic.navigator.math.poi.BotPOIBuilder;
 import com.devone.bot.core.brain.logic.navigator.math.poi.BotPOIBuilder.BotPOIBuildStrategy;
@@ -39,9 +39,9 @@ public class BotNavigationContextMaker {
             safe = sliced;
         }
 
-        List<BotBlockData> safe_with_fake  = BotAddStartNavigationFilter.apply(botPosition, safe); // added a fake block
+        List<BotBlockData> safe_with_dummy  = BotAddDummyBlock.apply(botPosition, safe); // added a fake block
 
-        List<BotBlockData> walkable = BotWalkableSurfaceBuilder.build(safe_with_fake);
+        List<BotBlockData> walkable = BotWalkableSurfaceBuilder.build(safe_with_dummy);
         if (walkable == null || walkable.isEmpty()) {
             walkable = safe;
         } 
@@ -55,7 +55,7 @@ public class BotNavigationContextMaker {
         // проверить есть ли мобы на navigable surface
         List<BotBlockData> livingTargets = BotEntitiesFilter.filter(bioBlocks, navigable);
 
-        List<BotBlockData> reachable = BotReachableSurfaceBuilder.build(botPosition, navigable);
+        List<BotBlockData> reachable = BotReachableSurfaceBuilder.build(navigable);
         if (reachable == null || reachable.isEmpty()) {
             reachable = navigable;
         }
