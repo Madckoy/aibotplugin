@@ -127,14 +127,13 @@ public class BotExcavateTemplateRunner implements IBotExcavatePatternRunner {
             if (sortingComparator != null) {
                 toBeRemoved.sort(sortingComparator);
             }
-                                  
-            //toBeRemoved.removeAll(kept);
 
             if (toBeRemoved != null && !toBeRemoved.isEmpty()) {
 
                 blocksToBreak.addAll(toBeRemoved);
                 
                 BotLogger.debug("📐", true, " ✅ Added " + blocksToBreak.size() + " coordinates");
+                BotLogger.debug("📐", true, " ✅ Added " + blocksToBreak);
 
             } else {
                 
