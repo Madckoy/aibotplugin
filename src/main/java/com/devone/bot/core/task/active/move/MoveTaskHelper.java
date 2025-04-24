@@ -20,8 +20,8 @@ public class MoveTaskHelper {
      * @param log    включить логирование
      */
     public static void setPoi(Bot bot, BotPosition target, float speed, boolean log) {
-        if (bot == null || target == null) {
-            BotLogger.debug("🏁", true, bot.getId() + " ▶ Не смогли начать движение.");
+        if (target == null) {
+            BotLogger.debug("🏁", true, bot.getId() + " ❌ Не смогли начать движение.");
             return;
         }
 
