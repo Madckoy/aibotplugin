@@ -18,8 +18,8 @@ function renderBotTable(data) {
     const tbody = table.querySelector("tbody") || table.appendChild(document.createElement("tbody"));
 
     data.bots.forEach(bot => updateOrCreateBotRow(bot, tbody));
+
     setupButtonHandlers(data.bots);
-    setupInfoPanel();
 }
 
 function updateOrCreateBotRow(bot, tbody) {
@@ -41,6 +41,7 @@ function updateOrCreateBotRow(bot, tbody) {
             <td class="commands"></td>`;
         tbody.appendChild(row);
     }
+
 
     const cells = row.children;
     cells[1].innerHTML = `
@@ -88,14 +89,16 @@ function updateOrCreateBotRow(bot, tbody) {
         cells[8].innerHTML = `
             <div class="bot-position-cell">
                 <button class="cmd-btn" data-bot="${bot.id}" data-cmd="bot-tp">⚡</button>
-                <button class="cmd-btn" data-bot="${bot.id}" data-cmd="bot-move">🚶‍♀️‍➡️</button>
+                <button class="cmd-btn" data-bot="${bot.id}" data-cmd="bot-move">🏃🏻‍♂️‍➡️</button>
                 <button class="cmd-btn" data-bot="${bot.id}" data-cmd="bot-drop-all">📦</button>
                 <div class="bot-objective-divider"></div>
                 <button class="cmd-btn" data-bot="${bot.id}" data-cmd="bot-signal">📡</button>
-                <button class="cmd-btn" data-bot="${bot.id}" data-cmd="bot-home">🏡</button>
+                <button class="cmd-btn" data-bot="${bot.id}" data-cmd="bot-dump">🧊</button>
                 <button class="cmd-btn" data-bot="${bot.id}" data-cmd="bot-info">ℹ️</button>
             </div>`;
     }
+
+    updateInfoPanel(bot);     
 }
 
 function getTaskStatusEmoji(isReactive) {
@@ -118,21 +121,4 @@ function generateInventoryGrid(slots, autoPickupEnabled) {
     }).join('') + '</div>';
 }
 
-function setupInfoPanel() {
-    const panel = document.getElementById("bot-info-panel");
-    const closeBtn = document.getElementById("info-close-btn");
-    closeBtn.addEventListener("click", () => {
-        panel.classList.remove("visible");
-        panel.classList.add("hidden");
-    });
-}
 
-function showInfoPanel(bot) {
-    document.getElementById("info-id").textContent = bot.id;
-    document.getElementById("info-model").textContent = bot.model || "M-000.2";
-    document.getElementById("info-navpoints").textContent = bot.navPoints ?? "n/a";
-    document.getElementById("info-reactive").textContent = getTaskStatusEmoji(bot.taskIsReactive);
-    const panel = document.getElementById("bot-info-panel");
-    panel.classList.remove("hidden");
-    panel.classList.add("visible");
-}

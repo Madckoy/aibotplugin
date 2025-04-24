@@ -6,9 +6,28 @@ import org.bukkit.command.CommandSender;
 import org.bukkit.plugin.java.JavaPlugin;
 
 import com.devone.bot.AIBotPlugin;
-import com.devone.bot.core.bot.BotManager;
+import com.devone.bot.core.BotManager;
 import com.devone.bot.core.utils.logger.BotLogger;
 import com.devone.bot.core.utils.zone.BotZoneManager;
+import com.devone.bot.plugin.command.commands.BotAddCommand;
+import com.devone.bot.plugin.command.commands.BotCalibrateCommand;
+import com.devone.bot.plugin.command.commands.BotChaseCommand;
+import com.devone.bot.plugin.command.commands.BotDropAllCommand;
+import com.devone.bot.plugin.command.commands.BotDumpCommand;
+import com.devone.bot.plugin.command.commands.BotListCommand;
+import com.devone.bot.plugin.command.commands.BotMoveCommand;
+import com.devone.bot.plugin.command.commands.BotMoveHereCommand;
+import com.devone.bot.plugin.command.commands.BotProtectCommand;
+import com.devone.bot.plugin.command.commands.BotReloadPluginCommand;
+import com.devone.bot.plugin.command.commands.BotRemoveAllCommand;
+import com.devone.bot.plugin.command.commands.BotRemoveCommand;
+import com.devone.bot.plugin.command.commands.BotSelectCommand;
+import com.devone.bot.plugin.command.commands.BotTeleportCommand;
+import com.devone.bot.plugin.command.commands.BotTeleportHereCommand;
+import com.devone.bot.plugin.command.commands.BotUnselectCommand;
+import com.devone.bot.plugin.command.commands.BotZoneAddCommand;
+import com.devone.bot.plugin.command.commands.BotZoneListCommand;
+import com.devone.bot.plugin.command.commands.BotZoneRemoveCommand;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -41,7 +60,8 @@ public class BotCommandsDispatcher implements CommandExecutor {
         registerCommand("bot-move", new BotMoveCommand(botManager));
         registerCommand("bot-move-here", new BotMoveHereCommand(botManager));
 
-        //registerCommand("bot-stop", new BotCalibrateCommand(botManager));
+        registerCommand("bot-dump", new BotDumpCommand(botManager));
+
         registerCommand("bot-chase", new BotChaseCommand(botManager));
         registerCommand("bot-protect", new BotProtectCommand(botManager));
         registerCommand("bot-calibrate", new BotCalibrateCommand(botManager));

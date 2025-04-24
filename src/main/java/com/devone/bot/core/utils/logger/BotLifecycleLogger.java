@@ -2,11 +2,11 @@ package com.devone.bot.core.utils.logger;
 
 import org.bukkit.Bukkit;
 
-import com.devone.bot.core.bot.Bot;
-import com.devone.bot.core.bot.task.passive.BotTask;
+import com.devone.bot.core.Bot;
+import com.devone.bot.core.task.passive.BotTask;
 import com.devone.bot.core.utils.BotConstants;
 import com.devone.bot.core.utils.BotUtils;
-import com.devone.bot.core.utils.blocks.BotLocation;
+import com.devone.bot.core.utils.blocks.BotPosition;
 
 import java.io.*;
 import java.text.SimpleDateFormat;
@@ -18,7 +18,7 @@ public class BotLifecycleLogger {
     private static final String SESSION_ID = generateSessionId();
 
     public static void write(Bot bot) {
-        BotLocation loc = bot.getNavigation().getLocation();
+        BotPosition loc = bot.getNavigator().getPosition();
         if (loc == null) return;
     
         String botName = bot.getId();
@@ -54,7 +54,7 @@ public class BotLifecycleLogger {
             bw.newLine();
     
         } catch (IOException e) {
-            Bukkit.getLogger().warning("[BotMovementLogger] Ошибка записи в лог " + filename + ": " + e.getMessage());
+            Bukkit.getLogger().warning("[BotLifecycleLogger] Ошибка записи в лог " + filename + ": " + e.getMessage());
         }
     }
 
@@ -66,7 +66,7 @@ public class BotLifecycleLogger {
             bw.newLine();
 
         } catch (IOException e) {
-            Bukkit.getLogger().warning("[BotMovementLogger] Ошибка создания файла " + file.getName() + ": " + e.getMessage());
+            Bukkit.getLogger().warning("[BotLifecycleLogger] Ошибка создания файла " + file.getName() + ": " + e.getMessage());
         }
     }
 

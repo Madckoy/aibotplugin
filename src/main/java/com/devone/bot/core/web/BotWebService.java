@@ -5,7 +5,7 @@ import org.eclipse.jetty.servlet.ServletContextHandler;
 import org.eclipse.jetty.servlet.ServletHolder;
 
 import com.devone.bot.AIBotPlugin;
-import com.devone.bot.core.bot.BotManager;
+import com.devone.bot.core.BotManager;
 import com.devone.bot.core.utils.BotConstants;
 import com.devone.bot.core.utils.logger.BotLogger;
 import com.devone.bot.core.web.servlets.BlueMapProxyServlet;

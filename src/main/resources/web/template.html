@@ -20,7 +20,8 @@
     <script src="/assets/scripts/map.js"></script>
     <script src="/assets/scripts/api.js"></script>
     <script src="/assets/scripts/ui.js"></script>
-    <script src="/assets/scripts/commands.js"></script>
+    <script src="/assets/scripts/info.js"></script>
+    <script src="/assets/scripts/cmd.js"></script>
     <script src="/assets/scripts/main.js"></script>
 
 
@@ -62,14 +63,23 @@
 <div id="botMap" class="map"></div>
 
 <div id="bot-info-panel" class="info-panel hidden">
-  <button id="info-close-btn">✖</button>
-  <div id="info-content">
-      <p>📛 ID: <span id="info-id"></span></p>
-      <p>🧠 Model: <span id="info-model">M-000.2</span></p>
-      <p>🧭 Nav Points: <span id="info-navpoints">~</span></p>
-      <p>⚡ Reactive: <span id="info-reactive">❔</span></p>
+  <div class="close-btn-container">
+    <button class="cmd-btn" data-bot="${bot.id}" data-cmd="bot-close-info">🗙</button>
+   &nbsp;🗺️ Navigation (calculated vs confirmed)
+  </div>
+ <hr class = "info-panel-hr-top">
+  <div id="info-content"></div>
+      <p>🎯    Targets: <span id="info-nav-targets">N/A</span></p>
+      <p>📍  Reachable: <span id="info-nav-reachable">N/A</span></p>
+      <p>🧭  Navigable: <span id="info-nav-navigable">N/A</span></p>
+      <p>🚶🏻‍➡️   Walkable: <span id="info-nav-walkable">N/A</span></p>
+      <p><hr class = "info-panel-hr-bottom"></p>
+      <p>💡 Suggestion: <span id="info-nav-type">N/A</span></p>
+      <p>🎯  Suggested: <span id="info-nav-suggestion">N/A</span></p>
+      <p></p>
   </div>
 </div>
+
 
 </body>
 </html>

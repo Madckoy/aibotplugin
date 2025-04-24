@@ -5,7 +5,7 @@
     top: 50%;
     right: 0;
     transform: translate(100%, -50%);
-    width: 250px;
+    width: 300px;
     background: rgba(30, 30, 30, 0.95);
     border-left: 2px solid #444;
     padding: 12px;
@@ -21,13 +21,51 @@
 .info-panel.hidden {
     transform: translateX(100%);
 }
-#info-close-btn {
-    background: none;
+
+.info-panel-hr-top {
+
     border: none;
-    color: #aaa;
-    font-size: 14px;
-    position: absolute;
-    top: 6px;
-    right: 10px;
+    border-top: 1px solid rgb(206, 105, 105);
+
+}
+
+.info-panel-hr-bottom {
+
+    border: none;
+    border-top: 1px dotted rgb(92, 86, 86);
+
+}  
+
+
+.close-btn-container {
+  position: relative;
+  height: 25px;
+  z-index: 10;
+}
+
+/* Переиспользуем cmd-btn, добавим уточнение для позиции */
+#bot-info-panel .close-btn {
+  position: relative;
+  z-index: 10;
+}
+
+.cmd-btn-close {
+    background-color: #333;
+    color: #ccc;
+    border: none;
+    padding: 3px 6px;
+    font-size: 13px;
+    margin: 1px 2px;
+    border-radius: 3px;
     cursor: pointer;
+    transition: box-shadow 0.2s ease, background-color 0.2s ease;
+}
+.cmd-btn-close:hover {
+    background-color: #444;
+    color: #fff;
+    box-shadow: 0 0 0 1px #666;
+}
+.cmd-btn-close:active {
+    background-color: #555;
+    box-shadow: 0 0 0 1px #888;
 }

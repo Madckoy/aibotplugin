@@ -30,7 +30,7 @@ public class BotEntityUtils {
         EntityType.ZOGLIN
     );
 
-    private static final Set<EntityType> PASSIVE_MOBS = EnumSet.of(
+    private static final Set<EntityType> PEACEFULL_MOBS = EnumSet.of(
         EntityType.SHEEP,
         EntityType.COW,
         EntityType.CHICKEN,
@@ -50,16 +50,16 @@ public class BotEntityUtils {
         EntityType.MUSHROOM_COW
     );
 
-    public static boolean isHostileMob(LivingEntity entity) {
+    public static boolean isHostile(LivingEntity entity) {
         return HOSTILE_MOBS.contains(entity.getType());
     }
 
-    public static boolean isPassiveMob(LivingEntity entity) {
-        return PASSIVE_MOBS.contains(entity.getType());
+    public static boolean isPeacefull(LivingEntity entity) {
+        return PEACEFULL_MOBS.contains(entity.getType());
     }
 
 
-    public static boolean isHostileMob(String type) {
+    public static boolean isHostile(String type) {
         try {
             EntityType entityType = EntityType.valueOf(type.toUpperCase());
             return HOSTILE_MOBS.contains(entityType);
@@ -68,10 +68,10 @@ public class BotEntityUtils {
         }
     }
     
-    public static boolean isPassiveMob(String type) {
+    public static boolean isPeaceful(String type) {
         try {
             EntityType entityType = EntityType.valueOf(type.toUpperCase());
-            return PASSIVE_MOBS.contains(entityType);
+            return PEACEFULL_MOBS.contains(entityType);
         } catch (IllegalArgumentException e) {
             return false;
         }

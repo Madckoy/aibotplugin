@@ -3,21 +3,19 @@ package com.devone.bot.core.web.servlets;
 import java.io.IOException;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
-import java.util.List;
 import java.util.Objects;
-import java.util.stream.Collectors;
 
 import org.bukkit.Bukkit;
 import org.bukkit.inventory.ItemStack;
 
-import com.devone.bot.core.bot.Bot;
-import com.devone.bot.core.bot.BotManager;
-import com.devone.bot.core.bot.task.passive.BotTask;
+import com.devone.bot.core.Bot;
+import com.devone.bot.core.BotManager;
+import com.devone.bot.core.brain.logic.navigator.BotNavigator;
+import com.devone.bot.core.task.passive.BotTask;
 import com.devone.bot.core.utils.BotUtils;
-import com.devone.bot.core.utils.blocks.BotLocation;
+import com.devone.bot.core.utils.blocks.BotPosition;
 import com.devone.bot.core.web.BotWebService;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
@@ -28,8 +26,13 @@ import jakarta.servlet.http.HttpServletResponse;
 
 public class BotStatusServlet extends HttpServlet {
     private final BotManager botManager;
-    public BotStatusServlet(BotManager botManager) { this.botManager = botManager; }
-    @Override protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws IOException {
+
+    public BotStatusServlet(BotManager botManager) {
+        this.botManager = botManager;
+    }
+
+    @Override
+    protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws IOException {
         resp.setContentType("application/json");
         resp.setCharacterEncoding("UTF-8");
         resp.setHeader("Access-Control-Allow-Origin", "*");
@@ -41,62 +44,87 @@ public class BotStatusServlet extends HttpServlet {
 
         // Время Minecraft
         long mcTicks = Bukkit.getWorlds().get(0).getTime();
-        int hour = (int)((mcTicks / 1000 + 6) % 24);
-        int minute = (int)((mcTicks % 1000) * 60 / 1000);
+        int hour = (int) ((mcTicks / 1000 + 6) % 24);
+        int minute = (int) ((mcTicks % 1000) * 60 / 1000);
         String mcTimeFormatted = String.format("%02d:%02d", hour, minute);
         result.addProperty("mc-time", mcTimeFormatted);
-
 
         JsonArray botsArray = new JsonArray();
         Collection<Bot> bots = botManager.getAllBots();
 
         for (Bot bot : bots) {
             JsonObject botJson = new JsonObject();
-            BotLocation loc = bot.getNavigation().getLocation();
+
+            BotPosition loc = bot.getNavigator().getPosition();
+            BotPosition tgt = bot.getNavigator().getPoi();
+
             if (loc != null) {
-                botJson.addProperty("skin", "http://" + BotWebService.getServerHost() + ":"+BotWebService.getServerPort()+"/skins/" + bot.getUuid() + ".png");
-                
+                botJson.addProperty("skin", "http://" + BotWebService.getServerHost() + ":"
+                        + BotWebService.getServerPort() + "/skins/" + bot.getUuid() + ".png");
+
                 botJson.addProperty("id", bot.getId());
                 botJson.addProperty("name", bot.getNPC().getName());
 
-                botJson.addProperty("stuck", bot.getState().isStuck());
-                botJson.addProperty("stuckCount", bot.getState().getStuckCount());
+                botJson.addProperty("stuck", bot.getNavigator().isStuck());
+                botJson.addProperty("stuckCount", bot.getNavigator().getStuckCount());
 
-                botJson.addProperty("blocksBroken",  bot.getBrain().getMemory().getBlocksBroken());
+                botJson.addProperty("blocksBroken", bot.getBrain().getMemory().getBlocksBroken());
                 botJson.addProperty("mobsKilled", bot.getBrain().getMemory().getMobsKilled());
                 botJson.addProperty("teleportUsed", bot.getBrain().getMemory().getTeleportUsed());
-                
+
                 botJson.addProperty("autoPickUpItems", bot.getBrain().getAutoPickupItems());
 
-                String currLoc = " " + loc.getX() + ", " + loc.getY() + ", " + loc.getZ();   
+                String currLoc = loc.getX() + ", " + loc.getY() + ", " + loc.getZ();
 
                 botJson.addProperty("position", currLoc);
 
                 botJson.addProperty("task", bot.getBrain().getCurrentTask().getIcon());
                 botJson.addProperty("taskIsReactive", bot.getBrain().getCurrentTask().isReactive());
-                
+
                 botJson.addProperty("object", getCurrentObjective(bot));
 
-                BotLocation tgtLoc = bot.getNavigation().getTarget();
+                String tgtLoc = "";
+                
+                if(tgt!=null) {
+                    tgtLoc = tgt.getX() + ", " + tgt.getY() + ", " + tgt.getZ();
+                }
 
-                botJson.addProperty("target", tgtLoc != null ? " " + tgtLoc.getX() + ", " + tgtLoc.getY() + ", " + tgtLoc.getZ() : "");
+                botJson.addProperty("target", tgtLoc );
 
-                botJson.addProperty("elapsedTime", BotUtils.formatTime(bot.getBrain().getCurrentTask().getElapsedTime()));
+                botJson.addProperty("elapsedTime",
+                        BotUtils.formatTime(bot.getBrain().getCurrentTask().getElapsedTime()));
 
-                List<BotTask<?>> taskStack = (bot.getBootstrap() != null && bot.getBootstrap().getTaskStackManager() != null)
-                    ? new ArrayList<>(bot.getBootstrap().getTaskStackManager().getTaskStack())
-                    : new ArrayList<>();
-                String taskStackText = taskStack.isEmpty() ? "N/A" :
-                    taskStack.stream().map(BotTask::getIcon).collect(Collectors.joining(" ➜ "));
-                botJson.addProperty("queue", taskStackText);
+                botJson.addProperty("queue", bot.getTaskManager().getQueueIcons());
 
                 botJson.addProperty("memory", bot.getBrain().getMemory().toJson().toString());
 
-                botsArray.add(botJson);
-            
-                ItemStack[] contents = null;
+                // add navigation data
+                if (bot.getNavigator().getSuggestion() == BotNavigator.NavigationType.TELEPORT) {
+                    botJson.addProperty("navigationSuggestion", "Teleport");
+                } else {
+                    botJson.addProperty("navigationSuggestion", "Walk");
+                }
+
+                botJson.addProperty("reachableTargets",
+                        bot.getNavigator().getNavigationSummaryItem("poi").toString());
+                botJson.addProperty("reachableBlocks",
+                        bot.getNavigator().getNavigationSummaryItem("reachable").toString());
+                botJson.addProperty("navigableBlocks",
+                        bot.getNavigator().getNavigationSummaryItem("navigable").toString());
+                botJson.addProperty("walkableBlocks",
+                        bot.getNavigator().getNavigationSummaryItem("walkable").toString());
                 
-                if(bot.getInventory().getNPCInventory()!=null) {
+                Object obj = bot.getNavigator().getSuggested();
+                if(obj!=null) {
+                    botJson.addProperty("suggestedBlock",
+                    bot.getNavigator().getSuggested().toString());
+                }
+                    
+                botsArray.add(botJson);
+
+                ItemStack[] contents = null;
+
+                if (bot.getInventory().getNPCInventory() != null) {
                     // 📦 Serialize inventory
                     contents = bot.getInventory().getNPCInventory().getContents();
                 }
@@ -119,9 +147,9 @@ public class BotStatusServlet extends HttpServlet {
                 botJson.add("inventorySlotsFilled", inventoryArray);
 
                 int count = Arrays.stream(contents)
-                                .filter(Objects::nonNull)
-                                .mapToInt(ItemStack::getAmount)
-                                .sum();
+                        .filter(Objects::nonNull)
+                        .mapToInt(ItemStack::getAmount)
+                        .sum();
 
                 botJson.addProperty("inventoryCount", count);
                 botJson.addProperty("inventoryMax", 36); // или сколько слотов у тебя по факту
@@ -132,7 +160,7 @@ public class BotStatusServlet extends HttpServlet {
         result.add("bots", botsArray);
         resp.getWriter().write(result.toString());
     }
-    
+
     private static String getCurrentObjective(Bot bot) {
         BotTask<?> currentTask = bot.getBrain().getCurrentTask();
         return (currentTask != null) ? currentTask.getObjective() : "";

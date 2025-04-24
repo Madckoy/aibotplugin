@@ -6,8 +6,8 @@ import java.util.Set;
 import org.bukkit.Bukkit;
 import org.bukkit.plugin.java.JavaPlugin;
 
-import com.devone.bot.core.bot.BotManager;
-import com.devone.bot.core.bot.brain.logic.math.BotMathMaxFunction;
+import com.devone.bot.core.BotManager;
+import com.devone.bot.core.brain.logic.math.BotMathMaxFunction;
 import com.devone.bot.core.utils.BotConstants;
 import com.devone.bot.core.utils.logger.BotLogger;
 import com.devone.bot.core.utils.server.BotResourceExtractor;

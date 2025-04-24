@@ -6,8 +6,8 @@ import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerJoinEvent;
 import org.bukkit.event.player.PlayerQuitEvent;
 
-import com.devone.bot.core.bot.BotManager;
-import com.devone.bot.core.bot.speaker.BotSpeaker;
+import com.devone.bot.core.BotManager;
+import com.devone.bot.core.speaker.BotSpeaker;
 
 public class PlayerListener implements Listener {
 
