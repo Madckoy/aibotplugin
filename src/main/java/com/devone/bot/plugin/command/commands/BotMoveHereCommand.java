@@ -14,7 +14,7 @@ import com.devone.bot.core.task.active.move.BotMoveTask;
 import com.devone.bot.core.task.active.move.params.BotMoveTaskParams;
 import com.devone.bot.core.task.active.teleport.BotTeleportTask;
 import com.devone.bot.core.task.active.teleport.params.BotTeleportTaskParams;
-import com.devone.bot.core.task.reactive.container.BotEmptyReactiveContainer;
+import com.devone.bot.core.task.reactive.container.BotReactiveEmptyContainer;
 import com.devone.bot.core.utils.blocks.BotPosition;
 import com.devone.bot.core.utils.logger.BotLogger;
 
@@ -59,7 +59,7 @@ public class BotMoveHereCommand implements CommandExecutor {
                 "/bot-move-here: Бот " + bot.getId() + " телепортируется и направляется к игроку " + moveTo);
 
         // 📦 Контейнер
-        BotEmptyReactiveContainer cont = new BotEmptyReactiveContainer(bot);
+        BotReactiveEmptyContainer cont = new BotReactiveEmptyContainer(bot);
 
         // 1. Телепорт за спину
         BotTeleportTask tp = new BotTeleportTask(bot, player);

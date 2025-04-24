@@ -3,8 +3,8 @@ package com.devone.bot.core.task.reactive.strategy;
 import com.devone.bot.core.Bot;
 import com.devone.bot.core.brain.memory.scene.BotSceneData;
 import com.devone.bot.core.task.passive.BotTaskManager;
-import com.devone.bot.core.task.reactive.IBotReactionStrategy;
-import com.devone.bot.core.task.reactive.container.BotNearbyHostileReactiveContainer;
+import com.devone.bot.core.task.reactive.IBotStrategyReaction;
+import com.devone.bot.core.task.reactive.container.BotReactiveNearbyHostileContainer;
 import com.devone.bot.core.utils.blocks.BotBlockData;
 import com.devone.bot.core.utils.blocks.BotPosition;
 import com.devone.bot.core.utils.logger.BotLogger;
@@ -12,7 +12,7 @@ import com.devone.bot.core.utils.world.BotWorldHelper;
 
 import java.util.Optional;
 
-public class BotNearbyHostileStrategy implements IBotReactionStrategy {
+public class BotStrategyNearbyHostile implements IBotStrategyReaction {
 
     @Override
     public Optional<Runnable> check(Bot bot) {
@@ -36,7 +36,7 @@ public class BotNearbyHostileStrategy implements IBotReactionStrategy {
                         + " (" + String.format("%.1f", dist) + " м)");
 
                 return Optional.of(() -> {
-                    BotTaskManager.push(bot, new BotNearbyHostileReactiveContainer(bot, entity));
+                    BotTaskManager.push(bot, new BotReactiveNearbyHostileContainer(bot, entity));
                 });
             }
         }

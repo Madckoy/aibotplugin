@@ -4,17 +4,17 @@ import com.devone.bot.core.Bot;
 import com.devone.bot.core.task.passive.BotReactiveTaskContainer;
 import com.devone.bot.core.task.active.teleport.BotTeleportTask;
 import com.devone.bot.core.task.active.teleport.params.BotTeleportTaskParams;
-import com.devone.bot.core.task.reactive.container.params.BotTeleportToLocationReactiveContainerParams;
+import com.devone.bot.core.task.reactive.container.params.BotReactiveTeleportToLocationContainerParams;
 import com.devone.bot.core.utils.blocks.BotPosition;
 import com.devone.bot.core.utils.logger.BotLogger;
 
-public class BotTeleportToLocationReactiveContainer
-        extends BotReactiveTaskContainer<BotTeleportToLocationReactiveContainerParams> {
+public class BotReactiveTeleportToLocationContainer
+        extends BotReactiveTaskContainer<BotReactiveTeleportToLocationContainerParams> {
 
     private final BotPosition location;
 
-    public BotTeleportToLocationReactiveContainer(Bot bot, BotPosition location) {
-        super(bot, BotTeleportToLocationReactiveContainerParams.class);
+    public BotReactiveTeleportToLocationContainer(Bot bot, BotPosition location) {
+        super(bot, BotReactiveTeleportToLocationContainerParams.class);
         this.location = location;
         setObjective("Reactive: BotTeleportTask");
     }

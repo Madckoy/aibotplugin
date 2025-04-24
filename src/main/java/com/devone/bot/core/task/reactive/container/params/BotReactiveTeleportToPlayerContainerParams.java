@@ -2,6 +2,6 @@ package com.devone.bot.core.task.reactive.container.params;
 
 import com.devone.bot.core.task.passive.params.BotTaskParams;
 
-public class BotExcavateReactiveContainerParams extends BotTaskParams{
+public class BotReactiveTeleportToPlayerContainerParams extends BotTaskParams{
 
 }

@@ -1,9 +1,9 @@
 package com.devone.bot.core.task.reactive;
 
 import com.devone.bot.core.Bot;
-import com.devone.bot.core.task.reactive.strategy.BotLowHealthStrategy;
-import com.devone.bot.core.task.reactive.strategy.BotNearbyHostileStrategy;
-import com.devone.bot.core.task.reactive.strategy.BotNearbyPlayerStrategy;
+import com.devone.bot.core.task.reactive.strategy.BotStrategyLowHealth;
+import com.devone.bot.core.task.reactive.strategy.BotStrategyNearbyHostile;
+import com.devone.bot.core.task.reactive.strategy.BotStrategyNearbyPlayer;
 import com.devone.bot.core.utils.logger.BotLogger;
 
 import java.util.ArrayList;
@@ -16,13 +16,13 @@ import java.util.Optional;
  */
 public class BotReactivityManager {
 
-    private static final List<IBotReactionStrategy> strategies = new ArrayList<>();
+    private static final List<IBotStrategyReaction> strategies = new ArrayList<>();
 
     static {
         // 📚 Регистрация стандартных стратегий
-        registerStrategy(new BotNearbyHostileStrategy());
-        registerStrategy(new BotLowHealthStrategy());
-        registerStrategy(new BotNearbyPlayerStrategy());
+        registerStrategy(new BotStrategyNearbyHostile());
+        registerStrategy(new BotStrategyLowHealth());
+        registerStrategy(new BotStrategyNearbyPlayer());
 
         BotLogger.debug("🧠", true, "🧩 Зарегистрированы предустановленные реакции: " + strategies.size());
     }
@@ -35,7 +35,7 @@ public class BotReactivityManager {
 
         BotLogger.debug(bot.getActiveTask().getIcon(), true, bot.getId() + " 🧩 Проверка реакций...");
 
-        for (IBotReactionStrategy strategy : strategies) {
+        for (IBotStrategyReaction strategy : strategies) {
             BotLogger.debug(bot.getActiveTask().getIcon(), true, bot.getId() + " 🔎 Пробуем стратегию: " + strategy.getName());
 
             Optional<Runnable> reaction = strategy.check(bot);
@@ -50,7 +50,7 @@ public class BotReactivityManager {
         return Optional.empty();
     }
 
-    public static void registerStrategy(IBotReactionStrategy strategy) {
+    public static void registerStrategy(IBotStrategyReaction strategy) {
         strategies.add(strategy);
     }
 }

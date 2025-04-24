@@ -5,19 +5,19 @@ import com.devone.bot.core.task.passive.BotReactiveTaskContainer;
 import com.devone.bot.core.task.active.drop.BotDropAllTask;
 import com.devone.bot.core.task.active.move.BotMoveTask;
 import com.devone.bot.core.task.active.move.params.BotMoveTaskParams;
-import com.devone.bot.core.task.reactive.container.params.BotNearbyPlayerReactiveContainerParams;
+import com.devone.bot.core.task.reactive.container.params.BotReactiveNearbyPlayerContainerParams;
 import com.devone.bot.core.utils.blocks.BotPosition;
 import com.devone.bot.core.utils.logger.BotLogger;
 import com.devone.bot.core.utils.world.BotWorldHelper;
 
 import org.bukkit.entity.Player;
 
-public class BotNearbyPlayerReactiveContainer extends BotReactiveTaskContainer<BotNearbyPlayerReactiveContainerParams> {
+public class BotReactiveNearbyPlayerContainer extends BotReactiveTaskContainer<BotReactiveNearbyPlayerContainerParams> {
 
     Player player = null;
 
-    public BotNearbyPlayerReactiveContainer(Bot bot, Player player) {
-        super(bot, BotNearbyPlayerReactiveContainerParams.class);
+    public BotReactiveNearbyPlayerContainer(Bot bot, Player player) {
+        super(bot, BotReactiveNearbyPlayerContainerParams.class);
         this.player = player;
         setObjective("Reactive: BotMoveTask + BotDropAllTask");
     }

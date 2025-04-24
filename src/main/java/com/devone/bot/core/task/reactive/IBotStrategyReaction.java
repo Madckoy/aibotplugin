@@ -5,7 +5,7 @@ import com.devone.bot.core.Bot;
 
 import java.util.Optional;
 
-public interface IBotReactionStrategy {
+public interface IBotStrategyReaction {
     Optional<Runnable> check(Bot bot);
     String getName();
 }

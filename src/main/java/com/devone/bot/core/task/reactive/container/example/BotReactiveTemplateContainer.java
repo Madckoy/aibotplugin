@@ -2,13 +2,13 @@ package com.devone.bot.core.task.reactive.container.example;
 
 import com.devone.bot.core.Bot;
 import com.devone.bot.core.task.passive.BotReactiveTaskContainer;
-import com.devone.bot.core.task.reactive.container.params.example.BotTemplateReactiveContainerParams;
+import com.devone.bot.core.task.reactive.container.params.example.BotReactiveTemplateContainerParams;
 import com.devone.bot.core.utils.logger.BotLogger;
 
-public class BotTemplateReactiveContainer extends BotReactiveTaskContainer<BotTemplateReactiveContainerParams> {
+public class BotReactiveTemplateContainer extends BotReactiveTaskContainer<BotReactiveTemplateContainerParams> {
 
-    public BotTemplateReactiveContainer(Bot bot) {
-        super(bot, BotTemplateReactiveContainerParams.class);
+    public BotReactiveTemplateContainer(Bot bot) {
+        super(bot, BotReactiveTemplateContainerParams.class);
         setIcon("📦");
         setObjective("Шаблон реактивного контейнера");
     }

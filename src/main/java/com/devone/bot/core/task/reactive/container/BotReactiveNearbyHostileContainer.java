@@ -6,17 +6,17 @@ import com.devone.bot.core.task.active.hand.attack.BotHandAttackTask;
 import com.devone.bot.core.task.active.hand.attack.params.BotHandAttackTaskParams;
 import com.devone.bot.core.task.active.move.BotMoveTask;
 import com.devone.bot.core.task.active.move.params.BotMoveTaskParams;
-import com.devone.bot.core.task.reactive.container.params.BotNearbyHostileReactiveContainerParams;
+import com.devone.bot.core.task.reactive.container.params.BotReactiveNearbyHostileContainerParams;
 import com.devone.bot.core.utils.blocks.BotBlockData;
 import com.devone.bot.core.utils.logger.BotLogger;
 
-public class BotNearbyHostileReactiveContainer
-        extends BotReactiveTaskContainer<BotNearbyHostileReactiveContainerParams> {
+public class BotReactiveNearbyHostileContainer
+        extends BotReactiveTaskContainer<BotReactiveNearbyHostileContainerParams> {
 
     private BotBlockData target;
 
-    public BotNearbyHostileReactiveContainer(Bot bot, BotBlockData hostileMob) {
-        super(bot, BotNearbyHostileReactiveContainerParams.class);
+    public BotReactiveNearbyHostileContainer(Bot bot, BotBlockData hostileMob) {
+        super(bot, BotReactiveNearbyHostileContainerParams.class);
         setObjective("Reactive: BotMoveTask + BotHandAttackTask");
         target = hostileMob;
     }

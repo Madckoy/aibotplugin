@@ -4,15 +4,15 @@ import com.devone.bot.core.Bot;
 import com.devone.bot.core.task.passive.BotReactiveTaskContainer;
 import com.devone.bot.core.task.active.calibrate.BotCalibrateTask;
 import com.devone.bot.core.task.active.calibrate.params.BotCalibrateTaskParams;
-import com.devone.bot.core.task.reactive.container.params.BotCalibrateReactiveContainerParams;
+import com.devone.bot.core.task.reactive.container.params.BotReactiveCalibrateContainerParams;
 
 import com.devone.bot.core.utils.logger.BotLogger;
 
-public class BotCalibrateReactiveContainer extends BotReactiveTaskContainer<BotCalibrateReactiveContainerParams> {
+public class BotReactiveCalibrateContainer extends BotReactiveTaskContainer<BotReactiveCalibrateContainerParams> {
 
-    public BotCalibrateReactiveContainer(Bot bot) {
+    public BotReactiveCalibrateContainer(Bot bot) {
 
-        super(bot, BotCalibrateReactiveContainerParams.class);
+        super(bot, BotReactiveCalibrateContainerParams.class);
 
         setObjective("Reactive: BotCalibrationTask");
     }

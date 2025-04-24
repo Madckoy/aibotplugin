@@ -2,19 +2,19 @@ package com.devone.bot.core.task.reactive.strategy.example;
 
 import com.devone.bot.core.Bot;
 import com.devone.bot.core.task.passive.BotTaskManager;
-import com.devone.bot.core.task.reactive.IBotReactionStrategy;
-import com.devone.bot.core.task.reactive.container.example.BotCustomReactiveContainer;
+import com.devone.bot.core.task.reactive.IBotStrategyReaction;
+import com.devone.bot.core.task.reactive.container.example.BotReactiveCustomContainer;
 import com.devone.bot.core.utils.logger.BotLogger;
 
 import java.util.Optional;
 
-public class BotReactiveCustomStrategy implements IBotReactionStrategy {
+public class BotStrategyReactiveCustom implements IBotStrategyReaction {
 
     private final String reactionName;
     private final double minHealth;
     private final double detectionRadius;
 
-    public BotReactiveCustomStrategy(String reactionName, double minHealth, double detectionRadius) {
+    public BotStrategyReactiveCustom(String reactionName, double minHealth, double detectionRadius) {
         this.reactionName = reactionName;
         this.minHealth = minHealth;
         this.detectionRadius = detectionRadius;
@@ -30,7 +30,7 @@ public class BotReactiveCustomStrategy implements IBotReactionStrategy {
         BotLogger.debug("🤖", true, bot.getId() + " ✅ Условие выполнено, запускаем контейнер реакции.");
 
         return Optional.of(() -> {
-            BotTaskManager.push(bot, new BotCustomReactiveContainer(bot));
+            BotTaskManager.push(bot, new BotReactiveCustomContainer(bot));
         });
     }
 

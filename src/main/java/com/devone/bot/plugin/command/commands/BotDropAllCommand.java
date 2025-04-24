@@ -8,7 +8,7 @@ import com.devone.bot.core.Bot;
 import com.devone.bot.core.BotManager;
 import com.devone.bot.core.task.passive.BotTaskManager;
 import com.devone.bot.core.task.active.drop.BotDropAllTask;
-import com.devone.bot.core.task.reactive.container.BotEmptyReactiveContainer;
+import com.devone.bot.core.task.reactive.container.BotReactiveEmptyContainer;
 
 public class BotDropAllCommand implements CommandExecutor {
 
@@ -34,7 +34,7 @@ public class BotDropAllCommand implements CommandExecutor {
             return false;
         }
 
-        BotEmptyReactiveContainer cont = new BotEmptyReactiveContainer(bot);
+        BotReactiveEmptyContainer cont = new BotReactiveEmptyContainer(bot);
         // ✅ Добавляем задачу на drop
         BotDropAllTask task = new BotDropAllTask(bot, null);
         cont.add(task);

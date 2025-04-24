@@ -12,7 +12,7 @@ import com.devone.bot.core.BotManager;
 import com.devone.bot.core.task.passive.BotTaskManager;
 import com.devone.bot.core.task.active.move.BotMoveTask;
 import com.devone.bot.core.task.active.move.params.BotMoveTaskParams;
-import com.devone.bot.core.task.reactive.container.BotEmptyReactiveContainer;
+import com.devone.bot.core.task.reactive.container.BotReactiveEmptyContainer;
 import com.devone.bot.core.utils.blocks.BotPosition;
 import com.devone.bot.core.utils.logger.BotLogger;
 
@@ -68,7 +68,7 @@ public class BotMoveCommand implements CommandExecutor {
         // ✅ Добавляем задачу на перемещение
         Location targetLocation = new Location(bot.getNPCEntity().getWorld(), x, y, z);
         // создаем контейнер
-        BotEmptyReactiveContainer container = new BotEmptyReactiveContainer(bot);
+        BotReactiveEmptyContainer container = new BotReactiveEmptyContainer(bot);
         BotMoveTask moveTask = new BotMoveTask(bot);
         BotMoveTaskParams moveTaskParams = new BotMoveTaskParams();
         moveTaskParams.setTarget(new BotPosition(x, y, z));

@@ -7,16 +7,16 @@ import com.devone.bot.core.Bot;
 import com.devone.bot.core.task.passive.BotReactiveTaskContainer;
 import com.devone.bot.core.task.active.teleport.BotTeleportTask;
 import com.devone.bot.core.task.active.teleport.params.BotTeleportTaskParams;
-import com.devone.bot.core.task.reactive.container.params.BotTeleportToPlayerReactiveContainerParams;
+import com.devone.bot.core.task.reactive.container.params.BotReactiveTeleportToPlayerContainerParams;
 import com.devone.bot.core.utils.blocks.BotPosition;
 
-public class BotTeleportToPlayerReactiveContainer
-        extends BotReactiveTaskContainer<BotTeleportToPlayerReactiveContainerParams> {
+public class BotReactiveTeleportToPlayerContainer
+        extends BotReactiveTaskContainer<BotReactiveTeleportToPlayerContainerParams> {
 
     private final Player player;
 
-    public BotTeleportToPlayerReactiveContainer(Bot bot, Player player) {
-        super(bot, BotTeleportToPlayerReactiveContainerParams.class);
+    public BotReactiveTeleportToPlayerContainer(Bot bot, Player player) {
+        super(bot, BotReactiveTeleportToPlayerContainerParams.class);
         this.player = player;
 
         setIcon("📍");

@@ -4,14 +4,14 @@ import com.devone.bot.core.Bot;
 import com.devone.bot.core.task.passive.BotReactiveTaskContainer;
 import com.devone.bot.core.task.active.teleport.BotTeleportTask;
 import com.devone.bot.core.task.active.teleport.params.BotTeleportTaskParams;
-import com.devone.bot.core.task.reactive.container.params.BotLowHealthReactiveContainerParams;
+import com.devone.bot.core.task.reactive.container.params.BotReactiveLowHealthContainerParams;
 import com.devone.bot.core.utils.logger.BotLogger;
 import com.devone.bot.core.utils.world.BotWorldHelper;
 
-public class BotLowHealthReactiveContainer extends BotReactiveTaskContainer<BotLowHealthReactiveContainerParams> {
+public class BotReactiveLowHealthContainer extends BotReactiveTaskContainer<BotReactiveLowHealthContainerParams> {
 
-    public BotLowHealthReactiveContainer(Bot bot) {
-        super(bot, BotLowHealthReactiveContainerParams.class);
+    public BotReactiveLowHealthContainer(Bot bot) {
+        super(bot, BotReactiveLowHealthContainerParams.class);
         setObjective("Reactive: BotTeleportTask if low HP");
     }
 

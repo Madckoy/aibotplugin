@@ -15,6 +15,8 @@ import com.devone.bot.core.brain.logic.navigator.math.selector.BotPOISelector;
 import com.devone.bot.core.brain.logic.navigator.summary.BotNavigationSummaryItem;
 import com.devone.bot.core.brain.memory.scene.BotSceneData;
 import com.devone.bot.core.task.passive.BotTaskManager;
+import com.devone.bot.core.task.reactive.container.BotReactiveExcavateContainer;
+import com.devone.bot.core.task.reactive.container.params.BotReactiveExcavateContainerParams;
 import com.devone.bot.core.task.active.move.BotMoveTask;
 import com.devone.bot.core.task.active.move.params.BotMoveTaskParams;
 import com.devone.bot.core.utils.blocks.BlockUtils;
@@ -277,6 +279,12 @@ public class BotNavigator {
                 " " + owner.getBrain().getCurrentTask().getClass().getSimpleName() +" ]");
 
 
+            BotReactiveExcavateContainerParams params =  new BotReactiveExcavateContainerParams();
+            params.position = new BotPosition(this.poi);
+            BotReactiveExcavateContainer container  = new BotReactiveExcavateContainer(owner);
+            container.setParams(params);
+            BotTaskManager.push(owner, container);
+            /* 
             BotMoveTaskParams moveTaskParams = new BotMoveTaskParams();
 
             moveTaskParams.setTarget(this.poi);
@@ -286,7 +294,7 @@ public class BotNavigator {
             moveTask.setParams(moveTaskParams);
 
             BotTaskManager.push(owner, moveTask);
-
+            */
             Location loc = BotWorldHelper.botPositionToWorldLocation(this.poi);
             boolean canNavigate = owner.getNPC().getNavigator().canNavigateTo(loc);
             return canNavigate;

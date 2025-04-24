@@ -2,12 +2,12 @@ package com.devone.bot.core.task.reactive.container.example;
 
 import com.devone.bot.core.Bot;
 import com.devone.bot.core.task.passive.BotReactiveTaskContainer;
-import com.devone.bot.core.task.reactive.container.params.example.BotCustomReactiveContainerParams;
+import com.devone.bot.core.task.reactive.container.params.example.BotReactiveCustomContainerParams;
 
-public class BotCustomReactiveContainer extends BotReactiveTaskContainer<BotCustomReactiveContainerParams> {
+public class BotReactiveCustomContainer extends BotReactiveTaskContainer<BotReactiveCustomContainerParams> {
 
-    public BotCustomReactiveContainer(Bot bot) {
-        super(bot, BotCustomReactiveContainerParams.class);
+    public BotReactiveCustomContainer(Bot bot) {
+        super(bot, BotReactiveCustomContainerParams.class);
         setIcon("⚙️");
         setObjective("Пользовательская реакция на низкое здоровье");
     }

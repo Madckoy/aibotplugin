@@ -2,14 +2,14 @@ package com.devone.bot.core.task.reactive.container;
 
 import com.devone.bot.core.Bot;
 import com.devone.bot.core.task.passive.BotReactiveTaskContainer;
-import com.devone.bot.core.task.reactive.container.params.BotEmptyReactiveContainerParams;
+import com.devone.bot.core.task.reactive.container.params.BotReactiveEmptyContainerParams;
 import com.devone.bot.core.utils.logger.BotLogger;
 
-public class BotEmptyReactiveContainer
-        extends BotReactiveTaskContainer<BotEmptyReactiveContainerParams> {
+public class BotReactiveEmptyContainer
+        extends BotReactiveTaskContainer<BotReactiveEmptyContainerParams> {
 
-    public BotEmptyReactiveContainer(Bot bot) {
-        super(bot, BotEmptyReactiveContainerParams.class);
+    public BotReactiveEmptyContainer(Bot bot) {
+        super(bot, BotReactiveEmptyContainerParams.class);
         setObjective("Reactive: Empty container");
     }
 

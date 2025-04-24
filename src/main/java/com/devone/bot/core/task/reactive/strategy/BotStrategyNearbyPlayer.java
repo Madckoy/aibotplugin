@@ -3,8 +3,8 @@ package com.devone.bot.core.task.reactive.strategy;
 import com.devone.bot.core.Bot;
 import com.devone.bot.core.inventory.BotInventory;
 import com.devone.bot.core.task.passive.BotTaskManager;
-import com.devone.bot.core.task.reactive.IBotReactionStrategy;
-import com.devone.bot.core.task.reactive.container.BotNearbyPlayerReactiveContainer;
+import com.devone.bot.core.task.reactive.IBotStrategyReaction;
+import com.devone.bot.core.task.reactive.container.BotReactiveNearbyPlayerContainer;
 import com.devone.bot.core.utils.BotConstants;
 import com.devone.bot.core.utils.blocks.BotPosition;
 import com.devone.bot.core.utils.logger.BotLogger;
@@ -14,7 +14,7 @@ import org.bukkit.entity.Player;
 
 import java.util.Optional;
 
-public class BotNearbyPlayerStrategy implements IBotReactionStrategy {
+public class BotStrategyNearbyPlayer implements IBotStrategyReaction {
 
     @Override
     public Optional<Runnable> check(Bot bot) {
@@ -39,7 +39,7 @@ public class BotNearbyPlayerStrategy implements IBotReactionStrategy {
                         + String.format("%.1f", dist) + " м");
 
                 return Optional.of(() -> {
-                    BotTaskManager.push(bot, new BotNearbyPlayerReactiveContainer(bot, player));
+                    BotTaskManager.push(bot, new BotReactiveNearbyPlayerContainer(bot, player));
                 });
             }
         }
