@@ -7,7 +7,7 @@ import java.util.List;
 import java.util.Random;
 
 import com.devone.bot.core.Bot;
-import com.devone.bot.core.utils.blocks.BotBlockData;
+import com.devone.bot.core.utils.blocks.BotPosition;
 
 
 public class BotPOISelector {
@@ -20,7 +20,7 @@ public class BotPOISelector {
      * @param targets список доступных точек
      * @return одна случайная точка или null, если список пуст или null
      */
-    public static BotBlockData selectRandom(Bot bot, List<BotBlockData> targets) {
+    public static BotPosition selectRandom(Bot bot, List<BotPosition> targets) {
         if (targets == null || targets.isEmpty()) {
             return null;
         }

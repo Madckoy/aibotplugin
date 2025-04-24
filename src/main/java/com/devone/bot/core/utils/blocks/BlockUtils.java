@@ -1,5 +1,8 @@
 package com.devone.bot.core.utils.blocks;
 
+import java.util.List;
+import java.util.stream.Collectors;
+
 public class BlockUtils {
 
     /**
@@ -88,5 +91,16 @@ public class BlockUtils {
             Integer.compare(to.getY(), from.getY()),
             Integer.compare(to.getZ(), from.getZ())
         };
+    }
+
+
+    public static BotPosition fromBlock(BotBlockData block) {
+        return new BotPosition(block.getX(), block.getY(), block.getZ());
+    }
+
+    public static List<BotPosition> fromBlocks(List<BotBlockData> blocks) {
+        return blocks.stream()
+            .map(BlockUtils::fromBlock)
+            .collect(Collectors.toList());
     }
 }

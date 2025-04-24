@@ -1,4 +1,3 @@
-
 package com.devone.bot.core.utils.world;
 
 import java.util.ArrayList;
@@ -21,19 +20,15 @@ public class BotWorldHelper {
 
     public static boolean isNight(Bot bot) {
         if (bot == null || bot.getNPCEntity() == null) return false;
-        World world = getWorld();
+        World world = getBotWorld(bot);
         long time = world.getTime();
         return time >= 13000 && time <= 23999;
     }
 
-    public static World getWorld() {
-        return Bukkit.getWorlds().get(0);
-    }
-
-    public static Block getBlockAt_old(BotPosition location) {
-        World world = getWorld();
-        if (world == null) return null;
-        return world.getBlockAt(location.getX(), location.getY(), location.getZ());
+    public static World getBotWorld(Bot bot) {
+        return bot != null && bot.getNPCEntity() != null
+            ? bot.getNPCEntity().getWorld()
+            : Bukkit.getWorlds().get(0);
     }
 
     public static BotBlockData getWorldSpawnLocation() {
@@ -45,10 +40,14 @@ public class BotWorldHelper {
         return blockData;
     }
 
-    public static BotPosition locationToBotPosition(Location loc) {
-        BotPosition location = new BotPosition((int)loc.getX(), (int)loc.getY(), (int)loc.getZ());
-        return location;
+    public static World getWorld() {
+        return Bukkit.getWorlds().get(0);
     }
+
+    public static BotPosition locationToBotPosition(Location loc) {
+        return new BotPosition((int) loc.getX(), (int) loc.getY(), (int) loc.getZ());
+    }
+
     public static BotBlockData blockToBotBlockData(Block block) {
         BotBlockData blockData = new BotBlockData();
         blockData.setX(block.getX());
@@ -73,8 +72,7 @@ public class BotWorldHelper {
     public static boolean isDangerousLiquid(Block block) {
         if (block == null) return false;
         return switch (block.getType()) {
-            case WATER, BUBBLE_COLUMN, KELP, SEAGRASS,
-                 LAVA, MAGMA_BLOCK -> true;
+            case WATER, BUBBLE_COLUMN, KELP, SEAGRASS, LAVA, MAGMA_BLOCK -> true;
             default -> false;
         };
     }
@@ -92,13 +90,13 @@ public class BotWorldHelper {
 
     public static boolean isNearWater(Bot bot) {
         BotPosition loc = bot.getNavigator().getPosition();
-        Block block = botPositionToWorldBlock(loc);
+        Block origin = botPositionToWorldBlock(loc);
         int radius = 2;
         for (int dx = -radius; dx <= radius; dx++) {
             for (int dy = -1; dy <= 1; dy++) {
                 for (int dz = -radius; dz <= radius; dz++) {
-                    Material material = block.getType();
-                    if (material == Material.WATER) return true;
+                    Block neighbor = origin.getRelative(dx, dy, dz);
+                    if (neighbor.getType() == Material.WATER) return true;
                 }
             }
         }
@@ -115,13 +113,13 @@ public class BotWorldHelper {
 
     public static Location botPositionToWorldLocation(BotPosition loc) {
         if (loc == null) return null;
-        World world = Bukkit.getWorlds().get(0);
-        return world.getBlockAt(loc.getX(), loc.getY(), loc.getZ()).getLocation();
+        World world = getWorld();
+        return new Location(world, loc.getX() + 0.5, loc.getY(), loc.getZ() + 0.5);
     }
 
     public static Block botPositionToWorldBlock(BotPosition loc) {
         if (loc == null) return null;
-        World world = Bukkit.getWorlds().get(0);
+        World world = getWorld();
         return world.getBlockAt(loc.getX(), loc.getY(), loc.getZ());
     }
 
@@ -142,7 +140,7 @@ public class BotWorldHelper {
     public static List<Block> getNearbyBlocks(BotPosition loc, int radius) {
         List<Block> blocks = new ArrayList<>();
         if (loc == null) return blocks;
-        World world = Bukkit.getWorlds().get(0);
+        World world = getWorld();
         for (int dx = -radius; dx <= radius; dx++) {
             for (int dy = -1; dy <= 1; dy++) {
                 for (int dz = -radius; dz <= radius; dz++) {
@@ -156,7 +154,7 @@ public class BotWorldHelper {
 
     public static BotPosition findSafeLandingBelow(BotPosition loc, int maxDepth) {
         if (loc == null) return null;
-        World world = Bukkit.getWorlds().get(0);
+        World world = getWorld();
         for (int y = loc.getY(); y >= Math.max(0, loc.getY() - maxDepth); y--) {
             Block block = world.getBlockAt(loc.getX(), y, loc.getZ());
             if (isSolidSurface(block)) {
@@ -168,35 +166,26 @@ public class BotWorldHelper {
 
     public static boolean isInDangerousLiquid(BotBlockData data) {
         if (data == null) return false;
-        Material type;
         try {
-            type = Material.valueOf(data.getType());
+            Material type = Material.valueOf(data.getType());
+            return switch (type) {
+                case WATER, BUBBLE_COLUMN, KELP, SEAGRASS, LAVA, MAGMA_BLOCK -> true;
+                default -> false;
+            };
         } catch (IllegalArgumentException | NullPointerException e) {
             return false;
         }
-    
-        return switch (type) {
-            case WATER, BUBBLE_COLUMN, KELP, SEAGRASS,
-                 LAVA, MAGMA_BLOCK -> true;
-            default -> false;
-        };
     }
 
-    
     public static boolean isBreakableBlock(Block block) {
-        if (block == null ) return false;
-    
+        if (block == null) return false;
         Material type = block.getType();
-    
         return switch (type) {
-            case AIR, CAVE_AIR, VOID_AIR,
-                 BEDROCK, BARRIER, WATER, 
+            case AIR, CAVE_AIR, VOID_AIR, BEDROCK, BARRIER, WATER,
                  END_PORTAL, END_PORTAL_FRAME,
                  STRUCTURE_BLOCK, STRUCTURE_VOID,
                  COMMAND_BLOCK, CHAIN_COMMAND_BLOCK, REPEATING_COMMAND_BLOCK -> false;
             default -> true;
         };
     }
-    
-
 }

@@ -20,10 +20,16 @@ public class MoveTaskHelper {
      * @param log    включить логирование
      */
     public static void setPoi(Bot bot, BotPosition target, float speed, boolean log) {
-        if (bot == null || target == null) return;
+        if (bot == null || target == null) {
+            BotLogger.debug("🏁", true, bot.getId() + " ▶ Не смогли начать движение.");
+            return;
+        }
 
         Location poi = BotWorldHelper.botPositionToWorldLocation(target);
 
+        bot.getNPCNavigator().cancelNavigation();
+        bot.getNPCNavigator().setPaused(false);
+        bot.getNPCNavigator().getDefaultParameters().speedModifier(speed);
         bot.getNPCNavigator().setTarget(poi);
 
         if (log) {

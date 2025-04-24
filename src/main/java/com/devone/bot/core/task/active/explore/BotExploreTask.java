@@ -6,7 +6,7 @@ import com.devone.bot.core.task.passive.BotTaskAutoParams;
 import com.devone.bot.core.task.passive.IBotTaskParameterized;
 import com.devone.bot.core.task.active.explore.params.BotExploreTaskParams;
 import com.devone.bot.core.utils.BotUtils;
-import com.devone.bot.core.utils.blocks.BotBlockData;
+import com.devone.bot.core.utils.blocks.BotPosition;
 import com.devone.bot.core.utils.logger.BotLogger;
 
 public class BotExploreTask extends BotTaskAutoParams<BotExploreTaskParams> {
@@ -63,12 +63,12 @@ public class BotExploreTask extends BotTaskAutoParams<BotExploreTaskParams> {
         // BotSceneContext context = BotNavigationPlannerWrapper.getSceneContext(botPos,
         // sceneData.blocks, sceneData.entities);
 
-        BotBlockData target = bot.getNavigator().getSuggested();
+        BotPosition poi = bot.getNavigator().getSuggested();
 
-        if (target != null) {
-            BotLogger.debug(icon, isLogging(), bot.getId() + " 🎯 Navigation - Set Target: " + target);
+        if (poi != null) {
+            BotLogger.debug(icon, isLogging(), bot.getId() + " 🎯 Navigation - Set Target: " + poi);
 
-            bot.getNavigator().setTarget(target);
+            bot.getNavigator().setTarget(poi);
 
             float speed = 1.5f;
 
@@ -78,6 +78,7 @@ public class BotExploreTask extends BotTaskAutoParams<BotExploreTaskParams> {
 
             // bot.getBrain().getMemory().memorize(target, MemoryType.VISITED_BLOCKS); //
             // Запоминаем на ~30 минут посещенную цель навигации
+            return;
 
         } else {
             BotLogger.debug(icon, isLogging(), bot.getId() + " ⛔ Navigation - No valid target found. Possibly stuck?");

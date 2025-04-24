@@ -17,6 +17,7 @@ import com.devone.bot.core.brain.memory.scene.BotSceneData;
 import com.devone.bot.core.task.passive.BotTaskManager;
 import com.devone.bot.core.task.active.move.BotMoveTask;
 import com.devone.bot.core.task.active.move.params.BotMoveTaskParams;
+import com.devone.bot.core.utils.blocks.BlockUtils;
 import com.devone.bot.core.utils.blocks.BotBlockData;
 import com.devone.bot.core.utils.blocks.BotPosition;
 import com.devone.bot.core.utils.logger.BotLogger;
@@ -33,15 +34,15 @@ public class BotNavigator {
     private boolean stuck = false;
     private int stuckCount = 0;
     private NavigationType suggestion;
-    private BotBlockData   suggested;
+    private BotPosition   suggested;
 
-    private List<BotBlockData> candidates;
+    private List<BotPosition> candidates;
 
     // Добавляем currentLocation, lastKnownLocation и targetLocation
     private BotPosition position;
     private transient BotPosition poi; // Новое свойство для целевой локации
 
-    private BotNavigationSummaryItem targets = new BotNavigationSummaryItem("targets");
+    private BotNavigationSummaryItem targets = new BotNavigationSummaryItem("poi");
     private BotNavigationSummaryItem reachable = new BotNavigationSummaryItem("reachable");
     private BotNavigationSummaryItem navigable = new BotNavigationSummaryItem("navigable");
     private BotNavigationSummaryItem walkable = new BotNavigationSummaryItem("walkable");
@@ -69,7 +70,7 @@ public class BotNavigator {
         this.poi = null; // Начальное значение для targetLocation
     }
 
-    public List<BotBlockData> getCandidates() {
+    public List<BotPosition> getCandidates() {
         return candidates;
     }
 
@@ -90,7 +91,7 @@ public class BotNavigator {
         return stuck;
     }
 
-    public void setLocation(BotPosition pos) {
+    public void setPosition(BotPosition pos) {
         this.position = pos;
     }
 
@@ -131,9 +132,9 @@ public class BotNavigator {
         this.stuckCount = 0;
     }
 
-    private List<BotBlockData> loopTargets(BotPosition botPos, String key, List<BotBlockData> targets) {
+    private List<BotPosition> loopTargets(BotPosition botPos, String key, List<BotBlockData> targets) {
 
-        List<BotBlockData> navigable = new ArrayList<>();
+        List<BotPosition> navigable = new ArrayList<>();
 
         if(targets==null) {
             return navigable;
@@ -141,17 +142,23 @@ public class BotNavigator {
 
         for (int i = 0; i < targets.size(); i++) {
             BotBlockData target = targets.get(i);
-            Location loc = BotWorldHelper.botPositionToWorldLocation(target);
+            
+            BotPosition pos = BlockUtils.fromBlock(target);
+
+            Location loc = BotWorldHelper.botPositionToWorldLocation(pos);
+
+            //BotLogger.debug(owner.getActiveTask().getIcon(), true, owner.getId() + " ⚠️ nav candidate (world) = " + loc);
+            
             boolean canNavigate = owner.getNPC().getNavigator().canNavigateTo(loc);
+
+            //BotLogger.debug(owner.getActiveTask().getIcon(), true, owner.getId() + " ⚠️ NPC POS = " + owner.getNPC().getStoredLocation());
+
             if (canNavigate) {
-                BotBlockData data = new BotBlockData();
-                data.setX(target.getX());
-                data.setY(target.getY());
-                data.setZ(target.getZ());
-                data.setType(target.getType());
-                data.setUUID(target.getUUID());
-                data.setBot(target.isBot());
-                navigable.add(data);
+                BotPosition npos = new BotPosition();
+                npos.setX(target.getX());
+                npos.setY(target.getY());
+                npos.setZ(target.getZ());
+                navigable.add(npos);
             } 
         }
 
@@ -161,13 +168,18 @@ public class BotNavigator {
         return navigable;
     }
 
-    public List<BotBlockData> calculate(BotSceneData scene) {
+    public List<BotPosition> calculate(BotSceneData scene) {
 
-        List<BotBlockData> result = new ArrayList<BotBlockData>();
+        List<BotPosition> result = new ArrayList<BotPosition>();
 
         BotPosition botPos = getPosition();
 
         BotNavigationContext context = BotNavigationContextMaker.createSceneContext(botPos, scene.blocks, scene.entities);
+
+        BotLogger.debug(owner.getActiveTask().getIcon(), true, 
+                owner.getId() + " ⚠️ Context=" + context);
+
+
 
         if(context==null) {
             // context does not present yet
@@ -179,17 +191,20 @@ public class BotNavigator {
                 return result;
         }
 
-        List<BotBlockData> targets    = loopTargets(botPos, "targets",   context.targets);
-        List<BotBlockData> reachable  = loopTargets(botPos, "reachable", context.reachable);
-        List<BotBlockData> navigable  = loopTargets(botPos, "navigable", context.navigable);
-        List<BotBlockData> walkable   = loopTargets(botPos, "walkable",  context.walkable);
+        List<BotPosition> pois       = loopTargets(botPos, "poi",       context.poi);
+
+        BotLogger.debug(owner.getActiveTask().getIcon(), true, owner.getId() + " ⚠️ POIs = " + pois);
+        
+        List<BotPosition> reachable  = loopTargets(botPos, "reachable", context.reachable);
+        List<BotPosition> navigable  = loopTargets(botPos, "navigable", context.navigable);
+        List<BotPosition> walkable   = loopTargets(botPos, "walkable",  context.walkable);
 
         boolean hardStuck = false;
         boolean softStuck = false;
         
         setStuck(false);
 
-        if (targets.size() == 0) {
+        if (pois.size() == 0) {
             softStuck = true;
             if (reachable.size() == 0) {
                 softStuck = true;
@@ -199,20 +214,20 @@ public class BotNavigator {
                         hardStuck = true;
                         suggestion = NavigationType.TELEPORT;
                     } else {
-                        result = context.walkable;
+                        result = walkable;
                         suggestion = NavigationType.TELEPORT;
                     }
                 } else {
-                    result = context.navigable;
+                    result = navigable;
                     suggestion = NavigationType.TELEPORT;
                 }
             } else {
                 softStuck = false;
-                result = context.reachable;
+                result = reachable;
                 suggestion = NavigationType.WALK;
             }
         } else {
-            result = context.targets;
+            result = pois;
             suggestion = NavigationType.WALK;
         }
 
@@ -239,7 +254,7 @@ public class BotNavigator {
         this.suggestion = suggestion;
     }
 
-    public BotBlockData getSuggested() {
+    public BotPosition getSuggested() {
         return suggested;
     }
 
@@ -249,12 +264,15 @@ public class BotNavigator {
 
     public boolean navigate(float speed) {
 
-        if(this.poi!=null) {
+        if(this.poi == null) {
 
             BotLogger.debug(owner.getActiveTask().getIcon(), true, 
                 owner.getId() + " 🗺️ POI is null. Navigation is not possible " + " [ID: " + owner.getBrain().getCurrentTask().getIcon() + 
                            " " + owner.getBrain().getCurrentTask().getClass().getSimpleName() +" ]");
-        
+                           
+            return false;
+
+        } else { 
             BotLogger.debug(owner.getActiveTask().getIcon(), true,
                 owner.getId() + " 🗺️ Runtime POI position: " + this.poi + " [ID: " + owner.getBrain().getCurrentTask().getIcon() + 
                 " " + owner.getBrain().getCurrentTask().getClass().getSimpleName() +" ]");
@@ -274,7 +292,5 @@ public class BotNavigator {
             boolean canNavigate = owner.getNPC().getNavigator().canNavigateTo(loc);
             return canNavigate;
         }
-
-        return false;
     }
 }

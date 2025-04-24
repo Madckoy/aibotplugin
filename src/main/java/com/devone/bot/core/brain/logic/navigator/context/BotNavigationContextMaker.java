@@ -13,6 +13,7 @@ import com.devone.bot.core.brain.logic.navigator.math.filters.BotSafeBlocksFilte
 import com.devone.bot.core.brain.logic.navigator.math.filters.BotVerticalSliceFilter;
 import com.devone.bot.core.utils.blocks.BotBlockData;
 import com.devone.bot.core.utils.blocks.BotPosition;
+import com.devone.bot.core.utils.logger.BotLogger;
 
 public class BotNavigationContextMaker {
 
@@ -70,6 +71,8 @@ public class BotNavigationContextMaker {
                 maxTargets,
                 true,
                 scanRadius);
+
+        BotLogger.debug("📜", true,  " POI BLOCKS = " + poi);
         //--------------------------------------------------------------------------
         // Строим debug-путь к одной цели по сетке reachable, а не по самим таргетам
         // Set<BotPosition> navMesh = SimplePathUtils.toLocationSet(reachable); // 🆕 сетка движения
@@ -91,7 +94,7 @@ public class BotNavigationContextMaker {
         context.walkable  = walkable;
         context.navigable = navigable;
         context.reachable = reachable;
-        context.targets   = poi;
+        context.poi       = poi;
         context.entities  = livingTargets;
 
         return context;
