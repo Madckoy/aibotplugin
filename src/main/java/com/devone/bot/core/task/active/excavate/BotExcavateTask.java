@@ -186,9 +186,16 @@ public class BotExcavateTask extends BotTaskAutoParams<BotExcavateTaskParams> {
 
         Block targetBlock = BotWorldHelper.botPositionToWorldBlock(targetLocation);
 
-        bot.getNavigator().setTarget(targetLocation);
 
-        turnToTarget(this, targetLocation);
+        bot.getNavigator().setTarget(targetLocation);
+        
+        if(targetBlock.getType()!=Material.AIR || 
+            targetBlock.getType()!=Material.CAVE_AIR || 
+            targetBlock.getType()!=Material.VOID_AIR || 
+            targetBlock.getType()!=Material.AIR) {
+
+            turnToTarget(this, targetLocation);
+        }
 
         if (bot.getNavigator().getPoi() != null) {
 
