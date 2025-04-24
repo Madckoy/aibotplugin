@@ -33,7 +33,7 @@ public class BotChaseTargetTask extends BotTaskAutoParams<BotChaseTaskParams> {
         setObjective(params.getObjective());
 
         if (target != null) {
-            bot.getNavigator().setTarget(target);
+            bot.getNavigator().setTarget(target.getPosition());
         }
 
         BotLogger.debug("✅", this.isLogging(),
@@ -62,7 +62,7 @@ public class BotChaseTargetTask extends BotTaskAutoParams<BotChaseTaskParams> {
     }
 
     private void updateFollowLogic() {
-        BotUtils.lookAt(bot, target);
+        BotUtils.lookAt(bot, target.getPosition());
         BotLogger.debug("🏃", this.isLogging(), "Chasing: " + target);
         this.stop();
     }

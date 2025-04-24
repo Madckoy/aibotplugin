@@ -49,7 +49,7 @@ public class BotHandAttackTask extends BotHandTask<BotHandAttackTaskParams> {
         this.target = params.getTarget();
         this.damage = params.getDamage();
 
-        bot.getNavigator().setTarget(target);
+        bot.getNavigator().setTarget(target.getPosition());
 
         BotLogger.debug(icon, isLogging(), bot.getId() + " ✅ Parameters for BotHandAttackTask set.");
         return this;

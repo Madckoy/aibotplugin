@@ -10,6 +10,7 @@ import com.devone.bot.core.BotManager;
 import com.devone.bot.core.task.passive.BotTaskManager;
 import com.devone.bot.core.task.active.playerlinked.chase.BotChaseTargetTask;
 import com.devone.bot.core.utils.blocks.BotBlockData;
+import com.devone.bot.core.utils.blocks.BotPosition;
 import com.devone.bot.core.utils.logger.BotLogger;
 
 public class BotChaseCommand implements CommandExecutor {
@@ -42,9 +43,12 @@ public class BotChaseCommand implements CommandExecutor {
 
         BotBlockData block_data = new BotBlockData();
         block_data.setType("player");
-        block_data.setX(player.getLocation().getBlockX());
-        block_data.setY(player.getLocation().getBlockY());
-        block_data.setZ(player.getLocation().getBlockZ());
+        block_data.setPosition(new BotPosition(
+            player.getLocation().getBlockX(),
+            player.getLocation().getBlockY(),
+            player.getLocation().getBlockZ()
+        ));
+
 
         // ✅ Добавляем задачу на следование
         BotChaseTargetTask followTask = new BotChaseTargetTask(bot, block_data);

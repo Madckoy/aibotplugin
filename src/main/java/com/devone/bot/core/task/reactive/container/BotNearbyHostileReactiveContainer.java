@@ -25,7 +25,7 @@ public class BotNearbyHostileReactiveContainer
     protected void enqueue(Bot bot) {
         BotLogger.debug(getIcon(), true, bot.getId() + " " + icon + " " + getObjective());
         // 1. Идём к мобу
-        BotMoveTaskParams walkParams = new BotMoveTaskParams(target);
+        BotMoveTaskParams walkParams = new BotMoveTaskParams(target.getPosition());
         BotMoveTask walkTask = new BotMoveTask(bot);
         walkTask.setParams(walkParams);
         walkTask.setObjective("🥾 Идём к мобу");

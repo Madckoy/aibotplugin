@@ -70,11 +70,10 @@ public class BotReachableSurfaceBuilder {
 
     private static BotBlockData cloneAndMarkAsReachable(BotBlockData original) {
         BotBlockData copy = new BotBlockData();
-        copy.setX(original.getX());
-        copy.setY(original.getY());
-        copy.setZ(original.getZ());
+        copy.setPosition(new BotPosition(original.getX(), original.getY(), original.getZ()));
         copy.setType("DUMMY");
         copy.setTag("reachable:surface");
         return copy;
     }
+    
 }

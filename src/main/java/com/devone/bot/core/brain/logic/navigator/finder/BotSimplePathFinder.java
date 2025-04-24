@@ -3,7 +3,6 @@ package com.devone.bot.core.brain.logic.navigator.finder;
 import com.devone.bot.core.utils.blocks.BotBlockData;
 import com.devone.bot.core.utils.blocks.BotPosition;
 
-
 import java.util.*;
 
 public class BotSimplePathFinder {
@@ -15,7 +14,7 @@ public class BotSimplePathFinder {
     }
 
     public List<BotPosition> findPath(BotPosition from, BotPosition to) {
-        
+
         if (from.equals(to)) return List.of(from);
 
         Queue<BotPosition> queue = new LinkedList<>();
@@ -78,9 +77,7 @@ public class BotSimplePathFinder {
         List<BotBlockData> result = new ArrayList<>();
         for (BotPosition loc : path) {
             BotBlockData block = new BotBlockData();
-            block.setX(loc.getX());
-            block.setY(loc.getY());
-            block.setZ(loc.getZ());
+            block.setPosition(loc);
             block.setType("DUMMY");
             block.setTag("debug:path");
             result.add(block);
@@ -90,98 +87,89 @@ public class BotSimplePathFinder {
     }
 
     public static List<BotBlockData> buildAllDebugPaths(
-    BotPosition from,
-    List<BotBlockData> navTargets,
-    BotSimplePathFinder pathfinder
-) {
-    List<BotBlockData> result = new ArrayList<>();
+        BotPosition from,
+        List<BotBlockData> navTargets,
+        BotSimplePathFinder pathfinder
+    ) {
+        List<BotBlockData> result = new ArrayList<>();
 
-    if (navTargets == null || navTargets.isEmpty()) {
-        System.out.println("⚠️ No navigation targets provided.");
+        if (navTargets == null || navTargets.isEmpty()) {
+            System.out.println("⚠️ No navigation targets provided.");
+            return result;
+        }
+
+        int successCount = 0;
+
+        for (BotBlockData target : navTargets) {
+            if (target == null) continue;
+
+            List<BotPosition> path = pathfinder.findPath(from, target.getPosition());
+
+            if (path != null && !path.isEmpty()) {
+                for (BotPosition loc : path) {
+                    BotBlockData block = new BotBlockData();
+                    block.setPosition(loc);
+                    block.setType("DUMMY");
+                    block.setTag("debug:path");
+                    result.add(block);
+                }
+
+                System.out.println("✅ Path to: " + target);
+                successCount++;
+            } else {
+                System.out.println("❌ Failed path to: " + target);
+            }
+        }
+
+        if (successCount == 0) {
+            BotBlockData placeholder = new BotBlockData();
+            placeholder.setPosition(from);
+            placeholder.setType("DUMMY");
+            placeholder.setTag("debug:path");
+
+            result.add(placeholder);
+            System.out.println("⚠️ No valid path found — inserting placeholder block for debug.");
+        } else {
+            System.out.println("🔍 Total valid paths: " + successCount);
+        }
+
         return result;
     }
 
-    int successCount = 0;
+    public static List<List<BotBlockData>> buildAllDebugPathsV2(
+        BotPosition from,
+        List<BotBlockData> navTargets,
+        BotSimplePathFinder pathfinder
+    ) {
+        List<List<BotBlockData>> allPaths = new ArrayList<>();
 
-    for (BotBlockData target : navTargets) {
-        if (target == null) continue;
-
-        List<BotPosition> path = pathfinder.findPath(from, target.getPosition());
-
-        if (path != null && !path.isEmpty()) {
-            for (BotPosition loc : path) {
-                BotBlockData block = new BotBlockData();
-                block.setX(loc.getX());
-                block.setY(loc.getY());
-                block.setZ(loc.getZ());
-                block.setType("DUMMY");
-                block.setTag("debug:path");
-                result.add(block);
-            }
-
-            System.out.println("✅ Path to: " + target);
-            successCount++;
-        } else {
-            System.out.println("❌ Failed path to: " + target);
+        if (navTargets == null || navTargets.isEmpty()) {
+            System.out.println("⚠️ No targets available for path building.");
+            return allPaths;
         }
-    }
 
-    if (successCount == 0) {
-        BotBlockData placeholder = new BotBlockData();
-        placeholder.setX(from.getX());
-        placeholder.setY(from.getY());
-        placeholder.setZ(from.getZ());
-        placeholder.setType("DUMMY");
-        placeholder.setTag("debug:path");
+        for (BotBlockData target : navTargets) {
+            if (target == null) continue;
 
+            List<BotPosition> path = pathfinder.findPath(from, target.getPosition());
 
-        result.add(placeholder);
-        System.out.println("⚠️ No valid path found — inserting placeholder block for debug.");
-    } else {
-        System.out.println("🔍 Total valid paths: " + successCount);
-    }
+            if (path != null && !path.isEmpty()) {
+                List<BotBlockData> debugBlocks = new ArrayList<>();
+                for (BotPosition loc : path) {
+                    BotBlockData block = new BotBlockData();
+                    block.setPosition(loc);
+                    block.setType("DUMMY");
+                    block.setTag("debug:path");
+                    debugBlocks.add(block);
+                }
+                allPaths.add(debugBlocks);
+                System.out.println("✅ Path to: " + target);
+            } else {
+                System.out.println("❌ Failed path to: " + target);
+            }
+        }
 
-    return result;
-}
-
-public static List<List<BotBlockData>> buildAllDebugPathsV2(
-    BotPosition from,
-    List<BotBlockData> navTargets,
-    BotSimplePathFinder pathfinder
-) {
-    List<List<BotBlockData>> allPaths = new ArrayList<>();
-
-    if (navTargets == null || navTargets.isEmpty()) {
-        System.out.println("⚠️ No targets available for path building.");
+        System.out.println("🔍 Total valid paths: " + allPaths.size());
         return allPaths;
     }
-
-    for (BotBlockData target : navTargets) {
-        if (target == null) continue;
-
-        List<BotPosition> path = pathfinder.findPath(from, target.getPosition());
-
-        if (path != null && !path.isEmpty()) {
-            List<BotBlockData> debugBlocks = new ArrayList<>();
-            for (BotPosition loc : path) {
-                BotBlockData block = new BotBlockData();
-                block.setX(loc.getX());
-                block.setY(loc.getY());
-                block.setZ(loc.getZ());
-                block.setType("DUMMY");
-                block.setTag("debug:path");
-                debugBlocks.add(block);
-            }
-            allPaths.add(debugBlocks);
-            System.out.println("✅ Path to: " + target);
-        } else {
-            System.out.println("❌ Failed path to: " + target);
-        }
-    }
-
-    System.out.println("🔍 Total valid paths: " + allPaths.size());
-    return allPaths;
-}
-
-
 }

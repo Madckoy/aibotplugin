@@ -19,7 +19,7 @@ public class BotEntitySelector {
         if (targets == null || targets.isEmpty() || botOrigin == null) return null;
 
         return targets.stream()
-            .min(Comparator.comparingDouble(target -> target.distanceTo(botOrigin)))
+            .min(Comparator.comparingDouble(target -> target.getPosition().distanceTo(botOrigin)))
             .orElse(null);
     }
 

@@ -1,8 +1,6 @@
 package com.devone.bot.core.brain.logic.navigator.context;
 
 
-import com.devone.bot.core.brain.logic.navigator.finder.BotSimplePathFinder;
-import com.devone.bot.core.brain.logic.navigator.finder.SimplePathUtils;
 import com.devone.bot.core.brain.logic.navigator.math.filters.BotAddDummyBlock;
 import java.util.List;
 import com.devone.bot.core.brain.logic.navigator.math.poi.BotPOIBuilder;
@@ -15,7 +13,6 @@ import com.devone.bot.core.brain.logic.navigator.math.filters.BotSafeBlocksFilte
 import com.devone.bot.core.brain.logic.navigator.math.filters.BotVerticalSliceFilter;
 import com.devone.bot.core.utils.blocks.BotBlockData;
 import com.devone.bot.core.utils.blocks.BotPosition;
-import java.util.Set;
 
 public class BotNavigationContextMaker {
 

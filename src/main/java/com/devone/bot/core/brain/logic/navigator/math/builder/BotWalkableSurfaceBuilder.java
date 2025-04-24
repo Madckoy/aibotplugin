@@ -2,6 +2,7 @@ package com.devone.bot.core.brain.logic.navigator.math.builder;
 
 import java.util.*;
 import com.devone.bot.core.utils.blocks.BotBlockData;
+import com.devone.bot.core.utils.blocks.BotPosition;
 
 public class BotWalkableSurfaceBuilder {
 
@@ -38,14 +39,12 @@ public class BotWalkableSurfaceBuilder {
     
     private static BotBlockData createFakeBlock(int x, int y, int z, String type, String tag) {
         BotBlockData fake = new BotBlockData();
-        fake.setX(x);
-        fake.setY(y);
-        fake.setZ(z);
+        fake.setPosition(new BotPosition(x, y, z));
         fake.setType(type);
         fake.setTag(tag);
         return fake;
     }
-    
+        
     private static BotBlockData findBlockAt(List<BotBlockData> blocks, int x, int y, int z) {
         for (BotBlockData b : blocks) {
             if (b.getX() == x && b.getY() == y && b.getZ() == z) {

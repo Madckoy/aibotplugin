@@ -11,6 +11,8 @@ function updateInfoPanel(bot) {
     document.getElementById("info-nav-walkable").textContent    = bot.walkableBlocks       ?? "N/A";
     document.getElementById("info-nav-type").textContent        = bot.navigationSuggestion ?? "N/A";
     document.getElementById("info-nav-suggestion").textContent  = bot.suggestedBlock       ?? "N/A";
+    //
+    
 }
 
 function showInfoPanel(bot) {
