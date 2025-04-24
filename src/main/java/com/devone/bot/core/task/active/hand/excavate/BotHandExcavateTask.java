@@ -26,7 +26,8 @@ public class BotHandExcavateTask extends BotHandTask<BotHandExcavateTaskParams> 
     public BotHandExcavateTask setParams(BotHandExcavateTaskParams params) {
         super.setParams(params); // вызовет BotHandTask.setParams()
         this.target = params.getTarget();
-        bot.getNavigator().setTarget(target);
+
+        bot.getNavigator().setTarget(target.getPosition());
 
         return this;
     }
@@ -55,7 +56,7 @@ public class BotHandExcavateTask extends BotHandTask<BotHandExcavateTaskParams> 
                     return;
                 }
 
-                Block block = BotWorldHelper.botPositionToWorldBlock(target);
+                Block block = BotWorldHelper.botPositionToWorldBlock(target.getPosition());
                 if (block == null || block.getType() == Material.AIR) {
                     BotLogger.debug(icon, isLogging(), bot.getId() + " ✅ Block already excavated.");
                     stop();

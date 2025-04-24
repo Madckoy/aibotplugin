@@ -199,7 +199,7 @@ public class BotBrainTask extends BotTaskAutoParams<BotBrainTaskParams> {
         return Optional.of(() -> {
             BotLogger.debug(icon, isLogging(),
                     "⚡Телепорт на враждебную сущность вне жидкости: " + bot.getId() + " → " + target);
-            BotTeleportTaskParams tpParams = new BotTeleportTaskParams(target);
+            BotTeleportTaskParams tpParams = new BotTeleportTaskParams(target.getPosition());
             BotTeleportTask tpTask = new BotTeleportTask(bot, null);
             tpTask.setParams(tpParams);
             push(bot, tpTask);

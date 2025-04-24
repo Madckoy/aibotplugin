@@ -258,7 +258,7 @@ public class BotNavigator {
     }
 
     public void setSuggested(BotBlockData suggested) {
-        this.suggested = suggested;
+        this.suggested = suggested.getPosition();
     }
 
     public boolean navigate(float speed) {

@@ -31,13 +31,10 @@ public class BotWorldHelper {
             : Bukkit.getWorlds().get(0);
     }
 
-    public static BotBlockData getWorldSpawnLocation() {
+    public static BotPosition getWorldSpawnLocation() {
         Location spawnLocation = getWorld().getSpawnLocation();
-        BotBlockData blockData = new BotBlockData();
-        blockData.setX(spawnLocation.getBlockX());
-        blockData.setY(spawnLocation.getBlockY());
-        blockData.setZ(spawnLocation.getBlockZ());
-        return blockData;
+;
+        return BotWorldHelper.locationToBotPosition(spawnLocation);
     }
 
     public static World getWorld() {

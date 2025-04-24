@@ -24,7 +24,9 @@ public abstract class BotHandTask<T extends BotHandTaskParams> extends BotTaskAu
         this.target = params.getTarget();
 
         if (target != null) {
-            bot.getNavigator().setTarget(target);
+            
+            bot.getNavigator().setTarget(target.getPosition());
+
             BotLogger.debug(icon, isLogging(), bot.getId() + " ✅ Target for BotHandTask is set: " + target);
         } else {
             BotLogger.debug(icon, isLogging(), bot.getId() + " ⚠️ Target is null in BotHandTask.");
@@ -42,7 +44,7 @@ public abstract class BotHandTask<T extends BotHandTaskParams> extends BotTaskAu
             this.stop();
             return;
         }
-        turnToTarget(this, target);
+        turnToTarget(this, target.getPosition());
 
         // Конкретная логика — в наследнике
     }

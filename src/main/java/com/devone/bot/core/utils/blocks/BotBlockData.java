@@ -4,11 +4,20 @@ import java.util.UUID;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
-public class BotBlockData extends BotPosition {
+public class BotBlockData  {
 
+    private BotPosition position;
     private String type;
     private UUID   uuid;
     private String tag;
+
+    public BotBlockData() {
+        position = new BotPosition();
+    }
+
+    public BotBlockData(int x, int y, int z) {
+        this.position = new BotPosition(x, y, z);
+    }
 
     public void setType( String type){
         this.type = type;
@@ -56,17 +65,11 @@ public class BotBlockData extends BotPosition {
     public String toString() {
         return String.format("Block: [ x=%d, y=%d, z=%d, type=%s, bot=%s ]", this.getX(), this.getY(), this.getZ(), type, tag);
     }
-    @JsonIgnore
-    public BotPosition getPosition(){
-        return new BotPosition(getX(), getY(), getZ());
-    }
 
     @Override
     public BotBlockData clone() {
         BotBlockData copy = new BotBlockData();
-        copy.setX(this.getX());
-        copy.setY(this.getY());
-        copy.setZ(this.getZ());
+        copy.setPosition(this.getPosition());
         copy.setType(this.getType());
         copy.setUUID(this.getUUID());
         copy.setTag(this.getTag());
@@ -82,4 +85,23 @@ public class BotBlockData extends BotPosition {
     public boolean isPeaceful() {
         return BotEntityUtils.isPeaceful(this.type);
     }
+
+    public BotPosition getPosition() {
+        return position;
+    }
+
+    public void setPosition(BotPosition pos) {
+       position = pos;
+    }
+
+
+    public int getX() { return position.getX(); }
+    public void setX(int x) { this.position = new BotPosition(x, getY(), getZ()); }
+
+    public int getY() { return position.getY(); }
+    public void setY(int y) { this.position = new BotPosition(getX(), y, getZ()); }
+
+    public int getZ() { return position.getZ(); }
+    public void setZ(int z) { this.position = new BotPosition(getX(), getY(), z); }
+    
 }
