@@ -17,7 +17,7 @@ public class BotReactiveTeleportToPositionContainer
     public BotReactiveTeleportToPositionContainer(Bot bot, BotPosition position) {
         super(bot, BotReactiveTeleportToPositionContainerParams.class);
         this.position = position;
-        setObjective("Reactive: BotTeleportTask");
+        setObjective("Reactive: Bot Teleport Task");
     }
 
     @Override

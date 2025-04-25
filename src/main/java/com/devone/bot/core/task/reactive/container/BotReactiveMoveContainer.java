@@ -16,7 +16,7 @@ public class BotReactiveMoveContainer extends BotReactiveTaskContainer<BotReacti
 
         super(bot, BotReactiveMoveContainerParams.class);
 
-        setObjective("Reactive: BotExcavateTask");
+        setObjective("Reactive: Bot Move Task");
     }
 
     @Override
@@ -32,11 +32,5 @@ public class BotReactiveMoveContainer extends BotReactiveTaskContainer<BotReacti
             moveTask.setParams(mv_params);
             add(moveTask);
         }
-
-        BotExcavateTaskParams excvParams = new BotExcavateTaskParams();
-        BotExcavateTask excvTask = new BotExcavateTask(bot);
-        excvTask.setParams(excvParams);
-        add(excvTask);
     }
-
 }

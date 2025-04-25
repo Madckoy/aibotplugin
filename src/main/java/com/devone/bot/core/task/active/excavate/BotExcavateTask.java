@@ -59,30 +59,6 @@ public class BotExcavateTask extends BotTaskAutoParams<BotExcavateTaskParams> {
         return this;
     }
 
-    /**
-     * Конфигурирует задачу разрушения.
-     * 
-     * Параметры (позиционные):
-     * 
-     * 0 - Set<Material> targetMaterials (nullable) — блоки, которые нужно
-     * разрушать.
-     * 1 - Integer maxBlocks (nullable) — максимальное количество блоков, которые
-     * нужно собрать.
-     * 2 - Integer outerRadius (nullable) — радиус разрушения.
-     * 3 - Integer innerRadius (nullable) — радиус разрушения.
-     * 4 - Boolean shouldPickup (nullable) — собирать ли предметы после разрушения.
-     * 5 - Boolean destroyAllIfNoTarget (nullable) — если нет подходящих блоков,
-     * разрушать всё подряд.
-     * 7 - int offsetX
-     * 8 - int offsetY
-     * 9 - int offsetZ
-     * 10 - IBotDestructionPattern или String (nullable) — шаблон разрушения:
-     * - IBotDestructionPattern — готовый объект.
-     * - String — путь к YAML-файлу шаблона (относительно каталога паттернов).
-     *
-     * Если параметры не заданы, используются значения по умолчанию.
-     */
-
     public String getPatternName() {
         return this.patternName;
     }

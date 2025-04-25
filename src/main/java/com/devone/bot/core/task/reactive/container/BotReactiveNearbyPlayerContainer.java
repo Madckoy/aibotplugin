@@ -19,7 +19,7 @@ public class BotReactiveNearbyPlayerContainer extends BotReactiveTaskContainer<B
     public BotReactiveNearbyPlayerContainer(Bot bot, Player player) {
         super(bot, BotReactiveNearbyPlayerContainerParams.class);
         this.player = player;
-        setObjective("Reactive: BotMoveTask + BotDropAllTask");
+        setObjective("Reactive: Bot MoveTask and Bot Drop All Task");
     }
 
     @Override

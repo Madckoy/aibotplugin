@@ -17,7 +17,7 @@ public class BotReactiveNearbyHostileContainer
 
     public BotReactiveNearbyHostileContainer(Bot bot, BotBlockData hostileMob) {
         super(bot, BotReactiveNearbyHostileContainerParams.class);
-        setObjective("Reactive: BotMoveTask + BotHandAttackTask");
+        setObjective("Reactive: Bot MoveTask and Bot Hand Attack Task");
         target = hostileMob;
     }
 

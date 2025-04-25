@@ -14,7 +14,7 @@ public class BotReactiveCalibrateContainer extends BotReactiveTaskContainer<BotR
 
         super(bot, BotReactiveCalibrateContainerParams.class);
 
-        setObjective("Reactive: BotCalibrationTask");
+        setObjective("Reactive: Bot Calibration Task");
     }
 
     @Override
