@@ -191,9 +191,11 @@ public class BotExcavateTask extends BotTaskAutoParams<BotExcavateTaskParams> {
         
         if( targetBlock.getType().toString().equals(Material.AIR.toString()) || 
             targetBlock.getType().toString().equals(Material.CAVE_AIR.toString()) || 
-            targetBlock.getType().toString().equals(Material.VOID_AIR.toString())) {
+            targetBlock.getType().toString().equals(Material.VOID_AIR.toString()) ||
+            targetBlock.getType().toString().equals(Material.WATER.toString()) ||
+            targetBlock.getType().toString().equals(Material.LAVA.toString())) {
             
-            BotLogger.debug(icon, isLogging(), bot.getId() + " Блок пустой, уже разрушен: " + targetLocation + " " + targetBlock.getType());
+            BotLogger.debug(icon, isLogging(), bot.getId() + " Блок не разрушимый или уже разрушен: " + targetLocation + " " + targetBlock.getType());
             return;
 
         } else { 
