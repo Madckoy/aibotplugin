@@ -105,8 +105,12 @@ public class BotHandAttackTask extends BotHandTask<BotHandAttackTaskParams> {
                     }
 
                     // 🔄 Обновляем targetLocation
-                    bot.getNavigator().setTarget(BotWorldHelper.locationToBotPosition(living.getLocation()));
-                    BotUtils.lookAt(bot, BotWorldHelper.locationToBotPosition(living.getLocation()));
+                    BotPosition pos = BotWorldHelper.locationToBotPosition(living.getLocation());
+                    
+                    bot.getNavigator().setTarget(pos);
+
+                    BotUtils.turnToTarget(haTask, bot, pos);
+
                     bot.getNPCNavigator().setTarget(living.getLocation());
                     double distance = bot.getNPCEntity().getLocation().distance(living.getLocation());
 
@@ -117,7 +121,9 @@ public class BotHandAttackTask extends BotHandTask<BotHandAttackTaskParams> {
                             bot.getNPCNavigator().setTarget(living.getLocation());
                             bot.getNavigator()
                                     .setTarget(BotWorldHelper.locationToBotPosition(living.getLocation()));
-                            BotUtils.lookAt(bot, BotWorldHelper.locationToBotPosition(living.getLocation()));
+
+                            //BotUtils.turnToTarget();
+                            
                             BotLogger.debug(icon, isLogging(),
                                     bot.getId() + " 🏃🏻‍➡️ Pursuing mob, correcting direction. Distance: "
                                             + String.format("%.2f", distance));

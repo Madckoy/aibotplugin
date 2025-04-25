@@ -94,7 +94,7 @@ public class BotUtils {
      * @param bot    Бот (CraftPlayer или NPC, поддерживающий teleport)
      * @param target Цель, к которой нужно повернуть лицо
      */
-    public static void lookAt(Bot bot, BotPosition target) {
+    private static void lookAt(Bot bot, BotPosition target) {
 
         if (bot.getNPCEntity() == null)
             return;
@@ -110,9 +110,11 @@ public class BotUtils {
         float pitch = (float) Math.toDegrees(-Math.atan2(direction.getY(),
                 Math.sqrt(direction.getX() * direction.getX() + direction.getZ() * direction.getZ())));
 
-        Location newLook = from.clone();
+       Location newLook = from.clone();
         newLook.setYaw(yaw);
         newLook.setPitch(pitch);
+
+        //bot.getNPCEntity().setRotation(yaw, pitch);
 
         bot.getNPCEntity().teleport(newLook);
     }

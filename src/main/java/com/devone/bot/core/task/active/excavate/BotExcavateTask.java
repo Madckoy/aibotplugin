@@ -120,7 +120,7 @@ public class BotExcavateTask extends BotTaskAutoParams<BotExcavateTaskParams> {
 
         BotLogger.debug(icon, isLogging(), bot.getId() + " 🚀 Запуск задачи разрушения блоков для бота " + bot.getId() +
                 " (Целевые блоки: " + (targetMaterials == null ? "ВСЕ" : targetMaterials) + ")");
-
+   
         // 🚨 Проверка на опасную жидкость
         if (BotWorldHelper.isInDangerousLiquid(bot)) {
             BotLogger.debug(icon, isLogging(), bot.getId() + " 💧 Оказался в опасной жидкости. Завершаем копку.");
@@ -189,11 +189,17 @@ public class BotExcavateTask extends BotTaskAutoParams<BotExcavateTaskParams> {
 
         bot.getNavigator().setTarget(targetLocation);
         
-        if(targetBlock.getType()!=Material.AIR || 
-            targetBlock.getType()!=Material.CAVE_AIR || 
-            targetBlock.getType()!=Material.VOID_AIR || 
-            targetBlock.getType()!=Material.AIR) {
+        if( targetBlock.getType().toString().equals(Material.AIR.toString()) || 
+            targetBlock.getType().toString().equals(Material.CAVE_AIR.toString()) || 
+            targetBlock.getType().toString().equals(Material.VOID_AIR.toString())) {
+            
+            BotLogger.debug(icon, isLogging(), bot.getId() + " Блок пустой, уже разрушен: " + targetLocation + " " + targetBlock.getType());
+            return;
 
+        } else { 
+
+            BotLogger.debug(icon, isLogging(), bot.getId() + " Поворачивает голову в сторону: " + targetLocation + " " + targetBlock.getType());       
+            
             turnToTarget(this, targetLocation);
         }
 

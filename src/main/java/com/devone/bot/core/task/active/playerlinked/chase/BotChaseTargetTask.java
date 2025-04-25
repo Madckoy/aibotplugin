@@ -62,7 +62,9 @@ public class BotChaseTargetTask extends BotTaskAutoParams<BotChaseTaskParams> {
     }
 
     private void updateFollowLogic() {
-        BotUtils.lookAt(bot, target.getPosition());
+ 
+        BotUtils.turnToTarget(this, bot, target.getPosition());
+ 
         BotLogger.debug("🏃", this.isLogging(), "Chasing: " + target);
         this.stop();
     }
