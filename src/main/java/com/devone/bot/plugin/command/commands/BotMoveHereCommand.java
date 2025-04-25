@@ -64,7 +64,7 @@ public class BotMoveHereCommand implements CommandExecutor {
         // 1. Телепорт за спину
         BotTeleportTask tp = new BotTeleportTask(bot, player);
         BotTeleportTaskParams tpParams = new BotTeleportTaskParams();
-        tpParams.setLocation(tpLoc);
+        tpParams.setPosition(tpLoc);
         tp.setParams(tpParams);
         tp.setObjective("Появление за спиной игрока");
         tp.setIcon("⚡");

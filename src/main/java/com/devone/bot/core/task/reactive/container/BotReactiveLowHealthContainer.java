@@ -20,7 +20,7 @@ public class BotReactiveLowHealthContainer extends BotReactiveTaskContainer<BotR
         BotLogger.debug(getIcon(), true, bot.getId() + " " + icon + " " + getObjective());
 
         BotTeleportTaskParams tpParams = new BotTeleportTaskParams();
-        tpParams.setLocation(BotWorldHelper.getWorldSpawnLocation());
+        tpParams.setPosition(BotWorldHelper.getWorldSpawnLocation());
 
         BotTeleportTask tpTask = new BotTeleportTask(bot, null);
         tpTask.setParams(tpParams);

@@ -33,7 +33,7 @@ public class BotReactiveTeleportToPlayerContainer
 
         BotTeleportTask tp = new BotTeleportTask(bot, player);
         BotTeleportTaskParams params = new BotTeleportTaskParams();
-        params.setLocation(new BotPosition(
+        params.setPosition(new BotPosition(
                 playerLoc.getBlockX(),
                 playerLoc.getBlockY(),
                 playerLoc.getBlockZ()));

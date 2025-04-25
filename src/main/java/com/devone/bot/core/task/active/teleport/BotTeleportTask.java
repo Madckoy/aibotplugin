@@ -26,7 +26,7 @@ public class BotTeleportTask extends BotTaskAutoParams<BotTeleportTaskParams> {
 
             BotTeleportTaskParams params = new BotTeleportTaskParams();
             BotPosition loc = BotWorldHelper.locationToBotPosition(player.getLocation());
-            params.setLocation(loc);
+            params.setPosition(loc);
         }
 
         setParams(new BotTeleportTaskParams());
@@ -36,7 +36,7 @@ public class BotTeleportTask extends BotTaskAutoParams<BotTeleportTaskParams> {
     public IBotTaskParameterized<BotTeleportTaskParams> setParams(BotTeleportTaskParams params) {
         super.setParams(params);
 
-        this.target = params.getLocation();
+        this.target = params.getPosition();
         setIcon(params.getIcon());
         setObjective(params.getObjective());
 

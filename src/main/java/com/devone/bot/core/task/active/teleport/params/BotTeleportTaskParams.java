@@ -23,13 +23,13 @@ public class BotTeleportTaskParams extends BotLocationParams {
      */
     public BotTeleportTaskParams(BotPosition loc) {
         this(); // загружаем всё остальное из JSON
-        setLocation(loc);
+        setPosition(loc);
     }
 
     @Override
     public String toString() {
         return "BotTeleportTaskParams{" +
-                "location=" + getLocation() +
+                "location=" + getPosition() +
                 ", icon=" + getIcon() +
                 ", objective=" + getObjective() +
                 '}';

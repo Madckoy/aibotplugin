@@ -6,15 +6,15 @@ import com.devone.bot.core.task.passive.BotReactiveTaskContainer;
 import com.devone.bot.core.task.active.excavate.params.BotExcavateTaskParams;
 import com.devone.bot.core.task.active.move.BotMoveTask;
 import com.devone.bot.core.task.active.move.params.BotMoveTaskParams;
-import com.devone.bot.core.task.reactive.container.params.BotReactiveExcavateContainerParams;
+import com.devone.bot.core.task.reactive.container.params.BotReactiveMoveAndExcavateContainerParams;
 import com.devone.bot.core.utils.blocks.BotPosition;
 import com.devone.bot.core.utils.logger.BotLogger;
 
-public class BotReactiveExcavateContainer extends BotReactiveTaskContainer<BotReactiveExcavateContainerParams> {
+public class BotReactiveMoveAndExcavateContainer extends BotReactiveTaskContainer<BotReactiveMoveAndExcavateContainerParams> {
 
-    public BotReactiveExcavateContainer(Bot bot) {
+    public BotReactiveMoveAndExcavateContainer(Bot bot) {
 
-        super(bot, BotReactiveExcavateContainerParams.class);
+        super(bot, BotReactiveMoveAndExcavateContainerParams.class);
 
         setObjective("Reactive: BotExcavateTask");
     }
