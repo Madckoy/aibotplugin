@@ -109,7 +109,9 @@ public class BotWorldHelper {
     public static Location botPositionToWorldLocation(BotPosition loc) {
         if (loc == null) return null;
         World world = getWorld();
-        return new Location(world, loc.getX()-0.5, loc.getY(), loc.getZ()-0.5);
+        double blockX = ((int)loc.getX());
+        double blockZ = ((int)loc.getZ());
+        return new Location(world, blockX, loc.getY(), blockZ);
     }
 
     public static Block botPositionToWorldBlock(BotPosition loc) {

@@ -1,5 +1,7 @@
 package com.devone.bot.core.task.active.excavate.patterns.generator.params;
 
+import com.devone.bot.core.utils.blocks.BotPosition;
+
 public class BotExcavateTemplateRunnerParams {
     public double observerX, observerY, observerZ;
 
@@ -36,21 +38,23 @@ public class BotExcavateTemplateRunnerParams {
         this.inverted    = true;
     }
 
-    public BotExcavateTemplateRunnerParams(double observerX, double observerY, double observerZ,
-                                           double offsetOuterX, double offsetOuterY, double offsetOuterZ, double outerRadius, 
-                                           double offsetInnerX, double offsetInnerY, double offsetInnerZ, double innerRadius, 
+    public BotExcavateTemplateRunnerParams(BotPosition observer, 
+                                           BotPosition offsetOuter, 
+                                           double outerRadius, 
+                                           BotPosition offsetInner, 
+                                           double innerRadius, 
                                            boolean inverted) {
-        this.observerX = observerX;
-        this.observerY = observerY;
-        this.observerZ = observerZ;
+        this.observerX = observer.getX();
+        this.observerY = observer.getY();
+        this.observerZ = observer.getZ();
         
-        this.offsetOuterX = offsetOuterX;
-        this.offsetOuterY = offsetOuterY;
-        this.offsetOuterZ = offsetOuterZ;
+        this.offsetOuterX = offsetOuter.getX();
+        this.offsetOuterY = offsetOuter.getY();
+        this.offsetOuterZ = offsetOuter.getZ();
 
-        this.offsetInnerX = offsetInnerX;
-        this.offsetInnerY = offsetInnerY;
-        this.offsetInnerZ = offsetInnerZ;
+        this.offsetInnerX = offsetInner.getX();
+        this.offsetInnerY = offsetInner.getY();
+        this.offsetInnerZ = offsetInner.getZ();
 
         this.outerRadius = outerRadius;
         this.innerRadius = innerRadius;

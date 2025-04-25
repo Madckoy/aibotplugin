@@ -37,6 +37,7 @@ public class BotExcavateTask extends BotTaskAutoParams<BotExcavateTaskParams> {
     private String patternName = BotConstants.DEFAULT_PATTERN_BREAK;
     private IBotExcavatePatternRunner patternRunner = null;
     private BotExcavateTemplateRunnerParams excavateParams = new BotExcavateTemplateRunnerParams();
+    private BotPosition basePosition;
 
     public BotExcavateTask(Bot bot) {
         super(bot, BotExcavateTaskParams.class);
@@ -109,9 +110,8 @@ public class BotExcavateTask extends BotTaskAutoParams<BotExcavateTaskParams> {
 
                 Path ptrnPath = Paths.get(BotConstants.PLUGIN_PATH_PATTERNS_BREAK, patternName);
 
-                this.patternRunner = new BotExcavateTemplateRunner(ptrnPath).init(bot.getNavigator().getPosition().getX(),
-                                                                                  bot.getNavigator().getPosition().getY(),
-                                                                                  bot.getNavigator().getPosition().getZ());
+                this.patternRunner = new BotExcavateTemplateRunner(ptrnPath).init(bot.getNavigator().getPosition());
+                basePosition = new BotPosition(bot.getNavigator().getPosition());
 
                 //setParams(null ); //null because we read from the template file
 
@@ -148,22 +148,32 @@ public class BotExcavateTask extends BotTaskAutoParams<BotExcavateTaskParams> {
         if (params.isPickup()) {
             bot.pickupNearbyItems();
         }
+        BotPosition blockPosition = null;
         // -----------------
-        BotPosition location = patternRunner.getNextBlock(bot);
+        BotLogger.debug(icon, isLogging(), bot.getId() + " Заданая опорная точка: "+basePosition);
+        BotLogger.debug(icon, isLogging(), bot.getId() + " Актуальная опорная точка: "+bot.getNavigator().getPosition());
+        if(!basePosition.equals(bot.getNavigator().getPosition())) {
+
+            this.patternRunner = null;
+            bot.getNavigator().setTarget(null);
+            BotLogger.debug(icon, isLogging(), bot.getId() + " Опорные точки не равны! Нужна переинициализация паттерна!");
+
+        } else {    
+            
+            blockPosition = patternRunner.getNextBlock(bot);
+        }    
         // -----------------
-        if (location == null) {
+        if (blockPosition == null) {
             this.stop();
             BotLogger.debug(icon, isLogging(),
                     bot.getId() + " 🙈 Не удалось получить координаты блока для разрушения. Выходим.");
             return;
         }
 
-        BotPosition targetLocation = new BotPosition(location);
-
-        Block targetBlock = BotWorldHelper.botPositionToWorldBlock(targetLocation);
+        Block targetBlock = BotWorldHelper.botPositionToWorldBlock(blockPosition);
 
 
-        bot.getNavigator().setTarget(targetLocation);
+        //bot.getNavigator().setTarget(targetLocation);
         
         if( targetBlock.getType().toString().equals(Material.AIR.toString()) || 
             targetBlock.getType().toString().equals(Material.CAVE_AIR.toString()) || 
@@ -171,20 +181,20 @@ public class BotExcavateTask extends BotTaskAutoParams<BotExcavateTaskParams> {
             targetBlock.getType().toString().equals(Material.WATER.toString()) ||
             targetBlock.getType().toString().equals(Material.LAVA.toString())) {
             
-            BotLogger.debug(icon, isLogging(), bot.getId() + " Блок не разрушимый или уже разрушен: " + targetLocation + " " + targetBlock.getType());
+            BotLogger.debug(icon, isLogging(), bot.getId() + " Блок не разрушимый или уже разрушен: " + blockPosition + " " + targetBlock.getType());
             return;
 
         } else { 
 
-            BotLogger.debug(icon, isLogging(), bot.getId() + " Поворачивает голову в сторону: " + targetLocation + " " + targetBlock.getType());       
+            BotLogger.debug(icon, isLogging(), bot.getId() + " Поворачивает голову в сторону: " + blockPosition + " " + targetBlock.getType());       
             
-            turnToTarget(this, targetLocation);
+            turnToTarget(this, blockPosition);
         }
 
         if (bot.getNavigator().getPoi() != null) {
 
             setObjective(params.getObjective() + " " + BotUtils.getBlockName(targetBlock)
-                    + " at " + targetLocation);
+                    + " at " + blockPosition);
 
             if (isInProtectedZone(bot.getNavigator().getPoi())) {
                 BotLogger.debug(icon, isLogging(), bot.getId() + " ⛔ в запретной зоне, НЕ будет разрушать блок: " +

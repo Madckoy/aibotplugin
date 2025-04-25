@@ -200,28 +200,4 @@ public class Bot {
     public BotTaskManager getTaskManager() {
         return this.bootstrap.getTaskManager();
     }
-
-    // под вопросом, стоит ли перенести в BotUtils или в BotInventory
-    public void checkAndSelfMove(Location target) {
-        double pickupRadius = 2.0; // Радиус, в котором проверяем предметы
-        List<Entity> nearbyItems = getNPCEntity().getNearbyEntities(pickupRadius, pickupRadius, pickupRadius);
-
-        // Если есть дроп в радиусе 2 блоков — бот остается на месте
-        if (!nearbyItems.isEmpty()) {
-            BotLogger.debug("🤖", true,
-                    getId() + " 🔍 В радиусе " + pickupRadius + " блоков от есть предметы, остаюсь на месте.");
-            return;
-        }
-
-        // Если предметов рядом нет, двигаем бота к последнему разрушенному блоку
-        BotPosition pos = BotWorldHelper.locationToBotPosition(target);
-        BotLogger.debug("🤖", true, getId() + " 📦 Дроп подобран. Двигается к цели:" + pos);
-
-        BotMoveTask mv_task = new BotMoveTask(this);
-        BotMoveTaskParams mv_taskParams = new BotMoveTaskParams(pos);
-        mv_task.setParams(mv_taskParams);
-
-        BotTaskManager.push(this, mv_task);
-    }
-
 }

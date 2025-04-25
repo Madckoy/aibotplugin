@@ -56,22 +56,27 @@ public class BotExcavateCoordinatesGenerator {
     @SuppressWarnings("unchecked")
     private static BotExcavatePatternAttributes readPatternAttributes(Map<String, Object> data) {
 
-        int innerRadius = ((Number) data.getOrDefault("innerRadius", 0)).intValue();
-        int outerRadius = ((Number) data.getOrDefault("outerRadius", 0)).intValue();
+        double innerRadius = ((Number) data.getOrDefault("innerRadius", 0)).doubleValue();
+        double outerRadius = ((Number) data.getOrDefault("outerRadius", 0)).doubleValue();
         boolean inverted = (boolean) data.getOrDefault("inverted", false);
 
         Map<String, Object> outerOffsetMap = (Map<String, Object>) data.getOrDefault("offsetOuter", Collections.emptyMap());
         Map<String, Object> innerOffsetMap = (Map<String, Object>) data.getOrDefault("offsetInner", Collections.emptyMap());
 
-        int x1 = ((Number) outerOffsetMap.getOrDefault("x", 0)).intValue();
-        int y1 = ((Number) outerOffsetMap.getOrDefault("y", 0)).intValue();
-        int z1 = ((Number) outerOffsetMap.getOrDefault("z", 0)).intValue();
+        
+        double x1 = ((Number) outerOffsetMap.getOrDefault("x", 0)).doubleValue();
+        double y1 = ((Number) outerOffsetMap.getOrDefault("y", 0)).doubleValue();
+        double z1 = ((Number) outerOffsetMap.getOrDefault("z", 0)).doubleValue();
 
-        int x2 = ((Number) innerOffsetMap.getOrDefault("x", 0)).intValue();
-        int y2 = ((Number) innerOffsetMap.getOrDefault("y", 0)).intValue();
-        int z2 = ((Number) innerOffsetMap.getOrDefault("z", 0)).intValue();
+        BotPosition offsetOuter = new BotPosition(x1, y1, z1);
 
-        return new BotExcavatePatternAttributes(x1, y1, z1, outerRadius, x2, y2, z2, innerRadius, inverted);
+        double x2 = ((Number) innerOffsetMap.getOrDefault("x", 0)).doubleValue();
+        double y2 = ((Number) innerOffsetMap.getOrDefault("y", 0)).doubleValue();
+        double z2 = ((Number) innerOffsetMap.getOrDefault("z", 0)).doubleValue();
+
+        BotPosition offsetInner = new BotPosition(x2, y2, z2);
+
+        return new BotExcavatePatternAttributes(offsetOuter, outerRadius, offsetInner, innerRadius, inverted);
 
         //BotExcavateInterpretedYamlPattern(x1, y1, z1, outerRadius, x2, y2, z2, innerRadius);
     }

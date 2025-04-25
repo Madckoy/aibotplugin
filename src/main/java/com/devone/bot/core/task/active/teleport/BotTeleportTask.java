@@ -62,7 +62,7 @@ public class BotTeleportTask extends BotTaskAutoParams<BotTeleportTaskParams> {
 
         Bukkit.getScheduler().runTask(AIBotPlugin.getInstance(), () -> {
             Location baseLocation = BotWorldHelper.botPositionToWorldLocation(target);
-            Location safeOffset = baseLocation.clone().add(0.5, 0, 0.5);
+            Location safeOffset = baseLocation.clone();//.add(0.5, 0, 0.5);
 
             bot.getNPCEntity().teleport(safeOffset);
             bot.getBrain().getMemory().teleportUsedIncrease();

@@ -4,6 +4,7 @@ import java.util.Stack;
 
 import com.devone.bot.core.Bot;
 import com.devone.bot.core.task.passive.params.BotTaskParams;
+import com.devone.bot.core.utils.BotConstants;
 import com.devone.bot.core.utils.logger.BotLifecycleLogger;
 import com.devone.bot.core.utils.logger.BotLogger;
 
@@ -46,7 +47,7 @@ public class BotTaskManager {
 
         if (!stack.isEmpty()) {
             BotTask<?> currentTask = stack.peek();
-            currentTask.setPause(true); // Ставим текущую задачу на паузу
+            currentTask.setPause(true, currentTask.canResume()); // Ставим текущую задачу на паузу
         }
 
         stack.push(task);
@@ -74,7 +75,7 @@ public class BotTaskManager {
             }
 
             if (!stack.isEmpty()) {
-                stack.peek().setPause(false);
+                stack.peek().setPause(false, true);
             }
         }
     }
@@ -111,11 +112,16 @@ public class BotTaskManager {
         if (currentTask != null) {
             BotLogger.debug("🤖", true, bot.getId() + " 🟢 Activate task: " + currentTask.getIcon() + " "
                     + currentTask.getClass().getSimpleName());
-
-            if (currentTask.isPause()) {
-                currentTask.setPause(false); // будим акивную таску
-            }
-
+                    if (currentTask.isPause()) {
+                        if (currentTask.canResume()) {
+                            currentTask.setPause(false, true);
+                        } else if (currentTask.isPauseTimedOut(BotConstants.DEFAULT_TASK_TIMEOUT)) { // Например, 3 секунды
+                            BotLogger.debug("🤖", true, bot.getId() + " ⏳ Таймаут паузы. Убираем задачу.");
+                            popTask();
+                        } else {
+                            return; // Просто ждём
+                        }
+                    }
             if (currentTask.isDone()) {
                 popTask();
                 BotLogger.debug("🤖", true, bot.getId() + " ⭕ Deactivating task: " + currentTask.getIcon() + " "

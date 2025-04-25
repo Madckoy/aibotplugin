@@ -5,16 +5,21 @@ import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.World;
 import org.bukkit.block.Block;
+import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
 import org.bukkit.util.Vector;
 
 import com.devone.bot.AIBotPlugin;
 import com.devone.bot.core.Bot;
+import com.devone.bot.core.task.active.move.BotMoveTask;
+import com.devone.bot.core.task.active.move.params.BotMoveTaskParams;
 import com.devone.bot.core.task.passive.BotTask;
+import com.devone.bot.core.task.passive.BotTaskManager;
 import com.devone.bot.core.utils.blocks.BotPosition;
 import com.devone.bot.core.utils.logger.BotLogger;
 import com.devone.bot.core.utils.world.BotWorldHelper;
 
+import java.util.List;
 import java.util.concurrent.TimeUnit;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -163,5 +168,29 @@ public class BotUtils {
             BotLogger.debug(task.getIcon(), true, bot.getId() + " 🖐🏻 Анимация не выполнена: бот — не игрок");
         }
     }
+
+        // под вопросом, стоит ли перенести в BotUtils или в BotInventory
+    public void checkAndSelfMove(Bot bot, Location target) {
+        double pickupRadius = 2.0; // Радиус, в котором проверяем предметы
+        List<Entity> nearbyItems = bot.getNPCEntity().getNearbyEntities(pickupRadius, pickupRadius, pickupRadius);
+
+        // Если есть дроп в радиусе 2 блоков — бот остается на месте
+        if (!nearbyItems.isEmpty()) {
+            BotLogger.debug("🤖", true,
+                    bot.getId() + " 🔍 В радиусе " + pickupRadius + " блоков от есть предметы, остаюсь на месте.");
+            return;
+        }
+
+        // Если предметов рядом нет, двигаем бота к последнему разрушенному блоку
+        BotPosition pos = BotWorldHelper.locationToBotPosition(target);
+        BotLogger.debug("🤖", true, bot.getId() + " 📦 Дроп подобран. Двигается к цели:" + pos);
+
+        BotMoveTask mv_task = new BotMoveTask(bot);
+        BotMoveTaskParams mv_taskParams = new BotMoveTaskParams(pos);
+        mv_task.setParams(mv_taskParams);
+
+        BotTaskManager.push(bot, mv_task);
+    }
+
 
 }

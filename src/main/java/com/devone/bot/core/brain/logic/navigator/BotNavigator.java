@@ -293,7 +293,8 @@ public class BotNavigator {
             BotExcavateTaskParams excvParams = new BotExcavateTaskParams();
             BotExcavateTask excvTask = new BotExcavateTask(owner);
             excvTask.setParams(excvParams);
-            BotTaskManager.push(owner, excvTask);
+            excvTask.setPause(true, false);                               // force pause to prevent run before the move
+            BotTaskManager.push(owner, excvTask); // force pause to prevent run before the move
                             
             if (suggestion == NavigationType.WALK) {
                 

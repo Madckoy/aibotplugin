@@ -33,6 +33,8 @@ public abstract class BotTask<T extends BotTaskParams> implements IBotTask, List
     protected long startTime = System.currentTimeMillis();
 
     private boolean pause = false;
+    private boolean canResume = true;
+
     protected boolean done = false;
 
     protected final String uuid;
@@ -41,6 +43,8 @@ public abstract class BotTask<T extends BotTaskParams> implements IBotTask, List
 
     protected boolean isListenerRegistered = false;
     private boolean isReactive = false;
+
+    private long pauseStartTime=0;
 
     public BotTask(Bot bot) {
         this.bot = bot;
@@ -88,7 +92,7 @@ public abstract class BotTask<T extends BotTaskParams> implements IBotTask, List
 
     private void logTaskStatus() {
         BotLogger.debug(icon, logging, bot.getId() +
-                " ❓ Status: done=" + done + ", paused=" + pause +
+                " ❓ Status: done=" + done + ", paused=" + pause + " , can resume = " + canResume + ", " +
                 " 📍: " + bot.getNavigator().getPosition() +
                 " | 🎯: " + bot.getNavigator().getPoi());
     }
@@ -107,7 +111,7 @@ public abstract class BotTask<T extends BotTaskParams> implements IBotTask, List
         if (!BotReactiveUtils.isAlreadyReacting(bot)) {
             Optional<Runnable> reaction = BotReactivityManager.checkReactions(bot);
             if (reaction.isPresent()) {
-                setPause(true);
+                setPause(true, true);
                 BotLogger.debug("🧠", logging, bot.getId() + " 🚨 Обнаружена реакция. Текущая задача приостановлена.");
                 reaction.get().run();
                 return true;
@@ -134,22 +138,35 @@ public abstract class BotTask<T extends BotTaskParams> implements IBotTask, List
         }
         // ✅ Снимаем паузу, если вдруг задача её не сняла сама
         if (isPause()) {
-            setPause(false);
+            setPause(false, true);
         }
     }
 
-    public void setPause(boolean pause) {
+    public void setPause(boolean pause, boolean canResume) {
+        this.canResume = canResume;
         this.pause = pause;
+
+        if (pause) {
+            this.pauseStartTime = System.currentTimeMillis();
+        } else {
+            this.pauseStartTime = 0L;
+        }
+
         String status = pause ? "⏸️ Pause" : "▶️ Resume";
         BotLogger.debug(icon, logging, bot.getId() + " " + status + " (" + getClass().getSimpleName() + ")");
+    }
+
+    public boolean isPauseTimedOut(long timeoutMillis) {
+        return pause && (System.currentTimeMillis() - pauseStartTime) > timeoutMillis;
     }
 
     private void handlePlayerDisconnect() {
         BotLogger.debug("🧠", logging,
                 bot.getId() + " 🚨 Игрок " + player.getName() + " отключился. Возврат к BrainTask.");
         BotTaskManager.clear(bot);
-        BotTaskManager.push(bot, new BotBrainTask(bot));
-        this.stop();
+        BotBrainTask brain = new BotBrainTask(bot);
+        brain.setPause(false, true);
+        BotTaskManager.push(bot, brain);
     }
 
     @Override
@@ -166,6 +183,11 @@ public abstract class BotTask<T extends BotTaskParams> implements IBotTask, List
     public boolean isPause() {
         return pause;
     }
+
+    public boolean canResume() {
+        return canResume;
+    }
+
 
     public boolean isEnabled() {
         return enabled;
