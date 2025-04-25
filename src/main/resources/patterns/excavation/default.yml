@@ -2,23 +2,24 @@ name: around_observer
 
 offsetOuter:
   x: 0
-  y: 1
+  y: 0
   z: 0
 
 offsetInner:
   x: 0
-  y: 1
+  y: 0
   z: 0
 
-outerRadius: 2
-innerRadius: 2
+outerRadius: 1
+innerRadius: 1
 
-inverted: true
+inverted: false
 
+#cube with cental column
 filters:
-  - "x == cx"
-  - "z == cz"
-  - "y <= cy && y >= cy - 3"  # Три блока вниз от центра: cy, cy-1, cy-2
-
+  - "x >= cx - r && x <= cx + r"
+  - "y >= cy - r && y <= cy + r"
+  - "z >= cz - r && z <= cz + r"
+  - "!(x == cx && z == cz)"
 sort:
   - "y"

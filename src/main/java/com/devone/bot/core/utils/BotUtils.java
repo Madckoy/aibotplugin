@@ -102,7 +102,7 @@ public class BotUtils {
         Location tgt = BotWorldHelper.botPositionToWorldLocation(target);
 
         Location from = bot.getNPCEntity().getLocation();
-        Location to = tgt.clone().add(0.5, 0.5, 0.5); // центр блока
+        Location to = tgt.clone();//.add(0.5, 0.5, 0.5); // центр блока
 
         Vector direction = to.toVector().subtract(from.toVector());
 

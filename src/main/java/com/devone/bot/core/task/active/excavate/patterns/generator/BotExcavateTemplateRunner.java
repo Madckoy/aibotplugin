@@ -97,7 +97,7 @@ public class BotExcavateTemplateRunner implements IBotExcavatePatternRunner {
         }
 
         if (!initialized) {
-            BotLogger.debug("📐", true, " 🔁 Генерация точек по паттерну: " + yamlPath);
+            BotLogger.debug("📐", true, " 🔁 удаление блоков по паттерну: " + yamlPath);
             
             if(params!=null) { 
                 BotLogger.debug("Params:", true, params.toString());
@@ -108,29 +108,30 @@ public class BotExcavateTemplateRunner implements IBotExcavatePatternRunner {
             List<BotPosition> outerPts =  generator.generateOuterPoints(params);
             List<BotPosition> innerPts = generator.generateInnerPoints(params);
             
-            List<BotPosition> substract  = new ArrayList<>(outerPts);
-            
+            List<BotPosition> result  = null;
+
             if(isInverted) {
-                substract.removeAll(innerPts);
+                outerPts.removeAll(innerPts);
+                result = outerPts;
+            } else {
+                result = innerPts;
             }
 
             // ✅ Сортировка по направлению
             Comparator<BotPosition> sortingComparator = BotPositionComparators.byAxisDirection(AxisDirection.DOWN);
             if (sortingComparator != null) {
-                substract.sort(sortingComparator);
+                result.sort(sortingComparator);
             }
 
-            if (substract != null && !substract.isEmpty()) {
+            if (result != null && !result.isEmpty()) {
 
-                blocksToBreak.addAll(substract);
+                blocksToBreak.addAll(result);
                 
-                BotLogger.debug("📐", true, " ✅ Added " + blocksToBreak.size() + " coordinates");
-                BotLogger.debug("📐", true, " ✅ Added " + blocksToBreak);
+                BotLogger.debug("📐", true, " ✅ Added " + result.size() + " coordinates");
+                BotLogger.debug("📐", true, " ✅ Added " + result);
 
             } else {
-                
                 BotLogger.debug("📐", true, " ⚠️ Паттерн YAML не вернул ни одной точки для разрушения.");
-
             }
 
             BotLogger.debug("Block:", true, blocksToBreak.toString());
