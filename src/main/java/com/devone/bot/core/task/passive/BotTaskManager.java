@@ -47,7 +47,10 @@ public class BotTaskManager {
 
         if (!stack.isEmpty()) {
             BotTask<?> currentTask = stack.peek();
-            currentTask.setPause(true, currentTask.canResume()); // Ставим текущую задачу на паузу
+            currentTask.setPause(true); // Ставим текущую задачу на паузу
+            if(currentTask.isDeffered()) {
+              currentTask.setDeffered(false); // Cнимам флажок отложенности т.к пришла следующая таска
+            }
         }
 
         stack.push(task);
@@ -75,7 +78,7 @@ public class BotTaskManager {
             }
 
             if (!stack.isEmpty()) {
-                stack.peek().setPause(false, true);
+                stack.peek().setPause(false);
             }
         }
     }
@@ -113,8 +116,8 @@ public class BotTaskManager {
             BotLogger.debug("🤖", true, bot.getId() + " 🟢 Activate task: " + currentTask.getIcon() + " "
                     + currentTask.getClass().getSimpleName());
                     if (currentTask.isPause()) {
-                        if (currentTask.canResume()) {
-                            currentTask.setPause(false, true);
+                        if (currentTask.isDeffered()) {
+                            currentTask.setPause(false);
                         } else if (currentTask.isPauseTimedOut(BotConstants.DEFAULT_TASK_TIMEOUT)) { // Например, 3 секунды
                             BotLogger.debug("🤖", true, bot.getId() + " ⏳ Таймаут паузы. Убираем задачу.");
                             popTask();
@@ -130,7 +133,13 @@ public class BotTaskManager {
                 BotLogger.debug("🤖", true, bot.getId() + " 🔵 Updating task: " + currentTask.getIcon() + " "
                         + currentTask.getClass().getSimpleName());
 
-                currentTask.update();
+                if(currentTask.isDeffered()==false) {
+                    currentTask.update();
+                } else {
+                    BotLogger.debug("🤖", true, bot.getId() + " 🟣 Task is waiting while anoher task is being added: " + currentTask.getIcon() + " "
+                    + currentTask.getClass().getSimpleName());
+                    return; //skip the cycle
+                }
             }
         }
     }
@@ -160,6 +169,9 @@ public class BotTaskManager {
     public static void push(Bot bot, BotTask<?> task) {
         task.setReactive(task.isReactive()); // не переопределяем, если уже выставлено
         bot.getTaskManager().pushTask(task);
+        if(task.isDeffered()){
+            task.setPause(true);
+        }    
         BotLogger.debug(task.getIcon(), true, bot.getId() + " ➕ Добавлена задача: " + task.getClass().getSimpleName());
     }
 

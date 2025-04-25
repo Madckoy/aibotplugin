@@ -158,8 +158,10 @@ public class BotExcavateTask extends BotTaskAutoParams<BotExcavateTaskParams> {
             bot.getNavigator().setTarget(null);
             BotLogger.debug(icon, isLogging(), bot.getId() + " Опорные точки не равны! Нужна переинициализация паттерна!");
 
+            return;
+
         } else {    
-            
+
             blockPosition = patternRunner.getNextBlock(bot);
         }    
         // -----------------

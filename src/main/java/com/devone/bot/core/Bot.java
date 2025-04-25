@@ -1,10 +1,6 @@
 package com.devone.bot.core;
 
-import java.util.List;
-
 import java.util.UUID;
-
-import org.bukkit.Location;
 
 import org.bukkit.entity.Entity;
 
@@ -18,12 +14,7 @@ import com.devone.bot.core.speaker.BotSpeaker;
 import com.devone.bot.core.state.BotState;
 import com.devone.bot.core.task.passive.BotTask;
 import com.devone.bot.core.task.passive.BotTaskManager;
-import com.devone.bot.core.task.active.move.BotMoveTask;
-import com.devone.bot.core.task.active.move.params.BotMoveTaskParams;
-import com.devone.bot.core.utils.blocks.BotPosition;
 import com.devone.bot.core.utils.logger.BotLogger;
-import com.devone.bot.core.utils.world.BotWorldHelper;
-
 import net.citizensnpcs.api.ai.Navigator;
 import net.citizensnpcs.api.npc.NPC;
 

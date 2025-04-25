@@ -33,7 +33,15 @@ public abstract class BotTask<T extends BotTaskParams> implements IBotTask, List
     protected long startTime = System.currentTimeMillis();
 
     private boolean pause = false;
-    private boolean canResume = true;
+    private boolean deffered = false;
+
+    public boolean isDeffered() {
+        return deffered;
+    }
+
+    public void setDeffered(boolean deffered) {
+        this.deffered = deffered;
+    }
 
     protected boolean done = false;
 
@@ -49,6 +57,7 @@ public abstract class BotTask<T extends BotTaskParams> implements IBotTask, List
     public BotTask(Bot bot) {
         this.bot = bot;
         this.uuid = UUID.randomUUID().toString();
+        startTime = System.currentTimeMillis();
     }
 
     public BotTask(Bot bot, String icn) {
@@ -75,7 +84,7 @@ public abstract class BotTask<T extends BotTaskParams> implements IBotTask, List
         sonar.execute();    
         bot.getNavigator().calculate(bot.getBrain().getMemory().getSceneData()); 
 
-        if (!enabled || isPause()) {
+        if (!enabled || isPause() || isDeffered()) {
             return;
         }
 
@@ -92,7 +101,7 @@ public abstract class BotTask<T extends BotTaskParams> implements IBotTask, List
 
     private void logTaskStatus() {
         BotLogger.debug(icon, logging, bot.getId() +
-                " ❓ Status: done=" + done + ", paused=" + pause + " , can resume = " + canResume + ", " +
+                " ❓ Status: done=" + done + ", paused=" + pause + " , can resume = " + deffered + ", " +
                 " 📍: " + bot.getNavigator().getPosition() +
                 " | 🎯: " + bot.getNavigator().getPoi());
     }
@@ -111,7 +120,7 @@ public abstract class BotTask<T extends BotTaskParams> implements IBotTask, List
         if (!BotReactiveUtils.isAlreadyReacting(bot)) {
             Optional<Runnable> reaction = BotReactivityManager.checkReactions(bot);
             if (reaction.isPresent()) {
-                setPause(true, true);
+                setPause(true);
                 BotLogger.debug("🧠", logging, bot.getId() + " 🚨 Обнаружена реакция. Текущая задача приостановлена.");
                 reaction.get().run();
                 return true;
@@ -138,12 +147,11 @@ public abstract class BotTask<T extends BotTaskParams> implements IBotTask, List
         }
         // ✅ Снимаем паузу, если вдруг задача её не сняла сама
         if (isPause()) {
-            setPause(false, true);
+            setPause(false);
         }
     }
 
-    public void setPause(boolean pause, boolean canResume) {
-        this.canResume = canResume;
+    public void setPause(boolean pause) {
         this.pause = pause;
 
         if (pause) {
@@ -165,14 +173,14 @@ public abstract class BotTask<T extends BotTaskParams> implements IBotTask, List
                 bot.getId() + " 🚨 Игрок " + player.getName() + " отключился. Возврат к BrainTask.");
         BotTaskManager.clear(bot);
         BotBrainTask brain = new BotBrainTask(bot);
-        brain.setPause(false, true);
+        brain.setPause(false);
         BotTaskManager.push(bot, brain);
     }
 
     @Override
     public IBotTaskParameterized<T> setParams(T params) {
         this.params = params;
-        this.startTime = System.currentTimeMillis();
+        startTime = System.currentTimeMillis();
         return this;
     }
 
@@ -184,8 +192,8 @@ public abstract class BotTask<T extends BotTaskParams> implements IBotTask, List
         return pause;
     }
 
-    public boolean canResume() {
-        return canResume;
+    public boolean isDeeered() {
+        return deffered;
     }
 
 
