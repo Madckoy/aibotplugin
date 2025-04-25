@@ -44,7 +44,7 @@ public abstract class BotHandTask<T extends BotHandTaskParams> extends BotTaskAu
             this.stop();
             return;
         }
-        turnToTarget(this, target.getPosition());
+        // turnToTarget(this, target.getPosition());
 
         // Конкретная логика — в наследнике
     }
