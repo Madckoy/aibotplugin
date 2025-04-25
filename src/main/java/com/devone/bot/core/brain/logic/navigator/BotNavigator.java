@@ -16,6 +16,12 @@ import com.devone.bot.core.brain.logic.navigator.context.BotNavigationContextMak
 import com.devone.bot.core.brain.logic.navigator.math.selector.BotPOISelector;
 import com.devone.bot.core.brain.logic.navigator.summary.BotNavigationSummaryItem;
 import com.devone.bot.core.brain.memory.scene.BotSceneData;
+import com.devone.bot.core.task.active.excavate.BotExcavateTask;
+import com.devone.bot.core.task.active.excavate.params.BotExcavateTaskParams;
+import com.devone.bot.core.task.active.move.BotMoveTask;
+import com.devone.bot.core.task.active.move.params.BotMoveTaskParams;
+import com.devone.bot.core.task.active.teleport.BotTeleportTask;
+import com.devone.bot.core.task.active.teleport.params.BotTeleportTaskParams;
 import com.devone.bot.core.task.passive.BotTaskManager;
 import com.devone.bot.core.task.reactive.container.BotReactiveMoveAndExcavateContainer;
 import com.devone.bot.core.task.reactive.container.BotReactiveTeleportToPositionAndExcavateContainer;
@@ -287,33 +293,32 @@ public class BotNavigator {
                             + owner.getBrain().getCurrentTask().getIcon() +
                             " " + owner.getBrain().getCurrentTask().getClass().getSimpleName() + " ]");
 
+
+            BotExcavateTaskParams excvParams = new BotExcavateTaskParams();
+            BotExcavateTask excvTask = new BotExcavateTask(owner);
+            excvTask.setParams(excvParams);
+            BotTaskManager.push(owner, excvTask);
+                            
             if (suggestion == NavigationType.WALK) {
                 
-                BotReactiveMoveAndExcavateContainerParams params = new BotReactiveMoveAndExcavateContainerParams();
-                params.position = new BotPosition(this.poi);
-                BotReactiveMoveAndExcavateContainer container = new BotReactiveMoveAndExcavateContainer(owner);
-                container.setParams(params);
-                BotTaskManager.push(owner, container);
+                BotPosition movePosiiton = new BotPosition(this.poi);
+
+                BotMoveTaskParams mv_params = new BotMoveTaskParams();
+                mv_params.setTarget(new BotPosition(movePosiiton));
+                BotMoveTask moveTask =  new BotMoveTask(owner);
+                moveTask.setParams(mv_params);
+                BotTaskManager.push(owner, moveTask);
 
             } else {
 
-                BotReactiveTeleportToPositionAndExcavateContainerParams tp_params = new BotReactiveTeleportToPositionAndExcavateContainerParams();
-                tp_params.position = new BotPosition(this.poi);
-                BotReactiveTeleportToPositionAndExcavateContainer container = new BotReactiveTeleportToPositionAndExcavateContainer(owner, tp_params.position);
-                BotTaskManager.push(owner, container);
+
+                BotTeleportTask tp = new BotTeleportTask(owner, null);
+                BotTeleportTaskParams params = new BotTeleportTaskParams();
+                params.setPosition(position);
+                tp.setParams(params);
+                BotTaskManager.push(owner, tp);
 
             }
-            /*
-             * BotMoveTaskParams moveTaskParams = new BotMoveTaskParams();
-             * 
-             * moveTaskParams.setTarget(this.poi);
-             * moveTaskParams.setSpeed(speed);
-             * 
-             * BotMoveTask moveTask = new BotMoveTask(owner);
-             * moveTask.setParams(moveTaskParams);
-             * 
-             * BotTaskManager.push(owner, moveTask);
-             */
             Location loc = BotWorldHelper.botPositionToWorldLocation(this.poi);
             boolean canNavigate = owner.getNPC().getNavigator().canNavigateTo(loc);
             return canNavigate;
