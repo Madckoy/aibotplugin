@@ -107,21 +107,22 @@ public class BotExcavateTemplateRunner implements IBotExcavatePatternRunner {
 
             List<BotPosition> outerPts =  generator.generateOuterPoints(params);
             List<BotPosition> innerPts = generator.generateInnerPoints(params);
-            List<BotPosition> removedPts = new ArrayList<>(outerPts);
+            
+            List<BotPosition> substract  = new ArrayList<>(outerPts);
             
             if(isInverted) {
-                removedPts.removeAll(innerPts);
+                substract.removeAll(innerPts);
             }
 
             // ✅ Сортировка по направлению
             Comparator<BotPosition> sortingComparator = BotPositionComparators.byAxisDirection(AxisDirection.DOWN);
             if (sortingComparator != null) {
-                removedPts.sort(sortingComparator);
+                substract.sort(sortingComparator);
             }
 
-            if (removedPts != null && !removedPts.isEmpty()) {
+            if (substract != null && !substract.isEmpty()) {
 
-                blocksToBreak.addAll(removedPts);
+                blocksToBreak.addAll(substract);
                 
                 BotLogger.debug("📐", true, " ✅ Added " + blocksToBreak.size() + " coordinates");
                 BotLogger.debug("📐", true, " ✅ Added " + blocksToBreak);
