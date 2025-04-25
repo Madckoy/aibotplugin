@@ -82,17 +82,11 @@ public class BotExcavateCoordinatesGenerator {
     }
 
     public List<BotPosition> generateInnerPoints(BotExcavateTemplateRunnerParams params) {
-        double ox = params.observerX;
-        double oy = params.observerY;
-        double oz = params.observerZ;
-        
+        BotPosition observer = new BotPosition(params.observer);
+        BotPosition offsetInner = new BotPosition(params.offsetInner); 
         double innerRadius = params.innerRadius;
         
-        double offsetX = params.offsetInnerX;
-        double offsetY = params.offsetInnerY;
-        double offsetZ = params.offsetInnerZ;
-
-        double[] center = computeFigureCenter(ox, oy, oz, offsetX, offsetY, offsetZ);
+        double[] center = computeFigureCenter(observer.getX(), observer.getY(), observer.getZ(), offsetInner.getX(), offsetInner.getY(), offsetInner.getZ());
 
         return generateInnerPoints(center[0], center[1], center[2], innerRadius);
     }
@@ -140,18 +134,14 @@ public class BotExcavateCoordinatesGenerator {
     }
 
     public List<BotPosition> generateOuterPoints(BotExcavateTemplateRunnerParams params) {
-        double ox = params.observerX;
-        double oy = params.observerY;
-        double oz = params.observerZ;
-        
+
+        BotPosition observer = new BotPosition(params.observer);
+        BotPosition offsetOuter = new BotPosition(params.offsetOuter);        
 
         double outerRadius = params.outerRadius;
-        
-        double offsetX = params.offsetOuterX;
-        double offsetY = params.offsetOuterY;
-        double offsetZ = params.offsetOuterZ;
 
-        double[] center = computeFigureCenter(ox, oy, oz, offsetX, offsetY, offsetZ);
+        double[] center = computeFigureCenter(observer.getX(), observer.getY(), observer.getZ(), 
+        offsetOuter.getX(), offsetOuter.getY(), offsetOuter.getZ());
 
         return generateOuterPoints(center[0], center[1], center[2], outerRadius);
     }

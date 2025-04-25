@@ -49,6 +49,7 @@ public class BotExcavateTask extends BotTaskAutoParams<BotExcavateTaskParams> {
 
         setIcon(params.getIcon());
         setObjective(params.getObjective());
+        setEnabled(params.isEnabled());
 
         if (params.getPatternName() != null) {
             this.patternName = params.getPatternName();
@@ -105,13 +106,18 @@ public class BotExcavateTask extends BotTaskAutoParams<BotExcavateTaskParams> {
             return;
         }
 
+        basePosition = new BotPosition(bot.getNavigator().getPosition());
+
         if (patternRunner == null) {
             if (!StringUtil.isEmpty(patternName)) {
 
                 Path ptrnPath = Paths.get(BotConstants.PLUGIN_PATH_PATTERNS_BREAK, patternName);
-
-                this.patternRunner = new BotExcavateTemplateRunner(ptrnPath).init(bot.getNavigator().getPosition());
+               
                 basePosition = new BotPosition(bot.getNavigator().getPosition());
+
+                this.patternRunner = new BotExcavateTemplateRunner(ptrnPath).init(basePosition);
+
+                
 
                 //setParams(null ); //null because we read from the template file
 
@@ -123,6 +129,7 @@ public class BotExcavateTask extends BotTaskAutoParams<BotExcavateTaskParams> {
                 Path fallbackPath = Paths.get(BotConstants.PLUGIN_PATH_PATTERNS_BREAK,
                         BotConstants.DEFAULT_PATTERN_BREAK);
 
+                excavateParams.observer = new BotPosition(basePosition);        
                 this.patternRunner = new BotExcavateTemplateRunner(fallbackPath).setParams( excavateParams );
 
                 BotLogger.debug(icon, isLogging(), bot.getId() +
@@ -148,6 +155,7 @@ public class BotExcavateTask extends BotTaskAutoParams<BotExcavateTaskParams> {
         if (params.isPickup()) {
             bot.pickupNearbyItems();
         }
+
         BotPosition blockPosition = null;
         // -----------------
         BotLogger.debug(icon, isLogging(), bot.getId() + " Заданая опорная точка: "+basePosition);
@@ -190,7 +198,7 @@ public class BotExcavateTask extends BotTaskAutoParams<BotExcavateTaskParams> {
 
             BotLogger.debug(icon, isLogging(), bot.getId() + " Поворачивает голову в сторону: " + blockPosition + " " + targetBlock.getType());       
             
-            turnToTarget(this, blockPosition);
+            //turnToTarget(this, blockPosition);
         }
 
         if (bot.getNavigator().getPoi() != null) {

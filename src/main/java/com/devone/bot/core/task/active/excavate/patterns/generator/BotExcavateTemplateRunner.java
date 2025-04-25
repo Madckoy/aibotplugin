@@ -35,12 +35,12 @@ public class BotExcavateTemplateRunner implements IBotExcavatePatternRunner {
         this.yamlPath = path;
     }
 
-    public BotExcavateTemplateRunner init(BotPosition observer) {
+    public BotExcavateTemplateRunner init(BotPosition obs) {
 
-        BotPosition position = new BotPosition(observer);
+        BotPosition observer  = new BotPosition(obs);
 
         BotLogger.debug("🛠️", true, "Начинаем загрузку YAML-паттерна: " + yamlPath);
-        BotLogger.debug("🛠️", true, "Для опорной точки: " + position);
+        BotLogger.debug("🛠️", true, "Для опорной точки: " + observer);
 
     
         try (InputStream inputStream = Files.newInputStream(yamlPath)) {
@@ -65,7 +65,7 @@ public class BotExcavateTemplateRunner implements IBotExcavatePatternRunner {
 
         BotExcavatePatternAttributes attributes = this.generator.getAttributes();
 
-        params = new BotExcavateTemplateRunnerParams(position, 
+        params = new BotExcavateTemplateRunnerParams(observer, 
                                                      attributes.getOffsetOuter(), 
                                                      attributes.getOuterRadius(),
                                                      attributes.getOffsetInner(),

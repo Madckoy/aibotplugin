@@ -1,5 +1,6 @@
 package com.devone.bot.core.task.active.move.listeners;
 
+import com.devone.bot.AIBotPlugin;
 import com.devone.bot.core.Bot;
 import com.devone.bot.core.brain.memory.MemoryType;
 import com.devone.bot.core.task.active.move.BotMoveTask;
@@ -11,11 +12,13 @@ import com.devone.bot.core.utils.world.BotWorldHelper;
 import net.citizensnpcs.api.ai.event.NavigationCancelEvent;
 import net.citizensnpcs.api.ai.event.NavigationCompleteEvent;
 
+import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.block.Block;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.HandlerList;
 import org.bukkit.event.Listener;
+import org.bukkit.event.player.PlayerTeleportEvent;
 
 public class BotMoveTaskListener implements Listener {
 
@@ -50,7 +53,7 @@ public class BotMoveTaskListener implements Listener {
             task.getBot().getBrain().getMemory().memorize(data, MemoryType.VISITED_BLOCKS);
         }
 
-        onComplete(task.getBot());
+        //onComplete(task.getBot());
 
         task.stop();
     }
@@ -84,9 +87,11 @@ public class BotMoveTaskListener implements Listener {
                     Math.floor(target.getZ()) + 0.5
                 );
 
-                bot.getNPCEntity().teleport(aligned);
+                Bukkit.getScheduler().runTask(AIBotPlugin.getInstance(), () -> {
+                        bot.getNPC().teleport(aligned, PlayerTeleportEvent.TeleportCause.PLUGIN);
+                });
 
-                BotLogger.debug("🧭", true, bot.getId() + " 📌 Выровнен в центр блока через NavigationCompleteListener: " + aligned);
+                BotLogger.debug("🧭", true, bot.getId() + " 📌 Выровнен в центр блока через NavigationCompleteListener: " + bot.getNPC().getStoredLocation());
             }
         }
     }

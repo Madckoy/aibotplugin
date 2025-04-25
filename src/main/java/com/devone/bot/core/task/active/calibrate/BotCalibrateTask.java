@@ -19,11 +19,16 @@ public class BotCalibrateTask extends BotTaskAutoParams<BotCalibrateTaskParams> 
         super.setParams(params);
         setIcon(params.getIcon());
         setObjective(params.getObjective());
+        setEnabled(params.isEnabled());
         return this;
     }
 
     @Override
     public void execute() {
+
+        if(!isEnabled()) {
+            return;
+        }
 
         long rmt = BotUtils.getRemainingTime(startTime, params.getTimeout());
 

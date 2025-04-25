@@ -23,6 +23,7 @@ public class BotExploreTask extends BotTaskAutoParams<BotExploreTaskParams> {
 
         setIcon(params.getIcon());
         setObjective(params.getObjective());
+        setEnabled(params.isEnabled());
 
         this.scanRadius = params.getScanRadius(); // Извлекаем параметр
 
@@ -34,6 +35,13 @@ public class BotExploreTask extends BotTaskAutoParams<BotExploreTaskParams> {
 
         if (isPause())
             return;
+
+        if(!isEnabled()) {
+                return;
+        }
+    
+
+        bot.getNavigator().calculate(bot.getBrain().getMemory().getSceneData());     
 
         BotLogger.debug(icon, isLogging(), bot.getId() + " 🧭 Explore with distance: " + scanRadius);
 

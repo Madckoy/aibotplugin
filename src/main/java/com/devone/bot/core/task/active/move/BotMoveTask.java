@@ -34,6 +34,7 @@ public class BotMoveTask extends BotTaskAutoParams<BotMoveTaskParams> {
         this.speed = params.getSpeed();
         setIcon(params.getIcon());
         setObjective(params.getObjective());
+        setEnabled(params.isEnabled());
 
         BotPosition target = params.getTarget();
 
@@ -51,6 +52,11 @@ public class BotMoveTask extends BotTaskAutoParams<BotMoveTaskParams> {
 
     @Override
     public void execute() {
+
+        if(!isEnabled()) {
+            return;
+        }
+
         if (done || isPause()) {
             BotLogger.debug(icon, isLogging(), bot.getId() + " ⭕ Таска завершена или на паузе");
             return;

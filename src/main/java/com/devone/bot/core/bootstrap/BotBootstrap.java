@@ -6,6 +6,7 @@ import com.devone.bot.AIBotPlugin;
 import com.devone.bot.core.Bot;
 import com.devone.bot.core.task.passive.BotTaskManager;
 import com.devone.bot.core.task.active.brain.BotBrainTask;
+import com.devone.bot.core.task.active.sonar.BotSonar3DTask;
 import com.devone.bot.core.utils.logger.BotLogger;
 import com.devone.bot.core.utils.server.ServerUtils;
 
@@ -29,7 +30,7 @@ public class BotBootstrap {
 
             update();
 
-        }, 0L, 2L); // 2 тика = 0.1 секунды (в 10 раз быстрее, чем было!)
+        }, 0L, 40); // 2 sec
     }
 
     public void update() {
@@ -40,6 +41,10 @@ public class BotBootstrap {
 
             brainStarted = false; // ✅ Если есть активность, сбрасываем флаг
 
+            BotLogger.debug(bot.getActiveTask().getIcon(), true, bot.getId() + " 📡 Scan");
+            BotSonar3DTask sonar = new BotSonar3DTask(bot);
+            sonar.execute();    
+
             taskManager.updateActiveTask();
 
         } else {
@@ -48,7 +53,7 @@ public class BotBootstrap {
 
                 BotTaskManager.push(bot, new BotBrainTask(bot));
 
-                brainStarted = true; // ✅ Ставим флаг, что Calibration Tsk уже добавлен
+                brainStarted = true; // ✅ Ставим флаг, что Brain уже добавлен
             }
         }
     }

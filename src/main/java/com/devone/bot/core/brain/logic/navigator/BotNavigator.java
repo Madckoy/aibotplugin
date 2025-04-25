@@ -16,8 +16,6 @@ import com.devone.bot.core.brain.logic.navigator.context.BotNavigationContextMak
 import com.devone.bot.core.brain.logic.navigator.math.selector.BotPOISelector;
 import com.devone.bot.core.brain.logic.navigator.summary.BotNavigationSummaryItem;
 import com.devone.bot.core.brain.memory.scene.BotSceneData;
-import com.devone.bot.core.task.active.excavate.BotExcavateTask;
-import com.devone.bot.core.task.active.excavate.params.BotExcavateTaskParams;
 import com.devone.bot.core.task.active.move.BotMoveTask;
 import com.devone.bot.core.task.active.move.params.BotMoveTaskParams;
 import com.devone.bot.core.task.active.teleport.BotTeleportTask;
@@ -290,11 +288,11 @@ public class BotNavigator {
                             " " + owner.getBrain().getCurrentTask().getClass().getSimpleName() + " ]");
 
 
-            BotExcavateTaskParams excvParams = new BotExcavateTaskParams();
-            BotExcavateTask excvTask = new BotExcavateTask(owner);
-            excvTask.setParams(excvParams);
-            excvTask.setDeffered(true);  // delayed update() to prevent run before the move
-            BotTaskManager.push(owner, excvTask); 
+            //BotExcavateTaskParams excvParams = new BotExcavateTaskParams();
+            //BotExcavateTask excvTask = new BotExcavateTask(owner);
+            //excvTask.setParams(excvParams);
+            //excvTask.setDeffered(true);  // delayed update() to prevent run before the move
+            //BotTaskManager.push(owner, excvTask); 
                             
             if (suggestion == NavigationType.WALK) {
                 
@@ -307,7 +305,6 @@ public class BotNavigator {
                 BotTaskManager.push(owner, moveTask);
 
             } else {
-
 
                 BotTeleportTask tp = new BotTeleportTask(owner, null);
                 BotTeleportTaskParams params = new BotTeleportTaskParams();

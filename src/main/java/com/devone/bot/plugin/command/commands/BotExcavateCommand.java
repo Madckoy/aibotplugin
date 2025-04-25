@@ -1,6 +1,6 @@
 package com.devone.bot.plugin.command.commands;
 
-import com.devone.bot.core.task.reactive.container.BotReactiveMoveAndExcavateContainer;
+import com.devone.bot.core.task.reactive.container.BotReactiveExcavateContainer;
 import java.util.Arrays;
 
 import org.bukkit.command.Command;
@@ -41,7 +41,7 @@ BotLogger.debug("🔧", true, "Получена команда от сервер
             return false;
         }
 
-        BotTaskManager.push(bot, new BotReactiveMoveAndExcavateContainer(bot));
+        BotTaskManager.push(bot, new BotReactiveExcavateContainer(bot));
 
         return true;
     }

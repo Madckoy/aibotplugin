@@ -5,7 +5,6 @@ import org.bukkit.event.Listener;
 
 import com.devone.bot.core.Bot;
 import com.devone.bot.core.task.active.brain.BotBrainTask;
-import com.devone.bot.core.task.active.sonar.BotSonar3DTask;
 import com.devone.bot.core.task.passive.params.BotTaskParams;
 import com.devone.bot.core.task.reactive.BotReactiveUtils;
 import com.devone.bot.core.task.reactive.BotReactivityManager;
@@ -25,6 +24,19 @@ public abstract class BotTask<T extends BotTaskParams> implements IBotTask, List
     }
 
     protected boolean enabled = true;
+    
+    public void setEnabled(boolean enabled) {
+        this.enabled = enabled;
+    }
+
+    public boolean isStopped() {
+        return stopped;
+    }
+
+    public void setStopped(boolean stopped) {
+        this.stopped = stopped;
+    }
+
     protected boolean stopped = false;
     protected boolean logging = true;
 
@@ -79,12 +91,7 @@ public abstract class BotTask<T extends BotTaskParams> implements IBotTask, List
 
         logTaskStatus();
 
-        BotLogger.debug(icon, isLogging(), bot.getId() + " 📡 Scan");
-        BotSonar3DTask sonar = new BotSonar3DTask(bot);
-        sonar.execute();    
-        bot.getNavigator().calculate(bot.getBrain().getMemory().getSceneData()); 
-
-        if (!enabled || isPause() || isDeffered()) {
+        if (!isEnabled() || isPause() || isDeffered()) {
             return;
         }
 
@@ -101,7 +108,7 @@ public abstract class BotTask<T extends BotTaskParams> implements IBotTask, List
 
     private void logTaskStatus() {
         BotLogger.debug(icon, logging, bot.getId() +
-                " ❓ Status: done=" + done + ", paused=" + pause + " , can resume = " + deffered + ", " +
+                " ❓ Status: done=" + done + ", paused=" + pause + " , deffered= " + deffered + ", " +
                 " 📍: " + bot.getNavigator().getPosition() +
                 " | 🎯: " + bot.getNavigator().getPoi());
     }

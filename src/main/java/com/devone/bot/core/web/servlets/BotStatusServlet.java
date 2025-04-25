@@ -77,11 +77,11 @@ public class BotStatusServlet extends HttpServlet {
                 String currLoc = loc.getX() + ", " + loc.getY() + ", " + loc.getZ();
 
                 botJson.addProperty("position", currLoc);
-
-                botJson.addProperty("task", bot.getBrain().getCurrentTask().getIcon());
-                botJson.addProperty("taskIsReactive", bot.getBrain().getCurrentTask().isReactive());
-
-                botJson.addProperty("object", getCurrentObjective(bot));
+                if(bot.getBrain().getCurrentTask()!=null) {
+                    botJson.addProperty("task", bot.getBrain().getCurrentTask().getIcon());
+                    botJson.addProperty("taskIsReactive", bot.getBrain().getCurrentTask().isReactive());
+                }
+                botJson.addProperty("object", BotStatusServlet.getCurrentObjective(bot));
 
                 String tgtLoc = "";
                 
