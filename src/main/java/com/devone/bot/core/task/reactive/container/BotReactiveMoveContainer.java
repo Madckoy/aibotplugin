@@ -1,9 +1,7 @@
 package com.devone.bot.core.task.reactive.container;
 
 import com.devone.bot.core.Bot;
-import com.devone.bot.core.task.active.excavate.BotExcavateTask;
 import com.devone.bot.core.task.passive.BotReactiveTaskContainer;
-import com.devone.bot.core.task.active.excavate.params.BotExcavateTaskParams;
 import com.devone.bot.core.task.active.move.BotMoveTask;
 import com.devone.bot.core.task.active.move.params.BotMoveTaskParams;
 import com.devone.bot.core.task.reactive.container.params.BotReactiveMoveContainerParams;

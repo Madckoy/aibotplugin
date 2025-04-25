@@ -35,7 +35,7 @@ public class BotExcavateTemplateRunner implements IBotExcavatePatternRunner {
         this.yamlPath = path;
     }
 
-    public BotExcavateTemplateRunner init(int observerX, int observerY, int observerZ) {
+    public BotExcavateTemplateRunner init(double observerX, double observerY, double observerZ) {
 
         BotLogger.debug("🛠️", true, "Начинаем загрузку YAML-паттерна: " + yamlPath);
     

@@ -1,18 +1,18 @@
 package com.devone.bot.core.task.active.excavate.patterns.generator.params;
 
 public class BotExcavateTemplateRunnerParams {
-    public int observerX, observerY, observerZ;
+    public double observerX, observerY, observerZ;
 
-    public int offsetOuterX;
-    public int offsetOuterY;
-    public int offsetOuterZ;
+    public double offsetOuterX;
+    public double offsetOuterY;
+    public double offsetOuterZ;
 
-    public int offsetInnerX;
-    public int offsetInnerY;
-    public int offsetInnerZ;
+    public double offsetInnerX;
+    public double offsetInnerY;
+    public double offsetInnerZ;
 
-    public int outerRadius;
-    public int innerRadius;
+    public double outerRadius;
+    public double innerRadius;
 
     public boolean inverted;
 
@@ -36,9 +36,9 @@ public class BotExcavateTemplateRunnerParams {
         this.inverted    = true;
     }
 
-    public BotExcavateTemplateRunnerParams(int observerX, int observerY, int observerZ,
-                                           int offsetOuterX, int offsetOuterY, int offsetOuterZ, int outerRadius, 
-                                           int offsetInnerX, int offsetInnerY, int offsetInnerZ, int innerRadius, 
+    public BotExcavateTemplateRunnerParams(double observerX, double observerY, double observerZ,
+                                           double offsetOuterX, double offsetOuterY, double offsetOuterZ, double outerRadius, 
+                                           double offsetInnerX, double offsetInnerY, double offsetInnerZ, double innerRadius, 
                                            boolean inverted) {
         this.observerX = observerX;
         this.observerY = observerY;
@@ -62,7 +62,7 @@ public class BotExcavateTemplateRunnerParams {
     @Override
     public String toString() {
     return String.format(
-        "📦 origin: (%d, %d, %d), offsetOuter: (%d, %d, %d), outerRadius: %d, offsetInner: (%d, %d, %d), innerRadius: %d, %s",
+        "📦 origin: (%1$,.2f, %2$,.2f, %3$,.2f), offsetOuter: (%4$,.2f, %5$,.2f, %6$,.2f), outerRadius: %7$,.2f, offsetInner: (%8$,.2f, %9$,.2f, %10$,.2f), innerRadius: %11$,.2f, %s",
         observerX, 
         observerY, 
         observerZ,  

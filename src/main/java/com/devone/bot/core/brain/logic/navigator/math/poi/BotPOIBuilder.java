@@ -56,8 +56,8 @@ public class BotPOIBuilder {
         Map<Integer, Double> maxDistances = new HashMap<>();
 
         for (BotBlockData point : reachable) {
-            int dx = point.getX() - bot.getX();
-            int dz = point.getZ() - bot.getZ();
+            double dx = point.getX() - bot.getX();
+            double dz = point.getZ() - bot.getZ();
             if (dx == 0 && dz == 0) continue;
 
             double angle = Math.atan2(dz, dx);

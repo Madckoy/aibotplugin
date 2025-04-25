@@ -38,17 +38,24 @@ public class BotLifecycleLogger {
     
             BotTask<?> task = bot.getBrain().getCurrentTask();
     
+            String t_icon = "N/A";
             String t_name = "N/A";
             String e_time = "N/A";
     
             if (task != null) {
-                t_name = task.getIcon();
+                t_icon = task.getIcon();
+                t_name = task.getClass().getSimpleName();
+
                 e_time = BotUtils.formatTime(task.getElapsedTime());
             }
     
-            String logEntry = String.format("%s,%s,%s,%d,%d,%d,%s,%s",
-                    getCurrentTimestamp(), botName, Bukkit.getWorlds().get(0).getName(),
-                    loc.getX(), loc.getY(), loc.getZ(), "'" + t_name + "'", e_time);
+            String logEntry = getCurrentTimestamp().toString() + ","+ 
+                              botName + ","+ 
+                              Bukkit.getWorlds().get(0).getName() + ","+ 
+                              loc.toString() + ","+
+                              t_icon + ","+ 
+                              t_name +  ","+ 
+                              e_time;
     
             bw.write(logEntry);
             bw.newLine();

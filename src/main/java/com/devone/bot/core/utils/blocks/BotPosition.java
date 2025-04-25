@@ -3,7 +3,7 @@ package com.devone.bot.core.utils.blocks;
 import java.util.Objects;
 
 public class BotPosition {
-    private int x, y, z;
+    private double x, y, z;
 
     public BotPosition() {
         this.x = 0;
@@ -11,7 +11,7 @@ public class BotPosition {
         this.z = 0;
     }
 
-    public BotPosition(int x, int y, int z) {
+    public BotPosition(double x, double y, double z) {
         this.x = x;
         this.y = y;
         this.z = z;
@@ -33,9 +33,9 @@ public class BotPosition {
 
     public double distanceTo(BotPosition other) {
         if (other == null) return Double.MAX_VALUE;
-        int dx = this.x - other.x;
-        int dy = this.y - other.y;
-        int dz = this.z - other.z;
+        double dx = this.x - other.x;
+        double dy = this.y - other.y;
+        double dz = this.z - other.z;
         return Math.sqrt(dx * dx + dy * dy + dz * dz);
     }
 
@@ -46,16 +46,16 @@ public class BotPosition {
  
     @Override
     public String toString() {
-        return String.format("%d,%d,%d", x, y, z);
+        return String.format("%1$,.2f, %2$,.2f, %3$,.2f", x, y, z);
     }
 
-    public int getX() { return x; }
-    public void setX(int x) { this.x = x; }
+    public double getX() { return x; }
+    public void setX(double x) { this.x = x; }
 
-    public int getY() { return y; }
-    public void setY(int y) { this.y = y; }
+    public double getY() { return y; }
+    public void setY(double y) { this.y = y; }
 
-    public int getZ() { return z; }
-    public void setZ(int z) { this.z = z; }
+    public double getZ() { return z; }
+    public void setZ(double z) { this.z = z; }
 
 }

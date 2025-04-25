@@ -160,9 +160,9 @@ public class BlueMapMarkers {
             // -----------------------------------------------------------------------------------
             // using BlueMapAPI here
 
-            int x = loc.getX();
-            int y = loc.getY();
-            int z = loc.getZ();
+            double x = loc.getX();
+            double y = loc.getY();
+            double z = loc.getZ();
 
             // ✅ Get or download the bot’s skin icon
             @SuppressWarnings("unused")

@@ -23,20 +23,20 @@ public class BotSceneScan3D {
         // Центр сканирования
         BotPosition botLoc = bot.getNavigator().getPosition();
 
-        int centerX = botLoc.getX();
-        int centerY = botLoc.getY();
-        int centerZ = botLoc.getZ();
+        double centerX = botLoc.getX();
+        double centerY = botLoc.getY();
+        double centerZ = botLoc.getZ();
 
-        int minY = centerY - deltaY;
-        int maxY = centerY + deltaY;
+        double minY = centerY - deltaY;
+        double maxY = centerY + deltaY;
 
         List<BotBlockData> scannedBlocks = new ArrayList<>();
         List<BotBlockData> scannedEntities = new ArrayList<>();
 
         // 1. Сканирование блоков
-        for (int y = maxY; y >= minY; y--) {
-            for (int x = -scanRadius; x <= scanRadius; x++) {
-                for (int z = -scanRadius; z <= scanRadius; z++) {
+        for (double y = maxY; y >= minY; y--) {
+            for (double x = -scanRadius; x <= scanRadius; x++) {
+                for (double z = -scanRadius; z <= scanRadius; z++) {
 
                     Location loc = new Location(world, centerX + x, y, centerZ + z);
                     Material material = world.getBlockAt(loc).getType();

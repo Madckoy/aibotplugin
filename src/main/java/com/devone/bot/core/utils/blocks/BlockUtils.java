@@ -26,9 +26,9 @@ public class BlockUtils {
      */
     public static double distance(BotPosition a, BotPosition b) {
         if (a == null || b == null) return Double.MAX_VALUE;
-        int dx = a.getX() - b.getX();
-        int dy = a.getY() - b.getY();
-        int dz = a.getZ() - b.getZ();
+        double dx = a.getX() - b.getX();
+        double dy = a.getY() - b.getY();
+        double dz = a.getZ() - b.getZ();
         return Math.sqrt(dx * dx + dy * dy + dz * dz);
     }
 
@@ -37,8 +37,8 @@ public class BlockUtils {
      */
     public static double distanceXZ(BotPosition a, BotPosition b) {
         if (a == null || b == null) return Double.MAX_VALUE;
-        int dx = a.getX() - b.getX();
-        int dz = a.getZ() - b.getZ();
+        double dx = a.getX() - b.getX();
+        double dz = a.getZ() - b.getZ();
         return Math.sqrt(dx * dx + dz * dz);
     }
 
@@ -47,9 +47,9 @@ public class BlockUtils {
      */
     public static boolean isWithinSquaredRadius(BotPosition a, BotPosition b, double radiusSquared) {
         if (a == null || b == null) return false;
-        int dx = a.getX() - b.getX();
-        int dy = a.getY() - b.getY();
-        int dz = a.getZ() - b.getZ();
+        double dx = a.getX() - b.getX();
+        double dy = a.getY() - b.getY();
+        double dz = a.getZ() - b.getZ();
         double distSq = dx * dx + dy * dy + dz * dz;
         return distSq <= radiusSquared;
     }
@@ -59,7 +59,7 @@ public class BlockUtils {
      */
     public static boolean isWithinManhattan(BotPosition a, BotPosition b, int maxDistance) {
         if (a == null || b == null) return false;
-        int dist = Math.abs(a.getX() - b.getX()) + Math.abs(a.getY() - b.getY()) + Math.abs(a.getZ() - b.getZ());
+        double dist = Math.abs(a.getX() - b.getX()) + Math.abs(a.getY() - b.getY()) + Math.abs(a.getZ() - b.getZ());
         return dist <= maxDistance;
     }
 
@@ -68,9 +68,9 @@ public class BlockUtils {
      */
     public static double distanceSquared(BotPosition a, BotPosition b) {
         if (a == null || b == null) return Double.MAX_VALUE;
-        int dx = a.getX() - b.getX();
-        int dy = a.getY() - b.getY();
-        int dz = a.getZ() - b.getZ();
+        double dx = a.getX() - b.getX();
+        double dy = a.getY() - b.getY();
+        double dz = a.getZ() - b.getZ();
         return dx * dx + dy * dy + dz * dz;
     }
 
@@ -87,9 +87,9 @@ public class BlockUtils {
     public static int[] directionVector(BotPosition from, BotPosition to) {
         if (from == null || to == null) return new int[] { 0, 0, 0 };
         return new int[] {
-            Integer.compare(to.getX(), from.getX()),
-            Integer.compare(to.getY(), from.getY()),
-            Integer.compare(to.getZ(), from.getZ())
+            Double.compare(to.getX(), from.getX()),
+            Double.compare(to.getY(), from.getY()),
+            Double.compare(to.getZ(), from.getZ())
         };
     }
 

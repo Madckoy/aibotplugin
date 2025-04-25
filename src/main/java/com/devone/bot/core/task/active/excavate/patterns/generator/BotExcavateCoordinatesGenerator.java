@@ -77,38 +77,38 @@ public class BotExcavateCoordinatesGenerator {
     }
 
     public List<BotPosition> generateInnerPoints(BotExcavateTemplateRunnerParams params) {
-        int ox = params.observerX;
-        int oy = params.observerY;
-        int oz = params.observerZ;
+        double ox = params.observerX;
+        double oy = params.observerY;
+        double oz = params.observerZ;
         
-        int innerRadius = params.innerRadius;
+        double innerRadius = params.innerRadius;
         
-        int offsetX = params.offsetInnerX;
-        int offsetY = params.offsetInnerY;
-        int offsetZ = params.offsetInnerZ;
+        double offsetX = params.offsetInnerX;
+        double offsetY = params.offsetInnerY;
+        double offsetZ = params.offsetInnerZ;
 
-        int[] center = computeFigureCenter(ox, oy, oz, offsetX, offsetY, offsetZ);
+        double[] center = computeFigureCenter(ox, oy, oz, offsetX, offsetY, offsetZ);
 
         return generateInnerPoints(center[0], center[1], center[2], innerRadius);
     }
 
-    private int[] computeFigureCenter(int ox, int oy, int oz, int offsetX, int offsetY, int offsetZ) {
+    private double[] computeFigureCenter(double ox, double oy, double oz, double offsetX, double offsetY, double offsetZ) {
 
-        int cx = ox + offsetX;
-        int cy = oy + offsetY;
-        int cz = oz + offsetZ;
+        double cx = ox + offsetX;
+        double cy = oy + offsetY;
+        double cz = oz + offsetZ;
 
-        return new int[]{cx, cy, cz};
+        return new double[]{cx, cy, cz};
     }
 
     
-    private List<BotPosition> generateInnerPoints(int cx, int cy, int cz, int inner_radius) {
+    private List<BotPosition> generateInnerPoints(double cx, double cy, double cz, double inner_radius) {
         List<BotPosition> result = new ArrayList<>();
         Map<String, Object> env = new HashMap<>();
 
-        for (int y = cy - inner_radius; y <= cy + inner_radius; y++) {
-            for (int x = cx - inner_radius; x <= cx + inner_radius; x++) {
-                for (int z = cz - inner_radius; z <= cz + inner_radius; z++) {
+        for (double y = cy - inner_radius; y <= cy + inner_radius; y++) {
+            for (double x = cx - inner_radius; x <= cx + inner_radius; x++) {
+                for (double z = cz - inner_radius; z <= cz + inner_radius; z++) {
                     env.put("x", x);
                     env.put("y", y);
                     env.put("z", z);
@@ -135,27 +135,27 @@ public class BotExcavateCoordinatesGenerator {
     }
 
     public List<BotPosition> generateOuterPoints(BotExcavateTemplateRunnerParams params) {
-        int ox = params.observerX;
-        int oy = params.observerY;
-        int oz = params.observerZ;
+        double ox = params.observerX;
+        double oy = params.observerY;
+        double oz = params.observerZ;
         
 
-        int outerRadius = params.outerRadius;
+        double outerRadius = params.outerRadius;
         
-        int offsetX = params.offsetOuterX;
-        int offsetY = params.offsetOuterY;
-        int offsetZ = params.offsetOuterZ;
+        double offsetX = params.offsetOuterX;
+        double offsetY = params.offsetOuterY;
+        double offsetZ = params.offsetOuterZ;
 
-        int[] center = computeFigureCenter(ox, oy, oz, offsetX, offsetY, offsetZ);
+        double[] center = computeFigureCenter(ox, oy, oz, offsetX, offsetY, offsetZ);
 
         return generateOuterPoints(center[0], center[1], center[2], outerRadius);
     }
 
-    private List<BotPosition> generateOuterPoints(int cx, int cy, int cz, int radius) {
+    private List<BotPosition> generateOuterPoints(double cx, double cy, double cz, double radius) {
         List<BotPosition> result = new ArrayList<>();
-        for (int y = cy - radius; y <= cy + radius; y++) {
-            for (int x = cx - radius; x <= cx + radius; x++) {
-                for (int z = cz - radius; z <= cz + radius; z++) {
+        for (double y = cy - radius; y <= cy + radius; y++) {
+            for (double x = cx - radius; x <= cx + radius; x++) {
+                for (double z = cz - radius; z <= cz + radius; z++) {
                     result.add(new BotPosition(x, y, z));
                 }
             }

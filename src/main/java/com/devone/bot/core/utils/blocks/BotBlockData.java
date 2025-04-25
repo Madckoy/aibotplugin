@@ -78,17 +78,17 @@ public class BotBlockData {
 
     @JsonIgnore
     public int getX() {
-        return position.getX();
+        return (int)position.getX();
     }
 
     @JsonIgnore
     public int getY() {
-        return position.getY();
+        return (int)position.getY();
     }
 
     @JsonIgnore
     public int getZ() {
-        return position.getZ();
+        return (int)position.getZ();
     }
 
     @Override
