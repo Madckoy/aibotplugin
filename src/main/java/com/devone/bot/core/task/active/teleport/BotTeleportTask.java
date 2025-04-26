@@ -62,16 +62,12 @@ public class BotTeleportTask extends BotTaskAutoParams<BotTeleportTaskParams> {
 
         Bukkit.getScheduler().runTask(AIBotPlugin.getInstance(), () -> {
             Location baseLocation = BotWorldHelper.botPositionToWorldLocation(target);
-            Location safeOffset = baseLocation.clone();//.add(0.5, 0, 0.5);
+            Location safeOffset = baseLocation.clone().add(0, 1, 0);
 
             bot.getNPCEntity().teleport(safeOffset);
             bot.getBrain().getMemory().teleportUsedIncrease();
 
             bot.getTaskManager().getActiveTask().stop();
-
-            BotSonar3DTask sonar = new BotSonar3DTask(bot);
-            sonar.execute();
-            bot.getNavigator().calculate(bot.getBrain().getMemory().getSceneData());
 
             BotLogger.debug(icon, this.isLogging(),
                     bot.getId() + " ⚡ Телепорт завершен с " + baseLocation.toVector() + " в " + safeOffset.toVector());

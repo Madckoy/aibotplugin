@@ -24,7 +24,7 @@ public abstract class BotTask<T extends BotTaskParams> implements IBotTask, List
     }
 
     protected boolean enabled = true;
-    
+
     public void setEnabled(boolean enabled) {
         this.enabled = enabled;
     }
@@ -108,9 +108,9 @@ public abstract class BotTask<T extends BotTaskParams> implements IBotTask, List
 
     private void logTaskStatus() {
         BotLogger.debug(icon, logging, bot.getId() +
-                " ❓ Status: done=" + done + ", paused=" + pause + " , deffered= " + deffered + ", " +
+                " ❓ Status: done=" + done +", enabled="+isEnabled() +", paused=" + pause + " , deffered=" + deffered + ", " +
                 " 📍: " + bot.getNavigator().getPosition() +
-                " | 🎯: " + bot.getNavigator().getPoi());
+                " / 🎯: " + bot.getNavigator().getPoi());
     }
 
     private boolean playerDisconnected() {

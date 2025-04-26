@@ -199,7 +199,7 @@ public class BotExcavateTask extends BotTaskAutoParams<BotExcavateTaskParams> {
 
             BotLogger.debug(icon, isLogging(), bot.getId() + " Поворачивает голову в сторону: " + blockPosition + " " + targetBlock.getType());       
             
-            //turnToTarget(this, blockPosition);
+            turnToTarget(this, blockPosition);
         }
 
         if (bot.getNavigator().getPoi() != null) {

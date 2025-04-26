@@ -8,7 +8,7 @@ function setupButtonHandlers(botList = []) {
         "bot-move":     (botId) => handleCoordCommand(botId, "bot-move"),
         "bot-dump":     (botId) => sendBotCommand(botId, "bot-dump"),
         "bot-drop-all": (botId) => sendBotCommand(botId, "bot-drop-all"),
-        "bot-excavate":   (botId) => sendBotCommand(botId, "bot-excavate"),
+        "bot-excavate": (botId) => sendBotCommand(botId, "bot-excavate"),
         "bot-home":     (botId) => sendBotCommand(botId, "bot-home"),
         "bot-info":     (botId) => {
             const bot = botList.find(b => b.id === botId);

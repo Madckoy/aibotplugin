@@ -13,7 +13,7 @@ public class BotReactiveExcavateContainer extends BotReactiveTaskContainer<BotRe
     public BotReactiveExcavateContainer(Bot bot) {
 
         super(bot, BotReactiveExcavateContainerParams.class);
-
+        setReactive(true);
         setObjective("Reactive: Bot Move and Excavate Tasks");
     }
 
@@ -22,6 +22,7 @@ public class BotReactiveExcavateContainer extends BotReactiveTaskContainer<BotRe
         BotLogger.debug(getIcon(), true, bot.getId() + " " + icon + " " + getObjective());
         BotExcavateTaskParams excvParams = new BotExcavateTaskParams();
         BotExcavateTask excvTask = new BotExcavateTask(bot);
+        excvTask.setReactive(true);
         excvTask.setParams(excvParams);
         add(excvTask);
     }
