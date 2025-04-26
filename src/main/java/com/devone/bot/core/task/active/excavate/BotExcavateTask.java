@@ -236,6 +236,8 @@ public class BotExcavateTask extends BotTaskAutoParams<BotExcavateTaskParams> {
                 }
             }
 
+            this.setPause(true);
+            
             BotBlockData block = BotWorldHelper.blockToBotBlockData(targetBlock);
             BotHandExcavateTask handTask = new BotHandExcavateTask(bot);
             BotHandExcavateTaskParams params = new BotHandExcavateTaskParams();
