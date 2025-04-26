@@ -10,16 +10,14 @@ offsetInner:
   y: 0
   z: 0
 
-outerRadius: 1
+outerRadius: 2
 innerRadius: 1
 
 inverted: false
 
-#cube with cental column
 filters:
-  - "x >= cx - r && x <= cx + r"
-  - "y >= cy - r && y <= cy + r"
-  - "z >= cz - r && z <= cz + r"
-  - "!(x == cx && z == cz)"
+  - "math.abs(x - cx) <= r"
+  - "math.abs(z - cz) <= r"
+  - "math.abs(x - cx) > 0 || math.abs(z - cz) > 0"
 sort:
   - "y"
