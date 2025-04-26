@@ -104,15 +104,15 @@ public class BotNavigator {
         return poi;
     }
 
-    public void setTarget(BotPosition target) {
+    public void setPoi(BotPosition poi) {
 
-        if (target != null) {
-            BotLogger.debug(owner.getActiveTask().getIcon(), true, owner.getId() + " 🗺️ Wants to navigate to "
-                    + target + " [ID: " + owner.getBrain().getCurrentTask().getIcon() +
+        if (poi != null) {
+            BotLogger.debug(owner.getActiveTask().getIcon(), true, owner.getId() + " 🗺️ POI/Target is set: "
+                    + poi + " [ID: " + owner.getBrain().getCurrentTask().getIcon() +
                     " " + owner.getBrain().getCurrentTask().getClass().getSimpleName() + "]");
         }
 
-        this.poi = target;
+        this.poi = poi;
     }
 
     public void setStuck(boolean stuck) {

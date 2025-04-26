@@ -44,7 +44,7 @@ public class BotMoveTask extends BotTaskAutoParams<BotMoveTaskParams> {
             return this;
         }
 
-        bot.getNavigator().setTarget(target);
+        bot.getNavigator().setPoi(target);
         BotLogger.debug(icon, isLogging(), bot.getId() + " ✅ Цель установлена: " + target);
 
         return this;
@@ -128,7 +128,7 @@ public class BotMoveTask extends BotTaskAutoParams<BotMoveTaskParams> {
             listener = null;
         }
 
-        bot.getNavigator().setTarget(null);
+        bot.getNavigator().setPoi(null);
         BotLogger.debug(icon, isLogging(), bot.getId() + " ⭕ Движение остановлено");
         super.stop();
     }

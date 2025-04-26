@@ -76,7 +76,7 @@ public class BotExploreTask extends BotTaskAutoParams<BotExploreTaskParams> {
         if (poi != null) {
             BotLogger.debug(icon, isLogging(), bot.getId() + " 🎯 Navigation - Set Target: " + poi);
 
-            bot.getNavigator().setTarget(poi);
+            bot.getNavigator().setPoi(poi);
 
             float speed = 1.5f;
 

@@ -64,6 +64,7 @@ public class BotBrainTask extends BotTaskAutoParams<BotBrainTaskParams> {
         BotLogger.debug(icon, isLogging(), bot.getId() + " 🎲 Is making a decision...");
 
         int thinkingTicks = bot.getBrain().getThinkingTicks();
+        
         if (thinkingTicks > 50) {
             BotLogger.warn(icon, isLogging(),
                     bot.getId() + " 🎲 Бот думает слишком долго (" + thinkingTicks + " тиков). Сброс в Calibration.");
@@ -74,12 +75,6 @@ public class BotBrainTask extends BotTaskAutoParams<BotBrainTaskParams> {
 
         bot.getBrain().markThinkingCycle();
 
-        if (bot.getBrain().getMemory().getSceneData() == null) {
-            BotLogger.debug(icon, isLogging(), bot.getId() + " ⛔ Ожидаем результаты сканирования...");
-            return;
-        }
-
-        bot.getNavigator().calculate(bot.getBrain().getMemory().getSceneData());
 
         Runnable decision = determineBehaviorScenario(bot);
         if (decision != null)
