@@ -88,23 +88,30 @@ public abstract class BotTask<T extends BotTaskParams> implements IBotTask, List
     }
 
     public void update() {
-
         logTaskStatus();
-
-        if (!isEnabled() || isPause() || isDeffered()) {
+    
+        // ⛔ Если задача выключена - останавливаем её правильно
+        if (!isEnabled()) {
+            BotLogger.debug(icon, true, bot.getId() + " 🛑 Задача выключена и будет остановлена: " + this.getClass().getSimpleName());
+            stop();
             return;
         }
-
+    
+        if (isPause() || isDeffered()) {
+            return;
+        }
+    
         if (playerDisconnected()) {
             handlePlayerDisconnect();
             return;
         }
-
+    
         if (handleReactiveLogic())
             return;
-
+    
         runTaskExecution();
     }
+    
 
     private void logTaskStatus() {
         BotLogger.debug(icon, logging, bot.getId() +
