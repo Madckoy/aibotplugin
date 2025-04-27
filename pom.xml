@@ -13,6 +13,13 @@
     </properties>
 
     <dependencies>
+        <dependency>
+            <groupId>com.devone.bot.core.brain</groupId>
+            <artifactId>botmemoryv2</artifactId>
+            <version>0.2.0</version>
+            <scope>system</scope>
+            <systemPath>${project.basedir}/lib/botmemoryv2-0.1.0.jar</systemPath>
+        </dependency>
 
         <dependency>
             <groupId>com.googlecode.aviator</groupId>

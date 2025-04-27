@@ -18,7 +18,7 @@ public class BotConstants {
     public static final long   DEFAULT_TASK_TIMEOUT = 30_000;
     public static final double DEFAULT_HAND_DAMAGE = 5.0;
 
-    public static final String DEFAULT_PATTERN_BREAK = "default.yml";
+    public static final String DEFAULT_PATTERN_BREAK = "default.json";
 
     public static final double DEFAULT_PLAYER_DETECTION_RADIUS = 2.0;
     public static final double DEFAULT_DETECTION_RADIUS = 20.0;

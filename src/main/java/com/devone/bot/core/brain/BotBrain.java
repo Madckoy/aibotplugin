@@ -2,6 +2,7 @@ package com.devone.bot.core.brain;
 
 import com.devone.bot.core.Bot;
 import com.devone.bot.core.brain.memory.BotMemory;
+import com.devone.bot.core.brain.memoryv2.BotMemoryV2;
 import com.devone.bot.core.task.passive.BotTask;
 import com.devone.bot.core.utils.BotConstants;
 import com.devone.bot.core.utils.logger.BotLogger;
@@ -18,11 +19,18 @@ public class BotBrain {
     private boolean autoPickUpItems = true;
     private transient BotMemory memory = null;
 
+    private BotMemoryV2 memoryV2 = null;
+
+    public BotMemoryV2 getMemoryV2() {
+        return memoryV2;
+    }
+
     private long memoryExpirationMillis = BotConstants.DEFAULT_MEMORY_EXPIRATION;
 
     public BotBrain(Bot bot) {
         this.owner = bot;
         this.memory = new BotMemory(this);
+        this.memoryV2 = new BotMemoryV2(this);
     }
 
     // 🧠 Получение текущей задачи
@@ -102,7 +110,8 @@ public class BotBrain {
 
     // 🧠 Проверка: текущая задача — владелец реакции?
     public boolean isReactionOwnedBy(BotTask<?> task) {
-        if (!reactionInProgress || currentReactionOwner == null || task == null) return false;
+        if (!reactionInProgress || currentReactionOwner == null || task == null)
+            return false;
 
         boolean result = currentReactionOwner.equals(task.getUUID());
 

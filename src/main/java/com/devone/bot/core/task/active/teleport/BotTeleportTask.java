@@ -8,7 +8,6 @@ import com.devone.bot.AIBotPlugin;
 import com.devone.bot.core.Bot;
 import com.devone.bot.core.task.passive.BotTaskAutoParams;
 import com.devone.bot.core.task.passive.IBotTaskParameterized;
-import com.devone.bot.core.task.active.sonar.BotSonar3DTask;
 import com.devone.bot.core.task.active.teleport.params.BotTeleportTaskParams;
 import com.devone.bot.core.utils.blocks.BotPosition;
 import com.devone.bot.core.utils.logger.BotLogger;
