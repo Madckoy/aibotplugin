@@ -60,4 +60,5 @@ public class BotPatternParser {
 
         return result;
     }
+    
 }

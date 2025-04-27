@@ -74,12 +74,11 @@ public class BotPatternRunner {
         return this;
     }
 
-    public boolean checkIfLoaded() {
+    public boolean checkIfLoaded(BotPosition obs) {
         boolean res = true;
 
         if (!loaded) {
             res = false;
-            BotPosition obs = new BotPosition(); 
             try {
                 load(obs);
                 res = true;
@@ -91,18 +90,20 @@ public class BotPatternRunner {
         return res;
     }
 
-    public BotPosition getNextVoid() {
-        if (checkIfLoaded()) {
+    public BotPosition getNextVoid(BotPosition obs) {
+        if (checkIfLoaded(obs)) {
             return voidPointsQueue.poll();
         } else {
+            BotLogger.debug("📐", true, " 🚨 getNextVoid: checkIfLoaded вернул FALSE: " + params.getFilename());   
             return null;
         } 
     }
 
-    public BotPosition getNextSolid() {
-        if (checkIfLoaded()) {
+    public BotPosition getNextSolid(BotPosition obs) {
+        if (checkIfLoaded(obs)) {
             return solidPointsQueue.poll();
         } else {
+            BotLogger.debug("📐", true, " 🚨 getNextSolid: checkIfLoaded вернул FALSE: " + params.getFilename());
             return null;
         } 
     }

@@ -39,8 +39,8 @@ public abstract class BotReactiveTaskContainer<T extends BotTaskParams> extends 
             }
 
             started = true;
-
-            return; // ⏳ ждем выполнения подзадач
+            setPause(true);
+            return;
         }
 
         // ✅ Проверяем: завершены ли все подзадачи

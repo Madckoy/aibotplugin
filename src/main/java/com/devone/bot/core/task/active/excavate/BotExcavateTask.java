@@ -25,13 +25,11 @@ import com.devone.bot.core.utils.zone.BotZoneManager;
 public class BotExcavateTask extends BotTaskAutoParams<BotExcavateTaskParams> {
 
     private int maxBlocks;
-    private int outerRadius = BotConstants.DEFAULT_SCAN_RANGE;
-    private int innerRadius = BotConstants.DEFAULT_SCAN_RANGE;
     private Set<Material> targetMaterials = null;
     private String patternName = BotConstants.DEFAULT_PATTERN_BREAK;
     private BotPosition basePosition;
     private long blocksCounter = 0;
-    private BotPatternRunner runner = new BotPatternRunner();
+    private BotPatternRunner runner = null;
 
     public BotExcavateTask(Bot bot) {
         super(bot, BotExcavateTaskParams.class);
@@ -47,10 +45,11 @@ public class BotExcavateTask extends BotTaskAutoParams<BotExcavateTaskParams> {
 
         if (params.getPatternName() != null) {
             this.patternName = params.getPatternName();
-            BotLogger.debug(icon, isLogging(), bot.getId()+ " 📐 Установлен паттерн разрушения: " + patternName);
+            BotLogger.debug(icon, isLogging(), bot.getId() + " 📐 Установлен паттерн разрушения: " + patternName);
         }
 
-        BotLogger.debug(icon, isLogging(), bot.getId() + " 📐 Установлен паттерн разрушения через setParams(): " + patternName);
+        BotLogger.debug(icon, isLogging(),
+                bot.getId() + " 📐 Установлен паттерн разрушения через setParams(): " + patternName);
 
         return this;
     }
@@ -58,24 +57,6 @@ public class BotExcavateTask extends BotTaskAutoParams<BotExcavateTaskParams> {
     public String getPatternName() {
         return this.patternName;
     }
-
-
-    public int getOuterRadius() {
-        return outerRadius;
-    }
-
-    public void setOuterRadius(int r) {
-        this.outerRadius = r;
-    }
-
-    public int getInnerRadius() {
-        return innerRadius;
-    }
-
-    public void setInnerRadius(int r) {
-        this.innerRadius = r;
-    }
-
 
     public void setTargetMaterials(Set<Material> materials) {
         this.targetMaterials = materials;
@@ -92,7 +73,13 @@ public class BotExcavateTask extends BotTaskAutoParams<BotExcavateTaskParams> {
 
         BotLogger.debug(icon, isLogging(), bot.getId() + " 🚀 Запуск задачи разрушения блоков для бота " + bot.getId() +
                 " (Целевые блоки: " + (targetMaterials == null ? "ВСЕ" : targetMaterials) + ")");
-   
+
+        basePosition = new BotPosition(bot.getNavigator().getPosition());
+
+        if (runner == null) {
+            runner = new BotPatternRunner();
+        }
+
         // 🚨 Проверка на опасную жидкость
         if (BotWorldHelper.isInDangerousLiquid(bot)) {
             BotLogger.debug(icon, isLogging(), bot.getId() + " 💧 Оказался в опасной жидкости. Завершаем копку.");
@@ -100,98 +87,107 @@ public class BotExcavateTask extends BotTaskAutoParams<BotExcavateTaskParams> {
             return;
         }
 
-        basePosition = new BotPosition(bot.getNavigator().getPosition());
         BotPosition blockPosition = null;
 
-        if (!this.runner.isLoaded()) {
-            try {
-                this.runner.load(basePosition);
-            } catch (Exception ex) {
-                BotLogger.debug(icon, isLogging(), bot.getId() + " ❌ Ошибка загрузки паттерна: "+ex.getMessage());
-                this.stop();
-                return;
-            }
-        } else {
-            blockPosition = this.runner.getNextVoid();
+        if (runner.isLoaded()) {
+
+            blockPosition = runner.getNextVoid(basePosition);
             BotLogger.debug(icon, isLogging(), bot.getId() + " Next Void: " + blockPosition);
+        } else {
+            try {
+                runner.load(basePosition);
+            } catch (Exception ex) {
+                BotLogger.debug(icon, isLogging(), bot.getId() + " ❌ Ошибка загрузки паттерна: " + ex.getMessage());
+                return; // exit and go to another cycle
+            }
         }
 
-        if (this.runner.isNoVoid()) {
+        blockPosition = runner.getNextVoid(basePosition);
+        BotLogger.debug(icon, isLogging(), bot.getId() + " Next Void: " + blockPosition);
+
+        if (runner.isNoVoid()) {
             BotLogger.debug(icon, isLogging(), " 🏁 Все блоки по паттерну обработаны. Завершаем задачу.");
             this.stop();
             return;
         } else {
-
-        if (params.isPickup()) {
-            bot.pickupNearbyItems();
-            if (isInventoryFull() || isEnoughBlocksCollected()) {
-                BotLogger.debug(icon, isLogging(), bot.getId() + " ⛔ Задача завершена: инвентарь полон или ресурсов достаточно");
-                this.stop();
-                return;
-            }
-        }
-
-        if (blockPosition != null) {
-            Block targetBlock = BotWorldHelper.botPositionToWorldBlock(blockPosition);
-            bot.getNavigator().setPoi(blockPosition);
-
-            if( targetBlock.getType().toString().equals(Material.AIR.toString()) || 
-                targetBlock.getType().toString().equals(Material.CAVE_AIR.toString()) || 
-                targetBlock.getType().toString().equals(Material.VOID_AIR.toString()) ||
-                targetBlock.getType().toString().equals(Material.WATER.toString()) ||
-                targetBlock.getType().toString().equals(Material.LAVA.toString())) {
-            
-                BotLogger.debug(icon, isLogging(), bot.getId() + " Блок не разрушимый или уже разрушен: " + blockPosition + " " + targetBlock.getType());
-                return;
-            } 
-
-            BotLogger.debug(icon, isLogging(), bot.getId() + " Поворачивает голову в сторону: " + blockPosition + " " + targetBlock.getType());       
-            turnToTarget(this, blockPosition);
-
-            if (bot.getNavigator().getPoi() != null) {
-                setObjective(params.getObjective() + " " + BotUtils.getBlockName(targetBlock) + " at " + blockPosition);
-
-                if (isInProtectedZone(bot.getNavigator().getPoi())) {
-                    BotLogger.debug(icon, isLogging(), bot.getId() + " ⛔ в запретной зоне, НЕ будет разрушать блок: " + bot.getNavigator().getPoi());
+            if (params.isPickup()) {
+                bot.pickupNearbyItems();
+                if (isInventoryFull() || isEnoughBlocksCollected()) {
+                    BotLogger.debug(icon, isLogging(),
+                            bot.getId() + " ⛔ Задача завершена: инвентарь полон или ресурсов достаточно");
+                    this.stop();
                     return;
                 }
             }
 
-            if (BotWorldHelper.isBreakableBlock(targetBlock)==false) {
+            if (blockPosition != null) {
+                Block targetBlock = BotWorldHelper.botPositionToWorldBlock(blockPosition);
+                bot.getNavigator().setPoi(blockPosition);
 
-                BotLogger.debug(icon, isLogging(), bot.getId() + " ⛔ Неразрушаемый блок: " + bot.getNavigator().getPoi());
+                if (targetBlock.getType().toString().equals(Material.AIR.toString()) ||
+                        targetBlock.getType().toString().equals(Material.CAVE_AIR.toString()) ||
+                        targetBlock.getType().toString().equals(Material.VOID_AIR.toString()) ||
+                        targetBlock.getType().toString().equals(Material.WATER.toString()) ||
+                        targetBlock.getType().toString().equals(Material.LAVA.toString())) {
 
-                bot.getNavigator().setPoi(null);
-                return;
-            }
+                    BotLogger.debug(icon, isLogging(), bot.getId() + " Блок не разрушимый или уже разрушен: "
+                            + blockPosition + " " + targetBlock.getType());
+                    return;
+                }
 
-            Material mat = targetBlock.getType();
+                BotLogger.debug(icon, isLogging(),
+                        bot.getId() + " Поворачивает голову в сторону: " + blockPosition + " " + targetBlock.getType());
+                turnToTarget(this, blockPosition);
 
-            if (BotUtils.requiresTool(mat)) {
-                if (!BotInventory.equipRequiredTool(bot, mat)) {
-                    BotLogger.debug(icon, isLogging(), bot.getId() + " 🙈 Не удалось взять инструмент в руку. Пропускаем.");
+                if (bot.getNavigator().getPoi() != null) {
+                    setObjective(
+                            params.getObjective() + " " + BotUtils.getBlockName(targetBlock) + " at " + blockPosition);
+
+                    if (isInProtectedZone(bot.getNavigator().getPoi())) {
+                        BotLogger.debug(icon, isLogging(),
+                                bot.getId() + " ⛔ в запретной зоне, НЕ будет разрушать блок: "
+                                        + bot.getNavigator().getPoi());
+                        return;
+                    }
+                }
+
+                if (BotWorldHelper.isBreakableBlock(targetBlock) == false) {
+
+                    BotLogger.debug(icon, isLogging(),
+                            bot.getId() + " ⛔ Неразрушаемый блок: " + bot.getNavigator().getPoi());
+
                     bot.getNavigator().setPoi(null);
                     return;
                 }
+
+                Material mat = targetBlock.getType();
+
+                if (BotUtils.requiresTool(mat)) {
+                    if (!BotInventory.equipRequiredTool(bot, mat)) {
+                        BotLogger.debug(icon, isLogging(),
+                                bot.getId() + " 🙈 Не удалось взять инструмент в руку. Пропускаем.");
+                        bot.getNavigator().setPoi(null);
+                        return;
+                    }
+                }
+
+                this.setPause(true);
+
+                BotBlockData block = BotWorldHelper.blockToBotBlockData(targetBlock);
+                BotHandExcavateTask handTask = new BotHandExcavateTask(bot);
+                BotHandExcavateTaskParams params = new BotHandExcavateTaskParams();
+                params.setTarget(block);
+                handTask.setParams(params);
+                BotTaskManager.push(bot, handTask);
+
+                BotLogger.info(this.getIcon(), isLogging(), bot.getId() + "  Blocks processed: " + blocksCounter);
+
+            } else {
+
+                setObjective("The block is not found. ");
+                handleNoTargetFound();
             }
-
-            this.setPause(true);
-            
-            BotBlockData block = BotWorldHelper.blockToBotBlockData(targetBlock);
-            BotHandExcavateTask handTask = new BotHandExcavateTask(bot);
-            BotHandExcavateTaskParams params = new BotHandExcavateTaskParams();
-            params.setTarget(block);
-            handTask.setParams(params);
-            BotTaskManager.push(bot, handTask);
-
-            BotLogger.info(this.getIcon(), isLogging(), bot.getId() + "  Blocks processed: " + blocksCounter);
-
-        } else {
-
-            setObjective("The block is not found. ");
-            handleNoTargetFound();
         }
-    }
         return;
     }
 

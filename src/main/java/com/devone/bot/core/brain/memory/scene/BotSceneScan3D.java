@@ -3,6 +3,7 @@ package com.devone.bot.core.brain.memory.scene;
 import com.devone.bot.core.Bot;
 import com.devone.bot.core.utils.blocks.BotBlockData;
 import com.devone.bot.core.utils.blocks.BotPosition;
+import com.devone.bot.core.utils.logger.BotLogger;
 import com.devone.bot.core.utils.world.BotWorldHelper;
 import org.bukkit.Location;
 import org.bukkit.Material;
@@ -60,6 +61,17 @@ public class BotSceneScan3D {
                 continue;
 
             Location loc = entity.getLocation();
+
+            Material standingOn = loc.getBlock().getType();
+
+            // 🚨 Новый фильтр: игнорировать если стоит в воде
+            if (standingOn == Material.WATER || standingOn == Material.BUBBLE_COLUMN || standingOn == Material.SEAGRASS
+                    || standingOn == Material.KELP) {
+                BotLogger.debug("📡", true,
+                        bot.getId() + " 🌊 Обнаружен морской моб в воде, игнорируем: " + entity.getName());
+                continue;
+            }
+
             String type = entity.getCustomName() != null ? entity.getCustomName() : entity.getName();
             ;
 
@@ -75,17 +87,18 @@ public class BotSceneScan3D {
         BotPosition botCoords = new BotPosition(centerX, centerY, centerZ);
         BotSceneData sceneData = new BotSceneData(scannedBlocks, scannedEntities, botCoords);
 
-        //if (bot.getNavigator().isStuck()) {
-            // long currTime = System.currentTimeMillis();
-            // 4. Сохраняем всё в JSON если застряли
-        //    String fileName = BotConstants.PLUGIN_TMP + bot.getId() + "_stuck_scene.json";
+        // if (bot.getNavigator().isStuck()) {
+        // long currTime = System.currentTimeMillis();
+        // 4. Сохраняем всё в JSON если застряли
+        // String fileName = BotConstants.PLUGIN_TMP + bot.getId() +
+        // "_stuck_scene.json";
 
-        //    try {
-        //        BotSceneSaver.saveToJsonFile(fileName, sceneData);
-        //    } catch (IOException e) {
-        //        System.err.println("Ошибка при сохранении карты: " + e.getMessage());
-        //    }
-        //}
+        // try {
+        // BotSceneSaver.saveToJsonFile(fileName, sceneData);
+        // } catch (IOException e) {
+        // System.err.println("Ошибка при сохранении карты: " + e.getMessage());
+        // }
+        // }
 
         return sceneData;
     }

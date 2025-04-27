@@ -4,6 +4,7 @@ import org.bukkit.Bukkit;
 
 import com.devone.bot.AIBotPlugin;
 import com.devone.bot.core.Bot;
+import com.devone.bot.core.task.passive.BotTask;
 import com.devone.bot.core.task.passive.BotTaskManager;
 import com.devone.bot.core.task.active.brain.BotBrainTask;
 import com.devone.bot.core.task.active.sonar.BotSonar3DTask;
@@ -25,27 +26,32 @@ public class BotBootstrap {
 
     private void startLifeCycle() {
         BotLogger.debug("🤖", true, "💥 Запускаем Bootstrap для бота " + bot.getId());
-    
+
         // Отдельный таймер для сканирования окружения (часто)
         Bukkit.getScheduler().runTaskTimer(AIBotPlugin.getInstance(), () -> {
-            if (ServerUtils.isServerStopping()) return;
-    
+            if (ServerUtils.isServerStopping())
+                return;
+
             BotSonar3DTask sonar = new BotSonar3DTask(bot);
-            sonar.execute();    
-    
-            BotLogger.debug(bot.getActiveTask().getIcon(), true, bot.getId() + " 📡 Sonar Scan");
-    
+            sonar.execute();
+            BotTask<?> currTask = bot.getActiveTask();
+            String icon = "🤖";
+            if (currTask != null) {
+                icon = bot.getActiveTask().getIcon();
+            }
+            BotLogger.debug(icon, true, bot.getId() + " 📡 Sonar Scan");
+
         }, 0L, 10L); // каждые 10 тиков = 0.5 сек
-    
+
         // Отдельный таймер для обработки задач (редко)
         Bukkit.getScheduler().runTaskTimer(AIBotPlugin.getInstance(), () -> {
-            if (ServerUtils.isServerStopping()) return;
-    
+            if (ServerUtils.isServerStopping())
+                return;
+
             update();
-    
+
         }, 0L, 20L); // каждые 40 тиков = 2 сек
     }
-    
 
     private void update() {
         if (!taskManager.isEmpty()) {
@@ -59,6 +65,7 @@ public class BotBootstrap {
             }
         }
     }
+
     public BotTaskManager getTaskManager() {
         return taskManager;
     }
