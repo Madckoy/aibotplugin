@@ -18,9 +18,8 @@ public class BotReactiveTeleportToPlayerContainer
     public BotReactiveTeleportToPlayerContainer(Bot bot, Player player) {
         super(bot, BotReactiveTeleportToPlayerContainerParams.class);
         this.player = player;
-
-        setIcon("📍");
-        setObjective("Телепорт к игроку (не вплотную)");
+        setIcon("🔀");
+        setObjective("Reactive: Телепорт к игроку (не вплотную)");
     }
 
     @Override

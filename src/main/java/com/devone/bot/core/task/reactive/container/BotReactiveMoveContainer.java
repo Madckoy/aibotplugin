@@ -13,7 +13,7 @@ public class BotReactiveMoveContainer extends BotReactiveTaskContainer<BotReacti
     public BotReactiveMoveContainer(Bot bot) {
 
         super(bot, BotReactiveMoveContainerParams.class);
-
+        setIcon("🔀");
         setObjective("Reactive: Bot Move Task");
     }
 

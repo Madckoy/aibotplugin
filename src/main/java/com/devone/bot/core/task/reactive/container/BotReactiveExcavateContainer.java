@@ -13,8 +13,9 @@ public class BotReactiveExcavateContainer extends BotReactiveTaskContainer<BotRe
     public BotReactiveExcavateContainer(Bot bot) {
 
         super(bot, BotReactiveExcavateContainerParams.class);
+        setIcon("🔀");
         setReactive(true);
-        setObjective("Reactive: Bot Move and Excavate Tasks");
+        setObjective("Reactive: Excavate Tasks");
     }
 
     @Override

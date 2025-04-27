@@ -107,12 +107,13 @@ public class BotExcavateTask extends BotTaskAutoParams<BotExcavateTaskParams> {
             try {
                 this.runner.load(basePosition);
             } catch (Exception ex) {
-                BotLogger.debug(icon, isLogging(), bot.getId() + " ❌ Ошибка: "+ex.getMessage());
+                BotLogger.debug(icon, isLogging(), bot.getId() + " ❌ Ошибка загрузки паттерна: "+ex.getMessage());
                 this.stop();
                 return;
             }
         } else {
             blockPosition = this.runner.getNextVoid();
+            BotLogger.debug(icon, isLogging(), bot.getId() + " Next Void: " + blockPosition);
         }
 
         if (this.runner.isNoVoid()) {
@@ -186,6 +187,7 @@ public class BotExcavateTask extends BotTaskAutoParams<BotExcavateTaskParams> {
             BotLogger.info(this.getIcon(), isLogging(), bot.getId() + "  Blocks processed: " + blocksCounter);
 
         } else {
+
             setObjective("The block is not found. ");
             handleNoTargetFound();
         }
@@ -197,7 +199,7 @@ public class BotExcavateTask extends BotTaskAutoParams<BotExcavateTaskParams> {
         bot.getNavigator().setPoi(null);
 
         setObjective("");
-        BotLogger.debug(icon, isLogging(), bot.getId() + bot.getId() + " ❌ Нет подходящих блоков. Завершаем.");
+        BotLogger.debug(icon, isLogging(), bot.getId() + " ❌ Нет подходящих блоков. Завершаем.");
         this.stop();
 
     }

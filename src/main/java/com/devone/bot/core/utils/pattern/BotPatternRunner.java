@@ -7,7 +7,9 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Queue;
 
+import com.devone.bot.core.utils.BotConstants;
 import com.devone.bot.core.utils.blocks.BotPosition;
+import com.devone.bot.core.utils.logger.BotLogger;
 import com.devone.bot.core.utils.pattern.BotPatternParser.BotPatternParserResult;
 import com.devone.bot.core.utils.pattern.params.BotPatternRunnerParams;
 
@@ -48,7 +50,7 @@ public class BotPatternRunner {
 
     public BotPatternRunner load(BotPosition obs) throws IOException {
 
-        pattern = BotPatternLoader.load(new File(params.getFilename()));
+        pattern = BotPatternLoader.load(new File(BotConstants.PLUGIN_PATH_PATTERNS_BREAK+params.getFilename()));
         loaded = true;
         parsedResult = BotPatternParser.parse(pattern, obs);
 
@@ -58,28 +60,33 @@ public class BotPatternRunner {
         allVoidPoints = new ArrayList<BotPosition>(parsedResult.voidPoints);
         allSolidPoints = new ArrayList<BotPosition>(parsedResult.solidPoints);
 
-        voidPointsQueue.addAll(allSolidPoints);
+        voidPointsQueue.addAll(allVoidPoints);
         solidPointsQueue.addAll(allSolidPoints);
+
+        BotLogger.debug("📐", true, " 📝 Pattern Summary: " + params.getFilename());
+        BotLogger.debug("📐", true, "          All Points: " + allPoints);
+        BotLogger.debug("📐", true, "     All Void Points: " + allVoidPoints);
+        BotLogger.debug("📐", true, "    All Solid Points: " + allSolidPoints);
+        BotLogger.debug("📐", true, " -----------------------------------------");
+        BotLogger.debug("📐", true, " Void Points Queue: " + voidPointsQueue);
+        BotLogger.debug("📐", true, " Solid Points Queue: " + solidPointsQueue);
 
         return this;
     }
 
     public boolean checkIfLoaded() {
-        boolean res = false;
-        if (this.pattern == null) {
-            //BotLogger.debug("📐", true, " 🚨 Паттерн не загружен! JSON: " + params.getFilename());
-        }
+        boolean res = true;
 
         if (!loaded) {
-
+            res = false;
             BotPosition obs = new BotPosition(); 
             try {
                 load(obs);
+                res = true;
             } catch(Exception ex) {
-                 //BotLogger.debug("📐", true, " 🚨 Паттерн не загружен! JSON: " + params.getFilename());   
-                 loaded = false;
+                 BotLogger.debug("📐", true, " 🚨 Паттерн не загружен! JSON: " + params.getFilename());   
+                 res = false;
             }    
-            res = true;
         }
         return res;
     }

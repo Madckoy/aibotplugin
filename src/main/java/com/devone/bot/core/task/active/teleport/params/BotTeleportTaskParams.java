@@ -13,7 +13,7 @@ public class BotTeleportTaskParams extends BotLocationParams {
     public BotTeleportTaskParams() {
         super();
         // Устанавливаем значения по умолчанию (на случай, если файл не загрузится)
-        setIcon("🗲");
+        setIcon("⚡");
         setObjective("Teleport");
 
     }

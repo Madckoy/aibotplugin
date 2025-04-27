@@ -14,6 +14,7 @@ import com.devone.bot.core.Bot;
 import com.devone.bot.core.brain.logic.navigator.context.BotNavigationContext;
 import com.devone.bot.core.brain.logic.navigator.context.BotNavigationContextMaker;
 import com.devone.bot.core.brain.logic.navigator.math.selector.BotPOISelector;
+import com.devone.bot.core.brain.logic.navigator.math.selector.PoiSelectionMode;
 import com.devone.bot.core.brain.logic.navigator.summary.BotNavigationSummaryItem;
 import com.devone.bot.core.brain.memory.scene.BotSceneData;
 import com.devone.bot.core.task.active.move.BotMoveTask;
@@ -21,6 +22,7 @@ import com.devone.bot.core.task.active.move.params.BotMoveTaskParams;
 import com.devone.bot.core.task.active.teleport.BotTeleportTask;
 import com.devone.bot.core.task.active.teleport.params.BotTeleportTaskParams;
 import com.devone.bot.core.task.passive.BotTaskManager;
+import com.devone.bot.core.utils.BotUtils;
 import com.devone.bot.core.utils.blocks.BlockUtils;
 import com.devone.bot.core.utils.blocks.BotBlockData;
 import com.devone.bot.core.utils.blocks.BotPosition;
@@ -50,6 +52,8 @@ public class BotNavigator {
     private BotNavigationSummaryItem reachable = new BotNavigationSummaryItem("reachable");
     private BotNavigationSummaryItem navigable = new BotNavigationSummaryItem("navigable");
     private BotNavigationSummaryItem walkable = new BotNavigationSummaryItem("walkable");
+
+    PoiSelectionMode poiSelectionMode = PoiSelectionMode.SMART;
 
     private Map<String, BotNavigationSummaryItem> summary = new HashMap<String, BotNavigationSummaryItem>();
 
@@ -113,6 +117,19 @@ public class BotNavigator {
         }
 
         this.poi = poi;
+    }
+
+    public PoiSelectionMode getPoiSelectionMode() {
+        return poiSelectionMode;
+    }
+
+    public void setPoiSelectionMode(PoiSelectionMode mode) {
+        this.poiSelectionMode = mode;
+
+        BotLogger.debug(
+            owner.getActiveTask().getIcon(), true,
+            owner.getId() + " switched POI selection mode ➔ " + mode.name()
+        );
     }
 
     public void setStuck(boolean stuck) {
@@ -245,7 +262,11 @@ public class BotNavigator {
 
         candidates = result;
 
-        suggested = BotPOISelector.selectRandom(candidates);
+        if (poiSelectionMode == PoiSelectionMode.SMART) {
+            suggested = BotPOISelector.selectSmart(owner, candidates, context, BotUtils.getBotYaw(owner));
+        } else {
+            suggested = BotPOISelector.selectRandom(candidates);
+        }
 
         return result;
     }

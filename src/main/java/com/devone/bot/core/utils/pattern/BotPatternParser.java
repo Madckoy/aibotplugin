@@ -25,8 +25,8 @@ public class BotPatternParser {
         double centerZ = 0;
         if (!layers.isEmpty()) {
             List<String> anyLayer = layers.values().iterator().next();
-            centerX = anyLayer.get(0).length() / 2.0;
-            centerZ = anyLayer.size() / 2.0;
+            centerX = (anyLayer.get(0).length() / 2.0) - 0.5;
+            centerZ = (anyLayer.size() / 2.0) - 0.5;
         }
 
         for (Map.Entry<Integer, List<String>> layerEntry : layers.entrySet()) {

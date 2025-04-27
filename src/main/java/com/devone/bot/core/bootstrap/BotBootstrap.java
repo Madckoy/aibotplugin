@@ -25,39 +25,40 @@ public class BotBootstrap {
 
     private void startLifeCycle() {
         BotLogger.debug("🤖", true, "💥 Запускаем Bootstrap для бота " + bot.getId());
-
+    
+        // Отдельный таймер для сканирования окружения (часто)
         Bukkit.getScheduler().runTaskTimer(AIBotPlugin.getInstance(), () -> {
-
-            update();
-
-        }, 0L, 40); // 2 sec
-    }
-
-    public void update() {
-        if (ServerUtils.isServerStopping())
-            return;
-
-        if (!taskManager.isEmpty()) {
-
-            brainStarted = false; // ✅ Если есть активность, сбрасываем флаг
-
-            BotLogger.debug(bot.getActiveTask().getIcon(), true, bot.getId() + " 📡 Scan");
+            if (ServerUtils.isServerStopping()) return;
+    
             BotSonar3DTask sonar = new BotSonar3DTask(bot);
             sonar.execute();    
+    
+            BotLogger.debug(bot.getActiveTask().getIcon(), true, bot.getId() + " 📡 Sonar Scan");
+    
+        }, 0L, 10L); // каждые 10 тиков = 0.5 сек
+    
+        // Отдельный таймер для обработки задач (редко)
+        Bukkit.getScheduler().runTaskTimer(AIBotPlugin.getInstance(), () -> {
+            if (ServerUtils.isServerStopping()) return;
+    
+            update();
+    
+        }, 0L, 20L); // каждые 40 тиков = 2 сек
+    }
+    
 
+    private void update() {
+        if (!taskManager.isEmpty()) {
+            brainStarted = false;
             taskManager.updateActiveTask();
-
         } else {
             if (!brainStarted) {
                 BotLogger.debug("💥", true, bot.getId() + " 😴 Бот без задач. Добавляем BotBrainTask.");
-
                 BotTaskManager.push(bot, new BotBrainTask(bot));
-
-                brainStarted = true; // ✅ Ставим флаг, что Brain уже добавлен
+                brainStarted = true;
             }
         }
     }
-
     public BotTaskManager getTaskManager() {
         return taskManager;
     }

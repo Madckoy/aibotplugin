@@ -192,5 +192,12 @@ public class BotUtils {
         BotTaskManager.push(bot, mv_task);
     }
 
+    public static float getBotYaw(Bot bot) {
 
+        Location botLocation = bot.getNPC().getStoredLocation();
+        float botYaw = botLocation.getYaw();
+
+        return botYaw;
+
+    }
 }
