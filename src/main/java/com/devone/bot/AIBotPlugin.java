@@ -32,9 +32,6 @@ public class AIBotPlugin extends JavaPlugin {
     public AIBotPlugin() {
         
             super();
-
-            AviatorEvaluator.addFunction(new com.googlecode.aviator.runtime.function.math.MathAbsFunction());
-            AviatorEvaluator.addFunction(new BotMathMaxFunction());
     }
 
     @Override
