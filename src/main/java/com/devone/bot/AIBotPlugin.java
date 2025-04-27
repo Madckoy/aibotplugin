@@ -7,7 +7,6 @@ import org.bukkit.Bukkit;
 import org.bukkit.plugin.java.JavaPlugin;
 
 import com.devone.bot.core.BotManager;
-import com.devone.bot.core.brain.logic.math.BotMathMaxFunction;
 import com.devone.bot.core.utils.BotConstants;
 import com.devone.bot.core.utils.logger.BotLogger;
 import com.devone.bot.core.utils.server.BotResourceExtractor;
@@ -19,7 +18,6 @@ import com.devone.bot.plugin.config.AIBotPluginConfig;
 import com.devone.bot.plugin.config.AIBotPluginConfigManager;
 import com.devone.bot.plugin.listener.BotListener;
 import com.devone.bot.plugin.listener.PlayerListener;
-import com.googlecode.aviator.AviatorEvaluator;
 
 public class AIBotPlugin extends JavaPlugin {
     private static AIBotPlugin instance;
