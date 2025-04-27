@@ -25,9 +25,12 @@
             </goals>
             <configuration>
               <artifactSet>
-                <includes>
-                  <include>com.devone.bot.core.brain:botmemoryv2</include>
-                </includes>
+                <excludes>
+                  <exclude>org.spigotmc:spigot-api</exclude>
+                  <exclude>net.citizensnpcs:citizens</exclude>
+                  <exclude>de.bluecolored:bluemap-api</exclude>
+                  <exclude>jakarta.servlet:jakarta.servlet-api</exclude>
+                </excludes>
               </artifactSet>
             </configuration>
           </execution>
@@ -73,48 +76,6 @@
   </repositories>
   <dependencies>
     <dependency>
-      <groupId>com.googlecode.aviator</groupId>
-      <artifactId>aviator</artifactId>
-      <version>5.4.1</version>
-      <scope>compile</scope>
-    </dependency>
-    <dependency>
-      <groupId>org.yaml</groupId>
-      <artifactId>snakeyaml</artifactId>
-      <version>2.2</version>
-      <scope>compile</scope>
-    </dependency>
-    <dependency>
-      <groupId>org.eclipse.jetty</groupId>
-      <artifactId>jetty-server</artifactId>
-      <version>11.0.15</version>
-      <scope>compile</scope>
-    </dependency>
-    <dependency>
-      <groupId>org.eclipse.jetty</groupId>
-      <artifactId>jetty-servlet</artifactId>
-      <version>11.0.15</version>
-      <scope>compile</scope>
-    </dependency>
-    <dependency>
-      <groupId>jakarta.servlet</groupId>
-      <artifactId>jakarta.servlet-api</artifactId>
-      <version>5.0.0</version>
-      <scope>provided</scope>
-    </dependency>
-    <dependency>
-      <groupId>com.google.code.gson</groupId>
-      <artifactId>gson</artifactId>
-      <version>2.10.1</version>
-      <scope>compile</scope>
-    </dependency>
-    <dependency>
-      <groupId>com.fasterxml.jackson.core</groupId>
-      <artifactId>jackson-databind</artifactId>
-      <version>2.17.0</version>
-      <scope>compile</scope>
-    </dependency>
-    <dependency>
       <groupId>org.spigotmc</groupId>
       <artifactId>spigot-api</artifactId>
       <version>1.20.4-R0.1-SNAPSHOT</version>
@@ -133,23 +94,10 @@
       <scope>provided</scope>
     </dependency>
     <dependency>
-      <groupId>org.json</groupId>
-      <artifactId>json</artifactId>
-      <version>20210307</version>
-      <scope>compile</scope>
-    </dependency>
-    <dependency>
-      <groupId>com.googlecode.json-simple</groupId>
-      <artifactId>json-simple</artifactId>
-      <version>1.1.1</version>
-      <scope>compile</scope>
-    </dependency>
-    <dependency>
-      <groupId>com.devone.bot.core.brain</groupId>
-      <artifactId>botmemoryv2</artifactId>
-      <version>0.1.0</version>
-      <scope>system</scope>
-      <systemPath>${project.basedir}/lib/botmemoryv2-0.1.0.jar</systemPath>
+      <groupId>jakarta.servlet</groupId>
+      <artifactId>jakarta.servlet-api</artifactId>
+      <version>5.0.0</version>
+      <scope>provided</scope>
     </dependency>
   </dependencies>
   <properties>

@@ -13,26 +13,28 @@
     </properties>
 
     <dependencies>
+        <!-- BotMemoryV2 -->
         <dependency>
             <groupId>com.devone.bot.core.brain</groupId>
             <artifactId>botmemoryv2</artifactId>
-            <version>0.1.0</version> <!-- Подогнал под твой jar-файл в lib -->
-            <scope>system</scope>
-            <systemPath>${project.basedir}/lib/botmemoryv2-0.1.0.jar</systemPath>
+            <version>0.1.0</version>
         </dependency>
 
+        <!-- Gson -->
         <dependency>
-            <groupId>com.googlecode.aviator</groupId>
-            <artifactId>aviator</artifactId>
-            <version>5.4.1</version>
+            <groupId>com.google.code.gson</groupId>
+            <artifactId>gson</artifactId>
+            <version>2.10.1</version>
         </dependency>
 
+        <!-- Jackson -->
         <dependency>
-            <groupId>org.yaml</groupId>
-            <artifactId>snakeyaml</artifactId>
-            <version>2.2</version>
+            <groupId>com.fasterxml.jackson.core</groupId>
+            <artifactId>jackson-databind</artifactId>
+            <version>2.17.0</version>
         </dependency>
 
+        <!-- Jetty -->
         <dependency>
             <groupId>org.eclipse.jetty</groupId>
             <artifactId>jetty-server</artifactId>
@@ -43,25 +45,20 @@
             <artifactId>jetty-servlet</artifactId>
             <version>11.0.15</version>
         </dependency>
+
+        <!-- JSON parsers -->
         <dependency>
-            <groupId>jakarta.servlet</groupId>
-            <artifactId>jakarta.servlet-api</artifactId>
-            <version>5.0.0</version>
-            <scope>provided</scope>
+            <groupId>org.json</groupId>
+            <artifactId>json</artifactId>
+            <version>20210307</version>
+        </dependency>
+        <dependency>
+            <groupId>com.googlecode.json-simple</groupId>
+            <artifactId>json-simple</artifactId>
+            <version>1.1.1</version>
         </dependency>
 
-        <dependency>
-            <groupId>com.google.code.gson</groupId>
-            <artifactId>gson</artifactId>
-            <version>2.10.1</version>
-        </dependency>
-
-        <dependency>
-            <groupId>com.fasterxml.jackson.core</groupId>
-            <artifactId>jackson-databind</artifactId>
-            <version>2.17.0</version>
-        </dependency>
-
+        <!-- Спигот и прочее - только provided -->
         <dependency>
             <groupId>org.spigotmc</groupId>
             <artifactId>spigot-api</artifactId>
@@ -84,15 +81,17 @@
         </dependency>
 
         <dependency>
-            <groupId>org.json</groupId>
-            <artifactId>json</artifactId>
-            <version>20210307</version>
+            <groupId>jakarta.servlet</groupId>
+            <artifactId>jakarta.servlet-api</artifactId>
+            <version>5.0.0</version>
+            <scope>provided</scope>
         </dependency>
 
+        <!-- SnakeYAML -->
         <dependency>
-            <groupId>com.googlecode.json-simple</groupId>
-            <artifactId>json-simple</artifactId>
-            <version>1.1.1</version>
+            <groupId>org.yaml</groupId>
+            <artifactId>snakeyaml</artifactId>
+            <version>2.2</version>
         </dependency>
     </dependencies>
 
@@ -121,7 +120,7 @@
 
     <build>
         <plugins>
-            <!-- Java Compiler Plugin -->
+            <!-- Компиляция под Java 17 -->
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-compiler-plugin</artifactId>
@@ -132,7 +131,7 @@
                 </configuration>
             </plugin>
 
-            <!-- Maven Shade Plugin для создания fat-jar -->
+            <!-- Shade Plugin -->
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-shade-plugin</artifactId>
@@ -145,16 +144,19 @@
                         </goals>
                         <configuration>
                             <artifactSet>
-                                <includes>
-                                    <include>com.devone.bot.core.brain:botmemoryv2</include>
-                                </includes>
+                                <excludes>
+                                    <exclude>org.spigotmc:spigot-api</exclude>
+                                    <exclude>net.citizensnpcs:citizens</exclude>
+                                    <exclude>de.bluecolored:bluemap-api</exclude>
+                                    <exclude>jakarta.servlet:jakarta.servlet-api</exclude>
+                                </excludes>
                             </artifactSet>
                         </configuration>
                     </execution>
                 </executions>
             </plugin>
 
-            <!-- Maven Exec Plugin для автозаливки -->
+            <!-- Скрипт деплоймента -->
             <plugin>
                 <groupId>org.codehaus.mojo</groupId>
                 <artifactId>exec-maven-plugin</artifactId>
@@ -175,6 +177,8 @@
                     </execution>
                 </executions>
             </plugin>
+
         </plugins>
     </build>
+
 </project>
