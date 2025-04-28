@@ -23,6 +23,7 @@ public class BotReactiveTeleportToPositionContainer
         this.position = position;
         setIcon("🔀");
         setObjective("Reactive: Bot Teleport Task");
+        setDeffered(true);
     }
 
     @Override

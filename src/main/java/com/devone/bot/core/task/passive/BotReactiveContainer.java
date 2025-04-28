@@ -18,6 +18,7 @@ public abstract class BotReactiveContainer<T extends BotTaskParams> extends BotT
         setReactive(true); // Включаем реактивный режим
         setIcon("📦");
         setObjective("Reactive container for tasks");
+        setDeffered(true);
     }
 
     @Override

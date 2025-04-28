@@ -19,6 +19,7 @@ public class BotReactiveMoveContainer extends BotReactiveContainer<BotReactiveMo
         super(bot, BotReactiveMoveContainerParams.class);
         setIcon("🔀");
         setObjective("Reactive: Bot Move Task");
+        setDeffered(true);
     }
 
     @Override

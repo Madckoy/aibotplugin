@@ -25,6 +25,7 @@ public class BotReactiveNearbyPlayerContainer extends BotReactiveContainer<BotRe
         this.player = player;
         setIcon("🔀");
         setObjective("Reactive: Bot MoveTask and Bot Drop All Task");
+        setDeffered(true);
     }
 
     @Override

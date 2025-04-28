@@ -20,6 +20,7 @@ public class BotReactiveExcavateContainer extends BotReactiveContainer<BotReacti
         setIcon("🔀");
         setReactive(true);
         setObjective("Reactive: Excavate Tasks");
+        setDeffered(true);
     }
 
     @Override

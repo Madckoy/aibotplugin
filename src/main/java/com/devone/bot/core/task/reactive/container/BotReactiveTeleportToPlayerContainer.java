@@ -24,6 +24,7 @@ public class BotReactiveTeleportToPlayerContainer
         this.player = player;
         setIcon("🔀");
         setObjective("Reactive: Телепорт к игроку (не вплотную)");
+        setDeffered(true);
     }
 
     @Override
