@@ -31,15 +31,23 @@ public class BotBootstrap {
         Bukkit.getScheduler().runTaskTimer(AIBotPlugin.getInstance(), () -> {
             if (ServerUtils.isServerStopping())
                 return;
-
-            BotSonar3DTask sonar = new BotSonar3DTask(bot);
-            sonar.execute();
+            
             BotTask<?> currTask = bot.getActiveTask();
             String icon = "🤖";
+            
             if (currTask != null) {
-                icon = bot.getActiveTask().getIcon();
+                    icon = bot.getActiveTask().getIcon();
             }
-            BotLogger.debug(icon, true, bot.getId() + " 📡 Sonar Scan");
+    
+
+            BotLogger.debug(icon, true, bot.getId() + " 🛜 Sonar Scan started");
+            BotSonar3DTask sonar = new BotSonar3DTask(bot);
+            sonar.execute();
+            BotLogger.debug(icon, true, bot.getId() + " 🛜 Sonar Scan started");
+
+            BotLogger.debug(icon, true, bot.getId() + " 💻 Navigator calculation started");
+            bot.getNavigator().calculate(bot.getBrain().getMemory().getSceneData());
+            BotLogger.debug(icon, true, bot.getId() + " 💻 Navigator calculation ended");
 
         }, 0L, 10L); // каждые 10 тиков = 0.5 сек
 
@@ -50,7 +58,7 @@ public class BotBootstrap {
 
             update();
 
-        }, 0L, 20L); // каждые 40 тиков = 2 сек
+        }, 0L, 20L); // каждые 20 тиков = 1 сек
     }
 
     private void update() {

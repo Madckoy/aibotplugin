@@ -41,7 +41,7 @@ public class BotExploreTask extends BotTaskAutoParams<BotExploreTaskParams> {
         }
     
 
-        bot.getNavigator().calculate(bot.getBrain().getMemory().getSceneData());     
+        //bot.getNavigator().calculate(bot.getBrain().getMemory().getSceneData());     
 
         BotLogger.debug(icon, isLogging(), bot.getId() + " 🧭 Explore with distance: " + scanRadius);
 
