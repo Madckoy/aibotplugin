@@ -90,7 +90,8 @@ public class BotExcavateTask extends BotTaskAutoParams<BotExcavateTaskParams> {
         BotPosition blockPosition = null;
 
         setIcon("📜");
-        setObjective(getObjective() + ": Processing pattern - " + patternName);
+
+        setObjective(params.getObjective() + ": Processing pattern - " + patternName);
 
         if (runner.isLoaded()) {
 

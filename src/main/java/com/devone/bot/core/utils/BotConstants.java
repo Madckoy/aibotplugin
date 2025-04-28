@@ -12,10 +12,10 @@ public class BotConstants {
     public static final String PLUGIN_PATH_PATTERNS_BREAK = PLUGIN_PATH + "/patterns/excavation/";
     public static final String RESOURCE_PATH_PATTERNS_BREAK = "patterns/break/";
 
-    public static final int    DEFAULT_SCAN_RANGE = 10;
-    public static final int    DEFAULT_SCAN_DATA_SLICE_HEIGHT = 10;
+    public static final int DEFAULT_SCAN_RANGE = 10;
+    public static final int DEFAULT_SCAN_DATA_SLICE_HEIGHT = 10;
 
-    public static final long   DEFAULT_TASK_TIMEOUT = 30_000;
+    public static final long DEFAULT_TASK_TIMEOUT = 120_000;
     public static final double DEFAULT_HAND_DAMAGE = 5.0;
 
     public static final String DEFAULT_PATTERN_BREAK = "default.json";
@@ -23,6 +23,6 @@ public class BotConstants {
     public static final double DEFAULT_PLAYER_DETECTION_RADIUS = 2.0;
     public static final double DEFAULT_DETECTION_RADIUS = 20.0;
 
-    public static final long   DEFAULT_MEMORY_EXPIRATION = 300_000; // 30 min
+    public static final long DEFAULT_MEMORY_EXPIRATION = 300_000; // 30 min
 
 }
