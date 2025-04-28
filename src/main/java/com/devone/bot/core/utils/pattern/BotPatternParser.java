@@ -2,6 +2,7 @@ package com.devone.bot.core.utils.pattern;
 
 import com.devone.bot.core.utils.blocks.BotPosition;
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.List;
 import java.util.Map;
 
@@ -15,6 +16,10 @@ public class BotPatternParser {
     }
 
     public static BotPatternParserResult parse(BotPattern pattern, BotPosition observerPosition) {
+        return parse(pattern, observerPosition, true); // 🔥 По умолчанию сортировка сверху вниз
+    }
+
+    public static BotPatternParserResult parse(BotPattern pattern, BotPosition observerPosition, boolean descending) {
         BotPatternParserResult result = new BotPatternParserResult();
 
         Map<Integer, List<String>> layers = pattern.getLayers();
@@ -30,7 +35,7 @@ public class BotPatternParser {
         }
 
         for (Map.Entry<Integer, List<String>> layerEntry : layers.entrySet()) {
-            int layerIndex = layerEntry.getKey(); // теперь int, а не double!
+            int layerIndex = layerEntry.getKey();
             List<String> rows = layerEntry.getValue();
 
             for (int z = 0; z < rows.size(); z++) {
@@ -58,7 +63,15 @@ public class BotPatternParser {
             }
         }
 
+        // ✅ Сортировка с выбором направления
+        Comparator<BotPosition> byY = Comparator.comparingDouble(BotPosition::getY);
+        if (descending) {
+            byY = byY.reversed();
+        }
+        result.allPoints.sort(byY);
+        result.solidPoints.sort(byY);
+        result.voidPoints.sort(byY);
+
         return result;
     }
-    
 }
