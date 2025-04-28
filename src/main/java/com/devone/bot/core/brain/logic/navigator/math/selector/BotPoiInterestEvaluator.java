@@ -5,6 +5,8 @@ import com.devone.bot.core.utils.blocks.BotBlockData;
 import com.devone.bot.core.utils.world.BotWorldHelper;
 import com.devone.bot.core.Bot;
 import com.devone.bot.core.brain.logic.navigator.context.BotNavigationContext;
+
+import org.bukkit.block.Block;
 import org.bukkit.util.Vector;
 
 import java.util.List;
@@ -13,29 +15,29 @@ public class BotPoiInterestEvaluator {
 
     public static double evaluate(Bot bot, BotNavigationContext context, BotPosition poi, float botYaw) {
         double interest = 0.0;
-
+    
         if (isInDangerousLiquid(poi)) {
-            return -10000;
+            return -10000; // <- сразу даём штраф и выходим
         }
-
-        if (isNearDangerousLiquid(poi)) {
-            interest -= 1000;
-        }
-
+    
+        // Добавляем динамический штраф за близость к воде
+        interest += computeDangerousLiquidPenalty(poi);
+    
         if (isNearEntity(context.entities, poi)) {
             interest += 5000;
         }
-
+    
         if (isNearRareBlock(context.sliced, poi)) {
             interest += 5000;
         }
-
+    
         interest += computeViewBonus(botYaw, poi, bot.getNavigator().getPosition());
-
+    
         interest += Math.random() * 50;
-
+    
         return interest;
     }
+    
 
     private static boolean isInDangerousLiquid(BotPosition poi) {
         return BotWorldHelper.isBlockInDangerousLiquid(poi);
@@ -96,4 +98,26 @@ public class BotPoiInterestEvaluator {
         double z = Math.cos(radians);
         return new Vector(x, 0, z).normalize();
     }
+
+    private static double computeDangerousLiquidPenalty(BotPosition poi) {
+    List<Block> nearbyBlocks = BotWorldHelper.getNearbyBlocks(poi, 5);
+    double maxPenalty = 0;
+
+    for (var block : nearbyBlocks) {
+        if (BotWorldHelper.isDangerousLiquid(block)) {
+            double distance = poi.distanceTo(BotWorldHelper.locationToBotPosition(block.getLocation()));
+            if (distance <= 1.0) {
+                maxPenalty = Math.min(maxPenalty, -7000);
+            } else if (distance <= 2.0) {
+                maxPenalty = Math.min(maxPenalty, -5000);
+            } else if (distance <= 3.0) {
+                maxPenalty = Math.min(maxPenalty, -3000);
+            } else if (distance <= 5.0) {
+                maxPenalty = Math.min(maxPenalty, -1000);
+            }
+        }
+    }
+    return maxPenalty;
+}
+
 }
