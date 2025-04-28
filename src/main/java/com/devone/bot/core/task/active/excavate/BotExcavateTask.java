@@ -93,11 +93,7 @@ public class BotExcavateTask extends BotTaskAutoParams<BotExcavateTaskParams> {
 
         setObjective(params.getObjective() + ": Processing pattern - " + patternName);
 
-        if (runner.isLoaded()) {
-
-            blockPosition = runner.getNextVoid(basePosition);
-            BotLogger.debug(icon, isLogging(), bot.getId() + " Next Void: " + blockPosition);
-        } else {
+        if (!runner.isLoaded()) {
             try {
                 runner.load(basePosition);
             } catch (Exception ex) {
