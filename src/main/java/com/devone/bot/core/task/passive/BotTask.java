@@ -185,7 +185,7 @@ public abstract class BotTask<T extends BotTaskParams> implements IBotTask, List
     private void handlePlayerDisconnect() {
         BotLogger.debug("🧠", logging,
                 bot.getId() + " 🚨 Игрок " + player.getName() + " отключился. Возврат к BrainTask.");
-        BotTaskManager.clear(bot);
+        //BotTaskManager.clear(bot);
         BotBrainTask brain = new BotBrainTask(bot);
         brain.setPause(false);
         BotTaskManager.push(bot, brain);
