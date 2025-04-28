@@ -1,10 +1,14 @@
 package com.devone.bot.core.task.reactive.container;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import org.bukkit.Location;
 import org.bukkit.entity.Player;
 
 import com.devone.bot.core.Bot;
 import com.devone.bot.core.task.passive.BotReactiveTaskContainer;
+import com.devone.bot.core.task.passive.BotTask;
 import com.devone.bot.core.task.active.teleport.BotTeleportTask;
 import com.devone.bot.core.task.active.teleport.params.BotTeleportTaskParams;
 import com.devone.bot.core.task.reactive.container.params.BotReactiveTeleportToPlayerContainerParams;
@@ -23,7 +27,7 @@ public class BotReactiveTeleportToPlayerContainer
     }
 
     @Override
-    protected void enqueue(Bot bot) {
+    protected List<BotTask<?>> enqueue(Bot bot) {
         Location playerLoc = player.getLocation();
 
         // 📏 Смещаемся на 2 блока назад по направлению взгляда
@@ -41,6 +45,8 @@ public class BotReactiveTeleportToPlayerContainer
         tp.setIcon("⚡");
         tp.setObjective("Телепорт к игроку сзади");
 
-        add(tp); // was add(tp) 📦 добавляем в контейнер
+        List<BotTask<?>> subtasks = new ArrayList<>();
+        subtasks.add(tp);
+        return subtasks;
     }
 }

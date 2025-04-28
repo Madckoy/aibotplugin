@@ -1,7 +1,10 @@
 package com.devone.bot.core.task.reactive.container.example;
 
+import java.util.List;
+
 import com.devone.bot.core.Bot;
 import com.devone.bot.core.task.passive.BotReactiveTaskContainer;
+import com.devone.bot.core.task.passive.BotTask;
 import com.devone.bot.core.task.reactive.container.params.example.BotReactiveTemplateContainerParams;
 import com.devone.bot.core.utils.logger.BotLogger;
 
@@ -14,10 +17,11 @@ public class BotReactiveTemplateContainer extends BotReactiveTaskContainer<BotRe
     }
 
     @Override
-    protected void enqueue(Bot bot) {
+    protected List<BotTask<?>> enqueue(Bot bot) {
         BotLogger.debug(getIcon(), true, bot.getId() + " 📦 enqueue() шаблонного контейнера");
 
         // ✅ Используем реактивный сахар внутри
         // bot.pushReactiveTask(new YourTask(bot));
+        return null;
     }
 }

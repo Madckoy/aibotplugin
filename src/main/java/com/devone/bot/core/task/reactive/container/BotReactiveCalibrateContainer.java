@@ -1,7 +1,11 @@
 package com.devone.bot.core.task.reactive.container;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import com.devone.bot.core.Bot;
 import com.devone.bot.core.task.passive.BotReactiveTaskContainer;
+import com.devone.bot.core.task.passive.BotTask;
 import com.devone.bot.core.task.active.calibrate.BotCalibrateTask;
 import com.devone.bot.core.task.active.calibrate.params.BotCalibrateTaskParams;
 import com.devone.bot.core.task.reactive.container.params.BotReactiveCalibrateContainerParams;
@@ -18,14 +22,17 @@ public class BotReactiveCalibrateContainer extends BotReactiveTaskContainer<BotR
     }
 
     @Override
-    protected void enqueue(Bot bot) {
+    protected List<BotTask<?>> enqueue(Bot bot) {
         BotLogger.debug(getIcon(), true, bot.getId() + " " + icon + " " + getObjective());
 
         BotCalibrateTaskParams tpParams = new BotCalibrateTaskParams();
         BotCalibrateTask tpTask = new BotCalibrateTask(bot);
         tpTask.setParams(tpParams);
 
-        add(tpTask);
+        List<BotTask<?>> subtasks = new ArrayList<>();
+        subtasks.add(tpTask);
+        
+        return subtasks;
     }
 
 }

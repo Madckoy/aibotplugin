@@ -1,7 +1,11 @@
 package com.devone.bot.core.task.reactive.container;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import com.devone.bot.core.Bot;
 import com.devone.bot.core.task.passive.BotReactiveTaskContainer;
+import com.devone.bot.core.task.passive.BotTask;
 import com.devone.bot.core.task.active.hand.attack.BotHandAttackTask;
 import com.devone.bot.core.task.active.hand.attack.params.BotHandAttackTaskParams;
 import com.devone.bot.core.task.active.move.BotMoveTask;
@@ -23,21 +27,23 @@ public class BotReactiveNearbyHostileContainer
     }
 
     @Override
-    protected void enqueue(Bot bot) {
+    protected List<BotTask<?>> enqueue(Bot bot) {
         BotLogger.debug(getIcon(), true, bot.getId() + " " + icon + " " + getObjective());
         // 1. Идём к мобу
         BotMoveTaskParams walkParams = new BotMoveTaskParams(target.getPosition());
         BotMoveTask walkTask = new BotMoveTask(bot);
         walkTask.setParams(walkParams);
         walkTask.setObjective("🥾 Идём к мобу");
-        add(walkTask);
 
         // 2. Атакуем
-        BotHandAttackTask task = new BotHandAttackTask(bot);
+        BotHandAttackTask attackTask = new BotHandAttackTask(bot);
         BotHandAttackTaskParams params = new BotHandAttackTaskParams();
         params.setTarget(target);
-        task.setParams(params);
+        attackTask.setParams(params);
 
-        add(task);
+        List<BotTask<?>> subtasks = new ArrayList<>();
+        subtasks.add(walkTask);
+        subtasks.add(attackTask);
+        return subtasks;
     }
 }

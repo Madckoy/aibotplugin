@@ -8,6 +8,7 @@ import com.devone.bot.core.task.active.brain.BotBrainTask;
 import com.devone.bot.core.task.passive.params.BotTaskParams;
 import com.devone.bot.core.task.reactive.BotReactiveUtils;
 import com.devone.bot.core.task.reactive.BotReactivityManager;
+import com.devone.bot.core.utils.BotConstants;
 import com.devone.bot.core.utils.BotUtils;
 import com.devone.bot.core.utils.blocks.BotPosition;
 import com.devone.bot.core.utils.logger.BotLogger;
@@ -18,6 +19,16 @@ import java.util.UUID;
 public abstract class BotTask<T extends BotTaskParams> implements IBotTask, Listener, IBotTaskParameterized<T> {
 
     protected T params;
+
+    protected boolean injected = false;
+
+    public boolean isInjected() {
+        return injected;
+    }
+
+    public void setInjected(boolean injected) {
+        this.injected = injected;
+    }
 
     public T getParams() {
         return params;
@@ -99,6 +110,12 @@ public abstract class BotTask<T extends BotTaskParams> implements IBotTask, List
     
         if (isPause()) {
             BotLogger.debug(icon, true, bot.getId() + " ⏸️ Задача на паузе: " + this.getClass().getSimpleName());
+
+            if (isPauseTimedOut(BotConstants.DEFAULT_TASK_TIMEOUT)) { 
+                BotLogger.debug("🤖", true, bot.getId() + " ⏳ Таймаут паузы. Убираем задачу.");
+                stop();
+                return;
+            }
             return;
         }
     
@@ -110,12 +127,11 @@ public abstract class BotTask<T extends BotTaskParams> implements IBotTask, List
         if (handleReactiveLogic())
             return;
     
-        if(isDeffered()==false) {
-            BotLogger.debug(icon, true, bot.getId() + " ▶️ Задача не на паузе. выполняем: " + this.getClass().getSimpleName());
+        if(injected==true) {
+            BotLogger.debug(icon, true, bot.getId() + " ▶️ Задача не на паузе и в стеке. Выполняем: " + this.getClass().getSimpleName());
             runTaskExecution();
         }
-    }
-    
+    }    
 
     private void logTaskStatus() {
         BotLogger.debug(icon, logging, bot.getId() +
@@ -131,7 +147,8 @@ public abstract class BotTask<T extends BotTaskParams> implements IBotTask, List
     private boolean handleReactiveLogic() {
         if (isReactive && !BotReactiveUtils.isAlreadyReacting(bot)) {
             BotLogger.debug("🧠", logging,
-                    bot.getId() + " ⚠️ Форсируем реактивный режим (task = " + getClass().getSimpleName() + ")");
+                    bot.getId() + " ⚠️ Инжектаем реактивный контейнер с задачами (task = " + getClass().getSimpleName() + ")");
+
             BotReactiveUtils.activateReaction(bot, true);
         }
 

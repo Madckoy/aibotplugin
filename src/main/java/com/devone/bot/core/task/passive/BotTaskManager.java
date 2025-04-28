@@ -54,6 +54,7 @@ public class BotTaskManager {
         }
 
         stack.push(task);
+        task.setInjected(true); // сообщаем задаче что она добавилась в общий стек
 
         // если это первый реактивный — запоминаем
         if (task.isReactive() && currentReactiveRoot == null) {
@@ -113,35 +114,19 @@ public class BotTaskManager {
     public void updateActiveTask() {
         BotTask<?> currentTask = getActiveTask();
         if (currentTask != null) {
-            BotLogger.debug("🤖", true, bot.getId() + " 🟢 Activate task: " + currentTask.getIcon() + " "
+            BotLogger.debug("🤖", true, bot.getId()     + " 🟢 Activate task: " + currentTask.getIcon() + " "
                     + currentTask.getClass().getSimpleName());
-            if (currentTask.isPause()) {
-                if (currentTask.isDeffered()) {
-                    currentTask.setPause(false);
-                } else if (currentTask.isPauseTimedOut(BotConstants.DEFAULT_TASK_TIMEOUT)) { // Например, 3 секунды
-                    BotLogger.debug("🤖", true, bot.getId() + " ⏳ Таймаут паузы. Убираем задачу.");
-                    popTask();
-                } else {
-                    return; // Просто ждём
-                }
-            }
+
             if (currentTask.isDone()) {
-                popTask();
                 BotLogger.debug("🤖", true, bot.getId() + " ⭕ Deactivating task: " + currentTask.getIcon() + " "
                         + currentTask.getClass().getSimpleName());
+                popTask();                        
+            
             } else {
                 BotLogger.debug("🤖", true, bot.getId() + " 🔵 Updating task: " + currentTask.getIcon() + " "
                         + currentTask.getClass().getSimpleName());
 
-                if (currentTask.isDeffered() == false) {
-                    currentTask.update();
-                } else {
-                    BotLogger.debug("🤖", true,
-                            bot.getId() + " 🟣 Task is waiting while anoher task is being added: "
-                                    + currentTask.getIcon() + " "
-                                    + currentTask.getClass().getSimpleName());
-                    return; // skip the cycle
-                }
+                currentTask.update();        
             }
         }
     }
@@ -150,7 +135,7 @@ public class BotTaskManager {
         while (!reactiveStack.isEmpty()) {
             BotTask<?> removedTask = reactiveStack.pop();
             removedTask.stop();
-            BotLogger.debug("🤖", true, bot.getId() + " ⚫ Удалена реактивная задача: " + removedTask.getIcon() + " "
+            BotLogger.debug("🤖", true, bot.getId()      + " ⚫ Удалена реактивная задача: " + removedTask.getIcon() + " "
                     + removedTask.getClass().getSimpleName());
         }
 
@@ -159,7 +144,7 @@ public class BotTaskManager {
         while (!taskStack.isEmpty()) {
             BotTask<?> removedTask = taskStack.pop();
             removedTask.stop();
-            BotLogger.debug("🤖", true, bot.getId() + " ⚫ Удалена задача: " + removedTask.getIcon() + " "
+            BotLogger.debug("🤖", true, bot.getId()     + " ⚫ Удалена задача: " + removedTask.getIcon() + " "
                     + removedTask.getClass().getSimpleName());
         }
     }
