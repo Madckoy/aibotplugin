@@ -5,10 +5,8 @@ import com.devone.bot.core.Bot;
 import com.devone.bot.core.brain.logic.navigator.context.BotNavigationContext;
 import com.devone.bot.core.utils.logger.BotLogger;
 
-import java.util.Comparator;
 import java.util.List;
 import java.util.Random;
-import java.util.stream.Collectors;
 
 public class BotPOISelector {
 
