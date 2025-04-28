@@ -26,8 +26,7 @@ public abstract class BotReactiveTaskContainer<T extends BotTaskParams> extends 
         if (injected) {
             BotLogger.debug(getIcon(), true,
                     bot.getId() + " ⚡ Запущен реактивный контейнер: " + this.getClass().getSimpleName());
-
-            setPause(true);        
+      
             if(isDeffered()==true) {
 
                 subtasks = enqueue(bot); // 📦 добавляем задачи
@@ -36,6 +35,8 @@ public abstract class BotReactiveTaskContainer<T extends BotTaskParams> extends 
                     stop();
                     return;
                 }
+
+                setDeffered(false);
             }
 
             List<BotTask<?>> reversed = new ArrayList<>(subtasks);

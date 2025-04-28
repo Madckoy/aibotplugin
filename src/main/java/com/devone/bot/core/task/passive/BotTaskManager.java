@@ -47,9 +47,6 @@ public class BotTaskManager {
         if (!stack.isEmpty()) {
             BotTask<?> currentTask = stack.peek();
             currentTask.setPause(true); // Ставим текущую задачу на паузу
-            if (currentTask.isDeffered()) {
-                currentTask.setDeffered(false); // Cнимам флажок отложенности т.к пришла следующая таска
-            }
         }
 
         stack.push(task);
