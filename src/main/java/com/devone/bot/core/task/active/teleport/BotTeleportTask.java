@@ -55,6 +55,12 @@ public class BotTeleportTask extends BotTaskAutoParams<BotTeleportTaskParams> {
             return;
         }
 
+        if (bot.getNPCEntity() == null) {
+            BotLogger.debug(icon, this.isLogging(), bot.getId() + " ❌ Проблема с NPC Enitity.");
+            stop();
+            return;
+        }
+
         setObjective(params.getObjective() + " to: " + target);
 
         BotLogger.debug(icon, this.isLogging(), bot.getId() + " ⚡ Телепорт в " + target);
