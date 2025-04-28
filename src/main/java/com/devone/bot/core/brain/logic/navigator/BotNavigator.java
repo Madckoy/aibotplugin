@@ -329,7 +329,7 @@ public class BotNavigator {
 
                 BotTeleportTask tp = new BotTeleportTask(owner, null);
                 BotTeleportTaskParams params = new BotTeleportTaskParams();
-                params.setPosition(position);
+                params.setPosition(suggested);
                 tp.setParams(params);
                 BotTaskManager.push(owner, tp);
 
