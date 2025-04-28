@@ -90,9 +90,16 @@ public class BotStatusServlet extends HttpServlet {
                 }
 
                 botJson.addProperty("target", tgtLoc );
+                
+                long elapsedTime = 0;
 
-                botJson.addProperty("elapsedTime",
-                        BotUtils.formatTime(bot.getBrain().getCurrentTask().getElapsedTime()));
+                if(bot.getBrain()!=null) {
+                    if(bot.getBrain().getCurrentTask()!=null) {
+                        elapsedTime = bot.getBrain().getCurrentTask().getElapsedTime();
+                    }
+                }
+                
+                botJson.addProperty("elapsedTime", BotUtils.formatTime(elapsedTime));
 
                 botJson.addProperty("queue", bot.getTaskManager().getQueueIcons());
 
