@@ -97,7 +97,8 @@ public abstract class BotTask<T extends BotTaskParams> implements IBotTask, List
             return;
         }
     
-        if (isPause() || isDeffered()) {
+        if (isPause()) {
+            BotLogger.debug(icon, true, bot.getId() + " ⏸️ Задача на паузе: " + this.getClass().getSimpleName());
             return;
         }
     
@@ -109,7 +110,10 @@ public abstract class BotTask<T extends BotTaskParams> implements IBotTask, List
         if (handleReactiveLogic())
             return;
     
-        runTaskExecution();
+        if(isDeffered()==false) {
+            BotLogger.debug(icon, true, bot.getId() + " ▶️ Задача не на паузе. выполняем: " + this.getClass().getSimpleName());
+            runTaskExecution();
+        }
     }
     
 
