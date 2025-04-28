@@ -16,7 +16,7 @@ public class BotPatternParser {
     }
 
     public static BotPatternParserResult parse(BotPattern pattern, BotPosition observerPosition) {
-        return parse(pattern, observerPosition, true); // 🔥 По умолчанию сортировка сверху вниз
+        return parse(pattern, observerPosition, true); // 🔥 По умолчанию сортируем сверху вниз
     }
 
     public static BotPatternParserResult parse(BotPattern pattern, BotPosition observerPosition, boolean descending) {
@@ -28,10 +28,11 @@ public class BotPatternParser {
 
         double centerX = 0;
         double centerZ = 0;
+
         if (!layers.isEmpty()) {
             List<String> anyLayer = layers.values().iterator().next();
-            centerX = (anyLayer.get(0).length() / 2.0) - 0.5;
-            centerZ = (anyLayer.size() / 2.0) - 0.5;
+            centerX = (anyLayer.get(0).length() - 1) / 2.0;
+            centerZ = (anyLayer.size() - 1) / 2.0;
         }
 
         for (Map.Entry<Integer, List<String>> layerEntry : layers.entrySet()) {
@@ -63,11 +64,12 @@ public class BotPatternParser {
             }
         }
 
-        // ✅ Сортировка с выбором направления
+        // ✅ Сортируем по Y (вверх-вниз или вниз-вверх)
         Comparator<BotPosition> byY = Comparator.comparingDouble(BotPosition::getY);
         if (descending) {
             byY = byY.reversed();
         }
+
         result.allPoints.sort(byY);
         result.solidPoints.sort(byY);
         result.voidPoints.sort(byY);
