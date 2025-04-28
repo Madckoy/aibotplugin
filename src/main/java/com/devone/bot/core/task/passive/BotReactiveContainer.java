@@ -8,12 +8,12 @@ import com.devone.bot.core.Bot;
 import com.devone.bot.core.task.passive.params.BotTaskParams;
 import com.devone.bot.core.utils.logger.BotLogger;
 
-public abstract class BotReactiveTaskContainer<T extends BotTaskParams> extends BotTaskAutoParams<T> {
+public abstract class BotReactiveContainer<T extends BotTaskParams> extends BotTaskAutoParams<T> {
 
     protected List<BotTask<?>> subtasks = new ArrayList<>();
     protected boolean injected = false;
 
-    public BotReactiveTaskContainer(Bot bot, Class<T> paramClass) {
+    public BotReactiveContainer(Bot bot, Class<T> paramClass) {
         super(bot, null, paramClass);
         setReactive(true); // Включаем реактивный режим
         setIcon("📦");
@@ -22,7 +22,7 @@ public abstract class BotReactiveTaskContainer<T extends BotTaskParams> extends 
 
     @Override
     public void execute() {
-        if (injected) {
+
             BotLogger.debug(getIcon(), true,
                     bot.getId() + " ⚡ Запущен реактивный контейнер: " + this.getClass().getSimpleName());
       
@@ -35,6 +35,9 @@ public abstract class BotReactiveTaskContainer<T extends BotTaskParams> extends 
                 if(subtasks == null) {
                     stop();
                     return;
+                } else {
+                    BotLogger.debug(getIcon(), true,
+                    bot.getId() + " ⚡ Добавлены задачи: " + subtasks);
                 }
 
                 List<BotTask<?>> reversed = new ArrayList<>(subtasks);
@@ -69,7 +72,6 @@ public abstract class BotReactiveTaskContainer<T extends BotTaskParams> extends 
             }
 
             return;
-        }
     }
 
     /**

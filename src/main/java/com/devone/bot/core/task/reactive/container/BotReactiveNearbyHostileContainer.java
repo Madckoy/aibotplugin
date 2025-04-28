@@ -4,7 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import com.devone.bot.core.Bot;
-import com.devone.bot.core.task.passive.BotReactiveTaskContainer;
+import com.devone.bot.core.task.passive.BotReactiveContainer;
 import com.devone.bot.core.task.passive.BotTask;
 import com.devone.bot.core.task.active.hand.attack.BotHandAttackTask;
 import com.devone.bot.core.task.active.hand.attack.params.BotHandAttackTaskParams;
@@ -15,7 +15,7 @@ import com.devone.bot.core.utils.blocks.BotBlockData;
 import com.devone.bot.core.utils.logger.BotLogger;
 
 public class BotReactiveNearbyHostileContainer
-        extends BotReactiveTaskContainer<BotReactiveNearbyHostileContainerParams> {
+        extends BotReactiveContainer<BotReactiveNearbyHostileContainerParams> {
 
     private BotBlockData target;
 

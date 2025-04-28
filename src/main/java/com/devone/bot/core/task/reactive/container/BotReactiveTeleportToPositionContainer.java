@@ -4,7 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import com.devone.bot.core.Bot;
-import com.devone.bot.core.task.passive.BotReactiveTaskContainer;
+import com.devone.bot.core.task.passive.BotReactiveContainer;
 import com.devone.bot.core.task.passive.BotTask;
 import com.devone.bot.core.task.reactive.container.params.BotReactiveTeleportToPositionContainerParams;
 import com.devone.bot.core.task.active.teleport.BotTeleportTask;
@@ -14,7 +14,7 @@ import com.devone.bot.core.utils.blocks.BotPosition;
 import com.devone.bot.core.utils.logger.BotLogger;
 
 public class BotReactiveTeleportToPositionContainer
-        extends BotReactiveTaskContainer<BotReactiveTeleportToPositionContainerParams> {
+        extends BotReactiveContainer<BotReactiveTeleportToPositionContainerParams> {
 
     private final BotPosition position;
 

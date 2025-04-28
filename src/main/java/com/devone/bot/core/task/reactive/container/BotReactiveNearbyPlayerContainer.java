@@ -1,7 +1,7 @@
 package com.devone.bot.core.task.reactive.container;
 
 import com.devone.bot.core.Bot;
-import com.devone.bot.core.task.passive.BotReactiveTaskContainer;
+import com.devone.bot.core.task.passive.BotReactiveContainer;
 import com.devone.bot.core.task.passive.BotTask;
 import com.devone.bot.core.task.active.drop.BotDropAllTask;
 import com.devone.bot.core.task.active.move.BotMoveTask;
@@ -16,7 +16,7 @@ import java.util.List;
 
 import org.bukkit.entity.Player;
 
-public class BotReactiveNearbyPlayerContainer extends BotReactiveTaskContainer<BotReactiveNearbyPlayerContainerParams> {
+public class BotReactiveNearbyPlayerContainer extends BotReactiveContainer<BotReactiveNearbyPlayerContainerParams> {
 
     Player player = null;
 

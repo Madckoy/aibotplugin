@@ -3,12 +3,12 @@ package com.devone.bot.core.task.reactive.container.example;
 import java.util.List;
 
 import com.devone.bot.core.Bot;
-import com.devone.bot.core.task.passive.BotReactiveTaskContainer;
+import com.devone.bot.core.task.passive.BotReactiveContainer;
 import com.devone.bot.core.task.passive.BotTask;
 import com.devone.bot.core.task.reactive.container.params.example.BotReactiveTemplateContainerParams;
 import com.devone.bot.core.utils.logger.BotLogger;
 
-public class BotReactiveTemplateContainer extends BotReactiveTaskContainer<BotReactiveTemplateContainerParams> {
+public class BotReactiveTemplateContainer extends BotReactiveContainer<BotReactiveTemplateContainerParams> {
 
     public BotReactiveTemplateContainer(Bot bot) {
         super(bot, BotReactiveTemplateContainerParams.class);

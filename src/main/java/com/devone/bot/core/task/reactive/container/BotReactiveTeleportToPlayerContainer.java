@@ -7,7 +7,7 @@ import org.bukkit.Location;
 import org.bukkit.entity.Player;
 
 import com.devone.bot.core.Bot;
-import com.devone.bot.core.task.passive.BotReactiveTaskContainer;
+import com.devone.bot.core.task.passive.BotReactiveContainer;
 import com.devone.bot.core.task.passive.BotTask;
 import com.devone.bot.core.task.active.teleport.BotTeleportTask;
 import com.devone.bot.core.task.active.teleport.params.BotTeleportTaskParams;
@@ -15,7 +15,7 @@ import com.devone.bot.core.task.reactive.container.params.BotReactiveTeleportToP
 import com.devone.bot.core.utils.blocks.BotPosition;
 
 public class BotReactiveTeleportToPlayerContainer
-        extends BotReactiveTaskContainer<BotReactiveTeleportToPlayerContainerParams> {
+        extends BotReactiveContainer<BotReactiveTeleportToPlayerContainerParams> {
 
     private final Player player;
 

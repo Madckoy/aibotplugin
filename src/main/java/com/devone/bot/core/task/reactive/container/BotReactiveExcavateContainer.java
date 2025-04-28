@@ -5,14 +5,14 @@ import java.util.List;
 
 import com.devone.bot.core.Bot;
 import com.devone.bot.core.task.active.excavate.BotExcavateTask;
-import com.devone.bot.core.task.passive.BotReactiveTaskContainer;
+import com.devone.bot.core.task.passive.BotReactiveContainer;
 import com.devone.bot.core.task.passive.BotTask;
 import com.devone.bot.core.task.active.excavate.params.BotExcavateTaskParams;
 
 import com.devone.bot.core.task.reactive.container.params.BotReactiveExcavateContainerParams;
 import com.devone.bot.core.utils.logger.BotLogger;
 
-public class BotReactiveExcavateContainer extends BotReactiveTaskContainer<BotReactiveExcavateContainerParams> {
+public class BotReactiveExcavateContainer extends BotReactiveContainer<BotReactiveExcavateContainerParams> {
 
     public BotReactiveExcavateContainer(Bot bot) {
 
