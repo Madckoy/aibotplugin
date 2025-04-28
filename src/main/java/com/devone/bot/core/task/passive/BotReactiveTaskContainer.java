@@ -18,7 +18,6 @@ public abstract class BotReactiveTaskContainer<T extends BotTaskParams> extends 
         setReactive(true); // Включаем реактивный режим
         setIcon("📦");
         setObjective("Reactive container for tasks");
-        setDeffered(true);
     }
 
     @Override
@@ -28,6 +27,8 @@ public abstract class BotReactiveTaskContainer<T extends BotTaskParams> extends 
                     bot.getId() + " ⚡ Запущен реактивный контейнер: " + this.getClass().getSimpleName());
       
             if(isDeffered()==true) {
+                BotLogger.debug(getIcon(), true,
+                    bot.getId() + " ⚡ Добавляем вложенные задачи в стек");
 
                 subtasks = enqueue(bot); // 📦 добавляем задачи
 
@@ -36,22 +37,24 @@ public abstract class BotReactiveTaskContainer<T extends BotTaskParams> extends 
                     return;
                 }
 
+                List<BotTask<?>> reversed = new ArrayList<>(subtasks);
+                Collections.reverse(reversed);
+                
+                bot.getTaskManager().wait(true); // stop updating the stack
+
+                for (BotTask<?> task : reversed) {
+                    BotLogger.debug(getIcon(), true,
+                            bot.getId() + " ➕ Запуск подзадачи: " + task.getClass().getSimpleName());
+
+                    task.setReactive(true); // наследуем реактивность
+                    bot.getTaskManager().wait(true); 
+                    bot.getTaskManager().pushTask(task);
+                }
+
+                bot.getTaskManager().wait(false); // continue updating the stack
                 setDeffered(false);
             }
 
-            List<BotTask<?>> reversed = new ArrayList<>(subtasks);
-            Collections.reverse(reversed);
-
-            for (BotTask<?> task : reversed) {
-                BotLogger.debug(getIcon(), true,
-                        bot.getId() + " ➕ Запуск подзадачи: " + task.getClass().getSimpleName());
-                task.setReactive(true);
-                bot.getTaskManager().pushTask(task);
-            }
-
-            return;
-
-        } else {
             if(subtasks!=null) {
                 boolean allDone = subtasks.stream().allMatch(BotTask::isDone);
 
@@ -60,7 +63,12 @@ public abstract class BotReactiveTaskContainer<T extends BotTaskParams> extends 
                                 + this.getClass().getSimpleName());
                     stop();
                 }
+
+            } else {
+               stop();     
             }
+
+            return;
         }
     }
 

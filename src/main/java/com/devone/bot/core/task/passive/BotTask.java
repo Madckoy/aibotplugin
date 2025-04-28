@@ -108,7 +108,7 @@ public abstract class BotTask<T extends BotTaskParams> implements IBotTask, List
             return;
         }
     
-        if (isPause()) {
+        if (isPause() && isDeffered()==false) {
             BotLogger.debug(icon, true, bot.getId() + " ⏸️ Задача на паузе: " + this.getClass().getSimpleName());
 
             if (isPauseTimedOut(BotConstants.DEFAULT_TASK_TIMEOUT)) { 

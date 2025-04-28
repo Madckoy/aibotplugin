@@ -10,10 +10,19 @@ import com.devone.bot.core.utils.logger.BotLogger;
 public class BotTaskManager {
 
     private final Stack<BotTask<?>> taskStack = new Stack<>();
-    // 👇 ДОБАВИМ ВВЕРХУ
 
     private final Stack<BotTask<?>> reactiveStack = new Stack<>();
     private BotTask<?> currentReactiveRoot = null;
+
+    private boolean waiting = false;
+
+    public boolean isWaiting() {
+        return waiting;
+    }
+
+    public void wait(boolean w) {
+        this.waiting = w;
+    }
 
     public boolean isInReactiveMode() {
         return !reactiveStack.isEmpty();
@@ -122,7 +131,9 @@ public class BotTaskManager {
                 BotLogger.debug("🤖", true, bot.getId() + " 🔵 Updating task: " + currentTask.getIcon() + " "
                         + currentTask.getClass().getSimpleName());
 
-                currentTask.update();        
+                if(isWaiting()==false) {
+                    currentTask.update();
+                }        
             }
         }
     }
@@ -151,11 +162,6 @@ public class BotTaskManager {
 
     public static void push(Bot bot, BotTask<?> task) {
         task.setReactive(task.isReactive()); // не переопределяем, если уже выставлено
-
-        if (task.isDeffered()) {
-            task.setPause(true);
-        }
-
         bot.getTaskManager().pushTask(task);
     }
 
