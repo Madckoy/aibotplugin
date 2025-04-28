@@ -48,8 +48,8 @@ public class BotTaskManager {
         if (!stack.isEmpty()) {
             BotTask<?> currentTask = stack.peek();
             currentTask.setPause(true); // Ставим текущую задачу на паузу
-            if(currentTask.isDeffered()) {
-              currentTask.setDeffered(false); // Cнимам флажок отложенности т.к пришла следующая таска
+            if (currentTask.isDeffered()) {
+                currentTask.setDeffered(false); // Cнимам флажок отложенности т.к пришла следующая таска
             }
         }
 
@@ -115,16 +115,16 @@ public class BotTaskManager {
         if (currentTask != null) {
             BotLogger.debug("🤖", true, bot.getId() + " 🟢 Activate task: " + currentTask.getIcon() + " "
                     + currentTask.getClass().getSimpleName());
-                    if (currentTask.isPause()) {
-                        if (currentTask.isDeffered()) {
-                            currentTask.setPause(false);
-                        } else if (currentTask.isPauseTimedOut(BotConstants.DEFAULT_TASK_TIMEOUT)) { // Например, 3 секунды
-                            BotLogger.debug("🤖", true, bot.getId() + " ⏳ Таймаут паузы. Убираем задачу.");
-                            popTask();
-                        } else {
-                            return; // Просто ждём
-                        }
-                    }
+            if (currentTask.isPause()) {
+                if (currentTask.isDeffered()) {
+                    currentTask.setPause(false);
+                } else if (currentTask.isPauseTimedOut(BotConstants.DEFAULT_TASK_TIMEOUT)) { // Например, 3 секунды
+                    BotLogger.debug("🤖", true, bot.getId() + " ⏳ Таймаут паузы. Убираем задачу.");
+                    popTask();
+                } else {
+                    return; // Просто ждём
+                }
+            }
             if (currentTask.isDone()) {
                 popTask();
                 BotLogger.debug("🤖", true, bot.getId() + " ⭕ Deactivating task: " + currentTask.getIcon() + " "
@@ -133,12 +133,14 @@ public class BotTaskManager {
                 BotLogger.debug("🤖", true, bot.getId() + " 🔵 Updating task: " + currentTask.getIcon() + " "
                         + currentTask.getClass().getSimpleName());
 
-                if(currentTask.isDeffered()==false) {
+                if (currentTask.isDeffered() == false) {
                     currentTask.update();
                 } else {
-                    BotLogger.debug("🤖", true, bot.getId() + " 🟣 Task is waiting while anoher task is being added: " + currentTask.getIcon() + " "
-                    + currentTask.getClass().getSimpleName());
-                    return; //skip the cycle
+                    BotLogger.debug("🤖", true,
+                            bot.getId() + " 🟣 Task is waiting while anoher task is being added: "
+                                    + currentTask.getIcon() + " "
+                                    + currentTask.getClass().getSimpleName());
+                    return; // skip the cycle
                 }
             }
         }
@@ -168,11 +170,12 @@ public class BotTaskManager {
 
     public static void push(Bot bot, BotTask<?> task) {
         task.setReactive(task.isReactive()); // не переопределяем, если уже выставлено
-        bot.getTaskManager().pushTask(task);
-        if(task.isDeffered()){
+
+        if (task.isDeffered()) {
             task.setPause(true);
-        }    
-        BotLogger.debug(task.getIcon(), true, bot.getId() + " ➕ Добавлена задача: " + task.getClass().getSimpleName());
+        }
+
+        bot.getTaskManager().pushTask(task);
     }
 
     public static void clear(Bot bot) {
@@ -187,6 +190,9 @@ public class BotTaskManager {
         StringBuilder sb = new StringBuilder();
         for (int i = 0; i < getTaskStack().size(); i++) {
             BotTask<?> task = getTaskStack().get(i);
+
+            BotLogger.debug("🤖", true, bot.getId() + " Task Info: " + task.getIcon() + " | " + task.getObjective());
+
             sb.append(task != null ? task.getIcon() : "?");
             if (i < getTaskStack().size() - 1) {
                 sb.append(" ➜ ");
