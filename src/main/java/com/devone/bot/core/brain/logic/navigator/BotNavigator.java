@@ -243,6 +243,7 @@ public class BotNavigator {
                         // hard stuck
                         hardStuck = true;
                         suggestion = NavigationType.TELEPORT;
+                        suggested = BotWorldHelper.getWorldSpawnLocation(); // if hard stuck go to spawn
                     } else {
                         result = walkable;
                         suggestion = NavigationType.TELEPORT;
