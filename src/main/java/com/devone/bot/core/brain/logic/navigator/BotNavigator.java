@@ -134,9 +134,11 @@ public class BotNavigator {
 
     public void setStuck(boolean stuck) {
         this.stuck = stuck;
-        BotLogger.debug(owner.getActiveTask().getIcon(), true, owner.getId() + " ❓ BotState: set Stuck=" + stuck);
-        if (stuck) {
-            incrementStuckCount();
+        if(owner.getActiveTask()!=null) {
+          BotLogger.debug(owner.getActiveTask().getIcon(), true, owner.getId() + " ❓ BotState: set Stuck=" + stuck);
+          if (stuck) {
+             incrementStuckCount();
+           }
         }
     }
 
