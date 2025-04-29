@@ -20,7 +20,7 @@ public class BotExcavateTaskParams extends BotTaskParams {
 
     public BotExcavateTaskParams() {
         super();
-        setIcon("🪨");
+        setIcon("🧊");
         setObjective("Excavate");
     }
 

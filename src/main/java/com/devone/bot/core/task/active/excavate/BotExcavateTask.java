@@ -106,7 +106,7 @@ public class BotExcavateTask extends BotTaskAutoParams<BotExcavateTaskParams> {
             bot.pickupNearbyItems();
             if (isInventoryFull() || isEnoughBlocksCollected()) {
                 BotLogger.debug(icon, isLogging(),
-                bot.getId() + " ⛔ Задача завершена: инвентарь полон или ресурсов достаточно");
+                        bot.getId() + " ⛔ Задача завершена: инвентарь полон или ресурсов достаточно");
                 this.stop();
                 return;
             }
@@ -116,20 +116,22 @@ public class BotExcavateTask extends BotTaskAutoParams<BotExcavateTaskParams> {
             BotLogger.debug(icon, isLogging(),
                     bot.getId() + " ⛔ в запретной зоне, НЕ будет разрушать блок: "
                             + bot.getNavigator().getPoi());
-            stop();                
+            stop();
             return;
         }
 
         if (!runner.isLoaded()) {
             try {
                 runner.load(basePosition);
-                // read points, get blocks at relative position, chack if block can be broken, add it to the separate list.
-                // once all points processed add them to the queue, set flag "preprocessed"=true  and run the next cycle 
+                // read points, get blocks at relative position, chack if block can be broken,
+                // add it to the separate list.
+                // once all points processed add them to the queue, set flag "preprocessed"=true
+                // and run the next cycle
                 List<BotPosition> points = runner.getAllVoid();
-                for(int i=0; i<points.size(); i++) {
+                for (int i = 0; i < points.size(); i++) {
                     BotPosition pos = points.get(i);
                     Block block = BotWorldHelper.botPositionToWorldBlock(pos);
-                        if (block.getType().toString().equals(Material.AIR.toString()) ||
+                    if (block.getType().toString().equals(Material.AIR.toString()) ||
                             block.getType().toString().equals(Material.CAVE_AIR.toString()) ||
                             block.getType().toString().equals(Material.VOID_AIR.toString()) ||
                             block.getType().toString().equals(Material.WATER.toString()) ||
@@ -155,21 +157,23 @@ public class BotExcavateTask extends BotTaskAutoParams<BotExcavateTaskParams> {
             }
         }
 
-
-        if(!validated) {
-            if(blockPosition==null) {
+        if (!validated) {
+            if (blockPosition == null) {
                 BotLogger.debug(icon, isLogging(), " 🏁 Нет блоков на обработку. Завершаем задачу.");
                 stop();
                 return;
-            }       
-        } else {    
+            }
+        } else {
+
+            setIcon("🧊");
+
             blockPosition = queuedList.poll();
-            if(blockPosition==null) {
+            if (blockPosition == null) {
                 BotLogger.debug(icon, isLogging(), " 🏁 Все блоки обработаны. Завершаем задачу.");
                 stop();
                 return;
             } else {
-                BotLogger.debug(icon, isLogging(), bot.getId() + " Берем Next блок: " + blockPosition);
+                BotLogger.debug(icon, isLogging(), bot.getId() + " 👆 Берем Next блок: " + blockPosition);
                 Block targetBlock = BotWorldHelper.botPositionToWorldBlock(blockPosition);
                 bot.getNavigator().setPoi(blockPosition);
                 turnToTarget(this, blockPosition);
@@ -177,14 +181,15 @@ public class BotExcavateTask extends BotTaskAutoParams<BotExcavateTaskParams> {
                 Material mat = targetBlock.getType();
                 if (BotUtils.requiresTool(mat)) {
                     if (!BotInventory.equipRequiredTool(bot, mat)) {
-                        BotLogger.debug(icon, isLogging(), bot.getId() + " 🙈 Не удалось взять инструмент в руку. Пропускаем.");
+                        BotLogger.debug(icon, isLogging(),
+                                bot.getId() + " ❌ Не удалось взять инструмент в руку. Пропускаем.");
                         bot.getNavigator().setPoi(null);
                         return;
                     }
                 }
 
                 this.setPause(true);
-                
+
                 BotBlockData blockData = BotWorldHelper.blockToBotBlockData(targetBlock);
                 BotHandExcavateTask handTask = new BotHandExcavateTask(bot);
                 BotHandExcavateTaskParams params = new BotHandExcavateTaskParams();
