@@ -108,15 +108,6 @@ public class BotPatternRunner {
         } 
     }
 
-
-    public boolean isNoVoid() {
-        return loaded && voidPointsQueue.isEmpty();
-    }
-
-    public boolean isNoSolid() {
-        return loaded && solidPointsQueue.isEmpty();
-    }
-
     public List<BotPosition> getAll() {
         return allPoints;
     }

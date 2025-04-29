@@ -16,6 +16,10 @@ public class BotPoiInterestEvaluator {
     public static double evaluate(Bot bot, BotNavigationContext context, BotPosition poi, float botYaw) {
         double interest = 0.0;
     
+        if(isNearDangerousLiquid(poi)) {
+            interest = interest - 5000;
+        }
+
         if (isInDangerousLiquid(poi)) {
             return -10000; // <- сразу даём штраф и выходим
         }
@@ -44,7 +48,7 @@ public class BotPoiInterestEvaluator {
     }
 
     private static boolean isNearDangerousLiquid(BotPosition poi) {
-        List<org.bukkit.block.Block> nearbyBlocks = BotWorldHelper.getNearbyBlocks(poi, 2);
+        List<org.bukkit.block.Block> nearbyBlocks = BotWorldHelper.getNearbyBlocks(poi, 5);
         for (var block : nearbyBlocks) {
             if (BotWorldHelper.isDangerousLiquid(block)) return true;
         }
