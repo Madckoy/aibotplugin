@@ -21,7 +21,7 @@ public class BotReactiveTeleportToPositionContainer
     public BotReactiveTeleportToPositionContainer(Bot bot, BotPosition position) {
         super(bot, BotReactiveTeleportToPositionContainerParams.class);
         this.position = position;
-        setIcon("🔀");
+        setIcon("#️⃣");
         setObjective("Reactive: Bot Teleport Task");
         setDeffered(true);
     }

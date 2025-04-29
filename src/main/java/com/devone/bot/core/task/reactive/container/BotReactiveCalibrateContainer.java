@@ -17,7 +17,7 @@ public class BotReactiveCalibrateContainer extends BotReactiveContainer<BotReact
     public BotReactiveCalibrateContainer(Bot bot) {
 
         super(bot, BotReactiveCalibrateContainerParams.class);
-        setIcon("🔀");
+        setIcon("#️⃣");
         setObjective("Reactive: Bot Calibration Task");
         setDeffered(true);
     }

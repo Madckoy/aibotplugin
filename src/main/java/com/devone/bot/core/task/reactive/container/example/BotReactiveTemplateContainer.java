@@ -12,13 +12,13 @@ public class BotReactiveTemplateContainer extends BotReactiveContainer<BotReacti
 
     public BotReactiveTemplateContainer(Bot bot) {
         super(bot, BotReactiveTemplateContainerParams.class);
-        setIcon("📦");
+        setIcon("#️⃣");
         setObjective("Шаблон реактивного контейнера");
     }
 
     @Override
     protected List<BotTask<?>> enqueue(Bot bot) {
-        BotLogger.debug(getIcon(), true, bot.getId() + " 📦 enqueue() шаблонного контейнера");
+        BotLogger.debug(getIcon(), true, bot.getId() + " #️⃣ enqueue() шаблонного контейнера");
 
         // ✅ Используем реактивный сахар внутри
         // bot.pushReactiveTask(new YourTask(bot));
