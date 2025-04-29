@@ -52,7 +52,7 @@ public class BotBootstrap {
 
             update();
 
-        }, 0L, 10L); // каждые 10 тиков = 0.5 сек
+        }, 0L, 5L); // каждые 10 тиков = 0.5 сек
     }
 
     private void update() {
