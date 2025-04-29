@@ -22,7 +22,7 @@ public class BotReactiveTeleportToPlayerContainer
     public BotReactiveTeleportToPlayerContainer(Bot bot, Player player) {
         super(bot, BotReactiveTeleportToPlayerContainerParams.class);
         this.player = player;
-        setIcon("#️⃣");
+        setIcon("🔣");
         setObjective("Reactive: Телепорт к игроку (не вплотную)");
         setDeffered(true);
     }

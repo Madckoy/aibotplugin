@@ -16,7 +16,7 @@ public abstract class BotReactiveContainer<T extends BotTaskParams> extends BotT
     public BotReactiveContainer(Bot bot, Class<T> paramClass) {
         super(bot, null, paramClass);
         setReactive(true); // Включаем реактивный режим
-        setIcon("#️⃣");
+        setIcon("🔣");
         setObjective("Reactive container for tasks");
         setDeffered(true);
     }
@@ -25,7 +25,7 @@ public abstract class BotReactiveContainer<T extends BotTaskParams> extends BotT
     public void execute() {
 
             BotLogger.debug(getIcon(), true,
-                    bot.getId() + " #️⃣ Запущен реактивный контейнер: " + this.getClass().getSimpleName());
+                    bot.getId() + " 🔣 Запущен реактивный контейнер: " + this.getClass().getSimpleName());
       
             if(isDeffered()==true) {
                 BotLogger.debug(getIcon(), true,

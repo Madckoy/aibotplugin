@@ -14,7 +14,7 @@ public class BotReactiveEmptyContainer
 
     public BotReactiveEmptyContainer(Bot bot) {
         super(bot, BotReactiveEmptyContainerParams.class);
-        setIcon("#️⃣");
+        setIcon("🔣");
         setObjective("Reactive: Empty container");
     }
 

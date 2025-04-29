@@ -17,7 +17,7 @@ public class BotReactiveExcavateContainer extends BotReactiveContainer<BotReacti
     public BotReactiveExcavateContainer(Bot bot) {
 
         super(bot, BotReactiveExcavateContainerParams.class);
-        setIcon("#️⃣");
+        setIcon("🔣");
         setReactive(true);
         setObjective("Reactive: Excavate Tasks");
         setDeffered(true);

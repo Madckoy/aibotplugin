@@ -16,7 +16,7 @@ public class BotReactiveLowHealthContainer extends BotReactiveContainer<BotReact
 
     public BotReactiveLowHealthContainer(Bot bot) {
         super(bot, BotReactiveLowHealthContainerParams.class);
-        setIcon("#️⃣");
+        setIcon("🔣");
         setObjective("Reactive: Bot Teleport Task on Low HP");
         setDeffered(true);
     }

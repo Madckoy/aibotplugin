@@ -29,7 +29,7 @@ public class BotStrategyNearbyHostile implements IBotStrategyReaction {
                     continue;
 
                 double dist = botPos.distanceTo(entity.getPosition());
-                if (dist >= 5)
+                if (dist >= 1)
                     continue;
 
                 BotLogger.debug("🤖", true, bot.getId() + " ❗ Обнаружен враждебный моб: " + entity.getType()
