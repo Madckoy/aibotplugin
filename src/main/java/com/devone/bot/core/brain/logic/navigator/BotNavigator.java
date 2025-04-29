@@ -262,7 +262,7 @@ public class BotNavigator {
 
         candidates = result;
 
-        if (poiSelectionMode == PoiSelectionMode.SMART) {
+        if (poiSelectionMode == PoiSelectionMode.RANDOM) {
             suggested = BotPOISelector.selectSmart(owner, candidates, context, BotUtils.getBotYaw(owner));
         } else {
             suggested = BotPOISelector.selectRandom(candidates);
