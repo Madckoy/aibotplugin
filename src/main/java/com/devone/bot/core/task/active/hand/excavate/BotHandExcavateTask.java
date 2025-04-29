@@ -88,7 +88,7 @@ public class BotHandExcavateTask extends BotHandTask<BotHandExcavateTaskParams> 
                 BotBlockData bl = BotWorldHelper.blockToBotBlockData(block);
                 BotLogger.debug(icon, isLogging(), bot.getId() + " 🪨 Block is excavated: " + bl);
             }
-        }.runTaskTimer(AIBotPlugin.getInstance(), 0L, 10L);
+        }.runTaskTimer(AIBotPlugin.getInstance(), 0L, 5L);
     }
 
     @Override
