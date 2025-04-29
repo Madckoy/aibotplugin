@@ -5,6 +5,7 @@ import com.devone.bot.core.brain.memory.BotMemory;
 import com.devone.bot.core.brain.memoryv2.BotMemoryV2;
 import com.devone.bot.core.task.passive.BotTask;
 import com.devone.bot.core.utils.BotConstants;
+import com.devone.bot.core.utils.BotUtils;
 import com.devone.bot.core.utils.logger.BotLogger;
 
 public class BotBrain {
@@ -34,7 +35,7 @@ public class BotBrain {
     }
 
     // 🧠 Получение текущей задачи
-    public BotTask<?> getCurrentTask() {
+    public BotTask<?> getCurrentTask() throws Exception{
         return owner.getActiveTask();
     }
 
@@ -81,14 +82,14 @@ public class BotBrain {
 
     // 🧠 Реактивность
     public boolean isReactionInProgress() {
-        BotLogger.debug(owner.getActiveTask().getIcon(), true,
+        BotLogger.debug(BotUtils.getActiveTaskIcon(owner), true,
                 owner.getId() + " ⚛️ Get Reactive reaction in progress status: " + this.reactionInProgress);
         return reactionInProgress;
     }
 
     public void setReactionInProgress(boolean value) {
         this.reactionInProgress = value;
-        BotLogger.debug(owner.getActiveTask().getIcon(), true,
+        BotLogger.debug(BotUtils.getActiveTaskIcon(owner), true,
                 owner.getId() + " ⚛️ Set Reactive reaction in progress status: " + this.reactionInProgress);
     }
 

@@ -1,6 +1,7 @@
 package com.devone.bot.core.task.active.move;
 
 import com.devone.bot.core.Bot;
+import com.devone.bot.core.utils.BotUtils;
 import com.devone.bot.core.utils.blocks.BotPosition;
 import com.devone.bot.core.utils.logger.BotLogger;
 import com.devone.bot.core.utils.world.BotWorldHelper;
@@ -21,7 +22,7 @@ public class MoveTaskHelper {
      */
     public static void setPoi(Bot bot, BotPosition target, float speed, boolean log) {
         if (target == null) {
-            BotLogger.debug(bot.getActiveTask().getIcon(), true, bot.getId() + " 🏁 Не смогли начать движение.");
+            BotLogger.debug( BotUtils.getActiveTaskIcon(bot), true, bot.getId() + " 🏁 Не смогли начать движение.");
             return;
         }
 
@@ -33,7 +34,7 @@ public class MoveTaskHelper {
         bot.getNPCNavigator().setTarget(poi);
 
         if (log) {
-            BotLogger.debug(bot.getActiveTask().getIcon(), true, bot.getId() + " ▶ Двигаемся к: " + target);
+            BotLogger.debug(BotUtils.getActiveTaskIcon(bot), true, bot.getId() + " ▶ Двигаемся к: " + target);
         }
     }
 
@@ -55,7 +56,7 @@ public class MoveTaskHelper {
                 && botLoc.getZ() == poiLoc.getZ()
                 && Math.abs(botLoc.getY() - poiLoc.getY()) <= yTolerance;
 
-        BotLogger.debug(bot.getActiveTask().getIcon(), true, bot.getId() + " 📍 Позиция: " + botLoc + " | Цель: " + poiLoc + " | Совпадает: " + match);
+        BotLogger.debug(BotUtils.getActiveTaskIcon(bot), true, bot.getId() + " 📍 Позиция: " + botLoc + " | Цель: " + poiLoc + " | Совпадает: " + match);
 
         return match;
     }

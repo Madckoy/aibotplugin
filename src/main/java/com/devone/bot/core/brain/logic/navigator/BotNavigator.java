@@ -111,9 +111,7 @@ public class BotNavigator {
     public void setPoi(BotPosition poi) {
 
         if (poi != null) {
-            BotLogger.debug(owner.getActiveTask().getIcon(), true, owner.getId() + " 🗺️ POI/Target is set: "
-                    + poi + " [ID: " + owner.getBrain().getCurrentTask().getIcon() +
-                    " " + owner.getBrain().getCurrentTask().getClass().getSimpleName() + "]");
+            BotLogger.debug(BotUtils.getActiveTaskIcon(owner), true, owner.getId() + " 🗺️ POI/Target is set: " + poi);
         }
 
         this.poi = poi;
@@ -127,18 +125,22 @@ public class BotNavigator {
         this.poiSelectionMode = mode;
 
         BotLogger.debug(
-            owner.getActiveTask().getIcon(), true,
-            owner.getId() + " switched POI selection mode ➔ " + mode.name()
-        );
+                BotUtils.getActiveTaskIcon(owner), true,
+                owner.getId() + " switched POI selection mode ➔ " + mode.name());
     }
 
     public void setStuck(boolean stuck) {
-        this.stuck = stuck;
-        if(owner.getActiveTask()!=null) {
-          BotLogger.debug(owner.getActiveTask().getIcon(), true, owner.getId() + " ❓ BotState: set Stuck=" + stuck);
-          if (stuck) {
-             incrementStuckCount();
-           }
+        try {
+            if (owner.getActiveTask() != null) {
+                BotLogger.debug(BotUtils.getActiveTaskIcon(owner), true,
+                        owner.getId() + " ❓ BotState: set Stuck=" + stuck);
+                this.stuck = stuck;
+                if (stuck) {
+                    incrementStuckCount();
+                }
+            }
+        } catch (Exception ex) {
+
         }
     }
 
@@ -169,12 +171,12 @@ public class BotNavigator {
             BotPosition pos = BlockUtils.fromBlock(target);
             Location loc = BotWorldHelper.botPositionToWorldLocation(pos);
 
-            // BotLogger.debug(owner.getActiveTask().getIcon(), true, owner.getId() + " ⚠️
+            // BotLogger.debug(BotUtils.getActiveTaskIcon(owner), true, owner.getId() + " ⚠️
             // nav candidate (world) = " + loc);
 
             boolean canNavigate = owner.getNPC().getNavigator().canNavigateTo(loc);
 
-            // BotLogger.debug(owner.getActiveTask().getIcon(), true, owner.getId() + " ⚠️
+            // BotLogger.debug(BotUtils.getActiveTaskIcon(owner), true, owner.getId() + " ⚠️
             // NPC POS = " + owner.getNPC().getStoredLocation());
 
             if (canNavigate) {
@@ -209,12 +211,12 @@ public class BotNavigator {
         BotNavigationContext context = BotNavigationContextMaker.createSceneContext(botPos, scene.blocks,
                 scene.entities);
 
-        // BotLogger.debug(owner.getActiveTask().getIcon(), true, owner.getId() + " ⚠️
+        // BotLogger.debug(BotUtils.getActiveTaskIcon(owner), true, owner.getId() + " ⚠️
         // Context=" + context);
 
         if (context == null) {
             // context does not present yet
-            BotLogger.debug(owner.getActiveTask().getIcon(), true,
+            BotLogger.debug(BotUtils.getActiveTaskIcon(owner), true,
                     owner.getId() + " ⚠️ Navigation error: Scene Context is not ready");
 
             setStuck(true); // stuck somewhere
@@ -224,7 +226,7 @@ public class BotNavigator {
 
         List<BotPosition> pois = loopTargets(botPos, "poi", context.poi);
 
-        // BotLogger.debug(owner.getActiveTask().getIcon(), true, owner.getId() + " ⚠️
+        // BotLogger.debug(BotUtils.getActiveTaskIcon(owner), true, owner.getId() + " ⚠️
         // POIs = " + pois);
 
         List<BotPosition> reachable = loopTargets(botPos, "reachable", context.reachable);
@@ -297,33 +299,29 @@ public class BotNavigator {
 
         if (this.poi == null) {
 
-            BotLogger.debug(owner.getActiveTask().getIcon(), true,
-                    owner.getId() + " 🗺️ POI is null. Navigation is not possible " + " [ID: "
-                            + owner.getBrain().getCurrentTask().getIcon() +
-                            " " + owner.getBrain().getCurrentTask().getClass().getSimpleName() + " ]");
+            BotLogger.debug(BotUtils.getActiveTaskIcon(owner), true,
+                    owner.getId() + " 🗺️ POI is null. Navigation is not possible ");
 
             return false;
 
         } else {
-            BotLogger.debug(owner.getActiveTask().getIcon(), true,
-                    owner.getId() + " 🗺️ Runtime POI position: " + this.poi + " [ID: "
-                            + owner.getBrain().getCurrentTask().getIcon() +
-                            " " + owner.getBrain().getCurrentTask().getClass().getSimpleName() + " ]");
+            BotLogger.debug(BotUtils.getActiveTaskIcon(owner), true,
+                    owner.getId() + " 🗺️ Runtime POI position: " + this.poi);
 
+            // BotExcavateTaskParams excvParams = new BotExcavateTaskParams();
+            // BotExcavateTask excvTask = new BotExcavateTask(owner);
+            // excvTask.setParams(excvParams);
+            // excvTask.setDeffered(true); // delayed update() to prevent run before the
+            // move
+            // BotTaskManager.push(owner, excvTask);
 
-            //BotExcavateTaskParams excvParams = new BotExcavateTaskParams();
-            //BotExcavateTask excvTask = new BotExcavateTask(owner);
-            //excvTask.setParams(excvParams);
-            //excvTask.setDeffered(true);  // delayed update() to prevent run before the move
-            //BotTaskManager.push(owner, excvTask); 
-                            
             if (suggestion == NavigationType.WALK) {
-                
+
                 BotPosition movePosiiton = new BotPosition(this.poi);
 
                 BotMoveTaskParams mv_params = new BotMoveTaskParams();
                 mv_params.setTarget(new BotPosition(movePosiiton));
-                BotMoveTask moveTask =  new BotMoveTask(owner);
+                BotMoveTask moveTask = new BotMoveTask(owner);
                 moveTask.setParams(mv_params);
                 BotTaskManager.push(owner, moveTask);
 

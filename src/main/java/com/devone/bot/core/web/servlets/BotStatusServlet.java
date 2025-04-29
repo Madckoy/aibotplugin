@@ -13,7 +13,6 @@ import org.bukkit.inventory.ItemStack;
 import com.devone.bot.core.Bot;
 import com.devone.bot.core.BotManager;
 import com.devone.bot.core.brain.logic.navigator.BotNavigator;
-import com.devone.bot.core.task.passive.BotTask;
 import com.devone.bot.core.utils.BotUtils;
 import com.devone.bot.core.utils.blocks.BotPosition;
 import com.devone.bot.core.web.BotWebService;
@@ -77,29 +76,28 @@ public class BotStatusServlet extends HttpServlet {
                 String currLoc = loc.getX() + ", " + loc.getY() + ", " + loc.getZ();
 
                 botJson.addProperty("position", currLoc);
-                if(bot.getBrain().getCurrentTask()!=null) {
-                    botJson.addProperty("task", bot.getBrain().getCurrentTask().getIcon());
-                    botJson.addProperty("taskIsReactive", bot.getBrain().getCurrentTask().isReactive());
-                }
-                botJson.addProperty("object", BotStatusServlet.getCurrentObjective(bot));
+
+                botJson.addProperty("task", BotUtils.getActiveTaskIcon(bot));
+                botJson.addProperty("taskIsReactive", BotUtils.getActiveTaskIcon(bot));
+
+                botJson.addProperty("object", BotUtils.getObjective(bot));
 
                 String tgtLoc = "";
-                
-                if(tgt!=null) {
+
+                if (tgt != null) {
                     tgtLoc = tgt.getX() + ", " + tgt.getY() + ", " + tgt.getZ();
                 }
 
-                botJson.addProperty("target", tgtLoc );
-                
+                botJson.addProperty("target", tgtLoc);
+
                 long elapsedTime = 0;
 
-                if(bot.getBrain()!=null) {
-                    if(bot.getBrain().getCurrentTask()!=null) {
-                        elapsedTime = bot.getBrain().getCurrentTask().getElapsedTime();
-                    }
+                try {
+                    elapsedTime = bot.getBrain().getCurrentTask().getElapsedTime();
+                    botJson.addProperty("elapsedTime", BotUtils.formatTime(elapsedTime));
+                } catch (Exception ex) {
+
                 }
-                
-                botJson.addProperty("elapsedTime", BotUtils.formatTime(elapsedTime));
 
                 botJson.addProperty("queue", bot.getTaskManager().getQueueIcons());
 
@@ -120,13 +118,13 @@ public class BotStatusServlet extends HttpServlet {
                         bot.getNavigator().getNavigationSummaryItem("navigable").toString());
                 botJson.addProperty("walkableBlocks",
                         bot.getNavigator().getNavigationSummaryItem("walkable").toString());
-                
+
                 Object obj = bot.getNavigator().getSuggested();
-                if(obj!=null) {
+                if (obj != null) {
                     botJson.addProperty("suggestedBlock",
-                    bot.getNavigator().getSuggested().toString());
+                            bot.getNavigator().getSuggested().toString());
                 }
-                    
+
                 botsArray.add(botJson);
 
                 ItemStack[] contents = null;
@@ -168,8 +166,4 @@ public class BotStatusServlet extends HttpServlet {
         resp.getWriter().write(result.toString());
     }
 
-    private static String getCurrentObjective(Bot bot) {
-        BotTask<?> currentTask = bot.getBrain().getCurrentTask();
-        return (currentTask != null) ? currentTask.getObjective() : "";
-    }
 }

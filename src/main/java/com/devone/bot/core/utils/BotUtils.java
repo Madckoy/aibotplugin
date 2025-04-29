@@ -107,7 +107,7 @@ public class BotUtils {
         Location tgt = BotWorldHelper.botPositionToWorldLocation(target);
 
         Location from = bot.getNPCEntity().getLocation();
-        Location to = tgt.clone();//.add(0.5, 0.5, 0.5); // центр блока
+        Location to = tgt.clone();// .add(0.5, 0.5, 0.5); // центр блока
 
         Vector direction = to.toVector().subtract(from.toVector());
 
@@ -115,11 +115,11 @@ public class BotUtils {
         float pitch = (float) Math.toDegrees(-Math.atan2(direction.getY(),
                 Math.sqrt(direction.getX() * direction.getX() + direction.getZ() * direction.getZ())));
 
-       Location newLook = from.clone();
+        Location newLook = from.clone();
         newLook.setYaw(yaw);
         newLook.setPitch(pitch);
 
-        //bot.getNPCEntity().setRotation(yaw, pitch);
+        // bot.getNPCEntity().setRotation(yaw, pitch);
 
         bot.getNPCEntity().teleport(newLook);
     }
@@ -154,8 +154,8 @@ public class BotUtils {
         Bukkit.getScheduler().runTaskLater(AIBotPlugin.getInstance(), () -> {
 
             BotLogger.debug(task.getIcon(), task.isLogging(),
-                        bot.getId() + " Поворачивает голову в сторону: " + target);
-                        
+                    bot.getId() + " Поворачивает голову в сторону: " + target);
+
             BotUtils.lookAt(bot, target);
 
         }, 1L); // ✅ Через тик, чтобы дать время на обновление
@@ -170,7 +170,7 @@ public class BotUtils {
         }
     }
 
-        // под вопросом, стоит ли перенести в BotUtils или в BotInventory
+    // под вопросом, стоит ли перенести в BotUtils или в BotInventory
     public void checkAndSelfMove(Bot bot, Location target) {
         double pickupRadius = 2.0; // Радиус, в котором проверяем предметы
         List<Entity> nearbyItems = bot.getNPCEntity().getNearbyEntities(pickupRadius, pickupRadius, pickupRadius);
@@ -193,12 +193,54 @@ public class BotUtils {
         BotTaskManager.push(bot, mv_task);
     }
 
+    public static String getActiveTaskIcon(Bot bot) {
+        String icon = "🤖";
+        try {
+            BotTask<?> task = bot.getActiveTask();
+            icon = task.getIcon();
+        } catch (Exception ex) {
+        }
+        return icon;
+    }
+
     public static float getBotYaw(Bot bot) {
 
         Location botLocation = bot.getNPC().getStoredLocation();
         float botYaw = botLocation.getYaw();
 
         return botYaw;
-
     }
+
+    public static String getObjective(Bot bot) {
+        try {
+            return bot.getActiveTask().getObjective();
+        } catch (Exception ex) {
+            return "";
+        }
+    }
+
+    public static boolean isTaskReactive(Bot bot) {
+        try {
+            return bot.getActiveTask().isReactive();
+        } catch (Exception ex) {
+            return false;
+        }
+    }
+
+    public static String getActiveTaskSimpleName(Bot bot) {
+        try {
+            return bot.getActiveTask().getClass().getSimpleName();
+        } catch (Exception ex) {
+            return "N/A";
+        }
+    }
+
+    public static long getActiveTaskElapsed(Bot bot) {
+        try {
+            return bot.getActiveTask().getElapsedTime();
+        } catch (Exception ex) {
+            return 0;
+        }
+    }
+
 }

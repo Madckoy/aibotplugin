@@ -4,10 +4,10 @@ import org.bukkit.Bukkit;
 
 import com.devone.bot.AIBotPlugin;
 import com.devone.bot.core.Bot;
-import com.devone.bot.core.task.passive.BotTask;
 import com.devone.bot.core.task.passive.BotTaskManager;
 import com.devone.bot.core.task.active.brain.BotBrainTask;
 import com.devone.bot.core.task.active.sonar.BotSonar3DTask;
+import com.devone.bot.core.utils.BotUtils;
 import com.devone.bot.core.utils.logger.BotLogger;
 import com.devone.bot.core.utils.server.ServerUtils;
 
@@ -32,12 +32,7 @@ public class BotBootstrap {
             if (ServerUtils.isServerStopping())
                 return;
             
-            BotTask<?> currTask = bot.getActiveTask();
-            String icon = "🤖";
-            
-            if (currTask != null) {
-                    icon = bot.getActiveTask().getIcon();
-            }
+            String icon = BotUtils.getActiveTaskIcon(bot);
     
 
             BotLogger.debug(icon, true, bot.getId() + " 🛜 Sonar Scan started");

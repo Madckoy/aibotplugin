@@ -182,10 +182,14 @@ public class Bot {
         getInventory().pickupAll(this.allowPickupItems);
     }
 
-    public BotTask<?> getActiveTask() {
-        BotTask<?> task = Bot.getActiveTask(this);
-        return task;
-
+    public BotTask<?> getActiveTask() throws Exception
+    {
+        BotTask<?> task = getTaskManager().getActiveTask();
+        if (task==null) {
+            throw new Exception("Task is null");
+        } else {
+            return task;
+        }      
     }
 
     public BotTaskManager getTaskManager() {
