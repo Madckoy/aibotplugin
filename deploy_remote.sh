@@ -1,9 +1,9 @@
 #!/bin/bash
 
 # Variables
-PLUGIN_NAME="AIBotPlugin-1.3-SNAPSHOT.jar"
+PLUGIN_NAME="AIBotPlugin-1.4-SNAPSHOT.jar"
 LOCAL_PATH="target/$PLUGIN_NAME"
-REMOTE_HOST="192.168.3.33"
+REMOTE_HOST="192.168.2.20"
 REMOTE_USER="serge"  # Change this if needed
 REMOTE_PATH="/opt/apps/minecraft/spigot/plugins"
 LOG_FILE="deploy.log"
