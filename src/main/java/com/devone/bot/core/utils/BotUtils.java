@@ -210,6 +210,14 @@ public class BotUtils {
 
         return botYaw;
     }
+    
+    public static float getBotPitch(Bot bot) {
+
+        Location botLocation = bot.getNPC().getStoredLocation();
+        float botPitch = botLocation.getPitch();
+
+        return botPitch;
+    }
 
     public static String getObjective(Bot bot) {
         try {

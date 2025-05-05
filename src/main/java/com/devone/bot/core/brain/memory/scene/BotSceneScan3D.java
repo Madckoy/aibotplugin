@@ -1,8 +1,10 @@
 package com.devone.bot.core.brain.memory.scene;
 
 import com.devone.bot.core.Bot;
+import com.devone.bot.core.utils.BotUtils;
 import com.devone.bot.core.utils.blocks.BotBlockData;
 import com.devone.bot.core.utils.blocks.BotPosition;
+import com.devone.bot.core.utils.blocks.BotPositionLook;
 import com.devone.bot.core.utils.logger.BotLogger;
 import com.devone.bot.core.utils.world.BotWorldHelper;
 import org.bukkit.Location;
@@ -84,7 +86,10 @@ public class BotSceneScan3D {
         }
 
         // 3. Координаты бота
-        BotPosition botCoords = new BotPosition(centerX, centerY, centerZ);
+        float botYaw = BotUtils.getBotYaw(bot);
+        float botPitch =  BotUtils.getBotPitch(bot);
+
+        BotPositionLook botCoords = new BotPositionLook(centerX, centerY, centerZ, botYaw, botPitch);
         BotSceneData sceneData = new BotSceneData(scannedBlocks, scannedEntities, botCoords);
 
         // if (bot.getNavigator().isStuck()) {
