@@ -72,9 +72,9 @@ public class BotStatusServlet extends HttpServlet {
 
                 botJson.addProperty("autoPickUpItems", bot.getBrain().getAutoPickupItems());
 
-                String currLoc = loc.getX() + ", " + loc.getY() + ", " + loc.getZ();
+                //String currLoc = loc.getX() + ", " + loc.getY() + ", " + loc.getZ();
 
-                botJson.addProperty("position", currLoc);
+                botJson.addProperty("position", loc.toString());
 
                 botJson.addProperty("task", BotUtils.getActiveTaskIcon(bot));
                 botJson.addProperty("taskIsReactive", BotUtils.getActiveTaskIcon(bot));
@@ -84,7 +84,7 @@ public class BotStatusServlet extends HttpServlet {
                 String tgtLoc = "";
 
                 if (tgt != null) {
-                    tgtLoc = tgt.getX() + ", " + tgt.getY() + ", " + tgt.getZ();
+                    tgtLoc = tgt.toString();
                 }
 
                 botJson.addProperty("target", tgtLoc);

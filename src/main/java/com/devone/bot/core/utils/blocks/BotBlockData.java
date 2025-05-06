@@ -1,6 +1,8 @@
 package com.devone.bot.core.utils.blocks;
 
+import java.util.Objects;
 import java.util.UUID;
+
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
 public class BotBlockData {
@@ -101,6 +103,24 @@ public class BotBlockData {
         return false;
     }
 
+    @JsonIgnore
+    public BotPositionKey toKey() {
+        return position.toKey();
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (!(o instanceof BotBlockData)) return false;
+        BotBlockData that = (BotBlockData) o;
+        return Objects.equals(this.toKey(), that.toKey());
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(toKey());
+    }
+
     @Override
     public BotBlockData clone() {
         BotBlockData copy = new BotBlockData();
@@ -113,7 +133,7 @@ public class BotBlockData {
 
     @Override
     public String toString() {
-        return String.format("Block: [ x=%.2f, y=%.2f, z=%.2f, type=%s, tag=%s ]",
-            getX(), getY(), getZ(), type, tag);
+        return String.format("Block: [ x=%.2f, y=%.2f, z=%.2f | key=%s, type=%s, tag=%s ]",
+            getX(), getY(), getZ(), toKey(), type, tag);
     }
 }

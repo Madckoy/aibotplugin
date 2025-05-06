@@ -13,8 +13,6 @@ import com.devone.bot.core.Bot;
 
 import com.devone.bot.core.brain.logic.navigator.context.BotNavigationContext;
 import com.devone.bot.core.brain.logic.navigator.context.BotNavigationContextMaker;
-import com.devone.bot.core.brain.logic.navigator.math.builder.BotSightBuilder;
-import com.devone.bot.core.brain.logic.navigator.math.filters.BotSightFilter;
 import com.devone.bot.core.brain.logic.navigator.math.selector.BotPOISelector;
 import com.devone.bot.core.brain.logic.navigator.math.selector.PoiSelectionMode;
 import com.devone.bot.core.brain.logic.navigator.summary.BotNavigationSummaryItem;
@@ -24,7 +22,6 @@ import com.devone.bot.core.task.active.move.params.BotMoveTaskParams;
 import com.devone.bot.core.task.active.teleport.BotTeleportTask;
 import com.devone.bot.core.task.active.teleport.params.BotTeleportTaskParams;
 import com.devone.bot.core.task.passive.BotTaskManager;
-import com.devone.bot.core.utils.BotConstants;
 import com.devone.bot.core.utils.BotUtils;
 import com.devone.bot.core.utils.blocks.BlockUtils;
 import com.devone.bot.core.utils.blocks.BotBlockData;
@@ -42,7 +39,6 @@ public class BotNavigator {
     }
 
     private transient Bot owner;
-    private double fov = BotConstants.DEFAULT_SIGHT_FOV;
     private boolean stuck = false;
     private int stuckCount = 0;
     private NavigationSuggestion navigationSuggestion;
@@ -90,15 +86,13 @@ public class BotNavigator {
 
     // Получение и обновление currentLocation с проверкой на застревание
     public BotPosition getPosition() {
-        if (owner.getNPC() != null) {
-            // Получаем текущую локацию NPC
-            BotPosition newPosition = BotWorldHelper.locationToBotPosition(owner.getNPC().getStoredLocation());
+        if (owner.getNPC() != null && owner.getNPC().getEntity() != null) {
+            BotPosition newPosition = BotWorldHelper.locationToBotPosition(owner.getNPC().getEntity().getLocation());
             position = newPosition;
+            return position;
         } else {
-            // Если NPC не найден, возвращаем null
             return null;
         }
-        return position;
     }
 
     // Получение и обновление currentLocation с проверкой на застревание
@@ -187,25 +181,12 @@ public class BotNavigator {
         }
 
         //apply POI filtering 
-
-        float yaw = botPos.getYaw(); // если есть
-
-        BotPosition eye = new BotPosition(botPos.getX(), botPos.getY(), botPos.getZ());
-        List<BotBlockData> viewSector = BotSightBuilder.buildViewSectorBlocks(eye, yaw, BotConstants.DEFAULT_SCAN_RANGE+5.0, 
-                                                                             BotConstants.DEFAULT_SCAN_DATA_SLICE_HEIGHT, 
-                                                                             fov);
-        
-        BotLogger.debug(BotUtils.getActiveTaskIcon(owner), true, owner.getId() + " ⚠️ POI calculted (in context):" + context.poi);
-
-        List<BotBlockData>  poiSighted       = BotSightFilter.filter(context.poi, viewSector);
-        BotLogger.debug(BotUtils.getActiveTaskIcon(owner), true,
-        owner.getId() + " ⚠️ POI Sighted:" + poiSighted);
         
         //List<BotBlockData>  reachableSighted = BotSightFilter.filter(context.reachable, viewSector);
         //List<BotBlockData>  navigableSighted = BotSightFilter.filter(context.navigable, viewSector);
         //List<BotBlockData>  walkableSighted  = BotSightFilter.filter(context.walkable, viewSector);
 
-        List<BotPosition> poiSightedValidatedPos       = validateTargets(botPos, "poi", poiSighted);
+        List<BotPosition> poiSightedValidatedPos       = validateTargets(botPos, "poi", context.poiOnSight);
         
         BotLogger.debug(BotUtils.getActiveTaskIcon(owner), true,
         owner.getId() + " ⚠️ POI Validated:" + poiSightedValidatedPos);

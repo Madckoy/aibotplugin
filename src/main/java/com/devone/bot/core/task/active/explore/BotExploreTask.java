@@ -6,6 +6,7 @@ import com.devone.bot.core.brain.memory.scene.BotSceneData;
 import com.devone.bot.core.task.passive.BotTaskAutoParams;
 import com.devone.bot.core.task.passive.IBotTaskParameterized;
 import com.devone.bot.core.task.active.explore.params.BotExploreTaskParams;
+import com.devone.bot.core.utils.BotConstants;
 import com.devone.bot.core.utils.BotUtils;
 import com.devone.bot.core.utils.blocks.BotPosition;
 import com.devone.bot.core.utils.logger.BotLogger;
@@ -70,12 +71,11 @@ public class BotExploreTask extends BotTaskAutoParams<BotExploreTaskParams> {
         
         NavigationSuggestion suggestion = bot.getNavigator().getNavigationSuggestion();
         if(suggestion == NavigationSuggestion.CHANGE_DIRECTION) {
+            BotLogger.debug(icon, isLogging(), bot.getId() + "  Rotating the bot to scan new sector!");
             //rotate 45 clockwise            
-            BotUtils.rotateClockwise(this, bot, 45.0f);
-            BotLogger.debug(icon, isLogging(), bot.getId() + "  Need to rotate bot!");
+            BotUtils.rotateClockwise(this, bot, (float)BotConstants.DEFAULT_SIGHT_FOV);
             return;
         }
-
 
         if (poi != null) {
             BotLogger.debug(icon, isLogging(), bot.getId() + " 🎯 Navigation - Set Target: " + poi);

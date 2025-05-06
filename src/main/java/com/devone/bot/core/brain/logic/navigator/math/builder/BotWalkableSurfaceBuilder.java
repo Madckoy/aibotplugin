@@ -2,27 +2,29 @@ package com.devone.bot.core.brain.logic.navigator.math.builder;
 
 import java.util.*;
 import com.devone.bot.core.utils.blocks.BotBlockData;
-import com.devone.bot.core.utils.blocks.BotPosition;
+import com.devone.bot.core.utils.blocks.BotPositionKey;
 
 public class BotWalkableSurfaceBuilder {
 
-    /**
-     * Строит поверхность из фейковых блоков, пригодных для навигации.
-     * Возвращает только искусственные блоки, с пометками (notes), исключая воздух.
-     */
     public static List<BotBlockData> build(List<BotBlockData> blocks) {
         List<BotBlockData> result = new ArrayList<>();
-    
+        Map<BotPositionKey, BotBlockData> blockMap = new HashMap<>();
+
+        // Построим map для быстрой навигации по координате
+        for (BotBlockData block : blocks) {
+            blockMap.put(block.toKey(), block);
+        }
+
         for (BotBlockData block : blocks) {
             if (block.isAir()) continue;
-    
+
             double x = block.getX();
             double y = block.getY();
             double z = block.getZ();
-    
-            BotBlockData above1 = findBlockAt(blocks, x, y + 1, z);
-            BotBlockData above2 = findBlockAt(blocks, x, y + 2, z);
-    
+
+            BotBlockData above1 = blockMap.get(new BotPositionKey(x, y + 1, z));
+            BotBlockData above2 = blockMap.get(new BotPositionKey(x, y + 2, z));
+
             if (block.isCover()) {
                 if (isAir(above1)) {
                     result.add(createFakeBlock(x, y, z, "DUMMY", "walkable:cover"));
@@ -33,29 +35,21 @@ public class BotWalkableSurfaceBuilder {
                 }
             }
         }
-    
+
         return result;
     }
-    
+
     private static BotBlockData createFakeBlock(double x, double y, double z, String type, String tag) {
         BotBlockData fake = new BotBlockData();
-        fake.setPosition(new BotPosition(x, y, z));
+        fake.setX(x);
+        fake.setY(y);
+        fake.setZ(z);
         fake.setType(type);
         fake.setTag(tag);
         return fake;
     }
-        
-    private static BotBlockData findBlockAt(List<BotBlockData> blocks, double x, double y, double z) {
-        for (BotBlockData b : blocks) {
-            if ((int)b.getX() == (int)x && (int)b.getY() == (int)y && (int)b.getZ() == (int)z) {
-                return b;
-            }
-        }
-        return null;
-    }
 
     private static boolean isAir(BotBlockData block) {
-        return block != null && (block.isAir() );
+        return block != null && block.isAir();
     }
-
 }

@@ -2,6 +2,7 @@ package com.devone.bot.core.brain.logic.navigator.math.poi;
 
 import com.devone.bot.core.utils.blocks.BotBlockData;
 import com.devone.bot.core.utils.blocks.BotPosition;
+import com.devone.bot.core.utils.blocks.BotPositionKey;
 
 import java.util.*;
 
@@ -12,10 +13,6 @@ public class BotPOIBuilder {
         EVEN_DISTRIBUTED
     }
 
-    /**
-     * Главный метод: выбирает цели (POI) для навигации.
-     * Возвращает помеченные копии блоков.
-     */
     public static List<BotBlockData> build(BotPosition bot,
                                            List<BotBlockData> reachable,
                                            BotPOIBuildStrategy strategy,
@@ -40,9 +37,10 @@ public class BotPOIBuilder {
 
         List<BotBlockData> result = new ArrayList<>();
         for (BotBlockData original : targets) {
-            BotBlockData copy = new BotBlockData(); // клонируем
-            BotPosition pos = new BotPosition(original.getX(), original.getY(), original.getZ());
-            copy.setPosition(pos);
+            BotBlockData copy = new BotBlockData();
+            copy.setX(original.getX());
+            copy.setY(original.getY());
+            copy.setZ(original.getZ());
             copy.setType("POI");
             copy.setTag("poi:end");
             result.add(copy);
@@ -52,14 +50,17 @@ public class BotPOIBuilder {
     }
 
     private static List<BotBlockData> selectAdaptiveSectorTargets(List<BotBlockData> reachable, BotPosition bot, int sectorCount) {
-    
         Map<Integer, BotBlockData> bestInSector = new HashMap<>();
         Map<Integer, Double> maxDistances = new HashMap<>();
 
+        BotPositionKey botXZ = new BotPositionKey(bot.getX(), 0, bot.getZ());
+
         for (BotBlockData point : reachable) {
+            BotPositionKey pointXZ = new BotPositionKey(point.getX(), 0, point.getZ());
+            if (pointXZ.equals(botXZ)) continue;
+
             double dx = point.getX() - bot.getX();
             double dz = point.getZ() - bot.getZ();
-            if (dx == 0 && dz == 0) continue;
 
             double angle = Math.atan2(dz, dx);
             int sector = (int) ((angle + Math.PI) / (2 * Math.PI) * sectorCount) % sectorCount;
@@ -89,9 +90,11 @@ public class BotPOIBuilder {
         double minRadius = (scanRadius > 3) ? scanRadius * 0.5 : 0.0;
 
         Map<Integer, BotBlockData> sectorMap = new HashMap<>();
+        BotPositionKey botXZ = new BotPositionKey(bot.getX(), 0, bot.getZ());
 
         for (BotBlockData point : reachable) {
-            if (point.getX() == bot.getX() && point.getZ() == bot.getZ()) continue;
+            BotPositionKey pointXZ = new BotPositionKey(point.getX(), 0, point.getZ());
+            if (pointXZ.equals(botXZ)) continue;
 
             double dx = point.getX() - bot.getX();
             double dy = point.getY() - bot.getY();

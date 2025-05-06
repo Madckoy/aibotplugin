@@ -2,41 +2,45 @@ package com.devone.bot.core.brain.logic.navigator.finder;
 
 import com.devone.bot.core.utils.blocks.BotBlockData;
 import com.devone.bot.core.utils.blocks.BotPosition;
+import com.devone.bot.core.utils.blocks.BotPositionKey;
 
 import java.util.*;
 
 public class BotSimplePathFinder {
 
-    private final Set<BotPosition> walkableBlocks;
+    private final Set<BotPositionKey> walkableKeys;
 
-    public BotSimplePathFinder(Set<BotPosition> walkableBlocks) {
-        this.walkableBlocks = walkableBlocks;
+    public BotSimplePathFinder(Set<BotPositionKey> walkableKeys) {
+        this.walkableKeys = new HashSet<>(walkableKeys);
     }
 
     public List<BotPosition> findPath(BotPosition from, BotPosition to) {
+        BotPositionKey fromKey = from.toKey();
+        BotPositionKey toKey = to.toKey();
 
-        if (from.equals(to)) return List.of(from);
+        if (fromKey.equals(toKey)) return List.of(from);
 
         Queue<BotPosition> queue = new LinkedList<>();
-        Map<BotPosition, BotPosition> cameFrom = new HashMap<>();
-        Set<BotPosition> visited = new HashSet<>();
+        Map<BotPositionKey, BotPosition> cameFrom = new HashMap<>();
+        Set<BotPositionKey> visited = new HashSet<>();
 
         queue.add(from);
-        visited.add(from);
+        visited.add(fromKey);
 
         while (!queue.isEmpty()) {
             BotPosition current = queue.poll();
+            //BotPositionKey currentKey = current.toKey();
 
-            // 🧠 Ходим только по реальной проходимой сетке (walkableBlocks)
-            for (BotPosition neighbor : SimplePathUtils.getSmartNeighbors(current, walkableBlocks)) {
-                if (visited.contains(neighbor)) continue;
+            for (BotPosition neighbor : SimplePathUtils.getSmartNeighbors(current, walkableKeys)) {
+                BotPositionKey neighborKey = neighbor.toKey();
+                if (visited.contains(neighborKey)) continue;
 
-                visited.add(neighbor);
-                cameFrom.put(neighbor, current);
+                visited.add(neighborKey);
+                cameFrom.put(neighborKey, current);
                 queue.add(neighbor);
 
-                if (neighbor.equals(to)) {
-                    return reconstructPath(cameFrom, from, to);
+                if (neighborKey.equals(toKey)) {
+                    return reconstructPath(cameFrom, fromKey, toKey);
                 }
             }
         }
@@ -45,23 +49,24 @@ public class BotSimplePathFinder {
     }
 
     private List<BotPosition> reconstructPath(
-        Map<BotPosition, BotPosition> cameFrom,
-        BotPosition start,
-        BotPosition end
+        Map<BotPositionKey, BotPosition> cameFrom,
+        BotPositionKey start,
+        BotPositionKey end
     ) {
         List<BotPosition> path = new LinkedList<>();
-        BotPosition current = end;
+        BotPositionKey currentKey = end;
 
-        while (!current.equals(start)) {
-            path.add(0, current);
-            current = cameFrom.get(current);
+        while (!currentKey.equals(start)) {
+            BotPosition step = cameFrom.get(currentKey);
+            if (step == null) break; // fallback
+            path.add(0, step);
+            currentKey = step.toKey();
         }
 
-        path.add(0, start);
+        path.add(0, new BotPosition(start.getX(), start.getY(), start.getZ()));
         return path;
     }
 
-    // 🧪 Строим путь только к одной случайной цели
     public static List<BotBlockData> buildDebugPathBlocks(
         BotPosition from,
         List<BotBlockData> navTargets,
@@ -76,8 +81,7 @@ public class BotSimplePathFinder {
 
         List<BotBlockData> result = new ArrayList<>();
         for (BotPosition loc : path) {
-            BotBlockData block = new BotBlockData();
-            block.setPosition(loc);
+            BotBlockData block = new BotBlockData(loc.getX(), loc.getY(), loc.getZ());
             block.setType("DUMMY");
             block.setTag("debug:path");
             result.add(block);
@@ -92,7 +96,6 @@ public class BotSimplePathFinder {
         BotSimplePathFinder pathfinder
     ) {
         List<BotBlockData> result = new ArrayList<>();
-
         if (navTargets == null || navTargets.isEmpty()) {
             System.out.println("⚠️ No navigation targets provided.");
             return result;
@@ -104,16 +107,13 @@ public class BotSimplePathFinder {
             if (target == null) continue;
 
             List<BotPosition> path = pathfinder.findPath(from, target.getPosition());
-
             if (path != null && !path.isEmpty()) {
                 for (BotPosition loc : path) {
-                    BotBlockData block = new BotBlockData();
-                    block.setPosition(loc);
+                    BotBlockData block = new BotBlockData(loc.getX(), loc.getY(), loc.getZ());
                     block.setType("DUMMY");
                     block.setTag("debug:path");
                     result.add(block);
                 }
-
                 System.out.println("✅ Path to: " + target);
                 successCount++;
             } else {
@@ -122,11 +122,9 @@ public class BotSimplePathFinder {
         }
 
         if (successCount == 0) {
-            BotBlockData placeholder = new BotBlockData();
-            placeholder.setPosition(from);
+            BotBlockData placeholder = new BotBlockData(from.getX(), from.getY(), from.getZ());
             placeholder.setType("DUMMY");
             placeholder.setTag("debug:path");
-
             result.add(placeholder);
             System.out.println("⚠️ No valid path found — inserting placeholder block for debug.");
         } else {
@@ -142,7 +140,6 @@ public class BotSimplePathFinder {
         BotSimplePathFinder pathfinder
     ) {
         List<List<BotBlockData>> allPaths = new ArrayList<>();
-
         if (navTargets == null || navTargets.isEmpty()) {
             System.out.println("⚠️ No targets available for path building.");
             return allPaths;
@@ -152,12 +149,10 @@ public class BotSimplePathFinder {
             if (target == null) continue;
 
             List<BotPosition> path = pathfinder.findPath(from, target.getPosition());
-
             if (path != null && !path.isEmpty()) {
                 List<BotBlockData> debugBlocks = new ArrayList<>();
                 for (BotPosition loc : path) {
-                    BotBlockData block = new BotBlockData();
-                    block.setPosition(loc);
+                    BotBlockData block = new BotBlockData(loc.getX(), loc.getY(), loc.getZ());
                     block.setType("DUMMY");
                     block.setTag("debug:path");
                     debugBlocks.add(block);

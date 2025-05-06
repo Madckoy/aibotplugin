@@ -1,7 +1,5 @@
 package com.devone.bot.core.utils.blocks;
 
-import java.util.Objects;
-
 public class BotPosition {
     private double x, y, z;
 
@@ -23,12 +21,8 @@ public class BotPosition {
         this.z = other.z;
     }
 
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (!(o instanceof BotPosition)) return false;
-        BotPosition that = (BotPosition) o;
-        return x == that.x && y == that.y && z == that.z;
+    public BotPositionKey toKey() {
+        return new BotPositionKey(this);
     }
 
     public double distanceTo(BotPosition other) {
@@ -40,13 +34,9 @@ public class BotPosition {
     }
 
     @Override
-    public int hashCode() {
-        return Objects.hash(x, y, z);
-    }
- 
-    @Override
     public String toString() {
-        return String.format("%1$,.2f, %2$,.2f, %3$,.2f", x, y, z);
+        return String.format("BotPosition[%.2f, %.2f, %.2f] → key=%s",
+            x, y, z, toKey().toString());
     }
 
     public double getX() { return x; }
@@ -57,5 +47,4 @@ public class BotPosition {
 
     public double getZ() { return z; }
     public void setZ(double z) { this.z = z; }
-
 }

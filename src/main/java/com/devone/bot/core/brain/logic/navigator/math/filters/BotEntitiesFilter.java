@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import com.devone.bot.core.utils.blocks.BotBlockData;
+import com.devone.bot.core.utils.blocks.BotPositionKey;
 
 public class BotEntitiesFilter {
 
@@ -15,9 +16,13 @@ public class BotEntitiesFilter {
         List<BotBlockData> result = new ArrayList<>();
 
         for (BotBlockData entity : entities) {
+            BotPositionKey entityXZ = new BotPositionKey(entity.getX(), 0, entity.getZ());
+
             for (BotBlockData block : surface) {
-                if (entity.getX() == block.getX() && entity.getZ() == block.getZ()) {
-                    int dy = (int)entity.getY() - (int)block.getY();
+                BotPositionKey blockXZ = new BotPositionKey(block.getX(), 0, block.getZ());
+
+                if (entityXZ.equals(blockXZ)) {
+                    double dy = entity.getY() - block.getY();
                     if (dy >= 0 && dy <= 2) {
                         result.add(entity);
                         break;

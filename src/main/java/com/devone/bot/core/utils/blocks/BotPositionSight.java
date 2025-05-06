@@ -14,10 +14,6 @@ public class BotPositionSight extends BotPosition {
         this.pitch = pitch;
     }
 
-    public BotPositionSight(BotPositionSight other) {
-        this(other.getX(), other.getY(), other.getZ(), other.getYaw(), other.getPitch());
-    }
-
     public BotPositionSight(BotPosition base, float yaw, float pitch) {
         super(base.getX(), base.getY(), base.getZ());
         this.yaw = yaw;
@@ -40,8 +36,15 @@ public class BotPositionSight extends BotPosition {
         this.pitch = pitch;
     }
 
+    public BotPositionKey toKey() {
+        return super.toKey();
+    }
+
     @Override
     public String toString() {
-        return super.toString() + String.format(" | Yaw: %.1f°, Pitch: %.1f°", yaw, pitch);
+        return String.format(
+            "BotPositionSight[%.2f, %.2f, %.2f | Yaw: %.1f°, Pitch: %.1f° → Key=%s]",
+            getX(), getY(), getZ(), yaw, pitch, toKey()
+        );
     }
 }
