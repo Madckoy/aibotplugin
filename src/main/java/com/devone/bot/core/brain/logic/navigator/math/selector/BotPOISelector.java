@@ -18,17 +18,16 @@ public class BotPOISelector {
         return candidates.get(random.nextInt(candidates.size()));
     }
 
-    public static BotPosition selectSmart(Bot bot, List<BotPosition> candidates, BotNavigationContext context,
-            float botYaw) {
+    public static BotPosition selectSmart(Bot bot, List<BotPosition> pois, BotNavigationContext context ) {
                 
-        if (candidates == null || candidates.isEmpty())
+        if (pois == null || pois.isEmpty())
             return null;
 
         BotPosition best = null;
         double bestScore = Double.NEGATIVE_INFINITY;
 
-        for (BotPosition poi : candidates) {
-            double score = BotPoiInterestEvaluator.evaluate(bot, context, poi, botYaw);
+        for (BotPosition poi : pois) {
+            double score = BotPoiInterestEvaluator.evaluate(bot, poi, context);
 
             if (score > bestScore) {
                 bestScore = score;

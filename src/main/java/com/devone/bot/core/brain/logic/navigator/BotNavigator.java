@@ -13,6 +13,8 @@ import com.devone.bot.core.Bot;
 
 import com.devone.bot.core.brain.logic.navigator.context.BotNavigationContext;
 import com.devone.bot.core.brain.logic.navigator.context.BotNavigationContextMaker;
+import com.devone.bot.core.brain.logic.navigator.math.builder.BotSightBuilder;
+import com.devone.bot.core.brain.logic.navigator.math.filters.BotSightFilter;
 import com.devone.bot.core.brain.logic.navigator.math.selector.BotPOISelector;
 import com.devone.bot.core.brain.logic.navigator.math.selector.PoiSelectionMode;
 import com.devone.bot.core.brain.logic.navigator.summary.BotNavigationSummaryItem;
@@ -22,6 +24,7 @@ import com.devone.bot.core.task.active.move.params.BotMoveTaskParams;
 import com.devone.bot.core.task.active.teleport.BotTeleportTask;
 import com.devone.bot.core.task.active.teleport.params.BotTeleportTaskParams;
 import com.devone.bot.core.task.passive.BotTaskManager;
+import com.devone.bot.core.utils.BotConstants;
 import com.devone.bot.core.utils.BotUtils;
 import com.devone.bot.core.utils.blocks.BlockUtils;
 import com.devone.bot.core.utils.blocks.BotBlockData;
@@ -32,22 +35,18 @@ import com.devone.bot.core.utils.world.BotWorldHelper;
 
 public class BotNavigator {
 
-    public static enum NavigationType {
+    public static enum NavigationSuggestion {
         WALK,
+        CHANGE_DIRECTION,
         TELEPORT;
     }
 
-    public static enum PoiSelectionType {
-        ON_SIGHT,
-        ALL;
-    }
-
     private transient Bot owner;
-    private PoiSelectionType poiSelection = PoiSelectionType.ON_SIGHT;
+    private double fov = BotConstants.DEFAULT_SIGHT_FOV;
     private boolean stuck = false;
     private int stuckCount = 0;
-    private NavigationType suggestion;
-    private BotPosition suggested;
+    private NavigationSuggestion navigationSuggestion;
+    private BotPosition suggestedPoi;
 
     private List<BotPosition> candidates;
 
@@ -190,71 +189,52 @@ public class BotNavigator {
             return result;
         }
 
-        List<BotPosition> pois = null;
+        //apply POI filtering 
 
-        if(poiSelection==PoiSelectionType.ON_SIGHT) {
-            pois = loopTargets(botPos, "poi", context.poiOnSight); 
+        float yaw = botPos.getYaw(); // если есть
+
+        BotPosition eye = new BotPosition(botPos.getX(), botPos.getY(), botPos.getZ());
+        List<BotBlockData> viewSector = BotSightBuilder.buildViewSectorBlocks(eye, yaw, BotConstants.DEFAULT_SCAN_RANGE+5.0, 
+                                                                             BotConstants.DEFAULT_SCAN_DATA_SLICE_HEIGHT, 
+                                                                             fov);
+        
+        List<BotBlockData>  poiSighted       = BotSightFilter.filter(context.poi, viewSector);
+        //List<BotBlockData>  reachableSighted = BotSightFilter.filter(context.reachable, viewSector);
+        //List<BotBlockData>  navigableSighted = BotSightFilter.filter(context.navigable, viewSector);
+        //List<BotBlockData>  walkableSighted  = BotSightFilter.filter(context.walkable, viewSector);
+
+        List<BotPosition> poiSightedValidatedPos       = validateTargets(botPos, "poi", poiSighted);
+        //List<BotPosition> reachableSightedValidatedPos = validateTargets(botPos, "reachable", reachableSighted);
+        //List<BotPosition> navigableSightedValidatedPos = validateTargets(botPos, "navigable", navigableSighted);
+        //List<BotPosition> walkableSightedValidatedPos  = validateTargets(botPos, "walkable", walkableSighted);
+
+        if (poiSightedValidatedPos.size() == 0) {
+            navigationSuggestion = NavigationSuggestion.CHANGE_DIRECTION;
         } else {
-            pois = loopTargets(botPos, "poi", context.poiGlobal); 
-        }
+            candidates = poiSightedValidatedPos;
+            navigationSuggestion = NavigationSuggestion.WALK;
 
-        List<BotPosition> reachable = loopTargets(botPos, "reachable", context.reachable);
-        List<BotPosition> navigable = loopTargets(botPos, "navigable", context.navigable);
-        List<BotPosition> walkable  = loopTargets(botPos, "walkable", context.walkable);
-
-        boolean hardStuck = false;
-        setStuck(false);
-
-        if (pois.size() == 0) {
-            if (reachable.size() == 0) {
-                if (navigable.size() == 0) {
-                    if (walkable.size() == 0) {
-                        // hard stuck
-                        hardStuck = true;
-                        suggestion = NavigationType.TELEPORT;
-                        suggested = BotWorldHelper.getWorldSpawnLocation(); // if hard stuck go to spawn
-                    } else {
-                        result = walkable;
-                        suggestion = NavigationType.TELEPORT;
-                    }
-                } else {
-                    result = navigable;
-                    suggestion = NavigationType.TELEPORT;
-                }
+            if (poiSelectionMode == PoiSelectionMode.SMART) {
+                suggestedPoi = BotPOISelector.selectSmart(owner, candidates, context);
             } else {
-                result = reachable;
-                suggestion = NavigationType.WALK;
+                suggestedPoi = BotPOISelector.selectRandom(candidates);
             }
-        } else {
-            result = pois;
-            suggestion = NavigationType.WALK;
-        }
-
-        if (hardStuck) {
-            setStuck(true);
-        }
-
-        candidates = result;
-
-        if (poiSelectionMode == PoiSelectionMode.SMART) {
-            suggested = BotPOISelector.selectSmart(owner, candidates, context, BotUtils.getBotYaw(owner));
-        } else {
-            suggested = BotPOISelector.selectRandom(candidates);
+            result = candidates;
         }
 
         return result;
     }
 
-    private List<BotPosition> loopTargets(BotPosition botPos, String key, List<BotBlockData> targets) {
+    private List<BotPosition> validateTargets(BotPositionSight botPos, String key, List<BotBlockData> blocks) {
 
         List<BotPosition> navigable = new ArrayList<>();
 
-        if (targets == null) {
+        if (blocks == null) {
             return navigable;
         }
 
-        for (int i = 0; i < targets.size(); i++) {
-            BotBlockData target = targets.get(i);
+        for (int i = 0; i < blocks.size(); i++) {
+            BotBlockData target = blocks.get(i);
 
             BotPosition pos = BlockUtils.fromBlock(target);
             Location loc = BotWorldHelper.botPositionToWorldLocation(pos);
@@ -284,7 +264,7 @@ public class BotNavigator {
             }
         }
 
-        summary.get(key).setCalculated(targets.size());
+        summary.get(key).setCalculated(blocks.size());
         summary.get(key).setConfirmed(navigable.size());
 
         return navigable;
@@ -294,20 +274,20 @@ public class BotNavigator {
         return summary.get(key);
     }
 
-    public NavigationType getSuggestion() {
-        return suggestion;
+    public NavigationSuggestion getNavigationSuggestion() {
+        return navigationSuggestion;
     }
 
-    public void setRecomendation(NavigationType suggestion) {
-        this.suggestion = suggestion;
+    public void setNavigationSuggestion(NavigationSuggestion suggestion) {
+        this.navigationSuggestion = suggestion;
     }
 
-    public BotPosition getSuggested() {
-        return suggested;
+    public BotPosition getSuggestedPoi() {
+        return suggestedPoi;
     }
 
-    public void setSuggested(BotBlockData suggested) {
-        this.suggested = suggested.getPosition();
+    public void setSuggestedPoi(BotPosition suggested) {
+        this.suggestedPoi = suggested;
     }
 
     public boolean navigate(float speed) {
@@ -330,7 +310,7 @@ public class BotNavigator {
             // move
             // BotTaskManager.push(owner, excvTask);
 
-            if (suggestion == NavigationType.WALK) {
+            if (navigationSuggestion == NavigationSuggestion.WALK) {
 
                 BotPosition movePosiiton = new BotPosition(this.poi);
 
@@ -344,7 +324,7 @@ public class BotNavigator {
 
                 BotTeleportTask tp = new BotTeleportTask(owner, null);
                 BotTeleportTaskParams params = new BotTeleportTaskParams();
-                params.setPosition(suggested);
+                params.setPosition(suggestedPoi);
                 tp.setParams(params);
                 BotTaskManager.push(owner, tp);
 

@@ -11,6 +11,7 @@ import org.bukkit.util.Vector;
 
 import com.devone.bot.AIBotPlugin;
 import com.devone.bot.core.Bot;
+import com.devone.bot.core.brain.logic.navigator.BotNavigator.NavigationSuggestion;
 import com.devone.bot.core.task.active.move.BotMoveTask;
 import com.devone.bot.core.task.active.move.params.BotMoveTaskParams;
 import com.devone.bot.core.task.passive.BotTask;
@@ -249,6 +250,44 @@ public class BotUtils {
         } catch (Exception ex) {
             return 0;
         }
+    }
+
+    public static String getNavigationSuggestionAsString(Bot bot) {
+        String result = "";
+
+        if(bot.getNavigator().getNavigationSuggestion()==NavigationSuggestion.WALK) {
+            return "WALK";
+        }
+
+        if(bot.getNavigator().getNavigationSuggestion()==NavigationSuggestion.CHANGE_DIRECTION) {
+            return "CHANGE_DIRECTION";
+        }
+
+        if(bot.getNavigator().getNavigationSuggestion()==NavigationSuggestion.TELEPORT) {
+            return "TELEPORT";
+        }
+
+       return result;
+    }
+
+    public static void rotateClockwise(BotTask<?> task, Bot bot, float degrees) {
+        if (bot == null || bot.getNavigator().getPositionSight() == null) return;
+
+        Bukkit.getScheduler().runTaskLater(AIBotPlugin.getInstance(), () -> {
+
+            float currentYaw = bot.getNavigator().getPositionSight().getYaw();
+            float newYaw = (currentYaw + degrees) % 360.0f;
+    
+            Location from = bot.getNPCEntity().getLocation();
+            Location newLook = from.clone();
+            newLook.setYaw(newYaw);
+      
+            bot.getNPCEntity().teleport(newLook);
+
+            BotLogger.debug("↻", true, bot.getId() + " rotated " + degrees + "° → yaw=" + newYaw);
+        
+        }, 1L); // ✅ Через тик, чтобы дать время на обновление
+        
     }
 
 }

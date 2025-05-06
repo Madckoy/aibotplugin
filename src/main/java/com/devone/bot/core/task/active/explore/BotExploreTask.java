@@ -1,6 +1,7 @@
 package com.devone.bot.core.task.active.explore;
 
 import com.devone.bot.core.Bot;
+import com.devone.bot.core.brain.logic.navigator.BotNavigator.NavigationSuggestion;
 import com.devone.bot.core.brain.memory.scene.BotSceneData;
 import com.devone.bot.core.task.passive.BotTaskAutoParams;
 import com.devone.bot.core.task.passive.IBotTaskParameterized;
@@ -49,7 +50,6 @@ public class BotExploreTask extends BotTaskAutoParams<BotExploreTaskParams> {
         setObjective(params.getObjective() + " (" + rmt + ")");
 
         if (rmt <= 0) {
-            BotLogger.debug(icon, isLogging(), bot.getId() + " ⏱️ Task timeout: " + getElapsedTime());
             this.stop();
             return;
         }
@@ -66,12 +66,15 @@ public class BotExploreTask extends BotTaskAutoParams<BotExploreTaskParams> {
             return;
         }
 
-        // BotLocation botPos = bot.getNavigator().getLocation();
+        BotPosition poi = bot.getNavigator().getSuggestedPoi();
+        
+        NavigationSuggestion suggestion = bot.getNavigator().getNavigationSuggestion();
+        if(suggestion == NavigationSuggestion.CHANGE_DIRECTION) {
+            //rotate 45 clockwise            
+            BotLogger.debug(icon, isLogging(), bot.getId() + "  Need to rotate bot!");
+            return;
+        }
 
-        // BotSceneContext context = BotNavigationPlannerWrapper.getSceneContext(botPos,
-        // sceneData.blocks, sceneData.entities);
-
-        BotPosition poi = bot.getNavigator().getSuggested();
 
         if (poi != null) {
             BotLogger.debug(icon, isLogging(), bot.getId() + " 🎯 Navigation - Set Target: " + poi);

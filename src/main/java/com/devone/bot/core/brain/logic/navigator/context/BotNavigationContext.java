@@ -8,14 +8,14 @@ import com.devone.bot.core.utils.blocks.BotBlockData;
 
 public class BotNavigationContext extends BotSceneData {
     public List<BotBlockData> sliced;
-    public List<BotBlockData> safe;
+    //public List<BotBlockData> safe;
     public List<BotBlockData> walkable;
     public List<BotBlockData> navigable;
     public List<BotBlockData> reachable;
-    public List<BotBlockData> poiGlobal;
+    public List<BotBlockData> poi;
     public List<BotBlockData> entities;
-    public List<BotBlockData> viewSector;
-    public List<BotBlockData> poiOnSight;
+    //public List<BotBlockData> viewSector;
+    //public List<BotBlockData> poiOnSight;
 
 
     //public List<BotBlockData> debugPath;

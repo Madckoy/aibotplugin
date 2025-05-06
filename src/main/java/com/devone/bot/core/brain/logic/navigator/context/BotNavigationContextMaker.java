@@ -2,14 +2,14 @@ package com.devone.bot.core.brain.logic.navigator.context;
 
 
 import com.devone.bot.core.brain.logic.navigator.math.filters.BotAddDummyBlock;
-import com.devone.bot.core.brain.logic.navigator.math.filters.BotBySectorFilter;
+
 
 import java.util.List;
 import com.devone.bot.core.brain.logic.navigator.math.poi.BotPOIBuilder;
 import com.devone.bot.core.brain.logic.navigator.math.poi.BotPOIBuilder.BotPOIBuildStrategy;
 import com.devone.bot.core.brain.logic.navigator.math.builder.BotReachableSurfaceBuilder;
 import com.devone.bot.core.brain.logic.navigator.math.builder.BotWalkableSurfaceBuilder;
-import com.devone.bot.core.brain.logic.navigator.math.builder.ViewConeBuilder;
+
 import com.devone.bot.core.brain.logic.navigator.math.filters.BotEntitiesFilter;
 import com.devone.bot.core.brain.logic.navigator.math.filters.BotNavigableFilter;
 import com.devone.bot.core.brain.logic.navigator.math.filters.BotSafeBlocksFilter;
@@ -31,7 +31,7 @@ public class BotNavigationContextMaker {
 
         BotNavigationContext context = new BotNavigationContext();
 
-        List<BotBlockData> sliced = BotVerticalSliceFilter.filter(geoBlocks, botPositionLook.getY(), 10);// relative!!!
+        List<BotBlockData> sliced = BotVerticalSliceFilter.filter(geoBlocks, botPositionLook.getY(), BotConstants.DEFAULT_SCAN_DATA_SLICE_HEIGHT);// relative!!!
 
         if (sliced == null || sliced.isEmpty()) {
             sliced = geoBlocks;
@@ -96,25 +96,15 @@ public class BotNavigationContextMaker {
         context.debugPaths = debugPaths;
         */
         //---------------------------------------------------------------------------
-        
-        float yaw = botPositionLook.getYaw(); // если есть
-        //float pitch = botPositionLook.getPitch(); // если есть
 
-        BotPosition eye = new BotPosition(botPositionLook.getX(), botPositionLook.getY(), botPositionLook.getZ());
-        context.viewSector = ViewConeBuilder.buildViewSectorBlocks(eye, yaw, BotConstants.DEFAULT_SCAN_RANGE+5.0, 
-                                                                             BotConstants.DEFAULT_SCAN_DATA_SLICE_HEIGHT, 
-                                                                             BotConstants.DEFAULT_SIGHT_FOV);
-        
-        List<BotBlockData> poiOnSight = BotBySectorFilter.filter(poiAll, context.viewSector);
-
-        context.sliced     = sliced;
-        context.safe       = safe;               
+        context.sliced      = sliced;
+        //context.safe       = safe;               
         context.walkable   = walkable;
         context.navigable  = navigable;
         context.reachable  = reachable;
-        context.poiGlobal  = poiAll;
+        context.poi        = poiAll;
         context.entities   = livingTargets;
-        context.poiOnSight = poiOnSight;
+
 
         return context;
     }

@@ -5,7 +5,7 @@ import java.util.stream.Collectors;
 
 import com.devone.bot.core.utils.blocks.BotBlockData;
 
-public class BotBySectorFilter {
+public class BotSightFilter {
 
     public static List<BotBlockData> filter(
         List<BotBlockData> candidates,

@@ -12,7 +12,6 @@ import org.bukkit.inventory.ItemStack;
 
 import com.devone.bot.core.Bot;
 import com.devone.bot.core.BotManager;
-import com.devone.bot.core.brain.logic.navigator.BotNavigator;
 import com.devone.bot.core.utils.BotUtils;
 import com.devone.bot.core.utils.blocks.BotPosition;
 import com.devone.bot.core.web.BotWebService;
@@ -104,11 +103,7 @@ public class BotStatusServlet extends HttpServlet {
                 botJson.addProperty("memory", bot.getBrain().getMemory().toJson().toString());
 
                 // add navigation data
-                if (bot.getNavigator().getSuggestion() == BotNavigator.NavigationType.TELEPORT) {
-                    botJson.addProperty("navigationSuggestion", "Teleport");
-                } else {
-                    botJson.addProperty("navigationSuggestion", "Walk");
-                }
+                botJson.addProperty("navigationSuggestion", BotUtils.getNavigationSuggestionAsString(bot));
 
                 botJson.addProperty("reachableTargets",
                         bot.getNavigator().getNavigationSummaryItem("poi").toString());
@@ -119,10 +114,10 @@ public class BotStatusServlet extends HttpServlet {
                 botJson.addProperty("walkableBlocks",
                         bot.getNavigator().getNavigationSummaryItem("walkable").toString());
 
-                Object obj = bot.getNavigator().getSuggested();
+                Object obj = bot.getNavigator().getSuggestedPoi();
                 if (obj != null) {
                     botJson.addProperty("suggestedBlock",
-                            bot.getNavigator().getSuggested().toString());
+                            bot.getNavigator().getSuggestedPoi().toString());
                 }
 
                 botsArray.add(botJson);

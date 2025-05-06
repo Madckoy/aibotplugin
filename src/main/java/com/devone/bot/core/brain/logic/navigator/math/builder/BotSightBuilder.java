@@ -6,7 +6,7 @@ import com.devone.bot.core.utils.blocks.BotPosition;
 import java.util.ArrayList;
 import java.util.List;
 
-public class ViewConeBuilder {
+public class BotSightBuilder {
 
 
     public static List<BotBlockData> buildViewSectorBlocks(
