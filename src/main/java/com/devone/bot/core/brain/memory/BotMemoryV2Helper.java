@@ -4,7 +4,7 @@ import com.devone.bot.core.utils.blocks.BotPosition;
 import com.devone.bot.core.Bot;
 import com.devone.bot.core.brain.memoryv2.BotMemoryV2Partition;
 
-public class BotMemoryHelper {
+public class BotMemoryV2Helper {
     public void memorize(Bot bot, String partition, String key, Object value) {
         bot.getBrain().getMemoryV2().partition(partition).put(key, value);
     }

@@ -37,7 +37,13 @@ public class BotNavigator {
         TELEPORT;
     }
 
+    public static enum PoiSelectionType {
+        ON_SIGHT,
+        ALL;
+    }
+
     private transient Bot owner;
+    private PoiSelectionType poiSelection = PoiSelectionType.ON_SIGHT;
     private boolean stuck = false;
     private int stuckCount = 0;
     private NavigationType suggestion;
@@ -49,10 +55,10 @@ public class BotNavigator {
     private BotPosition position;
     private transient BotPosition poi; // Новое свойство для целевой локации
 
-    private BotNavigationSummaryItem targets = new BotNavigationSummaryItem("poi");
+    private BotNavigationSummaryItem pois      = new BotNavigationSummaryItem("poi");
     private BotNavigationSummaryItem reachable = new BotNavigationSummaryItem("reachable");
     private BotNavigationSummaryItem navigable = new BotNavigationSummaryItem("navigable");
-    private BotNavigationSummaryItem walkable = new BotNavigationSummaryItem("walkable");
+    private BotNavigationSummaryItem walkable  = new BotNavigationSummaryItem("walkable");
 
     PoiSelectionMode poiSelectionMode = PoiSelectionMode.SMART;
 
@@ -65,7 +71,7 @@ public class BotNavigator {
     public BotNavigator() {
         this.position = null; // Инициализируем с текущей локацией
         this.poi = null; // Начальное значение для targetLocation
-        summary.put(targets.getId(), targets);
+        summary.put(pois.getId(), pois);
         summary.put(reachable.getId(), reachable);
         summary.put(navigable.getId(), navigable);
         summary.put(walkable.getId(), walkable);
@@ -164,51 +170,6 @@ public class BotNavigator {
         this.stuckCount = 0;
     }
 
-    private List<BotPosition> loopTargets(BotPosition botPos, String key, List<BotBlockData> targets) {
-
-        List<BotPosition> navigable = new ArrayList<>();
-
-        if (targets == null) {
-            return navigable;
-        }
-
-        for (int i = 0; i < targets.size(); i++) {
-            BotBlockData target = targets.get(i);
-
-            BotPosition pos = BlockUtils.fromBlock(target);
-            Location loc = BotWorldHelper.botPositionToWorldLocation(pos);
-
-            // BotLogger.debug(BotUtils.getActiveTaskIcon(owner), true, owner.getId() + " ⚠️
-            // nav candidate (world) = " + loc);
-
-            boolean canNavigate = owner.getNPC().getNavigator().canNavigateTo(loc);
-
-            // BotLogger.debug(BotUtils.getActiveTaskIcon(owner), true, owner.getId() + " ⚠️
-            // NPC POS = " + owner.getNPC().getStoredLocation());
-
-            if (canNavigate) {
-                BotPosition npos = new BotPosition();
-                npos.setX(target.getX());
-                npos.setY(target.getY());
-                npos.setZ(target.getZ());
-
-                BotPosition posAbove = new BotPosition(npos.getX(), npos.getY() + 1, npos.getZ());
-                // check if location above the valid target is AIR
-                Block blockAbove = BotWorldHelper.botPositionToWorldBlock(posAbove);
-                if (blockAbove.getType().toString().equals(Material.AIR.toString()) ||
-                        blockAbove.getType().toString().equals(Material.CAVE_AIR.toString()) ||
-                        blockAbove.getType().toString().equals(Material.VOID_AIR.toString())) {
-                    navigable.add(npos);
-                }
-            }
-        }
-
-        summary.get(key).setCalculated(targets.size());
-        summary.get(key).setConfirmed(navigable.size());
-
-        return navigable;
-    }
-
     public List<BotPosition> calculate(BotSceneData scene) {
 
         List<BotPosition> result = new ArrayList<BotPosition>();
@@ -226,15 +187,16 @@ public class BotNavigator {
             BotLogger.debug(BotUtils.getActiveTaskIcon(owner), true,
                     owner.getId() + " ⚠️ Navigation error: Scene Context is not ready");
 
-            setStuck(true); // stuck somewhere
-
             return result;
         }
 
-        List<BotPosition> pois = loopTargets(botPos, "poi", context.poiGlobal);
+        List<BotPosition> pois = null;
 
-        // BotLogger.debug(BotUtils.getActiveTaskIcon(owner), true, owner.getId() + " ⚠️
-        // POIs = " + pois);
+        if(poiSelection==PoiSelectionType.ON_SIGHT) {
+            pois = loopTargets(botPos, "poi", context.poiOnSight); 
+        } else {
+            pois = loopTargets(botPos, "poi", context.poiGlobal); 
+        }
 
         List<BotPosition> reachable = loopTargets(botPos, "reachable", context.reachable);
         List<BotPosition> navigable = loopTargets(botPos, "navigable", context.navigable);
@@ -281,6 +243,51 @@ public class BotNavigator {
         }
 
         return result;
+    }
+
+    private List<BotPosition> loopTargets(BotPosition botPos, String key, List<BotBlockData> targets) {
+
+        List<BotPosition> navigable = new ArrayList<>();
+
+        if (targets == null) {
+            return navigable;
+        }
+
+        for (int i = 0; i < targets.size(); i++) {
+            BotBlockData target = targets.get(i);
+
+            BotPosition pos = BlockUtils.fromBlock(target);
+            Location loc = BotWorldHelper.botPositionToWorldLocation(pos);
+
+            // BotLogger.debug(BotUtils.getActiveTaskIcon(owner), true, owner.getId() + " ⚠️
+            // nav candidate (world) = " + loc);
+
+            boolean canNavigate = owner.getNPC().getNavigator().canNavigateTo(loc);
+
+            // BotLogger.debug(BotUtils.getActiveTaskIcon(owner), true, owner.getId() + " ⚠️
+            // NPC POS = " + owner.getNPC().getStoredLocation());
+
+            if (canNavigate) {
+                BotPosition npos = new BotPosition();
+                npos.setX(target.getX());
+                npos.setY(target.getY());
+                npos.setZ(target.getZ());
+
+                BotPosition posAbove = new BotPosition(npos.getX(), npos.getY() + 1, npos.getZ());
+                // check if location above the valid target is AIR
+                Block blockAbove = BotWorldHelper.botPositionToWorldBlock(posAbove);
+                if (blockAbove.getType().toString().equals(Material.AIR.toString()) ||
+                        blockAbove.getType().toString().equals(Material.CAVE_AIR.toString()) ||
+                        blockAbove.getType().toString().equals(Material.VOID_AIR.toString())) {
+                    navigable.add(npos);
+                }
+            }
+        }
+
+        summary.get(key).setCalculated(targets.size());
+        summary.get(key).setConfirmed(navigable.size());
+
+        return navigable;
     }
 
     public BotNavigationSummaryItem getNavigationSummaryItem(String key) {
