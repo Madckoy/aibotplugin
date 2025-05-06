@@ -28,9 +28,9 @@ public class BotNavigableFilter {
     }
 
     private static boolean hasNavigableNeighbor(BotBlockData block, Map<BotPosition, BotBlockData> map) {
-        int x = block.getX();
-        int y = block.getY();
-        int z = block.getZ();
+        double x = block.getX();
+        double y = block.getY();
+        double z = block.getZ();
 
         for (int dx = -1; dx <= 1; dx++) {
             for (int dy = -1; dy <= 1; dy++) {

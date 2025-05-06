@@ -22,7 +22,7 @@ public class BotPOIBuilder {
                                            int sectorCount,
                                            int maxTargets,
                                            boolean preferDistant,
-                                           int scanRadius) {
+                                           double scanRadius) {
 
         if (reachable == null || reachable.isEmpty()) return List.of();
 
@@ -52,6 +52,7 @@ public class BotPOIBuilder {
     }
 
     private static List<BotBlockData> selectAdaptiveSectorTargets(List<BotBlockData> reachable, BotPosition bot, int sectorCount) {
+    
         Map<Integer, BotBlockData> bestInSector = new HashMap<>();
         Map<Integer, Double> maxDistances = new HashMap<>();
 
@@ -78,7 +79,7 @@ public class BotPOIBuilder {
                                                                    int sectors,
                                                                    int maxTargetsInput,
                                                                    boolean preferDistant,
-                                                                   int scanRadius) {
+                                                                   double scanRadius) {
 
         if (reachable.isEmpty()) return List.of();
 
@@ -127,7 +128,7 @@ public class BotPOIBuilder {
         return filtered.size() > maxTargets ? filtered.subList(0, maxTargets) : filtered;
     }
 
-    private static int estimateAdaptiveMaxTargets(List<BotBlockData> reachable, int scanRadius) {
+    private static int estimateAdaptiveMaxTargets(List<BotBlockData> reachable, double scanRadius) {
         if (reachable.isEmpty()) return 0;
         double area = Math.PI * scanRadius * scanRadius;
         double densityFactor = 0.8;

@@ -6,9 +6,9 @@ import java.util.List;
 import com.devone.bot.core.utils.blocks.BotBlockData;
 
 public class BotSceneUtils {
-    public static int estimateHorizontalRadius(List<BotBlockData> blocks) {
-        int minX = Integer.MAX_VALUE, maxX = Integer.MIN_VALUE;
-        int minZ = Integer.MAX_VALUE, maxZ = Integer.MIN_VALUE;
+    public static double estimateHorizontalRadius(List<BotBlockData> blocks) {
+        double minX = Double.MAX_VALUE, maxX = Double.MIN_VALUE;
+        double minZ = Double.MAX_VALUE, maxZ = Double.MIN_VALUE;
 
         for (BotBlockData block : blocks) {
             if (block.getX() < minX) minX = block.getX();

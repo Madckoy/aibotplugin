@@ -3,16 +3,16 @@ package com.devone.bot.core.brain.memory.scene;
 import java.util.List;
 
 import com.devone.bot.core.utils.blocks.BotBlockData;
-import com.devone.bot.core.utils.blocks.BotPositionLook;
+import com.devone.bot.core.utils.blocks.BotPositionSight;
 
 public class BotSceneData {
     public List<BotBlockData> blocks;
     public List<BotBlockData> entities;
-    public BotPositionLook bot;
+    public BotPositionSight bot;
 
     public BotSceneData() {}
 
-    public BotSceneData(List<BotBlockData> blocks, List<BotBlockData> entities, BotPositionLook botPos) {
+    public BotSceneData(List<BotBlockData> blocks, List<BotBlockData> entities, BotPositionSight botPos) {
         this.blocks = blocks;
         this.entities = entities;
         this.bot = botPos;

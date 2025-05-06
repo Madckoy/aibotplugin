@@ -12,8 +12,11 @@ public class BotNavigationContext extends BotSceneData {
     public List<BotBlockData> walkable;
     public List<BotBlockData> navigable;
     public List<BotBlockData> reachable;
-    public List<BotBlockData> poi;
+    public List<BotBlockData> poiGlobal;
     public List<BotBlockData> entities;
+    public List<BotBlockData> viewSector;
+    public List<BotBlockData> poiOnSight;
+
 
     //public List<BotBlockData> debugPath;
     //public List<List<BotBlockData>> debugPaths; // 🔥 новый, мульти-пути

@@ -29,6 +29,7 @@ import com.devone.bot.core.utils.BotConstants;
 import com.devone.bot.core.utils.blocks.BlockUtils;
 import com.devone.bot.core.utils.blocks.BotBlockData;
 import com.devone.bot.core.utils.blocks.BotPosition;
+import com.devone.bot.core.utils.blocks.BotPositionSight;
 import com.devone.bot.core.utils.logger.BotLogger;
 import com.devone.bot.core.utils.world.BotWorldHelper;
 
@@ -138,7 +139,7 @@ public class BotBrainTask extends BotTaskAutoParams<BotBrainTaskParams> {
 
             case 2:
                 if (params.isAllowTeleport()) {
-                    BotPosition botPos = bot.getNavigator().getPosition();
+                    BotPositionSight botPos = bot.getNavigator().getPositionSight();
                     BotSceneData sceneData = bot.getBrain().getMemory().getSceneData();
                     BotNavigationContext context = BotNavigationContextMaker.createSceneContext(botPos, sceneData.blocks,
                             sceneData.entities);

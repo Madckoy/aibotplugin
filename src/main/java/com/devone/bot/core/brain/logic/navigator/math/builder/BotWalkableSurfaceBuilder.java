@@ -16,9 +16,9 @@ public class BotWalkableSurfaceBuilder {
         for (BotBlockData block : blocks) {
             if (block.isAir()) continue;
     
-            int x = block.getX();
-            int y = block.getY();
-            int z = block.getZ();
+            double x = block.getX();
+            double y = block.getY();
+            double z = block.getZ();
     
             BotBlockData above1 = findBlockAt(blocks, x, y + 1, z);
             BotBlockData above2 = findBlockAt(blocks, x, y + 2, z);
@@ -37,7 +37,7 @@ public class BotWalkableSurfaceBuilder {
         return result;
     }
     
-    private static BotBlockData createFakeBlock(int x, int y, int z, String type, String tag) {
+    private static BotBlockData createFakeBlock(double x, double y, double z, String type, String tag) {
         BotBlockData fake = new BotBlockData();
         fake.setPosition(new BotPosition(x, y, z));
         fake.setType(type);
@@ -45,9 +45,9 @@ public class BotWalkableSurfaceBuilder {
         return fake;
     }
         
-    private static BotBlockData findBlockAt(List<BotBlockData> blocks, int x, int y, int z) {
+    private static BotBlockData findBlockAt(List<BotBlockData> blocks, double x, double y, double z) {
         for (BotBlockData b : blocks) {
-            if (b.getX() == x && b.getY() == y && b.getZ() == z) {
+            if ((int)b.getX() == (int)x && (int)b.getY() == (int)y && (int)b.getZ() == (int)z) {
                 return b;
             }
         }

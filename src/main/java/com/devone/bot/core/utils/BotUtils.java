@@ -69,8 +69,8 @@ public class BotUtils {
                 location.getBlock().getBlockData() // Тип блока для эффекта
         );
 
-        BotPosition loc = BotWorldHelper.locationToBotPosition(location);
-        BotLogger.debug(task.getIcon(), true, bot.getId() + " 🎇 Эффект разрушения воспроизведён на " + loc);
+        BotPosition pos = BotWorldHelper.locationToBotPositionSight(location);
+        BotLogger.debug(task.getIcon(), true, bot.getId() + " 🎇 Эффект разрушения воспроизведён на " + pos);
     }
 
     public static boolean requiresTool(Material blockType) {
@@ -183,7 +183,7 @@ public class BotUtils {
         }
 
         // Если предметов рядом нет, двигаем бота к последнему разрушенному блоку
-        BotPosition pos = BotWorldHelper.locationToBotPosition(target);
+        BotPosition pos = BotWorldHelper.locationToBotPositionSight(target);
         BotLogger.debug("🤖", true, bot.getId() + " 📦 Дроп подобран. Двигается к цели:" + pos);
 
         BotMoveTask mv_task = new BotMoveTask(bot);

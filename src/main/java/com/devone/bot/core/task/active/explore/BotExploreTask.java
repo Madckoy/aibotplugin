@@ -11,7 +11,7 @@ import com.devone.bot.core.utils.logger.BotLogger;
 
 public class BotExploreTask extends BotTaskAutoParams<BotExploreTaskParams> {
 
-    private int scanRadius;
+    private double scanRadius;
 
     public BotExploreTask(Bot bot) {
         super(bot, BotExploreTaskParams.class);

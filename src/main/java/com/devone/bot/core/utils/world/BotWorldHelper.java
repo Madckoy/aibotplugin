@@ -15,6 +15,7 @@ import org.bukkit.entity.LivingEntity;
 import com.devone.bot.core.Bot;
 import com.devone.bot.core.utils.blocks.BotBlockData;
 import com.devone.bot.core.utils.blocks.BotPosition;
+import com.devone.bot.core.utils.blocks.BotPositionSight;
 
 public class BotWorldHelper {
 
@@ -42,8 +43,13 @@ public class BotWorldHelper {
     }
 
     public static BotPosition locationToBotPosition(Location loc) {
-        return new BotPosition((int) loc.getX(), (int) loc.getY(), (int) loc.getZ());
+        return new BotPosition(loc.getX(), loc.getY(), loc.getZ());
     }
+
+    public static BotPositionSight locationToBotPositionSight(Location loc) {
+        return new BotPositionSight(loc.getX(), loc.getY(), loc.getZ(),  loc.getYaw(), loc.getPitch());
+    }
+
 
     public static BotBlockData blockToBotBlockData(Block block) {
         BotPosition pos = new BotPosition(block.getX(), block.getY(), block.getZ());

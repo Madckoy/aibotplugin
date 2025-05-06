@@ -31,7 +31,7 @@ public class BotStrategyNearbyPlayer implements IBotStrategyReaction {
             if (!player.isOnline() || player.isDead())
                 continue;
 
-            BotPosition playerLoc = new BotPosition(BotWorldHelper.locationToBotPosition(player.getLocation()));
+            BotPosition playerLoc = new BotPosition(BotWorldHelper.locationToBotPositionSight(player.getLocation()));
             double dist = botLoc.distanceTo(playerLoc);
 
             if (dist < BotConstants.DEFAULT_PLAYER_DETECTION_RADIUS) {

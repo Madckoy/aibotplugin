@@ -17,7 +17,7 @@ public class BotEntitiesFilter {
         for (BotBlockData entity : entities) {
             for (BotBlockData block : surface) {
                 if (entity.getX() == block.getX() && entity.getZ() == block.getZ()) {
-                    int dy = entity.getY() - block.getY();
+                    int dy = (int)entity.getY() - (int)block.getY();
                     if (dy >= 0 && dy <= 2) {
                         result.add(entity);
                         break;

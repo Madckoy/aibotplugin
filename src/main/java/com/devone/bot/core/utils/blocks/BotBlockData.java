@@ -5,15 +5,16 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 
 public class BotBlockData {
 
-    private BotPosition position = new BotPosition();
+    private BotPosition position;
     private String type;
     private UUID uuid;
     private String tag;
 
     public BotBlockData() {
+        this.position = new BotPosition();
     }
 
-    public BotBlockData(int x, int y, int z) {
+    public BotBlockData(double x, double y, double z) {
         this.position = new BotPosition(x, y, z);
     }
 
@@ -21,8 +22,32 @@ public class BotBlockData {
         return position;
     }
 
-    public void setPosition(BotPosition position) {
-        this.position = position;
+    public void setPosition(BotPosition pos) {
+        this.position = pos;
+    }
+
+    public double getX() {
+        return position.getX();
+    }
+
+    public void setX(double x) {
+        position.setX(x);
+    }
+
+    public double getY() {
+        return position.getY();
+    }
+
+    public void setY(double y) {
+        position.setY(y);
+    }
+
+    public double getZ() {
+        return position.getZ();
+    }
+
+    public void setZ(double z) {
+        position.setZ(z);
     }
 
     public void setType(String type) {
@@ -33,8 +58,8 @@ public class BotBlockData {
         return this.type;
     }
 
-    public void setUUID(UUID uuid) {
-        this.uuid = uuid;
+    public void setUUID(UUID id) {
+        this.uuid = id;
     }
 
     public UUID getUUID() {
@@ -68,41 +93,27 @@ public class BotBlockData {
 
     @JsonIgnore
     public boolean isHostile() {
-        return BotEntityUtils.isHostile(this.type);
+        return true;
     }
 
     @JsonIgnore
     public boolean isPeaceful() {
-        return BotEntityUtils.isPeaceful(this.type);
-    }
-
-    @JsonIgnore
-    public int getX() {
-        return (int)position.getX();
-    }
-
-    @JsonIgnore
-    public int getY() {
-        return (int)position.getY();
-    }
-
-    @JsonIgnore
-    public int getZ() {
-        return (int)position.getZ();
-    }
-
-    @Override
-    public String toString() {
-        return String.format("Block: [x=%d, y=%d, z=%d, type=%s, tag=%s]", getX(), getY(), getZ(), type, tag);
+        return false;
     }
 
     @Override
     public BotBlockData clone() {
         BotBlockData copy = new BotBlockData();
-        copy.setPosition(this.getPosition());
+        copy.setPosition(new BotPosition(this.getPosition()));
         copy.setType(this.getType());
         copy.setUUID(this.getUUID());
         copy.setTag(this.getTag());
         return copy;
+    }
+
+    @Override
+    public String toString() {
+        return String.format("Block: [ x=%.2f, y=%.2f, z=%.2f, type=%s, tag=%s ]",
+            getX(), getY(), getZ(), type, tag);
     }
 }

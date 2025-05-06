@@ -26,6 +26,7 @@ import com.devone.bot.core.utils.BotUtils;
 import com.devone.bot.core.utils.blocks.BlockUtils;
 import com.devone.bot.core.utils.blocks.BotBlockData;
 import com.devone.bot.core.utils.blocks.BotPosition;
+import com.devone.bot.core.utils.blocks.BotPositionSight;
 import com.devone.bot.core.utils.logger.BotLogger;
 import com.devone.bot.core.utils.world.BotWorldHelper;
 
@@ -94,6 +95,12 @@ public class BotNavigator {
         }
         return position;
     }
+
+    // Получение и обновление currentLocation с проверкой на застревание
+    public BotPositionSight getPositionSight() {
+        return BotWorldHelper.locationToBotPositionSight(owner.getNPC().getStoredLocation());
+    }
+    
 
     public boolean isStuck() {
         return stuck;
@@ -206,7 +213,7 @@ public class BotNavigator {
 
         List<BotPosition> result = new ArrayList<BotPosition>();
 
-        BotPosition botPos = getPosition();
+        BotPositionSight botPos = getPositionSight();
 
         BotNavigationContext context = BotNavigationContextMaker.createSceneContext(botPos, scene.blocks,
                 scene.entities);
@@ -224,14 +231,14 @@ public class BotNavigator {
             return result;
         }
 
-        List<BotPosition> pois = loopTargets(botPos, "poi", context.poi);
+        List<BotPosition> pois = loopTargets(botPos, "poi", context.poiGlobal);
 
         // BotLogger.debug(BotUtils.getActiveTaskIcon(owner), true, owner.getId() + " ⚠️
         // POIs = " + pois);
 
         List<BotPosition> reachable = loopTargets(botPos, "reachable", context.reachable);
         List<BotPosition> navigable = loopTargets(botPos, "navigable", context.navigable);
-        List<BotPosition> walkable = loopTargets(botPos, "walkable", context.walkable);
+        List<BotPosition> walkable  = loopTargets(botPos, "walkable", context.walkable);
 
         boolean hardStuck = false;
         setStuck(false);

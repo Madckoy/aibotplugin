@@ -1,20 +1,24 @@
 package com.devone.bot.core.utils.blocks;
 
-public class BotPositionLook extends BotPosition {
+public class BotPositionSight extends BotPosition {
     private float yaw;
     private float pitch;
 
-    public BotPositionLook() {
+    public BotPositionSight() {
         super();
     }
 
-    public BotPositionLook(double x, double y, double z, float yaw, float pitch) {
+    public BotPositionSight(double x, double y, double z, float yaw, float pitch) {
         super(x, y, z);
         this.yaw = yaw;
         this.pitch = pitch;
     }
 
-    public BotPositionLook(BotPosition base, float yaw, float pitch) {
+    public BotPositionSight(BotPositionSight other) {
+        this(other.getX(), other.getY(), other.getZ(), other.getYaw(), other.getPitch());
+    }
+
+    public BotPositionSight(BotPosition base, float yaw, float pitch) {
         super(base.getX(), base.getY(), base.getZ());
         this.yaw = yaw;
         this.pitch = pitch;

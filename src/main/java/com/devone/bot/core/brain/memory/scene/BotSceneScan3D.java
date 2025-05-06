@@ -4,7 +4,7 @@ import com.devone.bot.core.Bot;
 import com.devone.bot.core.utils.BotUtils;
 import com.devone.bot.core.utils.blocks.BotBlockData;
 import com.devone.bot.core.utils.blocks.BotPosition;
-import com.devone.bot.core.utils.blocks.BotPositionLook;
+import com.devone.bot.core.utils.blocks.BotPositionSight;
 import com.devone.bot.core.utils.logger.BotLogger;
 import com.devone.bot.core.utils.world.BotWorldHelper;
 import org.bukkit.Location;
@@ -18,7 +18,7 @@ import java.util.List;
 
 public class BotSceneScan3D {
 
-    public static BotSceneData scan(Bot bot, int scanRadius, int height) {
+    public static BotSceneData scan(Bot bot, double scanRadius, int height) {
 
         int deltaY = (height - 1) / 2;
         World world = BotWorldHelper.getWorld();
@@ -89,7 +89,7 @@ public class BotSceneScan3D {
         float botYaw = BotUtils.getBotYaw(bot);
         float botPitch =  BotUtils.getBotPitch(bot);
 
-        BotPositionLook botCoords = new BotPositionLook(centerX, centerY, centerZ, botYaw, botPitch);
+        BotPositionSight botCoords = new BotPositionSight(centerX, centerY, centerZ, botYaw, botPitch);
         BotSceneData sceneData = new BotSceneData(scannedBlocks, scannedEntities, botCoords);
 
         // if (bot.getNavigator().isStuck()) {
