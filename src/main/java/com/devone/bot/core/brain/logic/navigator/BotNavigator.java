@@ -84,21 +84,36 @@ public class BotNavigator {
         return candidates;
     }
 
-    // Получение и обновление currentLocation с проверкой на застревание
     public BotPosition getPosition() {
-        if (owner.getNPC() != null && owner.getNPC().getEntity() != null) {
-            BotPosition newPosition = BotWorldHelper.locationToBotPosition(owner.getNPC().getEntity().getLocation());
-            position = newPosition;
-            return position;
-        } else {
-            return null;
+        if (owner.getNPC() != null) {
+            if (owner.getNPC().getEntity() != null) {
+                // Точный yaw/pitch недоступен, но координаты актуальны
+                Location loc = owner.getNPC().getEntity().getLocation();
+                this.position = BotWorldHelper.locationToBotPosition(loc);
+            } else if (owner.getNPC().getStoredLocation() != null) {
+                // Fallback — когда entity ещё не загружен
+                Location loc = owner.getNPC().getStoredLocation();
+                this.position = BotWorldHelper.locationToBotPosition(loc);
+            }
         }
+        return this.position;
     }
-
-    // Получение и обновление currentLocation с проверкой на застревание
+    
     public BotPositionSight getPositionSight() {
-        return BotWorldHelper.locationToBotPositionSight(owner.getNPC().getStoredLocation());
+        if (owner.getNPC() != null) {
+            if (owner.getNPC().getEntity() != null) {
+                // yaw/pitch доступны
+                Location loc = owner.getNPC().getEntity().getLocation();
+                return BotWorldHelper.locationToBotPositionSight(loc);
+            } else if (owner.getNPC().getStoredLocation() != null) {
+                // Fallback без точного yaw/pitch
+                Location loc = owner.getNPC().getStoredLocation();
+                return BotWorldHelper.locationToBotPositionSight(loc);
+            }
+        }
+        return null;
     }
+    
     
 
     public boolean isStuck() {
