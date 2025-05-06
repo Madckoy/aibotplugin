@@ -68,9 +68,11 @@ public class BotManager {
                 storedPosition = coord;
             }
 
-            if (!npc.isSpawned()) {
+            if (!npc.isSpawned() && storedPosition!=null) {
                 Location spawnLocation = BotWorldHelper.botPositionToWorldLocation(storedPosition);
+                
                 npc.spawn(spawnLocation);
+
                 BotLogger.debug("🤖", true, "✅ Spawned NPC: " + botName);
             }
 
