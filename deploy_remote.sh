@@ -32,7 +32,8 @@ else
 fi
 
 # Optional: Restart Minecraft Server on Remote Host
-SSH_CMD="sudo systemctl restart minecraft"
+SSH_CMD="sudo -n /usr/bin/systemctl restart minecraft"
+
 echo "🔄 Restarting Minecraft server on $REMOTE_HOST..." | tee -a "$LOG_FILE"
 ssh "$REMOTE_USER@$REMOTE_HOST" "$SSH_CMD"
 
