@@ -178,9 +178,6 @@ public class BotNavigator {
         BotNavigationContext context = BotNavigationContextMaker.createSceneContext(botPos, scene.blocks,
                 scene.entities);
 
-        // BotLogger.debug(BotUtils.getActiveTaskIcon(owner), true, owner.getId() + " ⚠️
-        // Context=" + context);
-
         if (context == null) {
             // context does not present yet
             BotLogger.debug(BotUtils.getActiveTaskIcon(owner), true,
@@ -198,17 +195,26 @@ public class BotNavigator {
                                                                              BotConstants.DEFAULT_SCAN_DATA_SLICE_HEIGHT, 
                                                                              fov);
         
+        BotLogger.debug(BotUtils.getActiveTaskIcon(owner), true, owner.getId() + " ⚠️ POI calculted (in context):" + context.poi);
+
         List<BotBlockData>  poiSighted       = BotSightFilter.filter(context.poi, viewSector);
+        BotLogger.debug(BotUtils.getActiveTaskIcon(owner), true,
+        owner.getId() + " ⚠️ POI Sighted:" + poiSighted);
+        
         //List<BotBlockData>  reachableSighted = BotSightFilter.filter(context.reachable, viewSector);
         //List<BotBlockData>  navigableSighted = BotSightFilter.filter(context.navigable, viewSector);
         //List<BotBlockData>  walkableSighted  = BotSightFilter.filter(context.walkable, viewSector);
 
         List<BotPosition> poiSightedValidatedPos       = validateTargets(botPos, "poi", poiSighted);
+        
+        BotLogger.debug(BotUtils.getActiveTaskIcon(owner), true,
+        owner.getId() + " ⚠️ POI Validated:" + poiSightedValidatedPos);
+
         //List<BotPosition> reachableSightedValidatedPos = validateTargets(botPos, "reachable", reachableSighted);
         //List<BotPosition> navigableSightedValidatedPos = validateTargets(botPos, "navigable", navigableSighted);
         //List<BotPosition> walkableSightedValidatedPos  = validateTargets(botPos, "walkable", walkableSighted);
 
-        if (poiSightedValidatedPos.size() == 0) {
+        if (poiSightedValidatedPos.size() <= 1) {
             navigationSuggestion = NavigationSuggestion.CHANGE_DIRECTION;
         } else {
             candidates = poiSightedValidatedPos;
@@ -253,6 +259,11 @@ public class BotNavigator {
                 npos.setY(target.getY());
                 npos.setZ(target.getZ());
 
+                // 🚫 Не добавляем саму точку под ботом
+                if (botPos.distanceTo(npos) <= 1.5) {
+                    continue;
+                }
+                
                 BotPosition posAbove = new BotPosition(npos.getX(), npos.getY() + 1, npos.getZ());
                 // check if location above the valid target is AIR
                 Block blockAbove = BotWorldHelper.botPositionToWorldBlock(posAbove);

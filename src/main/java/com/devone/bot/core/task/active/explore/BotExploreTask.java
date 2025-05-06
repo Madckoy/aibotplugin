@@ -71,6 +71,7 @@ public class BotExploreTask extends BotTaskAutoParams<BotExploreTaskParams> {
         NavigationSuggestion suggestion = bot.getNavigator().getNavigationSuggestion();
         if(suggestion == NavigationSuggestion.CHANGE_DIRECTION) {
             //rotate 45 clockwise            
+            BotUtils.rotateClockwise(this, bot, 45.0f);
             BotLogger.debug(icon, isLogging(), bot.getId() + "  Need to rotate bot!");
             return;
         }

@@ -11,7 +11,7 @@ public class BotSightFilter {
         List<BotBlockData> candidates,
         List<BotBlockData> viewSector
     ) {
-        final double epsilon = 0.5; // радиус допуска
+        final double epsilon = 1; // радиус допуска
 
         return candidates.stream()
             .filter(candidate -> viewSector.stream().anyMatch(sectorBlock ->
