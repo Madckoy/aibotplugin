@@ -1,12 +1,21 @@
 window.onload = async function () {
     loadBlueMap();
 
-    const data = await fetchBotData();
-    renderBotTable(data);
+    try {
+        const data = await fetchBotData();
+        updateMonitoringHeader(data);
+        renderBotTable(data);
+    } catch (e) {
+        console.error("Ошибка при первичной загрузке:", e);
+    }
 
     setInterval(async () => {
-        const newData = await fetchBotData();
-        updateMonitoringHeader(newData);
-        renderBotTable(newData);
+        try {
+            const newData = await fetchBotData();
+            updateMonitoringHeader(newData);
+            renderBotTable(newData);
+        } catch (e) {
+            console.error("Ошибка при обновлении данных:", e);
+        }
     }, 1000);
 };

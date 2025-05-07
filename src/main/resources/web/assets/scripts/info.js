@@ -1,17 +1,3 @@
-function yawToDirectionArrow(yaw) {
-    if (typeof yaw !== "number") return "N/A";
-    const angle = (yaw + 360) % 360;
-    if (angle >= 337.5 || angle < 22.5) return "↑";
-    if (angle >= 22.5 && angle < 67.5) return "↗";
-    if (angle >= 67.5 && angle < 112.5) return "→";
-    if (angle >= 112.5 && angle < 157.5) return "↘";
-    if (angle >= 157.5 && angle < 202.5) return "↓";
-    if (angle >= 202.5 && angle < 247.5) return "↙";
-    if (angle >= 247.5 && angle < 292.5) return "←";
-    if (angle >= 292.5 && angle < 337.5) return "↖";
-    return "❓";
-}
-
 function updateInfoPanel(bot) {
     const panel = document.getElementById("bot-info-panel");
     const currentBotId = panel.getAttribute("data-bot-id");
@@ -19,44 +5,54 @@ function updateInfoPanel(bot) {
     if (!panel.classList.contains("visible")) return;
     if (currentBotId !== bot.id) return;
 
-    const setText = (id, value) => {
-        const elem = document.getElementById(id);
-        if (elem) elem.textContent = value ?? "N/A";
+    updateNavSummary(bot);
+    updateStats(bot);
+}
+
+function updateNavSummary(bot) {
+    const summary = bot.memory?.navigation?.summary ?? {};
+    const yaw = bot.memory?.navigation?.yaw;
+    const suggestion = bot.memory?.navigation?.suggestion ?? "N/A";
+    const suggestedPoi = bot.memory?.navigation?.suggestedPoi ?? "N/A";
+
+    const format = (entry) => {
+        if (!entry) return "N/A";
+        return `${entry.calculated ?? 0} / ${entry.confirmed ?? 0}`;
     };
 
-    setText("info-nav-targets", bot.reachableTargets);
-    setText("info-nav-reachable", bot.reachableBlocks);
-    setText("info-nav-navigable", bot.walkableBlocks);
-    setText("info-nav-walkable", bot.walkableBlocks);
-    setText("info-nav-type", bot.navigationSuggestion);
-    setText("info-nav-suggestion", bot.suggestedBlock);
-    setText("info-nav-direction", yawToDirectionArrow(bot.memory?.navigation?.yaw));
-    setText("info-nav-moves", bot.memory?.navigation?.moves);
-    setText("info-nav-teleports", bot.memory?.navigation?.teleports);
-    setText("info-places-visited", bot.memory?.places?.visited);
-    setText("info-memory-cleanup-timer", bot.memory?.cleanupTimer);
-    setText("info-stats-inventory-size", bot.inventory?.length);
-    setText("info-stats-attack", bot.memory?.combat?.attacks);
-    setText("info-memory-killed-mobs", bot.memory?.combat?.kills);
-    setText("info-stats-excavations", bot.memory?.excavation?.count);
-    setText("info-stats-excavated", bot.memory?.excavation?.blocks);
+    document.getElementById("info-nav-targets").textContent = format(summary.poi);
+    document.getElementById("info-nav-reachable").textContent = format(summary.reachable);
+    document.getElementById("info-nav-navigable").textContent = format(summary.navigable);
+    document.getElementById("info-nav-walkable").textContent = format(summary.walkable);
+    document.getElementById("info-nav-type").textContent = suggestion;
+    document.getElementById("info-nav-suggestion").textContent = suggestedPoi;
+    document.getElementById("info-nav-direction").textContent = getCompassArrow(yaw);
+}
+
+function updateStats(bot) {
+    document.getElementById("info-nav-moves").textContent = bot.moves ?? "N/A";
+    document.getElementById("info-nav-teleports").textContent = bot.teleportUsed ?? "N/A";
+    document.getElementById("info-places-visited").textContent = bot.visitedPlaces ?? "N/A";
+    document.getElementById("info-memory-cleanup-timer").textContent = bot.cleanupTimer ?? "N/A";
+    document.getElementById("info-stats-inventory-size").textContent = bot.inventoryCount ?? "N/A";
+    document.getElementById("info-memory-killed-mobs").textContent = bot.mobsKilled ?? "N/A";
+    document.getElementById("info-stats-excavations").textContent = bot.excavations ?? "N/A";
+    document.getElementById("info-stats-excavated").textContent = bot.blocksBroken ?? "N/A";
 }
 
 function showInfoPanel(bot) {
     const panel = document.getElementById("bot-info-panel");
-    const currentBotId = panel.getAttribute("data-bot-id");
     const isVisible = panel.classList.contains("visible");
 
-    if (isVisible && currentBotId === bot.id) {
+    if (isVisible && panel.getAttribute("data-bot-id") === bot.id) {
         hideInfoPanel();
         return;
     }
 
-    updateInfoPanel(bot);
-
+    panel.setAttribute("data-bot-id", bot.id);
     panel.classList.remove("hidden");
     panel.classList.add("visible");
-    panel.setAttribute("data-bot-id", bot.id);
+    updateInfoPanel(bot);
 }
 
 function hideInfoPanel() {
@@ -66,6 +62,11 @@ function hideInfoPanel() {
     panel.removeAttribute("data-bot-id");
 }
 
-document.getElementById('close-info-btn')?.addEventListener('click', () => {
-    hideInfoPanel();
-});
+document.getElementById('close-info-btn')?.addEventListener('click', hideInfoPanel);
+
+function getCompassArrow(yaw) {
+    if (typeof yaw !== "number") return "❓";
+    yaw = (yaw + 360) % 360;
+    const arrows = ["⬆️", "↗️", "➡️", "↘️", "⬇️", "↙️", "⬅️", "↖️"];
+    return arrows[Math.round(yaw / 45) % 8];
+}
