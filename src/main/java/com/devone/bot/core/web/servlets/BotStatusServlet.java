@@ -17,6 +17,7 @@ import com.devone.bot.core.brain.memoryv2.BotMemoryV2Partition;
 import com.devone.bot.core.utils.BotConstants;
 import com.devone.bot.core.utils.BotUtils;
 import com.devone.bot.core.utils.blocks.BotPosition;
+import com.devone.bot.core.utils.logger.BotLogger;
 import com.devone.bot.core.web.BotWebService;
 
 import com.google.gson.JsonArray;
@@ -150,11 +151,14 @@ public class BotStatusServlet extends HttpServlet {
                 botJson.add("inventorySlotsFilled", inventoryArray);
 
 
-                BotMemoryV2Partition navPartition = bot.getBrain().getMemoryV2().partition("navigation", BotMemoryV2Partition.Type.MAP);
-                BotMemoryV2Partition visitedPartition = navPartition.partition("visited", BotMemoryV2Partition.Type.MAP);
+                BotMemoryV2Partition nav = bot.getBrain().getMemoryV2().partition("navigation", BotMemoryV2Partition.Type.MAP);
+                BotMemoryV2Partition visitedPartition = nav.partition("visited", BotMemoryV2Partition.Type.MAP);
+
                 if (visitedPartition != null) {
+                    BotLogger.debug("DEBUG", true, "visitedPartition is not null! Size = " + visitedPartition.getMap().size());
                     botJson.addProperty("visitedCount", visitedPartition.getMap().size());
                 } else {
+                    BotLogger.debug("DEBUG", true, "visitedPartition is null!");
                     botJson.addProperty("visitedCount", 0);
                 }
             }
