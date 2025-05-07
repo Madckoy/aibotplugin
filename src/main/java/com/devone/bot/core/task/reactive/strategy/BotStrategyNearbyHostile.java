@@ -1,7 +1,7 @@
 package com.devone.bot.core.task.reactive.strategy;
 
 import com.devone.bot.core.Bot;
-import com.devone.bot.core.brain.memory.scene.BotSceneData;
+import com.devone.bot.core.brain.perseption.scene.BotSceneData;
 import com.devone.bot.core.task.passive.BotTaskManager;
 import com.devone.bot.core.task.reactive.IBotStrategyReaction;
 import com.devone.bot.core.task.reactive.container.BotReactiveNearbyHostileContainer;
@@ -18,7 +18,7 @@ public class BotStrategyNearbyHostile implements IBotStrategyReaction {
     public Optional<Runnable> check(Bot bot) {
         BotLogger.debug("🤖", true, bot.getId() + " 😈 Проверка реакции на близость враждебного моба");
 
-        BotSceneData scene = bot.getBrain().getMemory().getSceneData();
+        BotSceneData scene = bot.getBrain().getSceneData();
         BotPosition botPos = bot.getNavigator().getPosition();
 
         if (scene != null) {

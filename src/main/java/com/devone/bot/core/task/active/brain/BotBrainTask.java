@@ -14,7 +14,7 @@ import com.devone.bot.core.brain.logic.navigator.context.BotNavigationContextMak
 
 import com.devone.bot.core.brain.logic.navigator.math.selector.BotEntitySelector;
 import com.devone.bot.core.brain.logic.navigator.math.selector.BotPOISelector;
-import com.devone.bot.core.brain.memory.scene.BotSceneData;
+import com.devone.bot.core.brain.perseption.scene.BotSceneData;
 import com.devone.bot.core.task.passive.BotTask;
 import com.devone.bot.core.task.passive.BotTaskAutoParams;
 import com.devone.bot.core.task.passive.BotTaskManager;
@@ -140,7 +140,7 @@ public class BotBrainTask extends BotTaskAutoParams<BotBrainTaskParams> {
             case 2:
                 if (params.isAllowTeleport()) {
                     BotPositionSight botPos = bot.getNavigator().getPositionSight();
-                    BotSceneData sceneData = bot.getBrain().getMemory().getSceneData();
+                    BotSceneData sceneData = bot.getBrain().getSceneData();
                     BotNavigationContext context = BotNavigationContextMaker.createSceneContext(botPos, sceneData.blocks,
                             sceneData.entities);
                     return tryTeleportFallback(bot, context);

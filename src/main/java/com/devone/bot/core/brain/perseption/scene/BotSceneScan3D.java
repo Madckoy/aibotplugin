@@ -1,4 +1,4 @@
-package com.devone.bot.core.brain.memory.scene;
+package com.devone.bot.core.brain.perseption.scene;
 
 import com.devone.bot.core.Bot;
 import com.devone.bot.core.utils.BotUtils;

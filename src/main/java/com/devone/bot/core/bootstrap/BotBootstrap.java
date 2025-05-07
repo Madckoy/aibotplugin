@@ -40,7 +40,7 @@ public class BotBootstrap {
             BotLogger.debug(icon, true, bot.getId() + " 🛜 Sonar Scan started");
 
             BotLogger.debug(icon, true, bot.getId() + " 💻 Navigator calculation started");
-            bot.getNavigator().calculate(bot.getBrain().getMemory().getSceneData());
+            bot.getNavigator().calculate(bot.getBrain().getSceneData());
             BotLogger.debug(icon, true, bot.getId() + " 💻 Navigator calculation ended");
 
         }, 0L, 20L); // каждые 10 тиков = 0.5 сек

@@ -1,7 +1,6 @@
 package com.devone.bot.core.brain.memory;
 
 import com.devone.bot.core.brain.BotBrain;
-import com.devone.bot.core.brain.memory.scene.BotSceneData;
 import com.devone.bot.core.utils.blocks.BotBlockData;
 import com.devone.bot.core.utils.blocks.BotPosition;
 
@@ -13,7 +12,6 @@ import com.google.gson.JsonObject;
 
 public class BotMemory {
     
-    protected transient BotSceneData sceneData;
     private final Map<String, Integer> blockBreakSummary = new HashMap<>();
     private final Map<String, Integer> EntitiesKilledSummary = new HashMap<>();
 
@@ -26,7 +24,6 @@ public class BotMemory {
 
     public BotMemory(BotBrain brain) {
         this.brain = brain;
-        this.sceneData = null;
         this.teleportUsed = 0;
 
         memoryMap = new EnumMap<>(MemoryType.class); // Используем EnumMap для лучшей производительности при работе с перечислениями
@@ -86,14 +83,6 @@ public class BotMemory {
 
     public long getTeleportUsed() {
         return teleportUsed;
-    }
-
-    public void setSceneData(BotSceneData sceneData) {
-        this.sceneData = sceneData;
-    }
-
-    public BotSceneData getSceneData() {
-        return this.sceneData;
     }
 
     // Запоминаем блок для конкретного типа памяти

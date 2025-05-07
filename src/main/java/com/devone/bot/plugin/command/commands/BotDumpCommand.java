@@ -9,9 +9,8 @@ import org.bukkit.command.CommandSender;
 
 import com.devone.bot.core.Bot;
 import com.devone.bot.core.BotManager;
-import com.devone.bot.core.brain.memory.scene.BotSceneData;
-import com.devone.bot.core.brain.memory.scene.BotSceneSaver;
-
+import com.devone.bot.core.brain.perseption.scene.BotSceneData;
+import com.devone.bot.core.brain.perseption.scene.BotSceneSaver;
 import com.devone.bot.core.utils.BotConstants;
 
 import com.devone.bot.core.utils.logger.BotLogger;
@@ -47,7 +46,7 @@ public class BotDumpCommand implements CommandExecutor {
             return false;
         }
 
-        BotSceneData sceneData = bot.getBrain().getMemory().getSceneData();
+        BotSceneData sceneData = bot.getBrain().getSceneData();
 
         String fileName = BotConstants.PLUGIN_TMP + bot.getId() + "_scene_data.json";
 

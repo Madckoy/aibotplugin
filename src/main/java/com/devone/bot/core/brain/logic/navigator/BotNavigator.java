@@ -10,9 +10,9 @@ import com.devone.bot.core.brain.logic.navigator.context.BotNavigationContext;
 import com.devone.bot.core.brain.logic.navigator.context.BotNavigationContextMaker;
 import com.devone.bot.core.brain.logic.navigator.math.selector.BotPOISelector;
 import com.devone.bot.core.brain.logic.navigator.math.selector.PoiSelectionMode;
-import com.devone.bot.core.brain.memory.scene.BotSceneData;
 import com.devone.bot.core.brain.memoryv2.BotMemoryV2;
 import com.devone.bot.core.brain.memoryv2.BotMemoryV2Partition;
+import com.devone.bot.core.brain.perseption.scene.BotSceneData;
 import com.devone.bot.core.task.active.move.BotMoveTask;
 import com.devone.bot.core.task.active.move.params.BotMoveTaskParams;
 import com.devone.bot.core.task.active.teleport.BotTeleportTask;
@@ -213,40 +213,42 @@ public class BotNavigator {
         BotMemoryV2 memory = getMemory();
         if (memory == null) return;
     
-        BotMemoryV2Partition summary = memory.partition("summary", BotMemoryV2Partition.Type.MAP);
+        BotMemoryV2Partition navigation = memory.partition("navigation", BotMemoryV2Partition.Type.MAP);
+        BotMemoryV2Partition summary = navigation.partition("summary", BotMemoryV2Partition.Type.MAP);
     
-        BotMemoryV2Partition item = new BotMemoryV2Partition(BotMemoryV2Partition.Type.MAP, memory.getObserver());
+        BotMemoryV2Partition item = summary.partition(key, BotMemoryV2Partition.Type.MAP);
         item.put("calculated", calculated);
         item.put("confirmed", confirmed);
-    
-        summary.put(key, item);
     }
+    
 
     public void updateNavigationMemory() {
         BotMemoryV2 memory = getMemory();
         if (memory == null) return;
-
-        BotMemoryV2Partition nav = memory.partition("navigation");
-
+    
+        BotMemoryV2Partition navigation = memory.partition("navigation", BotMemoryV2Partition.Type.MAP);
+    
+        // ➤ Позиция и направление
         BotPosition currentPos = getPosition();
         BotPositionSight sight = getPositionSight();
-
-        nav.put("position", currentPos != null ? currentPos.toString() : null);
-        nav.put("yaw", sight != null ? sight.getYaw() : null);
-        nav.put("target", poi != null ? poi.toString() : null);
-        nav.put("suggestion", navigationSuggestion != null ? navigationSuggestion.name() : null);
-        nav.put("suggestedPoi", suggestedPoi != null ? suggestedPoi.toString() : null);
-
-        // Обновим список кандидатов
-        BotMemoryV2Partition candidatePartition = new BotMemoryV2Partition(BotMemoryV2Partition.Type.LIST, memory.getObserver());
+    
+        navigation.put("position", currentPos != null ? currentPos.toCompactString() : null);
+        navigation.put("yaw", sight != null ? sight.getYaw() : null);
+        navigation.put("target", poi != null ? poi.toCompactString() : null);
+        navigation.put("suggestion", navigationSuggestion != null ? navigationSuggestion.name() : null);
+        navigation.put("suggestedPoi", suggestedPoi != null ? suggestedPoi.toCompactString() : null);
+    
+        // ➤ Кандидаты
+        BotMemoryV2Partition candidatesPartition = navigation.partition("candidates", BotMemoryV2Partition.Type.LIST);
+        candidatesPartition.getList().clear();
+    
         if (candidates != null) {
             for (BotPosition pos : candidates) {
-                candidatePartition.addToList(pos.toString());
+                candidatesPartition.addToList(pos.toCompactString());
             }
         }
-        nav.put("candidates", candidatePartition);
     }
-
+    
     public NavigationSuggestion getNavigationSuggestion() {
         return navigationSuggestion;
     }

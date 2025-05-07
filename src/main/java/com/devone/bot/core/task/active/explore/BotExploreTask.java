@@ -2,7 +2,7 @@ package com.devone.bot.core.task.active.explore;
 
 import com.devone.bot.core.Bot;
 import com.devone.bot.core.brain.logic.navigator.BotNavigator.NavigationSuggestion;
-import com.devone.bot.core.brain.memory.scene.BotSceneData;
+import com.devone.bot.core.brain.perseption.scene.BotSceneData;
 import com.devone.bot.core.task.passive.BotTaskAutoParams;
 import com.devone.bot.core.task.passive.IBotTaskParameterized;
 import com.devone.bot.core.task.active.explore.params.BotExploreTaskParams;
@@ -59,7 +59,7 @@ public class BotExploreTask extends BotTaskAutoParams<BotExploreTaskParams> {
             bot.pickupNearbyItems();
         }
 
-        BotSceneData sceneData = bot.getBrain().getMemory().getSceneData();
+        BotSceneData sceneData = bot.getBrain().getSceneData();
 
         if (sceneData == null) {
             BotLogger.debug(icon, isLogging(), bot.getId() + " ❌ No scene data available.");

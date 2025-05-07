@@ -3,6 +3,7 @@ package com.devone.bot.core.brain;
 import com.devone.bot.core.Bot;
 import com.devone.bot.core.brain.memory.BotMemory;
 import com.devone.bot.core.brain.memoryv2.BotMemoryV2;
+import com.devone.bot.core.brain.perseption.scene.BotSceneData;
 import com.devone.bot.core.task.passive.BotTask;
 import com.devone.bot.core.utils.BotConstants;
 import com.devone.bot.core.utils.BotUtils;
@@ -15,12 +16,13 @@ public class BotBrain {
     private transient boolean reactionInProgress = false;
     private transient String currentReactionOwner = null;
 
-    private int thinkingTicks = 0;
-    private long lastThinkingTimestamp = 0;
-    private boolean autoPickUpItems = true;
+    private transient int thinkingTicks = 0;
+    private transient long lastThinkingTimestamp = 0;
+    private transient boolean autoPickUpItems = true;
     private transient BotMemory memory = null;
 
-    private BotMemoryV2 memoryV2 = null;
+    private transient BotMemoryV2 memoryV2 = null;
+    private transient BotSceneData sceneData = null;
 
     private long memoryExpirationMillis = BotConstants.DEFAULT_MEMORY_EXPIRATION;
 
@@ -28,6 +30,7 @@ public class BotBrain {
         this.owner = bot;
         this.memory = new BotMemory(this);
         this.memoryV2 = new BotMemoryV2(this);
+        this.sceneData = null;
     }
 
     // 🧠 Получение текущей задачи
@@ -56,7 +59,16 @@ public class BotBrain {
     public BotMemoryV2 getMemoryV2() {
         return memoryV2;
     }
+
     
+    public void setSceneData(BotSceneData sceneData) {
+        this.sceneData = sceneData;
+    }
+
+    public BotSceneData getSceneData() {
+        return this.sceneData;
+    }
+
 
     // 🧠 Мышление
     public void markThinkingCycle() {

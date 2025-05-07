@@ -1,4 +1,4 @@
-package com.devone.bot.core.brain.memory.scene;
+package com.devone.bot.core.brain.perseption.scene;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import java.io.File;

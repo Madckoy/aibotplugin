@@ -1,5 +1,5 @@
 
-package com.devone.bot.core.brain.memory.scene;
+package com.devone.bot.core.brain.perseption.scene;
 
 import java.util.List;
 

@@ -11,7 +11,6 @@ import com.devone.bot.core.brain.BotBrain;
 import com.devone.bot.core.brain.logic.navigator.BotNavigator;
 import com.devone.bot.core.inventory.BotInventory;
 import com.devone.bot.core.speaker.BotSpeaker;
-import com.devone.bot.core.state.BotState;
 import com.devone.bot.core.task.passive.BotTask;
 import com.devone.bot.core.task.passive.BotTaskManager;
 import com.devone.bot.core.utils.logger.BotLogger;
@@ -35,7 +34,6 @@ public class Bot {
 
     private transient BotBrain brain; // Память/Рантайм статус бота
     private transient BotSpeaker speaker; // Создаем поле для общения бота
-    private transient BotState state;
 
     private BotNavigator navigator;
 
@@ -43,9 +41,6 @@ public class Bot {
         this.brain = brain;
     }
 
-    public void setState(BotState state) {
-        this.state = state;
-    }
 
     public BotSpeaker getSpeaker() {
         return speaker;
@@ -63,10 +58,6 @@ public class Bot {
         this.navigator = nav;
     }
 
-    public BotState getState() {
-        return state;
-    }
-
     public Bot(String id, NPC an_npc, BotManager botManager) {
         this.id = id;
         this.npc = an_npc;
@@ -75,7 +66,6 @@ public class Bot {
         this.bootstrap = new BotBootstrap(this);
         this.brain = new BotBrain(this); // Инициализация рантайм статуса
         this.speaker = new BotSpeaker(this); // Инициализация BotCommunicator
-        this.state = new BotState(this);
         this.navigator = new BotNavigator(this);
 
         BotLogger.debug("🤖", true, id + " ➕ Has been created and spawned");
