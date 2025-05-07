@@ -144,16 +144,17 @@ public class BotStatusServlet extends HttpServlet {
                         .mapToInt(ItemStack::getAmount)
                         .sum();
 
+
+                botJson.addProperty("inventoryCount", count);
+                botJson.addProperty("inventoryMax", 36*64);
+                botJson.add("inventorySlotsFilled", inventoryArray);
+
                 BotMemoryV2Partition visitedPartition = bot.getBrain().getMemoryV2().partition("visited", BotMemoryV2Partition.Type.MAP);
                 if (visitedPartition != null) {
                     botJson.addProperty("visitedCount", visitedPartition.getMap().size());
                 } else {
                     botJson.addProperty("visitedCount", 0);
                 }
-
-                botJson.addProperty("inventoryCount", count);
-                botJson.addProperty("inventoryMax", 36*64);
-                botJson.add("inventorySlotsFilled", inventoryArray);
             }
 
             botsArray.add(botJson);

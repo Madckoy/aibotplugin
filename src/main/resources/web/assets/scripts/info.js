@@ -20,22 +20,20 @@ function updateNavSummary(bot) {
         return `${entry.calculated ?? 0} / ${entry.confirmed ?? 0}`;
     };
 
-    document.getElementById("info-nav-targets").textContent = format(summary.poi);
+    document.getElementById("info-nav-pois").textContent = format(summary.poi);
     document.getElementById("info-nav-reachable").textContent = format(summary.reachable);
     document.getElementById("info-nav-navigable").textContent = format(summary.navigable);
     document.getElementById("info-nav-walkable").textContent = format(summary.walkable);
-    document.getElementById("info-nav-type").textContent = suggestion;
-    document.getElementById("info-nav-suggestion").textContent = suggestedPoi;
-    document.getElementById("info-nav-direction").textContent = getCompassArrow(yaw);
+    document.getElementById("info-nav-navigation-suggestion").textContent = suggestion;
+    document.getElementById("info-nav-suggested-position").textContent = suggestedPoi;
+    document.getElementById("info-nav-facing-direction").textContent = getCompassArrow(yaw);
 }
 
 function updateStats(bot) {
-    document.getElementById("info-nav-moves").textContent = bot.moves ?? "N/A";
-    document.getElementById("info-nav-teleports").textContent = bot.teleportUsed ?? "N/A";
-    document.getElementById("info-places-visited").textContent = bot.visitedPlaces ?? "N/A";
+    document.getElementById("info-stats-teleports").textContent = bot.teleportUsed ?? "N/A";
+    document.getElementById("info-stats-visited").textContent = bot.visitedCount ?? "N/A";
     document.getElementById("info-stats-inventory-count").textContent = bot.inventoryCount ?? "N/A";
-    document.getElementById("info-memory-killed-mobs").textContent = bot.mobsKilled ?? "N/A";
-    document.getElementById("info-stats-excavations").textContent = bot.excavations ?? "N/A";
+    document.getElementById("info-stats-killed-mobs").textContent = bot.mobsKilled ?? "N/A";
     document.getElementById("info-stats-excavated").textContent = bot.blocksBroken ?? "N/A";
 }
 
