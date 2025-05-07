@@ -40,7 +40,7 @@ public class BotPosition {
     }
 
     public String toCompactString() {
-        return String.format("%d,%d,%d", (int) x, (int) y, (int) z);
+        return String.format("%d, %d, %d", (int) x, (int) y, (int) z);
     }
 
     public double getX() { return x; }

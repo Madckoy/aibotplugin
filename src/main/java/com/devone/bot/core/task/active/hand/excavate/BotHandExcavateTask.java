@@ -58,6 +58,7 @@ public class BotHandExcavateTask extends BotHandTask<BotHandExcavateTaskParams> 
                 }
 
                 Block block = BotWorldHelper.botPositionToWorldBlock(target.getPosition());
+                
                 if (block == null || block.getType() == Material.AIR) {
                     BotLogger.debug(icon, isLogging(), bot.getId() + " ✅ Block already excavated.");
                     stop();

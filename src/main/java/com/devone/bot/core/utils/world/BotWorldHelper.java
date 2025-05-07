@@ -120,10 +120,10 @@ public class BotWorldHelper {
         return new Location(world, blockX, loc.getY(), blockZ);
     }
 
-    public static Block botPositionToWorldBlock(BotPosition loc) {
-        if (loc == null) return null;
-        World world = getWorld();
-        return world.getBlockAt((int)loc.getX(), (int)loc.getY(), (int)loc.getZ());
+    public static Block botPositionToWorldBlock(BotPosition pos) {
+        if (pos == null) return null;
+        Location loc  = BotWorldHelper.botPositionToWorldLocation(pos);        
+        return loc.getBlock();
     }
 
     public static boolean isInsideWorldBounds(BotPosition loc) {
