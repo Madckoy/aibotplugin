@@ -10,6 +10,7 @@ import com.devone.bot.core.brain.logic.navigator.context.BotNavigationContext;
 import com.devone.bot.core.brain.logic.navigator.context.BotNavigationContextMaker;
 import com.devone.bot.core.brain.logic.navigator.math.selector.BotPOISelector;
 import com.devone.bot.core.brain.logic.navigator.math.selector.PoiSelectionMode;
+import com.devone.bot.core.brain.memory.BotMemoryV2Utils;
 import com.devone.bot.core.brain.memoryv2.BotMemoryV2;
 import com.devone.bot.core.brain.memoryv2.BotMemoryV2Partition;
 import com.devone.bot.core.brain.perseption.scene.BotSceneData;
@@ -128,6 +129,7 @@ public class BotNavigator {
                 this.stuck = stuck;
                 if (stuck) {
                     incrementStuckCount();
+                    BotMemoryV2Utils.incrementCounter(owner, "stuckCount"); // ✅ глобально в memoryV2
                 }
             }
         } catch (Exception ex) {
@@ -211,6 +213,7 @@ public class BotNavigator {
         }
     
         updateNavigationMemory();
+
         return result;
     }
     

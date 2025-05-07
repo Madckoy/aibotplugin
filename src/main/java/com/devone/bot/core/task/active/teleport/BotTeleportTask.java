@@ -6,6 +6,7 @@ import org.bukkit.entity.Player;
 
 import com.devone.bot.AIBotPlugin;
 import com.devone.bot.core.Bot;
+import com.devone.bot.core.brain.memory.BotMemoryV2Utils;
 import com.devone.bot.core.task.passive.BotTaskAutoParams;
 import com.devone.bot.core.task.passive.IBotTaskParameterized;
 import com.devone.bot.core.task.active.teleport.params.BotTeleportTaskParams;
@@ -70,7 +71,8 @@ public class BotTeleportTask extends BotTaskAutoParams<BotTeleportTaskParams> {
             Location safeOffset = baseLocation.clone().add(-0.5, 1.0, -0.5);
 
             bot.getNPCEntity().teleport(safeOffset);
-            bot.getBrain().getMemory().teleportUsedIncrease();
+
+            BotMemoryV2Utils.incrementCounter(bot, "teleportUsed");            
 
             bot.getTaskManager().getActiveTask().stop();
 

@@ -4,6 +4,7 @@ import org.bukkit.Bukkit;
 
 import com.devone.bot.AIBotPlugin;
 import com.devone.bot.core.Bot;
+import com.devone.bot.core.brain.logic.navigator.NavigationMemoryHelper;
 import com.devone.bot.core.task.passive.BotTaskManager;
 import com.devone.bot.core.task.active.brain.BotBrainTask;
 import com.devone.bot.core.task.active.sonar.BotSonar3DTask;
@@ -43,6 +44,12 @@ public class BotBootstrap {
             bot.getNavigator().calculate(bot.getBrain().getSceneData());
             BotLogger.debug(icon, true, bot.getId() + " 💻 Navigator calculation ended");
 
+            // 💾 Очистка устаревших посещённых точек
+            int removed = NavigationMemoryHelper.cleanupVisited(bot, 30 * 60 * 1000); // 30 минут
+            if (removed > 0) {
+                BotLogger.debug("🧠", true, bot.getId() + " 🧹 Cleared " + removed + " expired visited POIs");
+            }
+            
         }, 0L, 20L); // каждые 10 тиков = 0.5 сек
 
         // Отдельный таймер для обработки задач (редко)
