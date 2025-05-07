@@ -42,20 +42,33 @@ function updateOrCreateBotRow(bot, tbody) {
         tbody.appendChild(row);
     }
 
+    // Безопасная распаковка новых вложенных полей
+    const mem = bot.memory ?? {};
+    const stats = mem.stats ?? {};
+    const nav = mem.navigation ?? {};
+    const summary = nav.summary ?? {};
+
+    const blocksBroken = stats.blocksBroken?.total ?? 0;
+    const mobsKilled = Object.keys(stats.mobsKilled || {}).length;
+    const teleportUsed = stats.teleportUsed ?? 0;
+
+    const position = nav.position ?? bot.position ?? "n/a";
+    const target = nav.target ?? bot.target ?? "n/a";
 
     const cells = row.children;
+
     cells[1].innerHTML = `
         <div class="bot-stats-cell">
-            <div><span>🪨</span><span>${bot.blocksBroken}</span></div>
-            <div><span>☠️</span><span>${bot.mobsKilled}</span></div>
-            <div><span>⚡️</span><span>${bot.teleportUsed}</span></div>
+            <div><span>🪨</span><span>${blocksBroken}</span></div>
+            <div><span>☠️</span><span>${mobsKilled}</span></div>
+            <div><span>⚡️</span><span>${teleportUsed}</span></div>
         </div>`;
 
     cells[2].innerHTML = `
         <div class="bot-stats-cell">
-            <div><span>📍</span><span>${bot.position}</span></div>
+            <div><span>📍</span><span>${position}</span></div>
             <div class="bot-objective-divider"></div>
-            <div><span>🎯</span><span>${bot.target}</span></div>
+            <div><span>🎯</span><span>${target}</span></div>
         </div>`;
 
     cells[3].innerHTML = `
@@ -84,7 +97,6 @@ function updateOrCreateBotRow(bot, tbody) {
     cells[7].title = `Items: ${bot.inventoryCount} / ${bot.inventoryMax}`;
     cells[7].innerHTML = generateInventoryGrid(bot.inventorySlotsFilled, bot.autoPickUpItems);
 
-    // Не пересоздавать кнопки, если они уже есть
     if (!cells[8].innerHTML.trim()) {
         cells[8].innerHTML = `
             <div class="bot-position-cell">
@@ -100,7 +112,7 @@ function updateOrCreateBotRow(bot, tbody) {
             </div>`;
     }
 
-    updateInfoPanel(bot);     
+    updateInfoPanel(bot);
 }
 
 function getTaskStatusEmoji(isReactive) {
