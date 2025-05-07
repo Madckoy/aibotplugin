@@ -1,66 +1,46 @@
-
+function yawToDirectionArrow(yaw) {
+    if (typeof yaw !== "number") return "N/A";
+    const angle = (yaw + 360) % 360;
+    if (angle >= 337.5 || angle < 22.5) return "↑";
+    if (angle >= 22.5 && angle < 67.5) return "↗";
+    if (angle >= 67.5 && angle < 112.5) return "→";
+    if (angle >= 112.5 && angle < 157.5) return "↘";
+    if (angle >= 157.5 && angle < 202.5) return "↓";
+    if (angle >= 202.5 && angle < 247.5) return "↙";
+    if (angle >= 247.5 && angle < 292.5) return "←";
+    if (angle >= 292.5 && angle < 337.5) return "↖";
+    return "❓";
+}
 
 function updateInfoPanel(bot) {
     const panel = document.getElementById("bot-info-panel");
     const currentBotId = panel.getAttribute("data-bot-id");
-    if (!panel.classList.contains("visible") || currentBotId !== bot.id) return;
 
-    const nav = bot.memory?.navigation || {};
-    const stats = bot.memory?.stats || {};
+    if (!panel.classList.contains("visible")) return;
+    if (currentBotId !== bot.id) return;
 
-    // Navigation
-    const summary = nav.summary || {};
-    updateNavSummary("poi", summary.poi);
-    updateNavSummary("reachable", summary.reachable);
-    updateNavSummary("navigable", summary.navigable);
-    updateNavSummary("walkable", summary.walkable);
+    const setText = (id, value) => {
+        const elem = document.getElementById(id);
+        if (elem) elem.textContent = value ?? "N/A";
+    };
 
-
-    document.getElementById("info-nav-type").textContent = nav.suggestion ?? "N/A";
-    document.getElementById("info-nav-suggestion").textContent = nav.suggestedPoi ?? "N/A";
-    document.getElementById("info-nav-moves").textContent = bot.blocksBroken ?? "N/A";
-    document.getElementById("info-nav-teleports").textContent = bot.teleportUsed ?? "N/A";
-
-    document.getElementById("info-nav-direction").textContent = getCompassArrow(bot.yaw);
-
-    // Stats
-    const visited = nav.visited || {};
-    document.getElementById("info-places-visited").textContent = Object.keys(visited).length;
-    document.getElementById("info-memory-cleanup-timer").textContent = formatCleanupTimer(visited);
-
-    document.getElementById("info-stats-inventory-size").textContent = `${bot.inventoryCount} / ${bot.inventoryMax}`;
-    document.getElementById("info-stats-health").textContent = "❤️"; // TODO: health logic
-    document.getElementById("info-memory-killed-mobs").textContent = Object.keys(stats.mobsKilled || {}).length || 0;
-    document.getElementById("info-stats-excavated").textContent = stats.blocksBroken?.total ?? "N/A";
-
-    // Future: Attacks, Excavations
+    setText("info-nav-targets", bot.reachableTargets);
+    setText("info-nav-reachable", bot.reachableBlocks);
+    setText("info-nav-navigable", bot.walkableBlocks);
+    setText("info-nav-walkable", bot.walkableBlocks);
+    setText("info-nav-type", bot.navigationSuggestion);
+    setText("info-nav-suggestion", bot.suggestedBlock);
+    setText("info-nav-direction", yawToDirectionArrow(bot.memory?.navigation?.yaw));
+    setText("info-nav-moves", bot.memory?.navigation?.moves);
+    setText("info-nav-teleports", bot.memory?.navigation?.teleports);
+    setText("info-places-visited", bot.memory?.places?.visited);
+    setText("info-memory-cleanup-timer", bot.memory?.cleanupTimer);
+    setText("info-stats-inventory-size", bot.inventory?.length);
+    setText("info-stats-attack", bot.memory?.combat?.attacks);
+    setText("info-memory-killed-mobs", bot.memory?.combat?.kills);
+    setText("info-stats-excavations", bot.memory?.excavation?.count);
+    setText("info-stats-excavated", bot.memory?.excavation?.blocks);
 }
-
-function updateNavSummary(key, data) {
-    if (!data) {
-        document.getElementById(`info-nav-${key}`).textContent = "N/A";
-        return;
-    }
-    const confirmed = data.confirmed ?? 0;
-    const calculated = data.calculated ?? 0;
-    document.getElementById(`info-nav-${key}`).textContent = `${confirmed} / ${calculated}`;
-}
-
-function formatCleanupTimer(visited) {
-    const now = Date.now();
-    const ttl = 30 * 60 * 1000; // 30 мин
-    const times = Object.values(visited);
-    if (times.length === 0) return "N/A";
-
-    const oldest = Math.min(...times);
-    const remaining = (ttl - (now - oldest)) / 1000;
-    if (remaining <= 0) return "soon";
-
-    const m = Math.floor(remaining / 60);
-    const s = Math.floor(remaining % 60);
-    return `${m}m ${s}s`;
-}
-
 
 function showInfoPanel(bot) {
     const panel = document.getElementById("bot-info-panel");
@@ -72,10 +52,8 @@ function showInfoPanel(bot) {
         return;
     }
 
-    // Обновляем данные сразу
     updateInfoPanel(bot);
 
-    // Показываем панель
     panel.classList.remove("hidden");
     panel.classList.add("visible");
     panel.setAttribute("data-bot-id", bot.id);
@@ -88,7 +66,6 @@ function hideInfoPanel() {
     panel.removeAttribute("data-bot-id");
 }
 
-// Закрытие по крестику
 document.getElementById('close-info-btn')?.addEventListener('click', () => {
     hideInfoPanel();
 });
