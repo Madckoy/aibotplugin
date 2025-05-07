@@ -136,8 +136,8 @@ public abstract class BotTask<T extends BotTaskParams> implements IBotTask, List
     private void logTaskStatus() {
         BotLogger.debug(icon, logging, bot.getId() +
                 " ❓ Status: done=" + done +", enabled="+isEnabled() +", paused=" + pause + " , deffered=" + deffered + ", " +
-                " 📍: " + bot.getNavigator().getPosition() +
-                " / 🎯: " + bot.getNavigator().getPoi());
+                " 📍: " + bot.getNavigator().getPosition().toCompactString() +
+                " / 🎯: " + bot.getNavigator().getPoi().toCompactString());
     }
 
     private boolean playerDisconnected() {

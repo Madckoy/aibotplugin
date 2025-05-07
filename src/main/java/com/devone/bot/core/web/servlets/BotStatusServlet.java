@@ -149,7 +149,9 @@ public class BotStatusServlet extends HttpServlet {
                 botJson.addProperty("inventoryMax", 36*64);
                 botJson.add("inventorySlotsFilled", inventoryArray);
 
-                BotMemoryV2Partition visitedPartition = bot.getBrain().getMemoryV2().partition("visited", BotMemoryV2Partition.Type.MAP);
+
+                BotMemoryV2Partition navPartition = bot.getBrain().getMemoryV2().partition("navigation", BotMemoryV2Partition.Type.MAP);
+                BotMemoryV2Partition visitedPartition = navPartition.partition("visited", BotMemoryV2Partition.Type.MAP);
                 if (visitedPartition != null) {
                     botJson.addProperty("visitedCount", visitedPartition.getMap().size());
                 } else {
