@@ -62,7 +62,7 @@ public class BotNavigationContextMaker {
         context.walkable  = walkable;
         context.navigable = navigable;
         context.reachable = reachable;
-        context.poiGlobal = poi;
+        context.poi       = poi;
         context.entities  = livingTargets;
 
         float yaw = botPositionSight.getYaw();
@@ -76,11 +76,11 @@ public class BotNavigationContextMaker {
                                                     (int) botPositionSight.getZ()));
         }
 
-        context.poiOnSight = BotOnSightFilter.filter(poi, context.viewSector);
-        if (context.poiOnSight.isEmpty()) {
-            context.poiOnSight.add(new BotBlockData((int) botPositionSight.getX(),
-                                                    (int) botPositionSight.getY(),
-                                                    (int) botPositionSight.getZ()));
+        context.poi = BotOnSightFilter.filter(poi, context.viewSector);
+        if (context.poi.isEmpty()) {
+            context.poi.add(new BotBlockData((int) botPositionSight.getX(),
+                                             (int) botPositionSight.getY(),
+                                             (int) botPositionSight.getZ()));
         }
 
         context.reachable = BotOnSightFilter.filter(context.reachable, context.viewSector);

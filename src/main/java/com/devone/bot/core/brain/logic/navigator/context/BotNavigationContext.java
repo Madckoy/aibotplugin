@@ -14,7 +14,7 @@ public class BotNavigationContext extends BotSceneData {
     public List<BotBlockData> poiGlobal;
     public List<BotBlockData> entities;
     public List<BotBlockData> viewSector;
-    public List<BotBlockData> poiOnSight;
+    public List<BotBlockData> poi;
 
 
     //public List<BotBlockData> debugPath;

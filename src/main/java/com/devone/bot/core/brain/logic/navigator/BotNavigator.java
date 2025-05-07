@@ -148,39 +148,74 @@ public class BotNavigator {
 
     public List<BotPosition> calculate(BotSceneData scene) {
         List<BotPosition> result = new ArrayList<>();
-
         BotPositionSight botPos = getPositionSight();
-
-        BotNavigationContext context = BotNavigationContextMaker.createSceneContext(botPos, scene.blocks,
-                scene.entities);
-
+    
+        BotNavigationContext context = BotNavigationContextMaker.createSceneContext(botPos, scene.blocks, scene.entities);
         if (context == null) {
             BotLogger.debug(BotUtils.getActiveTaskIcon(owner), true,
                     owner.getId() + " ⚠️ Navigation error: Scene Context is not ready");
             return result;
         }
-
-        List<BotPosition> poiSightedValidatedPos = validateTargets(botPos, "poi", context.poiOnSight);
-
+    
+        // Валидация всех типов целей
+        List<BotPosition> poiSightedValidatedPos       = validateTargets(botPos, context.poi);
+        List<BotPosition> reachableSightedValidatedPos = validateTargets(botPos, context.reachable);
+        List<BotPosition> navigableSightedValidatedPos = validateTargets(botPos, context.navigable);
+        List<BotPosition> walkableSightedValidatedPos  = validateTargets(botPos, context.walkable);
+    
+        // Обновим summary
+        updateNavigationSummary("poi", context.poi != null ? context.poi.size() : 0, poiSightedValidatedPos.size());
+        updateNavigationSummary("reachable", context.reachable != null ? context.reachable.size() : 0, reachableSightedValidatedPos.size());
+        updateNavigationSummary("navigable", context.navigable != null ? context.navigable.size() : 0, navigableSightedValidatedPos.size());
+        updateNavigationSummary("walkable", context.walkable != null ? context.walkable.size() : 0, walkableSightedValidatedPos.size());
+    
+        // Основная логика выбора цели
         if (poiSightedValidatedPos.size() <= 1) {
-            navigationSuggestion = NavigationSuggestion.CHANGE_DIRECTION;
+    
+            if (!reachableSightedValidatedPos.isEmpty()) {
+                // Доступна ближайшая точка → WALK
+                navigationSuggestion = NavigationSuggestion.WALK;
+                suggestedPoi = BotPOISelector.selectRandom(reachableSightedValidatedPos);
+                candidates = List.of(suggestedPoi);
+                result = candidates;
+    
+            } else if (!navigableSightedValidatedPos.isEmpty() || !walkableSightedValidatedPos.isEmpty()) {
+                // Доступна поверхность, но нет пути → TELEPORT
+                List<BotPosition> fallbackCandidates = new ArrayList<>();
+                fallbackCandidates.addAll(navigableSightedValidatedPos);
+                fallbackCandidates.addAll(walkableSightedValidatedPos);
+    
+                suggestedPoi = BotPOISelector.selectRandom(fallbackCandidates);
+                candidates = List.of(suggestedPoi);
+                navigationSuggestion = NavigationSuggestion.TELEPORT;
+                result = candidates;
+    
+            } else {
+                // Ничего нет → менять направление
+                navigationSuggestion = NavigationSuggestion.CHANGE_DIRECTION;
+                result = new ArrayList<>();
+            }
+    
         } else {
+            // Есть реальные POI
             candidates = poiSightedValidatedPos;
             navigationSuggestion = NavigationSuggestion.WALK;
-
+    
             if (poiSelectionMode == PoiSelectionMode.SMART) {
                 suggestedPoi = BotPOISelector.selectSmart(owner, candidates, context);
             } else {
                 suggestedPoi = BotPOISelector.selectRandom(candidates);
             }
+    
             result = candidates;
         }
-
+    
         updateNavigationMemory();
         return result;
     }
+    
 
-    private List<BotPosition> validateTargets(BotPositionSight botPos, String key, List<BotBlockData> blocks) {
+    private List<BotPosition> validateTargets(BotPositionSight botPos, List<BotBlockData> blocks) {
         List<BotPosition> navigable = new ArrayList<>();
 
         if (blocks == null) return navigable;
@@ -205,7 +240,6 @@ public class BotNavigator {
             }
         }
 
-        updateNavigationSummary(key, blocks.size(), navigable.size());
         return navigable;
     }
 
