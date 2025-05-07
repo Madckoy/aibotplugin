@@ -62,7 +62,7 @@ public class BotTeleportTask extends BotTaskAutoParams<BotTeleportTaskParams> {
             return;
         }
 
-        setObjective(params.getObjective() + " to: " + target);
+        setObjective(params.getObjective() + " to: " + target.toCompactString());
 
         BotLogger.debug(icon, this.isLogging(), bot.getId() + " ⚡ Телепорт в " + target);
 

@@ -1,7 +1,7 @@
 package com.devone.bot.core.task.active.calibrate;
 
 import com.devone.bot.core.Bot;
-import com.devone.bot.core.brain.logic.navigator.NavigationMemoryHelper;
+import com.devone.bot.core.brain.memory.BotMemoryV2Utils;
 import com.devone.bot.core.task.passive.BotTaskAutoParams;
 import com.devone.bot.core.task.passive.IBotTaskParameterized;
 import com.devone.bot.core.task.active.calibrate.params.BotCalibrateTaskParams;
@@ -34,7 +34,7 @@ public class BotCalibrateTask extends BotTaskAutoParams<BotCalibrateTaskParams> 
 
         setObjective(params.getObjective() + " (" + rmt + ")");
 
-        NavigationMemoryHelper.clearAllVisited(bot);
+        BotMemoryV2Utils.clearAllVisited(bot);
 
         BotLogger.debug(icon, isLogging(), bot.getId() + " 🗑️ Removed all visited navigation points");
 

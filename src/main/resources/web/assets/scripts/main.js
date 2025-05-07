@@ -17,5 +17,5 @@ window.onload = async function () {
         } catch (e) {
             console.error("Ошибка при обновлении данных:", e);
         }
-    }, 1000);
+    }, 250);
 };

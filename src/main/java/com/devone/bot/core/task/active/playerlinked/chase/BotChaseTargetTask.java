@@ -49,7 +49,7 @@ public class BotChaseTargetTask extends BotTaskAutoParams<BotChaseTaskParams> {
             return;
         }
 
-        setObjective(params.getObjective() + ": " + target);
+        setObjective(params.getObjective() + ": " + target.);
 
         updateFollowLogic();
 

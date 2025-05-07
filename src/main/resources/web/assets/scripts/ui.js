@@ -128,11 +128,3 @@ function generateInventoryGrid(slots, autoPickupEnabled) {
         return `<div class="${className}" title="${tooltip}"></div>`;
     }).join('') + '</div>';
 }
-
-function getCompassArrow(yaw) {
-    if (typeof yaw !== "number") return "❓";
-    yaw = (yaw + 360) % 360;
-    const arrows = ["⬆️", "↗️", "➡️", "↘️", "⬇️", "↙️", "⬅️", "↖️"];
-    const index = Math.round(yaw / 45) % 8;
-    return arrows[index];
-}

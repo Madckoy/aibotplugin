@@ -2,7 +2,7 @@ package com.devone.bot.core.task.active.move.listeners;
 
 import com.devone.bot.AIBotPlugin;
 import com.devone.bot.core.Bot;
-import com.devone.bot.core.brain.logic.navigator.NavigationMemoryHelper;
+import com.devone.bot.core.brain.memory.BotMemoryV2Utils;
 import com.devone.bot.core.task.active.move.BotMoveTask;
 import com.devone.bot.core.utils.blocks.BotBlockData;
 import com.devone.bot.core.utils.blocks.BotPosition;
@@ -51,7 +51,7 @@ public class BotMoveTaskListener implements Listener {
             BotBlockData data = new BotBlockData(block.getX(), block.getY(), block.getZ());
             data.setType(block.getType().toString());
 
-           NavigationMemoryHelper.memorizePosition( task.getBot(), pos);
+           BotMemoryV2Utils.memorizePosition( task.getBot(), pos);
 
         }
 

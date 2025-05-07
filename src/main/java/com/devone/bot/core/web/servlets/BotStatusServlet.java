@@ -14,7 +14,9 @@ import com.devone.bot.core.Bot;
 import com.devone.bot.core.BotManager;
 import com.devone.bot.core.brain.memoryv2.BotMemoryV2;
 import com.devone.bot.core.brain.memoryv2.BotMemoryV2Partition;
+import com.devone.bot.core.utils.BotConstants;
 import com.devone.bot.core.utils.BotUtils;
+import com.devone.bot.core.utils.blocks.BotPosition;
 import com.devone.bot.core.web.BotWebService;
 
 import com.google.gson.JsonArray;
@@ -54,6 +56,9 @@ public class BotStatusServlet extends HttpServlet {
         for (Bot bot : bots) {
             JsonObject botJson = new JsonObject();
 
+            BotPosition loc = bot.getNavigator().getPosition();
+            BotPosition tgt = bot.getNavigator().getPoi();
+
             botJson.addProperty("skin", "http://" + BotWebService.getServerHost() + ":"
                     + BotWebService.getServerPort() + "/skins/" + bot.getUuid() + ".png");
 
@@ -63,6 +68,17 @@ public class BotStatusServlet extends HttpServlet {
             botJson.addProperty("stuck", bot.getNavigator().isStuck());
             botJson.addProperty("stuckCount", bot.getNavigator().getStuckCount());
 
+            botJson.addProperty("position", loc.toString());
+            
+            String tgtLoc = "";
+            if (tgt != null) {
+                tgtLoc = tgt.toString();
+            }
+            botJson.addProperty("target", tgtLoc);
+
+
+
+            
             BotMemoryV2Partition stats = bot.getBrain().getMemoryV2().partition("stats", BotMemoryV2Partition.Type.MAP);
 
             Object teleportUsed = stats.get("teleportUsed");
@@ -128,8 +144,15 @@ public class BotStatusServlet extends HttpServlet {
                         .mapToInt(ItemStack::getAmount)
                         .sum();
 
+                BotMemoryV2Partition visitedPartition = bot.getBrain().getMemoryV2().partition("visited", BotMemoryV2Partition.Type.MAP);
+                if (visitedPartition != null) {
+                    botJson.addProperty("visitedCount", visitedPartition.getMap().size());
+                } else {
+                    botJson.addProperty("visitedCount", 0);
+                }
+
                 botJson.addProperty("inventoryCount", count);
-                botJson.addProperty("inventoryMax", 36);
+                botJson.addProperty("inventoryMax", 36*64);
                 botJson.add("inventorySlotsFilled", inventoryArray);
             }
 

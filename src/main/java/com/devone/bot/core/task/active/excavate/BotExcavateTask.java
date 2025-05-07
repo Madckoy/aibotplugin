@@ -177,7 +177,7 @@ public class BotExcavateTask extends BotTaskAutoParams<BotExcavateTaskParams> {
                 Block targetBlock = BotWorldHelper.botPositionToWorldBlock(blockPosition);
                 bot.getNavigator().setPoi(blockPosition);
                 turnToTarget(this, blockPosition);
-                setObjective(params.getObjective() + " " + BotUtils.getBlockName(targetBlock) + " at " + blockPosition);
+                setObjective(params.getObjective() + " " + BotUtils.getBlockName(targetBlock) + " at " + blockPosition.toCompactString());
                 Material mat = targetBlock.getType();
                 if (BotUtils.requiresTool(mat)) {
                     if (!BotInventory.equipRequiredTool(bot, mat)) {

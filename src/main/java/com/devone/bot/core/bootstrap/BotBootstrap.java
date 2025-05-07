@@ -4,6 +4,7 @@ import org.bukkit.Bukkit;
 
 import com.devone.bot.AIBotPlugin;
 import com.devone.bot.core.Bot;
+import com.devone.bot.core.brain.memory.BotMemoryV2Utils;
 import com.devone.bot.core.task.passive.BotTaskManager;
 import com.devone.bot.core.task.active.brain.BotBrainTask;
 import com.devone.bot.core.task.active.sonar.BotSonar3DTask;
@@ -59,6 +60,14 @@ public class BotBootstrap {
             if (ServerUtils.isServerStopping()) return;
             BotDataStorage.saveBotData(bot);
         }, 0L, BotConstants.TICKS_MEMORY_SAVE);
+
+        Bukkit.getScheduler().runTaskTimer(AIBotPlugin.getInstance(), () -> {
+            long ttlMillis = 60 * 60 * 1000; // 60 минут
+            int removed = BotMemoryV2Utils.cleanupVisited(bot, ttlMillis);
+            if (removed > 0) {
+                BotLogger.debug("🧠", true, bot.getId() + " 🧹 Auto-removed " + removed + " visited entries");
+            }
+        }, 20L, 600L); // каждые 30 секунд (600 ticks)
     }
 
     private void update() {
