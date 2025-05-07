@@ -5,6 +5,7 @@ public class BotConstants {
     public static final String PLUGIN_PATH = "plugins/" + PLUGIN_NAME;
     public static final String PLUGIN_PATH_CONFIGS = PLUGIN_PATH + "/config";
     public static final String PLUGIN_PATH_CONFIGS_TASKS = PLUGIN_PATH_CONFIGS + "/tasks/";
+    public static final String PLUGIN_PATH_CONFIGS_BOTS  = PLUGIN_PATH_CONFIGS + "/bots/";
     public static final String PLUGIN_PATH_WEB_ASSETS = PLUGIN_PATH + "/web/assets";
     public static final String PLUGIN_PATH_LOGS = PLUGIN_PATH + "/logs/";
     public static final String PLUGIN_TMP = PLUGIN_PATH + "/tmp/";

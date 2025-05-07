@@ -2,6 +2,7 @@ package com.devone.bot.core.storage;
 
 import com.devone.bot.core.Bot;
 import com.devone.bot.core.brain.memoryv2.BotMemoryV2;
+import com.devone.bot.core.utils.BotConstants;
 import com.devone.bot.core.utils.logger.BotLogger;
 import com.google.gson.*;
 
@@ -12,7 +13,7 @@ import java.io.*;
 
 public class BotDataStorage {
 
-    private static final File BOT_DATA_DIR = new File("plugins/AIBots/configs/bots");
+    private static final File BOT_DATA_DIR = new File(BotConstants.PLUGIN_PATH_CONFIGS_BOTS);
 
     static {
         BOT_DATA_DIR.mkdirs();
