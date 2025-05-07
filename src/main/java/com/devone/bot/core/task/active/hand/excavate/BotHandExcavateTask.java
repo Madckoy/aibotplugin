@@ -46,6 +46,7 @@ public class BotHandExcavateTask extends BotHandTask<BotHandExcavateTaskParams> 
         BotLogger.debug(icon, isLogging(), bot.getId() + " 🔶 Executing BotHandExcavateTask");
 
         setObjective(params.getObjective() + " " + target.getType() + " at " + target.getPosition().toCompactString());
+
         BotHandExcavateTask heTask = this;
 
         bukkitTask = new BukkitRunnable() {
@@ -88,10 +89,9 @@ public class BotHandExcavateTask extends BotHandTask<BotHandExcavateTaskParams> 
 
                 block.breakNaturally();
 
-                BotMemoryV2Utils.incrementSummaryCounter(bot, "blocksBroken", block.getType().name());
+                BotMemoryV2Utils.incrementSummaryCounter(bot, "blocksBroken", target.getType());
 
-                BotBlockData bl = BotWorldHelper.blockToBotBlockData(block);
-                BotLogger.debug(icon, isLogging(), bot.getId() + " 🧊 Block is excavated: " + bl);
+                BotLogger.debug(icon, isLogging(), bot.getId() + " 🧊 Block is excavated: " + target.getType());
             }
         }.runTaskTimer(AIBotPlugin.getInstance(), 0L, 1L);
     }
