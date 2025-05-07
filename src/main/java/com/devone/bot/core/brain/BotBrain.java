@@ -22,10 +22,6 @@ public class BotBrain {
 
     private BotMemoryV2 memoryV2 = null;
 
-    public BotMemoryV2 getMemoryV2() {
-        return memoryV2;
-    }
-
     private long memoryExpirationMillis = BotConstants.DEFAULT_MEMORY_EXPIRATION;
 
     public BotBrain(Bot bot) {
@@ -52,6 +48,15 @@ public class BotBrain {
     public BotMemory getMemory() {
         return memory;
     }
+
+    public void setMemoryV2(BotMemoryV2 memoryV2) {
+        this.memoryV2 = memoryV2;
+    }
+
+    public BotMemoryV2 getMemoryV2() {
+        return memoryV2;
+    }
+    
 
     // 🧠 Мышление
     public void markThinkingCycle() {

@@ -39,6 +39,10 @@ public class BotPosition {
             x, y, z, toKey().toString());
     }
 
+    public String toCompactString() {
+        return String.format("%d,%d,%d", (int) x, (int) y, (int) z);
+    }
+
     public double getX() { return x; }
     public void setX(double x) { this.x = x; }
 

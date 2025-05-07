@@ -19,7 +19,14 @@ import com.devone.bot.core.task.passive.BotTaskManager;
 import com.devone.bot.core.utils.blocks.BotPosition;
 import com.devone.bot.core.utils.logger.BotLogger;
 import com.devone.bot.core.utils.world.BotWorldHelper;
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
 
+import java.io.File;
+import java.io.FileReader;
+import java.io.FileWriter;
+import java.io.IOException;
+import java.io.Reader;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
 import java.util.regex.Matcher;
@@ -81,14 +88,14 @@ public class BotUtils {
         };
     }
 
-    private static Location getFallbackPos() {
+    public static Location getFallbackLocation() {
         World world = BotWorldHelper.getWorld();
         return world.getSpawnLocation();
     }
 
-    public static BotPosition getFallbackLocation() {
-        BotPosition coord = new BotPosition(getFallbackPos().getBlockX(), getFallbackPos().getBlockY(),
-                getFallbackPos().getBlockZ());
+    public static BotPosition getFallbackPosition() {
+        BotPosition coord = new BotPosition(getFallbackLocation().getBlockX(), getFallbackLocation().getBlockY(),
+                getFallbackLocation().getBlockZ());
         return coord;
     }
 
@@ -289,5 +296,24 @@ public class BotUtils {
         }, 1L); // ✅ Через тик, чтобы дать время на обновление
         
     }
+
+    private static final Gson gson = new GsonBuilder().setPrettyPrinting().create();
+
+    public static <T> T readJson(File file, Class<T> clazz) {
+        try (Reader reader = new FileReader(file)) {
+            return gson.fromJson(reader, clazz);
+        } catch (IOException e) {
+            throw new RuntimeException("Failed to read JSON from " + file.getName(), e);
+        }
+    }
+
+    public static void writeJson(File file, Object obj) {
+        try (FileWriter writer = new FileWriter(file)) {
+            gson.toJson(obj, writer);
+        } catch (IOException e) {
+            throw new RuntimeException("Failed to write JSON to " + file.getName(), e);
+        }
+    }
+
 
 }
