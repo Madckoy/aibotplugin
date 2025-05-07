@@ -68,17 +68,17 @@ public class BotStatusServlet extends HttpServlet {
             botJson.addProperty("stuck", bot.getNavigator().isStuck());
             botJson.addProperty("stuckCount", bot.getNavigator().getStuckCount());
 
-            botJson.addProperty("position", loc.toString());
+            botJson.addProperty("position", loc.toCompactString());
             
             String tgtLoc = "";
             if (tgt != null) {
-                tgtLoc = tgt.toString();
+                tgtLoc = tgt.toCompactString();
             }
             botJson.addProperty("target", tgtLoc);
 
 
 
-            
+
             BotMemoryV2Partition stats = bot.getBrain().getMemoryV2().partition("stats", BotMemoryV2Partition.Type.MAP);
 
             Object teleportUsed = stats.get("teleportUsed");

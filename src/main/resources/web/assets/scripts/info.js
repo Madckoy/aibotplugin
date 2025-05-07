@@ -68,6 +68,8 @@ function getCompassArrow(yaw) {
     if (typeof yaw !== "number") return "❓";
     yaw = (yaw + 360) % 360;
     const arrows = ["⬆️", "↗️", "➡️", "↘️", "⬇️", "↙️", "⬅️", "↖️"];
+    const index = Math.round(yaw / 45) % 8;
     const degrees = Math.round(yaw);
-    return '${arrow} (${degrees}°)';
+    const arrow = arrows[index];
+    return `${arrow} (${degrees}°)`;
 }
