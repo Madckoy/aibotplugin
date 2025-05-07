@@ -26,19 +26,19 @@ public class BotCalibrateTask extends BotTaskAutoParams<BotCalibrateTaskParams> 
     @Override
     public void execute() {
 
-        if(!isEnabled()) {
-            return;
-        }
-
         long rmt = BotUtils.getRemainingTime(startTime, params.getTimeout());
 
         setObjective(params.getObjective() + " (" + rmt + ")");
 
-        BotMemoryV2Utils.clearAllVisited(bot);
+        //BotMemoryV2Utils.clearAllVisited(bot);
 
-        BotLogger.debug(icon, isLogging(), bot.getId() + " 🗑️ Removed all visited navigation points");
+        //BotLogger.debug(icon, isLogging(), bot.getId() + " 🗑️ Removed all visited navigation points");
 
-        bot.getNavigator().resetStuckCount();
+        //bot.getNavigator().resetStuckCount();
+
+        BotLogger.debug(icon, true, bot.getId() + " 💻 Navigator calculation started");
+        bot.getNavigator().calculate(bot.getBrain().getSceneData());
+        BotLogger.debug(icon, true, bot.getId() + " 💻 Navigator calculation ended");
 
         if (rmt <= 0) {
             BotLogger.debug(icon, isLogging(), bot.getId() + " ⏱️ Task timeout passed. Ending Task.");

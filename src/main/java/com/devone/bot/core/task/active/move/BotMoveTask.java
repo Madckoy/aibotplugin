@@ -53,10 +53,6 @@ public class BotMoveTask extends BotTaskAutoParams<BotMoveTaskParams> {
     @Override
     public void execute() {
 
-        if(!isEnabled()) {
-            return;
-        }
-
         if (done || isPause()) {
             BotLogger.debug(icon, isLogging(), bot.getId() + " ⭕ Таска завершена или на паузе");
             return;

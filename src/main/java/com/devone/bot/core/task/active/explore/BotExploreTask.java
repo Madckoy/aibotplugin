@@ -37,14 +37,10 @@ public class BotExploreTask extends BotTaskAutoParams<BotExploreTaskParams> {
 
         if (isPause())
             return;
-
-        if(!isEnabled()) {
-            stop();
-            return;
-        }
-    
-
-        //bot.getNavigator().calculate(bot.getBrain().getMemory().getSceneData());     
+            
+        BotLogger.debug(icon, true, bot.getId() + " 💻 Navigator calculation started");
+        bot.getNavigator().calculate(bot.getBrain().getSceneData());
+        BotLogger.debug(icon, true, bot.getId() + " 💻 Navigator calculation ended");
 
         BotLogger.debug(icon, isLogging(), bot.getId() + " 🧭 Explore with distance: " + scanRadius);
 

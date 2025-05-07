@@ -37,9 +37,6 @@ public class BotBootstrap {
 
             BotLogger.debug(icon, true, bot.getId() + " 🛜 Sonar Scan started");
             new BotSonar3DTask(bot).execute();
-            BotLogger.debug(icon, true, bot.getId() + " 💻 Navigator calculation started");
-            bot.getNavigator().calculate(bot.getBrain().getSceneData());
-            BotLogger.debug(icon, true, bot.getId() + " 💻 Navigator calculation ended");
 
         }, 0L, BotConstants.TICKS_NAVIGATION_UPDATE);
 
