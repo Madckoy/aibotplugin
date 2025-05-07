@@ -33,8 +33,7 @@ function updateStats(bot) {
     document.getElementById("info-nav-moves").textContent = bot.moves ?? "N/A";
     document.getElementById("info-nav-teleports").textContent = bot.teleportUsed ?? "N/A";
     document.getElementById("info-places-visited").textContent = bot.visitedPlaces ?? "N/A";
-    document.getElementById("info-memory-cleanup-timer").textContent = bot.cleanupTimer ?? "N/A";
-    document.getElementById("info-stats-inventory-size").textContent = bot.inventoryCount ?? "N/A";
+    document.getElementById("info-stats-inventory-count").textContent = bot.inventoryCount ?? "N/A";
     document.getElementById("info-memory-killed-mobs").textContent = bot.mobsKilled ?? "N/A";
     document.getElementById("info-stats-excavations").textContent = bot.excavations ?? "N/A";
     document.getElementById("info-stats-excavated").textContent = bot.blocksBroken ?? "N/A";

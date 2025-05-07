@@ -39,7 +39,8 @@ public class BotExploreTask extends BotTaskAutoParams<BotExploreTaskParams> {
             return;
 
         if(!isEnabled()) {
-                return;
+            stop();
+            return;
         }
     
 
@@ -74,6 +75,7 @@ public class BotExploreTask extends BotTaskAutoParams<BotExploreTaskParams> {
             BotLogger.debug(icon, isLogging(), bot.getId() + "  Rotating the bot to scan new sector!");
             //rotate 45 clockwise            
             BotUtils.rotateClockwise(this, bot, (float)BotConstants.DEFAULT_SIGHT_FOV);
+            stop();
             return;
         }
 
@@ -90,6 +92,7 @@ public class BotExploreTask extends BotTaskAutoParams<BotExploreTaskParams> {
 
             // bot.getBrain().getMemory().memorize(target, MemoryType.VISITED_BLOCKS); //
             // Запоминаем на ~30 минут посещенную цель навигации
+            stop();
             return;
 
         } else {
