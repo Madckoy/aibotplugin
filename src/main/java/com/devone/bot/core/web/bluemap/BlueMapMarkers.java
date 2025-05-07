@@ -1,6 +1,5 @@
 package com.devone.bot.core.web.bluemap;
 
-import com.devone.bot.AIBotPlugin;
 import com.devone.bot.core.Bot;
 import com.devone.bot.core.BotManager;
 import com.devone.bot.core.utils.blocks.BotPosition;
@@ -33,8 +32,6 @@ public class BlueMapMarkers {
         BlueMapAPI.onEnable(api -> {
 
             mSet = setupMarkerSet(api);
-
-            //scheduleMarkerUpdate();
 
             BotLogger.debug("🗺️", true, "💡 BlueMapAPI detected! Initializing marker system...");
 
@@ -100,17 +97,6 @@ public class BlueMapMarkers {
                 // }, 100L); // 1-секундная задержка, чтобы не грузить сервер
 
         }
-    }
-
-    public void scheduleMarkerUpdate() {
-
-        Bukkit.getScheduler().runTaskTimer(AIBotPlugin.getInstance(), () -> {
-            BotLogger.debug("🗺️", true, "♻️ Обновление маркеров запущено.");
-
-            updateAllMarkers();
-
-        }, 0L, 100L); // Обновляем маркеры
-
     }
 
     public static MarkerSet setupMarkerSet(BlueMapAPI api) {

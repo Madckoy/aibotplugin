@@ -4,62 +4,61 @@ import org.bukkit.Bukkit;
 
 import com.devone.bot.AIBotPlugin;
 import com.devone.bot.core.Bot;
-import com.devone.bot.core.brain.logic.navigator.NavigationMemoryHelper;
 import com.devone.bot.core.task.passive.BotTaskManager;
 import com.devone.bot.core.task.active.brain.BotBrainTask;
 import com.devone.bot.core.task.active.sonar.BotSonar3DTask;
+import com.devone.bot.core.utils.BotConstants;
 import com.devone.bot.core.utils.BotUtils;
 import com.devone.bot.core.utils.logger.BotLogger;
 import com.devone.bot.core.utils.server.ServerUtils;
+import com.devone.bot.core.storage.BotDataStorage;
 
 public class BotBootstrap {
+
     private final Bot bot;
     private final BotTaskManager taskManager;
-
-    private boolean brainStarted = false; // ✅ Флаг, чтобы не добавлять Brain Task несколько раз
+    private boolean brainStarted = false;
 
     public BotBootstrap(Bot bot) {
         this.bot = bot;
         this.taskManager = new BotTaskManager(bot);
-
         startLifeCycle();
     }
 
     private void startLifeCycle() {
         BotLogger.debug("🤖", true, "💥 Запускаем Bootstrap для бота " + bot.getId());
 
-        // Отдельный таймер для сканирования окружения (часто)
+        // ⛏️ Обновление навигации и сканирования
         Bukkit.getScheduler().runTaskTimer(AIBotPlugin.getInstance(), () -> {
-            if (ServerUtils.isServerStopping())
-                return;
+            if (ServerUtils.isServerStopping()) return;
 
             String icon = BotUtils.getActiveTaskIcon(bot);
 
             BotLogger.debug(icon, true, bot.getId() + " 🛜 Sonar Scan started");
-            BotSonar3DTask sonar = new BotSonar3DTask(bot);
-            sonar.execute();
-            BotLogger.debug(icon, true, bot.getId() + " 🛜 Sonar Scan started");
-
+            new BotSonar3DTask(bot).execute();
             BotLogger.debug(icon, true, bot.getId() + " 💻 Navigator calculation started");
             bot.getNavigator().calculate(bot.getBrain().getSceneData());
             BotLogger.debug(icon, true, bot.getId() + " 💻 Navigator calculation ended");
 
-            // 💾 Очистка устаревших посещённых точек
-            int removed = NavigationMemoryHelper.cleanupVisited(bot, 30 * 60 * 1000); // 30 минут
-            if (removed > 0) {
-                BotLogger.debug("🧠", true, bot.getId() + " 🧹 Cleared " + removed + " expired visited POIs");
-            }
-            
-        }, 0L, 20L); // каждые 10 тиков = 0.5 сек
+        }, 0L, BotConstants.TICKS_NAVIGATION_UPDATE);
 
-        // Отдельный таймер для обработки задач (редко)
+        // 🧠 Обработка задач (редко)
         Bukkit.getScheduler().runTaskTimer(AIBotPlugin.getInstance(), () -> {
-            if (ServerUtils.isServerStopping())
-                return;
-
+            if (ServerUtils.isServerStopping()) return;
             update();
+        }, 0L, BotConstants.TICKS_TASK_UPDATE);
 
-        }, 0L, 5L); // каждые 10 тиков = 0.5 сек
+        // 🗺️ Обновление POI на BlueMap
+        Bukkit.getScheduler().runTaskTimer(AIBotPlugin.getInstance(), () -> {
+            if (ServerUtils.isServerStopping()) return;
+            AIBotPlugin.getInstance().getBotManager().getBlueMapMarkers().updateAllMarkers();
+        }, 0L, BotConstants.TICKS_BLUEMAP_UPDATE);
+
+        // 💾 Сохранение памяти и инвентаря на диск
+        Bukkit.getScheduler().runTaskTimer(AIBotPlugin.getInstance(), () -> {
+            if (ServerUtils.isServerStopping()) return;
+            BotDataStorage.saveBotData(bot);
+        }, 0L, BotConstants.TICKS_MEMORY_SAVE);
     }
 
     private void update() {

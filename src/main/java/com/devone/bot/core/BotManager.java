@@ -25,7 +25,15 @@ public class BotManager {
     private final Map<UUID, Bot> selectedBots = new HashMap<>();
     private final BotManagerConfig config;
 
-    private BlueMapMarkers bm_markers;
+    private BlueMapMarkers blueMapMarkers;
+
+    public BlueMapMarkers getBlueMapMarkers() {
+        return blueMapMarkers;
+    }
+
+    public void setBm_markers(BlueMapMarkers markers) {
+        this.blueMapMarkers = markers;
+    }
 
     public BotManager(AIBotPlugin plugin) {
         this.plugin = plugin;
@@ -70,8 +78,7 @@ public class BotManager {
             BotLogger.debug("🤖", true, botEntry.name + " ✅ Added to the map!");
         }
 
-        bm_markers = new BlueMapMarkers(this);
-        bm_markers.scheduleMarkerUpdate();
+        blueMapMarkers = new BlueMapMarkers(this);
 
         BotLogger.debug("🤖", true, "✅ Loaded NPC bots: " + botsMap.size());
     }
@@ -99,7 +106,6 @@ public class BotManager {
         }
         botsMap.put(name, bot);
         saveBots();
-        bm_markers.scheduleMarkerUpdate();
     }
 
     public void removeBot(String name) {
@@ -107,7 +113,7 @@ public class BotManager {
         if (bot != null) {
             bot.despawnNPC();
             botsMap.remove(name);
-            bm_markers.removeMarker(name);
+            blueMapMarkers.removeMarker(name);
             BotDataStorage.deleteBotData(name);
             saveBots();
             BotLogger.debug("🤖", true, name + " ➖ has been removed.");
