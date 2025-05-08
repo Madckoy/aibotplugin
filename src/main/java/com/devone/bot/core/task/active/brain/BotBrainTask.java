@@ -76,6 +76,13 @@ public class BotBrainTask extends BotTaskAutoParams<BotBrainTaskParams> {
 
         bot.getBrain().markThinkingCycle();
 
+        boolean stuck = bot.getNavigator().isStuck();
+        
+        if(stuck) {
+            bot.getNavigator().calculate(bot.getBrain().getSceneData(), BotConstants.DEFAULT_MAX_SIGHT_FOV); // ищем все возможные варианты POI и пробуем self-unstuck
+            return;
+        }
+
         Runnable decision = determineBehaviorScenario(bot);
         if (decision != null)
             decision.run();
@@ -95,6 +102,7 @@ public class BotBrainTask extends BotTaskAutoParams<BotBrainTaskParams> {
         boolean stuck = bot.getNavigator().isStuck();
 
         if (stuck) {
+
             Optional<Runnable> unstuck = tryUnstuckStrategy(bot);
             if (unstuck.isPresent())
                 return unstuck.get();

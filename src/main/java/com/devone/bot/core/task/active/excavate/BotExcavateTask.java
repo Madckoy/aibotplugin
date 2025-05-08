@@ -131,7 +131,7 @@ public class BotExcavateTask extends BotTaskAutoParams<BotExcavateTaskParams> {
                             block.getType().toString().equals(Material.LAVA.toString())) {
 
                         BotLogger.debug(icon, isLogging(), bot.getId() + " Блок не разрушимый или уже разрушен: "
-                                + blockPosition + " " + block.getType());
+                                + pos.toCompactString() + " " + block.getType());
                         continue;
                     } else {
                         validatedList.add(pos);
