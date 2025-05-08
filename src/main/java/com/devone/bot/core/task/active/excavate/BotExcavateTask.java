@@ -154,9 +154,15 @@ public class BotExcavateTask extends BotTaskAutoParams<BotExcavateTaskParams> {
 
                     }
                 }
-                validated = true;
+
                 queuedList.clear();
                 queuedList.addAll(validatedList);
+
+                if (validatedList.isEmpty()) {
+                    BotLogger.debug(icon, isLogging(), bot.getId() + " ❌ Нет доступных блоков в паттерне для разрушения.");
+                    validated = false;
+                }
+                
                 return;
 
             } catch (Exception ex) {
