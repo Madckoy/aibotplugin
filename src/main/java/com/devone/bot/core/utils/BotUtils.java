@@ -287,6 +287,8 @@ public class BotUtils {
       
             bot.getNPCEntity().teleport(newLook);
 
+            bot.getBrain().notifyYawChanged(newYaw); // вот здесь — оповещение
+
             BotLogger.debug("↻", true, bot.getId() + " rotated " + degrees + "° → yaw=" + newYaw);
         
         }, 1L); // ✅ Через тик, чтобы дать время на обновление

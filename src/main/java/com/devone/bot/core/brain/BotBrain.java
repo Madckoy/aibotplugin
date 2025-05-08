@@ -1,7 +1,12 @@
 package com.devone.bot.core.brain;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import com.devone.bot.core.Bot;
 import com.devone.bot.core.brain.memoryv2.BotMemoryV2;
+import com.devone.bot.core.brain.perseption.BotYawChangeListener;
+import com.devone.bot.core.brain.perseption.YawBasedSceneRefresher;
 import com.devone.bot.core.brain.perseption.scene.BotSceneData;
 import com.devone.bot.core.task.passive.BotTask;
 import com.devone.bot.core.utils.BotConstants;
@@ -24,10 +29,13 @@ public class BotBrain {
 
     private long memoryExpirationMillis = BotConstants.DEFAULT_MEMORY_EXPIRATION;
 
+    private BotYawChangeListener yawListener;
+
     public BotBrain(Bot bot) {
         this.owner = bot;
         this.memoryV2 = new BotMemoryV2(this);
         this.sceneData = null;
+        setYawListener(new YawBasedSceneRefresher());
     }
 
     // 🧠 Получение текущей задачи
@@ -130,4 +138,15 @@ public class BotBrain {
 
         return result;
     }
+
+    public void setYawListener(BotYawChangeListener listener) {
+        this.yawListener = listener;
+    }
+    
+    public void notifyYawChanged(float newYaw) {
+        if (yawListener != null) {
+            yawListener.onYawChanged(owner, newYaw);
+        }
+    }
+
 }
