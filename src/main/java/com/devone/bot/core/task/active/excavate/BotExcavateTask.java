@@ -23,6 +23,7 @@ import com.devone.bot.core.utils.blocks.BotBlockData;
 import com.devone.bot.core.utils.blocks.BotPosition;
 import com.devone.bot.core.utils.logger.BotLogger;
 import com.devone.bot.core.utils.pattern.BotPatternRunner;
+import com.devone.bot.core.utils.pattern.params.BotPatternRunnerParams;
 import com.devone.bot.core.utils.world.BotWorldHelper;
 import com.devone.bot.core.utils.zone.BotZoneManager;
 
@@ -54,7 +55,6 @@ public class BotExcavateTask extends BotTaskAutoParams<BotExcavateTaskParams> {
 
         if (params.getPatternName() != null) {
             this.patternName = params.getPatternName();
-            BotLogger.debug(icon, isLogging(), bot.getId() + " 📐 Установлен паттерн разрушения: " + patternName);
         }
 
         BotLogger.debug(icon, isLogging(),
@@ -86,7 +86,10 @@ public class BotExcavateTask extends BotTaskAutoParams<BotExcavateTaskParams> {
         basePosition = new BotPosition(bot.getNavigator().getPosition());
 
         if (runner == null) {
+            BotPatternRunnerParams params = new BotPatternRunnerParams();
+            params.setFilename(this.patternName);
             runner = new BotPatternRunner();
+            runner.setParams(params);
         }
 
         BotPosition blockPosition = null;
