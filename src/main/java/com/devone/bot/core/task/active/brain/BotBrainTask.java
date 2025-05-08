@@ -166,11 +166,15 @@ public class BotBrainTask extends BotTaskAutoParams<BotBrainTaskParams> {
                 return Optional.empty();
             case 3:
                 if (params.isAllowTeleport()) {
+                    
                     BotPositionSight botPos = bot.getNavigator().getPositionSight();
+                    
                     BotSceneData sceneData = bot.getBrain().getSceneData();
+
                     BotNavigationContext context = BotNavigationContextMaker.createSceneContext(botPos, sceneData.blocks,
                             sceneData.entities, BotConstants.DEFAULT_MAX_SIGHT_FOV);
                     params.setUnstuckStrategy(1);
+                    
                     return tryTeleportFallback(bot, context);
                 }
                 return Optional.empty();

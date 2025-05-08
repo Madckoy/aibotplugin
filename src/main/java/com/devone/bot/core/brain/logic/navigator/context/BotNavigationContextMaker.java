@@ -14,6 +14,7 @@ import com.devone.bot.core.brain.logic.navigator.math.filters.BotNavigableFilter
 import com.devone.bot.core.brain.logic.navigator.math.filters.BotSafeBlocksFilter;
 import com.devone.bot.core.brain.logic.navigator.math.filters.BotVerticalSliceFilter;
 import com.devone.bot.core.utils.BotConstants;
+import com.devone.bot.core.utils.blocks.BlockUtils;
 import com.devone.bot.core.utils.blocks.BotBlockData;
 import com.devone.bot.core.utils.blocks.BotPosition;
 import com.devone.bot.core.utils.blocks.BotPositionSight;
@@ -64,7 +65,30 @@ public class BotNavigationContextMaker {
         context.navigable = navigable;
         context.reachable = reachable;
         context.poi       = poi;
-        context.entities  = livingTargets;
+        context.entities  = livingTargets;                                                     
+
+        BotPosition current = new BotPosition(botPositionSight);
+        BotPosition below = new BotPosition(current.getX(), current.getY() - 1, current.getZ());
+
+        context.poi = context.poi.stream()
+            .filter(p -> !BlockUtils.isSameBlock(p.getPosition(), current))
+            .filter(p -> !BlockUtils.isSameBlock(p.getPosition(), below))
+            .toList();
+
+        context.reachable = context.reachable.stream()
+            .filter(p -> !BlockUtils.isSameBlock(p.getPosition(), current))
+            .filter(p -> !BlockUtils.isSameBlock(p.getPosition(), below))
+            .toList();
+
+        context.navigable = context.navigable.stream()
+            .filter(p -> !BlockUtils.isSameBlock(p.getPosition(), current))
+            .filter(p -> !BlockUtils.isSameBlock(p.getPosition(), below))
+            .toList();
+
+        context.walkable = context.walkable.stream()
+            .filter(p -> !BlockUtils.isSameBlock(p.getPosition(), current))
+            .filter(p -> !BlockUtils.isSameBlock(p.getPosition(), below))
+            .toList();                                                     
 
         float yaw = botPositionSight.getYaw();
         BotPosition eye = new BotPosition(botPositionSight.getX(), botPositionSight.getY(), botPositionSight.getZ());

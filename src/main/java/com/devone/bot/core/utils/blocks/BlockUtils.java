@@ -140,5 +140,15 @@ public class BlockUtils {
             && botY == (int) target.getY()
             && botZ == (int) target.getZ();
     }
+
+    /**
+     * Проверка, находятся ли два положения на одном и том же блоке (целочисленные координаты X/Y/Z).
+     */
+    public static boolean isSameBlock(BotPosition a, BotPosition b) {
+        if (a == null || b == null) return false;
+        return (int) a.getX() == (int) b.getX()
+            && (int) a.getY() == (int) b.getY()
+            && (int) a.getZ() == (int) b.getZ();
+    }
     
 }

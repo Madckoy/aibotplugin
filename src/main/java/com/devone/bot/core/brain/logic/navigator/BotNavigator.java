@@ -227,9 +227,20 @@ public class BotNavigator {
             candidates = List.of();
         }
     
-        updateNavigationMemory();
-        setInDanger(BotWorldHelper.isInDanger(owner));
+        boolean noPoi       = poiSightedValidatedPos == null || poiSightedValidatedPos.isEmpty();
+        boolean noReachable = reachableSightedValidatedPos == null || reachableSightedValidatedPos.isEmpty();
+        boolean noNavigable = navigableSightedValidatedPos == null || navigableSightedValidatedPos.isEmpty();
+        boolean noWalkable  = walkableSightedValidatedPos == null || walkableSightedValidatedPos.isEmpty();
     
+        // Если нет ни одной полезной навигационной поверхности — считаем, что бот застрял
+        boolean stuckNow = noPoi && noReachable && noNavigable && noWalkable;
+    
+        setStuck(stuckNow);
+
+        setInDanger(BotWorldHelper.isInDanger(owner));
+
+        updateNavigationMemory();
+
         try {
             BotLogger.debug(owner.getActiveTask().getIcon(), true, owner.getId() + " 💻 Navigator calculation ended");
         } catch (Exception ex) {
@@ -270,7 +281,6 @@ public class BotNavigator {
         return navigable;
     }
     
-
     private void updateNavigationSummary(String key, int calculated, int confirmed) {
         BotMemoryV2 memory = getMemory();
         if (memory == null) return;
