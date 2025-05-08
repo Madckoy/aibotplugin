@@ -36,6 +36,9 @@ public class BotNavigator {
 
     private transient Bot owner;
     private boolean stuck = false;
+    
+    private boolean inDanger = false;
+
     private int stuckCount = 0;
     private NavigationSuggestion navigationSuggestion;
     private BotPosition suggestedPoi;
@@ -147,11 +150,28 @@ public class BotNavigator {
         this.stuckCount = 0;
     }
 
-    public List<BotPosition> calculate(BotSceneData scene) {
+
+    
+    public boolean isInDanger() {
+        return inDanger;
+    }
+
+    public void setInDanger(boolean inDanger) {
+        this.inDanger = inDanger;
+    }
+
+    public List<BotPosition> calculate(BotSceneData scene, double sightFov) {
+        try {
+            BotLogger.debug(owner.getActiveTask().getIcon(), true, owner.getId() + " 💻 Navigator calculation started");
+        }catch(Exception ex){
+            BotLogger.debug("*", true, owner.getId() + " 💻 Navigator calculation started");
+        }
+
         List<BotPosition> result = new ArrayList<>();
         BotPositionSight botPos = getPositionSight();
     
-        BotNavigationContext context = BotNavigationContextMaker.createSceneContext(botPos, scene.blocks, scene.entities);
+        BotNavigationContext context = BotNavigationContextMaker.createSceneContext(botPos, scene.blocks, scene.entities, sightFov);
+
         if (context == null) {
             BotLogger.debug(BotUtils.getActiveTaskIcon(owner), true,
                     owner.getId() + " ⚠️ Navigation error: Scene Context is not ready");
@@ -213,6 +233,15 @@ public class BotNavigator {
     
         updateNavigationMemory();
 
+        // 🚨 Проверка на опасность (жидкость)
+        setInDanger(BotWorldHelper.isInDanger(owner));
+
+        try {
+            BotLogger.debug(owner.getActiveTask().getIcon(), true, owner.getId() + " 💻 Navigator calculation ended");
+        }catch(Exception ex){
+            BotLogger.debug("*", true, owner.getId() + " 💻 Navigator calculation ended");
+        }
+        
         return result;
     }
     

@@ -78,7 +78,7 @@ public class BotWorldHelper {
         };
     }
 
-    public static boolean isInDangerousLiquid(Bot bot) {
+    public static boolean isInDanger(Bot bot) {
         if (bot == null || bot.getNPCEntity() == null) return false;
         Location loc = bot.getNPCEntity().getLocation();
         return isDangerousLiquid(loc.getBlock());

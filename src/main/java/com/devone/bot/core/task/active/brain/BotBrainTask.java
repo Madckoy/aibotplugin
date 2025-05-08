@@ -76,6 +76,7 @@ public class BotBrainTask extends BotTaskAutoParams<BotBrainTaskParams> {
 
         bot.getBrain().markThinkingCycle();
 
+        bot.getNavigator().calculate(bot.getBrain().getSceneData(), BotConstants.DEFAULT_NORMAL_SIGHT_FOV); 
 
         Runnable decision = determineBehaviorScenario(bot);
         if (decision != null)
@@ -130,7 +131,6 @@ public class BotBrainTask extends BotTaskAutoParams<BotBrainTaskParams> {
                         BotLogger.debug(icon, isLogging(), bot.getId() + " ⛏️ Копаемся чтобы выбраться");
                         BotExcavateTask task = new BotExcavateTask(bot);
                         BotExcavateTaskParams exParams = new BotExcavateTaskParams();
-                        exParams.setPatternName("default.yml");
                         task.setParams(exParams);
                         push(bot, task);
                     });
@@ -142,7 +142,7 @@ public class BotBrainTask extends BotTaskAutoParams<BotBrainTaskParams> {
                     BotPositionSight botPos = bot.getNavigator().getPositionSight();
                     BotSceneData sceneData = bot.getBrain().getSceneData();
                     BotNavigationContext context = BotNavigationContextMaker.createSceneContext(botPos, sceneData.blocks,
-                            sceneData.entities);
+                            sceneData.entities, BotConstants.DEFAULT_MAX_SIGHT_FOV);
                     return tryTeleportFallback(bot, context);
                 }
                 return Optional.empty();

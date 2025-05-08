@@ -61,9 +61,9 @@ public class BotExploreTask extends BotTaskAutoParams<BotExploreTaskParams> {
             return;
         }
 
-        BotLogger.debug(icon, true, bot.getId() + " 💻 Navigator calculation started");
-        bot.getNavigator().calculate(sceneData);
-        BotLogger.debug(icon, true, bot.getId() + " 💻 Navigator calculation ended");
+
+        bot.getNavigator().calculate(sceneData, BotConstants.DEFAULT_NORMAL_SIGHT_FOV);
+
 
         BotPosition poi = bot.getNavigator().getSuggestedPoi();
         
@@ -80,7 +80,7 @@ public class BotExploreTask extends BotTaskAutoParams<BotExploreTaskParams> {
             }
             BotLogger.debug(icon, isLogging(), bot.getId() + "  Rotating the bot to scan new sector!");
             //rotate 45 clockwise            
-            BotUtils.rotateClockwise(this, bot, (float)BotConstants.DEFAULT_SIGHT_FOV);
+            BotUtils.rotateClockwise(this, bot, (float)BotConstants.DEFAULT_NORMAL_SIGHT_FOV);
             rotations++;
             return;
         }

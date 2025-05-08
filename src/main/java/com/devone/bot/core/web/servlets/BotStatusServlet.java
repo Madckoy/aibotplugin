@@ -14,7 +14,6 @@ import com.devone.bot.core.Bot;
 import com.devone.bot.core.BotManager;
 import com.devone.bot.core.brain.memoryv2.BotMemoryV2;
 import com.devone.bot.core.brain.memoryv2.BotMemoryV2Partition;
-import com.devone.bot.core.utils.BotConstants;
 import com.devone.bot.core.utils.BotUtils;
 import com.devone.bot.core.utils.blocks.BotPosition;
 import com.devone.bot.core.utils.logger.BotLogger;

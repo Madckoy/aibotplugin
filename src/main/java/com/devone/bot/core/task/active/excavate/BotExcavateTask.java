@@ -89,13 +89,6 @@ public class BotExcavateTask extends BotTaskAutoParams<BotExcavateTaskParams> {
             runner = new BotPatternRunner();
         }
 
-        // 🚨 Проверка на опасную жидкость
-        if (BotWorldHelper.isInDangerousLiquid(bot)) {
-            BotLogger.debug(icon, isLogging(), bot.getId() + " 💧 Оказался в опасной жидкости. Завершаем копку.");
-            this.stop();
-            return;
-        }
-
         BotPosition blockPosition = null;
 
         setIcon("📜");

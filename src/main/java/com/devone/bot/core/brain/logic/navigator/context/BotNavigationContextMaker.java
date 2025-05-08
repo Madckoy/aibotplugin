@@ -22,7 +22,8 @@ public class BotNavigationContextMaker {
 
     public static BotNavigationContext createSceneContext(BotPositionSight botPositionSight,
                                                           List<BotBlockData> geoBlocks,
-                                                          List<BotBlockData> bioBlocks) {
+                                                          List<BotBlockData> bioBlocks,
+                                                          double sightFov) {
 
         BotNavigationContext context = new BotNavigationContext();
 
@@ -68,8 +69,8 @@ public class BotNavigationContextMaker {
         float yaw = botPositionSight.getYaw();
         BotPosition eye = new BotPosition(botPositionSight.getX(), botPositionSight.getY(), botPositionSight.getZ());
 
-        context.viewSector = BotOnSightBuilder.buildViewSectorBlocks(eye, yaw, BotConstants.DEFAULT_SCAN_RANGE+5.0, 
-                                                                               BotConstants.DEFAULT_SCAN_DATA_SLICE_HEIGHT, BotConstants.DEFAULT_SIGHT_FOV);
+        context.viewSector = BotOnSightBuilder.buildViewSectorBlocks(eye, yaw, BotConstants.DEFAULT_SCAN_RANGE+(BotConstants.DEFAULT_SCAN_RANGE/2), 
+                                                                               BotConstants.DEFAULT_SCAN_DATA_SLICE_HEIGHT, sightFov);
         if (context.viewSector.isEmpty()) {
             context.viewSector.add(new BotBlockData((int) botPositionSight.getX(),
                                                     (int) botPositionSight.getY(),

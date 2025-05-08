@@ -1,10 +1,10 @@
 package com.devone.bot.core.task.active.calibrate;
 
 import com.devone.bot.core.Bot;
-import com.devone.bot.core.brain.memory.BotMemoryV2Utils;
 import com.devone.bot.core.task.passive.BotTaskAutoParams;
 import com.devone.bot.core.task.passive.IBotTaskParameterized;
 import com.devone.bot.core.task.active.calibrate.params.BotCalibrateTaskParams;
+import com.devone.bot.core.utils.BotConstants;
 import com.devone.bot.core.utils.BotUtils;
 import com.devone.bot.core.utils.logger.BotLogger;
 
@@ -37,7 +37,9 @@ public class BotCalibrateTask extends BotTaskAutoParams<BotCalibrateTaskParams> 
         //bot.getNavigator().resetStuckCount();
 
         BotLogger.debug(icon, true, bot.getId() + " 💻 Navigator calculation started");
-        bot.getNavigator().calculate(bot.getBrain().getSceneData());
+        
+        bot.getNavigator().calculate(bot.getBrain().getSceneData(), BotConstants.DEFAULT_MAX_SIGHT_FOV); //360 scan
+
         BotLogger.debug(icon, true, bot.getId() + " 💻 Navigator calculation ended");
 
         if (rmt <= 0) {
