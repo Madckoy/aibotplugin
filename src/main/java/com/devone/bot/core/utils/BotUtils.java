@@ -71,7 +71,7 @@ public class BotUtils {
 
         location.getWorld().spawnParticle(
                 org.bukkit.Particle.BLOCK_CRACK,
-                location.clone().add(0.5, 0.5, 0.5), // Центр блока
+                location.clone().add(0.0, 0.0, 0.0), // Центр блока
                 20, // Кол-во частиц
                 0.25, 0.25, 0.25, // Разброс
                 location.getBlock().getBlockData() // Тип блока для эффекта
@@ -115,7 +115,7 @@ public class BotUtils {
         Location tgt = BotWorldHelper.botPositionToWorldLocation(target);
 
         Location from = bot.getNPCEntity().getLocation();
-        Location to = tgt.clone();// .add(0.5, 0.5, 0.5); // центр блока
+        Location to = tgt.clone().add(0.0, 0.0, 0.0); // центр блока
 
         Vector direction = to.toVector().subtract(from.toVector());
 
@@ -268,10 +268,6 @@ public class BotUtils {
 
         if(bot.getNavigator().getNavigationSuggestion()==NavigationSuggestion.CHANGE_DIRECTION) {
             return "CHANGE_DIRECTION";
-        }
-
-        if(bot.getNavigator().getNavigationSuggestion()==NavigationSuggestion.TELEPORT) {
-            return "TELEPORT";
         }
 
        return result;

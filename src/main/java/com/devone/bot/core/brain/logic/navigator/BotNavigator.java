@@ -32,7 +32,6 @@ public class BotNavigator {
     public static enum NavigationSuggestion {
         WALK,
         CHANGE_DIRECTION,
-        TELEPORT;
     }
 
     private transient Bot owner;
@@ -166,10 +165,10 @@ public class BotNavigator {
         List<BotPosition> walkableSightedValidatedPos  = validateTargets(botPos, context.walkable);
     
         // Обновим summary
-        updateNavigationSummary("poi", context.poi != null ? context.poi.size() : 0, poiSightedValidatedPos.size());
+        updateNavigationSummary("poi",       context.poi != null ? context.poi.size() : 0, poiSightedValidatedPos.size());
         updateNavigationSummary("reachable", context.reachable != null ? context.reachable.size() : 0, reachableSightedValidatedPos.size());
         updateNavigationSummary("navigable", context.navigable != null ? context.navigable.size() : 0, navigableSightedValidatedPos.size());
-        updateNavigationSummary("walkable", context.walkable != null ? context.walkable.size() : 0, walkableSightedValidatedPos.size());
+        updateNavigationSummary("walkable",  context.walkable != null ? context.walkable.size() : 0, walkableSightedValidatedPos.size());
     
         // Основная логика выбора цели
         if (poiSightedValidatedPos.size() <= 1) {
@@ -182,14 +181,14 @@ public class BotNavigator {
                 result = candidates;
     
             } else if (!navigableSightedValidatedPos.isEmpty() || !walkableSightedValidatedPos.isEmpty()) {
-                // Доступна поверхность, но нет пути → TELEPORT
+                // Доступна поверхность, но нет пути → CHANGE_DIRECTION
                 List<BotPosition> fallbackCandidates = new ArrayList<>();
                 fallbackCandidates.addAll(navigableSightedValidatedPos);
                 fallbackCandidates.addAll(walkableSightedValidatedPos);
     
                 suggestedPoi = BotPOISelector.selectRandom(fallbackCandidates);
                 candidates = List.of(suggestedPoi);
-                navigationSuggestion = NavigationSuggestion.TELEPORT;
+                navigationSuggestion = NavigationSuggestion.CHANGE_DIRECTION;
                 result = candidates;
     
             } else {

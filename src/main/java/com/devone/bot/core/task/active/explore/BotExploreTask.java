@@ -14,6 +14,7 @@ import com.devone.bot.core.utils.logger.BotLogger;
 public class BotExploreTask extends BotTaskAutoParams<BotExploreTaskParams> {
 
     private double scanRadius;
+    private int rotations = 0;
 
     public BotExploreTask(Bot bot) {
         super(bot, BotExploreTaskParams.class);
@@ -34,15 +35,11 @@ public class BotExploreTask extends BotTaskAutoParams<BotExploreTaskParams> {
 
     @Override
     public void execute() {
+        BotLogger.debug(icon, isLogging(), bot.getId() + " 🧭 Explore with distance: " + scanRadius);
 
         if (isPause())
             return;
-            
-        BotLogger.debug(icon, true, bot.getId() + " 💻 Navigator calculation started");
-        bot.getNavigator().calculate(bot.getBrain().getSceneData());
-        BotLogger.debug(icon, true, bot.getId() + " 💻 Navigator calculation ended");
-
-        BotLogger.debug(icon, isLogging(), bot.getId() + " 🧭 Explore with distance: " + scanRadius);
+        
 
         long rmt = BotUtils.getRemainingTime(startTime, params.getTimeout());
         setObjective(params.getObjective() + " (" + rmt + ")");
@@ -64,14 +61,27 @@ public class BotExploreTask extends BotTaskAutoParams<BotExploreTaskParams> {
             return;
         }
 
+        BotLogger.debug(icon, true, bot.getId() + " 💻 Navigator calculation started");
+        bot.getNavigator().calculate(sceneData);
+        BotLogger.debug(icon, true, bot.getId() + " 💻 Navigator calculation ended");
+
         BotPosition poi = bot.getNavigator().getSuggestedPoi();
         
         NavigationSuggestion suggestion = bot.getNavigator().getNavigationSuggestion();
         if(suggestion == NavigationSuggestion.CHANGE_DIRECTION) {
+            if(rotations > 8) {
+                BotLogger.debug(icon, isLogging(), bot.getId() + "  The full rotation was made and navigation point was not found. The bost is stuck!");                
+                BotLogger.debug(icon, isLogging(), bot.getId() + "  It is up to BotBrain task to decide how to get the Bot unstuck");                
+
+                bot.getNavigator().setStuck(true);
+
+                stop();
+                return;
+            }
             BotLogger.debug(icon, isLogging(), bot.getId() + "  Rotating the bot to scan new sector!");
             //rotate 45 clockwise            
             BotUtils.rotateClockwise(this, bot, (float)BotConstants.DEFAULT_SIGHT_FOV);
-            stop();
+            rotations++;
             return;
         }
 
