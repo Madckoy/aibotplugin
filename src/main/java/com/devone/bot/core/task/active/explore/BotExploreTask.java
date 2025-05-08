@@ -10,6 +10,7 @@ import com.devone.bot.core.utils.BotConstants;
 import com.devone.bot.core.utils.BotUtils;
 import com.devone.bot.core.utils.blocks.BotPosition;
 import com.devone.bot.core.utils.logger.BotLogger;
+import com.devone.bot.core.utils.world.BotWorldHelper;
 
 public class BotExploreTask extends BotTaskAutoParams<BotExploreTaskParams> {
 
@@ -61,9 +62,12 @@ public class BotExploreTask extends BotTaskAutoParams<BotExploreTaskParams> {
             return;
         }
 
-
-        bot.getNavigator().calculate(sceneData, BotConstants.DEFAULT_NORMAL_SIGHT_FOV);
-
+        if (BotWorldHelper.isInDanger(bot)) {
+            bot.getNavigator().calculate(sceneData, BotConstants.DEFAULT_MAX_SIGHT_FOV);
+        } else {
+            bot.getNavigator().calculate(sceneData, BotConstants.DEFAULT_NORMAL_SIGHT_FOV);
+        }
+        
 
         BotPosition poi = bot.getNavigator().getSuggestedPoi();
         

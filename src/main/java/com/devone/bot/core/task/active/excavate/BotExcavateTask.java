@@ -41,6 +41,10 @@ public class BotExcavateTask extends BotTaskAutoParams<BotExcavateTaskParams> {
     private List<BotPosition> validatedList = new ArrayList<>();
     private Queue<BotPosition> queuedList = new LinkedList<>();
 
+    private boolean ignoreDanger = false;
+    private boolean needToRestartRunner = false;
+
+
     public BotExcavateTask(Bot bot) {
         super(bot, BotExcavateTaskParams.class);
     }
@@ -85,7 +89,16 @@ public class BotExcavateTask extends BotTaskAutoParams<BotExcavateTaskParams> {
 
         basePosition = new BotPosition(bot.getNavigator().getPosition());
 
-        if (runner == null) {
+        // 🚨 Проверка на опасную жидкость
+        if (BotWorldHelper.isInDanger(bot) && ignoreDanger==false) {
+            BotLogger.debug(icon, isLogging(), bot.getId() + " 💧 Оказался в опасной жидкости. Переключаем паттерн на спасательный.");
+            ignoreDanger = true;
+            this.patternName = "escape.json";            
+            needToRestartRunner = true;
+        }
+        
+
+        if (runner == null || needToRestartRunner==true) {
             BotPatternRunnerParams params = new BotPatternRunnerParams();
             params.setFilename(this.patternName);
             runner = new BotPatternRunner();
@@ -114,6 +127,13 @@ public class BotExcavateTask extends BotTaskAutoParams<BotExcavateTaskParams> {
                             + bot.getNavigator().getPoi());
             stop();
             return;
+        }
+
+        // 🚨 Проверка на опасную жидкость
+        if (BotWorldHelper.isInDanger(bot)) {
+            BotLogger.debug(icon, isLogging(), bot.getId() + " 💧 Оказался в опасной жидкости. Завершаем копку.");
+            ignoreDanger = true;
+            this.patternName = "escape.json";
         }
 
         if (!runner.isLoaded()) {

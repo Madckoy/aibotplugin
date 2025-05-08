@@ -23,6 +23,7 @@ import com.devone.bot.core.task.active.brain.params.BotBrainTaskParams;
 import com.devone.bot.core.task.active.calibrate.BotCalibrateTask;
 import com.devone.bot.core.task.active.excavate.BotExcavateTask;
 import com.devone.bot.core.task.active.excavate.params.BotExcavateTaskParams;
+import com.devone.bot.core.task.active.explore.BotExploreTask;
 import com.devone.bot.core.task.active.teleport.BotTeleportTask;
 import com.devone.bot.core.task.active.teleport.params.BotTeleportTaskParams;
 import com.devone.bot.core.utils.BotConstants;
@@ -129,10 +130,21 @@ public class BotBrainTask extends BotTaskAutoParams<BotBrainTaskParams> {
     }
 
     private Optional<Runnable> tryUnstuckStrategy(Bot bot) {
+
         int strategy = params.getUnstuckStrategy();
 
         switch (strategy) {
             case 1:
+                if (params.isAllowExploration()) {
+                    return Optional.of(() -> {
+                        BotLogger.debug(icon, isLogging(), bot.getId() + " 🚶🏻‍♂️Двигаемся чтобы выбраться");
+                        BotExploreTask task = new BotExploreTask(bot);
+                        push(bot, task);
+                        params.setUnstuckStrategy(2);
+                    });
+                }
+                return Optional.empty();
+            case 2:
                 if (params.isAllowExcavation()) {
                     return Optional.of(() -> {
                         BotLogger.debug(icon, isLogging(), bot.getId() + " ⛏️ Копаемся чтобы выбраться");
@@ -141,16 +153,17 @@ public class BotBrainTask extends BotTaskAutoParams<BotBrainTaskParams> {
                         exParams.setPatternName("escape.json");
                         task.setParams(exParams);
                         push(bot, task);
+                        params.setUnstuckStrategy(3);
                     });
                 }
                 return Optional.empty();
-
-            case 2:
+            case 3:
                 if (params.isAllowTeleport()) {
                     BotPositionSight botPos = bot.getNavigator().getPositionSight();
                     BotSceneData sceneData = bot.getBrain().getSceneData();
                     BotNavigationContext context = BotNavigationContextMaker.createSceneContext(botPos, sceneData.blocks,
                             sceneData.entities, BotConstants.DEFAULT_MAX_SIGHT_FOV);
+                    params.setUnstuckStrategy(1);
                     return tryTeleportFallback(bot, context);
                 }
                 return Optional.empty();

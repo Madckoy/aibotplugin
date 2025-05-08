@@ -11,14 +11,15 @@ public class BotBrainTaskParams extends BotTaskParams {
     private int     unstuckStrategy = 1;
     /*
     0 - do nothing
-    1 - excavate
-    2 - teleport
-      2.1 - teleport to random reachable spot, if available
-      2.2 - teleport to random navigable spot, if available
-      2.3 - teleport to random walkable spot,  if available
-      2.4 - teleport to specific location
-      2.5 - teleport to world spawn
-      2.6 - teleport to nearest animal
+    1 - Explore
+    2 - Excavate
+    3 - Teleport
+      3.1 - teleport to random reachable spot, if available
+      3.2 - teleport to random navigable spot, if available
+      3.3 - teleport to random walkable spot,  if available
+      3.4 - teleport to specific location
+      3.5 - teleport to world spawn
+      3.6 - teleport to nearest animal
     */
     private boolean allowViolence   = true;
     //
