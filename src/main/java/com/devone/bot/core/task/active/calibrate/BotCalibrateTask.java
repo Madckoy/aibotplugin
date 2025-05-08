@@ -10,8 +10,11 @@ import com.devone.bot.core.utils.logger.BotLogger;
 
 public class BotCalibrateTask extends BotTaskAutoParams<BotCalibrateTaskParams> {
 
-    public BotCalibrateTask(Bot bot) {
+    private String message="";
+
+    public BotCalibrateTask(Bot bot, String msg) {
         super(bot, BotCalibrateTaskParams.class);
+        message = msg;
     }
 
     @Override
@@ -28,7 +31,7 @@ public class BotCalibrateTask extends BotTaskAutoParams<BotCalibrateTaskParams> 
 
         long rmt = BotUtils.getRemainingTime(startTime, params.getTimeout());
 
-        setObjective(params.getObjective() + " (" + rmt + ")");
+        setObjective(params.getObjective() + " " + message + " (" + rmt + ")");
 
         //BotMemoryV2Utils.clearAllVisited(bot);
 

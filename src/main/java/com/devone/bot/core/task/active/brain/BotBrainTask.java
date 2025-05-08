@@ -70,7 +70,9 @@ public class BotBrainTask extends BotTaskAutoParams<BotBrainTaskParams> {
         if (thinkingTicks > 50) {
             BotLogger.warn(icon, isLogging(),
                     bot.getId() + " 🎲 Бот думает слишком долго (" + thinkingTicks + " тиков). Сброс в Calibration.");
-            push(bot, new BotCalibrateTask(bot));
+
+            push(bot, new BotCalibrateTask(bot,"Need reset!"));
+
             bot.getBrain().resetThinkingCycle();
             return;
         }
@@ -86,6 +88,7 @@ public class BotBrainTask extends BotTaskAutoParams<BotBrainTaskParams> {
         }
 
         Runnable decision = determineBehaviorScenario(bot);
+
         if (decision != null)
             decision.run();
     }
@@ -106,12 +109,16 @@ public class BotBrainTask extends BotTaskAutoParams<BotBrainTaskParams> {
         if (stuck) {
 
             Optional<Runnable> unstuck = tryUnstuckStrategy(bot);
-            if (unstuck.isPresent())
+
+            if (unstuck.isPresent()) {
+             
                 return unstuck.get();
+            }
 
             return () -> {
-                BotLogger.debug(icon, isLogging(), bot.getId() + " 💤 Бот застрял. Уходим в Calibration.");
-                push(bot, new BotCalibrateTask(bot));
+                BotLogger.debug(icon, isLogging(), bot.getId() + " 💤 Бот застрял. Уходим в Calibration с сообщением. ");
+
+                push(bot, new BotCalibrateTask(bot, "I'm stuck. Need help!"));
             };
         }
 
@@ -119,7 +126,7 @@ public class BotBrainTask extends BotTaskAutoParams<BotBrainTaskParams> {
 
         return weighted != null ? weighted : () -> {
             BotLogger.debug(icon, isLogging(), bot.getId() + " 💤 Нет задач. Уходим в Calibration.");
-            push(bot, new BotCalibrateTask(bot));
+            push(bot, new BotCalibrateTask(bot, "Ready"));
         };
     }
 
@@ -171,7 +178,7 @@ public class BotBrainTask extends BotTaskAutoParams<BotBrainTaskParams> {
             default:
                 return Optional.of(() -> {
                     BotLogger.debug(icon, isLogging(), bot.getId() + " ❌ Стратегия не определена. Calibrate.");
-                    push(bot, new BotCalibrateTask(bot));
+                    push(bot, new BotCalibrateTask(bot, "Unstuck strategy undefined!"));
                 });
         }
     }
