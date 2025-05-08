@@ -76,7 +76,7 @@ public class BotBrainTask extends BotTaskAutoParams<BotBrainTaskParams> {
 
         bot.getBrain().markThinkingCycle();
 
-        bot.getNavigator().calculate(bot.getBrain().getSceneData(), BotConstants.DEFAULT_NORMAL_SIGHT_FOV); 
+        bot.getNavigator().calculate(bot.getBrain().getSceneData(), BotConstants.DEFAULT_MAX_SIGHT_FOV); 
 
         Runnable decision = determineBehaviorScenario(bot);
         if (decision != null)
