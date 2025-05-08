@@ -253,10 +253,13 @@ public class BotNavigator {
     
             BotPosition npos = new BotPosition(target.getX(), target.getY(), target.getZ());
     
-            // Исключаем позицию под ботом
+            // 🛑 1. Исключаем блок под ногами
             if (BlockUtils.isSameBlockUnderfoot(botPos, npos)) continue;
     
-            // Проверим, есть ли воздух над блоком
+            // 🛑 2. Слишком близко по XZ
+            if (BlockUtils.distanceXZ(botPos, npos) < 2.0) continue;
+    
+            // ✅ 3. Воздух над блоком
             BotPosition posAbove = new BotPosition(npos.getX(), npos.getY() + 1, npos.getZ());
             Block blockAbove = BotWorldHelper.botPositionToWorldBlock(posAbove);
             if (blockAbove.getType().isAir()) {
