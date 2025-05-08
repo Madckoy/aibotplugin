@@ -129,13 +129,6 @@ public class BotExcavateTask extends BotTaskAutoParams<BotExcavateTaskParams> {
             return;
         }
 
-        // 🚨 Проверка на опасную жидкость
-        if (BotWorldHelper.isInDanger(bot)) {
-            BotLogger.debug(icon, isLogging(), bot.getId() + " 💧 Оказался в опасной жидкости. Завершаем копку.");
-            ignoreDanger = true;
-            this.patternName = "escape.json";
-        }
-
         if (!runner.isLoaded()) {
             try {
                 runner.load(basePosition);
