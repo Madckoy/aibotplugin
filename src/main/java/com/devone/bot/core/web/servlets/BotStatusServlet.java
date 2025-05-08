@@ -104,7 +104,13 @@ public class BotStatusServlet extends HttpServlet {
             botJson.addProperty("autoPickUpItems", bot.getBrain().getAutoPickupItems());
 
             botJson.addProperty("task", BotUtils.getActiveTaskIcon(bot));
-            botJson.addProperty("taskIsReactive", BotUtils.getActiveTaskIcon(bot));
+            
+            try {
+                botJson.addProperty("taskIsReactive", bot.getActiveTask().isReactive());
+            } catch (Exception e) {
+                botJson.addProperty("taskIsReactive", false);
+            }
+
             botJson.addProperty("object", BotUtils.getObjective(bot));
 
             long elapsedTime = 0;

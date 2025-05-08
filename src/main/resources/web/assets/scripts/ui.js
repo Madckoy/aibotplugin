@@ -110,7 +110,7 @@ function updateOrCreateBotRow(bot, tbody) {
 function getTaskStatusEmoji(isReactive) {
     if (isReactive === true || isReactive === "true") return "🔸";
     if (isReactive === false || isReactive === "false") return "▪️";
-    return "❔";
+    return "N/A";
 }
 
 function generateInventoryGrid(slots, autoPickupEnabled) {
