@@ -36,12 +36,6 @@ public class BotCalibrateTask extends BotTaskAutoParams<BotCalibrateTaskParams> 
 
         //bot.getNavigator().resetStuckCount();
 
-        BotLogger.debug(icon, true, bot.getId() + " 💻 Navigator calculation started");
-        
-        bot.getNavigator().calculate(bot.getBrain().getSceneData(), BotConstants.DEFAULT_MAX_SIGHT_FOV); //360 scan
-
-        BotLogger.debug(icon, true, bot.getId() + " 💻 Navigator calculation ended");
-
         if (rmt <= 0) {
             BotLogger.debug(icon, isLogging(), bot.getId() + " ⏱️ Task timeout passed. Ending Task.");
             stop();

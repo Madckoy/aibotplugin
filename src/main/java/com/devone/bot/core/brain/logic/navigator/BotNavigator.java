@@ -2,13 +2,15 @@ package com.devone.bot.core.brain.logic.navigator;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
+
 import org.bukkit.Location;
 import org.bukkit.block.Block;
 
 import com.devone.bot.core.Bot;
 import com.devone.bot.core.brain.logic.navigator.context.BotNavigationContext;
 import com.devone.bot.core.brain.logic.navigator.context.BotNavigationContextMaker;
-import com.devone.bot.core.brain.logic.navigator.math.selector.BotPOISelector;
 import com.devone.bot.core.brain.logic.navigator.math.selector.PoiSelectionMode;
 import com.devone.bot.core.brain.memory.BotMemoryV2Utils;
 import com.devone.bot.core.brain.memoryv2.BotMemoryV2;
@@ -163,116 +165,108 @@ public class BotNavigator {
     public List<BotPosition> calculate(BotSceneData scene, double sightFov) {
         try {
             BotLogger.debug(owner.getActiveTask().getIcon(), true, owner.getId() + " 💻 Navigator calculation started");
-        }catch(Exception ex){
+        } catch (Exception ex) {
             BotLogger.debug("*", true, owner.getId() + " 💻 Navigator calculation started");
         }
-
+    
         List<BotPosition> result = new ArrayList<>();
         BotPositionSight botPos = getPositionSight();
+        if (botPos == null) return result;
     
-        BotNavigationContext context = BotNavigationContextMaker.createSceneContext(botPos, scene.blocks, scene.entities, sightFov);
-
+        BotNavigationContext context = BotNavigationContextMaker.createSceneContext(
+            botPos, scene.blocks, scene.entities, sightFov);
         if (context == null) {
             BotLogger.debug(BotUtils.getActiveTaskIcon(owner), true,
                     owner.getId() + " ⚠️ Navigation error: Scene Context is not ready");
             return result;
         }
     
-        // Валидация всех типов целей
+        // Валидируем цели
         List<BotPosition> poiSightedValidatedPos       = validateTargets(botPos, context.poi);
         List<BotPosition> reachableSightedValidatedPos = validateTargets(botPos, context.reachable);
         List<BotPosition> navigableSightedValidatedPos = validateTargets(botPos, context.navigable);
         List<BotPosition> walkableSightedValidatedPos  = validateTargets(botPos, context.walkable);
     
-        // Обновим summary
         updateNavigationSummary("poi",       context.poi != null ? context.poi.size() : 0, poiSightedValidatedPos.size());
         updateNavigationSummary("reachable", context.reachable != null ? context.reachable.size() : 0, reachableSightedValidatedPos.size());
         updateNavigationSummary("navigable", context.navigable != null ? context.navigable.size() : 0, navigableSightedValidatedPos.size());
         updateNavigationSummary("walkable",  context.walkable != null ? context.walkable.size() : 0, walkableSightedValidatedPos.size());
     
-        // Основная логика выбора цели
-        if (poiSightedValidatedPos.size() <= 1) {
-    
-            if (!reachableSightedValidatedPos.isEmpty()) {
-                // Доступна ближайшая точка → WALK
-                navigationSuggestion = NavigationSuggestion.WALK;
-                suggestedPoi = BotPOISelector.selectRandom(reachableSightedValidatedPos);
-                candidates = List.of(suggestedPoi);
-                result = candidates;
-    
-            } else if (!navigableSightedValidatedPos.isEmpty() || !walkableSightedValidatedPos.isEmpty()) {
-                // Доступна поверхность, но нет пути → CHANGE_DIRECTION
-                List<BotPosition> fallbackCandidates = new ArrayList<>();
-                fallbackCandidates.addAll(navigableSightedValidatedPos);
-                fallbackCandidates.addAll(walkableSightedValidatedPos);
-    
-                suggestedPoi = BotPOISelector.selectRandom(fallbackCandidates);
-                candidates = List.of(suggestedPoi);
-                navigationSuggestion = NavigationSuggestion.CHANGE_DIRECTION;
-                result = candidates;
-    
-            } else {
-                // Ничего нет → менять направление
-                navigationSuggestion = NavigationSuggestion.CHANGE_DIRECTION;
-                result = new ArrayList<>();
-            }
-    
-        } else {
-            // Есть реальные POI
+        // Логика выбора цели
+        if (poiSightedValidatedPos.size() > 1) {
             candidates = poiSightedValidatedPos;
             navigationSuggestion = NavigationSuggestion.WALK;
+            suggestedPoi = BlockUtils.findNearestReachable(getPosition(), candidates);
+        } else if (reachableSightedValidatedPos.size() > 1) {
+            candidates = reachableSightedValidatedPos;
+            navigationSuggestion = NavigationSuggestion.WALK;
+            suggestedPoi = BlockUtils.findNearestReachable(getPosition(), candidates);
+        } else {
+            List<BotPosition> reachableFallback = Stream.concat(
+                    navigableSightedValidatedPos.stream(),
+                    walkableSightedValidatedPos.stream()
+            ).filter(pos -> BlockUtils.isSoftReachable(getPosition(), pos))
+             .collect(Collectors.toList());
     
-            if (poiSelectionMode == PoiSelectionMode.SMART) {
-                suggestedPoi = BotPOISelector.selectSmart(owner, candidates, context);
+            if (!reachableFallback.isEmpty()) {
+                candidates = reachableFallback;
+                navigationSuggestion = NavigationSuggestion.WALK;
+                suggestedPoi = BlockUtils.findNearestReachable(getPosition(), candidates);
             } else {
-                suggestedPoi = BotPOISelector.selectRandom(candidates);
+                navigationSuggestion = NavigationSuggestion.CHANGE_DIRECTION;
+                candidates = List.of();
+                suggestedPoi = null;
             }
+        }
     
-            result = candidates;
+        // ➤ Централизованная проверка: цель — это текущая позиция
+        if (suggestedPoi != null && BlockUtils.isSameBlockUnderfoot(getPosition(), suggestedPoi)) {
+            BotLogger.debug("*", true, owner.getId() + " 🔁 Suggested POI is underfoot — forcing direction change");
+            navigationSuggestion = NavigationSuggestion.CHANGE_DIRECTION;
+            suggestedPoi = null;
+            candidates = List.of();
         }
     
         updateNavigationMemory();
-
-        // 🚨 Проверка на опасность (жидкость)
         setInDanger(BotWorldHelper.isInDanger(owner));
-
+    
         try {
             BotLogger.debug(owner.getActiveTask().getIcon(), true, owner.getId() + " 💻 Navigator calculation ended");
-        }catch(Exception ex){
+        } catch (Exception ex) {
             BotLogger.debug("*", true, owner.getId() + " 💻 Navigator calculation ended");
         }
-        
-        return result;
+    
+        return candidates;
     }
     
 
     private List<BotPosition> validateTargets(BotPositionSight botPos, List<BotBlockData> blocks) {
         List<BotPosition> navigable = new ArrayList<>();
-
         if (blocks == null) return navigable;
-
+    
         for (BotBlockData target : blocks) {
             BotPosition pos = BlockUtils.fromBlock(target);
             Location loc = BotWorldHelper.botPositionToWorldLocation(pos);
-
+    
             boolean canNavigate = owner.getNPC().getNavigator().canNavigateTo(loc);
-
-            if (canNavigate) {
-                BotPosition npos = new BotPosition(target.getX(), target.getY(), target.getZ());
-
-                if (botPos.distanceTo(npos) <= 1.5) continue;
-
-                BotPosition posAbove = new BotPosition(npos.getX(), npos.getY() + 1, npos.getZ());
-                Block blockAbove = BotWorldHelper.botPositionToWorldBlock(posAbove);
-
-                if (blockAbove.getType().isAir()) {
-                    navigable.add(npos);
-                }
+            if (!canNavigate) continue;
+    
+            BotPosition npos = new BotPosition(target.getX(), target.getY(), target.getZ());
+    
+            // Исключаем позицию под ботом
+            if (BlockUtils.isSameBlockUnderfoot(botPos, npos)) continue;
+    
+            // Проверим, есть ли воздух над блоком
+            BotPosition posAbove = new BotPosition(npos.getX(), npos.getY() + 1, npos.getZ());
+            Block blockAbove = BotWorldHelper.botPositionToWorldBlock(posAbove);
+            if (blockAbove.getType().isAir()) {
+                navigable.add(npos);
             }
         }
-
+    
         return navigable;
     }
+    
 
     private void updateNavigationSummary(String key, int calculated, int confirmed) {
         BotMemoryV2 memory = getMemory();
