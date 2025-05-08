@@ -41,9 +41,9 @@ public class BotWalkableSurfaceBuilder {
 
     private static BotBlockData createFakeBlock(double x, double y, double z, String type, String tag) {
         BotBlockData fake = new BotBlockData();
-        fake.setX(x);
-        fake.setY(y);
-        fake.setZ(z);
+        fake.setX((int) x);
+        fake.setY((int) y);
+        fake.setZ((int) z);
         fake.setType(type);
         fake.setTag(tag);
         return fake;

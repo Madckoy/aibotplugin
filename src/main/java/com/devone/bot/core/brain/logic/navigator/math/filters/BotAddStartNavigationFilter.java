@@ -14,9 +14,9 @@ public class BotAddStartNavigationFilter {
         List<BotBlockData> result = new ArrayList<>(blocks);
 
         BotBlockData start = new BotBlockData();
-        start.setX(botPosition.getX());
-        start.setY(botPosition.getY() - 1);
-        start.setZ(botPosition.getZ());
+        start.setX((int) botPosition.getX());
+        start.setY((int) botPosition.getY() - 1);
+        start.setZ((int) botPosition.getZ());
         start.setType("DUMMY");
         start.setTag("navigator:start");
 

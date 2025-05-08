@@ -27,9 +27,9 @@ public class BotPosition {
 
     public double distanceTo(BotPosition other) {
         if (other == null) return Double.MAX_VALUE;
-        double dx = this.x - other.x;
-        double dy = this.y - other.y;
-        double dz = this.z - other.z;
+        int dx = (int) this.x - (int) other.x;
+        int dy = (int) this.y - (int) other.y;
+        int dz = (int) this.z - (int) other.z;
         return Math.sqrt(dx * dx + dy * dy + dz * dz);
     }
 

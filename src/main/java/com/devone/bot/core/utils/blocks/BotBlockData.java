@@ -16,7 +16,7 @@ public class BotBlockData {
         this.position = new BotPosition();
     }
 
-    public BotBlockData(double x, double y, double z) {
+    public BotBlockData(int x, int y, int z) {
         this.position = new BotPosition(x, y, z);
     }
 
@@ -28,27 +28,27 @@ public class BotBlockData {
         this.position = pos;
     }
 
-    public double getX() {
-        return position.getX();
+    public int getX() {
+        return (int) position.getX();
     }
 
-    public void setX(double x) {
+    public void setX(int x) {
         position.setX(x);
     }
 
-    public double getY() {
-        return position.getY();
+    public int getY() {
+        return (int) position.getY();
     }
 
-    public void setY(double y) {
+    public void setY(int y) {
         position.setY(y);
     }
 
-    public double getZ() {
-        return position.getZ();
+    public int getZ() {
+        return (int) position.getZ();
     }
 
-    public void setZ(double z) {
+    public void setZ(int z) {
         position.setZ(z);
     }
 
@@ -135,5 +135,9 @@ public class BotBlockData {
     public String toString() {
         return String.format("Block: [ x=%.2f, y=%.2f, z=%.2f | key=%s, type=%s, tag=%s ]",
             getX(), getY(), getZ(), toKey(), type, tag);
+    }
+
+    public String toCompactString() {
+        return String.format("%d, %d, %d", (int) getX(), (int) getY(), (int) getZ());
     }
 }

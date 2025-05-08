@@ -20,7 +20,7 @@ public class BotSceneScan3D {
 
     public static BotSceneData scan(Bot bot, double scanRadius, int height) {
 
-        int deltaY = (height - 1) / 2;
+        int deltaY = height;
         World world = BotWorldHelper.getWorld();
 
         // Центр сканирования
