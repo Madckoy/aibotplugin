@@ -80,7 +80,8 @@ public class BotBrainTask extends BotTaskAutoParams<BotBrainTaskParams> {
         
         if(stuck) {
             bot.getNavigator().calculate(bot.getBrain().getSceneData(), BotConstants.DEFAULT_MAX_SIGHT_FOV); // ищем все возможные варианты POI и пробуем self-unstuck
-            return;
+            stuck = bot.getNavigator().isStuck();
+            if(!stuck) return;
         }
 
         Runnable decision = determineBehaviorScenario(bot);
@@ -137,6 +138,7 @@ public class BotBrainTask extends BotTaskAutoParams<BotBrainTaskParams> {
                         BotLogger.debug(icon, isLogging(), bot.getId() + " ⛏️ Копаемся чтобы выбраться");
                         BotExcavateTask task = new BotExcavateTask(bot);
                         BotExcavateTaskParams exParams = new BotExcavateTaskParams();
+                        exParams.setPatternName("escape.json");
                         task.setParams(exParams);
                         push(bot, task);
                     });
