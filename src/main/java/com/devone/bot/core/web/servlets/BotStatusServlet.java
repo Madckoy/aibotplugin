@@ -84,6 +84,8 @@ public class BotStatusServlet extends HttpServlet {
             Object teleportUsed = stats.get("teleportUsed");
             if (teleportUsed != null) {
                 botJson.addProperty("teleportUsed", (Number) teleportUsed);
+            } else {
+                 botJson.addProperty("teleportUsed", (Number) 0);
             }
 
             // Общее число сломанных блоков
@@ -91,6 +93,8 @@ public class BotStatusServlet extends HttpServlet {
             Object totalBlocks = blocks.get("total");
             if (totalBlocks != null) {
                 botJson.addProperty("blocksBroken", (Number) totalBlocks);
+            } else {
+                botJson.addProperty("blocksBroken", (Number) 0);
             }
 
             // Общее число убитых мобов
@@ -98,6 +102,8 @@ public class BotStatusServlet extends HttpServlet {
             Object totalMobs = mobs.get("total");
             if (totalMobs != null) {
                 botJson.addProperty("mobsKilled", (Number) totalMobs);
+            } else {
+                botJson.addProperty("mobsKilled", (Number) 0);
             }
 
             botJson.addProperty("autoPickUpItems", bot.getBrain().getAutoPickupItems());
