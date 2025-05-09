@@ -1,8 +1,5 @@
 package com.devone.bot.core.brain;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import com.devone.bot.core.Bot;
 import com.devone.bot.core.brain.memoryv2.BotMemoryV2;
 import com.devone.bot.core.brain.perseption.BotYawChangeListener;
