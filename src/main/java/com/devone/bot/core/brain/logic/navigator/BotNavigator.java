@@ -49,7 +49,7 @@ public class BotNavigator {
     private BotPosition position;
     private transient BotPosition poi;
 
-    PoiSelectionMode poiSelectionMode = PoiSelectionMode.SMART;
+    PoiSelectionMode poiSelectionMode = PoiSelectionMode.RANDOM;
 
     public BotNavigator() {
         this.position = null;
