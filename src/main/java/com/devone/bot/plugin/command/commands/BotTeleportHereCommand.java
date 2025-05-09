@@ -8,7 +8,7 @@ import org.bukkit.entity.Player;
 import com.devone.bot.core.Bot;
 import com.devone.bot.core.BotManager;
 import com.devone.bot.core.task.passive.BotTaskManager;
-import com.devone.bot.core.task.reactive.container.BotTeleportToPlayerReactiveContainer;
+import com.devone.bot.core.task.reactive.container.BotReactiveTeleportToPlayerContainer;
 import com.devone.bot.core.utils.logger.BotLogger;
 
 public class BotTeleportHereCommand implements CommandExecutor {
@@ -34,9 +34,12 @@ public class BotTeleportHereCommand implements CommandExecutor {
             return true;
         }
 
+        // Удаляем все задачи
+        BotTaskManager.clear(bot);
+
         BotLogger.debug("📌", true, "/bot-tp-here: Бот " + bot.getId() + " будет телепортирован к игроку");
 
-        BotTaskManager.push(bot, new BotTeleportToPlayerReactiveContainer(bot, player));
+        BotTaskManager.push(bot, new BotReactiveTeleportToPlayerContainer(bot, player));
 
         player.sendMessage("§aБот " + bot.getId() + " телепортируется к вам!");
 

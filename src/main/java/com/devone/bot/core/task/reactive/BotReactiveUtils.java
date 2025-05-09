@@ -10,11 +10,14 @@ public class BotReactiveUtils {
     // 🧠 Активируем реакцию и запоминаем, кто её начал
     public static void activateReaction(Bot bot, boolean status) {
         bot.getBrain().setReactionInProgress(status);
+        BotTask<?> activeTask = null;
 
         if (status) {
-            BotTask<?> activeTask = bot.getActiveTask();
-            if (activeTask != null) {
+            try {
+                activeTask = bot.getActiveTask();
                 bot.getBrain().setCurrentReactionOwner(activeTask.getUUID());
+            } catch (Exception ex) {
+
             }
         } else {
             bot.getBrain().clearCurrentReactionOwner();

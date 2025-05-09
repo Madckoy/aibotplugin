@@ -1,9 +1,9 @@
 #!/bin/bash
 
 # Variables
-PLUGIN_NAME="AIBotPlugin-1.3-SNAPSHOT.jar"
+PLUGIN_NAME="AIBotPlugin-1.4-SNAPSHOT.jar"
 LOCAL_PATH="target/$PLUGIN_NAME"
-REMOTE_HOST="192.168.3.33"
+REMOTE_HOST="192.168.2.20"
 REMOTE_USER="serge"  # Change this if needed
 REMOTE_PATH="/opt/apps/minecraft/spigot/plugins"
 LOG_FILE="deploy.log"
@@ -32,7 +32,8 @@ else
 fi
 
 # Optional: Restart Minecraft Server on Remote Host
-SSH_CMD="sudo systemctl restart minecraft"
+SSH_CMD="sudo -n /usr/bin/systemctl restart minecraft"
+
 echo "🔄 Restarting Minecraft server on $REMOTE_HOST..." | tee -a "$LOG_FILE"
 ssh "$REMOTE_USER@$REMOTE_HOST" "$SSH_CMD"
 

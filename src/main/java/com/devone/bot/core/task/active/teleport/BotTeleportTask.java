@@ -6,9 +6,9 @@ import org.bukkit.entity.Player;
 
 import com.devone.bot.AIBotPlugin;
 import com.devone.bot.core.Bot;
+import com.devone.bot.core.brain.memory.BotMemoryV2Utils;
 import com.devone.bot.core.task.passive.BotTaskAutoParams;
 import com.devone.bot.core.task.passive.IBotTaskParameterized;
-import com.devone.bot.core.task.active.sonar.BotSonar3DTask;
 import com.devone.bot.core.task.active.teleport.params.BotTeleportTaskParams;
 import com.devone.bot.core.utils.blocks.BotPosition;
 import com.devone.bot.core.utils.logger.BotLogger;
@@ -26,7 +26,7 @@ public class BotTeleportTask extends BotTaskAutoParams<BotTeleportTaskParams> {
 
             BotTeleportTaskParams params = new BotTeleportTaskParams();
             BotPosition loc = BotWorldHelper.locationToBotPosition(player.getLocation());
-            params.setLocation(loc);
+            params.setPosition(loc);
         }
 
         setParams(new BotTeleportTaskParams());
@@ -36,7 +36,7 @@ public class BotTeleportTask extends BotTaskAutoParams<BotTeleportTaskParams> {
     public IBotTaskParameterized<BotTeleportTaskParams> setParams(BotTeleportTaskParams params) {
         super.setParams(params);
 
-        this.target = params.getLocation();
+        this.target = params.getPosition();
         setIcon(params.getIcon());
         setObjective(params.getObjective());
 
@@ -56,28 +56,30 @@ public class BotTeleportTask extends BotTaskAutoParams<BotTeleportTaskParams> {
             return;
         }
 
-        setObjective(params.getObjective() + " to: " + target);
+        if (bot.getNPCEntity() == null) {
+            BotLogger.debug(icon, this.isLogging(), bot.getId() + " ❌ Проблема с NPC Enitity.");
+            stop();
+            return;
+        }
+
+        setObjective(params.getObjective() + " to: " + target.toCompactString());
 
         BotLogger.debug(icon, this.isLogging(), bot.getId() + " ⚡ Телепорт в " + target);
 
         Bukkit.getScheduler().runTask(AIBotPlugin.getInstance(), () -> {
             Location baseLocation = BotWorldHelper.botPositionToWorldLocation(target);
-            Location safeOffset = baseLocation.clone().add(0.5, 0, 0.5);
+            Location safeOffset = baseLocation.clone().add(0.0, 1.0, 0.0);
 
             bot.getNPCEntity().teleport(safeOffset);
-            bot.getBrain().getMemory().teleportUsedIncrease();
+
+            BotMemoryV2Utils.incrementCounter(bot, "teleportUsed");            
 
             bot.getTaskManager().getActiveTask().stop();
 
-            BotSonar3DTask sonar = new BotSonar3DTask(bot);
-            sonar.execute();
-            bot.getNavigator().calculate(bot.getBrain().getMemory().getSceneData());
-
             BotLogger.debug(icon, this.isLogging(),
                     bot.getId() + " ⚡ Телепорт завершен с " + baseLocation.toVector() + " в " + safeOffset.toVector());
-
             stop();
         });
-
+        stop();
     }
 }

@@ -3,7 +3,6 @@ package com.devone.bot.core.utils.logger;
 import org.bukkit.Bukkit;
 
 import com.devone.bot.core.Bot;
-import com.devone.bot.core.task.passive.BotTask;
 import com.devone.bot.core.utils.BotConstants;
 import com.devone.bot.core.utils.BotUtils;
 import com.devone.bot.core.utils.blocks.BotPosition;
@@ -19,40 +18,43 @@ public class BotLifecycleLogger {
 
     public static void write(Bot bot) {
         BotPosition loc = bot.getNavigator().getPosition();
-        if (loc == null) return;
-    
+        if (loc == null)
+            return;
+
         String botName = bot.getId();
         String filename = LOG_FOLDER + botName + "_moves_" + SESSION_ID + ".csv";
-    
+
         File logFile = new File(filename);
-    
+
         // ✅ Создание директорий
         logFile.getParentFile().mkdirs();
-    
+
         if (!logFile.exists()) {
             writeHeader(logFile);
         }
-    
+
         try (FileWriter writer = new FileWriter(logFile, true);
-             BufferedWriter bw = new BufferedWriter(writer)) {
-    
-            BotTask<?> task = bot.getBrain().getCurrentTask();
-    
+                BufferedWriter bw = new BufferedWriter(writer)) {
+
+            String t_icon = "N/A";
             String t_name = "N/A";
             String e_time = "N/A";
-    
-            if (task != null) {
-                t_name = task.getIcon();
-                e_time = BotUtils.formatTime(task.getElapsedTime());
-            }
-    
-            String logEntry = String.format("%s,%s,%s,%d,%d,%d,%s,%s",
-                    getCurrentTimestamp(), botName, Bukkit.getWorlds().get(0).getName(),
-                    loc.getX(), loc.getY(), loc.getZ(), "'" + t_name + "'", e_time);
-    
+
+            t_icon = BotUtils.getActiveTaskIcon(bot);
+            t_name = BotUtils.getActiveTaskSimpleName(bot);
+            e_time = BotUtils.formatTime(BotUtils.getActiveTaskElapsed(bot));
+
+            String logEntry = getCurrentTimestamp().toString() + "," +
+                    botName + "," +
+                    Bukkit.getWorlds().get(0).getName() + "," +
+                    loc.toString() + "," +
+                    t_icon + "," +
+                    t_name + "," +
+                    e_time;
+
             bw.write(logEntry);
             bw.newLine();
-    
+
         } catch (IOException e) {
             Bukkit.getLogger().warning("[BotLifecycleLogger] Ошибка записи в лог " + filename + ": " + e.getMessage());
         }
@@ -60,13 +62,14 @@ public class BotLifecycleLogger {
 
     private static void writeHeader(File file) {
         try (FileWriter writer = new FileWriter(file, true);
-             BufferedWriter bw = new BufferedWriter(writer)) {
+                BufferedWriter bw = new BufferedWriter(writer)) {
 
             bw.write("timestamp,bot_id,world,x,y,z,action,duration");
             bw.newLine();
 
         } catch (IOException e) {
-            Bukkit.getLogger().warning("[BotLifecycleLogger] Ошибка создания файла " + file.getName() + ": " + e.getMessage());
+            Bukkit.getLogger()
+                    .warning("[BotLifecycleLogger] Ошибка создания файла " + file.getName() + ": " + e.getMessage());
         }
     }
 

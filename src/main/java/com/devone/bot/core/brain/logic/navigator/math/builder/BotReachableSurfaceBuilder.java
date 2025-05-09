@@ -1,8 +1,9 @@
 package com.devone.bot.core.brain.logic.navigator.math.builder;
 
 import java.util.*;
+
 import com.devone.bot.core.utils.blocks.BotBlockData;
-import com.devone.bot.core.utils.blocks.BotPosition;
+import com.devone.bot.core.utils.blocks.BotPositionKey;
 
 public class BotReachableSurfaceBuilder {
 
@@ -10,35 +11,31 @@ public class BotReachableSurfaceBuilder {
         {1, 0}, {-1, 0}, {0, 1}, {0, -1}
     };
 
-    /**
-     * Находит все блоки, достижимые с позиции бота по навигационной поверхности.
-     * Возвращает новые объекты с пометками.
-     */
     public static List<BotBlockData> build(List<BotBlockData> navigableBlocks) {
-        Map<BotPosition, BotBlockData> map = new HashMap<>();
-        BotPosition start = null;
-        
+        Map<BotPositionKey, BotBlockData> map = new HashMap<>();
+        BotPositionKey startKey = null;
+
         for (BotBlockData b : navigableBlocks) {
-            BotPosition pos = new BotPosition(b.getX(), b.getY(), b.getZ());
+            BotPositionKey key = b.toKey();
             if ("poi:start".equals(b.getTag())) {
-                start = pos;
+                startKey = key;
             }
-            map.put(pos, b);
+            map.put(key, b);
         }
-        
-        if (start == null) {
+
+        if (startKey == null) {
             System.out.println("❌ Start block with notes=navigator:start not found.");
             return List.of();
         }
 
-        Set<BotPosition> visited = new HashSet<>();
-        Queue<BotPosition> queue = new LinkedList<>();
+        Set<BotPositionKey> visited = new HashSet<>();
+        Queue<BotPositionKey> queue = new LinkedList<>();
         List<BotBlockData> reachable = new ArrayList<>();
 
-        queue.add(start);
+        queue.add(startKey);
 
         while (!queue.isEmpty()) {
-            BotPosition current = queue.poll();
+            BotPositionKey current = queue.poll();
             if (!visited.add(current)) continue;
 
             BotBlockData data = map.get(current);
@@ -51,7 +48,7 @@ public class BotReachableSurfaceBuilder {
                     int dz = d[1];
 
                     for (int dy = -1; dy <= 1; dy++) {
-                        BotPosition neighbor = new BotPosition(
+                        BotPositionKey neighbor = new BotPositionKey(
                             current.getX() + dx,
                             current.getY() + dy,
                             current.getZ() + dz
@@ -70,10 +67,11 @@ public class BotReachableSurfaceBuilder {
 
     private static BotBlockData cloneAndMarkAsReachable(BotBlockData original) {
         BotBlockData copy = new BotBlockData();
-        copy.setPosition(new BotPosition(original.getX(), original.getY(), original.getZ()));
+        copy.setX(original.getX());
+        copy.setY(original.getY());
+        copy.setZ(original.getZ());
         copy.setType("DUMMY");
         copy.setTag("reachable:surface");
         return copy;
     }
-    
 }

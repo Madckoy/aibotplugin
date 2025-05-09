@@ -8,7 +8,6 @@ import com.devone.bot.core.Bot;
 import com.devone.bot.core.BotManager;
 import com.devone.bot.core.task.passive.BotTaskManager;
 import com.devone.bot.core.task.active.drop.BotDropAllTask;
-import com.devone.bot.core.task.reactive.container.BotEmptyReactiveContainer;
 
 public class BotDropAllCommand implements CommandExecutor {
 
@@ -34,11 +33,9 @@ public class BotDropAllCommand implements CommandExecutor {
             return false;
         }
 
-        BotEmptyReactiveContainer cont = new BotEmptyReactiveContainer(bot);
         // ✅ Добавляем задачу на drop
         BotDropAllTask task = new BotDropAllTask(bot, null);
-        cont.add(task);
-        BotTaskManager.push(bot, cont);
+        BotTaskManager.push(bot, task);
         // Подтверждение для игрока
         sender.sendMessage("✅ Инвентарь бота '" + botName + "' был сброшен на месте.");
 

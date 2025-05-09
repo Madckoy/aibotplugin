@@ -9,7 +9,7 @@ import org.bukkit.command.CommandSender;
 import com.devone.bot.core.Bot;
 import com.devone.bot.core.BotManager;
 import com.devone.bot.core.task.passive.BotTaskManager;
-import com.devone.bot.core.task.reactive.container.BotTeleportToLocationReactiveContainer;
+import com.devone.bot.core.task.reactive.container.BotReactiveTeleportToPositionContainer;
 import com.devone.bot.core.utils.blocks.BotPosition;
 import com.devone.bot.core.utils.logger.BotLogger;
 
@@ -63,10 +63,10 @@ public class BotTeleportCommand implements CommandExecutor {
         BotLogger.debug("📌", true, "/bot-tp: Бот " + bot.getId() + " телепортируется в " + loc);
 
         // Удаляем все задачи
-        // BotUtils.clearTasks(bot);
+        BotTaskManager.clear(bot);
 
         // Создаём и запускаем реактивный контейнер
-        BotTeleportToLocationReactiveContainer tpContainer = new BotTeleportToLocationReactiveContainer(bot, loc);
+        BotReactiveTeleportToPositionContainer tpContainer = new BotReactiveTeleportToPositionContainer(bot, loc);
         BotTaskManager.push(bot, tpContainer);
 
         sender.sendMessage("✅ Бот '" + botName + "' телепортируется в " + loc);

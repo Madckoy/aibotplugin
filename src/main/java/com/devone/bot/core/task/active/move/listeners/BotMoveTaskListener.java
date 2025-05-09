@@ -1,6 +1,8 @@
 package com.devone.bot.core.task.active.move.listeners;
 
-import com.devone.bot.core.brain.memory.MemoryType;
+import com.devone.bot.AIBotPlugin;
+import com.devone.bot.core.Bot;
+import com.devone.bot.core.brain.memory.BotMemoryV2Utils;
 import com.devone.bot.core.task.active.move.BotMoveTask;
 import com.devone.bot.core.utils.blocks.BotBlockData;
 import com.devone.bot.core.utils.blocks.BotPosition;
@@ -9,10 +11,14 @@ import com.devone.bot.core.utils.world.BotWorldHelper;
 
 import net.citizensnpcs.api.ai.event.NavigationCancelEvent;
 import net.citizensnpcs.api.ai.event.NavigationCompleteEvent;
+
+import org.bukkit.Bukkit;
+import org.bukkit.Location;
 import org.bukkit.block.Block;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.HandlerList;
 import org.bukkit.event.Listener;
+import org.bukkit.event.player.PlayerTeleportEvent;
 
 public class BotMoveTaskListener implements Listener {
 
@@ -44,8 +50,11 @@ public class BotMoveTaskListener implements Listener {
         if (block != null) {
             BotBlockData data = new BotBlockData(block.getX(), block.getY(), block.getZ());
             data.setType(block.getType().toString());
-            task.getBot().getBrain().getMemory().memorize(data, MemoryType.VISITED_BLOCKS);
+
+           BotMemoryV2Utils.memorizePosition( task.getBot(), pos);
+
         }
+
         task.stop();
     }
 
@@ -60,5 +69,30 @@ public class BotMoveTaskListener implements Listener {
 
     public void unregister() {
         HandlerList.unregisterAll(this);
+    }
+
+    public void onComplete(Bot bot) {
+        BotPosition target = bot.getNavigator().getPoi();
+        BotPosition actual = bot.getNavigator().getPosition();
+    
+        if (target != null && actual != null) {
+            double dx = Math.abs(actual.getX() - target.getX());
+            double dz = Math.abs(actual.getZ() - target.getZ());
+    
+            if (dx > 0.2 || dz > 0.2) {
+                Location aligned = new Location(
+                    BotWorldHelper.getBotWorld(bot),
+                    Math.floor(target.getX()) + 0.0,
+                    target.getY(),
+                    Math.floor(target.getZ()) + 0.0
+                );
+
+                Bukkit.getScheduler().runTask(AIBotPlugin.getInstance(), () -> {
+                        bot.getNPC().teleport(aligned, PlayerTeleportEvent.TeleportCause.PLUGIN);
+                });
+
+                BotLogger.debug("🧭", true, bot.getId() + " 📌 Выровнен в центр блока через NavigationCompleteListener: " + bot.getNPC().getStoredLocation());
+            }
+        }
     }
 }

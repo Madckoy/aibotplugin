@@ -12,11 +12,13 @@ import org.bukkit.inventory.ItemStack;
 
 import com.devone.bot.core.Bot;
 import com.devone.bot.core.BotManager;
-import com.devone.bot.core.brain.logic.navigator.BotNavigator;
-import com.devone.bot.core.task.passive.BotTask;
+import com.devone.bot.core.brain.memoryv2.BotMemoryV2;
+import com.devone.bot.core.brain.memoryv2.BotMemoryV2Partition;
 import com.devone.bot.core.utils.BotUtils;
 import com.devone.bot.core.utils.blocks.BotPosition;
+import com.devone.bot.core.utils.logger.BotLogger;
 import com.devone.bot.core.web.BotWebService;
+
 import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
 
@@ -42,7 +44,6 @@ public class BotStatusServlet extends HttpServlet {
         String serverTime = LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss"));
         result.addProperty("server-time", serverTime);
 
-        // Время Minecraft
         long mcTicks = Bukkit.getWorlds().get(0).getTime();
         int hour = (int) ((mcTicks / 1000 + 6) % 24);
         int minute = (int) ((mcTicks % 1000) * 60 / 1000);
@@ -58,83 +59,83 @@ public class BotStatusServlet extends HttpServlet {
             BotPosition loc = bot.getNavigator().getPosition();
             BotPosition tgt = bot.getNavigator().getPoi();
 
-            if (loc != null) {
-                botJson.addProperty("skin", "http://" + BotWebService.getServerHost() + ":"
-                        + BotWebService.getServerPort() + "/skins/" + bot.getUuid() + ".png");
+            botJson.addProperty("skin", "http://" + BotWebService.getServerHost() + ":"
+                    + BotWebService.getServerPort() + "/skins/" + bot.getUuid() + ".png");
 
-                botJson.addProperty("id", bot.getId());
-                botJson.addProperty("name", bot.getNPC().getName());
+            botJson.addProperty("id", bot.getId());
+            botJson.addProperty("name", bot.getNPC().getName());
 
-                botJson.addProperty("stuck", bot.getNavigator().isStuck());
-                botJson.addProperty("stuckCount", bot.getNavigator().getStuckCount());
+            botJson.addProperty("stuck", bot.getNavigator().isStuck());
+            botJson.addProperty("stuckCount", bot.getNavigator().getStuckCount());
 
-                botJson.addProperty("blocksBroken", bot.getBrain().getMemory().getBlocksBroken());
-                botJson.addProperty("mobsKilled", bot.getBrain().getMemory().getMobsKilled());
-                botJson.addProperty("teleportUsed", bot.getBrain().getMemory().getTeleportUsed());
+            botJson.addProperty("position", loc.toCompactString());
+            
+            String tgtLoc = "";
+            if (tgt != null) {
+                tgtLoc = tgt.toCompactString();
+            }
+            botJson.addProperty("target", tgtLoc);
 
-                botJson.addProperty("autoPickUpItems", bot.getBrain().getAutoPickupItems());
 
-                String currLoc = loc.getX() + ", " + loc.getY() + ", " + loc.getZ();
 
-                botJson.addProperty("position", currLoc);
 
-                botJson.addProperty("task", bot.getBrain().getCurrentTask().getIcon());
-                botJson.addProperty("taskIsReactive", bot.getBrain().getCurrentTask().isReactive());
+            BotMemoryV2Partition stats = bot.getBrain().getMemoryV2().partition("stats", BotMemoryV2Partition.Type.MAP);
 
-                botJson.addProperty("object", getCurrentObjective(bot));
+            Object teleportUsed = stats.get("teleportUsed");
+            if (teleportUsed != null) {
+                botJson.addProperty("teleportUsed", (Number) teleportUsed);
+            }
 
-                String tgtLoc = "";
-                
-                if(tgt!=null) {
-                    tgtLoc = tgt.getX() + ", " + tgt.getY() + ", " + tgt.getZ();
-                }
+            // Общее число сломанных блоков
+            BotMemoryV2Partition blocks = stats.partition("blocksBroken", BotMemoryV2Partition.Type.MAP);
+            Object totalBlocks = blocks.get("total");
+            if (totalBlocks != null) {
+                botJson.addProperty("blocksBroken", (Number) totalBlocks);
+            }
 
-                botJson.addProperty("target", tgtLoc );
+            // Общее число убитых мобов
+            BotMemoryV2Partition mobs = stats.partition("mobsKilled", BotMemoryV2Partition.Type.MAP);
+            Object totalMobs = mobs.get("total");
+            if (totalMobs != null) {
+                botJson.addProperty("mobsKilled", (Number) totalMobs);
+            }
 
-                botJson.addProperty("elapsedTime",
-                        BotUtils.formatTime(bot.getBrain().getCurrentTask().getElapsedTime()));
+            botJson.addProperty("autoPickUpItems", bot.getBrain().getAutoPickupItems());
 
-                botJson.addProperty("queue", bot.getTaskManager().getQueueIcons());
+            botJson.addProperty("task", BotUtils.getActiveTaskIcon(bot));
+            
+            try {
+                botJson.addProperty("taskIsReactive", bot.getActiveTask().isReactive());
+            } catch (Exception e) {
+                botJson.addProperty("taskIsReactive", false);
+            }
 
-                botJson.addProperty("memory", bot.getBrain().getMemory().toJson().toString());
+            botJson.addProperty("object", BotUtils.getObjective(bot));
 
-                // add navigation data
-                if (bot.getNavigator().getSuggestion() == BotNavigator.NavigationType.TELEPORT) {
-                    botJson.addProperty("navigationSuggestion", "Teleport");
-                } else {
-                    botJson.addProperty("navigationSuggestion", "Walk");
-                }
+            long elapsedTime = 0;
+            try {
+                elapsedTime = bot.getBrain().getCurrentTask().getElapsedTime();
+                botJson.addProperty("elapsedTime", BotUtils.formatTime(elapsedTime));
+            } catch (Exception ex) {
+                // ignore
+            }
 
-                botJson.addProperty("reachableTargets",
-                        bot.getNavigator().getNavigationSummaryItem("poi").toString());
-                botJson.addProperty("reachableBlocks",
-                        bot.getNavigator().getNavigationSummaryItem("reachable").toString());
-                botJson.addProperty("navigableBlocks",
-                        bot.getNavigator().getNavigationSummaryItem("navigable").toString());
-                botJson.addProperty("walkableBlocks",
-                        bot.getNavigator().getNavigationSummaryItem("walkable").toString());
-                
-                Object obj = bot.getNavigator().getSuggested();
-                if(obj!=null) {
-                    botJson.addProperty("suggestedBlock",
-                    bot.getNavigator().getSuggested().toString());
-                }
-                    
-                botsArray.add(botJson);
+            botJson.addProperty("queue", bot.getTaskManager().getQueueIcons());
 
-                ItemStack[] contents = null;
+            // 🧠 Новое: вставляем память как объект
+            BotMemoryV2 memory = bot.getBrain().getMemoryV2();
+            if (memory != null) {
+                botJson.add("memory", memory.toJsonObject());
+            }
 
-                if (bot.getInventory().getNPCInventory() != null) {
-                    // 📦 Serialize inventory
-                    contents = bot.getInventory().getNPCInventory().getContents();
-                }
+            // 📦 Инвентарь
+            ItemStack[] contents = null;
+            if (bot.getInventory().getNPCInventory() != null) {
+                contents = bot.getInventory().getNPCInventory().getContents();
+            }
 
-                if (contents == null) {
-                    continue;
-                }
-
-                JsonArray inventoryArray = new JsonArray();
-
+            JsonArray inventoryArray = new JsonArray();
+            if (contents != null) {
                 for (ItemStack item : contents) {
                     if (item != null && item.getAmount() > 0) {
                         JsonObject slotObj = new JsonObject();
@@ -144,25 +145,33 @@ public class BotStatusServlet extends HttpServlet {
                     }
                 }
 
-                botJson.add("inventorySlotsFilled", inventoryArray);
-
                 int count = Arrays.stream(contents)
                         .filter(Objects::nonNull)
                         .mapToInt(ItemStack::getAmount)
                         .sum();
 
-                botJson.addProperty("inventoryCount", count);
-                botJson.addProperty("inventoryMax", 36); // или сколько слотов у тебя по факту
 
+                botJson.addProperty("inventoryCount", count);
+                botJson.addProperty("inventoryMax", 36*64);
+                botJson.add("inventorySlotsFilled", inventoryArray);
+
+
+                BotMemoryV2Partition nav = bot.getBrain().getMemoryV2().partition("navigation", BotMemoryV2Partition.Type.MAP);
+                BotMemoryV2Partition visitedPartition = nav.partition("visited", BotMemoryV2Partition.Type.MAP);
+
+                if (visitedPartition != null) {
+                    BotLogger.debug("DEBUG", true, "visitedPartition is not null! Size = " + visitedPartition.getMap().size());
+                    botJson.addProperty("visitedCount", visitedPartition.getMap().size());
+                } else {
+                    BotLogger.debug("DEBUG", true, "visitedPartition is null!");
+                    botJson.addProperty("visitedCount", 0);
+                }
             }
+
+            botsArray.add(botJson);
         }
 
         result.add("bots", botsArray);
         resp.getWriter().write(result.toString());
-    }
-
-    private static String getCurrentObjective(Bot bot) {
-        BotTask<?> currentTask = bot.getBrain().getCurrentTask();
-        return (currentTask != null) ? currentTask.getObjective() : "";
     }
 }

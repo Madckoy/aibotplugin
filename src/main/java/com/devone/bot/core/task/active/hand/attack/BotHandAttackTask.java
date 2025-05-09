@@ -49,7 +49,7 @@ public class BotHandAttackTask extends BotHandTask<BotHandAttackTaskParams> {
         this.target = params.getTarget();
         this.damage = params.getDamage();
 
-        bot.getNavigator().setTarget(target.getPosition());
+        bot.getNavigator().setPoi(target.getPosition());
 
         BotLogger.debug(icon, isLogging(), bot.getId() + " ✅ Parameters for BotHandAttackTask set.");
         return this;
@@ -98,15 +98,19 @@ public class BotHandAttackTask extends BotHandTask<BotHandAttackTaskParams> {
                         BotLogger.debug(icon, isLogging(), bot.getId() + " 💀 Target is dead or unreachable.");
                         target.setUUID(null);
                         target = null;
-                        bot.getNavigator().setTarget(null);
+                        bot.getNavigator().setPoi(null);
                         stop();
                         cancel();
                         return;
                     }
 
                     // 🔄 Обновляем targetLocation
-                    bot.getNavigator().setTarget(BotWorldHelper.locationToBotPosition(living.getLocation()));
-                    BotUtils.lookAt(bot, BotWorldHelper.locationToBotPosition(living.getLocation()));
+                    BotPosition pos = BotWorldHelper.locationToBotPosition(living.getLocation());
+                    
+                    bot.getNavigator().setPoi(pos);
+
+                    BotUtils.turnToTarget(haTask, bot, pos);
+
                     bot.getNPCNavigator().setTarget(living.getLocation());
                     double distance = bot.getNPCEntity().getLocation().distance(living.getLocation());
 
@@ -116,8 +120,10 @@ public class BotHandAttackTask extends BotHandTask<BotHandAttackTaskParams> {
                         if (pursuitTicks % 20 == 0) {
                             bot.getNPCNavigator().setTarget(living.getLocation());
                             bot.getNavigator()
-                                    .setTarget(BotWorldHelper.locationToBotPosition(living.getLocation()));
-                            BotUtils.lookAt(bot, BotWorldHelper.locationToBotPosition(living.getLocation()));
+                                    .setPoi(BotWorldHelper.locationToBotPosition(living.getLocation()));
+
+                            //BotUtils.turnToTarget();
+                            
                             BotLogger.debug(icon, isLogging(),
                                     bot.getId() + " 🏃🏻‍➡️ Pursuing mob, correcting direction. Distance: "
                                             + String.format("%.2f", distance));

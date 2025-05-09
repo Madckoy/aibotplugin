@@ -1,16 +1,19 @@
 package com.devone.bot.core.utils.blocks;
 
+import java.util.Objects;
 import java.util.UUID;
+
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
 public class BotBlockData {
 
-    private BotPosition position = new BotPosition();
+    private BotPosition position;
     private String type;
     private UUID uuid;
     private String tag;
 
     public BotBlockData() {
+        this.position = new BotPosition();
     }
 
     public BotBlockData(int x, int y, int z) {
@@ -21,8 +24,32 @@ public class BotBlockData {
         return position;
     }
 
-    public void setPosition(BotPosition position) {
-        this.position = position;
+    public void setPosition(BotPosition pos) {
+        this.position = pos;
+    }
+
+    public int getX() {
+        return (int) position.getX();
+    }
+
+    public void setX(int x) {
+        position.setX(x);
+    }
+
+    public int getY() {
+        return (int) position.getY();
+    }
+
+    public void setY(int y) {
+        position.setY(y);
+    }
+
+    public int getZ() {
+        return (int) position.getZ();
+    }
+
+    public void setZ(int z) {
+        position.setZ(z);
     }
 
     public void setType(String type) {
@@ -33,8 +60,8 @@ public class BotBlockData {
         return this.type;
     }
 
-    public void setUUID(UUID uuid) {
-        this.uuid = uuid;
+    public void setUUID(UUID id) {
+        this.uuid = id;
     }
 
     public UUID getUUID() {
@@ -68,41 +95,49 @@ public class BotBlockData {
 
     @JsonIgnore
     public boolean isHostile() {
-        return BotEntityUtils.isHostile(this.type);
+        return true;
     }
 
     @JsonIgnore
     public boolean isPeaceful() {
-        return BotEntityUtils.isPeaceful(this.type);
+        return false;
     }
 
     @JsonIgnore
-    public int getX() {
-        return position.getX();
-    }
-
-    @JsonIgnore
-    public int getY() {
-        return position.getY();
-    }
-
-    @JsonIgnore
-    public int getZ() {
-        return position.getZ();
+    public BotPositionKey toKey() {
+        return position.toKey();
     }
 
     @Override
-    public String toString() {
-        return String.format("Block: [x=%d, y=%d, z=%d, type=%s, tag=%s]", getX(), getY(), getZ(), type, tag);
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (!(o instanceof BotBlockData)) return false;
+        BotBlockData that = (BotBlockData) o;
+        return Objects.equals(this.toKey(), that.toKey());
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(toKey());
     }
 
     @Override
     public BotBlockData clone() {
         BotBlockData copy = new BotBlockData();
-        copy.setPosition(this.getPosition());
+        copy.setPosition(new BotPosition(this.getPosition()));
         copy.setType(this.getType());
         copy.setUUID(this.getUUID());
         copy.setTag(this.getTag());
         return copy;
+    }
+
+    @Override
+    public String toString() {
+        return String.format("%d, %d, %d, %s, %s",
+            getX(), getY(), getZ(), type, tag);
+    }
+
+    public String toCompactString() {
+        return String.format("%d, %d, %d", (int) getX(), (int) getY(), (int) getZ());
     }
 }

@@ -7,6 +7,7 @@ import org.bukkit.scheduler.BukkitTask;
 
 import com.devone.bot.AIBotPlugin;
 import com.devone.bot.core.Bot;
+import com.devone.bot.core.brain.memory.BotMemoryV2Utils;
 import com.devone.bot.core.task.active.hand.BotHandTask;
 import com.devone.bot.core.task.active.hand.excavate.params.BotHandExcavateTaskParams;
 import com.devone.bot.core.utils.BotUtils;
@@ -27,7 +28,7 @@ public class BotHandExcavateTask extends BotHandTask<BotHandExcavateTaskParams> 
         super.setParams(params); // вызовет BotHandTask.setParams()
         this.target = params.getTarget();
 
-        bot.getNavigator().setTarget(target.getPosition());
+        bot.getNavigator().setPoi(target.getPosition());
 
         return this;
     }
@@ -44,7 +45,8 @@ public class BotHandExcavateTask extends BotHandTask<BotHandExcavateTaskParams> 
 
         BotLogger.debug(icon, isLogging(), bot.getId() + " 🔶 Executing BotHandExcavateTask");
 
-        setObjective(params.getObjective() + " " + target.getType() +" at "+target.getPosition());
+        setObjective(params.getObjective() + " " + target.getType() + " at " + target.getPosition().toCompactString());
+
         BotHandExcavateTask heTask = this;
 
         bukkitTask = new BukkitRunnable() {
@@ -57,6 +59,7 @@ public class BotHandExcavateTask extends BotHandTask<BotHandExcavateTaskParams> 
                 }
 
                 Block block = BotWorldHelper.botPositionToWorldBlock(target.getPosition());
+                
                 if (block == null || block.getType() == Material.AIR) {
                     BotLogger.debug(icon, isLogging(), bot.getId() + " ✅ Block already excavated.");
                     stop();
@@ -65,14 +68,16 @@ public class BotHandExcavateTask extends BotHandTask<BotHandExcavateTaskParams> 
                 }
 
                 Material actualMaterial = block.getType(); // org.bukkit.Material
-                String expectedType = target.getType();    // String
-                
+                String expectedType = target.getType(); // String
+
                 if (expectedType == null && actualMaterial == null) {
                     return; // оба отсутствуют — считаем, что всё ок
                 }
-                
-                if (expectedType == null || actualMaterial == null || !actualMaterial.name().equalsIgnoreCase(expectedType)) {
-                    BotLogger.debug(icon, isLogging(), bot.getId() + " ⚠️ Block changed type before excavation. Skipping.");
+
+                if (expectedType == null || actualMaterial == null
+                        || !actualMaterial.name().equalsIgnoreCase(expectedType)) {
+                    BotLogger.debug(icon, isLogging(),
+                            bot.getId() + " ⚠️ Block changed type before excavation. Skipping.");
                     stop();
                     cancel();
                     return;
@@ -84,11 +89,11 @@ public class BotHandExcavateTask extends BotHandTask<BotHandExcavateTaskParams> 
 
                 block.breakNaturally();
 
-                bot.getBrain().getMemory().brokenBlocksIncrease(target.getType());
-                BotBlockData bl = BotWorldHelper.blockToBotBlockData(block);
-                BotLogger.debug(icon, isLogging(), bot.getId() + " 🪨 Block is excavated: " + bl);
+                BotMemoryV2Utils.incrementSummaryCounter(bot, "blocksBroken", target.getType());
+
+                BotLogger.debug(icon, isLogging(), bot.getId() + " 🧊 Block is excavated: " + target.getType());
             }
-        }.runTaskTimer(AIBotPlugin.getInstance(), 0L, 10L);
+        }.runTaskTimer(AIBotPlugin.getInstance(), 0L, 1L);
     }
 
     @Override
@@ -98,7 +103,7 @@ public class BotHandExcavateTask extends BotHandTask<BotHandExcavateTaskParams> 
             bukkitTask = null;
         }
 
-        bot.getNavigator().setTarget(null);
+        bot.getNavigator().setPoi(null);
 
         super.stop();
     }

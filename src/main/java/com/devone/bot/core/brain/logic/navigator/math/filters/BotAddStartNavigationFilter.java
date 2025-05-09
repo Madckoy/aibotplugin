@@ -13,14 +13,15 @@ public class BotAddStartNavigationFilter {
 
         List<BotBlockData> result = new ArrayList<>(blocks);
 
-        // Стартовая точка — под ботом (координаты ног)
-        BotPosition pos = new BotPosition(botPosition.getX(), botPosition.getY() - 1, botPosition.getZ());
         BotBlockData start = new BotBlockData();
-        start.setPosition(pos);
+        start.setX((int) botPosition.getX());
+        start.setY((int) botPosition.getY() - 1);
+        start.setZ((int) botPosition.getZ());
         start.setType("DUMMY");
         start.setTag("navigator:start");
 
         result.add(start);
+
         return result;
     }
 }

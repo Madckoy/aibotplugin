@@ -5,7 +5,7 @@ import com.devone.bot.core.utils.BotConstants;
 
 public class BotExploreTaskParams extends BotTaskParams {
 
-    private int scanRadius = BotConstants.DEFAULT_SCAN_RANGE;
+    private double scanRadius = BotConstants.DEFAULT_SCAN_RANGE;
 
     private boolean pickup = true;
 
@@ -28,7 +28,7 @@ public class BotExploreTaskParams extends BotTaskParams {
         return pickup;
     }
 
-    public int getScanRadius() {
+    public double getScanRadius() {
         return scanRadius;
     }
 

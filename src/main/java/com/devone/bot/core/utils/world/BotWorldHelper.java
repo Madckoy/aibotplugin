@@ -15,6 +15,7 @@ import org.bukkit.entity.LivingEntity;
 import com.devone.bot.core.Bot;
 import com.devone.bot.core.utils.blocks.BotBlockData;
 import com.devone.bot.core.utils.blocks.BotPosition;
+import com.devone.bot.core.utils.blocks.BotPositionSight;
 
 public class BotWorldHelper {
 
@@ -42,8 +43,13 @@ public class BotWorldHelper {
     }
 
     public static BotPosition locationToBotPosition(Location loc) {
-        return new BotPosition((int) loc.getX(), (int) loc.getY(), (int) loc.getZ());
+        return new BotPosition(loc.getX(), loc.getY(), loc.getZ());
     }
+
+    public static BotPositionSight locationToBotPositionSight(Location loc) {
+        return new BotPositionSight(loc.getX(), loc.getY(), loc.getZ(),  loc.getYaw(), loc.getPitch());
+    }
+
 
     public static BotBlockData blockToBotBlockData(Block block) {
         BotPosition pos = new BotPosition(block.getX(), block.getY(), block.getZ());
@@ -72,7 +78,7 @@ public class BotWorldHelper {
         };
     }
 
-    public static boolean isInDangerousLiquid(Bot bot) {
+    public static boolean isInDanger(Bot bot) {
         if (bot == null || bot.getNPCEntity() == null) return false;
         Location loc = bot.getNPCEntity().getLocation();
         return isDangerousLiquid(loc.getBlock());
@@ -109,13 +115,15 @@ public class BotWorldHelper {
     public static Location botPositionToWorldLocation(BotPosition loc) {
         if (loc == null) return null;
         World world = getWorld();
-        return new Location(world, loc.getX() + 0.5, loc.getY(), loc.getZ() + 0.5);
+        double blockX = ((int)loc.getX());
+        double blockZ = ((int)loc.getZ());
+        return new Location(world, blockX, loc.getY(), blockZ);
     }
 
-    public static Block botPositionToWorldBlock(BotPosition loc) {
-        if (loc == null) return null;
-        World world = getWorld();
-        return world.getBlockAt(loc.getX(), loc.getY(), loc.getZ());
+    public static Block botPositionToWorldBlock(BotPosition pos) {
+        if (pos == null) return null;
+        Location loc  = BotWorldHelper.botPositionToWorldLocation(pos);        
+        return loc.getBlock();
     }
 
     public static boolean isInsideWorldBounds(BotPosition loc) {
@@ -139,7 +147,7 @@ public class BotWorldHelper {
         for (int dx = -radius; dx <= radius; dx++) {
             for (int dy = -1; dy <= 1; dy++) {
                 for (int dz = -radius; dz <= radius; dz++) {
-                    Block block = world.getBlockAt(loc.getX() + dx, loc.getY() + dy, loc.getZ() + dz);
+                    Block block = world.getBlockAt((int)loc.getX() + dx, (int)loc.getY() + dy, (int)loc.getZ() + dz);
                     blocks.add(block);
                 }
             }
@@ -150,8 +158,8 @@ public class BotWorldHelper {
     public static BotPosition findSafeLandingBelow(BotPosition loc, int maxDepth) {
         if (loc == null) return null;
         World world = getWorld();
-        for (int y = loc.getY(); y >= Math.max(0, loc.getY() - maxDepth); y--) {
-            Block block = world.getBlockAt(loc.getX(), y, loc.getZ());
+        for (double y = loc.getY(); y >= Math.max(0, loc.getY() - maxDepth); y--) {
+            Block block = world.getBlockAt((int) loc.getX(), (int)y, (int) loc.getZ());
             if (isSolidSurface(block)) {
                 return new BotPosition(loc.getX(), y + 1, loc.getZ());
             }

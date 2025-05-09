@@ -1,47 +1,47 @@
 package com.devone.bot.core.utils.config;
 
 import java.io.File;
-import java.util.HashMap;
-import java.util.Map;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.UUID;
 
-import com.devone.bot.core.Bot;
-import com.devone.bot.core.brain.BotBrain;
-import com.devone.bot.core.brain.logic.navigator.BotNavigator;
-import com.devone.bot.core.state.BotState;
-import com.devone.bot.core.utils.blocks.BotPosition;
-import com.devone.bot.plugin.config.AIBotBaseJsonConfig;
+import com.devone.bot.core.utils.BotUtils;
 
-public class BotManagerConfig extends AIBotBaseJsonConfig<BotManagerConfig.Data> {
+public class BotManagerConfig {
 
-    public BotManagerConfig(File file) {
-        super(file, Data.class);
+    public static class BotEntry {
+        public String name;
+        public UUID uuid;
     }
 
     public static class Data {
-        public Map<String, BotEntry> bots = new HashMap<>();
+        public List<BotEntry> bots = new ArrayList<>();
     }
 
-    public static class BotEntry {
-        public boolean enabled = true;
-        public String id;
-        public String uuid;
-        public BotPosition position;
-        public boolean allowPickup;
-        public BotBrain brain;
-        public BotState state;
-        public BotNavigator navigation;
 
-        public BotEntry() {}
+    private final File file;
+    private Data data;
 
-        public BotEntry(Bot bot) {
-            this.id = bot.getId();
-            this.enabled = bot.isEnabled();
-            this.uuid = bot.getUuid().toString();
-            this.position = bot.getNavigator().getPosition();
-            this.allowPickup = bot.isAllowPickupItems();
-            this.brain = bot.getBrain();
-            this.state = bot.getState();
-            this.navigation = bot.getNavigator();
+    public BotManagerConfig(File file) {
+        this.file = file;
+        loadOrCreate();
+    }
+
+    public Data loadOrCreate() {
+        if (file.exists()) {
+            this.data = BotUtils.readJson(file, Data.class);
+        } else {
+            this.data = new Data();
+            save();
         }
+        return this.data;
+    }
+
+    public Data get() {
+        return data;
+    }
+
+    public void save() {
+        BotUtils.writeJson(file, data);
     }
 }

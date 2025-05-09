@@ -4,11 +4,14 @@ function setupButtonHandlers(botList = []) {
     const buttons = document.querySelectorAll(".cmd-btn");
 
     const handlers = {
+
         "bot-tp":       (botId) => handleCoordCommand(botId, "bot-tp"),
         "bot-move":     (botId) => handleCoordCommand(botId, "bot-move"),
+        "bot-add":      (botId) => sendBotCommand(botId, "bot-add"),
+        "bot-remove":   (botId) => sendBotCommand(botId, "bot-remove"),
         "bot-dump":     (botId) => sendBotCommand(botId, "bot-dump"),
         "bot-drop-all": (botId) => sendBotCommand(botId, "bot-drop-all"),
-        "bot-signal":   (botId) => sendBotCommand(botId, "bot-signal"),
+        "bot-excavate": (botId) => sendBotCommand(botId, "bot-excavate"),
         "bot-home":     (botId) => sendBotCommand(botId, "bot-home"),
         "bot-info":     (botId) => {
             const bot = botList.find(b => b.id === botId);

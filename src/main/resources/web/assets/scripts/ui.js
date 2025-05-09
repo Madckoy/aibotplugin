@@ -1,5 +1,3 @@
-// Optimized ui.js with selective DOM updates
-
 let previousBotData = {};
 
 function updateMonitoringHeader(data) {
@@ -14,7 +12,7 @@ function updateMonitoringHeader(data) {
 }
 
 function renderBotTable(data) {
-    const table = document.getElementById("botTable");
+    const table = document.getElementById("bot-table");
     const tbody = table.querySelector("tbody") || table.appendChild(document.createElement("tbody"));
 
     data.bots.forEach(bot => updateOrCreateBotRow(bot, tbody));
@@ -38,19 +36,22 @@ function updateOrCreateBotRow(bot, tbody) {
             <td class="objective"></td>
             <td class="elapsed"></td>
             <td class="inventory-cell"></td>
-            <td class="commands"></td>`;
+            <td class="commands"></td>
+        `;
         tbody.appendChild(row);
     }
 
-
     const cells = row.children;
+
+    // 🪨 Статистика
     cells[1].innerHTML = `
         <div class="bot-stats-cell">
-            <div><span>🪨</span><span>${bot.blocksBroken}</span></div>
+            <div><span>⛏️</span><span>${bot.blocksBroken}</span></div>
             <div><span>☠️</span><span>${bot.mobsKilled}</span></div>
             <div><span>⚡️</span><span>${bot.teleportUsed}</span></div>
         </div>`;
 
+    // 📍 Позиция и цель
     cells[2].innerHTML = `
         <div class="bot-stats-cell">
             <div><span>📍</span><span>${bot.position}</span></div>
@@ -58,6 +59,7 @@ function updateOrCreateBotRow(bot, tbody) {
             <div><span>🎯</span><span>${bot.target}</span></div>
         </div>`;
 
+    // 🧱 Застревание
     cells[3].innerHTML = `
         <div class="bot-position-cell">
             <div><span>${bot.stuck}</span></div>
@@ -65,6 +67,7 @@ function updateOrCreateBotRow(bot, tbody) {
             <div><span>${bot.stuckCount}</span></div>
         </div>`;
 
+    // 🧠 Задача
     cells[4].innerHTML = `
         <div class="bot-position-cell">
             <div><span>${bot.task}</span></div>
@@ -72,6 +75,7 @@ function updateOrCreateBotRow(bot, tbody) {
             <div><span>${getTaskStatusEmoji(bot.taskIsReactive)}</span></div>
         </div>`;
 
+    // 📋 Очередь задач
     cells[5].innerHTML = `
         <div class="bot-objective-cell">
             <div><span>ᯓ </span><span>${bot.queue}</span></div>
@@ -79,21 +83,23 @@ function updateOrCreateBotRow(bot, tbody) {
             <div><span>✴ </span><span>${bot.object}</span></div>
         </div>`;
 
+    // ⏱️ Время
     cells[6].textContent = bot.elapsedTime;
 
+    // 🎒 Инвентарь
     cells[7].title = `Items: ${bot.inventoryCount} / ${bot.inventoryMax}`;
     cells[7].innerHTML = generateInventoryGrid(bot.inventorySlotsFilled, bot.autoPickUpItems);
 
-    // Не пересоздавать кнопки, если они уже есть
+    // ⚙️ Команды
     if (!cells[8].innerHTML.trim()) {
         cells[8].innerHTML = `
             <div class="bot-position-cell">
                 <button class="cmd-btn" data-bot="${bot.id}" data-cmd="bot-tp">⚡</button>
                 <button class="cmd-btn" data-bot="${bot.id}" data-cmd="bot-move">🏃🏻‍♂️‍➡️</button>
+                <button class="cmd-btn" data-bot="${bot.id}" data-cmd="bot-excavate">⛏️</button>
+                <div class="bot-objective-divider"></div>      
                 <button class="cmd-btn" data-bot="${bot.id}" data-cmd="bot-drop-all">📦</button>
-                <div class="bot-objective-divider"></div>
-                <button class="cmd-btn" data-bot="${bot.id}" data-cmd="bot-signal">⛏️</button>
-                <button class="cmd-btn" data-bot="${bot.id}" data-cmd="bot-dump">🧊</button>
+                <button class="cmd-btn" data-bot="${bot.id}" data-cmd="bot-dump">#️⃣</button>
                 <button class="cmd-btn" data-bot="${bot.id}" data-cmd="bot-info">ℹ️</button>
             </div>`;
     }
@@ -104,7 +110,7 @@ function updateOrCreateBotRow(bot, tbody) {
 function getTaskStatusEmoji(isReactive) {
     if (isReactive === true || isReactive === "true") return "🔸";
     if (isReactive === false || isReactive === "false") return "▪️";
-    return "❔";
+    return "N/A";
 }
 
 function generateInventoryGrid(slots, autoPickupEnabled) {
@@ -120,5 +126,3 @@ function generateInventoryGrid(slots, autoPickupEnabled) {
         return `<div class="${className}" title="${tooltip}"></div>`;
     }).join('') + '</div>';
 }
-
-

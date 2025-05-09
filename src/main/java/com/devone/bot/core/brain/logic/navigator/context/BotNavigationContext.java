@@ -1,9 +1,8 @@
 package com.devone.bot.core.brain.logic.navigator.context;
 
-import com.devone.bot.core.brain.memory.scene.BotSceneData;
-
 import java.util.List;
 
+import com.devone.bot.core.brain.perseption.scene.BotSceneData;
 import com.devone.bot.core.utils.blocks.BotBlockData;
 
 public class BotNavigationContext extends BotSceneData {
@@ -12,8 +11,11 @@ public class BotNavigationContext extends BotSceneData {
     public List<BotBlockData> walkable;
     public List<BotBlockData> navigable;
     public List<BotBlockData> reachable;
-    public List<BotBlockData> poi;
+    public List<BotBlockData> poiGlobal;
     public List<BotBlockData> entities;
+    public List<BotBlockData> viewSector;
+    public List<BotBlockData> poi;
+
 
     //public List<BotBlockData> debugPath;
     //public List<List<BotBlockData>> debugPaths; // 🔥 новый, мульти-пути

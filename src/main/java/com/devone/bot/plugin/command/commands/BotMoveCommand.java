@@ -2,7 +2,6 @@ package com.devone.bot.plugin.command.commands;
 
 import java.util.Arrays;
 
-import org.bukkit.Location;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
@@ -10,9 +9,8 @@ import org.bukkit.command.CommandSender;
 import com.devone.bot.core.Bot;
 import com.devone.bot.core.BotManager;
 import com.devone.bot.core.task.passive.BotTaskManager;
-import com.devone.bot.core.task.active.move.BotMoveTask;
-import com.devone.bot.core.task.active.move.params.BotMoveTaskParams;
-import com.devone.bot.core.task.reactive.container.BotEmptyReactiveContainer;
+import com.devone.bot.core.task.reactive.container.BotReactiveMoveContainer;
+import com.devone.bot.core.task.reactive.container.params.BotReactiveMoveContainerParams;
 import com.devone.bot.core.utils.blocks.BotPosition;
 import com.devone.bot.core.utils.logger.BotLogger;
 
@@ -62,21 +60,14 @@ public class BotMoveCommand implements CommandExecutor {
 
             return false;
         }
-
-        // BotTaskManager.clear(bot);
-        
-        // ✅ Добавляем задачу на перемещение
-        Location targetLocation = new Location(bot.getNPCEntity().getWorld(), x, y, z);
         // создаем контейнер
-        BotEmptyReactiveContainer container = new BotEmptyReactiveContainer(bot);
-        BotMoveTask moveTask = new BotMoveTask(bot);
-        BotMoveTaskParams moveTaskParams = new BotMoveTaskParams();
-        moveTaskParams.setTarget(new BotPosition(x, y, z));
-        moveTask.setParams(moveTaskParams);
-        container.add(moveTask);
+        BotReactiveMoveContainerParams params = new BotReactiveMoveContainerParams();
+        params.position = new BotPosition(x, y, z);
+        BotReactiveMoveContainer container = new BotReactiveMoveContainer(bot);
+        container.setParams(params);
         BotTaskManager.push(bot, container);
 
-        BotLogger.debug("📌 ", true, "/bot-move: Бот " + bot.getId() + " направляется в " + targetLocation);
+        BotLogger.debug("📌 ", true, "/bot-move: Бот " + bot.getId() + " направляется в " + params.position);
         
         sender.sendMessage("✅ Бот '" + botName + "' направляется в " + x + " " + y + " " + z);
 

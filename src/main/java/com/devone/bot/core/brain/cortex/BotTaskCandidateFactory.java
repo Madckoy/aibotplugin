@@ -2,12 +2,11 @@ package com.devone.bot.core.brain.cortex;
 
 
 import com.devone.bot.core.brain.logic.navigator.math.selector.BotEntitySelector;
+import com.devone.bot.core.brain.perseption.scene.BotSceneData;
 import com.devone.bot.core.task.active.explore.BotExploreTask;
 import java.util.*;
 
 import com.devone.bot.core.Bot;
-
-import com.devone.bot.core.brain.memory.scene.BotSceneData;
 import com.devone.bot.core.task.passive.BotTaskManager;
 import com.devone.bot.core.task.active.brain.params.BotBrainTaskParams;
 import com.devone.bot.core.task.active.excavate.BotExcavateTask;
@@ -22,7 +21,7 @@ import com.devone.bot.core.utils.logger.BotLogger;
 public class BotTaskCandidateFactory {
 
     public static List<BotTaskCandidate> createCandidates(Bot bot, BotBrainTaskParams params) {
-        BotSceneData data = bot.getBrain().getMemory().getSceneData();
+        BotSceneData data = bot.getBrain().getSceneData();
         BotPosition botPos = bot.getNavigator().getPosition();
 
         List<BotTaskCandidate> candidates = new ArrayList<>();

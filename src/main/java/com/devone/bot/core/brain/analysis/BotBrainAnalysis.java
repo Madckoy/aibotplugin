@@ -4,9 +4,6 @@ import com.devone.bot.core.Bot;
 import com.devone.bot.core.utils.world.BotWorldHelper;
 
 public class BotBrainAnalysis {
-    public static boolean isInRiskyEnvironment(Bot bot) {
-        return BotWorldHelper.isInDangerousLiquid(bot) || bot.getState().isLowHealth(20.0);
-    }
 
     public static boolean shouldAvoidExcavation(Bot bot) {
         return BotWorldHelper.isNearWater(bot) || BotWorldHelper.isOnUnstableGround(bot);

@@ -4,18 +4,18 @@ import com.devone.bot.core.utils.blocks.BotPosition;
 
 public class BotLocationParams extends BotTaskParams {
 
-    private BotPosition location = new BotPosition(0, 0, 0);
+    private BotPosition position = new BotPosition(0, 0, 0);
 
     public BotLocationParams() {
         // Загружаем из файла и копируем значения
         super();
     }
 
-    public BotPosition getLocation() {
-        return location;
+    public BotPosition getPosition() {
+        return position;
     }
 
-    public void setLocation(BotPosition coord) {
-        this.location = coord;
+    public void setPosition(BotPosition coord) {
+        this.position = coord;
     }
 }

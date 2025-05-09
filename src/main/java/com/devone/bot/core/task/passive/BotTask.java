@@ -5,10 +5,10 @@ import org.bukkit.event.Listener;
 
 import com.devone.bot.core.Bot;
 import com.devone.bot.core.task.active.brain.BotBrainTask;
-import com.devone.bot.core.task.active.sonar.BotSonar3DTask;
 import com.devone.bot.core.task.passive.params.BotTaskParams;
 import com.devone.bot.core.task.reactive.BotReactiveUtils;
 import com.devone.bot.core.task.reactive.BotReactivityManager;
+import com.devone.bot.core.utils.BotConstants;
 import com.devone.bot.core.utils.BotUtils;
 import com.devone.bot.core.utils.blocks.BotPosition;
 import com.devone.bot.core.utils.logger.BotLogger;
@@ -20,11 +20,34 @@ public abstract class BotTask<T extends BotTaskParams> implements IBotTask, List
 
     protected T params;
 
+    protected boolean injected = false;
+
+    public boolean isInjected() {
+        return injected;
+    }
+
+    public void setInjected(boolean injected) {
+        this.injected = injected;
+    }
+
     public T getParams() {
         return params;
     }
 
     protected boolean enabled = true;
+
+    public void setEnabled(boolean enabled) {
+        this.enabled = enabled;
+    }
+
+    public boolean isStopped() {
+        return stopped;
+    }
+
+    public void setStopped(boolean stopped) {
+        this.stopped = stopped;
+    }
+
     protected boolean stopped = false;
     protected boolean logging = true;
 
@@ -33,6 +56,16 @@ public abstract class BotTask<T extends BotTaskParams> implements IBotTask, List
     protected long startTime = System.currentTimeMillis();
 
     private boolean pause = false;
+    private boolean deffered = false;
+
+    public boolean isDeffered() {
+        return deffered;
+    }
+
+    public void setDeffered(boolean deffered) {
+        this.deffered = deffered;
+    }
+
     protected boolean done = false;
 
     protected final String uuid;
@@ -42,9 +75,12 @@ public abstract class BotTask<T extends BotTaskParams> implements IBotTask, List
     protected boolean isListenerRegistered = false;
     private boolean isReactive = false;
 
+    private long pauseStartTime=0;
+
     public BotTask(Bot bot) {
         this.bot = bot;
         this.uuid = UUID.randomUUID().toString();
+        startTime = System.currentTimeMillis();
     }
 
     public BotTask(Bot bot, String icn) {
@@ -63,34 +99,55 @@ public abstract class BotTask<T extends BotTaskParams> implements IBotTask, List
     }
 
     public void update() {
-
         logTaskStatus();
-
-        BotLogger.debug(icon, isLogging(), bot.getId() + " 📡 Scan");
-        BotSonar3DTask sonar = new BotSonar3DTask(bot);
-        sonar.execute();    
-        bot.getNavigator().calculate(bot.getBrain().getMemory().getSceneData()); 
-
-        if (!enabled || isPause()) {
+    
+        // ⛔ Если задача выключена - останавливаем её правильно
+        if (!isEnabled()) {
+            BotLogger.debug(icon, true, bot.getId() + " 🛑 Задача выключена и будет остановлена: " + this.getClass().getSimpleName());
+            stop();
             return;
         }
+    
+        if (isPause() && isDeffered()==false) {
+            BotLogger.debug(icon, true, bot.getId() + " ⏸️ Задача на паузе: " + this.getClass().getSimpleName());
 
+            if (isPauseTimedOut(BotConstants.DEFAULT_TASK_TIMEOUT)) { 
+                BotLogger.debug("🤖", true, bot.getId() + " ⏳ Таймаут паузы. Убираем задачу.");
+                stop();
+                return;
+            }
+            return;
+        }
+    
         if (playerDisconnected()) {
             handlePlayerDisconnect();
             return;
         }
-
+    
         if (handleReactiveLogic())
             return;
-
-        runTaskExecution();
-    }
+    
+        if(injected==true) {
+            BotLogger.debug(icon, true, bot.getId() + " ▶️ Задача не на паузе и в стеке. Выполняем: " + this.getClass().getSimpleName());
+            runTaskExecution();
+        }
+    }    
 
     private void logTaskStatus() {
+        String pos = "N/A";
+        String poi = "N/A";
+
+        if(bot.getNavigator().getPosition()!=null ) {
+            pos = bot.getNavigator().getPosition().toCompactString();
+        }
+
+        if(bot.getNavigator().getPoi()!=null ) {
+            poi = bot.getNavigator().getPoi().toCompactString();
+        }
+
         BotLogger.debug(icon, logging, bot.getId() +
-                " ❓ Status: done=" + done + ", paused=" + pause +
-                " 📍: " + bot.getNavigator().getPosition() +
-                " | 🎯: " + bot.getNavigator().getPoi());
+                " ❓ Status: done: " + done +", enabled: "+isEnabled() +", paused: " + pause + " , deffered: " + deffered + ", " +
+                " 📍: " + pos + " / 🎯: " + poi);
     }
 
     private boolean playerDisconnected() {
@@ -100,7 +157,8 @@ public abstract class BotTask<T extends BotTaskParams> implements IBotTask, List
     private boolean handleReactiveLogic() {
         if (isReactive && !BotReactiveUtils.isAlreadyReacting(bot)) {
             BotLogger.debug("🧠", logging,
-                    bot.getId() + " ⚠️ Форсируем реактивный режим (task = " + getClass().getSimpleName() + ")");
+                    bot.getId() + " ⚠️ Инжектаем реактивный контейнер с задачами (task = " + getClass().getSimpleName() + ")");
+
             BotReactiveUtils.activateReaction(bot, true);
         }
 
@@ -140,22 +198,34 @@ public abstract class BotTask<T extends BotTaskParams> implements IBotTask, List
 
     public void setPause(boolean pause) {
         this.pause = pause;
+
+        if (pause) {
+            this.pauseStartTime = System.currentTimeMillis();
+        } else {
+            this.pauseStartTime = 0L;
+        }
+
         String status = pause ? "⏸️ Pause" : "▶️ Resume";
         BotLogger.debug(icon, logging, bot.getId() + " " + status + " (" + getClass().getSimpleName() + ")");
+    }
+
+    public boolean isPauseTimedOut(long timeoutMillis) {
+        return pause && (System.currentTimeMillis() - pauseStartTime) > timeoutMillis;
     }
 
     private void handlePlayerDisconnect() {
         BotLogger.debug("🧠", logging,
                 bot.getId() + " 🚨 Игрок " + player.getName() + " отключился. Возврат к BrainTask.");
-        BotTaskManager.clear(bot);
-        BotTaskManager.push(bot, new BotBrainTask(bot));
-        this.stop();
+        //BotTaskManager.clear(bot);
+        BotBrainTask brain = new BotBrainTask(bot);
+        brain.setPause(false);
+        BotTaskManager.push(bot, brain);
     }
 
     @Override
     public IBotTaskParameterized<T> setParams(T params) {
         this.params = params;
-        this.startTime = System.currentTimeMillis();
+        startTime = System.currentTimeMillis();
         return this;
     }
 
@@ -166,6 +236,11 @@ public abstract class BotTask<T extends BotTaskParams> implements IBotTask, List
     public boolean isPause() {
         return pause;
     }
+
+    public boolean isDeeered() {
+        return deffered;
+    }
+
 
     public boolean isEnabled() {
         return enabled;

@@ -3,17 +3,17 @@ package com.devone.bot.core.brain.logic.navigator.math.filters;
 import java.util.*;
 
 import com.devone.bot.core.utils.blocks.BotBlockData;
-import com.devone.bot.core.utils.blocks.BotPosition;
+import com.devone.bot.core.utils.blocks.BotPositionKey;
 
 public class BotNavigableFilter {
 
-    /* 
+    /**
      * Оставляет только те точки, к которым можно перейти хотя бы с одной соседней.
      */
     public static List<BotBlockData> filter(List<BotBlockData> walkableBlocks) {
-        Map<BotPosition, BotBlockData> map = new HashMap<>();
+        Map<BotPositionKey, BotBlockData> map = new HashMap<>();
         for (BotBlockData block : walkableBlocks) {
-            map.put(new BotPosition(block.getX(), block.getY(), block.getZ()), block);
+            map.put(block.toKey(), block);
         }
 
         List<BotBlockData> result = new ArrayList<>();
@@ -27,19 +27,19 @@ public class BotNavigableFilter {
         return result;
     }
 
-    private static boolean hasNavigableNeighbor(BotBlockData block, Map<BotPosition, BotBlockData> map) {
-        int x = block.getX();
-        int y = block.getY();
-        int z = block.getZ();
+    private static boolean hasNavigableNeighbor(BotBlockData block, Map<BotPositionKey, BotBlockData> map) {
+        double x = block.getX();
+        double y = block.getY();
+        double z = block.getZ();
 
-        for (int dx = -1; dx <= 1; dx++) {
-            for (int dy = -1; dy <= 1; dy++) {
-                for (int dz = -1; dz <= 1; dz++) {
-                    if (dx == 0 && dy == 0 && dz == 0) continue; // Пропускаем саму точку
-                    if (Math.abs(dy) > 1) continue; // Прыжки на 2 и более блоков запрещены
+        for (double dx = -1; dx <= 1; dx++) {
+            for (double dy = -1; dy <= 1; dy++) {
+                for (double dz = -1; dz <= 1; dz++) {
+                    if (dx == 0 && dy == 0 && dz == 0) continue;
+                    if (Math.abs(dy) > 1) continue;
 
-                    BotPosition neighbor = new BotPosition(x + dx, y + dy, z + dz);
-                    if (map.containsKey(neighbor)) {
+                    BotPositionKey neighborKey = new BotPositionKey(x + dx, y + dy, z + dz);
+                    if (map.containsKey(neighborKey)) {
                         return true;
                     }
                 }
