@@ -8,7 +8,7 @@ public class BotBrainTaskParams extends BotTaskParams {
     // 
     private boolean killPassives = true;
     //
-    private int     unstuckStrategy = 1;
+    private int     unstuckStrategy = 0;
     /*
     0 - Swimm
     1 - Explore
