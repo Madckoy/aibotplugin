@@ -52,14 +52,14 @@ public class BotOnSightBuilder {
                 double y = baseY + dy;
                 double z = baseZ + dz;
 
-                BotBlockData block = new BotBlockData(x, y, z);
+                BotBlockData block = new BotBlockData((int) x, (int) y, (int) z);
                 block.setType("VIEW_CONE");
                 sector.add(block);
             }
         }
 
         // Добавляем блок центра обзора
-        BotBlockData center = new BotBlockData(baseX, baseY, baseZ);
+        BotBlockData center = new BotBlockData((int) baseX, (int) baseY, (int) baseZ);
         center.setType("VIEW_CONE");
         sector.add(center);
 

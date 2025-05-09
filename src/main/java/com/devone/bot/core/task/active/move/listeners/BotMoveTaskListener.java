@@ -2,7 +2,7 @@ package com.devone.bot.core.task.active.move.listeners;
 
 import com.devone.bot.AIBotPlugin;
 import com.devone.bot.core.Bot;
-import com.devone.bot.core.brain.memory.MemoryType;
+import com.devone.bot.core.brain.memory.BotMemoryV2Utils;
 import com.devone.bot.core.task.active.move.BotMoveTask;
 import com.devone.bot.core.utils.blocks.BotBlockData;
 import com.devone.bot.core.utils.blocks.BotPosition;
@@ -50,10 +50,10 @@ public class BotMoveTaskListener implements Listener {
         if (block != null) {
             BotBlockData data = new BotBlockData(block.getX(), block.getY(), block.getZ());
             data.setType(block.getType().toString());
-            task.getBot().getBrain().getMemory().memorize(data, MemoryType.VISITED_BLOCKS);
-        }
 
-        //onComplete(task.getBot());
+           BotMemoryV2Utils.memorizePosition( task.getBot(), pos);
+
+        }
 
         task.stop();
     }
@@ -82,9 +82,9 @@ public class BotMoveTaskListener implements Listener {
             if (dx > 0.2 || dz > 0.2) {
                 Location aligned = new Location(
                     BotWorldHelper.getBotWorld(bot),
-                    Math.floor(target.getX()) + 0.5,
+                    Math.floor(target.getX()) + 0.0,
                     target.getY(),
-                    Math.floor(target.getZ()) + 0.5
+                    Math.floor(target.getZ()) + 0.0
                 );
 
                 Bukkit.getScheduler().runTask(AIBotPlugin.getInstance(), () -> {

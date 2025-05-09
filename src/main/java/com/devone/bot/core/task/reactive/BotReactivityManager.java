@@ -1,7 +1,6 @@
 package com.devone.bot.core.task.reactive;
 
 import com.devone.bot.core.Bot;
-import com.devone.bot.core.task.reactive.strategy.BotStrategyLowHealth;
 import com.devone.bot.core.task.reactive.strategy.BotStrategyNearbyHostile;
 import com.devone.bot.core.task.reactive.strategy.BotStrategyNearbyPlayer;
 import com.devone.bot.core.utils.BotUtils;
@@ -22,7 +21,6 @@ public class BotReactivityManager {
     static {
         // 📚 Регистрация стандартных стратегий
         registerStrategy(new BotStrategyNearbyHostile());
-        registerStrategy(new BotStrategyLowHealth());
         registerStrategy(new BotStrategyNearbyPlayer());
 
         BotLogger.debug("🧠", true, "🧩 Зарегистрированы предустановленные реакции: " + strategies.size());

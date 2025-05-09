@@ -1,8 +1,10 @@
 package com.devone.bot.core.brain;
 
 import com.devone.bot.core.Bot;
-import com.devone.bot.core.brain.memory.BotMemory;
 import com.devone.bot.core.brain.memoryv2.BotMemoryV2;
+import com.devone.bot.core.brain.perseption.BotYawChangeListener;
+import com.devone.bot.core.brain.perseption.YawBasedSceneRefresher;
+import com.devone.bot.core.brain.perseption.scene.BotSceneData;
 import com.devone.bot.core.task.passive.BotTask;
 import com.devone.bot.core.utils.BotConstants;
 import com.devone.bot.core.utils.BotUtils;
@@ -15,23 +17,22 @@ public class BotBrain {
     private transient boolean reactionInProgress = false;
     private transient String currentReactionOwner = null;
 
-    private int thinkingTicks = 0;
-    private long lastThinkingTimestamp = 0;
-    private boolean autoPickUpItems = true;
-    private transient BotMemory memory = null;
+    private transient int thinkingTicks = 0;
+    private transient long lastThinkingTimestamp = 0;
+    private transient boolean autoPickUpItems = true;
 
-    private BotMemoryV2 memoryV2 = null;
-
-    public BotMemoryV2 getMemoryV2() {
-        return memoryV2;
-    }
+    private transient BotMemoryV2 memoryV2 = null;
+    private transient BotSceneData sceneData = null;
 
     private long memoryExpirationMillis = BotConstants.DEFAULT_MEMORY_EXPIRATION;
 
+    private BotYawChangeListener yawListener;
+
     public BotBrain(Bot bot) {
         this.owner = bot;
-        this.memory = new BotMemory(this);
         this.memoryV2 = new BotMemoryV2(this);
+        this.sceneData = null;
+        setYawListener(new YawBasedSceneRefresher());
     }
 
     // 🧠 Получение текущей задачи
@@ -48,10 +49,23 @@ public class BotBrain {
         return autoPickUpItems;
     }
 
-    // 🧠 Память
-    public BotMemory getMemory() {
-        return memory;
+    public void setMemoryV2(BotMemoryV2 memoryV2) {
+        this.memoryV2 = memoryV2;
     }
+
+    public BotMemoryV2 getMemoryV2() {
+        return memoryV2;
+    }
+
+    
+    public void setSceneData(BotSceneData sceneData) {
+        this.sceneData = sceneData;
+    }
+
+    public BotSceneData getSceneData() {
+        return this.sceneData;
+    }
+
 
     // 🧠 Мышление
     public void markThinkingCycle() {
@@ -121,4 +135,15 @@ public class BotBrain {
 
         return result;
     }
+
+    public void setYawListener(BotYawChangeListener listener) {
+        this.yawListener = listener;
+    }
+    
+    public void notifyYawChanged(float newYaw) {
+        if (yawListener != null) {
+            yawListener.onYawChanged(owner, newYaw);
+        }
+    }
+
 }

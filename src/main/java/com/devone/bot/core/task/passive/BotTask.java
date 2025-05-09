@@ -134,10 +134,20 @@ public abstract class BotTask<T extends BotTaskParams> implements IBotTask, List
     }    
 
     private void logTaskStatus() {
+        String pos = "N/A";
+        String poi = "N/A";
+
+        if(bot.getNavigator().getPosition()!=null ) {
+            pos = bot.getNavigator().getPosition().toCompactString();
+        }
+
+        if(bot.getNavigator().getPoi()!=null ) {
+            poi = bot.getNavigator().getPoi().toCompactString();
+        }
+
         BotLogger.debug(icon, logging, bot.getId() +
-                " ❓ Status: done=" + done +", enabled="+isEnabled() +", paused=" + pause + " , deffered=" + deffered + ", " +
-                " 📍: " + bot.getNavigator().getPosition() +
-                " / 🎯: " + bot.getNavigator().getPoi());
+                " ❓ Status: done: " + done +", enabled: "+isEnabled() +", paused: " + pause + " , deffered: " + deffered + ", " +
+                " 📍: " + pos + " / 🎯: " + poi);
     }
 
     private boolean playerDisconnected() {

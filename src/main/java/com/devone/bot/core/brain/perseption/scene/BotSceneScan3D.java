@@ -1,4 +1,4 @@
-package com.devone.bot.core.brain.memory.scene;
+package com.devone.bot.core.brain.perseption.scene;
 
 import com.devone.bot.core.Bot;
 import com.devone.bot.core.utils.BotUtils;
@@ -20,7 +20,7 @@ public class BotSceneScan3D {
 
     public static BotSceneData scan(Bot bot, double scanRadius, int height) {
 
-        int deltaY = (height - 1) / 2;
+        int deltaY = height;
         World world = BotWorldHelper.getWorld();
 
         // Центр сканирования

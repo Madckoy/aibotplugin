@@ -14,6 +14,7 @@ import com.devone.bot.core.brain.logic.navigator.math.filters.BotNavigableFilter
 import com.devone.bot.core.brain.logic.navigator.math.filters.BotSafeBlocksFilter;
 import com.devone.bot.core.brain.logic.navigator.math.filters.BotVerticalSliceFilter;
 import com.devone.bot.core.utils.BotConstants;
+import com.devone.bot.core.utils.blocks.BlockUtils;
 import com.devone.bot.core.utils.blocks.BotBlockData;
 import com.devone.bot.core.utils.blocks.BotPosition;
 import com.devone.bot.core.utils.blocks.BotPositionSight;
@@ -22,7 +23,8 @@ public class BotNavigationContextMaker {
 
     public static BotNavigationContext createSceneContext(BotPositionSight botPositionSight,
                                                           List<BotBlockData> geoBlocks,
-                                                          List<BotBlockData> bioBlocks) {
+                                                          List<BotBlockData> bioBlocks,
+                                                          double sightFov) {
 
         BotNavigationContext context = new BotNavigationContext();
 
@@ -62,25 +64,48 @@ public class BotNavigationContextMaker {
         context.walkable  = walkable;
         context.navigable = navigable;
         context.reachable = reachable;
-        context.poiGlobal = poi;
-        context.entities  = livingTargets;
+        context.poi       = poi;
+        context.entities  = livingTargets;                                                     
+
+        BotPosition current = new BotPosition(botPositionSight);
+        BotPosition below = new BotPosition(current.getX(), current.getY() - 1, current.getZ());
+
+        context.poi = context.poi.stream()
+            .filter(p -> !BlockUtils.isSameBlock(p.getPosition(), current))
+            .filter(p -> !BlockUtils.isSameBlock(p.getPosition(), below))
+            .toList();
+
+        context.reachable = context.reachable.stream()
+            .filter(p -> !BlockUtils.isSameBlock(p.getPosition(), current))
+            .filter(p -> !BlockUtils.isSameBlock(p.getPosition(), below))
+            .toList();
+
+        context.navigable = context.navigable.stream()
+            .filter(p -> !BlockUtils.isSameBlock(p.getPosition(), current))
+            .filter(p -> !BlockUtils.isSameBlock(p.getPosition(), below))
+            .toList();
+
+        context.walkable = context.walkable.stream()
+            .filter(p -> !BlockUtils.isSameBlock(p.getPosition(), current))
+            .filter(p -> !BlockUtils.isSameBlock(p.getPosition(), below))
+            .toList();                                                     
 
         float yaw = botPositionSight.getYaw();
         BotPosition eye = new BotPosition(botPositionSight.getX(), botPositionSight.getY(), botPositionSight.getZ());
 
-        context.viewSector = BotOnSightBuilder.buildViewSectorBlocks(eye, yaw, BotConstants.DEFAULT_SCAN_RANGE+5.0, 
-                                                                               BotConstants.DEFAULT_SCAN_DATA_SLICE_HEIGHT, BotConstants.DEFAULT_SIGHT_FOV);
+        context.viewSector = BotOnSightBuilder.buildViewSectorBlocks(eye, yaw, BotConstants.DEFAULT_SCAN_RANGE+(BotConstants.DEFAULT_SCAN_RANGE/2), 
+                                                                               BotConstants.DEFAULT_SCAN_DATA_SLICE_HEIGHT, sightFov);
         if (context.viewSector.isEmpty()) {
             context.viewSector.add(new BotBlockData((int) botPositionSight.getX(),
                                                     (int) botPositionSight.getY(),
                                                     (int) botPositionSight.getZ()));
         }
 
-        context.poiOnSight = BotOnSightFilter.filter(poi, context.viewSector);
-        if (context.poiOnSight.isEmpty()) {
-            context.poiOnSight.add(new BotBlockData((int) botPositionSight.getX(),
-                                                    (int) botPositionSight.getY(),
-                                                    (int) botPositionSight.getZ()));
+        context.poi = BotOnSightFilter.filter(poi, context.viewSector);
+        if (context.poi.isEmpty()) {
+            context.poi.add(new BotBlockData((int) botPositionSight.getX(),
+                                             (int) botPositionSight.getY(),
+                                             (int) botPositionSight.getZ()));
         }
 
         context.reachable = BotOnSightFilter.filter(context.reachable, context.viewSector);

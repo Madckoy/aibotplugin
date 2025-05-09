@@ -8,17 +8,18 @@ public class BotBrainTaskParams extends BotTaskParams {
     // 
     private boolean killPassives = true;
     //
-    private int     unstuckStrategy = 1;
+    private int     unstuckStrategy = 0;
     /*
-    0 - do nothing
-    1 - excavate
-    2 - teleport
-      2.1 - teleport to random reachable spot, if available
-      2.2 - teleport to random navigable spot, if available
-      2.3 - teleport to random walkable spot,  if available
-      2.4 - teleport to specific location
-      2.5 - teleport to world spawn
-      2.6 - teleport to nearest animal
+    0 - Swimm
+    1 - Explore
+    2 - Excavate
+    3 - Teleport
+      3.1 - teleport to random reachable spot, if available
+      3.2 - teleport to random navigable spot, if available
+      3.3 - teleport to random walkable spot,  if available
+      3.4 - teleport to specific location
+      3.5 - teleport to world spawn
+      3.6 - teleport to nearest animal
     */
     private boolean allowViolence   = true;
     //
@@ -28,6 +29,7 @@ public class BotBrainTaskParams extends BotTaskParams {
     //
     private boolean allowExcavation  = true;
     private boolean allowExploration = true;
+    private boolean allowSwimming    = true;
     //
     private long memoryExpirationMillis = 30 * 60 * 1000; // по умолчанию 30 минут
     //
@@ -48,6 +50,7 @@ public class BotBrainTaskParams extends BotTaskParams {
     
         BotBrainTaskParams target = new BotBrainTaskParams();
         target.setAllowExploration(source.isAllowExploration());
+        target.setAllowSwimming(source.isAllowSwimming());
         target.setAllowExcavation(source.isAllowExcavation());
         target.setAllowTeleport(source.isAllowTeleport());
         target.setAllowBroadcast(source.isAllowBroadcast());
@@ -60,6 +63,15 @@ public class BotBrainTaskParams extends BotTaskParams {
         target.setViolenceWeight(source.getViolenceWeight());
         return target;
     }
+
+    public boolean isAllowSwimming() {
+        return allowSwimming;
+    }
+
+    public void setAllowSwimming(boolean allowSwimming) {
+        this.allowSwimming = allowSwimming;
+    }
+
 
     public void setViolenceWeight(double violenceWeight) {
         this.violenceWeight = violenceWeight;

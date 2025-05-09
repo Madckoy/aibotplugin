@@ -1,9 +1,8 @@
 package com.devone.bot.core.brain.logic.navigator.context;
 
-import com.devone.bot.core.brain.memory.scene.BotSceneData;
-
 import java.util.List;
 
+import com.devone.bot.core.brain.perseption.scene.BotSceneData;
 import com.devone.bot.core.utils.blocks.BotBlockData;
 
 public class BotNavigationContext extends BotSceneData {
@@ -15,7 +14,7 @@ public class BotNavigationContext extends BotSceneData {
     public List<BotBlockData> poiGlobal;
     public List<BotBlockData> entities;
     public List<BotBlockData> viewSector;
-    public List<BotBlockData> poiOnSight;
+    public List<BotBlockData> poi;
 
 
     //public List<BotBlockData> debugPath;

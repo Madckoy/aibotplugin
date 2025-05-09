@@ -81,7 +81,7 @@ public class BotSimplePathFinder {
 
         List<BotBlockData> result = new ArrayList<>();
         for (BotPosition loc : path) {
-            BotBlockData block = new BotBlockData(loc.getX(), loc.getY(), loc.getZ());
+            BotBlockData block = new BotBlockData((int) loc.getX(), (int) loc.getY(), (int) loc.getZ());
             block.setType("DUMMY");
             block.setTag("debug:path");
             result.add(block);
@@ -109,7 +109,7 @@ public class BotSimplePathFinder {
             List<BotPosition> path = pathfinder.findPath(from, target.getPosition());
             if (path != null && !path.isEmpty()) {
                 for (BotPosition loc : path) {
-                    BotBlockData block = new BotBlockData(loc.getX(), loc.getY(), loc.getZ());
+                    BotBlockData block = new BotBlockData((int) loc.getX(), (int) loc.getY(), (int) loc.getZ());
                     block.setType("DUMMY");
                     block.setTag("debug:path");
                     result.add(block);
@@ -122,7 +122,7 @@ public class BotSimplePathFinder {
         }
 
         if (successCount == 0) {
-            BotBlockData placeholder = new BotBlockData(from.getX(), from.getY(), from.getZ());
+            BotBlockData placeholder = new BotBlockData((int) from.getX(), (int) from.getY(), (int) from.getZ());
             placeholder.setType("DUMMY");
             placeholder.setTag("debug:path");
             result.add(placeholder);
@@ -152,7 +152,7 @@ public class BotSimplePathFinder {
             if (path != null && !path.isEmpty()) {
                 List<BotBlockData> debugBlocks = new ArrayList<>();
                 for (BotPosition loc : path) {
-                    BotBlockData block = new BotBlockData(loc.getX(), loc.getY(), loc.getZ());
+                    BotBlockData block = new BotBlockData((int) loc.getX(), (int) loc.getY(), (int) loc.getZ());
                     block.setType("DUMMY");
                     block.setTag("debug:path");
                     debugBlocks.add(block);

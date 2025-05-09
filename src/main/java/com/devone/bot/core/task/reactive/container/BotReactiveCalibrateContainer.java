@@ -26,7 +26,7 @@ public class BotReactiveCalibrateContainer extends BotReactiveContainer<BotReact
         BotLogger.debug(getIcon(), true, bot.getId() + " " + icon + " " + getObjective());
 
         BotCalibrateTaskParams tpParams = new BotCalibrateTaskParams();
-        BotCalibrateTask tpTask = new BotCalibrateTask(bot);
+        BotCalibrateTask tpTask = new BotCalibrateTask(bot, "I want beer!");
         tpTask.setParams(tpParams);
 
         List<BotTask<?>> subtasks = new ArrayList<>();

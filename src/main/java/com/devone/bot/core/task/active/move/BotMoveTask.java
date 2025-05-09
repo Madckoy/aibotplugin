@@ -53,10 +53,6 @@ public class BotMoveTask extends BotTaskAutoParams<BotMoveTaskParams> {
     @Override
     public void execute() {
 
-        if(!isEnabled()) {
-            return;
-        }
-
         if (done || isPause()) {
             BotLogger.debug(icon, isLogging(), bot.getId() + " ⭕ Таска завершена или на паузе");
             return;
@@ -85,7 +81,7 @@ public class BotMoveTask extends BotTaskAutoParams<BotMoveTaskParams> {
         
         // String coords = String.format(" %d, %d, %d", poi.getX(), poi.getY(), poi.getZ());
 
-        setObjective(params.getObjective() + " to " + blockName + " at:" + poi.toString());
+        setObjective(params.getObjective() + " to " + blockName + " at:" + poi.toCompactString());
 
         // Навигация начинается
         if (listener == null) {
@@ -101,7 +97,7 @@ public class BotMoveTask extends BotTaskAutoParams<BotMoveTaskParams> {
 
         taskHandle = Bukkit.getScheduler().runTaskTimer(AIBotPlugin.getInstance(), () -> {
             long remaining = BotUtils.getRemainingTime(startTime, params.getTimeout());
-            setObjective(params.getObjective() + " to " + blockName + " at:" + poi + " (" + remaining + ")");
+            setObjective(params.getObjective() + " to " + blockName + " at:" + poi.toCompactString() + " (" + remaining + ")");
 
             if (done || bot.getNPCEntity() == null) {
                 stop();

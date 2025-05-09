@@ -1,8 +1,8 @@
 package com.devone.bot.core.task.active.sonar;
 
 import com.devone.bot.core.Bot;
-import com.devone.bot.core.brain.memory.scene.BotSceneData;
-import com.devone.bot.core.brain.memory.scene.BotSceneScan3D;
+import com.devone.bot.core.brain.perseption.scene.BotSceneData;
+import com.devone.bot.core.brain.perseption.scene.BotSceneScan3D;
 import com.devone.bot.core.task.passive.BotTaskAutoParams;
 import com.devone.bot.core.task.passive.IBotTaskParameterized;
 import com.devone.bot.core.task.active.sonar.params.BotSonarTaskParams;
@@ -40,7 +40,7 @@ public class BotSonar3DTask extends BotTaskAutoParams<BotSonarTaskParams> {
 
         BotSceneData sceneData = BotSceneScan3D.scan(bot, radius, height);
 
-        bot.getBrain().getMemory().setSceneData(sceneData);
+        bot.getBrain().setSceneData(sceneData);
         
         stop();
     }

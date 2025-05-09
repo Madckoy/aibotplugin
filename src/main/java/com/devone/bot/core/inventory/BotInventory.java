@@ -15,7 +15,7 @@ import org.bukkit.inventory.InventoryHolder;
 import org.bukkit.inventory.ItemStack;
 
 import com.devone.bot.core.Bot;
-import com.devone.bot.core.brain.memory.scene.BotScanNatural;
+import com.devone.bot.core.brain.perseption.scene.BotScanNatural;
 import com.devone.bot.core.utils.BotConstants;
 import com.devone.bot.core.utils.BotUtils;
 import com.devone.bot.core.utils.logger.BotLogger;

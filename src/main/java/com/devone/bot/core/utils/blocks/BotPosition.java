@@ -27,16 +27,20 @@ public class BotPosition {
 
     public double distanceTo(BotPosition other) {
         if (other == null) return Double.MAX_VALUE;
-        double dx = this.x - other.x;
-        double dy = this.y - other.y;
-        double dz = this.z - other.z;
+        int dx = (int) this.x - (int) other.x;
+        int dy = (int) this.y - (int) other.y;
+        int dz = (int) this.z - (int) other.z;
         return Math.sqrt(dx * dx + dy * dy + dz * dz);
     }
 
     @Override
     public String toString() {
-        return String.format("BotPosition[%.2f, %.2f, %.2f] → key=%s",
-            x, y, z, toKey().toString());
+        return String.format("%.2f, %.2f, %.2f",
+            x, y, z);
+    }
+
+    public String toCompactString() {
+        return String.format("%d, %d, %d", (int) x, (int) y, (int) z);
     }
 
     public double getX() { return x; }
