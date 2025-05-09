@@ -10,7 +10,7 @@ public class BotBrainTaskParams extends BotTaskParams {
     //
     private int     unstuckStrategy = 1;
     /*
-    0 - do nothing
+    0 - Swimm
     1 - Explore
     2 - Excavate
     3 - Teleport
@@ -29,6 +29,7 @@ public class BotBrainTaskParams extends BotTaskParams {
     //
     private boolean allowExcavation  = true;
     private boolean allowExploration = true;
+    private boolean allowSwimming    = true;
     //
     private long memoryExpirationMillis = 30 * 60 * 1000; // по умолчанию 30 минут
     //
@@ -49,6 +50,7 @@ public class BotBrainTaskParams extends BotTaskParams {
     
         BotBrainTaskParams target = new BotBrainTaskParams();
         target.setAllowExploration(source.isAllowExploration());
+        target.setAllowSwimming(source.isAllowSwimming());
         target.setAllowExcavation(source.isAllowExcavation());
         target.setAllowTeleport(source.isAllowTeleport());
         target.setAllowBroadcast(source.isAllowBroadcast());
@@ -61,6 +63,15 @@ public class BotBrainTaskParams extends BotTaskParams {
         target.setViolenceWeight(source.getViolenceWeight());
         return target;
     }
+
+    public boolean isAllowSwimming() {
+        return allowSwimming;
+    }
+
+    public void setAllowSwimming(boolean allowSwimming) {
+        this.allowSwimming = allowSwimming;
+    }
+
 
     public void setViolenceWeight(double violenceWeight) {
         this.violenceWeight = violenceWeight;

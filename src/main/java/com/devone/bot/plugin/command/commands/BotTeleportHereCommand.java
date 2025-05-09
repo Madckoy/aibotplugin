@@ -34,6 +34,9 @@ public class BotTeleportHereCommand implements CommandExecutor {
             return true;
         }
 
+        // Удаляем все задачи
+        BotTaskManager.clear(bot);
+
         BotLogger.debug("📌", true, "/bot-tp-here: Бот " + bot.getId() + " будет телепортирован к игроку");
 
         BotTaskManager.push(bot, new BotReactiveTeleportToPlayerContainer(bot, player));

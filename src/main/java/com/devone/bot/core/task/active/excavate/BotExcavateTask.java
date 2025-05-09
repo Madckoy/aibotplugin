@@ -89,14 +89,15 @@ public class BotExcavateTask extends BotTaskAutoParams<BotExcavateTaskParams> {
 
         basePosition = new BotPosition(bot.getNavigator().getPosition());
 
-        // 🚨 Проверка на опасную жидкость
-        if (BotWorldHelper.isInDanger(bot) && ignoreDanger==false) {
-            BotLogger.debug(icon, isLogging(), bot.getId() + " 💧 Оказался в опасной жидкости. Переключаем паттерн на спасательный.");
-            ignoreDanger = true;
-            this.patternName = "escape.json";            
-            needToRestartRunner = true;
-        }
-        
+        if(ignoreDanger==false) {
+            // 🚨 Проверка на опасную жидкость
+            if (BotWorldHelper.isInDanger(bot)) {
+                BotLogger.debug(icon, isLogging(), bot.getId() + " 💧 Оказался в опасной жидкости. Переключаем паттерн на спасательный.");
+                ignoreDanger = true;
+                this.patternName = "escape.json";            
+                needToRestartRunner = true;
+            }
+        }            
 
         if (runner == null || needToRestartRunner==true) {
             BotPatternRunnerParams params = new BotPatternRunnerParams();
@@ -132,6 +133,10 @@ public class BotExcavateTask extends BotTaskAutoParams<BotExcavateTaskParams> {
         if (!runner.isLoaded()) {
             try {
                 runner.load(basePosition);
+                //
+                validatedList = new ArrayList<>();
+                queuedList.clear();
+                //
                 // read points, get blocks at relative position, chack if block can be broken,
                 // add it to the separate list.
                 // once all points processed add them to the queue, set flag "preprocessed"=true
@@ -140,6 +145,7 @@ public class BotExcavateTask extends BotTaskAutoParams<BotExcavateTaskParams> {
                 for (int i = 0; i < points.size(); i++) {
                     BotPosition pos = points.get(i);
                     Block block = BotWorldHelper.botPositionToWorldBlock(pos);
+
                     if (block.getType().toString().equals(Material.AIR.toString()) ||
                             block.getType().toString().equals(Material.CAVE_AIR.toString()) ||
                             block.getType().toString().equals(Material.VOID_AIR.toString()) ||
@@ -148,24 +154,24 @@ public class BotExcavateTask extends BotTaskAutoParams<BotExcavateTaskParams> {
 
                         BotLogger.debug(icon, isLogging(), bot.getId() + " Блок не разрушимый или уже разрушен: "
                                 + pos.toCompactString() + " " + block.getType());
+
                         continue;
+
                     } else {
                         validatedList.add(pos);
-
                     }
-                }
-                validated=true;
-                queuedList.clear();
-                queuedList.addAll(validatedList);
 
-                if (queuedList.isEmpty()) {
+                    String info = " ("+validatedList.size() + ")";
+                    setObjective(params.getObjective() + ": Processing: " + patternName + info);
+                }
+
+                if (validatedList.isEmpty()) {
                     BotLogger.debug(icon, isLogging(), bot.getId() + " ❌ Нет доступных блоков в паттерне для разрушения.");
                     validated = false;
-                    stop();
-                    return;
+                } else {
+                    validated=true;
+                    queuedList.addAll(validatedList);   
                 }
-
-                return;
 
             } catch (Exception ex) {
                 BotLogger.debug(icon, isLogging(), bot.getId() + " ❌ Ошибка загрузки паттерна: " + ex.getMessage());
@@ -182,9 +188,10 @@ public class BotExcavateTask extends BotTaskAutoParams<BotExcavateTaskParams> {
             }
         } else {
 
-            setIcon("🧊");
+            setIcon("🧊");           
 
             blockPosition = queuedList.poll();
+
             if (blockPosition == null) {
                 BotLogger.debug(icon, isLogging(), " 🏁 Все блоки обработаны. Завершаем задачу.");
                 stop();
@@ -192,9 +199,13 @@ public class BotExcavateTask extends BotTaskAutoParams<BotExcavateTaskParams> {
             } else {
                 BotLogger.debug(icon, isLogging(), bot.getId() + " 👆 Берем Next блок: " + blockPosition);
                 Block targetBlock = BotWorldHelper.botPositionToWorldBlock(blockPosition);
+            
                 bot.getNavigator().setPoi(blockPosition);
+            
                 turnToTarget(this, blockPosition);
+                
                 setObjective(params.getObjective() + " " + BotUtils.getBlockName(targetBlock) + " at " + blockPosition.toCompactString());
+
                 Material mat = targetBlock.getType();
                 if (BotUtils.requiresTool(mat)) {
                     if (!BotInventory.equipRequiredTool(bot, mat)) {

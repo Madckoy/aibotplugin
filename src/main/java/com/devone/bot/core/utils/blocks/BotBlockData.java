@@ -133,8 +133,8 @@ public class BotBlockData {
 
     @Override
     public String toString() {
-        return String.format("Block: [ %d, %d, %d | key=%s, type=%s, tag=%s ]",
-            getX(), getY(), getZ(), toKey(), type, tag);
+        return String.format("%d, %d, %d, %s, %s",
+            getX(), getY(), getZ(), type, tag);
     }
 
     public String toCompactString() {

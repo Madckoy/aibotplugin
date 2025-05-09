@@ -63,13 +63,13 @@ public class BotPatternRunner {
         voidPointsQueue.addAll(allVoidPoints);
         solidPointsQueue.addAll(allSolidPoints);
 
-        BotLogger.debug("📐", true, " 📝 Pattern Summary: " + params.getFilename());
-        BotLogger.debug("📐", true, "          All Points: " + allPoints);
-        BotLogger.debug("📐", true, "     All Void Points: " + allVoidPoints);
-        BotLogger.debug("📐", true, "    All Solid Points: " + allSolidPoints);
-        BotLogger.debug("📐", true, " -----------------------------------------");
-        BotLogger.debug("📐", true, " Void Points Queue: " + voidPointsQueue);
-        BotLogger.debug("📐", true, " Solid Points Queue: " + solidPointsQueue);
+        //BotLogger.debug("📐", true, " 📝 Pattern Summary: " + params.getFilename());
+        //BotLogger.debug("📐", true, "          All Points: " + allPoints);
+        //BotLogger.debug("📐", true, "     All Void Points: " + allVoidPoints);
+        //BotLogger.debug("📐", true, "    All Solid Points: " + allSolidPoints);
+        //BotLogger.debug("📐", true, " -----------------------------------------");
+        //BotLogger.debug("📐", true, " Void Points Queue: " + voidPointsQueue);
+        //BotLogger.debug("📐", true, " Solid Points Queue: " + solidPointsQueue);
 
         return this;
     }

@@ -123,13 +123,15 @@ public class BotUtils {
         float pitch = (float) Math.toDegrees(-Math.atan2(direction.getY(),
                 Math.sqrt(direction.getX() * direction.getX() + direction.getZ() * direction.getZ())));
 
-        Location newLook = from.clone();
-        newLook.setYaw(yaw);
-        newLook.setPitch(pitch);
+        Location newLoc = from.clone();
+        newLoc.setYaw(yaw);
+        newLoc.setPitch(pitch);
 
         // bot.getNPCEntity().setRotation(yaw, pitch);
 
-        bot.getNPCEntity().teleport(newLook);
+        bot.getNPCEntity().teleport(newLoc);
+
+        bot.getBrain().notifyYawChanged(newLoc.getYaw()); // вот здесь — оповещение
     }
 
     public static String formatTime(long milliseconds) {

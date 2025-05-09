@@ -35,8 +35,8 @@ public class BotPosition {
 
     @Override
     public String toString() {
-        return String.format("BotPosition[%.2f, %.2f, %.2f] → key=%s",
-            x, y, z, toKey().toString());
+        return String.format("%.2f, %.2f, %.2f",
+            x, y, z);
     }
 
     public String toCompactString() {

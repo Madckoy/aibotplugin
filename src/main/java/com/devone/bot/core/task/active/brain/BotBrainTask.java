@@ -1,5 +1,6 @@
 package com.devone.bot.core.task.active.brain;
 
+import java.util.Comparator;
 import java.util.List;
 import java.util.Optional;
 import java.util.function.Supplier;
@@ -24,6 +25,8 @@ import com.devone.bot.core.task.active.calibrate.BotCalibrateTask;
 import com.devone.bot.core.task.active.excavate.BotExcavateTask;
 import com.devone.bot.core.task.active.excavate.params.BotExcavateTaskParams;
 import com.devone.bot.core.task.active.explore.BotExploreTask;
+import com.devone.bot.core.task.active.swim.BotSwimTask;
+import com.devone.bot.core.task.active.swim.params.BotSwimTaskParams;
 import com.devone.bot.core.task.active.teleport.BotTeleportTask;
 import com.devone.bot.core.task.active.teleport.params.BotTeleportTaskParams;
 import com.devone.bot.core.utils.BotConstants;
@@ -106,9 +109,14 @@ public class BotBrainTask extends BotTaskAutoParams<BotBrainTaskParams> {
 
         boolean stuck = bot.getNavigator().isStuck();
 
+        BotPositionSight botPos = bot.getNavigator().getPositionSight();                    
+        BotSceneData sceneData = bot.getBrain().getSceneData();
+        BotNavigationContext context = BotNavigationContextMaker.createSceneContext(botPos, sceneData.blocks,
+        sceneData.entities, BotConstants.DEFAULT_MAX_SIGHT_FOV);
+
         if (stuck) {
 
-            Optional<Runnable> unstuck = tryUnstuckStrategy(bot);
+            Optional<Runnable> unstuck = tryUnstuckStrategy(bot, context);
 
             if (unstuck.isPresent()) {
              
@@ -136,11 +144,20 @@ public class BotBrainTask extends BotTaskAutoParams<BotBrainTaskParams> {
         return selected.orElse(null);
     }
 
-    private Optional<Runnable> tryUnstuckStrategy(Bot bot) {
+    private Optional<Runnable> tryUnstuckStrategy(Bot bot, BotNavigationContext context) {
 
         int strategy = params.getUnstuckStrategy();
 
         switch (strategy) {
+            case 0:
+                if (params.isAllowSwimming()) {
+                Optional<Runnable> swim = trySwimToLand(bot, context);
+                if (swim.isPresent()) return swim;
+                    params.setUnstuckStrategy(1);
+                } else {
+                    params.setUnstuckStrategy(1);
+                }
+                return tryUnstuckStrategy(bot, context);
             case 1:
                 if (params.isAllowExploration()) {
                     return Optional.of(() -> {
@@ -166,13 +183,7 @@ public class BotBrainTask extends BotTaskAutoParams<BotBrainTaskParams> {
                 return Optional.empty();
             case 3:
                 if (params.isAllowTeleport()) {
-                    
-                    BotPositionSight botPos = bot.getNavigator().getPositionSight();
-                    
-                    BotSceneData sceneData = bot.getBrain().getSceneData();
 
-                    BotNavigationContext context = BotNavigationContextMaker.createSceneContext(botPos, sceneData.blocks,
-                            sceneData.entities, BotConstants.DEFAULT_MAX_SIGHT_FOV);
                     params.setUnstuckStrategy(1);
                     
                     return tryTeleportFallback(bot, context);
@@ -183,8 +194,38 @@ public class BotBrainTask extends BotTaskAutoParams<BotBrainTaskParams> {
                 return Optional.of(() -> {
                     BotLogger.debug(icon, isLogging(), bot.getId() + " ❌ Стратегия не определена. Calibrate.");
                     push(bot, new BotCalibrateTask(bot, "Unstuck strategy undefined!"));
+                    params.setUnstuckStrategy(0);
                 });
         }
+    }
+
+    private Optional<Runnable> trySwimToLand(Bot bot, BotNavigationContext context) {
+        if (!BotWorldHelper.isInDanger(bot)) return Optional.empty();
+    
+        BotPosition target = findNearbyLandFromContext(bot, context);
+        if (target == null) return Optional.empty();
+    
+        return Optional.of(() -> {
+            BotLogger.debug(icon, isLogging(), bot.getId() + " 🏊 Попытка выплыть на сушу → " + target);
+            BotSwimTaskParams swimParams = new BotSwimTaskParams(target);
+            BotSwimTask swimTask = new BotSwimTask(bot);
+            swimTask.setParams(swimParams);
+            push(bot, swimTask);
+            params.setUnstuckStrategy(1);
+        });
+    }
+
+    public BotPosition findNearbyLandFromContext(Bot bot, BotNavigationContext context) {
+        if (context == null || context.walkable == null || context.walkable.isEmpty()) return null;
+    
+        BotPosition current = bot.getNavigator().getPosition();
+    
+        return context.walkable.stream()
+            .map(BotBlockData::getPosition)
+            .filter(pos -> !BlockUtils.isSameBlock(pos, current)) // избегаем текущей позиции
+            .sorted(Comparator.comparingDouble(pos -> BlockUtils.distance(pos, current)))
+            .findFirst()
+            .orElse(null);
     }
 
     private Optional<Runnable> tryTeleportFallback(Bot bot, BotNavigationContext context) {

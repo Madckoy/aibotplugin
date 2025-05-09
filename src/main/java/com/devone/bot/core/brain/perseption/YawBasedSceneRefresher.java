@@ -2,6 +2,7 @@ package com.devone.bot.core.brain.perseption;
 
 import com.devone.bot.core.Bot;
 import com.devone.bot.core.utils.BotConstants;
+import com.devone.bot.core.utils.logger.BotLogger;
 
 
 public class YawBasedSceneRefresher implements BotYawChangeListener {
@@ -10,6 +11,10 @@ public class YawBasedSceneRefresher implements BotYawChangeListener {
 
     @Override
     public void onYawChanged(Bot bot, float newYaw) {
+        try{
+            BotLogger.debug(bot.getActiveTask().getIcon(), true, bot.getId() + " YAW CHANGED. New YAW: " + newYaw);
+        }catch (Exception ex){}
+        
         if (lock) return;
 
         try {
