@@ -218,11 +218,11 @@ public class BotBrainTask extends BotTaskAutoParams<BotBrainTaskParams> {
     public BotPosition findNearbyLandFromContext(Bot bot, BotNavigationContext context) {
         if (context == null || context.walkable == null || context.walkable.isEmpty()) return null;
     
-        BotPosition current = bot.getNavigator().getPosition();
+        BotBlockData current = bot.getNavigator().getPosition().getBotBlockData();
     
         return context.walkable.stream()
             .map(BotBlockData::getPosition)
-            .filter(pos -> !BlockUtils.isSameBlock(pos, current)) // избегаем текущей позиции
+            .filter(pos -> !BlockUtils.isSameBlock(pos.getBotBlockData(), current)) // избегаем текущей позиции
             .sorted(Comparator.comparingDouble(pos -> BlockUtils.distance(pos, current)))
             .findFirst()
             .orElse(null);

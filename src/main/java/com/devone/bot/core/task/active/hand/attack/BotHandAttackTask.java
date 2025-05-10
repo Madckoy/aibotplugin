@@ -49,7 +49,7 @@ public class BotHandAttackTask extends BotHandTask<BotHandAttackTaskParams> {
         this.target = params.getTarget();
         this.damage = params.getDamage();
 
-        bot.getNavigator().setPoi(target.getPosition());
+        bot.getNavigator().setPoi(target);
 
         BotLogger.debug(icon, isLogging(), bot.getId() + " ✅ Parameters for BotHandAttackTask set.");
         return this;
@@ -107,7 +107,7 @@ public class BotHandAttackTask extends BotHandTask<BotHandAttackTaskParams> {
                     // 🔄 Обновляем targetLocation
                     BotPosition pos = BotWorldHelper.locationToBotPosition(living.getLocation());
                     
-                    bot.getNavigator().setPoi(pos);
+                    bot.getNavigator().setPoi(pos.getBotBlockData());
 
                     BotUtils.turnToTarget(haTask, bot, pos);
 
@@ -120,7 +120,7 @@ public class BotHandAttackTask extends BotHandTask<BotHandAttackTaskParams> {
                         if (pursuitTicks % 20 == 0) {
                             bot.getNPCNavigator().setTarget(living.getLocation());
                             bot.getNavigator()
-                                    .setPoi(BotWorldHelper.locationToBotPosition(living.getLocation()));
+                                    .setPoi(BotWorldHelper.locationToBotPosition(living.getLocation()).getBotBlockData());
 
                             //BotUtils.turnToTarget();
                             
@@ -150,7 +150,7 @@ public class BotHandAttackTask extends BotHandTask<BotHandAttackTaskParams> {
                     }
 
                     if (attempts > MAX_ATTEMPTS) { // застряли
-                        BotPosition endPos = bot.getNavigator().getPoi();
+                        BotPosition endPos = bot.getNavigator().getPoi().getPosition();
                         if (endPos.equals(startPos) && hits == 0) {
                             BotLogger.debug(icon, isLogging(), bot.getId() + " ⏱️ Seems like the bot got stuck.");
                             stop();

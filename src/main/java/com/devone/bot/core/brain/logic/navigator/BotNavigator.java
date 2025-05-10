@@ -43,11 +43,11 @@ public class BotNavigator {
 
     private int stuckCount = 0;
     private NavigationSuggestion navigationSuggestion;
-    private BotPosition suggestedPoi;
+    private BotBlockData suggestedPoi;
 
-    private List<BotPosition> candidates;
+    private List<BotBlockData> candidates;
     private BotPosition position;
-    private transient BotPosition poi;
+    private transient BotBlockData poi;
 
     PoiSelectionMode poiSelectionMode = PoiSelectionMode.RANDOM;
 
@@ -66,7 +66,7 @@ public class BotNavigator {
         return owner.getBrain().getMemoryV2();
     }
 
-    public List<BotPosition> getCandidates() {
+    public List<BotBlockData> getCandidates() {
         return candidates;
     }
 
@@ -104,11 +104,11 @@ public class BotNavigator {
         this.position = pos;
     }
 
-    public BotPosition getPoi() {
+    public BotBlockData getPoi() {
         return poi;
     }
 
-    public void setPoi(BotPosition poi) {
+    public void setPoi(BotBlockData poi) {
         if (poi != null) {
             BotLogger.debug(BotUtils.getActiveTaskIcon(owner), true, owner.getId() + " 🗺️ POI/Target is set: " + poi);
         }
@@ -162,14 +162,14 @@ public class BotNavigator {
         this.inDanger = inDanger;
     }
 
-    public List<BotPosition> calculate(BotSceneData scene, double sightFov) {
+    public List<BotBlockData> calculate(BotSceneData scene, double sightFov) {
         try {
             BotLogger.debug(owner.getActiveTask().getIcon(), true, owner.getId() + " 💻 Navigator calculation started");
         } catch (Exception ex) {
             BotLogger.debug("*", true, owner.getId() + " 💻 Navigator calculation started");
         }
     
-        List<BotPosition> result = new ArrayList<>();
+        List<BotBlockData> result = new ArrayList<>();
         BotPositionSight botPos = getPositionSight();
         if (botPos == null) return result;
     
@@ -182,10 +182,10 @@ public class BotNavigator {
         }
     
         // Валидируем цели
-        List<BotPosition> poiSightedValidatedPos       = validateTargets(botPos, context.poi);
-        List<BotPosition> reachableSightedValidatedPos = validateTargets(botPos, context.reachable);
-        List<BotPosition> navigableSightedValidatedPos = validateTargets(botPos, context.navigable);
-        List<BotPosition> walkableSightedValidatedPos  = validateTargets(botPos, context.walkable);
+        List<BotBlockData> poiSightedValidatedPos       = validateTargets(botPos, context.poi);
+        List<BotBlockData> reachableSightedValidatedPos = validateTargets(botPos, context.reachable);
+        List<BotBlockData> navigableSightedValidatedPos = validateTargets(botPos, context.navigable);
+        List<BotBlockData> walkableSightedValidatedPos  = validateTargets(botPos, context.walkable);
     
         updateNavigationSummary("poi",       context.poi != null ? context.poi.size() : 0, poiSightedValidatedPos.size());
         updateNavigationSummary("reachable", context.reachable != null ? context.reachable.size() : 0, reachableSightedValidatedPos.size());
@@ -196,22 +196,22 @@ public class BotNavigator {
         if (poiSightedValidatedPos.size() > 1) {
             candidates = poiSightedValidatedPos;
             navigationSuggestion = NavigationSuggestion.WALK;
-            suggestedPoi = BlockUtils.findNearestReachable(getPosition(), candidates);
+            suggestedPoi = BlockUtils.findNearestReachable(getPosition().getBotBlockData(), candidates);
         } else if (reachableSightedValidatedPos.size() > 1) {
             candidates = reachableSightedValidatedPos;
             navigationSuggestion = NavigationSuggestion.WALK;
-            suggestedPoi = BlockUtils.findNearestReachable(getPosition(), candidates);
+            suggestedPoi = BlockUtils.findNearestReachable(getPosition().getBotBlockData(), candidates);
         } else {
-            List<BotPosition> reachableFallback = Stream.concat(
+            List<BotBlockData> reachableFallback = Stream.concat(
                     navigableSightedValidatedPos.stream(),
                     walkableSightedValidatedPos.stream()
-            ).filter(pos -> BlockUtils.isSoftReachable(getPosition(), pos))
+            ).filter(pos -> BlockUtils.isSoftReachable(getPosition().getBotBlockData(), pos))
              .collect(Collectors.toList());
     
             if (!reachableFallback.isEmpty()) {
                 candidates = reachableFallback;
                 navigationSuggestion = NavigationSuggestion.WALK;
-                suggestedPoi = BlockUtils.findNearestReachable(getPosition(), candidates);
+                suggestedPoi = BlockUtils.findNearestReachable(getPosition().getBotBlockData(), candidates);
             } else {
                 navigationSuggestion = NavigationSuggestion.CHANGE_DIRECTION;
                 candidates = List.of();
@@ -220,7 +220,7 @@ public class BotNavigator {
         }
     
         // ➤ Централизованная проверка: цель — это текущая позиция
-        if (suggestedPoi != null && BlockUtils.isSameBlockUnderfoot(getPosition(), suggestedPoi)) {
+        if (suggestedPoi != null && BlockUtils.isSameBlockUnderfoot(getPosition().getBotBlockData(), suggestedPoi)) {
             BotLogger.debug("*", true, owner.getId() + " 🔁 Suggested POI is underfoot — forcing direction change");
             navigationSuggestion = NavigationSuggestion.CHANGE_DIRECTION;
             suggestedPoi = null;
@@ -251,30 +251,31 @@ public class BotNavigator {
     }
     
 
-    private List<BotPosition> validateTargets(BotPositionSight botPos, List<BotBlockData> blocks) {
-        List<BotPosition> navigable = new ArrayList<>();
+    private List<BotBlockData> validateTargets(BotPositionSight botPos, List<BotBlockData> blocks) {
+        List<BotBlockData> navigable = new ArrayList<>();
         if (blocks == null) return navigable;
     
         for (BotBlockData target : blocks) {
+
             BotPosition pos = BlockUtils.fromBlock(target);
             Location loc = BotWorldHelper.botPositionToWorldLocation(pos);
     
             boolean canNavigate = owner.getNPC().getNavigator().canNavigateTo(loc);
             if (!canNavigate) continue;
-    
-            BotPosition npos = new BotPosition(target.getX(), target.getY(), target.getZ());
-    
+       
             // 🛑 1. Исключаем блок под ногами
-            if (BlockUtils.isSameBlockUnderfoot(botPos, npos)) continue;
+            if (BlockUtils.isSameBlockUnderfoot(botPos.getBotBlockData(), target)) continue;
     
             // 🛑 2. Слишком близко по XZ
-            if (BlockUtils.distanceXZ(botPos, npos) < 2.0) continue;
+            if (BlockUtils.distanceXZ(botPos.getBotBlockData(), target) < 2.0) continue;
     
             // ✅ 3. Воздух над блоком
-            BotPosition posAbove = new BotPosition(npos.getX(), npos.getY() + 1, npos.getZ());
+
+            BotPosition posAbove = new BotPosition(target.getX(), target.getY() + 1, target.getZ());
             Block blockAbove = BotWorldHelper.botPositionToWorldBlock(posAbove);
+
             if (blockAbove.getType().isAir()) {
-                navigable.add(npos);
+                navigable.add(target);
             }
         }
     
@@ -301,7 +302,7 @@ public class BotNavigator {
         BotMemoryV2Partition navigation = memory.partition("navigation", BotMemoryV2Partition.Type.MAP);
     
         // ➤ Позиция и направление
-        BotPosition currentPos = getPosition();
+        BotBlockData currentPos = getPosition().getBotBlockData();
         BotPositionSight sight = getPositionSight();
     
         navigation.put("position", currentPos != null ? currentPos.toCompactString() : null);
@@ -315,7 +316,7 @@ public class BotNavigator {
         candidatesPartition.getList().clear();
     
         if (candidates != null) {
-            for (BotPosition pos : candidates) {
+            for (BotBlockData pos : candidates) {
                 candidatesPartition.addToList(pos.toCompactString());
             }
         }
@@ -329,11 +330,11 @@ public class BotNavigator {
         this.navigationSuggestion = suggestion;
     }
 
-    public BotPosition getSuggestedPoi() {
+    public BotBlockData getSuggestedPoi() {
         return suggestedPoi;
     }
 
-    public void setSuggestedPoi(BotPosition suggested) {
+    public void setSuggestedPoi(BotBlockData suggested) {
         this.suggestedPoi = suggested;
     }
 
@@ -347,7 +348,7 @@ public class BotNavigator {
                     owner.getId() + " 🗺️ Runtime POI position: " + this.poi);
 
             if (navigationSuggestion == NavigationSuggestion.WALK) {
-                BotPosition movePos = new BotPosition(this.poi);
+                BotPosition movePos = new BotPosition(this.poi.getPosition());
                 BotMoveTaskParams mvParams = new BotMoveTaskParams();
                 mvParams.setTarget(movePos);
                 BotMoveTask moveTask = new BotMoveTask(owner);
@@ -356,12 +357,12 @@ public class BotNavigator {
             } else {
                 BotTeleportTask tp = new BotTeleportTask(owner, null);
                 BotTeleportTaskParams params = new BotTeleportTaskParams();
-                params.setPosition(suggestedPoi);
+                params.setPosition(suggestedPoi.getPosition());
                 tp.setParams(params);
                 BotTaskManager.push(owner, tp);
             }
 
-            Location loc = BotWorldHelper.botPositionToWorldLocation(this.poi);
+            Location loc = BotWorldHelper.botPositionToWorldLocation(this.poi.getPosition());
             return owner.getNPC().getNavigator().canNavigateTo(loc);
         }
     }

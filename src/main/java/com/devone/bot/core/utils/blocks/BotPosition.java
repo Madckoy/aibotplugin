@@ -25,12 +25,27 @@ public class BotPosition {
         return new BotPositionKey(this);
     }
 
-    public double distanceTo(BotPosition other) {
-        if (other == null) return Double.MAX_VALUE;
-        int dx = (int) this.x - (int) other.x;
-        int dy = (int) this.y - (int) other.y;
-        int dz = (int) this.z - (int) other.z;
-        return Math.sqrt(dx * dx + dy * dy + dz * dz);
+    public BotBlockData getBotBlockData() {
+        BotBlockData block = new BotBlockData(this.getX(), this.getY(), this.getZ());
+        return block;
+    }
+
+
+    public int distanceTo(BotBlockData other) {
+        if (other == null) return Integer.MAX_VALUE;
+        int dx = (int) this.x - other.getX();
+        int dy = (int) this.y - other.getY();
+        int dz = (int) this.z - other.getZ();
+        return (int) Math.sqrt(dx * dx + dy * dy + dz * dz);
+    }
+
+    
+    public int distanceTo(BotPosition other) {
+        if (other == null) return Integer.MAX_VALUE;
+        int dx = (int) this.x - (int) other.getX();
+        int dy = (int) this.y - (int) other.getY();
+        int dz = (int) this.z - (int) other.getZ();
+        return (int) Math.sqrt(dx * dx + dy * dy + dz * dz);
     }
 
     @Override

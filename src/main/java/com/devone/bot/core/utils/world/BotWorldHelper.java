@@ -126,6 +126,11 @@ public class BotWorldHelper {
         return loc.getBlock();
     }
 
+    public static Block botBlockDataToWorldBlock(BotBlockData pos) {
+        if (pos == null) return null;
+        return BotWorldHelper.botPositionToWorldBlock(pos.getPosition());        
+    }    
+
     public static boolean isInsideWorldBounds(BotPosition loc) {
         return loc != null && loc.getY() >= 0 && loc.getY() <= 255;
     }

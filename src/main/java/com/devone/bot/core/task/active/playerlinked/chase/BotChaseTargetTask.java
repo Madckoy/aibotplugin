@@ -33,7 +33,7 @@ public class BotChaseTargetTask extends BotTaskAutoParams<BotChaseTaskParams> {
         setObjective(params.getObjective());
 
         if (target != null) {
-            bot.getNavigator().setPoi(target.getPosition());
+            bot.getNavigator().setPoi(target);
         }
 
         BotLogger.debug("✅", this.isLogging(),

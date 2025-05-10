@@ -5,6 +5,12 @@ import java.util.Objects;
 public class BotPositionKey {
     private final int x, y, z;
 
+    public BotPositionKey(int x, int y, int z) {
+        this.x = x;
+        this.y = y;
+        this.z = z;
+    }
+    
     public BotPositionKey(double x, double y, double z) {
         this.x = (int)Math.round(x);
         this.y = (int)Math.round(y);
@@ -12,7 +18,7 @@ public class BotPositionKey {
     }
 
     public BotPositionKey(BotPosition pos) {
-        this(pos.getX(), pos.getY(), pos.getZ());
+        this((int)pos.getX(), (int)pos.getY(), (int)pos.getZ());
     }
 
     public int getX() { return x; }
@@ -34,6 +40,6 @@ public class BotPositionKey {
 
     @Override
     public String toString() {
-        return x + "," + y + "," + z;
+        return x + ", " + y + ", " + z;
     }
 }

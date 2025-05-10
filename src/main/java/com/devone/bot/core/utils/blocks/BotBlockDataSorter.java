@@ -3,13 +3,13 @@ package com.devone.bot.core.utils.blocks;
 import java.util.Comparator;
 import java.util.List;
 
-public class BotPositionSorter {
+public class BotBlockDataSorter {
 
-    public enum BotPositionAxis {
+    public enum BotBlockDataSorterAxis {
         X, Y, Z
     }
 
-    public static void sort(List<BotPosition> list, BotPositionAxis axis, boolean descending) {
+    public static void sort(List<BotPosition> list, BotBlockDataSorterAxis axis, boolean descending) {
         if (list == null || list.isEmpty())
             return;
 
@@ -28,14 +28,14 @@ public class BotPositionSorter {
 
     // 🔥 Удобные методы шорткаты:
     public static void sortByX(List<BotPosition> list, boolean descending) {
-        sort(list, BotPositionAxis.X, descending);
+        sort(list, BotBlockDataSorterAxis.X, descending);
     }
 
     public static void sortByY(List<BotPosition> list, boolean descending) {
-        sort(list, BotPositionAxis.Y, descending);
+        sort(list, BotBlockDataSorterAxis.Y, descending);
     }
 
     public static void sortByZ(List<BotPosition> list, boolean descending) {
-        sort(list, BotPositionAxis.Z, descending);
+        sort(list, BotBlockDataSorterAxis.Z, descending);
     }
 }

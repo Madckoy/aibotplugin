@@ -122,14 +122,6 @@ public class BotExcavateTask extends BotTaskAutoParams<BotExcavateTaskParams> {
             }
         }
 
-        if (isInProtectedZone(bot.getNavigator().getPoi())) {
-            BotLogger.debug(icon, isLogging(),
-                    bot.getId() + " ⛔ в запретной зоне, НЕ будет разрушать блок: "
-                            + bot.getNavigator().getPoi());
-            stop();
-            return;
-        }
-
         if (!runner.isLoaded()) {
             try {
                 runner.load(basePosition);
@@ -155,9 +147,18 @@ public class BotExcavateTask extends BotTaskAutoParams<BotExcavateTaskParams> {
                         BotLogger.debug(icon, isLogging(), bot.getId() + " Блок не разрушимый или уже разрушен: "
                                 + pos.toCompactString() + " " + block.getType());
 
+
                         continue;
 
                     } else {
+
+                        if (isInProtectedZone(BotWorldHelper.locationToBotPosition(block.getLocation()))) {
+                            BotLogger.debug(icon, isLogging(),
+                                    bot.getId() + " ⛔ в запретной зоне, НЕ будет разрушать блок: "
+                                    + block.getType());
+                            continue;        
+                        }
+
                         validatedList.add(pos);
                     }
 
@@ -200,7 +201,7 @@ public class BotExcavateTask extends BotTaskAutoParams<BotExcavateTaskParams> {
                 BotLogger.debug(icon, isLogging(), bot.getId() + " 👆 Берем Next блок: " + blockPosition);
                 Block targetBlock = BotWorldHelper.botPositionToWorldBlock(blockPosition);
             
-                bot.getNavigator().setPoi(blockPosition);
+                bot.getNavigator().setPoi(blockPosition.getBotBlockData());
             
                 turnToTarget(this, blockPosition);
                 

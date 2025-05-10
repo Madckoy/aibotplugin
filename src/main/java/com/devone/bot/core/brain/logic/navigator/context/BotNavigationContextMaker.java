@@ -67,27 +67,27 @@ public class BotNavigationContextMaker {
         context.poi       = poi;
         context.entities  = livingTargets;                                                     
 
-        BotPosition current = new BotPosition(botPositionSight);
-        BotPosition below = new BotPosition(current.getX(), current.getY() - 1, current.getZ());
+        BotBlockData current = new BotBlockData(botPositionSight.getX(), botPositionSight.getY(), botPositionSight.getZ());
+        BotBlockData below = new BotBlockData(current.getX(), current.getY() - 1, current.getZ());
 
         context.poi = context.poi.stream()
-            .filter(p -> !BlockUtils.isSameBlock(p.getPosition(), current))
-            .filter(p -> !BlockUtils.isSameBlock(p.getPosition(), below))
+            .filter(p -> !BlockUtils.isSameBlock(p, current))
+            .filter(p -> !BlockUtils.isSameBlock(p, below))
             .toList();
 
         context.reachable = context.reachable.stream()
-            .filter(p -> !BlockUtils.isSameBlock(p.getPosition(), current))
-            .filter(p -> !BlockUtils.isSameBlock(p.getPosition(), below))
+            .filter(p -> !BlockUtils.isSameBlock(p, current))
+            .filter(p -> !BlockUtils.isSameBlock(p, below))
             .toList();
 
         context.navigable = context.navigable.stream()
-            .filter(p -> !BlockUtils.isSameBlock(p.getPosition(), current))
-            .filter(p -> !BlockUtils.isSameBlock(p.getPosition(), below))
+            .filter(p -> !BlockUtils.isSameBlock(p, current))
+            .filter(p -> !BlockUtils.isSameBlock(p, below))
             .toList();
 
         context.walkable = context.walkable.stream()
-            .filter(p -> !BlockUtils.isSameBlock(p.getPosition(), current))
-            .filter(p -> !BlockUtils.isSameBlock(p.getPosition(), below))
+            .filter(p -> !BlockUtils.isSameBlock(p, current))
+            .filter(p -> !BlockUtils.isSameBlock(p, below))
             .toList();                                                     
 
         float yaw = botPositionSight.getYaw();

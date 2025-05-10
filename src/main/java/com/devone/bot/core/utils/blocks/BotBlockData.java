@@ -19,6 +19,10 @@ public class BotBlockData {
     public BotBlockData(int x, int y, int z) {
         this.position = new BotPosition(x, y, z);
     }
+  
+    public BotBlockData(double x, double y, double z) {
+        this.position = new BotPosition(x, y, z);
+    }
 
     public BotPosition getPosition() {
         return position;
@@ -119,6 +123,15 @@ public class BotBlockData {
     @Override
     public int hashCode() {
         return Objects.hash(toKey());
+    }
+
+    
+    public int distanceTo(BotBlockData other) {
+        if (other == null) return Integer.MAX_VALUE;
+        int dx = this.getX() - other.getX();
+        int dy = this.getY() - other.getY();
+        int dz = this.getZ() - other.getZ();
+        return (int) Math.sqrt(dx * dx + dy * dy + dz * dz);
     }
 
     @Override
