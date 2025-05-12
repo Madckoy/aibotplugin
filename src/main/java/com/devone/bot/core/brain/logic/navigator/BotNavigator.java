@@ -196,22 +196,22 @@ public class BotNavigator {
         if (poiSightedValidatedPos.size() > 1) {
             candidates = poiSightedValidatedPos;
             navigationSuggestion = NavigationSuggestion.WALK;
-            suggestedPoi = BlockUtils.findNearestReachable(getPosition().getBotBlockData(), candidates);
+            suggestedPoi = BlockUtils.findNearestReachable(getPosition().toBlockData(), candidates);
         } else if (reachableSightedValidatedPos.size() > 1) {
             candidates = reachableSightedValidatedPos;
             navigationSuggestion = NavigationSuggestion.WALK;
-            suggestedPoi = BlockUtils.findNearestReachable(getPosition().getBotBlockData(), candidates);
+            suggestedPoi = BlockUtils.findNearestReachable(getPosition().toBlockData(), candidates);
         } else {
             List<BotBlockData> reachableFallback = Stream.concat(
                     navigableSightedValidatedPos.stream(),
                     walkableSightedValidatedPos.stream()
-            ).filter(pos -> BlockUtils.isSoftReachable(getPosition().getBotBlockData(), pos))
+            ).filter(pos -> BlockUtils.isSoftReachable(getPosition().toBlockData(), pos))
              .collect(Collectors.toList());
     
             if (!reachableFallback.isEmpty()) {
                 candidates = reachableFallback;
                 navigationSuggestion = NavigationSuggestion.WALK;
-                suggestedPoi = BlockUtils.findNearestReachable(getPosition().getBotBlockData(), candidates);
+                suggestedPoi = BlockUtils.findNearestReachable(getPosition().toBlockData(), candidates);
             } else {
                 navigationSuggestion = NavigationSuggestion.CHANGE_DIRECTION;
                 candidates = List.of();
@@ -220,7 +220,7 @@ public class BotNavigator {
         }
     
         // ➤ Централизованная проверка: цель — это текущая позиция
-        if (suggestedPoi != null && BlockUtils.isSameBlockUnderfoot(getPosition().getBotBlockData(), suggestedPoi)) {
+        if (suggestedPoi != null && BlockUtils.isSameBlockUnderfoot(getPosition().toBlockData(), suggestedPoi)) {
             BotLogger.debug("*", true, owner.getId() + " 🔁 Suggested POI is underfoot — forcing direction change");
             navigationSuggestion = NavigationSuggestion.CHANGE_DIRECTION;
             suggestedPoi = null;
@@ -264,10 +264,10 @@ public class BotNavigator {
             if (!canNavigate) continue;
        
             // 🛑 1. Исключаем блок под ногами
-            if (BlockUtils.isSameBlockUnderfoot(botPos.getBotBlockData(), target)) continue;
+            if (BlockUtils.isSameBlockUnderfoot(botPos.toBlockData(), target)) continue;
     
             // 🛑 2. Слишком близко по XZ
-            if (BlockUtils.distanceXZ(botPos.getBotBlockData(), target) < 2.0) continue;
+            if (BlockUtils.distanceXZ(botPos.toBlockData(), target) < 2.0) continue;
     
             // ✅ 3. Воздух над блоком
 
@@ -302,7 +302,7 @@ public class BotNavigator {
         BotMemoryV2Partition navigation = memory.partition("navigation", BotMemoryV2Partition.Type.MAP);
     
         // ➤ Позиция и направление
-        BotBlockData currentPos = getPosition().getBotBlockData();
+        BotBlockData currentPos = getPosition().toBlockData();
         BotPositionSight sight = getPositionSight();
     
         navigation.put("position", currentPos != null ? currentPos.toCompactString() : null);

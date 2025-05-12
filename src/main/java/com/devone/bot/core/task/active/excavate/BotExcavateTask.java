@@ -201,7 +201,7 @@ public class BotExcavateTask extends BotTaskAutoParams<BotExcavateTaskParams> {
                 BotLogger.debug(icon, isLogging(), bot.getId() + " 👆 Берем Next блок: " + blockPosition);
                 Block targetBlock = BotWorldHelper.botPositionToWorldBlock(blockPosition);
             
-                bot.getNavigator().setPoi(blockPosition.getBotBlockData());
+                bot.getNavigator().setPoi(blockPosition.toBlockData());
             
                 turnToTarget(this, blockPosition);
                 

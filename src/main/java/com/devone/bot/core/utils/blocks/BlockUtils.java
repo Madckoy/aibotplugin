@@ -11,9 +11,7 @@ public class BlockUtils {
      */
     public static boolean isSamePosition(BotPosition a, BotPosition b) {
         if (a == null || b == null) return false;
-        return (int) a.getX() == (int) b.getX()
-            && (int) a.getY() == (int) b.getY()
-            && (int) a.getZ() == (int) b.getZ();
+        return a.toKey().equals(b.toKey());
     }
 
     /**
@@ -21,18 +19,17 @@ public class BlockUtils {
      */
     public static boolean isSameXZ(BotPosition a, BotPosition b) {
         if (a == null || b == null) return false;
-        return (int) a.getX() == (int) b.getX()
-            && (int) a.getZ() == (int) b.getZ();
+        return a.getX() == b.getX() && a.getZ() == b.getZ();
     }
 
     /**
-     * Расстояние в 3D-пространстве
+     * Расстояние в 3D-пространстве (евклидово).
      */
     public static int distance(BotPosition a, BotBlockData b) {
         if (a == null || b == null) return Integer.MAX_VALUE;
-        int dx = (int) a.getX() - b.getX();
-        int dy = (int) a.getY() - b.getY();
-        int dz = (int) a.getZ() - b.getZ();
+        int dx = a.getX() - b.getX();
+        int dy = a.getY() - b.getY();
+        int dz = a.getZ() - b.getZ();
         return (int) Math.sqrt(dx * dx + dy * dy + dz * dz);
     }
 
@@ -41,61 +38,61 @@ public class BlockUtils {
      */
     public static int distanceXZ(BotBlockData a, BotBlockData b) {
         if (a == null || b == null) return Integer.MAX_VALUE;
-        int dx = (int) a.getX() - b.getX();
-        int dz = (int) a.getZ() - b.getZ();
+        int dx = a.getX() - b.getX();
+        int dz = a.getZ() - b.getZ();
         return (int) Math.sqrt(dx * dx + dz * dz);
     }
 
     /**
-     * Быстрая проверка "в пределах радиуса" без извлечения корня.
+     * Быстрая проверка: в пределах радиуса без корня.
      */
     public static boolean isWithinSquaredRadius(BotPosition a, BotBlockData b, double radiusSquared) {
         if (a == null || b == null) return false;
-        int dx = (int) a.getX() - b.getX();
-        int dy = (int) a.getY() - b.getY();
-        int dz = (int) a.getZ() - b.getZ();
+        int dx = a.getX() - b.getX();
+        int dy = a.getY() - b.getY();
+        int dz = a.getZ() - b.getZ();
         int distSq = dx * dx + dy * dy + dz * dz;
         return distSq <= radiusSquared;
     }
 
     /**
-     * Проверка, находится ли блок в пределах манхэттенского расстояния.
+     * Манхэттенское расстояние.
      */
     public static boolean isWithinManhattan(BotPosition a, BotBlockData b, double maxDistance) {
         if (a == null || b == null) return false;
-        double dist = Math.abs(a.getX() - b.getX())
-                    + Math.abs(a.getY() - b.getY())
-                    + Math.abs(a.getZ() - b.getZ());
+        int dist = Math.abs(a.getX() - b.getX())
+                 + Math.abs(a.getY() - b.getY())
+                 + Math.abs(a.getZ() - b.getZ());
         return dist <= maxDistance;
     }
 
     /**
-     * Возвращает квадрат расстояния (без Math.sqrt).
+     * Квадрат евклидова расстояния.
      */
     public static int distanceSquared(BotPosition a, BotBlockData b) {
         if (a == null || b == null) return Integer.MAX_VALUE;
-        int dx = (int) a.getX() - b.getX();
-        int dy = (int) a.getY() - b.getY();
-        int dz = (int) a.getZ() - b.getZ();
+        int dx = a.getX() - b.getX();
+        int dy = a.getY() - b.getY();
+        int dz = a.getZ() - b.getZ();
         return dx * dx + dy * dy + dz * dz;
     }
 
     /**
-     * Проверяет, находится ли позиция в пределах радиуса.
+     * Проверка, находится ли в пределах радиуса.
      */
     public static boolean isNearby(BotPosition a, BotBlockData b, int radius) {
         return distance(a, b) <= radius;
     }
 
     /**
-     * Получает направление от точки A к точке B в виде вектора {dx, dy, dz}
+     * Вектор направления от from к to.
      */
     public static int[] directionVector(BotPosition from, BotBlockData to) {
         if (from == null || to == null) return new int[] { 0, 0, 0 };
         return new int[] {
-            Integer.compare(to.getX(), (int) from.getX()),
-            Integer.compare(to.getY(), (int) from.getY()),
-            Integer.compare(to.getZ(), (int) from.getZ())
+            Integer.compare(to.getX(), from.getX()),
+            Integer.compare(to.getY(), from.getY()),
+            Integer.compare(to.getZ(), from.getZ())
         };
     }
 
@@ -113,7 +110,7 @@ public class BlockUtils {
     }
 
     /**
-     * Поиск ближайшей позиции из списка.
+     * Поиск ближайшей позиции из списка (по эвклидову расстоянию).
      */
     public static BotBlockData findNearestReachable(BotBlockData current, List<BotBlockData> candidates) {
         return candidates.stream()
@@ -123,32 +120,36 @@ public class BlockUtils {
     }
 
     /**
-     * Простая эвристика доступности точки: по расстоянию.
+     * Простая эвристика "достижимости".
      */
     public static boolean isSoftReachable(BotBlockData from, BotBlockData to) {
         double dist = from.distanceTo(to);
         return dist > 1.5 && dist < 8.0;
     }
 
+    /**
+     * Проверка: целевой блок прямо под ботом.
+     */
     public static boolean isSameBlockUnderfoot(BotBlockData bot, BotBlockData target) {
         if (bot == null || target == null) return false;
-        int botX = (int) bot.getX();
-        int botY = (int) (bot.getY() - 1);
-        int botZ = (int) bot.getZ();
-    
-        return botX == (int) target.getX()
-            && botY == (int) target.getY()
-            && botZ == (int) target.getZ();
+        int botX = bot.getX();
+        int botY = bot.getY() - 1;
+        int botZ = bot.getZ();
+        return botX == target.getX() && botY == target.getY() && botZ == target.getZ();
     }
 
     /**
-     * Проверка, находятся ли два положения на одном и том же блоке (целочисленные координаты X/Y/Z).
+     * Проверка полной совпадающей позиции.
      */
     public static boolean isSameBlock(BotBlockData a, BotBlockData b) {
         if (a == null || b == null) return false;
-        return (int) a.getX() == (int) b.getX()
-            && (int) a.getY() == (int) b.getY()
-            && (int) a.getZ() == (int) b.getZ();
+        return a.toKey().equals(b.toKey());
     }
+
     
+    public static boolean isHostileEntity(BotBlockData entity) {
+        if (entity == null || entity.getType() == null) return false;
+        return true;
+    }
+
 }

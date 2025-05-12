@@ -10,7 +10,7 @@ import com.devone.bot.core.utils.logger.BotLogger;
 
 public class BotSonar3DTask extends BotTaskAutoParams<BotSonarTaskParams> {
 
-    private double radius;
+    private int radius;
     private int height;
 
     public BotSonar3DTask(Bot bot) {

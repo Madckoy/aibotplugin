@@ -12,9 +12,9 @@ public class BotPositionKey {
     }
     
     public BotPositionKey(double x, double y, double z) {
-        this.x = (int)Math.round(x);
-        this.y = (int)Math.round(y);
-        this.z = (int)Math.round(z);
+        this.x = (int)Math.floor(x);
+        this.y = (int)Math.floor(y);
+        this.z = (int)Math.floor(z);
     }
 
     public BotPositionKey(BotPosition pos) {

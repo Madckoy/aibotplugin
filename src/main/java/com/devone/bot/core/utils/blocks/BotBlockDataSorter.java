@@ -5,18 +5,18 @@ import java.util.List;
 
 public class BotBlockDataSorter {
 
-    public enum BotBlockDataSorterAxis {
+    public enum Axis {
         X, Y, Z
     }
 
-    public static void sort(List<BotPosition> list, BotBlockDataSorterAxis axis, boolean descending) {
+    public static void sort(List<BotBlockData> list, Axis axis, boolean descending) {
         if (list == null || list.isEmpty())
             return;
 
-        Comparator<BotPosition> comparator = switch (axis) {
-            case X -> Comparator.comparingDouble(BotPosition::getX);
-            case Y -> Comparator.comparingDouble(BotPosition::getY);
-            case Z -> Comparator.comparingDouble(BotPosition::getZ);
+        Comparator<BotBlockData> comparator = switch (axis) {
+            case X -> Comparator.comparingInt(BotBlockData::getX);
+            case Y -> Comparator.comparingInt(BotBlockData::getY);
+            case Z -> Comparator.comparingInt(BotBlockData::getZ);
         };
 
         if (descending) {
@@ -26,16 +26,16 @@ public class BotBlockDataSorter {
         list.sort(comparator);
     }
 
-    // 🔥 Удобные методы шорткаты:
-    public static void sortByX(List<BotPosition> list, boolean descending) {
-        sort(list, BotBlockDataSorterAxis.X, descending);
+    // 🔥 Удобные шорткаты
+    public static void sortByX(List<BotBlockData> list, boolean descending) {
+        sort(list, Axis.X, descending);
     }
 
-    public static void sortByY(List<BotPosition> list, boolean descending) {
-        sort(list, BotBlockDataSorterAxis.Y, descending);
+    public static void sortByY(List<BotBlockData> list, boolean descending) {
+        sort(list, Axis.Y, descending);
     }
 
-    public static void sortByZ(List<BotPosition> list, boolean descending) {
-        sort(list, BotBlockDataSorterAxis.Z, descending);
+    public static void sortByZ(List<BotBlockData> list, boolean descending) {
+        sort(list, Axis.Z, descending);
     }
 }

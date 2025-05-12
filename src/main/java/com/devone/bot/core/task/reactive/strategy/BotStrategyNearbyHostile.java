@@ -5,6 +5,7 @@ import com.devone.bot.core.brain.perseption.scene.BotSceneData;
 import com.devone.bot.core.task.passive.BotTaskManager;
 import com.devone.bot.core.task.reactive.IBotStrategyReaction;
 import com.devone.bot.core.task.reactive.container.BotReactiveNearbyHostileContainer;
+import com.devone.bot.core.utils.blocks.BlockUtils;
 import com.devone.bot.core.utils.blocks.BotBlockData;
 import com.devone.bot.core.utils.blocks.BotPosition;
 import com.devone.bot.core.utils.logger.BotLogger;
@@ -23,7 +24,7 @@ public class BotStrategyNearbyHostile implements IBotStrategyReaction {
 
         if (scene != null) {
             for (BotBlockData entity : scene.entities) {
-                if (!entity.isHostile())
+                if (BlockUtils.isHostileEntity(entity)==false)
                     continue;
                 if (BotWorldHelper.isInDangerousLiquid(entity))
                     continue;

@@ -5,7 +5,7 @@ import com.devone.bot.core.utils.BotConstants;
 
 public class BotSonarTaskParams extends BotTaskParams {
 
-    private double radius = BotConstants.DEFAULT_SCAN_RANGE;
+    private int radius = BotConstants.DEFAULT_SCAN_RANGE;
     private int height = BotConstants.DEFAULT_SCAN_DATA_SLICE_HEIGHT;
 
     public BotSonarTaskParams() {
@@ -15,7 +15,7 @@ public class BotSonarTaskParams extends BotTaskParams {
         setObjective("Scan Signatures");
     }
 
-    public double getRadius() {
+    public int getRadius() {
         return radius;
     }
 

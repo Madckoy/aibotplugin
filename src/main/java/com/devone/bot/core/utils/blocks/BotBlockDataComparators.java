@@ -4,51 +4,28 @@ import java.util.Comparator;
 
 public class BotBlockDataComparators {
 
-    public static final Comparator<BotBlockData> X_ASC = new Comparator<>() {
-        @Override public int compare(BotBlockData a, BotBlockData b) {
-            return Integer.compare(a.getX(), b.getX());
-        }
-    };
+    public static final Comparator<BotBlockData> X_ASC = Comparator.comparingInt(BotBlockData::getX);
+    public static final Comparator<BotBlockData> X_DESC = X_ASC.reversed();
 
-    public static final Comparator<BotBlockData> X_DESC = new Comparator<>() {
-        @Override public int compare(BotBlockData a, BotBlockData b) {
-            return Integer.compare(b.getX(), a.getX());
-        }
-    };
+    public static final Comparator<BotBlockData> Y_ASC = Comparator.comparingInt(BotBlockData::getY);
+    public static final Comparator<BotBlockData> Y_DESC = Y_ASC.reversed();
 
-    public static final Comparator<BotBlockData> Y_ASC = new Comparator<>() {
-        @Override public int compare(BotBlockData a, BotBlockData b) {
-            return Integer.compare(a.getY(), b.getY());
-        }
-    };
+    public static final Comparator<BotBlockData> Z_ASC = Comparator.comparingInt(BotBlockData::getZ);
+    public static final Comparator<BotBlockData> Z_DESC = Z_ASC.reversed();
 
-    public static final Comparator<BotBlockData> Y_DESC = new Comparator<>() {
-        @Override public int compare(BotBlockData a, BotBlockData b) {
-            return Integer.compare(b.getY(), a.getY());
-        }
-    };
-
-    public static final Comparator<BotBlockData> Z_ASC = new Comparator<>() {
-        @Override public int compare(BotBlockData a, BotBlockData b) {
-            return Integer.compare(a.getZ(), b.getZ());
-        }
-    };
-
-    public static final Comparator<BotBlockData> Z_DESC = new Comparator<>() {
-        @Override public int compare(BotBlockData a, BotBlockData b) {
-            return Integer.compare(b.getZ(), a.getZ());
-        }
-    };
-
+    /**
+     * Возвращает компаратор блоков по направлению оси.
+     * UP → Y+, DOWN → Y-, EAST → X+, WEST → X-, SOUTH → Z+, NORTH → Z-
+     */
     public static Comparator<BotBlockData> byAxisDirection(BotAxisDirection.AxisDirection dir) {
-        switch (dir) {
-            case UP:    return Y_ASC;
-            case DOWN:  return Y_DESC;
-            case EAST:  return X_ASC;
-            case WEST:  return X_DESC;
-            case SOUTH: return Z_ASC;
-            case NORTH: return Z_DESC;
-            default:    return null;
-        }
+        return switch (dir) {
+            case UP    -> Y_ASC;
+            case DOWN  -> Y_DESC;
+            case EAST  -> X_ASC;
+            case WEST  -> X_DESC;
+            case SOUTH -> Z_ASC;
+            case NORTH -> Z_DESC;
+            default    -> throw new IllegalArgumentException("Unknown axis direction: " + dir);
+        };
     }
 }

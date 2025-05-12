@@ -107,7 +107,7 @@ public class BotHandAttackTask extends BotHandTask<BotHandAttackTaskParams> {
                     // 🔄 Обновляем targetLocation
                     BotPosition pos = BotWorldHelper.locationToBotPosition(living.getLocation());
                     
-                    bot.getNavigator().setPoi(pos.getBotBlockData());
+                    bot.getNavigator().setPoi(pos.toBlockData());
 
                     BotUtils.turnToTarget(haTask, bot, pos);
 
@@ -120,7 +120,7 @@ public class BotHandAttackTask extends BotHandTask<BotHandAttackTaskParams> {
                         if (pursuitTicks % 20 == 0) {
                             bot.getNPCNavigator().setTarget(living.getLocation());
                             bot.getNavigator()
-                                    .setPoi(BotWorldHelper.locationToBotPosition(living.getLocation()).getBotBlockData());
+                                    .setPoi(BotWorldHelper.locationToBotPosition(living.getLocation()).toBlockData());
 
                             //BotUtils.turnToTarget();
                             

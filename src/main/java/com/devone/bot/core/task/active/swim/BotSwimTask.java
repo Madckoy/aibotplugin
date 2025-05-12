@@ -41,7 +41,7 @@ public class BotSwimTask extends BotTaskAutoParams<BotSwimTaskParams> {
         setObjective(params.getObjective() + " to: " + target.toCompactString());
         BotLogger.debug(icon, isLogging(), bot.getId() + " 🌊 Start swimming to " + target);
 
-        bot.getNavigator().setPoi(target.getBotBlockData());
+        bot.getNavigator().setPoi(target.toBlockData());
         boolean canNavigate = bot.getNavigator().navigate(1.2f); // скорость чуть ниже обычной
 
         if (!canNavigate) {

@@ -19,7 +19,7 @@ public class BotBlockData {
     public BotBlockData(int x, int y, int z) {
         this.position = new BotPosition(x, y, z);
     }
-  
+
     public BotBlockData(double x, double y, double z) {
         this.position = new BotPosition(x, y, z);
     }
@@ -33,7 +33,7 @@ public class BotBlockData {
     }
 
     public int getX() {
-        return (int) position.getX();
+        return position.getX(); // теперь безопасно, уже floored
     }
 
     public void setX(int x) {
@@ -41,7 +41,7 @@ public class BotBlockData {
     }
 
     public int getY() {
-        return (int) position.getY();
+        return position.getY();
     }
 
     public void setY(int y) {
@@ -49,7 +49,7 @@ public class BotBlockData {
     }
 
     public int getZ() {
-        return (int) position.getZ();
+        return position.getZ();
     }
 
     public void setZ(int z) {
@@ -98,18 +98,12 @@ public class BotBlockData {
     }
 
     @JsonIgnore
-    public boolean isHostile() {
-        return true;
-    }
-
-    @JsonIgnore
-    public boolean isPeaceful() {
-        return false;
-    }
-
-    @JsonIgnore
     public BotPositionKey toKey() {
         return position.toKey();
+    }
+
+    public boolean isSameBlock(BotBlockData other) {
+        return other != null && this.toKey().equals(other.toKey());
     }
 
     @Override
@@ -125,12 +119,11 @@ public class BotBlockData {
         return Objects.hash(toKey());
     }
 
-    
     public int distanceTo(BotBlockData other) {
         if (other == null) return Integer.MAX_VALUE;
-        int dx = this.getX() - other.getX();
-        int dy = this.getY() - other.getY();
-        int dz = this.getZ() - other.getZ();
+        int dx = getX() - other.getX();
+        int dy = getY() - other.getY();
+        int dz = getZ() - other.getZ();
         return (int) Math.sqrt(dx * dx + dy * dy + dz * dz);
     }
 
@@ -151,6 +144,6 @@ public class BotBlockData {
     }
 
     public String toCompactString() {
-        return String.format("%d, %d, %d", (int) getX(), (int) getY(), (int) getZ());
+        return String.format("%d, %d, %d", getX(), getY(), getZ());
     }
 }

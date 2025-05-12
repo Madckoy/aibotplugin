@@ -4,17 +4,20 @@ import java.util.List;
 
 import com.devone.bot.core.utils.blocks.BotBlockData;
 import com.devone.bot.core.utils.blocks.BotPositionSight;
+import com.devone.bot.core.utils.blocks.BotScanInfo;
 
 public class BotSceneData {
     public List<BotBlockData> blocks;
     public List<BotBlockData> entities;
     public BotPositionSight bot;
+    public BotScanInfo info;
 
     public BotSceneData() {}
 
-    public BotSceneData(List<BotBlockData> blocks, List<BotBlockData> entities, BotPositionSight botPos) {
+    public BotSceneData(List<BotBlockData> blocks, List<BotBlockData> entities, BotPositionSight botPos, BotScanInfo info) {
         this.blocks = blocks;
         this.entities = entities;
         this.bot = botPos;
+        this.info = info;
     }
 }
