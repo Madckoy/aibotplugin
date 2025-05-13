@@ -32,7 +32,7 @@ import com.devone.bot.core.utils.world.BotWorldHelper;
 public class BotNavigator {
 
     public static enum NavigationSuggestion {
-        WALK,
+        MOVE,
         CHANGE_DIRECTION,
     }
 
@@ -195,11 +195,11 @@ public class BotNavigator {
         // Логика выбора цели
         if (poiSightedValidatedPos.size() > 1) {
             candidates = poiSightedValidatedPos;
-            navigationSuggestion = NavigationSuggestion.WALK;
+            navigationSuggestion = NavigationSuggestion.MOVE;
             suggestedTarget = BlockUtils.findNearestReachable(getPosition().toBlockData(), candidates);
         } else if (reachableSightedValidatedPos.size() > 1) {
             candidates = reachableSightedValidatedPos;
-            navigationSuggestion = NavigationSuggestion.WALK;
+            navigationSuggestion = NavigationSuggestion.MOVE;
             suggestedTarget = BlockUtils.findNearestReachable(getPosition().toBlockData(), candidates);
         } else {
             List<BotBlockData> reachableFallback = Stream.concat(
@@ -210,7 +210,7 @@ public class BotNavigator {
     
             if (!reachableFallback.isEmpty()) {
                 candidates = reachableFallback;
-                navigationSuggestion = NavigationSuggestion.WALK;
+                navigationSuggestion = NavigationSuggestion.MOVE;
                 suggestedTarget = BlockUtils.findNearestReachable(getPosition().toBlockData(), candidates);
             } else {
                 navigationSuggestion = NavigationSuggestion.CHANGE_DIRECTION;
@@ -341,13 +341,13 @@ public class BotNavigator {
     public boolean navigate(float speed) {
         if (this.target == null) {
             BotLogger.debug(BotUtils.getActiveTaskIcon(owner), true,
-                    owner.getId() + " 🗺️ POI is null. Navigation is not possible ");
+                    owner.getId() + " 🗺️ Target is null. Navigation is not possible ");
             return false;
         } else {
             BotLogger.debug(BotUtils.getActiveTaskIcon(owner), true,
-                    owner.getId() + " 🗺️ Runtime POI position: " + this.target);
+                    owner.getId() + " 🗺️ Runtime Target position: " + this.target);
 
-            if (navigationSuggestion == NavigationSuggestion.WALK) {
+            if (navigationSuggestion == NavigationSuggestion.MOVE) {
                 BotPosition movePos = new BotPosition(this.target.getPosition());
                 BotMoveTaskParams mvParams = new BotMoveTaskParams();
                 mvParams.setTarget(movePos);
@@ -355,7 +355,7 @@ public class BotNavigator {
                 moveTask.setParams(mvParams);
                 BotTaskManager.push(owner, moveTask);
             } else {
-                
+
                 if(suggestedTarget==null) {
                     if(getTarget()!=null) {
                         suggestedTarget = getTarget();

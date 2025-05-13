@@ -264,8 +264,8 @@ public class BotUtils {
     public static String getNavigationSuggestionAsString(Bot bot) {
         String result = "";
 
-        if(bot.getNavigator().getNavigationSuggestion()==NavigationSuggestion.WALK) {
-            return "WALK";
+        if(bot.getNavigator().getNavigationSuggestion()==NavigationSuggestion.MOVE) {
+            return "MOVE";
         }
 
         if(bot.getNavigator().getNavigationSuggestion()==NavigationSuggestion.CHANGE_DIRECTION) {
