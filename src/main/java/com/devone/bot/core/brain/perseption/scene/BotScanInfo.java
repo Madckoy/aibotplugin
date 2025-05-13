@@ -1,4 +1,4 @@
-package com.devone.bot.core.utils.blocks;
+package com.devone.bot.core.brain.perseption.scene;
 
 public class BotScanInfo {
     private int radius;

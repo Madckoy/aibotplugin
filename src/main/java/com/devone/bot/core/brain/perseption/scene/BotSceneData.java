@@ -4,7 +4,6 @@ import java.util.List;
 
 import com.devone.bot.core.utils.blocks.BotBlockData;
 import com.devone.bot.core.utils.blocks.BotPositionSight;
-import com.devone.bot.core.utils.blocks.BotScanInfo;
 
 public class BotSceneData {
     public List<BotBlockData> blocks;
