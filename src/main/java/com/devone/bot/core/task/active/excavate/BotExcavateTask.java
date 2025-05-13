@@ -201,7 +201,7 @@ public class BotExcavateTask extends BotTaskAutoParams<BotExcavateTaskParams> {
                 BotLogger.debug(icon, isLogging(), bot.getId() + " 👆 Берем Next блок: " + blockPosition);
                 Block targetBlock = BotWorldHelper.botPositionToWorldBlock(blockPosition);
             
-                bot.getNavigator().setPoi(blockPosition.toBlockData());
+                bot.getNavigator().setTarget(blockPosition.toBlockData());
             
                 turnToTarget(this, blockPosition);
                 
@@ -212,7 +212,7 @@ public class BotExcavateTask extends BotTaskAutoParams<BotExcavateTaskParams> {
                     if (!BotInventory.equipRequiredTool(bot, mat)) {
                         BotLogger.debug(icon, isLogging(),
                                 bot.getId() + " ❌ Не удалось взять инструмент в руку. Пропускаем.");
-                        bot.getNavigator().setPoi(null);
+                        bot.getNavigator().setTarget(null);
                         return;
                     }
                 }
@@ -253,7 +253,7 @@ public class BotExcavateTask extends BotTaskAutoParams<BotExcavateTaskParams> {
     @Override
     public void stop() {
         this.runner = null;
-        bot.getNavigator().setPoi(null);
+        bot.getNavigator().setTarget(null);
         BotLogger.debug(icon, isLogging(), bot.getId() + " 🛑 Задача разрушения остановлена.");
         super.stop();
     }

@@ -28,7 +28,7 @@ public class BotHandExcavateTask extends BotHandTask<BotHandExcavateTaskParams> 
         super.setParams(params); // вызовет BotHandTask.setParams()
         this.target = params.getTarget();
 
-        bot.getNavigator().setPoi(target);
+        bot.getNavigator().setTarget(target);
 
         return this;
     }
@@ -103,7 +103,7 @@ public class BotHandExcavateTask extends BotHandTask<BotHandExcavateTaskParams> 
             bukkitTask = null;
         }
 
-        bot.getNavigator().setPoi(null);
+        bot.getNavigator().setTarget(null);
 
         super.stop();
     }

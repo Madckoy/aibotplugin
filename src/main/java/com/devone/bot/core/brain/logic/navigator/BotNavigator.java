@@ -47,13 +47,13 @@ public class BotNavigator {
 
     private List<BotBlockData> candidates;
     private BotPosition position;
-    private transient BotBlockData poi;
+    private transient BotBlockData target;
 
     PoiSelectionMode poiSelectionMode = PoiSelectionMode.RANDOM;
 
     public BotNavigator() {
         this.position = null;
-        this.poi = null;
+        this.target = null;
     }
 
     public BotNavigator(Bot owner) {
@@ -104,15 +104,15 @@ public class BotNavigator {
         this.position = pos;
     }
 
-    public BotBlockData getPoi() {
-        return poi;
+    public BotBlockData getTarget() {
+        return target;
     }
 
-    public void setPoi(BotBlockData poi) {
-        if (poi != null) {
-            BotLogger.debug(BotUtils.getActiveTaskIcon(owner), true, owner.getId() + " 🗺️ POI/Target is set: " + poi);
+    public void setTarget(BotBlockData tgt) {
+        if (tgt != null) {
+            BotLogger.debug(BotUtils.getActiveTaskIcon(owner), true, owner.getId() + " 🗺️ Target is set: " + tgt);
         }
-        this.poi = poi;
+        this.target = tgt;
     }
 
     public PoiSelectionMode getPoiSelectionMode() {
@@ -307,7 +307,7 @@ public class BotNavigator {
     
         navigation.put("position", currentPos != null ? currentPos.toCompactString() : null);
         navigation.put("yaw", sight != null ? sight.getYaw() : null);
-        navigation.put("target", poi != null ? poi.toCompactString() : null);
+        navigation.put("target", this.target != null ? this.target.toCompactString() : null);
         navigation.put("suggestion", navigationSuggestion != null ? navigationSuggestion.name() : null);
         navigation.put("suggestedPoi", suggestedPoi != null ? suggestedPoi.toCompactString() : null);
     
@@ -339,16 +339,16 @@ public class BotNavigator {
     }
 
     public boolean navigate(float speed) {
-        if (this.poi == null) {
+        if (this.target == null) {
             BotLogger.debug(BotUtils.getActiveTaskIcon(owner), true,
                     owner.getId() + " 🗺️ POI is null. Navigation is not possible ");
             return false;
         } else {
             BotLogger.debug(BotUtils.getActiveTaskIcon(owner), true,
-                    owner.getId() + " 🗺️ Runtime POI position: " + this.poi);
+                    owner.getId() + " 🗺️ Runtime POI position: " + this.target);
 
             if (navigationSuggestion == NavigationSuggestion.WALK) {
-                BotPosition movePos = new BotPosition(this.poi.getPosition());
+                BotPosition movePos = new BotPosition(this.target.getPosition());
                 BotMoveTaskParams mvParams = new BotMoveTaskParams();
                 mvParams.setTarget(movePos);
                 BotMoveTask moveTask = new BotMoveTask(owner);
@@ -362,7 +362,7 @@ public class BotNavigator {
                 BotTaskManager.push(owner, tp);
             }
 
-            Location loc = BotWorldHelper.botPositionToWorldLocation(this.poi.getPosition());
+            Location loc = BotWorldHelper.botPositionToWorldLocation(this.target.getPosition());
             return owner.getNPC().getNavigator().canNavigateTo(loc);
         }
     }

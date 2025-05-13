@@ -58,7 +58,7 @@ public class BotStatusServlet extends HttpServlet {
             JsonObject botJson = new JsonObject();
 
             BotPosition loc = bot.getNavigator().getPosition();
-            BotBlockData tgt = bot.getNavigator().getPoi();
+            BotBlockData tgt = bot.getNavigator().getTarget();
 
             botJson.addProperty("skin", "http://" + BotWebService.getServerHost() + ":"
                     + BotWebService.getServerPort() + "/skins/" + bot.getUuid() + ".png");

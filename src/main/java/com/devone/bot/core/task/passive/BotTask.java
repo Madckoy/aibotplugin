@@ -141,8 +141,8 @@ public abstract class BotTask<T extends BotTaskParams> implements IBotTask, List
             pos = bot.getNavigator().getPosition().toCompactString();
         }
 
-        if(bot.getNavigator().getPoi()!=null ) {
-            poi = bot.getNavigator().getPoi().toCompactString();
+        if(bot.getNavigator().getTarget()!=null ) {
+            poi = bot.getNavigator().getTarget().toCompactString();
         }
 
         BotLogger.debug(icon, logging, bot.getId() +

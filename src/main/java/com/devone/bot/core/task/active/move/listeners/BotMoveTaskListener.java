@@ -72,7 +72,7 @@ public class BotMoveTaskListener implements Listener {
     }
 
     public void onComplete(Bot bot) {
-        BotPosition target = bot.getNavigator().getPoi().getPosition();
+        BotPosition target = bot.getNavigator().getTarget().getPosition();
         BotPosition actual = bot.getNavigator().getPosition();
     
         if (target != null && actual != null) {

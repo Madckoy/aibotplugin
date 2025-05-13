@@ -69,7 +69,7 @@ public class BotExploreTask extends BotTaskAutoParams<BotExploreTaskParams> {
         }
         
 
-        BotBlockData poi = bot.getNavigator().getSuggestedPoi();
+        BotBlockData target = bot.getNavigator().getSuggestedPoi();
         
         NavigationSuggestion suggestion = bot.getNavigator().getNavigationSuggestion();
         if(suggestion == NavigationSuggestion.CHANGE_DIRECTION) {
@@ -89,10 +89,10 @@ public class BotExploreTask extends BotTaskAutoParams<BotExploreTaskParams> {
             return;
         }
 
-        if (poi != null) {
-            BotLogger.debug(icon, isLogging(), bot.getId() + " 🎯 Navigation - Set Target: " + poi);
+        if (target != null) {
+            BotLogger.debug(icon, isLogging(), bot.getId() + " 🎯 Navigation - Set Target: " + target);
 
-            bot.getNavigator().setPoi(poi);
+            bot.getNavigator().setTarget(target);
 
             float speed = 1.5f;
 
