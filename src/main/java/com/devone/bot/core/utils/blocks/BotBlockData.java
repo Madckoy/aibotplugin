@@ -33,7 +33,7 @@ public class BotBlockData {
     }
 
     public int getX() {
-        return position.getX(); // теперь безопасно, уже floored
+        return (int) Math.floor(position.getX()); // теперь безопасно, уже floored
     }
 
     public void setX(int x) {
@@ -41,7 +41,7 @@ public class BotBlockData {
     }
 
     public int getY() {
-        return position.getY();
+        return (int) Math.floor(position.getY());
     }
 
     public void setY(int y) {
@@ -49,7 +49,7 @@ public class BotBlockData {
     }
 
     public int getZ() {
-        return position.getZ();
+        return (int) Math.floor(position.getZ());
     }
 
     public void setZ(int z) {

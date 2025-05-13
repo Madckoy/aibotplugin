@@ -22,7 +22,7 @@ public static BotSceneData scan(Bot bot, int radius, int height) {
     World world = BotWorldHelper.getWorld();
 
     BotPosition botLoc = bot.getNavigator().getPosition();
-    int centerY = botLoc.getY(); // уровень ног
+    int centerY = (int) Math.floor(botLoc.getY()); // уровень ног
 
     int yMin = centerY - height;
     int yMax = centerY + height + 1; // компенсация вверх

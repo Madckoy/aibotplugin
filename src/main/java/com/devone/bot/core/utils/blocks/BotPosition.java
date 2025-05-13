@@ -20,28 +20,15 @@ public class BotPosition {
     }
 
     // Основные координаты — округлённые в меньшую сторону (поведение по умолчанию)
-    public int getX() {
-        return (int) Math.floor(x);
-    }
-
-    public int getY() {
-        return (int) Math.floor(y);
-    }
-
-    public int getZ() {
-        return (int) Math.floor(z);
-    }
-
-    // Точные координаты (если нужно)
-    public double getExactX() {
+    public double getX() {
         return x;
     }
 
-    public double getExactY() {
+    public double getY() {
         return y;
     }
 
-    public double getExactZ() {
+    public double getZ() {
         return z;
     }
 
@@ -79,18 +66,18 @@ public class BotPosition {
     // Расстояние до блока
     public int blockDistanceTo(BotBlockData other) {
         if (other == null) return Integer.MAX_VALUE;
-        int dx = getX() - other.getX();
-        int dy = getY() - other.getY();
-        int dz = getZ() - other.getZ();
+        int dx = (int) Math.floor(getX()) - other.getX();
+        int dy = (int) Math.floor(getY()) - other.getY();
+        int dz = (int) Math.floor(getZ()) - other.getZ();
         return (int) Math.sqrt(dx * dx + dy * dy + dz * dz);
     }
 
     // Расстояние до другой позиции (целочисленно)
     public int blockDistanceTo(BotPosition other) {
         if (other == null) return Integer.MAX_VALUE;
-        int dx = getX() - other.getX();
-        int dy = getY() - other.getY();
-        int dz = getZ() - other.getZ();
+        int dx = (int) Math.floor(getX()) - (int) Math.floor(other.getX());
+        int dy = (int) Math.floor(getY()) - (int) Math.floor(other.getY());
+        int dz = (int) Math.floor(getZ()) - (int) Math.floor(other.getZ());
         return (int) Math.sqrt(dx * dx + dy * dy + dz * dz);
     }
 

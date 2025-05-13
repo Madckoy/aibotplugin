@@ -48,7 +48,7 @@ public class BotPositionSight extends BotPosition {
     public String toString() {
         return String.format(
             "BotPositionSight[%.2f, %.2f, %.2f | Yaw: %.1f°, Pitch: %.1f° → Key=%s]",
-            getExactX(), getExactY(), getExactZ(), yaw, pitch, toKey()
+            getX(), getY(), getZ(), yaw, pitch, toKey()
         );
     }
 
