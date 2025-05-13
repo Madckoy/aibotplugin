@@ -37,6 +37,7 @@ public class Bot {
 
     private BotNavigator navigator;
 
+
     public void setBrain(BotBrain brain) {
         this.brain = brain;
     }

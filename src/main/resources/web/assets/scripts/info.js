@@ -13,7 +13,7 @@ function updateNavSummary(bot) {
     const summary = bot.memory?.navigation?.summary ?? {};
     const yaw = bot.memory?.navigation?.yaw;
     const suggestion = bot.memory?.navigation?.suggestion ?? "N/A";
-    const suggestedPoi = bot.memory?.navigation?.suggestedPoi ?? "N/A";
+    const suggestedTarget = bot.memory?.navigation?.suggestedTarget ?? "N/A";
 
     const format = (entry) => {
         if (!entry) return "N/A";
@@ -25,7 +25,7 @@ function updateNavSummary(bot) {
     document.getElementById("info-nav-navigable").textContent = format(summary.navigable);
     document.getElementById("info-nav-walkable").textContent = format(summary.walkable);
     document.getElementById("info-nav-navigation-suggestion").textContent = suggestion;
-    document.getElementById("info-nav-suggested-position").textContent = suggestedPoi;
+    document.getElementById("info-nav-suggested-position").textContent = suggestedTarget;
     document.getElementById("info-nav-facing-direction").textContent = getCompassArrow(yaw);
 }
 

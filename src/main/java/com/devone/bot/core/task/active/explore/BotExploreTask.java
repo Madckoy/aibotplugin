@@ -69,9 +69,10 @@ public class BotExploreTask extends BotTaskAutoParams<BotExploreTaskParams> {
         }
         
 
-        BotBlockData target = bot.getNavigator().getSuggestedPoi();
+        BotBlockData target = bot.getNavigator().getSuggestedTarget();
         
         NavigationSuggestion suggestion = bot.getNavigator().getNavigationSuggestion();
+
         if(suggestion == NavigationSuggestion.CHANGE_DIRECTION) {
             if(rotations > 8) {
                 BotLogger.debug(icon, isLogging(), bot.getId() + "  The full rotation was made and navigation point was not found. The bost is stuck!");                
@@ -82,6 +83,7 @@ public class BotExploreTask extends BotTaskAutoParams<BotExploreTaskParams> {
                 stop();
                 return;
             }
+
             BotLogger.debug(icon, isLogging(), bot.getId() + "  Rotating the bot to scan new sector!");
             //rotate 45 clockwise            
             BotUtils.rotateClockwise(this, bot, (float)BotConstants.DEFAULT_NORMAL_SIGHT_FOV);

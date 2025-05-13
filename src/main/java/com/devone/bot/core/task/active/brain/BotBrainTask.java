@@ -87,9 +87,14 @@ public class BotBrainTask extends BotTaskAutoParams<BotBrainTaskParams> {
         if(stuck) {
             bot.getNavigator().calculate(bot.getBrain().getSceneData(), BotConstants.DEFAULT_MAX_SIGHT_FOV); // ищем все возможные варианты POI и пробуем self-unstuck
             stuck = bot.getNavigator().isStuck();
-            if(!stuck) return;
+            if(!stuck) { 
+                bot.getBrain().setScanRange(bot.getBrain().getScanRange()+1);
+                return;
+            };
         }
 
+        bot.getBrain().setScanRange(BotConstants.DEFAULT_SCAN_RANGE);
+        
         Runnable decision = determineBehaviorScenario(bot);
 
         if (decision != null)
@@ -184,7 +189,7 @@ public class BotBrainTask extends BotTaskAutoParams<BotBrainTaskParams> {
             case 3:
                 if (params.isAllowTeleport()) {
 
-                    params.setUnstuckStrategy(1);
+                    params.setUnstuckStrategy(0);
                     
                     return tryTeleportFallback(bot, context);
                 }

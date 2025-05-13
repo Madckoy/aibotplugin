@@ -3,7 +3,6 @@ package com.devone.bot.core.brain.perseption.scene;
 import com.devone.bot.core.Bot;
 import com.devone.bot.core.utils.BotUtils;
 import com.devone.bot.core.utils.blocks.BotBlockData;
-import com.devone.bot.core.utils.blocks.BotPosition;
 import com.devone.bot.core.utils.blocks.BotPositionSight;
 import com.devone.bot.core.utils.logger.BotLogger;
 import com.devone.bot.core.utils.world.BotWorldHelper;
@@ -21,23 +20,37 @@ public class BotSceneScan3D {
 public static BotSceneData scan(Bot bot, int radius, int height) {
     World world = BotWorldHelper.getWorld();
 
-    BotPosition botLoc = bot.getNavigator().getPosition();
-    int centerY = (int) Math.floor(botLoc.getY()); // уровень ног
+    BotBlockData botLegsLoc = bot.getNavigator().getPosition().toBlockData(); //legs
+    
+    System.out.println(bot.getNPCEntity().getLocation().toString());
+    System.out.println(bot.getNavigator().getPosition().toString());
 
-    int yMin = centerY - height;
-    int yMax = centerY + height + 1; // компенсация вверх
+    Location botLoc = BotWorldHelper.botPositionToWorldLocation(botLegsLoc.getPosition());
 
-    double centerX = botLoc.getX();
-    double centerZ = botLoc.getZ();
+    int legsY = botLegsLoc.getY();   // уровень ног
+    int headY = botLegsLoc.getY()+1; // уровень головы
+
+    int yMin = legsY - height;
+    int yMax = headY + height; 
+
+    int centerX = botLegsLoc.getX();
+    int centerZ = botLegsLoc.getZ();
+
+    int xMin = centerX - radius;
+    int xMax = centerX + radius; 
+
+    int zMin = centerZ - radius;
+    int zMax = centerZ + radius; 
 
     List<BotBlockData> scannedBlocks = new ArrayList<>();
     List<BotBlockData> scannedEntities = new ArrayList<>();
 
     // 1. Сканирование блоков
     for (int y = yMax; y >= yMin; y--) {
-        for (int x = -radius; x <= radius; x++) {
-            for (int z = -radius; z <= radius; z++) {
-                Location loc = new Location(world, centerX + x, y, centerZ + z);
+        for (int x = xMin; x <= xMax; x++) {
+            for (int z = zMin; z <= zMax; z++) {
+
+                Location loc = new Location(world, botLegsLoc.getX(), botLegsLoc.getY(), botLegsLoc.getZ());
                 Material material = world.getBlockAt(loc).getType();
 
                 BotBlockData blockData = new BotBlockData(loc.getBlockX(), loc.getBlockY(), loc.getBlockZ());
@@ -48,10 +61,9 @@ public static BotSceneData scan(Bot bot, int radius, int height) {
     }
 
     // 2. Сканирование живых существ
-    Location botLocWorld = BotWorldHelper.botPositionToWorldLocation(botLoc);
     for (LivingEntity entity : world.getLivingEntities()) {
         if (entity == bot.getNPCEntity() || entity instanceof Player || entity.isDead()) continue;
-        if (entity.getLocation().distance(botLocWorld) > radius) continue;
+        if (entity.getLocation().distance(botLoc) > radius) continue;
 
         Location loc = entity.getLocation();
         Material standingOn = loc.getBlock().getType();
@@ -73,7 +85,7 @@ public static BotSceneData scan(Bot bot, int radius, int height) {
     // 3. Положение бота
     float botYaw = BotUtils.getBotYaw(bot);
     float botPitch = BotUtils.getBotPitch(bot);
-    BotPositionSight botCoords = new BotPositionSight(centerX, centerY, centerZ, botYaw, botPitch);
+    BotPositionSight botCoords = new BotPositionSight(botLegsLoc.getX(), botLegsLoc.getY(), botLegsLoc.getZ(), botYaw, botPitch);
 
     // 4. Служебная информация
     BotScanInfo info = new BotScanInfo(radius, height);

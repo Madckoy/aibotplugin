@@ -5,16 +5,16 @@ import com.devone.bot.core.brain.perseption.scene.BotSceneData;
 import com.devone.bot.core.brain.perseption.scene.BotSceneScan3D;
 import com.devone.bot.core.task.passive.BotTaskAutoParams;
 import com.devone.bot.core.task.passive.IBotTaskParameterized;
-import com.devone.bot.core.task.active.sonar.params.BotSonarTaskParams;
+import com.devone.bot.core.task.active.sonar.params.BotSonar3DTaskParams;
 import com.devone.bot.core.utils.logger.BotLogger;
 
-public class BotSonar3DTask extends BotTaskAutoParams<BotSonarTaskParams> {
+public class BotSonar3DTask extends BotTaskAutoParams<BotSonar3DTaskParams> {
 
     private int radius;
     private int height;
 
     public BotSonar3DTask(Bot bot) {
-        super(bot, BotSonarTaskParams.class);
+        super(bot, BotSonar3DTaskParams.class);
     }
 
     public BotSonar3DTask(Bot bot, int radius, int height) {
@@ -24,7 +24,7 @@ public class BotSonar3DTask extends BotTaskAutoParams<BotSonarTaskParams> {
     }
 
     @Override
-    public IBotTaskParameterized<BotSonarTaskParams> setParams(BotSonarTaskParams params) {
+    public IBotTaskParameterized<BotSonar3DTaskParams> setParams(BotSonar3DTaskParams params) {
         super.setParams(params);
         setIcon(params.getIcon());
         setObjective(params.getObjective());

@@ -3,12 +3,12 @@ package com.devone.bot.core.task.active.sonar.params;
 import com.devone.bot.core.task.passive.params.BotTaskParams;
 import com.devone.bot.core.utils.BotConstants;
 
-public class BotSonarTaskParams extends BotTaskParams {
+public class BotSonar3DTaskParams extends BotTaskParams {
 
     private int radius = BotConstants.DEFAULT_SCAN_RANGE;
     private int height = BotConstants.DEFAULT_SCAN_DATA_SLICE_HEIGHT;
 
-    public BotSonarTaskParams() {
+    public BotSonar3DTaskParams() {
         super();
         // Устанавливаем значения по умолчанию
         setIcon("📡");

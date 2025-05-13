@@ -8,6 +8,7 @@ import com.devone.bot.core.brain.memory.BotMemoryV2Utils;
 import com.devone.bot.core.task.passive.BotTaskManager;
 import com.devone.bot.core.task.active.brain.BotBrainTask;
 import com.devone.bot.core.task.active.sonar.BotSonar3DTask;
+import com.devone.bot.core.task.active.sonar.params.BotSonar3DTaskParams;
 import com.devone.bot.core.utils.BotConstants;
 import com.devone.bot.core.utils.BotUtils;
 import com.devone.bot.core.utils.logger.BotLogger;
@@ -18,7 +19,7 @@ public class BotBootstrap {
 
     private final Bot bot;
     private final BotTaskManager taskManager;
-    private boolean brainStarted = false;
+    private boolean brainStarted  = false;
 
     public BotBootstrap(Bot bot) {
         this.bot = bot;
@@ -35,8 +36,15 @@ public class BotBootstrap {
 
             String icon = BotUtils.getActiveTaskIcon(bot);
 
+            
             BotLogger.debug(icon, true, bot.getId() + " 🛜 Sonar Scan started");
-            new BotSonar3DTask(bot).execute();
+
+            BotSonar3DTaskParams params = new BotSonar3DTaskParams();
+            params.setRadius(bot.getBrain().getScanRange());
+            BotSonar3DTask task = new BotSonar3DTask(bot);
+            task.setParams(params);
+            task.execute();
+
 
         }, 0L, BotConstants.TICKS_NAVIGATION_UPDATE);
 
