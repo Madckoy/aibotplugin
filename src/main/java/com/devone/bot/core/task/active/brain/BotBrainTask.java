@@ -96,7 +96,9 @@ public class BotBrainTask extends BotTaskAutoParams<BotBrainTaskParams> {
 
         if(stuck) {
 
-            radius++;
+            if(radius<BotConstants.MAX_SCAN_RANGE) {
+                radius++;
+            }
 
             BotMemoryV2Utils.memorizeValue(bot, "navigation", "scanRadius", radius);
 
