@@ -255,8 +255,8 @@ public class BotBrainTask extends BotTaskAutoParams<BotBrainTaskParams> {
                 () -> tryTeleportToReachable(bot, context.reachable),
                 () -> tryTeleportToNavigable(bot, context.navigable),
                 () -> tryTeleportToEntity(bot, context.entities),
-                () -> tryTeleportToWalkable(bot, context.walkable),
-                () -> tryTeleportToSpawn(bot));
+                () -> tryTeleportToWalkable(bot, context.walkable));//,
+                //() -> tryTeleportToSpawn(bot));
 
         for (Supplier<Optional<Runnable>> attempt : attempts) {
             Optional<Runnable> result = attempt.get();

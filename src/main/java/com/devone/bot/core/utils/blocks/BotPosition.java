@@ -87,7 +87,7 @@ public class BotPosition {
     }
 
     public String toCompactString() {
-        return toString();
+        return toKey().toString();
     }
  
     public double distanceTo(BotBlockData other) {

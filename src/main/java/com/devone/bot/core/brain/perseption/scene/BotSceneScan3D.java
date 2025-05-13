@@ -47,10 +47,10 @@ public static BotSceneData scan(Bot bot, int radius, int height) {
         for (int x = xMin; x <= xMax; x++) {
             for (int z = zMin; z <= zMax; z++) {
 
-                Location loc = new Location(world, botLegsLoc.getX(), botLegsLoc.getY(), botLegsLoc.getZ());
+                Location loc = new Location(world, x, y, z);
                 Material material = world.getBlockAt(loc).getType();
 
-                BotBlockData blockData = new BotBlockData(loc.getBlockX(), loc.getBlockY(), loc.getBlockZ());
+                BotBlockData blockData = new BotBlockData(x, y, z);
                 blockData.setType(material.toString());
                 scannedBlocks.add(blockData);
             }
