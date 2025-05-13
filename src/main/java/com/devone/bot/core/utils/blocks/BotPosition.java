@@ -87,7 +87,7 @@ public class BotPosition {
     }
 
     public String toCompactString() {
-        return String.format("%d, %d, %d", getX(), getY(), getZ());
+        return toString();
     }
  
     public double distanceTo(BotBlockData other) {
