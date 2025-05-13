@@ -77,18 +77,18 @@ public class BotMoveTask extends BotTaskAutoParams<BotMoveTaskParams> {
             return;
         }
 
-        BotPosition poi = block.getPosition();
+        BotPosition target = block.getPosition();
         
-        if (poi == null) {
+        if (target == null) {
             BotLogger.debug(icon, isLogging(), bot.getId() + " ❌ Цель навигации не найдена");
             stop();
             return;
         }
 
-        Block targetBlock = BotWorldHelper.botPositionToWorldBlock(poi);
+        Block targetBlock = BotWorldHelper.botPositionToWorldBlock(target);
         String blockName = BotUtils.getBlockName(targetBlock);
 
-        setObjective(params.getObjective() + " to " + blockName + " at:" + poi.toCompactString());
+        setObjective(params.getObjective() + " to " + blockName + " at: " + target.toCompactString());
 
         // Навигация начинается
         if (listener == null) {
@@ -96,15 +96,15 @@ public class BotMoveTask extends BotTaskAutoParams<BotMoveTaskParams> {
             Bukkit.getPluginManager().registerEvents(listener, AIBotPlugin.getInstance());
         }
 
-        MoveTaskHelper.setPoi(bot, poi, speed, isLogging());
+        MoveTaskHelper.setPoi(bot, target, speed, isLogging());
 
         isMoving = true;
 
-        BotLogger.debug(icon, isLogging(), bot.getId() + " 🏃 Начинаем движение к " + poi);
+        BotLogger.debug(icon, isLogging(), bot.getId() + " 🏃 Начинаем движение к " + target);
 
         taskHandle = Bukkit.getScheduler().runTaskTimer(AIBotPlugin.getInstance(), () -> {
             long remaining = BotUtils.getRemainingTime(startTime, params.getTimeout());
-            setObjective(params.getObjective() + " to " + blockName + " at:" + poi.toCompactString() + " (" + remaining + ")");
+            setObjective(params.getObjective() + " to " + blockName + " at: " + target.toCompactString() + " (" + remaining + ")");
 
             if (done || bot.getNPCEntity() == null) {
                 stop();
