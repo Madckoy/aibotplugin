@@ -7,6 +7,7 @@ import com.devone.bot.core.task.passive.IBotTaskParameterized;
 import com.devone.bot.core.task.active.move.listeners.BotMoveTaskListener;
 import com.devone.bot.core.task.active.move.params.BotMoveTaskParams;
 import com.devone.bot.core.utils.*;
+import com.devone.bot.core.utils.blocks.BotBlockData;
 import com.devone.bot.core.utils.blocks.BotPosition;
 import com.devone.bot.core.utils.logger.BotLogger;
 import com.devone.bot.core.utils.world.BotWorldHelper;
@@ -69,7 +70,15 @@ public class BotMoveTask extends BotTaskAutoParams<BotMoveTaskParams> {
             return;
         }
 
-        BotPosition poi = bot.getNavigator().getTarget().getPosition();
+        BotBlockData block = bot.getNavigator().getTarget();
+
+        if(block==null) {
+            stop();
+            return;
+        }
+
+        BotPosition poi = block.getPosition();
+        
         if (poi == null) {
             BotLogger.debug(icon, isLogging(), bot.getId() + " ❌ Цель навигации не найдена");
             stop();
@@ -78,8 +87,6 @@ public class BotMoveTask extends BotTaskAutoParams<BotMoveTaskParams> {
 
         Block targetBlock = BotWorldHelper.botPositionToWorldBlock(poi);
         String blockName = BotUtils.getBlockName(targetBlock);
-        
-        // String coords = String.format(" %d, %d, %d", poi.getX(), poi.getY(), poi.getZ());
 
         setObjective(params.getObjective() + " to " + blockName + " at:" + poi.toCompactString());
 
