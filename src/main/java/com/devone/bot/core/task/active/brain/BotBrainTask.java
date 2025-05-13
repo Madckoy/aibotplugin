@@ -15,6 +15,7 @@ import com.devone.bot.core.brain.logic.navigator.context.BotNavigationContextMak
 
 import com.devone.bot.core.brain.logic.navigator.math.selector.BotEntitySelector;
 import com.devone.bot.core.brain.logic.navigator.math.selector.BotPOISelector;
+import com.devone.bot.core.brain.memory.BotMemoryV2Utils;
 import com.devone.bot.core.brain.perseption.scene.BotSceneData;
 import com.devone.bot.core.task.passive.BotTask;
 import com.devone.bot.core.task.passive.BotTaskAutoParams;
@@ -84,17 +85,30 @@ public class BotBrainTask extends BotTaskAutoParams<BotBrainTaskParams> {
 
         boolean stuck = bot.getNavigator().isStuck();
         
-        if(stuck) {
-            bot.getNavigator().calculate(bot.getBrain().getSceneData(), BotConstants.DEFAULT_MAX_SIGHT_FOV); // ищем все возможные варианты POI и пробуем self-unstuck
-            stuck = bot.getNavigator().isStuck();
-            if(!stuck) { 
-                bot.getBrain().setScanRange(bot.getBrain().getScanRange()+1);
-                return;
-            };
+
+        int radius = BotConstants.DEFAULT_SCAN_RANGE;
+
+        Integer scanRadius = (Integer) BotMemoryV2Utils.readMemoryValue(bot, "navigation", "scanRadius");
+            
+        if(scanRadius!=null) {
+            radius = scanRadius.intValue();
         }
 
-        bot.getBrain().setScanRange(BotConstants.DEFAULT_SCAN_RANGE);
-        
+        if(stuck) {
+
+            radius++;
+
+            BotMemoryV2Utils.memorizeValue(bot, "navigation", "scanRadius", radius);
+
+            bot.getNavigator().calculate(bot.getBrain().getSceneData(), BotConstants.DEFAULT_MAX_SIGHT_FOV); // ищем все возможные варианты targets и пробуем self-unstuck
+
+        } else {
+
+            BotMemoryV2Utils.memorizeValue(bot, "navigation", "scanRadius", BotConstants.DEFAULT_SCAN_RANGE);
+
+        }
+
+
         Runnable decision = determineBehaviorScenario(bot);
 
         if (decision != null)

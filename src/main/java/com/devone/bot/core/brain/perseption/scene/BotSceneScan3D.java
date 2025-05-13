@@ -21,9 +21,6 @@ public static BotSceneData scan(Bot bot, int radius, int height) {
     World world = BotWorldHelper.getWorld();
 
     BotBlockData botLegsLoc = bot.getNavigator().getPosition().toBlockData(); //legs
-    
-    System.out.println(bot.getNPCEntity().getLocation().toString());
-    System.out.println(bot.getNavigator().getPosition().toString());
 
     Location botLoc = BotWorldHelper.botPositionToWorldLocation(botLegsLoc.getPosition());
 

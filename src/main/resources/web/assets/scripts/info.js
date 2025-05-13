@@ -14,6 +14,7 @@ function updateNavSummary(bot) {
     const yaw = bot.memory?.navigation?.yaw;
     const suggestion = bot.memory?.navigation?.suggestion ?? "N/A";
     const suggestedTarget = bot.memory?.navigation?.suggestedTarget ?? "N/A";
+    const scanRadius = bot.memory?.navigation?.scanRadius ?? "N/A";
 
     const format = (entry) => {
         if (!entry) return "N/A";
@@ -27,6 +28,7 @@ function updateNavSummary(bot) {
     document.getElementById("info-nav-navigation-suggestion").textContent = suggestion;
     document.getElementById("info-nav-suggested-position").textContent = suggestedTarget;
     document.getElementById("info-nav-facing-direction").textContent = getCompassArrow(yaw);
+    document.getElementById("info-nav-scan-range").textContent = scanRadius;
 }
 
 function updateStats(bot) {

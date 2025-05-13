@@ -28,18 +28,6 @@ public class BotBrain {
 
     private BotYawChangeListener yawListener;
 
-    private int scanRange = BotConstants.DEFAULT_SCAN_RANGE;
-
-    public int getScanRange() {
-        return scanRange;
-    }
-
-    public void setScanRange(int eScanRange) {
-        if(eScanRange<=BotConstants.MAX_SCAN_RANGE) {
-            this.scanRange = eScanRange;
-        }
-    }
-
     public BotBrain(Bot bot) {
         this.owner = bot;
         this.memoryV2 = new BotMemoryV2(this);

@@ -227,10 +227,10 @@ public class BotNavigator {
             candidates = List.of();
         }
     
-        boolean noTarget       = poiSightedValidatedPos == null || poiSightedValidatedPos.isEmpty();
+        boolean noTarget       = poiSightedValidatedPos    == null || poiSightedValidatedPos.isEmpty();
         boolean noReachable = reachableSightedValidatedPos == null || reachableSightedValidatedPos.isEmpty();
         boolean noNavigable = navigableSightedValidatedPos == null || navigableSightedValidatedPos.isEmpty();
-        boolean noWalkable  = walkableSightedValidatedPos == null || walkableSightedValidatedPos.isEmpty();
+        boolean noWalkable  = walkableSightedValidatedPos  == null || walkableSightedValidatedPos.isEmpty();
     
         // Если нет ни одной полезной навигационной поверхности — считаем, что бот застрял
         boolean stuckNow = noTarget && noReachable && noNavigable && noWalkable;

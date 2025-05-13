@@ -32,7 +32,7 @@ public class BotMemoryV2Utils {
         summary.increment("total");
     }
 
-public static void memorizePosition(Bot bot, BotPosition pos) {
+    public static void memorizePosition(Bot bot, BotPosition pos) {
         if (bot == null || pos == null) return;
         String key = pos.toKey().toString();
 
@@ -41,6 +41,30 @@ public static void memorizePosition(Bot bot, BotPosition pos) {
         BotMemoryV2Partition visited = nav.partition("visited", BotMemoryV2Partition.Type.MAP);
 
         visited.put(key, System.currentTimeMillis());
+    }
+
+    public static void memorizeScanRange(Bot bot, int scanRange) {
+        if (bot == null) return;
+
+        BotMemoryV2 memory           = bot.getBrain().getMemoryV2();
+        BotMemoryV2Partition nav     = memory.partition("navigation", BotMemoryV2Partition.Type.MAP);
+        nav.put("scan-range", scanRange);
+    }
+
+    public static void memorizeValue(Bot bot, String partition, String key, Object value) {
+        if (bot == null) return;
+
+        BotMemoryV2 memory           = bot.getBrain().getMemoryV2();
+        BotMemoryV2Partition part     = memory.partition(partition, BotMemoryV2Partition.Type.MAP);
+        part.put(key, value);
+    }
+
+    public static Object readMemoryValue(Bot bot, String partition, String key) {
+        if (bot == null) return null;
+
+        BotMemoryV2 memory           = bot.getBrain().getMemoryV2();
+        BotMemoryV2Partition part    = memory.partition(partition, BotMemoryV2Partition.Type.MAP);
+        return part.get(key);
     }
 
     public static boolean isPositionVisited(Bot bot, BotPosition pos) {

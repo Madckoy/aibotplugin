@@ -164,6 +164,7 @@ public class BotStatusServlet extends HttpServlet {
 
 
                 BotMemoryV2Partition nav = bot.getBrain().getMemoryV2().partition("navigation", BotMemoryV2Partition.Type.MAP);
+
                 BotMemoryV2Partition visitedPartition = nav.partition("visited", BotMemoryV2Partition.Type.MAP);
 
                 if (visitedPartition != null) {
