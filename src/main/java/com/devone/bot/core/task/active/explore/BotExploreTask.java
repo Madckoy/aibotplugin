@@ -1,11 +1,14 @@
 package com.devone.bot.core.task.active.explore;
 
+import java.util.List;
+
 import com.devone.bot.core.Bot;
 import com.devone.bot.core.brain.logic.navigator.BotNavigator.NavigationSuggestion;
 import com.devone.bot.core.brain.perseption.scene.BotSceneData;
 import com.devone.bot.core.task.passive.BotTaskAutoParams;
 import com.devone.bot.core.task.passive.IBotTaskParameterized;
 import com.devone.bot.core.task.active.explore.params.BotExploreTaskParams;
+import com.devone.bot.core.utils.BotConstants;
 import com.devone.bot.core.utils.BotUtils;
 import com.devone.bot.core.utils.blocks.BotBlockData;
 import com.devone.bot.core.utils.logger.BotLogger;
@@ -59,6 +62,8 @@ public class BotExploreTask extends BotTaskAutoParams<BotExploreTaskParams> {
             return;
         }
 
+        List<BotBlockData> candidates = bot.getNavigator().calculate(sceneData, BotConstants.DEFAULT_NORMAL_SIGHT_FOV);
+
         BotBlockData target = bot.getNavigator().getSuggestedTarget();
         
         NavigationSuggestion suggestion = bot.getNavigator().getNavigationSuggestion();
@@ -80,8 +85,6 @@ public class BotExploreTask extends BotTaskAutoParams<BotExploreTaskParams> {
             
             BotLogger.debug(icon, isLogging(), bot.getId() + " ❓ Navigation - Can navigate: " + canNavigate);
 
-            // bot.getBrain().getMemory().memorize(target, MemoryType.VISITED_BLOCKS); //
-            // Запоминаем на ~30 минут посещенную цель навигации
             stop();
             return;
 

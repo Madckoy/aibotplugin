@@ -2,6 +2,7 @@ package com.devone.bot.core.brain.logic.navigator;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
@@ -29,6 +30,7 @@ import com.devone.bot.core.utils.blocks.BotPosition;
 import com.devone.bot.core.utils.blocks.BotPositionSight;
 import com.devone.bot.core.utils.logger.BotLogger;
 import com.devone.bot.core.utils.world.BotWorldHelper;
+import com.google.common.base.Predicate;
 
 public class BotNavigator {
 
@@ -193,7 +195,11 @@ public class BotNavigator {
 
         final int maxRadius = radius;
 
-        BotNavigationContext context = BotContextMakerHelper.alignBotToMaxReachableYaw(botPos, scene.blocks, sightFov, radius, BotConstants.DEFAULT_SCAN_HEIGHT);
+        BotMemoryV2Partition navPar = owner.getBrain().getMemoryV2().partition("navigation");
+        BotMemoryV2Partition visPar = navPar.partition("visited", BotMemoryV2Partition.Type.MAP);
+        Map<String, Object>  visited = visPar.getMap();
+        
+        BotNavigationContext context = BotContextMakerHelper.alignBotToMaxReachableYawNotVisited(botPos, scene.blocks, sightFov, radius, BotConstants.DEFAULT_SCAN_HEIGHT, visited);
 
         // Валидируем цели
         List<BotBlockData> reachableSightedValidatedPos = validateTargets(botPos, context.reachable);
@@ -205,6 +211,21 @@ public class BotNavigator {
         updateNavigationSummary("navigable", context.navigable != null ? context.navigable.size() : 0, navigableSightedValidatedPos.size());
         updateNavigationSummary("walkable",  context.walkable != null ? context.walkable.size()   : 0, walkableSightedValidatedPos.size());
     
+
+        Predicate<BotBlockData> isNotVisited = block -> !visited.containsKey(block.toCompactString());
+
+        reachableSightedValidatedPos = reachableSightedValidatedPos.stream()
+            .filter(isNotVisited)
+            .collect(Collectors.toList());
+
+        navigableSightedValidatedPos = navigableSightedValidatedPos.stream()
+        .filter(isNotVisited)
+        .collect(Collectors.toList());
+
+        walkableSightedValidatedPos = walkableSightedValidatedPos.stream()
+            .filter(isNotVisited)
+            .collect(Collectors.toList());
+
         // Логика выбора цели
         if (reachableSightedValidatedPos.size() > 1) {
             candidates = reachableSightedValidatedPos;
@@ -242,7 +263,7 @@ public class BotNavigator {
             candidates = List.of();
         }
     
-        boolean noTarget    = suggestedTarget    == null            || candidates.isEmpty();
+        boolean noTarget    = suggestedTarget    == null || candidates.isEmpty();
 
         // set The best YAW
         setBestYaw(context.bestYaw);

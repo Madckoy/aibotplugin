@@ -1,6 +1,7 @@
 package com.devone.bot.core.brain.logic.navigator.context;
 
 import java.util.List;
+import java.util.Map;
 
 import com.devone.bot.core.utils.blocks.BotBlockData;
 import com.devone.bot.core.utils.blocks.BotPosition;
@@ -54,14 +55,22 @@ public class BotContextMakerHelper {
         return Math.max(1, Math.min(suggested, reachable.size()));
     }
 
-    
-    public static BotNavigationContext alignBotToMaxReachableYaw(BotPositionSight botSight, List<BotBlockData> allBlocks, double fov, int radius, int height) {
+
+    public static BotNavigationContext alignBotToMaxReachableYawNotVisited(
+            BotPositionSight botSight,
+            List<BotBlockData> allBlocks,
+            double fov,
+            int radius,
+            int height,
+            Map<String, Object> visitedMap
+    ) {
         float bestYaw = 0f;
-        int maxReachable = -1;
+        int maxUnvisitedCount = -1;
         BotNavigationContext bestContext = new BotNavigationContext();
 
         for (float yaw = 0f; yaw < 360f; yaw += 1f) {
             botSight.setYaw(yaw);
+
             BotNavigationContext context = BotNavigationContextMaker.createSceneContext(
                 botSight,
                 allBlocks,
@@ -71,18 +80,21 @@ public class BotContextMakerHelper {
                 height
             );
 
-            int reachableCount = (context.reachable != null) ? context.reachable.size() : 0;
+            if (context.reachable == null || context.reachable.isEmpty()) continue;
 
-            if (reachableCount > maxReachable) {
-                maxReachable = reachableCount;
+            // Считаем только НЕ посещённые
+            long unvisitedCount = context.reachable.stream()
+                .filter(block -> !visitedMap.containsKey(block.toCompactString()))
+                .count();
+
+            if (unvisitedCount > maxUnvisitedCount) {
+                maxUnvisitedCount = (int) unvisitedCount;
                 bestYaw = yaw;
                 bestContext = context;
             }
         }
 
         bestContext.bestYaw = bestYaw;
-        //System.out.printf("✅ Best yaw: %.1f° with %d reachable blocks\n", bestYaw, maxReachable);
-
         return bestContext;
     }
 

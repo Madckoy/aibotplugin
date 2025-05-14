@@ -105,14 +105,14 @@ public class BotBlockData {
         return Objects.hash(toKey());
     }
 
-    public int distanceTo(BotBlockData other) {
+    public int distanceSquaredTo(BotBlockData other) {
         if (other == null) return Integer.MAX_VALUE;
         int dx = getX() - other.getX();
         int dy = getY() - other.getY();
         int dz = getZ() - other.getZ();
-        return (int) Math.sqrt(dx * dx + dy * dy + dz * dz);
+        return dx * dx + dy * dy + dz * dz;
     }
-
+    
     @Override
     public BotBlockData clone() {
         BotBlockData copy = new BotBlockData();

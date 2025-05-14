@@ -39,23 +39,25 @@ public class BotMemoryV2Utils {
         BotMemoryV2 memory = bot.getBrain().getMemoryV2();
         BotMemoryV2Partition nav = memory.partition("navigation", BotMemoryV2Partition.Type.MAP);
         BotMemoryV2Partition visited = nav.partition("visited", BotMemoryV2Partition.Type.MAP);
+        
+        //System.out.println(key);
 
         visited.put(key, System.currentTimeMillis());
     }
 
-    public static void memorizeScanRange(Bot bot, int scanRange) {
+    public static void memorizeScanRadius(Bot bot, int scanRange) {
         if (bot == null) return;
 
         BotMemoryV2 memory           = bot.getBrain().getMemoryV2();
         BotMemoryV2Partition nav     = memory.partition("navigation", BotMemoryV2Partition.Type.MAP);
-        nav.put("scan-range", scanRange);
+        nav.put("scanRadius", scanRange);
     }
 
     public static void memorizeValue(Bot bot, String partition, String key, Object value) {
         if (bot == null) return;
 
         BotMemoryV2 memory           = bot.getBrain().getMemoryV2();
-        BotMemoryV2Partition part     = memory.partition(partition, BotMemoryV2Partition.Type.MAP);
+        BotMemoryV2Partition part    = memory.partition(partition, BotMemoryV2Partition.Type.MAP);
         part.put(key, value);
     }
 

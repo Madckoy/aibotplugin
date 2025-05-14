@@ -115,7 +115,7 @@ public class BlockUtils {
     public static BotBlockData findNearestReachable(BotBlockData current, List<BotBlockData> candidates) {
         return candidates.stream()
             .filter(p -> !isSameBlockUnderfoot(current, p))
-            .min(Comparator.comparingInt(current::distanceTo))
+            .min(Comparator.comparingInt(current::distanceSquaredTo))
             .orElse(null);
     }
 
@@ -125,7 +125,7 @@ public class BlockUtils {
     public static BotBlockData findFarestReachable(BotBlockData current, List<BotBlockData> candidates) {
         return candidates.stream()
             .filter(p -> !isSameBlockUnderfoot(current, p))
-            .max(Comparator.comparingInt(current::distanceTo))
+            .max(Comparator.comparingInt(current::distanceSquaredTo))
             .orElse(null);
     }
 
@@ -133,7 +133,7 @@ public class BlockUtils {
      * Простая эвристика "достижимости".
      */
     public static boolean isSoftReachable(BotBlockData from, BotBlockData to, int maxDistance) {
-        double dist = from.distanceTo(to);
+        double dist = from.distanceSquaredTo(to);
         return dist > 1 && dist <= maxDistance;
     }
 

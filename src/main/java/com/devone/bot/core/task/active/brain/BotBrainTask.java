@@ -101,13 +101,12 @@ public class BotBrainTask extends BotTaskAutoParams<BotBrainTaskParams> {
             }
 
             BotMemoryV2Utils.memorizeValue(bot, "navigation", "scanRadius", radius);
-
-            bot.getNavigator().calculate(bot.getBrain().getSceneData(), BotConstants.DEFAULT_MAX_SIGHT_FOV); // ищем все возможные варианты targets и пробуем self-unstuck
+            bot.getNavigator().calculate(bot.getBrain().getSceneData(), BotConstants.DEFAULT_MAX_SIGHT_FOV); 
 
         } else {
 
             BotMemoryV2Utils.memorizeValue(bot, "navigation", "scanRadius", BotConstants.DEFAULT_SCAN_RADIUS);
-
+            bot.getNavigator().calculate(bot.getBrain().getSceneData(), BotConstants.DEFAULT_NORMAL_SIGHT_FOV); 
         }
 
 
