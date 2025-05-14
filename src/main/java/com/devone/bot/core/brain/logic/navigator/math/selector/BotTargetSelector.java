@@ -8,7 +8,7 @@ import com.devone.bot.core.utils.logger.BotLogger;
 import java.util.List;
 import java.util.Random;
 
-public class BotPOISelector {
+public class BotTargetSelector {
 
     private static final Random random = new Random();
 

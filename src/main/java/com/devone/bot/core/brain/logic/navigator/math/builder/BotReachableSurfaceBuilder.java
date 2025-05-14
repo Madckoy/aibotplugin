@@ -17,7 +17,7 @@ public class BotReachableSurfaceBuilder {
 
         for (BotBlockData b : navigableBlocks) {
             BotPositionKey key = b.toKey();
-            if ("poi:start".equals(b.getTag())) {
+            if ("reachable:start".equals(b.getTag())) {
                 startKey = key;
             }
             map.put(key, b);
@@ -70,7 +70,7 @@ public class BotReachableSurfaceBuilder {
         copy.setX(original.getX());
         copy.setY(original.getY());
         copy.setZ(original.getZ());
-        copy.setType("DUMMY");
+        copy.setType(original.getType());
         copy.setTag("reachable:surface");
         return copy;
     }

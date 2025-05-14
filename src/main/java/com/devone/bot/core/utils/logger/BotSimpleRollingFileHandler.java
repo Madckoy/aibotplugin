@@ -9,7 +9,7 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.logging.*;
 
-public class SimpleRollingFileHandler extends Handler {
+public class BotSimpleRollingFileHandler extends Handler {
 
     private final File logFile;
     private final int maxFileSize; // в байтах
@@ -17,7 +17,7 @@ public class SimpleRollingFileHandler extends Handler {
     private OutputStream outputStream;
     private final SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
 
-    public SimpleRollingFileHandler(String filePath, int maxFileSize, int maxBackupCount, boolean clearOnStart) throws IOException {
+    public BotSimpleRollingFileHandler(String filePath, int maxFileSize, int maxBackupCount, boolean clearOnStart) throws IOException {
         this.logFile = new File(filePath);
         this.maxFileSize = maxFileSize;
         this.maxBackupCount = maxBackupCount;

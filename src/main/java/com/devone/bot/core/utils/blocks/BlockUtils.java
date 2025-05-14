@@ -122,9 +122,9 @@ public class BlockUtils {
     /**
      * Простая эвристика "достижимости".
      */
-    public static boolean isSoftReachable(BotBlockData from, BotBlockData to) {
+    public static boolean isSoftReachable(BotBlockData from, BotBlockData to, int maxDistance) {
         double dist = from.distanceTo(to);
-        return dist > 1.5 && dist < 8.0;
+        return dist > 1 && dist <= maxDistance;
     }
 
     /**

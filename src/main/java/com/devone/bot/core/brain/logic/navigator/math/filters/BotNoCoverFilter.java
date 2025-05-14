@@ -3,6 +3,7 @@ package com.devone.bot.core.brain.logic.navigator.math.filters;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.devone.bot.core.utils.blocks.BlockMaterialUtils;
 import com.devone.bot.core.utils.blocks.BotBlockData;
 
 public class BotNoCoverFilter {
@@ -13,7 +14,7 @@ public class BotNoCoverFilter {
         // Проходим по всем блокам и применяем фильтрацию
         for (BotBlockData block : blocks) {
             // 1. Исключаем покрытия (например, снег, трава, и т.д.)
-            if (block.isCover()) {
+            if (BlockMaterialUtils.isCover(block)) {
                 continue;  // Пропускаем покрытия
             } else {
                 result.add(block); // Добавляем блок в результат, если он прошел все проверки

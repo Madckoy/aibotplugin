@@ -4,20 +4,11 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Set;
 
-import org.bukkit.Material;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 
 public class BlockMaterialUtils {
 
     public static final Set<String> AIR_TYPES = Set.of("AIR", "CAVE_AIR", "VOID_AIR");
-
-    public static Set<Material> dirtTypes = Set.of(
-                                                    Material.DIRT,
-                                                    Material.GRASS_BLOCK,
-                                                    Material.PODZOL,
-                                                    Material.MYCELIUM,
-                                                    Material.COARSE_DIRT,
-                                                    Material.ROOTED_DIRT
-                                                );
 
     // Блоки, которые представляют угрозу (например, наносят урон или мешают движению)
     public static final Set<String> UNSAFE_TYPES = Set.of(
@@ -63,10 +54,6 @@ public class BlockMaterialUtils {
 
     private static final Map<String, String> MATERIAL_COLOR_MAP = createColorMap();
 
-    public static boolean isAir(String type ) {
-        return type != null && BlockMaterialUtils.AIR_TYPES.contains(type.toUpperCase());
-    } 
-
     private static Map<String, String> createColorMap() {
         Map<String, String> map = new HashMap<>();
         map.put("AIR", "#e0e0e0");
@@ -109,7 +96,20 @@ public class BlockMaterialUtils {
 
         return "#aaaaaa"; // fallback
     }
+  
+    public static boolean isAir(BotBlockData block) {
+        return block != null && BlockMaterialUtils.AIR_TYPES.contains(block.getType().toUpperCase());
+    }
 
+
+    public static boolean isCover(BotBlockData block) {
+        return block != null && BlockMaterialUtils.COVER_TYPES.contains(block.getType().toUpperCase());
+    }
+
+    @JsonIgnore
+    public static boolean isDangerous(BotBlockData block) {
+        return block != null && BlockMaterialUtils.UNSAFE_TYPES.contains(block.getType().toUpperCase());
+    }
 
 
 

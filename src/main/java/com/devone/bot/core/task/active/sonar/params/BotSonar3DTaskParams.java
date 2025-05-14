@@ -5,8 +5,8 @@ import com.devone.bot.core.utils.BotConstants;
 
 public class BotSonar3DTaskParams extends BotTaskParams {
 
-    private int radius = BotConstants.DEFAULT_SCAN_RANGE;
-    private int height = BotConstants.DEFAULT_SCAN_DATA_SLICE_HEIGHT;
+    private int radius = BotConstants.DEFAULT_SCAN_RADIUS;
+    private int height = BotConstants.DEFAULT_SCAN_HEIGHT;
 
     public BotSonar3DTaskParams() {
         super();

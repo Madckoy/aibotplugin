@@ -6,7 +6,7 @@ import org.bukkit.Bukkit;
 
 
 
-public class ServerUtils {
+public class BotServerUtils {
 
     private static volatile boolean stopping = false;
 

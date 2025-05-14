@@ -6,16 +6,13 @@ import com.devone.bot.core.brain.perseption.scene.BotSceneData;
 import com.devone.bot.core.task.passive.BotTaskAutoParams;
 import com.devone.bot.core.task.passive.IBotTaskParameterized;
 import com.devone.bot.core.task.active.explore.params.BotExploreTaskParams;
-import com.devone.bot.core.utils.BotConstants;
 import com.devone.bot.core.utils.BotUtils;
 import com.devone.bot.core.utils.blocks.BotBlockData;
 import com.devone.bot.core.utils.logger.BotLogger;
-import com.devone.bot.core.utils.world.BotWorldHelper;
 
 public class BotExploreTask extends BotTaskAutoParams<BotExploreTaskParams> {
 
     private double scanRadius;
-    private int rotations = 0;
 
     public BotExploreTask(Bot bot) {
         super(bot, BotExploreTaskParams.class);
@@ -62,36 +59,17 @@ public class BotExploreTask extends BotTaskAutoParams<BotExploreTaskParams> {
             return;
         }
 
-        if (BotWorldHelper.isInDanger(bot)) {
-            bot.getNavigator().calculate(sceneData, BotConstants.DEFAULT_MAX_SIGHT_FOV);
-        } else {
-            bot.getNavigator().calculate(sceneData, BotConstants.DEFAULT_NORMAL_SIGHT_FOV);
-        }
-        
-
         BotBlockData target = bot.getNavigator().getSuggestedTarget();
         
         NavigationSuggestion suggestion = bot.getNavigator().getNavigationSuggestion();
 
-        if(suggestion == NavigationSuggestion.CHANGE_DIRECTION) {
-            if(rotations > 8) {
-                BotLogger.debug(icon, isLogging(), bot.getId() + "  The full rotation was made and navigation point was not found. The bost is stuck!");                
-                BotLogger.debug(icon, isLogging(), bot.getId() + "  It is up to BotBrain task to decide how to get the Bot unstuck");                
-
-                bot.getNavigator().setStuck(true);
-
-                stop();
-                return;
-            }
-
-            BotLogger.debug(icon, isLogging(), bot.getId() + "  Rotating the bot to scan new sector!");
-            //rotate 45 clockwise            
-            BotUtils.rotateClockwise(this, bot, (float)BotConstants.DEFAULT_NORMAL_SIGHT_FOV);
-            rotations++;
-            return;
-        }
 
         if (target != null) {
+            if(suggestion == NavigationSuggestion.CHANGE_DIRECTION) {
+                //rotate to the best YAW            
+                BotUtils.rotate(this, bot, bot.getNavigator().getBestYaw());
+            }
+
             BotLogger.debug(icon, isLogging(), bot.getId() + " 🎯 Navigation - Set Target: " + target);
 
             bot.getNavigator().setTarget(target);

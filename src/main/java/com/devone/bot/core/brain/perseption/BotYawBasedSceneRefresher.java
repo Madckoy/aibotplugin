@@ -5,7 +5,7 @@ import com.devone.bot.core.utils.BotConstants;
 import com.devone.bot.core.utils.logger.BotLogger;
 
 
-public class YawBasedSceneRefresher implements BotYawChangeListener {
+public class BotYawBasedSceneRefresher implements BotYawChangeListener {
 
     private boolean lock = false;
 

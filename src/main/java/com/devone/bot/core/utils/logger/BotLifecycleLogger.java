@@ -22,7 +22,7 @@ public class BotLifecycleLogger {
             return;
 
         String botName = bot.getId();
-        String filename = LOG_FOLDER + botName + "_moves_" + SESSION_ID + ".csv";
+        String filename = LOG_FOLDER + botName + "_lifecycle_" + SESSION_ID + ".csv";
 
         File logFile = new File(filename);
 
@@ -48,6 +48,7 @@ public class BotLifecycleLogger {
                     botName + "," +
                     Bukkit.getWorlds().get(0).getName() + "," +
                     loc.toString() + "," +
+                    bot.getNavigator().getBestYaw() + "," +
                     t_icon + "," +
                     t_name + "," +
                     e_time;
@@ -64,7 +65,7 @@ public class BotLifecycleLogger {
         try (FileWriter writer = new FileWriter(file, true);
                 BufferedWriter bw = new BufferedWriter(writer)) {
 
-            bw.write("timestamp,bot_id,world,x,y,z,action,duration");
+            bw.write("timestamp, bot_id, world, x, y, z, yaw, action, duration");
             bw.newLine();
 
         } catch (IOException e) {

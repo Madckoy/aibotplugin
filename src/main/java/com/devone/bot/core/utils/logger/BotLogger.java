@@ -18,7 +18,7 @@ public class BotLogger {
 
         // ✅ Используем кастомный хэндлер
         try {
-            fileHandler = new SimpleRollingFileHandler("plugins/AIBotPlugin/logs/console.log", 
+            fileHandler = new BotSimpleRollingFileHandler("plugins/AIBotPlugin/logs/console.log", 
                 10 * 1024 * 1024, 1, true);
             logger.addHandler(fileHandler);
         } catch (IOException e) {

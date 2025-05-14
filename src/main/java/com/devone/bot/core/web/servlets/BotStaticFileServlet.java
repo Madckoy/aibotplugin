@@ -6,7 +6,7 @@ import java.nio.file.Files;
 
 import com.devone.bot.core.utils.BotConstants;
 
-public class StaticFileServlet extends HttpServlet {
+public class BotStaticFileServlet extends HttpServlet {
     private static final String ASSETS_PATH = BotConstants.PLUGIN_PATH + "/web/assets/";
 
     @Override protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws IOException {

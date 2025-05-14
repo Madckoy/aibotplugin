@@ -3,7 +3,7 @@ package com.devone.bot.core.brain;
 import com.devone.bot.core.Bot;
 import com.devone.bot.core.brain.memoryv2.BotMemoryV2;
 import com.devone.bot.core.brain.perseption.BotYawChangeListener;
-import com.devone.bot.core.brain.perseption.YawBasedSceneRefresher;
+import com.devone.bot.core.brain.perseption.BotYawBasedSceneRefresher;
 import com.devone.bot.core.brain.perseption.scene.BotSceneData;
 import com.devone.bot.core.task.passive.BotTask;
 import com.devone.bot.core.utils.BotConstants;
@@ -32,7 +32,7 @@ public class BotBrain {
         this.owner = bot;
         this.memoryV2 = new BotMemoryV2(this);
         this.sceneData = null;
-        setYawListener(new YawBasedSceneRefresher());
+        setYawListener(new BotYawBasedSceneRefresher());
     }
 
     // 🧠 Получение текущей задачи

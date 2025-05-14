@@ -12,7 +12,7 @@ import com.devone.bot.core.task.active.sonar.params.BotSonar3DTaskParams;
 import com.devone.bot.core.utils.BotConstants;
 import com.devone.bot.core.utils.BotUtils;
 import com.devone.bot.core.utils.logger.BotLogger;
-import com.devone.bot.core.utils.server.ServerUtils;
+import com.devone.bot.core.utils.server.BotServerUtils;
 import com.devone.bot.core.storage.BotDataStorage;
 
 public class BotBootstrap {
@@ -32,7 +32,7 @@ public class BotBootstrap {
 
         // ⛏️ Обновление навигации и сканирования
         Bukkit.getScheduler().runTaskTimer(AIBotPlugin.getInstance(), () -> {
-            if (ServerUtils.isServerStopping()) return;
+            if (BotServerUtils.isServerStopping()) return;
 
             String icon = BotUtils.getActiveTaskIcon(bot);
 
@@ -41,7 +41,7 @@ public class BotBootstrap {
 
             BotSonar3DTaskParams params = new BotSonar3DTaskParams();
 
-            int radius = BotConstants.DEFAULT_SCAN_RANGE;
+            int radius = BotConstants.DEFAULT_SCAN_RADIUS;
 
             Integer scanRadius = (Integer) BotMemoryV2Utils.readMemoryValue(bot, "navigation", "scanRadius");
             
@@ -59,19 +59,19 @@ public class BotBootstrap {
 
         // 🧠 Обработка задач (редко)
         Bukkit.getScheduler().runTaskTimer(AIBotPlugin.getInstance(), () -> {
-            if (ServerUtils.isServerStopping()) return;
+            if (BotServerUtils.isServerStopping()) return;
             update();
         }, 0L, BotConstants.TICKS_TASK_UPDATE);
 
         // 🗺️ Обновление POI на BlueMap
         Bukkit.getScheduler().runTaskTimer(AIBotPlugin.getInstance(), () -> {
-            if (ServerUtils.isServerStopping()) return;
+            if (BotServerUtils.isServerStopping()) return;
             AIBotPlugin.getInstance().getBotManager().getBlueMapMarkers().updateAllMarkers();
         }, 0L, BotConstants.TICKS_BLUEMAP_UPDATE);
 
         // 💾 Сохранение памяти и инвентаря на диск
         Bukkit.getScheduler().runTaskTimer(AIBotPlugin.getInstance(), () -> {
-            if (ServerUtils.isServerStopping()) return;
+            if (BotServerUtils.isServerStopping()) return;
             BotDataStorage.saveBotData(bot);
         }, 0L, BotConstants.TICKS_MEMORY_SAVE);
 

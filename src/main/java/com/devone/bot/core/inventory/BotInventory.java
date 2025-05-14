@@ -115,7 +115,7 @@ public class BotInventory {
             return;
         }
 
-        BotScanNatural.logScanNatural(bot, BotConstants.DEFAULT_SCAN_RANGE);
+        BotScanNatural.logScanNatural(bot, BotConstants.DEFAULT_SCAN_RADIUS);
 
         if (bot.getBrain().getAutoPickupItems()) {
             pullAllItemsinRadius(2.0);

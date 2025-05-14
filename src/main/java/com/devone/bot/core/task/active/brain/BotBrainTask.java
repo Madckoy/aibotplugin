@@ -14,7 +14,7 @@ import com.devone.bot.core.brain.logic.navigator.context.BotNavigationContext;
 import com.devone.bot.core.brain.logic.navigator.context.BotNavigationContextMaker;
 
 import com.devone.bot.core.brain.logic.navigator.math.selector.BotEntitySelector;
-import com.devone.bot.core.brain.logic.navigator.math.selector.BotPOISelector;
+import com.devone.bot.core.brain.logic.navigator.math.selector.BotTargetSelector;
 import com.devone.bot.core.brain.memory.BotMemoryV2Utils;
 import com.devone.bot.core.brain.perseption.scene.BotSceneData;
 import com.devone.bot.core.task.passive.BotTask;
@@ -86,7 +86,7 @@ public class BotBrainTask extends BotTaskAutoParams<BotBrainTaskParams> {
         boolean stuck = bot.getNavigator().isStuck();
         
 
-        int radius = BotConstants.DEFAULT_SCAN_RANGE;
+        int radius = BotConstants.DEFAULT_SCAN_RADIUS;
 
         Integer scanRadius = (Integer) BotMemoryV2Utils.readMemoryValue(bot, "navigation", "scanRadius");
             
@@ -106,7 +106,7 @@ public class BotBrainTask extends BotTaskAutoParams<BotBrainTaskParams> {
 
         } else {
 
-            BotMemoryV2Utils.memorizeValue(bot, "navigation", "scanRadius", BotConstants.DEFAULT_SCAN_RANGE);
+            BotMemoryV2Utils.memorizeValue(bot, "navigation", "scanRadius", BotConstants.DEFAULT_SCAN_RADIUS);
 
         }
 
@@ -132,8 +132,19 @@ public class BotBrainTask extends BotTaskAutoParams<BotBrainTaskParams> {
 
         BotPositionSight botPos = bot.getNavigator().getPositionSight();                    
         BotSceneData sceneData = bot.getBrain().getSceneData();
+
+        int radius = BotConstants.DEFAULT_SCAN_RADIUS;
+        Integer scanRadius = (Integer) BotMemoryV2Utils.readMemoryValue(bot, "navigation", "scanRadius");
+            
+        if(scanRadius!=null) {
+            radius = scanRadius.intValue();
+        }
+
         BotNavigationContext context = BotNavigationContextMaker.createSceneContext(botPos, sceneData.blocks,
-        sceneData.entities, BotConstants.DEFAULT_MAX_SIGHT_FOV);
+
+
+
+        sceneData.entities, BotConstants.DEFAULT_MAX_SIGHT_FOV, radius, BotConstants.DEFAULT_SCAN_HEIGHT);
 
         if (stuck) {
 
@@ -255,8 +266,8 @@ public class BotBrainTask extends BotTaskAutoParams<BotBrainTaskParams> {
                 () -> tryTeleportToReachable(bot, context.reachable),
                 () -> tryTeleportToNavigable(bot, context.navigable),
                 () -> tryTeleportToEntity(bot, context.entities),
-                () -> tryTeleportToWalkable(bot, context.walkable));//,
-                //() -> tryTeleportToSpawn(bot));
+                () -> tryTeleportToWalkable(bot, context.walkable),
+                () -> tryTeleportToSpawn(bot));
 
         for (Supplier<Optional<Runnable>> attempt : attempts) {
             Optional<Runnable> result = attempt.get();
@@ -282,7 +293,7 @@ public class BotBrainTask extends BotTaskAutoParams<BotBrainTaskParams> {
         }
 
         BotBlockData target = BotEntitySelector.pickNearestTarget(filtered, bot.getNavigator().getPosition(),
-                BotConstants.DEFAULT_SCAN_RANGE);
+                BotConstants.DEFAULT_SCAN_RADIUS);
         if (target == null)
             return Optional.empty();
 
@@ -299,7 +310,7 @@ public class BotBrainTask extends BotTaskAutoParams<BotBrainTaskParams> {
     private Optional<Runnable> tryTeleportToReachable(Bot bot, List<BotBlockData> data) {
         if (data == null || data.isEmpty())
             return Optional.empty();
-            BotPosition block = BotPOISelector.selectRandom( BlockUtils.fromBlocks(data));
+            BotPosition block = BotTargetSelector.selectRandom( BlockUtils.fromBlocks(data));
         return Optional.of(() -> {
             BotLogger.debug(icon, isLogging(), "⚡Телепорт: достижимая точка " + bot.getId() + " → " + block);
             BotTeleportTaskParams tpParams = new BotTeleportTaskParams(block);
@@ -312,7 +323,7 @@ public class BotBrainTask extends BotTaskAutoParams<BotBrainTaskParams> {
     private Optional<Runnable> tryTeleportToNavigable(Bot bot, List<BotBlockData> data) {
         if (data == null || data.isEmpty())
             return Optional.empty();
-            BotPosition block = BotPOISelector.selectRandom( BlockUtils.fromBlocks(data));
+            BotPosition block = BotTargetSelector.selectRandom( BlockUtils.fromBlocks(data));
         return Optional.of(() -> {
             BotLogger.debug(icon, isLogging(), "⚡Телепорт: точка навигации " + bot.getId() + " → " + block);
             BotTeleportTaskParams tpParams = new BotTeleportTaskParams(block);
@@ -325,7 +336,7 @@ public class BotBrainTask extends BotTaskAutoParams<BotBrainTaskParams> {
     private Optional<Runnable> tryTeleportToEntity(Bot bot, List<BotBlockData> data) {
         if (data == null || data.isEmpty())
             return Optional.empty();
-            BotPosition block = BotPOISelector.selectRandom(BlockUtils.fromBlocks(data));
+            BotPosition block = BotTargetSelector.selectRandom(BlockUtils.fromBlocks(data));
         return Optional.of(() -> {
             BotLogger.debug(icon, isLogging(), "⚡Телепорт к сущности " + bot.getId() + " → " + block);
             BotTeleportTaskParams tpParams = new BotTeleportTaskParams(block);
@@ -338,7 +349,7 @@ public class BotBrainTask extends BotTaskAutoParams<BotBrainTaskParams> {
     private Optional<Runnable> tryTeleportToWalkable(Bot bot, List<BotBlockData> data) {
         if (data == null || data.isEmpty())
             return Optional.empty();
-            BotPosition block = BotPOISelector.selectRandom(BlockUtils.fromBlocks(data));
+            BotPosition block = BotTargetSelector.selectRandom(BlockUtils.fromBlocks(data));
         return Optional.of(() -> {
             BotLogger.debug(icon, isLogging(), "⚡Телепорт: проходимая точка " + bot.getId() + " → " + block);
             BotTeleportTaskParams tpParams = new BotTeleportTaskParams(block);

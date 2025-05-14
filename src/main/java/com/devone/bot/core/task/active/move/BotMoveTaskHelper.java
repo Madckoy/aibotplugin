@@ -10,7 +10,7 @@ import org.bukkit.Location;
 /**
  * Утилитный класс для управления движением бота (BotMoveTask).
  */
-public class MoveTaskHelper {
+public class BotMoveTaskHelper {
 
     /**
      * Устанавливает цель движения для NPC.

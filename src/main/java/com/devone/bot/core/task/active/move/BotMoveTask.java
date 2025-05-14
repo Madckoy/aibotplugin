@@ -96,7 +96,7 @@ public class BotMoveTask extends BotTaskAutoParams<BotMoveTaskParams> {
             Bukkit.getPluginManager().registerEvents(listener, AIBotPlugin.getInstance());
         }
 
-        MoveTaskHelper.setPoi(bot, target, speed, isLogging());
+        BotMoveTaskHelper.setPoi(bot, target, speed, isLogging());
 
         isMoving = true;
 

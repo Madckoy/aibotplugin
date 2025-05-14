@@ -10,10 +10,10 @@ import com.devone.bot.core.utils.BotConstants;
 import com.devone.bot.core.utils.logger.BotLogger;
 import com.devone.bot.core.web.servlets.BlueMapProxyServlet;
 import com.devone.bot.core.web.servlets.BotStatusServlet;
-import com.devone.bot.core.web.servlets.CommandServlet;
-import com.devone.bot.core.web.servlets.MainPageServlet;
-import com.devone.bot.core.web.servlets.SkinServlet;
-import com.devone.bot.core.web.servlets.StaticFileServlet;
+import com.devone.bot.core.web.servlets.BotCommandServlet;
+import com.devone.bot.core.web.servlets.BotMainPageServlet;
+import com.devone.bot.core.web.servlets.BotSkinServlet;
+import com.devone.bot.core.web.servlets.BotStaticFileServlet;
 import com.devone.bot.plugin.config.AIBotPluginConfig;
 
 
@@ -54,12 +54,12 @@ public class BotWebService {
         context.setContextPath("/");
         server.setHandler(context);
 
-        context.addServlet(new ServletHolder(new MainPageServlet()), "/");
+        context.addServlet(new ServletHolder(new BotMainPageServlet()), "/");
         context.addServlet(new ServletHolder(new BotStatusServlet(botManager)), "/status");
-        context.addServlet(new ServletHolder(new SkinServlet()), "/skins/*");
-        context.addServlet(new ServletHolder(new StaticFileServlet()), "/assets/*");
+        context.addServlet(new ServletHolder(new BotSkinServlet()), "/skins/*");
+        context.addServlet(new ServletHolder(new BotStaticFileServlet()), "/assets/*");
         context.addServlet(new ServletHolder(new BlueMapProxyServlet(bluemapBaseUrl)), "/bluemap/*");
-        context.addServlet(new ServletHolder(new CommandServlet(botManager)), "/api/command");
+        context.addServlet(new ServletHolder(new BotCommandServlet(botManager)), "/api/command");
 
         instance = this;
     }

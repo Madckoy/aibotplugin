@@ -17,12 +17,12 @@ import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 
-public class CommandServlet extends HttpServlet {
+public class BotCommandServlet extends HttpServlet {
 
     @SuppressWarnings("unused")
     private final BotManager botManager;
 
-    public CommandServlet(BotManager botManager) {
+    public BotCommandServlet(BotManager botManager) {
         this.botManager = botManager;
     }
 

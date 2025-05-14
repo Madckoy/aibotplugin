@@ -275,7 +275,7 @@ public class BotUtils {
        return result;
     }
 
-    public static void rotateClockwise(BotTask<?> task, Bot bot, float degrees) {
+    public static void rotate(BotTask<?> task, Bot bot, float degrees) {
         if (bot == null || bot.getNavigator().getPositionSight() == null || bot.getNPCEntity() == null) return;
 
         Bukkit.getScheduler().runTaskLater(AIBotPlugin.getInstance(), () -> {

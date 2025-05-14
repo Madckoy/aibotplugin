@@ -26,7 +26,7 @@ public class BotPoiInterestEvaluator {
             interest += 5000;
         }
     
-        if (isNearRareBlock(context.sliced, poi)) {
+        if (isNearRareBlock(context.blocks, poi)) {
             interest += 1000;
         }
         

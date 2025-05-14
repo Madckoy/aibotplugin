@@ -9,7 +9,7 @@ import java.nio.file.Files;
 import com.devone.bot.core.utils.BotConstants;
 import com.devone.bot.core.utils.logger.BotLogger;
 
-public class MainPageServlet extends HttpServlet {
+public class BotMainPageServlet extends HttpServlet {
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         resp.setContentType("text/html; charset=UTF-8");
 

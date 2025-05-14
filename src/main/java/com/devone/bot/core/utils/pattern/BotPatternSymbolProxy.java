@@ -5,7 +5,7 @@ import java.util.Map;
 
 import org.bukkit.Material;
 
-public class PatternSymbolProxy {
+public class BotPatternSymbolProxy {
 
     private final Map<Character, Material> proxyLegend = new HashMap<>();
     private final Map<String, Character> emojiToProxy = new HashMap<>();
@@ -13,7 +13,7 @@ public class PatternSymbolProxy {
     
     private char nextProxyChar = 'A'; // Начинаем с A, B, C и т.д.
 
-    public PatternSymbolProxy(Map<String, Material> emojiLegend) {
+    public BotPatternSymbolProxy(Map<String, Material> emojiLegend) {
         for (Map.Entry<String, Material> entry : emojiLegend.entrySet()) {
             String emoji = entry.getKey();
             Material material = entry.getValue();

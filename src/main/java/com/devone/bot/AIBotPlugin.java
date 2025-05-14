@@ -10,7 +10,7 @@ import com.devone.bot.core.BotManager;
 import com.devone.bot.core.utils.BotConstants;
 import com.devone.bot.core.utils.logger.BotLogger;
 import com.devone.bot.core.utils.server.BotResourceExtractor;
-import com.devone.bot.core.utils.server.ServerUtils;
+import com.devone.bot.core.utils.server.BotServerUtils;
 import com.devone.bot.core.utils.zone.BotZoneManager;
 import com.devone.bot.core.web.BotWebService;
 import com.devone.bot.plugin.command.BotCommandsDispatcher;
@@ -57,7 +57,7 @@ public class AIBotPlugin extends JavaPlugin {
             botManager.saveBots(); // 💾 сохраняем всех ботов
         }
 
-        ServerUtils.onDisable();
+        BotServerUtils.onDisable();
 
         // Остановка HTTP сервера
         if (web_service != null) {

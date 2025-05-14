@@ -9,9 +9,9 @@ import org.bukkit.Location;
 import org.bukkit.block.Block;
 
 import com.devone.bot.core.Bot;
+import com.devone.bot.core.brain.logic.navigator.context.BotContextMakerHelper;
 import com.devone.bot.core.brain.logic.navigator.context.BotNavigationContext;
-import com.devone.bot.core.brain.logic.navigator.context.BotNavigationContextMaker;
-import com.devone.bot.core.brain.logic.navigator.math.selector.TargetSelectionMode;
+import com.devone.bot.core.brain.logic.navigator.math.selector.BotTargetSelectionMode;
 import com.devone.bot.core.brain.memory.BotMemoryV2Utils;
 import com.devone.bot.core.brain.memoryv2.BotMemoryV2;
 import com.devone.bot.core.brain.memoryv2.BotMemoryV2Partition;
@@ -21,6 +21,7 @@ import com.devone.bot.core.task.active.move.params.BotMoveTaskParams;
 import com.devone.bot.core.task.active.teleport.BotTeleportTask;
 import com.devone.bot.core.task.active.teleport.params.BotTeleportTaskParams;
 import com.devone.bot.core.task.passive.BotTaskManager;
+import com.devone.bot.core.utils.BotConstants;
 import com.devone.bot.core.utils.BotUtils;
 import com.devone.bot.core.utils.blocks.BlockUtils;
 import com.devone.bot.core.utils.blocks.BotBlockData;
@@ -48,8 +49,17 @@ public class BotNavigator {
     private List<BotBlockData> candidates;
     private BotPosition position;
     private transient BotBlockData target;
+    private float bestYaw;
 
-    TargetSelectionMode targetSelectionMode = TargetSelectionMode.RANDOM;
+    public float getBestYaw() {
+        return bestYaw;
+    }
+
+    public void setBestYaw(float bestYaw) {
+        this.bestYaw = bestYaw;
+    }
+
+    BotTargetSelectionMode targetSelectionMode = BotTargetSelectionMode.RANDOM;
 
     public BotNavigator() {
         this.position = null;
@@ -115,11 +125,11 @@ public class BotNavigator {
         this.target = tgt;
     }
 
-    public TargetSelectionMode getTargetSelectionMode() {
+    public BotTargetSelectionMode getTargetSelectionMode() {
         return targetSelectionMode;
     }
 
-    public void setTargetSelectionMode(TargetSelectionMode mode) {
+    public void setTargetSelectionMode(BotTargetSelectionMode mode) {
         this.targetSelectionMode = mode;
         BotLogger.debug(BotUtils.getActiveTaskIcon(owner), true,
                 owner.getId() + " switched target selection mode ➔ " + mode.name());
@@ -173,28 +183,32 @@ public class BotNavigator {
         BotPositionSight botPos = getPositionSight();
         if (botPos == null) return result;
     
-        BotNavigationContext context = BotNavigationContextMaker.createSceneContext(
-            botPos, scene.blocks, scene.entities, sightFov);
-        if (context == null) {
-            BotLogger.debug(BotUtils.getActiveTaskIcon(owner), true,
-                    owner.getId() + " ⚠️ Navigation error: Scene Context is not ready");
-            return result;
+
+        int radius = BotConstants.DEFAULT_SCAN_RADIUS;
+        Integer scanRadius = (Integer) BotMemoryV2Utils.readMemoryValue(owner, "navigation", "scanRadius");
+            
+        if(scanRadius!=null) {
+            radius = scanRadius.intValue();
         }
-    
+
+        final int maxRadius = radius;
+
+        BotNavigationContext context = BotContextMakerHelper.alignBotToMaxReachableYaw(botPos, scene.blocks, sightFov, radius, BotConstants.DEFAULT_SCAN_HEIGHT);
+
         // Валидируем цели
-        List<BotBlockData> poiSightedValidatedPos       = validateTargets(botPos, context.poi);
+        List<BotBlockData> targetsSightedValidatedPos   = validateTargets(botPos, context.targets);
         List<BotBlockData> reachableSightedValidatedPos = validateTargets(botPos, context.reachable);
         List<BotBlockData> navigableSightedValidatedPos = validateTargets(botPos, context.navigable);
         List<BotBlockData> walkableSightedValidatedPos  = validateTargets(botPos, context.walkable);
     
-        updateNavigationSummary("poi",       context.poi != null ? context.poi.size() : 0, poiSightedValidatedPos.size());
+        updateNavigationSummary("targets",   context.targets != null ? context.targets.size() : 0, targetsSightedValidatedPos.size());
         updateNavigationSummary("reachable", context.reachable != null ? context.reachable.size() : 0, reachableSightedValidatedPos.size());
         updateNavigationSummary("navigable", context.navigable != null ? context.navigable.size() : 0, navigableSightedValidatedPos.size());
         updateNavigationSummary("walkable",  context.walkable != null ? context.walkable.size() : 0, walkableSightedValidatedPos.size());
     
         // Логика выбора цели
-        if (poiSightedValidatedPos.size() > 1) {
-            candidates = poiSightedValidatedPos;
+        if (targetsSightedValidatedPos.size() > 1) {
+            candidates = targetsSightedValidatedPos;
             navigationSuggestion = NavigationSuggestion.MOVE;
             suggestedTarget = BlockUtils.findNearestReachable(getPosition().toBlockData(), candidates);
         } else if (reachableSightedValidatedPos.size() > 1) {
@@ -205,7 +219,7 @@ public class BotNavigator {
             List<BotBlockData> reachableFallback = Stream.concat(
                     navigableSightedValidatedPos.stream(),
                     walkableSightedValidatedPos.stream()
-            ).filter(pos -> BlockUtils.isSoftReachable(getPosition().toBlockData(), pos))
+            ).filter(pos -> BlockUtils.isSoftReachable(getPosition().toBlockData(), pos, maxRadius))
              .collect(Collectors.toList());
     
             if (!reachableFallback.isEmpty()) {
@@ -227,11 +241,13 @@ public class BotNavigator {
             candidates = List.of();
         }
     
-        boolean noTarget       = poiSightedValidatedPos    == null || poiSightedValidatedPos.isEmpty();
-        boolean noReachable = reachableSightedValidatedPos == null || reachableSightedValidatedPos.isEmpty();
-        boolean noNavigable = navigableSightedValidatedPos == null || navigableSightedValidatedPos.isEmpty();
-        boolean noWalkable  = walkableSightedValidatedPos  == null || walkableSightedValidatedPos.isEmpty();
+        boolean noTarget    = targetsSightedValidatedPos    == null || targetsSightedValidatedPos.isEmpty();
+        boolean noReachable = reachableSightedValidatedPos  == null || reachableSightedValidatedPos.isEmpty();
+        boolean noNavigable = navigableSightedValidatedPos  == null || navigableSightedValidatedPos.isEmpty();
+        boolean noWalkable  = walkableSightedValidatedPos   == null || walkableSightedValidatedPos.isEmpty();
     
+        // set The best YAW
+        setBestYaw(context.bestYaw);
         // Если нет ни одной полезной навигационной поверхности — считаем, что бот застрял
         boolean stuckNow = noTarget && noReachable && noNavigable && noWalkable;
     

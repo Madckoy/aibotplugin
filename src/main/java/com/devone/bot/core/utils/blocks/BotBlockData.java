@@ -82,20 +82,6 @@ public class BotBlockData {
         this.tag = tag;
     }
 
-    @JsonIgnore
-    public boolean isAir() {
-        return type != null && BlockMaterialUtils.AIR_TYPES.contains(type.toUpperCase());
-    }
-
-    @JsonIgnore
-    public boolean isCover() {
-        return type != null && BlockMaterialUtils.COVER_TYPES.contains(type.toUpperCase());
-    }
-
-    @JsonIgnore
-    public boolean isDangerous() {
-        return type != null && BlockMaterialUtils.UNSAFE_TYPES.contains(type.toUpperCase());
-    }
 
     @JsonIgnore
     public BotPositionKey toKey() {
