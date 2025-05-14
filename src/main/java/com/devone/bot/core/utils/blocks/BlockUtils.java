@@ -119,6 +119,16 @@ public class BlockUtils {
             .orElse(null);
     }
 
+     /**
+     * Поиск удаленной позиции из списка (по эвклидову расстоянию).
+     */
+    public static BotBlockData findFarestReachable(BotBlockData current, List<BotBlockData> candidates) {
+        return candidates.stream()
+            .filter(p -> !isSameBlockUnderfoot(current, p))
+            .max(Comparator.comparingInt(current::distanceTo))
+            .orElse(null);
+    }
+
     /**
      * Простая эвристика "достижимости".
      */

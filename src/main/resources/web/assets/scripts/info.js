@@ -21,7 +21,7 @@ function updateNavSummary(bot) {
         return `${entry.calculated ?? 0} / ${entry.confirmed ?? 0}`;
     };
 
-    document.getElementById("info-nav-pois").textContent = format(summary.poi);
+    document.getElementById("info-nav-targets").textContent = format(summary.targets);
     document.getElementById("info-nav-reachable").textContent = format(summary.reachable);
     document.getElementById("info-nav-navigable").textContent = format(summary.navigable);
     document.getElementById("info-nav-walkable").textContent = format(summary.walkable);

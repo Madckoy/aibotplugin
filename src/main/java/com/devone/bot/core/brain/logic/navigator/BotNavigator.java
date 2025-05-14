@@ -196,25 +196,24 @@ public class BotNavigator {
         BotNavigationContext context = BotContextMakerHelper.alignBotToMaxReachableYaw(botPos, scene.blocks, sightFov, radius, BotConstants.DEFAULT_SCAN_HEIGHT);
 
         // Валидируем цели
-        List<BotBlockData> targetsSightedValidatedPos   = validateTargets(botPos, context.targets);
         List<BotBlockData> reachableSightedValidatedPos = validateTargets(botPos, context.reachable);
         List<BotBlockData> navigableSightedValidatedPos = validateTargets(botPos, context.navigable);
         List<BotBlockData> walkableSightedValidatedPos  = validateTargets(botPos, context.walkable);
     
-        updateNavigationSummary("targets",   context.targets != null ? context.targets.size() : 0, targetsSightedValidatedPos.size());
+        
         updateNavigationSummary("reachable", context.reachable != null ? context.reachable.size() : 0, reachableSightedValidatedPos.size());
         updateNavigationSummary("navigable", context.navigable != null ? context.navigable.size() : 0, navigableSightedValidatedPos.size());
-        updateNavigationSummary("walkable",  context.walkable != null ? context.walkable.size() : 0, walkableSightedValidatedPos.size());
+        updateNavigationSummary("walkable",  context.walkable != null ? context.walkable.size()   : 0, walkableSightedValidatedPos.size());
     
         // Логика выбора цели
-        if (targetsSightedValidatedPos.size() > 1) {
-            candidates = targetsSightedValidatedPos;
-            navigationSuggestion = NavigationSuggestion.MOVE;
-            suggestedTarget = BlockUtils.findNearestReachable(getPosition().toBlockData(), candidates);
-        } else if (reachableSightedValidatedPos.size() > 1) {
+        if (reachableSightedValidatedPos.size() > 1) {
             candidates = reachableSightedValidatedPos;
             navigationSuggestion = NavigationSuggestion.MOVE;
-            suggestedTarget = BlockUtils.findNearestReachable(getPosition().toBlockData(), candidates);
+            suggestedTarget = BlockUtils.findFarestReachable(getPosition().toBlockData(), candidates);
+        } else if (navigableSightedValidatedPos.size() > 1) {
+            candidates = navigableSightedValidatedPos;
+            navigationSuggestion = NavigationSuggestion.MOVE;
+            suggestedTarget = BlockUtils.findFarestReachable(getPosition().toBlockData(), candidates);
         } else {
             List<BotBlockData> reachableFallback = Stream.concat(
                     navigableSightedValidatedPos.stream(),
@@ -225,7 +224,7 @@ public class BotNavigator {
             if (!reachableFallback.isEmpty()) {
                 candidates = reachableFallback;
                 navigationSuggestion = NavigationSuggestion.MOVE;
-                suggestedTarget = BlockUtils.findNearestReachable(getPosition().toBlockData(), candidates);
+                suggestedTarget = BlockUtils.findFarestReachable(getPosition().toBlockData(), candidates);
             } else {
                 navigationSuggestion = NavigationSuggestion.CHANGE_DIRECTION;
                 candidates = List.of();
@@ -233,6 +232,8 @@ public class BotNavigator {
             }
         }
     
+        updateNavigationSummary("targets",  candidates != null ? candidates.size() : 0, candidates.size());
+
         // ➤ Централизованная проверка: цель — это текущая позиция
         if (suggestedTarget != null && BlockUtils.isSameBlockUnderfoot(getPosition().toBlockData(), suggestedTarget)) {
             BotLogger.debug("*", true, owner.getId() + " 🔁 Suggested Target is underfoot — forcing direction change");
@@ -241,15 +242,12 @@ public class BotNavigator {
             candidates = List.of();
         }
     
-        boolean noTarget    = targetsSightedValidatedPos    == null || targetsSightedValidatedPos.isEmpty();
-        boolean noReachable = reachableSightedValidatedPos  == null || reachableSightedValidatedPos.isEmpty();
-        boolean noNavigable = navigableSightedValidatedPos  == null || navigableSightedValidatedPos.isEmpty();
-        boolean noWalkable  = walkableSightedValidatedPos   == null || walkableSightedValidatedPos.isEmpty();
-    
+        boolean noTarget    = suggestedTarget    == null            || candidates.isEmpty();
+
         // set The best YAW
         setBestYaw(context.bestYaw);
         // Если нет ни одной полезной навигационной поверхности — считаем, что бот застрял
-        boolean stuckNow = noTarget && noReachable && noNavigable && noWalkable;
+        boolean stuckNow = noTarget;
     
         setStuck(stuckNow);
 
