@@ -71,9 +71,14 @@ document.getElementById('close-info-btn')?.addEventListener('click', hideInfoPan
 function getCompassArrow(yaw) {
     if (typeof yaw !== "number") return "❓";
     yaw = (yaw + 360) % 360;
-    const arrows = ["⬆️", "↗️", "➡️", "↘️", "⬇️", "↙️", "⬅️", "↖️"];
-    const index = Math.round(yaw / 45) % 8;
-    const degrees = Math.round(yaw);
-    const arrow = arrows[index];
-    return `${arrow} (${degrees}°)`;
+
+    // Поскольку North (0°) = ВНИЗ, надо сдвинуть визуально на 180°
+    const adjustedYaw = (yaw + 180) % 360;
+
+    const arrows = ["⬇️", "↙️", "⬅️", "↖️", "⬆️", "↗️", "➡️", "↘️"];
+    const index = Math.round(adjustedYaw / 45) % 8;
+
+    const degrees = Math.round(yaw); // показываем оригинальный yaw
+    return `${arrows[index]} (${degrees}°)`;
 }
+
