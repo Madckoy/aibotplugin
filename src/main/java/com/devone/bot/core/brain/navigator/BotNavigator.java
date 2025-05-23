@@ -205,23 +205,32 @@ public class BotNavigator {
         List<BotBlockData> walkableBlocks  = BotTagUtils.getTaggedBlocks(bot.getBrain().getSceneData().blocks,"walkable:*");
         //System.out.println("Walkable: " + walkableBlocks); 
 
-        // Валидируем цели
-        List<BotBlockData> reachableBlocksValidated = validateTargets(botPos, reachableBlocks);
-        List<BotBlockData> walkableBlocksValidated = validateTargets(botPos, walkableBlocks);          
+        // Валидируем цели and settting tag
+        int reachableValidated = validateTargets(botPos, reachableBlocks);
+        int walkableValidated = validateTargets(botPos, walkableBlocks);          
 
-        updateNavigationSummary("reachable", reachable, reachableBlocksValidated.size());
-        updateNavigationSummary("walkable",  walkable, walkableBlocksValidated.size());
+        updateNavigationSummary("reachable", reachable, reachableValidated);
+        updateNavigationSummary("walkable",  walkable,  walkableValidated);
     
-        // Логика выбора цели
-        if (reachableBlocksValidated.size() > 1) {
-            candidates = reachableBlocksValidated;
+        // Логика выбора цели (приоритетная)
+        List<BotBlockData> reachableValid = BotTagUtils.getTaggedBlocks(bot.getBrain().getSceneData().blocks, "reachable:*, navigation:valid");
+
+        if (!reachableValid.isEmpty()) {
+            candidates = reachableValid;
             navigationSuggestion = NavigationSuggestion.MOVE;
             suggestedTarget = BlockUtils.findRandom(candidates);
-
         } else {
-            navigationSuggestion = NavigationSuggestion.CHANGE_DIRECTION;
-            candidates = List.of();
-            suggestedTarget = null;
+            List<BotBlockData> walkableValid = BotTagUtils.getTaggedBlocks(bot.getBrain().getSceneData().blocks, "walkable:*, navigation:valid");
+            
+            if (!walkableValid.isEmpty()) {
+                candidates = walkableValid;
+                navigationSuggestion = NavigationSuggestion.MOVE;
+                suggestedTarget = BlockUtils.findRandom(candidates);
+            } else {
+                navigationSuggestion = NavigationSuggestion.CHANGE_DIRECTION;
+                candidates = List.of();
+                suggestedTarget = null;
+            }
         }
     
         updateNavigationSummary("targets",  candidates != null ? candidates.size() : 0, candidates.size());
@@ -264,10 +273,11 @@ public class BotNavigator {
     }
     
 
-    private List<BotBlockData> validateTargets(BotPositionSight botPos, List<BotBlockData> blocks) {
-        List<BotBlockData> navigable = new ArrayList<>();
-        if (blocks == null) return navigable;
-    
+    private int validateTargets(BotPositionSight botPos, List<BotBlockData> blocks) {
+        if (blocks==null) return 0;
+        
+        int count = 0;
+
         for (BotBlockData target : blocks) {
 
             BotPosition pos = BlockUtils.fromBlock(target);
@@ -288,11 +298,11 @@ public class BotNavigator {
             Block blockAbove = BotWorldHelper.botPositionToWorldBlock(posAbove);
 
             if (blockAbove.getType().isAir()) {
-                navigable.add(target);
+                target.addTag("navigation:valid");
+                count++;
             }
         }
-    
-        return navigable;
+        return count;
     }
     
     private void updateNavigationSummary(String key, int calculated, int confirmed) {
