@@ -12,7 +12,9 @@ import com.devone.bot.core.brain.memoryv2.BotMemoryV2;
 import com.devone.bot.core.brain.memoryv2.BotMemoryV2Partition;
 import com.devone.bot.core.brain.navigator.simulator.BotTagsMakerSimulator;
 import com.devone.bot.core.brain.navigator.tags.BotNavigationTagsMaker;
+import com.devone.bot.core.brain.perseption.scene.BotScanInfo;
 import com.devone.bot.core.brain.perseption.scene.BotSceneData;
+import com.devone.bot.core.brain.perseption.scene.BotSceneSaver;
 import com.devone.bot.core.task.active.move.BotMoveTask;
 import com.devone.bot.core.task.active.move.params.BotMoveTaskParams;
 import com.devone.bot.core.task.active.teleport.BotTeleportTask;
@@ -205,8 +207,20 @@ public class BotNavigator {
 
         //BotFovSliceTagger.tagFovSliceRemoveAll(bot.getBrain().getSceneData().blocks);
            
-        // Валидируем цели
+
         List<BotBlockData> reachableBlocks = BotTagUtils.getTaggedBlocks(bot.getBrain().getSceneData().blocks,"reachable:blocks");
+
+        BotScanInfo scanInfo = new BotScanInfo(BotConstants.DEFAULT_SCAN_RADIUS, BotConstants.DEFAULT_SCAN_HEIGHT);
+        BotSceneData sc_data_tagged = new BotSceneData(bot.getBrain().getSceneData().blocks, bot.getBrain().getSceneData().entities, botPos, scanInfo);
+
+        try {
+            BotSceneSaver.saveToJsonFile(BotConstants.PLUGIN_TMP+bot.getId()+"_scene_data_tagged.json", sc_data_tagged);
+        } catch (Exception ex) {
+            System.out.println(ex.getMessage());
+        }
+
+
+        // Валидируем цели
         List<BotBlockData> reachableBlocksValidated = validateTargets(botPos, reachableBlocks);
           
         updateNavigationSummary("reachable", reachableBlocks.size(), reachableBlocksValidated.size());
