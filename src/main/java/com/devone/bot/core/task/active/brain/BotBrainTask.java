@@ -1,10 +1,13 @@
 package com.devone.bot.core.task.active.brain;
 
 import com.devone.bot.core.Bot;
+import com.devone.bot.core.brain.navigator.BotNavigator.NavigationSuggestion;
 import com.devone.bot.core.task.passive.BotTaskAutoParams;
 import com.devone.bot.core.task.passive.IBotTaskParameterized;
 import com.devone.bot.core.task.active.brain.params.BotBrainTaskParams;
 import com.devone.bot.core.utils.BotConstants;
+import com.devone.bot.core.utils.BotUtils;
+import com.devone.bot.core.utils.blocks.BotBlockData;
 import com.devone.bot.core.utils.logger.BotLogger;
 
 public class BotBrainTask extends BotTaskAutoParams<BotBrainTaskParams> {
@@ -37,9 +40,33 @@ public class BotBrainTask extends BotTaskAutoParams<BotBrainTaskParams> {
 
     @Override
     public void execute() {
-        BotLogger.debug(icon, isLogging(), bot.getId() + " 🎲 Is making a decision...");
+        BotLogger.debug(icon, isLogging(), bot.getId() + " 🧠 Brain deciding...");
 
-        bot.getNavigator().calculate(bot.getBrain().getSceneData(), BotConstants.DEFAULT_NORMAL_SIGHT_FOV);                
-   }
+        // 1. Анализ сцены
+        bot.getNavigator().calculate(bot.getBrain().getSceneData(), BotConstants.DEFAULT_NORMAL_SIGHT_FOV);
+
+        // 2. Получение рекомендации
+        NavigationSuggestion suggestion = bot.getNavigator().getNavigationSuggestion();
+
+        switch (suggestion) {
+            case CHANGE_DIRECTION -> {
+                //rotate to the best YAW            
+                BotUtils.rotate(this, bot, bot.getNavigator().getBestYaw());               
+            }
+            case MOVE -> {
+                BotBlockData target = bot.getNavigator().getSuggestedTarget();
+                bot.getNavigator().setTarget(target);
+                float speed = 1.5f;
+                bot.getNavigator().navigate(speed);            
+            }
+
+            default -> {
+                BotLogger.debug(icon, isLogging(), bot.getId() + " 🧘 Brain is idle.");
+            }
+        }
+
+        stop(); // мозг сделал своё дело на этом тике
+    }
+
 
 }

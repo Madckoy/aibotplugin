@@ -11,11 +11,9 @@ import com.devone.bot.core.brain.memory.BotMemoryV2Utils;
 import com.devone.bot.core.brain.memoryv2.BotMemoryV2;
 import com.devone.bot.core.brain.memoryv2.BotMemoryV2Partition;
 import com.devone.bot.core.brain.navigator.simulator.BotTagsMakerSimulator;
-import com.devone.bot.core.brain.navigator.tags.BotFovSliceTagger;
 import com.devone.bot.core.brain.navigator.tags.BotNavigationTagsMaker;
 import com.devone.bot.core.brain.perseption.scene.BotScanInfo;
 import com.devone.bot.core.brain.perseption.scene.BotSceneData;
-import com.devone.bot.core.brain.perseption.scene.BotSceneSaver;
 import com.devone.bot.core.task.active.move.BotMoveTask;
 import com.devone.bot.core.task.active.move.params.BotMoveTaskParams;
 import com.devone.bot.core.task.active.teleport.BotTeleportTask;
@@ -219,6 +217,7 @@ public class BotNavigator {
             candidates = reachableValid;
             navigationSuggestion = NavigationSuggestion.MOVE;
             suggestedTarget = BlockUtils.findRandom(candidates);
+            setBestYaw(botPos.getYaw());       
         } else {
             List<BotBlockData> walkableValid = BotTagUtils.getTaggedBlocks(bot.getBrain().getSceneData().blocks, "walkable:*, navigation:valid");
             
@@ -228,6 +227,7 @@ public class BotNavigator {
                 suggestedTarget = BlockUtils.findRandom(candidates);
             } else {
                 navigationSuggestion = NavigationSuggestion.CHANGE_DIRECTION;
+                setBestYaw(bestYaw); // got from simulator       
                 candidates = List.of();
                 suggestedTarget = null;
             }
@@ -237,8 +237,6 @@ public class BotNavigator {
   
         boolean noTarget    = suggestedTarget    == null || candidates.isEmpty();
 
-        // set The best YAW
-        setBestYaw(bestYaw); // got from simulator       
         // Если нет ни одной полезной навигационной поверхности — считаем, что бот застрял
         boolean stuckNow = noTarget;
     

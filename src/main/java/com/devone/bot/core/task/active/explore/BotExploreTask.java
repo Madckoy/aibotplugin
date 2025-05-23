@@ -1,14 +1,9 @@
 package com.devone.bot.core.task.active.explore;
 
-import java.util.List;
-
 import com.devone.bot.core.Bot;
-import com.devone.bot.core.brain.navigator.BotNavigator.NavigationSuggestion;
-import com.devone.bot.core.brain.perseption.scene.BotSceneData;
 import com.devone.bot.core.task.passive.BotTaskAutoParams;
 import com.devone.bot.core.task.passive.IBotTaskParameterized;
 import com.devone.bot.core.task.active.explore.params.BotExploreTaskParams;
-import com.devone.bot.core.utils.BotConstants;
 import com.devone.bot.core.utils.BotUtils;
 import com.devone.bot.core.utils.blocks.BotBlockData;
 import com.devone.bot.core.utils.logger.BotLogger;
@@ -54,40 +49,16 @@ public class BotExploreTask extends BotTaskAutoParams<BotExploreTaskParams> {
             bot.pickupNearbyItems();
         }
 
-        BotSceneData sceneData = bot.getBrain().getSceneData();
-
-        if (sceneData == null) {
-            BotLogger.debug(icon, isLogging(), bot.getId() + " ❌ No scene data available.");
-            this.stop();
-            return;
-        }
-
-        List<BotBlockData> candidates = bot.getNavigator().calculate(sceneData, BotConstants.DEFAULT_NORMAL_SIGHT_FOV);
-
         BotBlockData target = bot.getNavigator().getSuggestedTarget();
         
-        NavigationSuggestion suggestion = bot.getNavigator().getNavigationSuggestion();
-
-
         if (target != null) {
-            if(suggestion == NavigationSuggestion.CHANGE_DIRECTION) {
-                //rotate to the best YAW            
-                BotUtils.rotate(this, bot, bot.getNavigator().getBestYaw());
-            }
-
             BotLogger.debug(icon, isLogging(), bot.getId() + " 🎯 Navigation - Set Target: " + target);
-
             bot.getNavigator().setTarget(target);
-
             float speed = 1.5f;
-
-            boolean canNavigate = bot.getNavigator().navigate(speed);
-            
+            boolean canNavigate = bot.getNavigator().navigate(speed);            
             BotLogger.debug(icon, isLogging(), bot.getId() + " ❓ Navigation - Can navigate: " + canNavigate);
-
             stop();
             return;
-
         } else {
             BotLogger.debug(icon, isLogging(), bot.getId() + " ⛔ Navigation - No valid target found. Possibly stuck?");
             bot.getNavigator().setStuck(true);

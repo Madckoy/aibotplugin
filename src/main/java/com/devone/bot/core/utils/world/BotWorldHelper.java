@@ -196,4 +196,16 @@ public class BotWorldHelper {
             default -> true;
         };
     }
+
+    public static float calculateYawTo(BotBlockData from, BotBlockData to) {
+        return calculateYawTo(from.getX(), from.getZ(), to.getX(), to.getZ());
+    }
+
+    public static float calculateYawTo(double fromX, double fromZ, double toX, double toZ) {
+        double dx = toX - fromX;
+        double dz = toZ - fromZ;
+
+        double yaw = Math.toDegrees(Math.atan2(-dx, dz));
+        return (float) ((yaw + 360) % 360);
+    }
 }
