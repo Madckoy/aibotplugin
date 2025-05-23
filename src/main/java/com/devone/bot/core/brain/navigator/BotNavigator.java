@@ -199,11 +199,11 @@ public class BotNavigator {
            
         float bestYaw = BotTagsMakerSimulator.reachableFindBestYaw(botPos, bot.getBrain().getSceneData().blocks, 90, BotConstants.DEFAULT_SCAN_RADIUS, BotConstants.DEFAULT_SCAN_HEIGHT );            
 
-        List<BotBlockData> reachableBlocks = BotTagUtils.getTaggedBlocks(bot.getBrain().getSceneData().blocks,"reachable:blocks");
-        System.out.println("Reachable: " + reachableBlocks); 
+        List<BotBlockData> reachableBlocks = BotTagUtils.getTaggedBlocks(bot.getBrain().getSceneData().blocks,"reachable:*");
+        //System.out.println("Reachable: " + reachableBlocks); 
 
         List<BotBlockData> walkableBlocks  = BotTagUtils.getTaggedBlocks(bot.getBrain().getSceneData().blocks,"walkable:*");
-        System.out.println("Walkable: " + walkableBlocks); 
+        //System.out.println("Walkable: " + walkableBlocks); 
 
         // Валидируем цели
         List<BotBlockData> reachableBlocksValidated = validateTargets(botPos, reachableBlocks);
@@ -251,14 +251,14 @@ public class BotNavigator {
         long end = System.currentTimeMillis();
         System.out.println("[Timing] Tagging completed in " + (end - start) + " ms");
 
+        /* 
         try {
             BotFovSliceTagger.tagFovSliceRemoveAll(bot.getBrain().getSceneData().blocks);
             BotSceneSaver.saveToJsonFile(BotConstants.PLUGIN_PATH_TMP + bot.getId()+"_scene_data_tagged.json_" + end, sc_data_tagged);
         } catch (Exception ex) {
             System.out.println(ex.getMessage());
         }
-
-        System.out.println("[Timing] Tagging completed in " + (end - start) + " ms");
+        */
 
         return candidates;
     }
