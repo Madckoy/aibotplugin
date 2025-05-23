@@ -191,7 +191,7 @@ public class BotNavigator {
         int reachable = BotNavigationTagsMaker.tagReachableBlocks(
                 botPos,
                 bot.getBrain().getSceneData().blocks,
-                90,
+                BotConstants.DEFAULT_NORMAL_SIGHT_FOV,
                 BotConstants.DEFAULT_SCAN_RADIUS,
                 BotConstants.DEFAULT_SCAN_HEIGHT
             );

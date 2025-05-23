@@ -22,8 +22,8 @@ public class BotConstants {
 
     public static final int MAX_SCAN_RANGE = 20;
 
-    public static final double DEFAULT_NORMAL_SIGHT_FOV = 90.0;
-    public static final double DEFAULT_MAX_SIGHT_FOV = 360.0;
+    public static final float DEFAULT_NORMAL_SIGHT_FOV = 90.0f;
+    public static final float DEFAULT_MAX_SIGHT_FOV = 360.0f;
 
     public static final long DEFAULT_TASK_TIMEOUT = 120_000;
     public static final double DEFAULT_HAND_DAMAGE = 5.0;

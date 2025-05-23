@@ -4,6 +4,7 @@ import com.devone.bot.core.Bot;
 import com.devone.bot.core.task.passive.BotTaskAutoParams;
 import com.devone.bot.core.task.passive.IBotTaskParameterized;
 import com.devone.bot.core.task.active.brain.params.BotBrainTaskParams;
+import com.devone.bot.core.utils.BotConstants;
 import com.devone.bot.core.utils.logger.BotLogger;
 
 public class BotBrainTask extends BotTaskAutoParams<BotBrainTaskParams> {
@@ -29,6 +30,8 @@ public class BotBrainTask extends BotTaskAutoParams<BotBrainTaskParams> {
                 "excavate=" + params.isAllowExcavation() + ", " +
                 "violence=" + params.isAllowViolence() + ", " +
                 "teleport=" + params.isAllowTeleport());
+
+        bot.getNavigator().calculate(bot.getBrain().getSceneData(), BotConstants.DEFAULT_NORMAL_SIGHT_FOV);                
 
         return this;
     }

@@ -10,9 +10,6 @@ import com.devone.bot.core.utils.blocks.BotPositionSight;
 public class BotNavigationTagsMaker {
 
     public static int tagWalkableBlocks(List<BotBlockData> geoBlocks) {
-
-
-       
         BotSafeBlockTagger.tagSafeBlocks(geoBlocks);
         int walkable = BotWalkableBlockTagger.tagWalkableBlocks(geoBlocks);      
         return walkable;
