@@ -6,17 +6,18 @@ import com.devone.bot.core.utils.blocks.BotBlockData;
 import com.devone.bot.core.utils.blocks.BotPositionSight;
 
 public class BotSceneData {
+    public BotScanInfo info;
+    public BotPositionSight bot;
     public List<BotBlockData> blocks;
     public List<BotBlockData> entities;
-    public BotPositionSight bot;
-    public BotScanInfo info;
-
+    
     public BotSceneData() {}
 
-    public BotSceneData(List<BotBlockData> blocks, List<BotBlockData> entities, BotPositionSight botPos, BotScanInfo info) {
+    public BotSceneData(BotScanInfo info, BotPositionSight botPos, List<BotBlockData> blocks, List<BotBlockData> entities) {
+        this.info = info;
+        this.bot = botPos;
         this.blocks = blocks;
         this.entities = entities;
-        this.bot = botPos;
-        this.info = info;
+
     }
 }

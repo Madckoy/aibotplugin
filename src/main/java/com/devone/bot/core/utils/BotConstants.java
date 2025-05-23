@@ -22,7 +22,7 @@ public class BotConstants {
 
     public static final int MAX_SCAN_RANGE = 20;
 
-    public static final float DEFAULT_NORMAL_SIGHT_FOV = 90.0f;
+    public static final float DEFAULT_NORMAL_SIGHT_FOV = 60.0f;
     public static final float DEFAULT_MAX_SIGHT_FOV = 360.0f;
 
     public static final long DEFAULT_TASK_TIMEOUT = 120_000;
@@ -35,7 +35,7 @@ public class BotConstants {
 
     // 🔁 Тайминги в тиках
     public static final long TICKS_NAVIGATION_UPDATE = 20L;       // 1 сек
-    public static final long TICKS_TASK_UPDATE = 5L;              // 0.25 сек
+    public static final long TICKS_TASK_UPDATE = 40L;              // 0.25 сек
     public static final long TICKS_BLUEMAP_UPDATE = 40L;          // 2 сек
     public static final long TICKS_MEMORY_SAVE = 200L;            // 10 сек
 

@@ -13,7 +13,6 @@ import com.devone.bot.core.brain.memoryv2.BotMemoryV2Partition;
 import com.devone.bot.core.brain.navigator.selector.BotBestTargetSelector;
 import com.devone.bot.core.brain.navigator.simulator.BotTagsMakerSimulator;
 import com.devone.bot.core.brain.navigator.tags.BotNavigationTagsMaker;
-import com.devone.bot.core.brain.perseption.scene.BotScanInfo;
 import com.devone.bot.core.brain.perseption.scene.BotSceneData;
 import com.devone.bot.core.task.active.move.BotMoveTask;
 import com.devone.bot.core.task.active.move.params.BotMoveTaskParams;
@@ -196,8 +195,8 @@ public class BotNavigator {
                 BotConstants.DEFAULT_SCAN_HEIGHT
             );
            
-        float bestYaw = BotTagsMakerSimulator.reachableFindBestYaw(botPos, bot.getBrain().getSceneData().blocks, 90, BotConstants.DEFAULT_SCAN_RADIUS, BotConstants.DEFAULT_SCAN_HEIGHT );            
-        setBestYaw(bestYaw);
+        float bestYaw = BotTagsMakerSimulator.reachableFindBestYaw(botPos, bot.getBrain().getSceneData().blocks, BotConstants.DEFAULT_NORMAL_SIGHT_FOV, BotConstants.DEFAULT_SCAN_RADIUS, BotConstants.DEFAULT_SCAN_HEIGHT );            
+        //setBestYaw(bestYaw);
 
         List<BotBlockData> reachableBlocks = BotTagUtils.getTaggedBlocks(bot.getBrain().getSceneData().blocks,"reachable:*");
         //System.out.println("Reachable: " + reachableBlocks); 
@@ -220,24 +219,16 @@ public class BotNavigator {
             candidates = reachableValid;
             navigationSuggestion = NavigationSuggestion.MOVE;
             suggestedTarget = BotBestTargetSelector.selectRandom(candidates);
-  
         } else {
-            List<BotBlockData> walkableValid = BotTagUtils.getTaggedBlocks(bot.getBrain().getSceneData().blocks, "walkable:*, navigation:valid");
+            candidates = List.of();
+            suggestedTarget = null;
 
-            if (!walkableValid.isEmpty()) {
-                candidates = walkableValid;
-                navigationSuggestion = NavigationSuggestion.MOVE;
-                suggestedTarget = BotBestTargetSelector.selectRandom(candidates);
-            } else {                  
-                candidates = List.of();
-                suggestedTarget = null;
-            }
         }
     
         updateNavigationSummary("targets",  candidates != null ? candidates.size() : 0, candidates.size());
   
         boolean noTarget    = suggestedTarget    == null || candidates.isEmpty();
-        
+
         if(noTarget) {
             navigationSuggestion = NavigationSuggestion.CHANGE_DIRECTION;
         }

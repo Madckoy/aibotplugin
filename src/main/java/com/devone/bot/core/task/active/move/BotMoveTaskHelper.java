@@ -20,18 +20,18 @@ public class BotMoveTaskHelper {
      * @param speed  множитель скорости
      * @param log    включить логирование
      */
-    public static void setPoi(Bot bot, BotPosition target, float speed, boolean log) {
+    public static void setTarget(Bot bot, BotPosition target, float speed, boolean log) {
         if (target == null) {
             BotLogger.debug( BotUtils.getActiveTaskIcon(bot), true, bot.getId() + " 🏁 Не смогли начать движение.");
             return;
         }
 
-        Location poi = BotWorldHelper.botPositionToWorldLocation(target);
+        Location loc = BotWorldHelper.botPositionToWorldLocation(target);
 
         bot.getNPCNavigator().cancelNavigation();
         bot.getNPCNavigator().setPaused(false);
         bot.getNPCNavigator().getDefaultParameters().speedModifier(speed);
-        bot.getNPCNavigator().setTarget(poi);
+        bot.getNPCNavigator().setTarget(loc);
 
         if (log) {
             BotLogger.debug(BotUtils.getActiveTaskIcon(bot), true, bot.getId() + " ▶ Двигаемся к: " + target);
@@ -46,11 +46,11 @@ public class BotMoveTaskHelper {
      * @param yTolerance допустимая погрешность по Y
      * @return true, если бот в нужной позиции
      */
-    public static boolean isAtPoi(Bot bot, BotPosition poi, double yTolerance) {
-        if (bot == null || poi == null) return false;
+    public static boolean isAtTarget(Bot bot, BotPosition tgt, double yTolerance) {
+        if (bot == null || tgt == null) return false;
 
         Location botLoc = bot.getNPC().getEntity().getLocation();
-        Location poiLoc = BotWorldHelper.botPositionToWorldLocation(poi);
+        Location poiLoc = BotWorldHelper.botPositionToWorldLocation(tgt);
 
         boolean match = botLoc.getX() == poiLoc.getX()
                 && botLoc.getZ() == poiLoc.getZ()

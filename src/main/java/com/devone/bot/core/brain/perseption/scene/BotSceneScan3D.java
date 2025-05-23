@@ -80,14 +80,17 @@ public static BotSceneData scan(Bot bot, int radius, int height) {
     }
 
     // 3. Положение бота
-    float botYaw = BotUtils.getBotYaw(bot);
-    float botPitch = BotUtils.getBotPitch(bot);
-    BotPositionSight botCoords = new BotPositionSight(botLegsLoc.getX(), botLegsLoc.getY(), botLegsLoc.getZ(), botYaw, botPitch);
+    BotPositionSight botCoords = bot.getNavigator().getPositionSight();
+    
+    //float botYaw   = BotUtils.getBotYaw(bot);
+    //float botPitch = BotUtils.getBotPitch(bot);
+
+    //BotPositionSight botCoords = new BotPositionSight(botLegsLoc.getX(), botLegsLoc.getY(), botLegsLoc.getZ(), botYaw, botPitch);
 
     // 4. Служебная информация
     BotScanInfo info = new BotScanInfo(radius, height);
 
-    return new BotSceneData(scannedBlocks, scannedEntities, botCoords, info);
+    return new BotSceneData(info, botCoords, scannedBlocks, scannedEntities );
 }
 
 }

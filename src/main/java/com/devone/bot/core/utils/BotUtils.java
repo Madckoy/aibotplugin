@@ -108,31 +108,26 @@ public class BotUtils {
      * @param target Цель, к которой нужно повернуть лицо
      */
     private static void lookAt(Bot bot, BotPosition target) {
-
         if (bot.getNPCEntity() == null)
             return;
 
-        Location tgt = BotWorldHelper.botPositionToWorldLocation(target);
-
         Location from = bot.getNPCEntity().getLocation();
-        Location to = tgt.clone().add(0.0, 0.0, 0.0); // центр блока
+        Location to = BotWorldHelper.botPositionToWorldLocation(target).clone().add(0.5, 0.5, 0.5); // центр блока
 
-        Vector direction = to.toVector().subtract(from.toVector());
+        Vector dir = to.toVector().subtract(from.toVector());
 
-        float yaw = (float) Math.toDegrees(Math.atan2(-direction.getX(), direction.getZ()));
-        float pitch = (float) Math.toDegrees(-Math.atan2(direction.getY(),
-                Math.sqrt(direction.getX() * direction.getX() + direction.getZ() * direction.getZ())));
+        float yaw = (float) Math.toDegrees(Math.atan2(dir.getZ(), dir.getX())) - 90f;
+        float pitch = (float) Math.toDegrees(-Math.atan2(dir.getY(), Math.sqrt(dir.getX() * dir.getX() + dir.getZ() * dir.getZ())));
 
         Location newLoc = from.clone();
         newLoc.setYaw(yaw);
         newLoc.setPitch(pitch);
 
-        // bot.getNPCEntity().setRotation(yaw, pitch);
+        bot.getNPCEntity().teleport(newLoc); // или setRotation(), если движок это поддерживает
 
-        bot.getNPCEntity().teleport(newLoc);
-
-        bot.getBrain().notifyYawChanged(newLoc.getYaw()); // вот здесь — оповещение
+        bot.getBrain().notifyYawChanged(yaw);
     }
+
 
     public static String formatTime(long milliseconds) {
         long hours = TimeUnit.MILLISECONDS.toHours(milliseconds);
@@ -213,7 +208,7 @@ public class BotUtils {
         return icon;
     }
 
-    public static float getBotYaw(Bot bot) {
+    public static float getBotYaw__(Bot bot) {
 
         Location botLocation = bot.getNPC().getStoredLocation();
         float botYaw = botLocation.getYaw();
@@ -221,7 +216,7 @@ public class BotUtils {
         return botYaw;
     }
     
-    public static float getBotPitch(Bot bot) {
+    public static float getBotPitch__(Bot bot) {
 
         Location botLocation = bot.getNPC().getStoredLocation();
         float botPitch = botLocation.getPitch();

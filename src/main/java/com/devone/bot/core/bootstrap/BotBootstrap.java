@@ -35,8 +35,7 @@ public class BotBootstrap {
             if (BotServerUtils.isServerStopping()) return;
 
             String icon = BotUtils.getActiveTaskIcon(bot);
-
-            
+           
             BotLogger.debug(icon, true, bot.getId() + " 🛜 Sonar Scan started");
 
             BotSonar3DTaskParams params = new BotSonar3DTaskParams();
