@@ -21,7 +21,13 @@ function updateNavSummary(bot) {
         return `${entry.calculated ?? 0} / ${entry.confirmed ?? 0}`;
     };
 
-    document.getElementById("info-nav-targets").textContent = format(summary.targets);
+    const simpleFormat = (entry) => {
+        if (!entry) return "N/A";
+        return `${entry.calculated ?? 0}`;
+    };
+
+
+    document.getElementById("info-nav-targets").textContent = simpleFormat(summary.targets);
     document.getElementById("info-nav-reachable").textContent = format(summary.reachable);
     document.getElementById("info-nav-walkable").textContent = format(summary.walkable);
     document.getElementById("info-nav-navigation-suggestion").textContent = suggestion;
@@ -65,7 +71,7 @@ document.getElementById('close-info-btn')?.addEventListener('click', hideInfoPan
 function getCompassArrow(yaw) {
     if (typeof yaw !== "number") return "❓";
     yaw = (yaw + 360) % 360;
-    const arrows = ["⬆️", "↗️", "➡️", "↘️", "⬇️", "↙️", "⬅️", "↖️"];
+    const arrows = ["⬅️", "↖️", "⬆️", "↗️", "➡️", "↘️", "⬇️", "↙️" ];
     const index = Math.round(yaw / 45) % 8;
     const degrees = Math.round(yaw);
     const arrow = arrows[index];

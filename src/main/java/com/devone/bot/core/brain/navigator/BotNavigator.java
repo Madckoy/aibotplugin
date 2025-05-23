@@ -214,25 +214,21 @@ public class BotNavigator {
     
         // Логика выбора цели (приоритетная)
         List<BotBlockData> reachableValid = BotTagUtils.getTaggedBlocks(bot.getBrain().getSceneData().blocks, "reachable:*, navigation:valid");
-        //System.out.println("Reachable valid: " + reachableValid); 
+
 
         if (!reachableValid.isEmpty()) {
             candidates = reachableValid;
             navigationSuggestion = NavigationSuggestion.MOVE;
-            suggestedTarget = BotBestTargetSelector.selectBestInYawCone(botPos, candidates, 15.0f);
-            System.out.println("SuggestedTarget: " + suggestedTarget); 
+            suggestedTarget = BotBestTargetSelector.selectRandom(candidates);
   
         } else {
             List<BotBlockData> walkableValid = BotTagUtils.getTaggedBlocks(bot.getBrain().getSceneData().blocks, "walkable:*, navigation:valid");
-            //System.out.println("Walkable valid: " + walkableValid); 
 
             if (!walkableValid.isEmpty()) {
                 candidates = walkableValid;
                 navigationSuggestion = NavigationSuggestion.MOVE;
                 suggestedTarget = BotBestTargetSelector.selectRandom(candidates);
-            } else {
-                navigationSuggestion = NavigationSuggestion.CHANGE_DIRECTION;
-                setBestYaw(bestYaw); // got from simulator       
+            } else {                  
                 candidates = List.of();
                 suggestedTarget = null;
             }
@@ -241,6 +237,10 @@ public class BotNavigator {
         updateNavigationSummary("targets",  candidates != null ? candidates.size() : 0, candidates.size());
   
         boolean noTarget    = suggestedTarget    == null || candidates.isEmpty();
+        
+        if(noTarget) {
+            navigationSuggestion = NavigationSuggestion.CHANGE_DIRECTION;
+        }
 
         // Если нет ни одной полезной навигационной поверхности — считаем, что бот застрял
         boolean stuckNow = noTarget;

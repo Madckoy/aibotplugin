@@ -46,7 +46,7 @@ public class BotTagsMakerSimulator {
             }
         }
 
-        System.out.printf("Yaw: %.0f => Reachable: %d\n", bestYaw, bestReachable);
+        //System.out.printf("Yaw: %.0f => Reachable: %d\n", bestYaw, bestReachable);
         return bestYaw;
     }
 
