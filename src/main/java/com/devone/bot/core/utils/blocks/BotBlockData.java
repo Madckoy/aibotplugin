@@ -1,5 +1,7 @@
 package com.devone.bot.core.utils.blocks;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Objects;
 import java.util.UUID;
 
@@ -10,17 +12,23 @@ public class BotBlockData {
     private BotPosition position;
     private String type;
     private UUID uuid;
-    private String tag;
+
+    @JsonIgnore
+    private String tag; // устаревшее поле
+
+    private List<String> tags = new ArrayList<>();
 
     public BotBlockData() {
         this.position = new BotPosition();
     }
 
     public BotBlockData(int x, int y, int z) {
+        this();
         this.position = new BotPosition(x, y, z);
     }
 
     public BotBlockData(double x, double y, double z) {
+        this();
         this.position = new BotPosition(x, y, z);
     }
 
@@ -33,7 +41,7 @@ public class BotBlockData {
     }
 
     public int getX() {
-        return (int) Math.floor(position.getX()); // теперь безопасно, уже floored
+        return (int) Math.floor(position.getX());
     }
 
     public void setX(int x) {
@@ -72,6 +80,26 @@ public class BotBlockData {
         return this.uuid;
     }
 
+    public List<String> getTags() {
+        return tags;
+    }
+
+    public void setTags(List<String> tags) {
+        this.tags = (tags != null) ? new ArrayList<>(tags) : new ArrayList<>();
+    }
+
+    public void addTag(String tagName) {
+        if (tagName != null && !tagName.trim().isEmpty()) {
+            if (!tags.contains(tagName)) {
+                tags.add(tagName);
+            }
+        }
+    }
+
+    public boolean hasTag(String tagName) {
+        return tagName != null && tags.contains(tagName);
+    }
+    
     @JsonIgnore
     public String getTag() {
         return tag;
@@ -81,7 +109,6 @@ public class BotBlockData {
     public void setTag(String tag) {
         this.tag = tag;
     }
-
 
     @JsonIgnore
     public BotPositionKey toKey() {
@@ -105,28 +132,29 @@ public class BotBlockData {
         return Objects.hash(toKey());
     }
 
-    public int distanceSquaredTo(BotBlockData other) {
+    public int distanceTo(BotBlockData other) {
         if (other == null) return Integer.MAX_VALUE;
         int dx = getX() - other.getX();
         int dy = getY() - other.getY();
         int dz = getZ() - other.getZ();
-        return dx * dx + dy * dy + dz * dz;
+        return (int) Math.sqrt(dx * dx + dy * dy + dz * dz);
     }
-    
+
     @Override
     public BotBlockData clone() {
         BotBlockData copy = new BotBlockData();
-        copy.setPosition(new BotPosition(this.getPosition()));
-        copy.setType(this.getType());
-        copy.setUUID(this.getUUID());
-        copy.setTag(this.getTag());
+        copy.setPosition(new BotPosition(this.getPosition())); // глубокая копия позиции
+        copy.setType(this.getType());                          // копия типа
+        copy.setUUID(this.getUUID());                          // UUID
+        copy.setTags(new ArrayList<>(this.getTags()));         // копия всех тегов
+        copy.setTag(this.getTag());                            // если где-то ещё используется устаревшее поле
         return copy;
     }
 
     @Override
     public String toString() {
-        return String.format("%d, %d, %d, %s, %s",
-            getX(), getY(), getZ(), type, tag);
+        return String.format("%d, %d, %d, %s, tags=%s",
+                getX(), getY(), getZ(), type, tags);
     }
 
     public String toCompactString() {

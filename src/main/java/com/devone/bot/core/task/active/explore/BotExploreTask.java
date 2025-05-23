@@ -3,7 +3,7 @@ package com.devone.bot.core.task.active.explore;
 import java.util.List;
 
 import com.devone.bot.core.Bot;
-import com.devone.bot.core.brain.logic.navigator.BotNavigator.NavigationSuggestion;
+import com.devone.bot.core.brain.navigator.BotNavigator.NavigationSuggestion;
 import com.devone.bot.core.brain.perseption.scene.BotSceneData;
 import com.devone.bot.core.task.passive.BotTaskAutoParams;
 import com.devone.bot.core.task.passive.IBotTaskParameterized;

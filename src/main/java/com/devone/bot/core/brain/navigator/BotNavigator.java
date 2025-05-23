@@ -1,21 +1,17 @@
-package com.devone.bot.core.brain.logic.navigator;
+package com.devone.bot.core.brain.navigator;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
-import java.util.stream.Collectors;
-import java.util.stream.Stream;
-
 import org.bukkit.Location;
 import org.bukkit.block.Block;
 
 import com.devone.bot.core.Bot;
-import com.devone.bot.core.brain.logic.navigator.context.BotContextMakerHelper;
-import com.devone.bot.core.brain.logic.navigator.context.BotNavigationContext;
-import com.devone.bot.core.brain.logic.navigator.math.selector.BotTargetSelectionMode;
 import com.devone.bot.core.brain.memory.BotMemoryV2Utils;
 import com.devone.bot.core.brain.memoryv2.BotMemoryV2;
 import com.devone.bot.core.brain.memoryv2.BotMemoryV2Partition;
+import com.devone.bot.core.brain.navigator.simulator.BotTagsMakerSimulator;
+import com.devone.bot.core.brain.navigator.tags.BotNavigationTagsMaker;
 import com.devone.bot.core.brain.perseption.scene.BotSceneData;
 import com.devone.bot.core.task.active.move.BotMoveTask;
 import com.devone.bot.core.task.active.move.params.BotMoveTaskParams;
@@ -28,9 +24,9 @@ import com.devone.bot.core.utils.blocks.BlockUtils;
 import com.devone.bot.core.utils.blocks.BotBlockData;
 import com.devone.bot.core.utils.blocks.BotPosition;
 import com.devone.bot.core.utils.blocks.BotPositionSight;
+import com.devone.bot.core.utils.blocks.BotTagUtils;
 import com.devone.bot.core.utils.logger.BotLogger;
 import com.devone.bot.core.utils.world.BotWorldHelper;
-import com.google.common.base.Predicate;
 
 public class BotNavigator {
 
@@ -39,7 +35,7 @@ public class BotNavigator {
         CHANGE_DIRECTION,
     }
 
-    private transient Bot owner;
+    private transient Bot bot;
     private boolean stuck = false;
     
     private boolean inDanger = false;
@@ -61,8 +57,6 @@ public class BotNavigator {
         this.bestYaw = bestYaw;
     }
 
-    BotTargetSelectionMode targetSelectionMode = BotTargetSelectionMode.RANDOM;
-
     public BotNavigator() {
         this.position = null;
         this.target = null;
@@ -70,12 +64,12 @@ public class BotNavigator {
 
     public BotNavigator(Bot owner) {
         this();
-        this.owner = owner;
+        this.bot = owner;
         this.position = getPosition();
     }
 
     private BotMemoryV2 getMemory() {
-        return owner.getBrain().getMemoryV2();
+        return bot.getBrain().getMemoryV2();
     }
 
     public List<BotBlockData> getCandidates() {
@@ -83,12 +77,12 @@ public class BotNavigator {
     }
 
     public BotPosition getPosition() {
-        if (owner.getNPC() != null) {
-            if (owner.getNPC().getEntity() != null) {
-                Location loc = owner.getNPC().getEntity().getLocation();
+        if (bot.getNPC() != null) {
+            if (bot.getNPC().getEntity() != null) {
+                Location loc = bot.getNPC().getEntity().getLocation();
                 this.position = BotWorldHelper.locationToBotPosition(loc);
-            } else if (owner.getNPC().getStoredLocation() != null) {
-                Location loc = owner.getNPC().getStoredLocation();
+            } else if (bot.getNPC().getStoredLocation() != null) {
+                Location loc = bot.getNPC().getStoredLocation();
                 this.position = BotWorldHelper.locationToBotPosition(loc);
             }
         }
@@ -96,12 +90,12 @@ public class BotNavigator {
     }
 
     public BotPositionSight getPositionSight() {
-        if (owner.getNPC() != null) {
-            if (owner.getNPC().getEntity() != null) {
-                Location loc = owner.getNPC().getEntity().getLocation();
+        if (bot.getNPC() != null) {
+            if (bot.getNPC().getEntity() != null) {
+                Location loc = bot.getNPC().getEntity().getLocation();
                 return BotWorldHelper.locationToBotPositionSight(loc);
-            } else if (owner.getNPC().getStoredLocation() != null) {
-                Location loc = owner.getNPC().getStoredLocation();
+            } else if (bot.getNPC().getStoredLocation() != null) {
+                Location loc = bot.getNPC().getStoredLocation();
                 return BotWorldHelper.locationToBotPositionSight(loc);
             }
         }
@@ -122,30 +116,20 @@ public class BotNavigator {
 
     public void setTarget(BotBlockData tgt) {
         if (tgt != null) {
-            BotLogger.debug(BotUtils.getActiveTaskIcon(owner), true, owner.getId() + " 🗺️ Target is set: " + tgt);
+            BotLogger.debug(BotUtils.getActiveTaskIcon(bot), true, bot.getId() + " 🗺️ Target is set: " + tgt);
         }
         this.target = tgt;
     }
 
-    public BotTargetSelectionMode getTargetSelectionMode() {
-        return targetSelectionMode;
-    }
-
-    public void setTargetSelectionMode(BotTargetSelectionMode mode) {
-        this.targetSelectionMode = mode;
-        BotLogger.debug(BotUtils.getActiveTaskIcon(owner), true,
-                owner.getId() + " switched target selection mode ➔ " + mode.name());
-    }
-
     public void setStuck(boolean stuck) {
         try {
-            if (owner.getActiveTask() != null) {
-                BotLogger.debug(BotUtils.getActiveTaskIcon(owner), true,
-                        owner.getId() + " ❓ BotState: set Stuck=" + stuck);
+            if (bot.getActiveTask() != null) {
+                BotLogger.debug(BotUtils.getActiveTaskIcon(bot), true,
+                        bot.getId() + " ❓ BotState: set Stuck=" + stuck);
                 this.stuck = stuck;
                 if (stuck) {
                     incrementStuckCount();
-                    BotMemoryV2Utils.incrementCounter(owner, "stuckCount"); // ✅ глобально в memoryV2
+                    BotMemoryV2Utils.incrementCounter(bot, "stuckCount"); // ✅ глобально в memoryV2
                 }
             }
         } catch (Exception ex) {
@@ -163,9 +147,7 @@ public class BotNavigator {
     public void resetStuckCount() {
         this.stuckCount = 0;
     }
-
-
-    
+  
     public boolean isInDanger() {
         return inDanger;
     }
@@ -176,9 +158,9 @@ public class BotNavigator {
 
     public List<BotBlockData> calculate(BotSceneData scene, double sightFov) {
         try {
-            BotLogger.debug(owner.getActiveTask().getIcon(), true, owner.getId() + " 💻 Navigator calculation started");
+            BotLogger.debug(bot.getActiveTask().getIcon(), true, bot.getId() + " 💻 Navigator calculation started");
         } catch (Exception ex) {
-            BotLogger.debug("*", true, owner.getId() + " 💻 Navigator calculation started");
+            BotLogger.debug("*", true, bot.getId() + " 💻 Navigator calculation started");
         }
     
         List<BotBlockData> result = new ArrayList<>();
@@ -187,7 +169,7 @@ public class BotNavigator {
     
 
         int radius = BotConstants.DEFAULT_SCAN_RADIUS;
-        Integer scanRadius = (Integer) BotMemoryV2Utils.readMemoryValue(owner, "navigation", "scanRadius");
+        Integer scanRadius = (Integer) BotMemoryV2Utils.readMemoryValue(bot, "navigation", "scanRadius");
             
         if(scanRadius!=null) {
             radius = scanRadius.intValue();
@@ -195,91 +177,72 @@ public class BotNavigator {
 
         final int maxRadius = radius;
 
-        BotMemoryV2Partition navPar = owner.getBrain().getMemoryV2().partition("navigation");
+        BotMemoryV2Partition navPar = bot.getBrain().getMemoryV2().partition("navigation");
         BotMemoryV2Partition visPar = navPar.partition("visited", BotMemoryV2Partition.Type.MAP);
         Map<String, Object>  visited = visPar.getMap();
         
-        BotNavigationContext context = BotContextMakerHelper.alignBotToMaxReachableYawNotVisited(botPos, scene.blocks, sightFov, radius, BotConstants.DEFAULT_SCAN_HEIGHT, visited);
+        // Tegging blocks
+        long start = System.currentTimeMillis();
+        int walkable = BotNavigationTagsMaker.tagWalkableBlocks(bot.getBrain().getSceneData().blocks);
+        System.out.println("Walkable: " + walkable); 
 
+        int reachable = BotNavigationTagsMaker.tagReachableBlocks(
+                botPos,
+                bot.getBrain().getSceneData().blocks,
+                90,
+                BotConstants.DEFAULT_SCAN_RADIUS,
+                BotConstants.DEFAULT_SCAN_HEIGHT
+            );
+           
+        System.out.println("Reachable blocks for current yaw/fov : " + reachable);
+
+        float bestYaw = BotTagsMakerSimulator.reachableFindBestYaw(botPos, bot.getBrain().getSceneData().blocks, 90, BotConstants.DEFAULT_SCAN_RADIUS, BotConstants.DEFAULT_SCAN_HEIGHT );            
+        System.out.printf("✅ Best yaw angle: %.1f° with max reachable blocks\n", bestYaw);
+
+        long end = System.currentTimeMillis();
+        System.out.println("[Timing] Tagging completed in " + (end - start) + " ms");
+            
+
+        //BotFovSliceTagger.tagFovSliceRemoveAll(bot.getBrain().getSceneData().blocks);
+           
         // Валидируем цели
-        List<BotBlockData> reachableSightedValidatedPos = validateTargets(botPos, context.reachable);
-        List<BotBlockData> navigableSightedValidatedPos = validateTargets(botPos, context.navigable);
-        List<BotBlockData> walkableSightedValidatedPos  = validateTargets(botPos, context.walkable);
+        List<BotBlockData> reachableBlocks = BotTagUtils.getTaggedBlocks(bot.getBrain().getSceneData().blocks,"reachable:blocks");
+        List<BotBlockData> reachableBlocksValidated = validateTargets(botPos, reachableBlocks);
+          
+        updateNavigationSummary("reachable", reachableBlocks.size(), reachableBlocksValidated.size());
     
-        
-        updateNavigationSummary("reachable", context.reachable != null ? context.reachable.size() : 0, reachableSightedValidatedPos.size());
-        updateNavigationSummary("navigable", context.navigable != null ? context.navigable.size() : 0, navigableSightedValidatedPos.size());
-        updateNavigationSummary("walkable",  context.walkable != null ? context.walkable.size()   : 0, walkableSightedValidatedPos.size());
-    
-
-        Predicate<BotBlockData> isNotVisited = block -> !visited.containsKey(block.toCompactString());
-
-        reachableSightedValidatedPos = reachableSightedValidatedPos.stream()
-            .filter(isNotVisited)
-            .collect(Collectors.toList());
-
-        navigableSightedValidatedPos = navigableSightedValidatedPos.stream()
-        .filter(isNotVisited)
-        .collect(Collectors.toList());
-
-        walkableSightedValidatedPos = walkableSightedValidatedPos.stream()
-            .filter(isNotVisited)
-            .collect(Collectors.toList());
-
         // Логика выбора цели
-        if (reachableSightedValidatedPos.size() > 1) {
-            candidates = reachableSightedValidatedPos;
+        if (reachableBlocksValidated.size() > 1) {
+            candidates = reachableBlocksValidated;
             navigationSuggestion = NavigationSuggestion.MOVE;
-            suggestedTarget = BlockUtils.findFarestReachable(getPosition().toBlockData(), candidates);
-        } else if (navigableSightedValidatedPos.size() > 1) {
-            candidates = navigableSightedValidatedPos;
-            navigationSuggestion = NavigationSuggestion.MOVE;
-            suggestedTarget = BlockUtils.findFarestReachable(getPosition().toBlockData(), candidates);
+            suggestedTarget = BlockUtils.findNearest(getPosition().toBlockData(), candidates);
+
+
         } else {
-            List<BotBlockData> reachableFallback = Stream.concat(
-                    navigableSightedValidatedPos.stream(),
-                    walkableSightedValidatedPos.stream()
-            ).filter(pos -> BlockUtils.isSoftReachable(getPosition().toBlockData(), pos, maxRadius))
-             .collect(Collectors.toList());
-    
-            if (!reachableFallback.isEmpty()) {
-                candidates = reachableFallback;
-                navigationSuggestion = NavigationSuggestion.MOVE;
-                suggestedTarget = BlockUtils.findFarestReachable(getPosition().toBlockData(), candidates);
-            } else {
-                navigationSuggestion = NavigationSuggestion.CHANGE_DIRECTION;
-                candidates = List.of();
-                suggestedTarget = null;
-            }
+            navigationSuggestion = NavigationSuggestion.CHANGE_DIRECTION;
+            candidates = List.of();
+            suggestedTarget = null;
         }
     
         updateNavigationSummary("targets",  candidates != null ? candidates.size() : 0, candidates.size());
-
-        // ➤ Централизованная проверка: цель — это текущая позиция
-        if (suggestedTarget != null && BlockUtils.isSameBlockUnderfoot(getPosition().toBlockData(), suggestedTarget)) {
-            BotLogger.debug("*", true, owner.getId() + " 🔁 Suggested Target is underfoot — forcing direction change");
-            navigationSuggestion = NavigationSuggestion.CHANGE_DIRECTION;
-            suggestedTarget = null;
-            candidates = List.of();
-        }
-    
+  
         boolean noTarget    = suggestedTarget    == null || candidates.isEmpty();
 
         // set The best YAW
-        setBestYaw(context.bestYaw);
+        setBestYaw(bestYaw); // got from simulator       
         // Если нет ни одной полезной навигационной поверхности — считаем, что бот застрял
         boolean stuckNow = noTarget;
     
         setStuck(stuckNow);
 
-        setInDanger(BotWorldHelper.isInDanger(owner));
+        setInDanger(BotWorldHelper.isInDanger(bot));
 
         updateNavigationMemory();
 
         try {
-            BotLogger.debug(owner.getActiveTask().getIcon(), true, owner.getId() + " 💻 Navigator calculation ended");
+            BotLogger.debug(bot.getActiveTask().getIcon(), true, bot.getId() + " 💻 Navigator calculation ended");
         } catch (Exception ex) {
-            BotLogger.debug("*", true, owner.getId() + " 💻 Navigator calculation ended");
+            BotLogger.debug("*", true, bot.getId() + " 💻 Navigator calculation ended");
         }
     
         return candidates;
@@ -295,7 +258,7 @@ public class BotNavigator {
             BotPosition pos = BlockUtils.fromBlock(target);
             Location loc = BotWorldHelper.botPositionToWorldLocation(pos);
     
-            boolean canNavigate = owner.getNPC().getNavigator().canNavigateTo(loc);
+            boolean canNavigate = bot.getNPC().getNavigator().canNavigateTo(loc);
             if (!canNavigate) continue;
        
             // 🛑 1. Исключаем блок под ногами
@@ -375,20 +338,20 @@ public class BotNavigator {
 
     public boolean navigate(float speed) {
         if (this.target == null) {
-            BotLogger.debug(BotUtils.getActiveTaskIcon(owner), true,
-                    owner.getId() + " 🗺️ Target is null. Navigation is not possible ");
+            BotLogger.debug(BotUtils.getActiveTaskIcon(bot), true,
+                    bot.getId() + " 🗺️ Target is null. Navigation is not possible ");
             return false;
         } else {
-            BotLogger.debug(BotUtils.getActiveTaskIcon(owner), true,
-                    owner.getId() + " 🗺️ Runtime Target position: " + this.target);
+            BotLogger.debug(BotUtils.getActiveTaskIcon(bot), true,
+                    bot.getId() + " 🗺️ Runtime Target position: " + this.target);
 
             if (navigationSuggestion == NavigationSuggestion.MOVE) {
                 BotPosition movePos = new BotPosition(this.target.getPosition());
                 BotMoveTaskParams mvParams = new BotMoveTaskParams();
                 mvParams.setTarget(movePos);
-                BotMoveTask moveTask = new BotMoveTask(owner);
+                BotMoveTask moveTask = new BotMoveTask(bot);
                 moveTask.setParams(mvParams);
-                BotTaskManager.push(owner, moveTask);
+                BotTaskManager.push(bot, moveTask);
             } else {
 
                 if(suggestedTarget==null) {
@@ -403,15 +366,15 @@ public class BotNavigator {
                     return false;
                 }
 
-                BotTeleportTask tp = new BotTeleportTask(owner, null);
+                BotTeleportTask tp = new BotTeleportTask(bot, null);
                 BotTeleportTaskParams params = new BotTeleportTaskParams();
                 params.setPosition(suggestedTarget.getPosition());
                 tp.setParams(params);
-                BotTaskManager.push(owner, tp);
+                BotTaskManager.push(bot, tp);
             }
 
             Location loc = BotWorldHelper.botPositionToWorldLocation(this.target.getPosition());
-            return owner.getNPC().getNavigator().canNavigateTo(loc);
+            return bot.getNPC().getNavigator().canNavigateTo(loc);
         }
     }
 }

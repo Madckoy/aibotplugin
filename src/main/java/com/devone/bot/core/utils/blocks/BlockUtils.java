@@ -112,29 +112,19 @@ public class BlockUtils {
     /**
      * Поиск ближайшей позиции из списка (по эвклидову расстоянию).
      */
-    public static BotBlockData findNearestReachable(BotBlockData current, List<BotBlockData> candidates) {
+    public static BotBlockData findNearest(BotBlockData current, List<BotBlockData> candidates) {
         return candidates.stream()
             .filter(p -> !isSameBlockUnderfoot(current, p))
-            .min(Comparator.comparingInt(current::distanceSquaredTo))
-            .orElse(null);
-    }
-
-     /**
-     * Поиск удаленной позиции из списка (по эвклидову расстоянию).
-     */
-    public static BotBlockData findFarestReachable(BotBlockData current, List<BotBlockData> candidates) {
-        return candidates.stream()
-            .filter(p -> !isSameBlockUnderfoot(current, p))
-            .max(Comparator.comparingInt(current::distanceSquaredTo))
+            .min(Comparator.comparingInt(current::distanceTo))
             .orElse(null);
     }
 
     /**
      * Простая эвристика "достижимости".
      */
-    public static boolean isSoftReachable(BotBlockData from, BotBlockData to, int maxDistance) {
-        double dist = from.distanceSquaredTo(to);
-        return dist > 1 && dist <= maxDistance;
+    public static boolean isSoftReachable(BotBlockData from, BotBlockData to) {
+        double dist = from.distanceTo(to);
+        return dist > 1.5 && dist < 8.0;
     }
 
     /**

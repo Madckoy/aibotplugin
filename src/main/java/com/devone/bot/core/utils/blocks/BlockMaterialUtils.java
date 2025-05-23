@@ -10,11 +10,25 @@ public class BlockMaterialUtils {
 
     public static final Set<String> AIR_TYPES = Set.of("AIR", "CAVE_AIR", "VOID_AIR");
 
-    // Блоки, которые представляют угрозу (например, наносят урон или мешают движению)
-    public static final Set<String> UNSAFE_TYPES = Set.of(
-        "WATER", "LAVA", "CACTUS", "FIRE", "MAGMA_BLOCK", "CAMPFIRE", "SOUL_CAMPFIRE",
-        "WITHER_ROSE", "SWEET_BERRY_BUSH", "DRIPSTONE_BLOCK", "POINTED_DRIPSTONE",
-        "POWDER_SNOW", "END_PORTAL", "NETHER_PORTAL", "VOID_AIR", "UNKNOWN"
+    public static final Set<String> DANGEROUS_PASSABLE = Set.of(
+        "WATER",
+        "POWDER_SNOW",
+        "MAGMA_BLOCK",
+        "CAMPFIRE",
+        "SOUL_CAMPFIRE",
+        "LAVA",
+        "FIRE",
+        "NETHER_PORTAL",
+        "END_PORTAL"
+    );
+
+    public static final Set<String> DANGEROUS_IMPASSABLE = Set.of(
+        "CACTUS",
+        "WITHER_ROSE",
+        "SWEET_BERRY_BUSH",
+        "DRIPSTONE_BLOCK",
+        "POINTED_DRIPSTONE",
+        "UNKNOWN"
     );
 
     public static final Set<String> COVER_TYPES = Set.of(
@@ -76,7 +90,6 @@ public class BlockMaterialUtils {
         map.put("FLOWER", "#ff69b4");
         map.put("DANDELION", "#ffff00");
         map.put("POPPY", "#ff0000");
-        // можно добавлять и другие
         return map;
     }
 
@@ -84,33 +97,65 @@ public class BlockMaterialUtils {
         if (type == null) return "#cccccc";
         String t = type.toUpperCase();
 
-        // сначала пытаемся прямое соответствие
         if (MATERIAL_COLOR_MAP.containsKey(t)) return MATERIAL_COLOR_MAP.get(t);
 
-        // затем пытаемся найти по вхождению (например, GRASS_PATH, STONE_BRICKS и т.д.)
         for (Map.Entry<String, String> entry : MATERIAL_COLOR_MAP.entrySet()) {
             if (t.contains(entry.getKey())) {
                 return entry.getValue();
             }
         }
 
-        return "#aaaaaa"; // fallback
+        return "#aaaaaa";
     }
-  
+
     public static boolean isAir(BotBlockData block) {
         return block != null && BlockMaterialUtils.AIR_TYPES.contains(block.getType().toUpperCase());
     }
-
 
     public static boolean isCover(BotBlockData block) {
         return block != null && BlockMaterialUtils.COVER_TYPES.contains(block.getType().toUpperCase());
     }
 
-    @JsonIgnore
-    public static boolean isDangerous(BotBlockData block) {
-        return block != null && BlockMaterialUtils.UNSAFE_TYPES.contains(block.getType().toUpperCase());
+    public static boolean isPassableForHeadroom(BotBlockData block) {
+        return isAir(block) || isCover(block);
     }
 
+    @JsonIgnore
+    public static boolean isDangerous(BotBlockData block) {
+    return block != null && (DANGEROUS_PASSABLE.contains(block.getType().toUpperCase())
+                          || DANGEROUS_IMPASSABLE.contains(block.getType().toUpperCase()));
+}
 
+    public static boolean isPassableDangerous(BotBlockData block) {
+        return block != null && DANGEROUS_PASSABLE.contains(block.getType().toUpperCase());
+    }
+
+    public static boolean isPassableAbove(BotBlockData block) {
+        if (block == null) return false;
+        String type = block.getType().toUpperCase();
+    
+        return AIR_TYPES.contains(type) || COVER_TYPES.contains(type);
+    }
+
+    public static boolean isPassableWalkable(BotBlockData block) {
+        if (block == null) return false;
+        String type = block.getType().toUpperCase();
+
+        // Явно непроходимые
+        if (AIR_TYPES.contains(type)) return true;
+        if (COVER_TYPES.contains(type)) return true;
+        if (DANGEROUS_PASSABLE.contains(type)) return true;
+
+        // Часто непроходимые, но не опасные — НЕ проходимы
+        if (DANGEROUS_IMPASSABLE.contains(type)) return false;
+
+        // Чисто эмпирически непроходимые
+        if (type.contains("LEAVES") || type.contains("FENCE") || type.contains("WALL") || type.contains("DOOR")) return false;
+        if (type.contains("BAMBOO") || type.contains("BARREL") || type.contains("TRAPDOOR")) return false;
+        if (type.contains("LOG") || type.contains("PLANK") || type.contains("WOOD")) return false;
+
+        // Всё остальное по умолчанию считаем проходимым
+        return true;
+    }
 
 }

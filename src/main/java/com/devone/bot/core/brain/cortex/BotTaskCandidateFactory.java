@@ -1,7 +1,6 @@
 package com.devone.bot.core.brain.cortex;
 
-
-import com.devone.bot.core.brain.logic.navigator.math.selector.BotEntitySelector;
+import com.devone.bot.core.brain.cortex.selector.BotEntitySelector;
 import com.devone.bot.core.brain.perseption.scene.BotSceneData;
 import com.devone.bot.core.task.active.explore.BotExploreTask;
 import java.util.*;

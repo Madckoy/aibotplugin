@@ -8,7 +8,7 @@ import org.bukkit.entity.Player;
 
 import com.devone.bot.core.bootstrap.BotBootstrap;
 import com.devone.bot.core.brain.BotBrain;
-import com.devone.bot.core.brain.logic.navigator.BotNavigator;
+import com.devone.bot.core.brain.navigator.BotNavigator;
 import com.devone.bot.core.inventory.BotInventory;
 import com.devone.bot.core.speaker.BotSpeaker;
 import com.devone.bot.core.task.passive.BotTask;
