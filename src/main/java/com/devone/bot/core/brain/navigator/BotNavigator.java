@@ -11,6 +11,7 @@ import com.devone.bot.core.brain.memory.BotMemoryV2Utils;
 import com.devone.bot.core.brain.memoryv2.BotMemoryV2;
 import com.devone.bot.core.brain.memoryv2.BotMemoryV2Partition;
 import com.devone.bot.core.brain.navigator.simulator.BotTagsMakerSimulator;
+import com.devone.bot.core.brain.navigator.tags.BotFovSliceTagger;
 import com.devone.bot.core.brain.navigator.tags.BotNavigationTagsMaker;
 import com.devone.bot.core.brain.perseption.scene.BotScanInfo;
 import com.devone.bot.core.brain.perseption.scene.BotSceneData;
@@ -183,10 +184,10 @@ public class BotNavigator {
         BotMemoryV2Partition visPar = navPar.partition("visited", BotMemoryV2Partition.Type.MAP);
         Map<String, Object>  visited = visPar.getMap();
         
-        // Tegging blocks
+        // Tagging blocks
         long start = System.currentTimeMillis();
         int walkable = BotNavigationTagsMaker.tagWalkableBlocks(bot.getBrain().getSceneData().blocks);
-        System.out.println("Walkable: " + walkable); 
+
 
         int reachable = BotNavigationTagsMaker.tagReachableBlocks(
                 botPos,
@@ -196,41 +197,26 @@ public class BotNavigator {
                 BotConstants.DEFAULT_SCAN_HEIGHT
             );
            
-        System.out.println("Reachable blocks for current yaw/fov : " + reachable);
-
         float bestYaw = BotTagsMakerSimulator.reachableFindBestYaw(botPos, bot.getBrain().getSceneData().blocks, 90, BotConstants.DEFAULT_SCAN_RADIUS, BotConstants.DEFAULT_SCAN_HEIGHT );            
-        System.out.printf("✅ Best yaw angle: %.1f° with max reachable blocks\n", bestYaw);
-
-        long end = System.currentTimeMillis();
-        System.out.println("[Timing] Tagging completed in " + (end - start) + " ms");
-            
-
-        //BotFovSliceTagger.tagFovSliceRemoveAll(bot.getBrain().getSceneData().blocks);
-           
 
         List<BotBlockData> reachableBlocks = BotTagUtils.getTaggedBlocks(bot.getBrain().getSceneData().blocks,"reachable:blocks");
+        System.out.println("Reachable: " + reachableBlocks); 
 
-        BotScanInfo scanInfo = new BotScanInfo(BotConstants.DEFAULT_SCAN_RADIUS, BotConstants.DEFAULT_SCAN_HEIGHT);
-        BotSceneData sc_data_tagged = new BotSceneData(bot.getBrain().getSceneData().blocks, bot.getBrain().getSceneData().entities, botPos, scanInfo);
-
-        try {
-            BotSceneSaver.saveToJsonFile(BotConstants.PLUGIN_TMP+bot.getId()+"_scene_data_tagged.json", sc_data_tagged);
-        } catch (Exception ex) {
-            System.out.println(ex.getMessage());
-        }
-
+        List<BotBlockData> walkableBlocks  = BotTagUtils.getTaggedBlocks(bot.getBrain().getSceneData().blocks,"walkable:*");
+        System.out.println("Walkable: " + walkableBlocks); 
 
         // Валидируем цели
         List<BotBlockData> reachableBlocksValidated = validateTargets(botPos, reachableBlocks);
-          
-        updateNavigationSummary("reachable", reachableBlocks.size(), reachableBlocksValidated.size());
+        List<BotBlockData> walkableBlocksValidated = validateTargets(botPos, walkableBlocks);          
+
+        updateNavigationSummary("reachable", reachable, reachableBlocksValidated.size());
+        updateNavigationSummary("walkable",  walkable, walkableBlocksValidated.size());
     
         // Логика выбора цели
         if (reachableBlocksValidated.size() > 1) {
             candidates = reachableBlocksValidated;
             navigationSuggestion = NavigationSuggestion.MOVE;
-            suggestedTarget = BlockUtils.findNearest(getPosition().toBlockData(), candidates);
-
+            suggestedTarget = BlockUtils.findRandom(candidates);
 
         } else {
             navigationSuggestion = NavigationSuggestion.CHANGE_DIRECTION;
@@ -259,6 +245,19 @@ public class BotNavigator {
             BotLogger.debug("*", true, bot.getId() + " 💻 Navigator calculation ended");
         }
     
+        BotScanInfo scanInfo = new BotScanInfo(BotConstants.DEFAULT_SCAN_RADIUS, BotConstants.DEFAULT_SCAN_HEIGHT);
+        BotSceneData sc_data_tagged = new BotSceneData(bot.getBrain().getSceneData().blocks, bot.getBrain().getSceneData().entities, botPos, scanInfo);
+
+        try {
+            BotFovSliceTagger.tagFovSliceRemoveAll(bot.getBrain().getSceneData().blocks);
+            BotSceneSaver.saveToJsonFile(BotConstants.PLUGIN_TMP+bot.getId()+"_scene_data_tagged.json", sc_data_tagged);
+        } catch (Exception ex) {
+            System.out.println(ex.getMessage());
+        }
+
+        long end = System.currentTimeMillis();
+        System.out.println("[Timing] Tagging completed in " + (end - start) + " ms");
+
         return candidates;
     }
     
@@ -319,6 +318,7 @@ public class BotNavigator {
     
         navigation.put("position", currentPos != null ? currentPos.toCompactString() : null);
         navigation.put("yaw", sight != null ? sight.getYaw() : null);
+        navigation.put("bestYaw", getBestYaw());
         navigation.put("target", this.target != null ? this.target.toCompactString() : null);
         navigation.put("suggestion", navigationSuggestion != null ? navigationSuggestion.name() : null);
         navigation.put("suggestedTarget", suggestedTarget != null ? suggestedTarget.toCompactString() : null);

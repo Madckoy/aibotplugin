@@ -30,8 +30,7 @@ public class BotBrainTask extends BotTaskAutoParams<BotBrainTaskParams> {
                 "excavate=" + params.isAllowExcavation() + ", " +
                 "violence=" + params.isAllowViolence() + ", " +
                 "teleport=" + params.isAllowTeleport());
-
-        bot.getNavigator().calculate(bot.getBrain().getSceneData(), BotConstants.DEFAULT_NORMAL_SIGHT_FOV);                
+       
 
         return this;
     }
@@ -40,6 +39,7 @@ public class BotBrainTask extends BotTaskAutoParams<BotBrainTaskParams> {
     public void execute() {
         BotLogger.debug(icon, isLogging(), bot.getId() + " 🎲 Is making a decision...");
 
+        bot.getNavigator().calculate(bot.getBrain().getSceneData(), BotConstants.DEFAULT_NORMAL_SIGHT_FOV);                
    }
 
 }

@@ -23,7 +23,6 @@ function updateNavSummary(bot) {
 
     document.getElementById("info-nav-targets").textContent = format(summary.targets);
     document.getElementById("info-nav-reachable").textContent = format(summary.reachable);
-    document.getElementById("info-nav-navigable").textContent = format(summary.navigable);
     document.getElementById("info-nav-walkable").textContent = format(summary.walkable);
     document.getElementById("info-nav-navigation-suggestion").textContent = suggestion;
     document.getElementById("info-nav-suggested-position").textContent = suggestedTarget;

@@ -2,6 +2,7 @@ package com.devone.bot.core.utils.blocks;
 
 import java.util.Comparator;
 import java.util.List;
+import java.util.Random;
 import java.util.stream.Collectors;
 
 public class BlockUtils {
@@ -117,6 +118,13 @@ public class BlockUtils {
             .filter(p -> !isSameBlockUnderfoot(current, p))
             .min(Comparator.comparingInt(current::distanceTo))
             .orElse(null);
+    }
+
+    public static BotBlockData findRandom(List<BotBlockData> candidates) {
+        Random random = new Random();
+        if (candidates == null || candidates.isEmpty())
+            return null;
+        return candidates.get(random.nextInt(candidates.size()));
     }
 
     /**
