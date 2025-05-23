@@ -2,10 +2,9 @@ package com.devone.bot.core.utils.blocks;
 
 import java.util.Set;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
-
 public class BlockMaterialUtils {
 
+    // --- Базовые типы блоков по поведению ---
     public static final Set<String> AIR_TYPES = Set.of("AIR", "CAVE_AIR", "VOID_AIR");
 
     public static final Set<String> DANGEROUS_PASSABLE = Set.of(
@@ -24,27 +23,73 @@ public class BlockMaterialUtils {
         "POPPY", "BLUE_ORCHID", "ALLIUM", "AZURE_BLUET", "RED_TULIP", "ORANGE_TULIP",
         "WHITE_TULIP", "PINK_TULIP", "OXEYE_DAISY", "CORNFLOWER", "LILY_OF_THE_VALLEY",
         "SUNFLOWER", "ROSE_BUSH", "PEONY", "LILAC", "MOSS_CARPET", "ROOTS",
-        "HANGING_ROOTS", "SUGAR_CANE"
+        "HANGING_ROOTS", "SUGAR_CANE", "VINE"
     );
 
-    public static boolean isAir(BotBlockData block) {
-        return block != null && AIR_TYPES.contains(block.getType().toUpperCase());
+    // --- Определения поведения ---
+    public static boolean isClimbable(BotBlockData block) {
+        if (block == null) return false;
+        String type = block.getType().toUpperCase();
+        return type.contains("VINE") || type.contains("LADDER") || type.contains("SCAFFOLDING");
+    }
+
+    // Можно ли зайти внутрь блока (он не мешает движению)?
+    public static boolean isPassableForMovement(BotBlockData block) {
+        if (block == null) return false;
+        String type = block.getType().toUpperCase();
+        return AIR_TYPES.contains(type)
+            || COVER_TYPES.contains(type)
+            || DANGEROUS_PASSABLE.contains(type);
+    }
+
+    // Можно ли завершить движение в этом блоке (стоять внутри)?
+    public static boolean canBotStandInside(BotBlockData block) {
+        if (block == null) return false;
+        String type = block.getType().toUpperCase();
+
+        // Бот может стоять в воздухе, траве, воде, но не в огне/лаве
+        if (AIR_TYPES.contains(type)) return true;
+        if (COVER_TYPES.contains(type)) return true;
+
+        // В воде стоять — ок, в лаве/огне — нет
+        if (type.equals("WATER") || type.equals("POWDER_SNOW")) return true;
+
+        return false;
+    }
+
+    // Можно ли стоять на этом блоке (он держит)?
+    public static boolean isSolidEnoughToStandOn(BotBlockData block) {
+        if (block == null) return false;
+        String type = block.getType().toUpperCase();
+
+        if (AIR_TYPES.contains(type)) return false;
+        if (COVER_TYPES.contains(type)) return false;
+
+        // Вода и лава не держат
+        if (type.equals("WATER") || type.equals("LAVA")) return false;
+
+        // Исключаем нестабильные
+        if (type.contains("FENCE") || type.contains("WALL") || type.contains("DOOR")
+            || type.contains("TRAPDOOR") || type.contains("BAMBOO") || type.contains("BARREL")) {
+            return false;
+        }
+
+        // Листва, камень, доски, земля и т.п. — держат
+        return true;
     }
 
     public static boolean isCover(BotBlockData block) {
         return block != null && COVER_TYPES.contains(block.getType().toUpperCase());
     }
 
-    public static boolean isPassableForHeadroom(BotBlockData block) {
-        return isAir(block) || isCover(block);
+    public static boolean isAir(BotBlockData block) {
+        return block != null && AIR_TYPES.contains(block.getType().toUpperCase());
     }
 
-    @JsonIgnore
     public static boolean isDangerous(BotBlockData block) {
-        return block != null && (
-            DANGEROUS_PASSABLE.contains(block.getType().toUpperCase()) ||
-            DANGEROUS_IMPASSABLE.contains(block.getType().toUpperCase())
-        );
+        if (block == null) return false;
+        String type = block.getType().toUpperCase();
+        return DANGEROUS_PASSABLE.contains(type) || DANGEROUS_IMPASSABLE.contains(type);
     }
 
     public static boolean isPassableDangerous(BotBlockData block) {
@@ -52,43 +97,10 @@ public class BlockMaterialUtils {
     }
 
     public static boolean isPassableAbove(BotBlockData block) {
-        if (block == null) return false;
-        String type = block.getType().toUpperCase();
-        return AIR_TYPES.contains(type) || COVER_TYPES.contains(type);
+        return canBotStandInside(block);
     }
 
-    public static boolean isPassableWalkable(BotBlockData block) {
-        if (block == null) return false;
-        String type = block.getType().toUpperCase();
-
-        if (AIR_TYPES.contains(type)) return true;
-        if (COVER_TYPES.contains(type)) return true;
-        if (DANGEROUS_PASSABLE.contains(type)) return true;
-        if (DANGEROUS_IMPASSABLE.contains(type)) return false;
-
-        if (type.contains("LEAVES") || type.contains("FENCE") || type.contains("WALL") || type.contains("DOOR")) return false;
-        if (type.contains("BAMBOO") || type.contains("BARREL") || type.contains("TRAPDOOR")) return false;
-        if (type.contains("LOG") || type.contains("PLANK") || type.contains("WOOD")) return false;
-
-        return true;
-    }
-
-    /**
-     * Можно ли стоять внутри этого блока?
-     */
-    public static boolean canBotStandInBlock(BotBlockData block) {
-        if (block == null) return false;
-        String type = block.getType().toUpperCase();
-
-        if (AIR_TYPES.contains(type)) return true;
-        if (COVER_TYPES.contains(type)) return true;
-
-        if (DANGEROUS_PASSABLE.contains(type)) return false;
-        if (DANGEROUS_IMPASSABLE.contains(type)) return false;
-
-        if (type.contains("FENCE") || type.contains("WALL") || type.contains("DOOR")) return false;
-        if (type.contains("LEAVES") || type.contains("TRAPDOOR")) return false;
-
-        return true;
+    public static boolean isLeaves(BotBlockData block) {
+        return block != null && block.getType().toUpperCase().contains("LEAVES");
     }
 }

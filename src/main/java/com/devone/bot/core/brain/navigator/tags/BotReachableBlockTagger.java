@@ -148,9 +148,11 @@ public class BotReachableBlockTagger {
     }
 
     private static boolean hasWalkableTag(BotBlockData block) {
+        if(block.hasTag("walkable:climbable")) return false;
+        
         return block.hasTag("walkable:solid")   ||
                block.hasTag("walkable:cover")   ||
                block.hasTag("walkable:covered") ||
-               block.hasTag("walkable:hazard");
+               block.hasTag("walkable:hazard"); 
     }
 } 
