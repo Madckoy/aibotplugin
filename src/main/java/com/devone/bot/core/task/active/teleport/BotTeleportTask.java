@@ -2,6 +2,7 @@ package com.devone.bot.core.task.active.teleport;
 
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
+import org.bukkit.block.Block;
 import org.bukkit.entity.Player;
 
 import com.devone.bot.AIBotPlugin;
@@ -10,6 +11,8 @@ import com.devone.bot.core.brain.memory.BotMemoryV2Utils;
 import com.devone.bot.core.task.passive.BotTaskAutoParams;
 import com.devone.bot.core.task.passive.IBotTaskParameterized;
 import com.devone.bot.core.task.active.teleport.params.BotTeleportTaskParams;
+import com.devone.bot.core.utils.blocks.BlockMaterialUtils;
+import com.devone.bot.core.utils.blocks.BotBlockData;
 import com.devone.bot.core.utils.blocks.BotPosition;
 import com.devone.bot.core.utils.logger.BotLogger;
 import com.devone.bot.core.utils.world.BotWorldHelper;
@@ -68,7 +71,19 @@ public class BotTeleportTask extends BotTaskAutoParams<BotTeleportTaskParams> {
 
         Bukkit.getScheduler().runTask(AIBotPlugin.getInstance(), () -> {
             Location baseLocation = BotWorldHelper.botPositionToWorldLocation(target);
-            Location safeOffset = baseLocation.clone().add(0.0, 1.6, 0.0);
+            double offsetX = 0.5;
+            double offsetY = 0.0;
+            double offsetZ = 0.5;
+
+            Block bl = baseLocation.getBlock();
+            BotBlockData blockData = BotWorldHelper.blockToBotBlockData(bl);
+            // если покрытие — бот может встать прямо сюда
+            if (BlockMaterialUtils.isCover(blockData) || BlockMaterialUtils.isAir(blockData)) {
+                offsetY = 0.0;
+            } else {
+                offsetY = 1.0;
+            }
+            Location safeOffset = baseLocation.clone().add(offsetX, offsetY + 0.6, offsetZ);
 
             bot.getNPCEntity().teleport(safeOffset);
 
@@ -80,6 +95,5 @@ public class BotTeleportTask extends BotTaskAutoParams<BotTeleportTaskParams> {
                     bot.getId() + " ⚡ Телепорт завершен с " + baseLocation.toVector() + " в " + safeOffset.toVector());
             stop();
         });
-        stop();
     }
 }

@@ -1,7 +1,5 @@
 package com.devone.bot.core.utils.blocks;
 
-import java.util.HashMap;
-import java.util.Map;
 import java.util.Set;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
@@ -11,109 +9,30 @@ public class BlockMaterialUtils {
     public static final Set<String> AIR_TYPES = Set.of("AIR", "CAVE_AIR", "VOID_AIR");
 
     public static final Set<String> DANGEROUS_PASSABLE = Set.of(
-        "WATER",
-        "POWDER_SNOW",
-        "MAGMA_BLOCK",
-        "CAMPFIRE",
-        "SOUL_CAMPFIRE",
-        "LAVA",
-        "FIRE",
-        "NETHER_PORTAL",
-        "END_PORTAL"
+        "WATER", "POWDER_SNOW", "MAGMA_BLOCK", "CAMPFIRE", "SOUL_CAMPFIRE",
+        "LAVA", "FIRE", "NETHER_PORTAL", "END_PORTAL"
     );
 
     public static final Set<String> DANGEROUS_IMPASSABLE = Set.of(
-        "CACTUS",
-        "WITHER_ROSE",
-        "SWEET_BERRY_BUSH",
-        "DRIPSTONE_BLOCK",
-        "POINTED_DRIPSTONE",
-        "UNKNOWN"
+        "CACTUS", "WITHER_ROSE", "SWEET_BERRY_BUSH",
+        "DRIPSTONE_BLOCK", "POINTED_DRIPSTONE", "UNKNOWN"
     );
 
     public static final Set<String> COVER_TYPES = Set.of(
-        "SHORT_GRASS",
-        "ICE",
-        "SNOW",
-        "CARPET",
-        "TALL_GRASS",
-        "GRASS",
-        "FERN",
-        "LARGE_FERN",
-        "DEAD_BUSH",
-        "SEAGRASS",
-        "TALL_SEAGRASS",
-        "FLOWER",
-        "DANDELION",
-        "POPPY",
-        "BLUE_ORCHID",
-        "ALLIUM",
-        "AZURE_BLUET",
-        "RED_TULIP",
-        "ORANGE_TULIP",
-        "WHITE_TULIP",
-        "PINK_TULIP",
-        "OXEYE_DAISY",
-        "CORNFLOWER",
-        "LILY_OF_THE_VALLEY",
-        "SUNFLOWER",
-        "ROSE_BUSH",
-        "PEONY",
-        "LILAC",
-        "MOSS_CARPET",
-        "ROOTS",
-        "HANGING_ROOTS",
-        "SUGAR_CANE"
+        "SHORT_GRASS", "ICE", "SNOW", "CARPET", "TALL_GRASS", "GRASS", "FERN",
+        "LARGE_FERN", "DEAD_BUSH", "SEAGRASS", "TALL_SEAGRASS", "FLOWER", "DANDELION",
+        "POPPY", "BLUE_ORCHID", "ALLIUM", "AZURE_BLUET", "RED_TULIP", "ORANGE_TULIP",
+        "WHITE_TULIP", "PINK_TULIP", "OXEYE_DAISY", "CORNFLOWER", "LILY_OF_THE_VALLEY",
+        "SUNFLOWER", "ROSE_BUSH", "PEONY", "LILAC", "MOSS_CARPET", "ROOTS",
+        "HANGING_ROOTS", "SUGAR_CANE"
     );
 
-    private static final Map<String, String> MATERIAL_COLOR_MAP = createColorMap();
-
-    private static Map<String, String> createColorMap() {
-        Map<String, String> map = new HashMap<>();
-        map.put("AIR", "#e0e0e0");
-        map.put("STONE", "#808080");
-        map.put("COBBLESTONE", "#696969");
-        map.put("DIRT", "#a0522d");
-        map.put("GRASS", "#228b22");
-        map.put("GRASS_BLOCK", "#228b22");
-        map.put("SAND", "#f4e99d");
-        map.put("RED_SAND", "#d47032");
-        map.put("WATER", "#1e90ff");
-        map.put("LAVA", "#ff4500");
-        map.put("SNOW", "#ffffff");
-        map.put("ICE", "#aee3f7");
-        map.put("WOOD", "#deb887");
-        map.put("OAK_LOG", "#8b5a2b");
-        map.put("OAK_PLANKS", "#c19a6b");
-        map.put("MAGMA_BLOCK", "#ff8c00");
-        map.put("CACTUS", "#228b22");
-        map.put("FLOWER", "#ff69b4");
-        map.put("DANDELION", "#ffff00");
-        map.put("POPPY", "#ff0000");
-        return map;
-    }
-
-    public static String getColorCodeForType(String type) {
-        if (type == null) return "#cccccc";
-        String t = type.toUpperCase();
-
-        if (MATERIAL_COLOR_MAP.containsKey(t)) return MATERIAL_COLOR_MAP.get(t);
-
-        for (Map.Entry<String, String> entry : MATERIAL_COLOR_MAP.entrySet()) {
-            if (t.contains(entry.getKey())) {
-                return entry.getValue();
-            }
-        }
-
-        return "#aaaaaa";
-    }
-
     public static boolean isAir(BotBlockData block) {
-        return block != null && BlockMaterialUtils.AIR_TYPES.contains(block.getType().toUpperCase());
+        return block != null && AIR_TYPES.contains(block.getType().toUpperCase());
     }
 
     public static boolean isCover(BotBlockData block) {
-        return block != null && BlockMaterialUtils.COVER_TYPES.contains(block.getType().toUpperCase());
+        return block != null && COVER_TYPES.contains(block.getType().toUpperCase());
     }
 
     public static boolean isPassableForHeadroom(BotBlockData block) {
@@ -122,9 +41,11 @@ public class BlockMaterialUtils {
 
     @JsonIgnore
     public static boolean isDangerous(BotBlockData block) {
-    return block != null && (DANGEROUS_PASSABLE.contains(block.getType().toUpperCase())
-                          || DANGEROUS_IMPASSABLE.contains(block.getType().toUpperCase()));
-}
+        return block != null && (
+            DANGEROUS_PASSABLE.contains(block.getType().toUpperCase()) ||
+            DANGEROUS_IMPASSABLE.contains(block.getType().toUpperCase())
+        );
+    }
 
     public static boolean isPassableDangerous(BotBlockData block) {
         return block != null && DANGEROUS_PASSABLE.contains(block.getType().toUpperCase());
@@ -133,7 +54,6 @@ public class BlockMaterialUtils {
     public static boolean isPassableAbove(BotBlockData block) {
         if (block == null) return false;
         String type = block.getType().toUpperCase();
-    
         return AIR_TYPES.contains(type) || COVER_TYPES.contains(type);
     }
 
@@ -141,21 +61,34 @@ public class BlockMaterialUtils {
         if (block == null) return false;
         String type = block.getType().toUpperCase();
 
-        // Явно непроходимые
         if (AIR_TYPES.contains(type)) return true;
         if (COVER_TYPES.contains(type)) return true;
         if (DANGEROUS_PASSABLE.contains(type)) return true;
-
-        // Часто непроходимые, но не опасные — НЕ проходимы
         if (DANGEROUS_IMPASSABLE.contains(type)) return false;
 
-        // Чисто эмпирически непроходимые
         if (type.contains("LEAVES") || type.contains("FENCE") || type.contains("WALL") || type.contains("DOOR")) return false;
         if (type.contains("BAMBOO") || type.contains("BARREL") || type.contains("TRAPDOOR")) return false;
         if (type.contains("LOG") || type.contains("PLANK") || type.contains("WOOD")) return false;
 
-        // Всё остальное по умолчанию считаем проходимым
         return true;
     }
 
+    /**
+     * Можно ли стоять внутри этого блока?
+     */
+    public static boolean canBotStandInBlock(BotBlockData block) {
+        if (block == null) return false;
+        String type = block.getType().toUpperCase();
+
+        if (AIR_TYPES.contains(type)) return true;
+        if (COVER_TYPES.contains(type)) return true;
+
+        if (DANGEROUS_PASSABLE.contains(type)) return false;
+        if (DANGEROUS_IMPASSABLE.contains(type)) return false;
+
+        if (type.contains("FENCE") || type.contains("WALL") || type.contains("DOOR")) return false;
+        if (type.contains("LEAVES") || type.contains("TRAPDOOR")) return false;
+
+        return true;
+    }
 }
