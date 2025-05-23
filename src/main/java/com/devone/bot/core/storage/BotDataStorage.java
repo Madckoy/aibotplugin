@@ -6,6 +6,7 @@ import com.devone.bot.core.utils.BotConstants;
 import com.devone.bot.core.utils.logger.BotLogger;
 import com.google.gson.*;
 
+import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.Material;
 
@@ -77,6 +78,9 @@ public class BotDataStorage {
 
     private static void saveInventory(Bot bot, File file) throws IOException {
         JsonArray items = new JsonArray();
+        Inventory inventory = bot.getInventory().getNPCInventory();
+        if(inventory==null) return;
+        
         ItemStack[] contents = bot.getInventory().getNPCInventory().getContents();
         for (ItemStack item : contents) {
             if (item != null && item.getAmount() > 0) {
