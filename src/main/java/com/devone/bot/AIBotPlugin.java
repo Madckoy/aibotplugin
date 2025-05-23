@@ -139,6 +139,7 @@ public class AIBotPlugin extends JavaPlugin {
         BotResourceExtractor.copyDirectoryFromJar("web", BotConstants.PLUGIN_PATH + "/web", true, Set.of(".html", ".css", ".js", ".png"));
         BotResourceExtractor.copyDirectoryFromJar("patterns", BotConstants.PLUGIN_PATH + "/patterns", false, Set.of(".json"));
         BotResourceExtractor.copyDirectoryFromJar("config", BotConstants.PLUGIN_PATH_CONFIGS, false, Set.of(".me"));
+        BotResourceExtractor.copyDirectoryFromJar("tmp", BotConstants.PLUGIN_PATH_TMP, false, Set.of(".me"));
     }
 
 

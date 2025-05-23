@@ -12,7 +12,7 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 
 public class BotLifecycleLogger {
-    private static final String LOG_FOLDER = BotConstants.PLUGIN_TMP; // Путь к логам
+    private static final String LOG_FOLDER = BotConstants.PLUGIN_PATH_TMP; // Путь к логам
 
     private static final String SESSION_ID = generateSessionId();
 

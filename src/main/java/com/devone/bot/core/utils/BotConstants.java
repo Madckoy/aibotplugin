@@ -9,7 +9,7 @@ public class BotConstants {
     public static final String PLUGIN_PATH_CONFIGS_BOTS  = PLUGIN_PATH_CONFIGS + "/bots/";
     public static final String PLUGIN_PATH_WEB_ASSETS = PLUGIN_PATH + "/web/assets";
     public static final String PLUGIN_PATH_LOGS = PLUGIN_PATH + "/logs/";
-    public static final String PLUGIN_TMP = PLUGIN_PATH + "/tmp/";
+    public static final String PLUGIN_PATH_TMP = PLUGIN_PATH + "/tmp/";
 
     public static final String PLUGIN_PATH_PATTERNS_BREAK = PLUGIN_PATH + "/patterns/excavation/";
     public static final String RESOURCE_PATH_PATTERNS_BREAK = "patterns/break/";
@@ -17,7 +17,7 @@ public class BotConstants {
 
     public static final boolean FLIP_COORDS = false;
 
-    public static final int DEFAULT_SCAN_RADIUS = 5;
+    public static final int DEFAULT_SCAN_RADIUS = 10;
     public static final int DEFAULT_SCAN_HEIGHT = 4;
 
     public static final int MAX_SCAN_RANGE = 20;

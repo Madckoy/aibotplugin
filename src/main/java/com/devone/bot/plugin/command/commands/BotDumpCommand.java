@@ -48,7 +48,7 @@ public class BotDumpCommand implements CommandExecutor {
 
         BotSceneData sceneData = bot.getBrain().getSceneData();
 
-        String fileName = BotConstants.PLUGIN_TMP + bot.getId() + "_scene_data.json";
+        String fileName = BotConstants.PLUGIN_PATH_TMP + bot.getId() + "_scene_data.json";
 
         try {
             BotSceneSaver.saveToJsonFile(fileName, sceneData);

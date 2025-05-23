@@ -248,14 +248,16 @@ public class BotNavigator {
         BotScanInfo scanInfo = new BotScanInfo(BotConstants.DEFAULT_SCAN_RADIUS, BotConstants.DEFAULT_SCAN_HEIGHT);
         BotSceneData sc_data_tagged = new BotSceneData(bot.getBrain().getSceneData().blocks, bot.getBrain().getSceneData().entities, botPos, scanInfo);
 
+        long end = System.currentTimeMillis();
+        System.out.println("[Timing] Tagging completed in " + (end - start) + " ms");
+
         try {
             BotFovSliceTagger.tagFovSliceRemoveAll(bot.getBrain().getSceneData().blocks);
-            BotSceneSaver.saveToJsonFile(BotConstants.PLUGIN_TMP+bot.getId()+"_scene_data_tagged.json", sc_data_tagged);
+            BotSceneSaver.saveToJsonFile(BotConstants.PLUGIN_PATH_TMP + bot.getId()+"_scene_data_tagged.json_" + end, sc_data_tagged);
         } catch (Exception ex) {
             System.out.println(ex.getMessage());
         }
 
-        long end = System.currentTimeMillis();
         System.out.println("[Timing] Tagging completed in " + (end - start) + " ms");
 
         return candidates;
