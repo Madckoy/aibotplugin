@@ -36,24 +36,27 @@ public class BotReachableBlockTagger {
 
         if (walkableSet.isEmpty()) return 0;
 
+        // Получаем округлённую позицию бота (вниз)
         int startX = (int) Math.floor(botPos.getX());
         int startY = (int) Math.floor(botPos.getY());
         int startZ = (int) Math.floor(botPos.getZ());
 
-        BotPositionKey[] startCandidates = {
-            new BotPositionKey(startX, startY, startZ),
-            new BotPositionKey(startX, startY + 1, startZ),
-            new BotPositionKey(startX, startY - 1, startZ)
-        };
-
-        Queue<BotPositionKey> queue = new LinkedList<>();
-
-        for (BotPositionKey key : startCandidates) {
-            if (walkableSet.contains(key)) {
-                queue.add(key);
+        // Ищем ближайший валидный walkable блок в радиусе по Y (от -2 до +2)
+        BotPositionKey start = null;
+        for (int dy = -2; dy <= 2; dy++) {
+            BotPositionKey candidate = new BotPositionKey(startX, startY + dy, startZ);
+            if (walkableSet.contains(candidate)) {
+                start = candidate;
                 break;
             }
         }
+
+        // Если не нашли — выходим
+        if (start == null) return 0;
+
+        // Запускаем flood fill
+        Queue<BotPositionKey> queue = new LinkedList<>();
+        queue.add(start);
 
         if (queue.isEmpty()) return 0;
 
