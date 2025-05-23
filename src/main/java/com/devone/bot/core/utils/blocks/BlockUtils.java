@@ -122,13 +122,6 @@ public class BlockUtils {
             .orElse(null);
     }
 
-    public static BotBlockData findRandom(List<BotBlockData> candidates) {
-        Random random = new Random();
-        if (candidates == null || candidates.isEmpty())
-            return null;
-        return candidates.get(random.nextInt(candidates.size()));
-    }
-
     /**
      * Простая эвристика "достижимости".
      */

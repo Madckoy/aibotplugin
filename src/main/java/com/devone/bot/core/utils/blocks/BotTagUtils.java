@@ -25,19 +25,30 @@ public class BotTagUtils {
         List<BotBlockData> result = new ArrayList<>();
 
         for (BotBlockData block : blocks) {
-            for (String tag : block.getTags()) {
-                for (TagFilter tf : tagFilters) {
+            boolean allMatch = true;
+
+            for (TagFilter tf : tagFilters) {
+                boolean matched = false;
+                for (String tag : block.getTags()) {
                     if ((tf.isWildcard && tag.startsWith(tf.baseTag)) || (!tf.isWildcard && tag.equals(tf.baseTag))) {
-                        result.add(block);
+                        matched = true;
                         break;
                     }
                 }
-                if (result.contains(block)) break;
+                if (!matched) {
+                    allMatch = false;
+                    break;
+                }
+            }
+
+            if (allMatch) {
+                result.add(block);
             }
         }
 
         return result;
     }
+
 
     private static class TagFilter {
         String baseTag;

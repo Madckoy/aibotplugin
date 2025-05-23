@@ -10,6 +10,7 @@ import com.devone.bot.core.Bot;
 import com.devone.bot.core.brain.memory.BotMemoryV2Utils;
 import com.devone.bot.core.brain.memoryv2.BotMemoryV2;
 import com.devone.bot.core.brain.memoryv2.BotMemoryV2Partition;
+import com.devone.bot.core.brain.navigator.selector.BotBestTargetSelector;
 import com.devone.bot.core.brain.navigator.simulator.BotTagsMakerSimulator;
 import com.devone.bot.core.brain.navigator.tags.BotNavigationTagsMaker;
 import com.devone.bot.core.brain.perseption.scene.BotScanInfo;
@@ -196,6 +197,7 @@ public class BotNavigator {
             );
            
         float bestYaw = BotTagsMakerSimulator.reachableFindBestYaw(botPos, bot.getBrain().getSceneData().blocks, 90, BotConstants.DEFAULT_SCAN_RADIUS, BotConstants.DEFAULT_SCAN_HEIGHT );            
+        setBestYaw(bestYaw);
 
         List<BotBlockData> reachableBlocks = BotTagUtils.getTaggedBlocks(bot.getBrain().getSceneData().blocks,"reachable:*");
         //System.out.println("Reachable: " + reachableBlocks); 
@@ -212,19 +214,22 @@ public class BotNavigator {
     
         // Логика выбора цели (приоритетная)
         List<BotBlockData> reachableValid = BotTagUtils.getTaggedBlocks(bot.getBrain().getSceneData().blocks, "reachable:*, navigation:valid");
+        //System.out.println("Reachable valid: " + reachableValid); 
 
         if (!reachableValid.isEmpty()) {
             candidates = reachableValid;
             navigationSuggestion = NavigationSuggestion.MOVE;
-            suggestedTarget = BlockUtils.findRandom(candidates);
-            setBestYaw(botPos.getYaw());       
+            suggestedTarget = BotBestTargetSelector.selectBestInYawCone(botPos, candidates, 15.0f);
+            System.out.println("SuggestedTarget: " + suggestedTarget); 
+  
         } else {
             List<BotBlockData> walkableValid = BotTagUtils.getTaggedBlocks(bot.getBrain().getSceneData().blocks, "walkable:*, navigation:valid");
-            
+            //System.out.println("Walkable valid: " + walkableValid); 
+
             if (!walkableValid.isEmpty()) {
                 candidates = walkableValid;
                 navigationSuggestion = NavigationSuggestion.MOVE;
-                suggestedTarget = BlockUtils.findRandom(candidates);
+                suggestedTarget = BotBestTargetSelector.selectRandom(candidates);
             } else {
                 navigationSuggestion = NavigationSuggestion.CHANGE_DIRECTION;
                 setBestYaw(bestYaw); // got from simulator       
@@ -252,8 +257,8 @@ public class BotNavigator {
             BotLogger.debug("*", true, bot.getId() + " 💻 Navigator calculation ended");
         }
     
-        BotScanInfo scanInfo = new BotScanInfo(BotConstants.DEFAULT_SCAN_RADIUS, BotConstants.DEFAULT_SCAN_HEIGHT);
-        BotSceneData sc_data_tagged = new BotSceneData(bot.getBrain().getSceneData().blocks, bot.getBrain().getSceneData().entities, botPos, scanInfo);
+        //BotScanInfo scanInfo = new BotScanInfo(BotConstants.DEFAULT_SCAN_RADIUS, BotConstants.DEFAULT_SCAN_HEIGHT);
+        //BotSceneData sc_data_tagged = new BotSceneData(bot.getBrain().getSceneData().blocks, bot.getBrain().getSceneData().entities, botPos, scanInfo);
 
         long end = System.currentTimeMillis();
         System.out.println("[Timing] Tagging completed in " + (end - start) + " ms");

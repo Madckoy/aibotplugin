@@ -1,6 +1,7 @@
 package com.devone.bot.core.task.active.brain;
 
 import com.devone.bot.core.Bot;
+import com.devone.bot.core.brain.memory.BotMemoryV2Utils;
 import com.devone.bot.core.brain.navigator.BotNavigator.NavigationSuggestion;
 import com.devone.bot.core.task.passive.BotTaskAutoParams;
 import com.devone.bot.core.task.passive.IBotTaskParameterized;
@@ -48,25 +49,34 @@ public class BotBrainTask extends BotTaskAutoParams<BotBrainTaskParams> {
         // 2. Получение рекомендации
         NavigationSuggestion suggestion = bot.getNavigator().getNavigationSuggestion();
 
+        int radius = BotConstants.DEFAULT_SCAN_RADIUS;
+
+        Integer scanRadius = (Integer) BotMemoryV2Utils.readMemoryValue(bot, "navigation", "scanRadius");        
+        if(scanRadius!=null) {
+            radius = scanRadius.intValue();
+        }
+
+        BotMemoryV2Utils.memorizeValue(bot, "navigation", "scanRadius", radius);
+
         switch (suggestion) {
             case CHANGE_DIRECTION -> {
                 //rotate to the best YAW            
-                BotUtils.rotate(this, bot, bot.getNavigator().getBestYaw());               
+                System.out.println("Rotate to best YAW: " + bot.getNavigator().getBestYaw()); 
+                BotUtils.rotate(this, bot, bot.getNavigator().getBestYaw());  
+                return;             
             }
             case MOVE -> {
                 BotBlockData target = bot.getNavigator().getSuggestedTarget();
                 bot.getNavigator().setTarget(target);
-                float speed = 1.5f;
+                float speed = 1.0f;
                 bot.getNavigator().navigate(speed);            
+                return;
             }
 
             default -> {
                 BotLogger.debug(icon, isLogging(), bot.getId() + " 🧘 Brain is idle.");
             }
         }
-
-        stop(); // мозг сделал своё дело на этом тике
     }
-
 
 }
