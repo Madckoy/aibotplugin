@@ -11,6 +11,17 @@ import com.devone.bot.core.utils.blocks.BotTagUtils;
 public class BotTagsMakerSimulator {
 
     public static BotSimulatorResult reachableFindBestYaw(BotPositionSight bot, List<BotBlockData> allBlocks, double fov, int radius, int height) {
+        List<BotBlockData> clearBlocks = new ArrayList<>();
+        for(int i=0;i<allBlocks.size(); i++) {
+            BotBlockData original = allBlocks.get(i);
+            BotBlockData cloned = original.clone();
+            cloned.setTags(new ArrayList<>());
+            clearBlocks.add(cloned);
+        }
+
+        int walkable = BotNavigationTagsMaker.tagWalkableBlocks(clearBlocks);
+        System.out.println("SIM Walkable: "+ walkable);
+
         int bestReachable = -1;
         BotSimulatorResult res = new BotSimulatorResult();
 
@@ -24,32 +35,30 @@ public class BotTagsMakerSimulator {
             );
 
             List<BotBlockData> blocksCopy = new ArrayList<>();
-            for (BotBlockData block : allBlocks) {
+            for (BotBlockData block : clearBlocks) {
                 BotBlockData cloned = block.clone(); 
-                cloned.getTags().removeIf(tag -> tag.startsWith("reachable:") || tag.startsWith("fov:") || tag.startsWith("navigation:"));
                 blocksCopy.add(cloned);
             }
-            
-            BotNavigationTagsMaker.tagReachableBlocks(
+
+            int reachable = BotNavigationTagsMaker.tagReachableBlocks(
                 botCopy,
                 blocksCopy,
                 fov,
                 radius,
                 height
             );
+            System.out.println("SIM Reachable: "+ reachable);
 
-            List<BotBlockData> reachable = BotTagUtils.getTaggedBlocks(blocksCopy, "reachable:block");
+            List<BotBlockData> reachableBlocks = BotTagUtils.getTaggedBlocks(blocksCopy, "reachable:block");
 
-            if (reachable.size() > bestReachable) {
-                bestReachable = reachable.size();               
+            if (reachableBlocks.size() > bestReachable) {
+                bestReachable = reachableBlocks.size();               
                 res.status = true;
                 res.yaw = yaw;
                 res.reachables = bestReachable;
             }
         }
-        
-
-
+      
         return res;
     }
 
