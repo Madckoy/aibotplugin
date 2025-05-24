@@ -71,11 +71,11 @@ document.getElementById('close-info-btn')?.addEventListener('click', hideInfoPan
 function getCompassArrow(yaw) {
   if (typeof yaw !== "number") return "❓";
 
-  const adjusted = (yaw + mapRotation + 360) % 360;
+  const adjusted = (yaw + 360) % 360;
 
   const directions = ["N ⬇️", "NE ↙️", "E ⬅️", "SE ↖️", "S ⬆️", "SW ↗️", "W ➡️", "NW ↘️"];
   const index = Math.round(adjusted / 45) % 8;
   
   const degrees = Math.round(yaw);
-  return 'directions[index] (${degrees}°)`;
+  return `${directions[index]} (${degrees}°)`;
 }
