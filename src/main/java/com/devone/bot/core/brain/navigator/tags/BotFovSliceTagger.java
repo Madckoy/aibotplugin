@@ -13,11 +13,12 @@ public class BotFovSliceTagger {
     /**
      * Тегирует все блоки по всей высоте, попадающие в радиус и угол обзора от бота.
      */
+    
     public static int tagFovSliceAll(List<BotBlockData> blocks,
-                                     BotPositionSight bot,
-                                     double fovDeg,
-                                     int radius,
-                                     int height) {
+                                    BotPositionSight bot,
+                                    double fovDeg,
+                                    int radius,
+                                    int height) {
 
         if (blocks == null || blocks.isEmpty()) return 0;
 
@@ -28,19 +29,19 @@ public class BotFovSliceTagger {
         int minY = (int) Math.floor(botY - height);
         int maxY = (int) Math.floor(botY + 1 + height);
 
-        float maxDistance = radius * 1.6f;
-
-        // Нормализация YAW в диапазон [0, 360)
         float yaw = bot.getYaw() % 360;
         if (yaw < 0) yaw += 360;
 
         double yawRad = Math.toRadians(yaw);
 
-        double dirX = Math.cos(yawRad);
-        double dirZ = Math.sin(yawRad);
+        // ✅ Направление в Minecraft (Z вперёд, X вправо)
+        double dirX = -Math.sin(yawRad);
+        double dirZ =  Math.cos(yawRad);
 
         double fovRad = Math.toRadians(fovDeg / 2.0);
-        double threshold = Math.cos(fovRad);
+        double threshold = Math.cos(fovRad); // угол отсечения
+
+        float maxDistance = radius * 1.6f;
 
         Map<BotPositionKey, BotBlockData> blockMap = new HashMap<>();
         for (BotBlockData b : blocks) {
@@ -52,8 +53,9 @@ public class BotFovSliceTagger {
         for (int dx = -radius; dx <= radius; dx++) {
             for (int dz = -radius; dz <= radius; dz++) {
                 double dist = Math.sqrt(dx * dx + dz * dz);
-                if (dist > maxDistance) continue;
+                if (dist > maxDistance || dist < 0.001) continue;
 
+                // Косинус угла между (dx,dz) и направлением взгляда
                 double dot = (dx * dirX + dz * dirZ) / dist;
                 if (dot < threshold) continue;
 
@@ -73,6 +75,8 @@ public class BotFovSliceTagger {
 
         return tagged;
     }
+
+
 
     public static void tagFovSliceRemoveAll(List<BotBlockData> blocks) {
         if (blocks == null) return;

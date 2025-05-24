@@ -13,6 +13,7 @@ import com.devone.bot.core.utils.BotConstants;
 import com.devone.bot.core.utils.BotUtils;
 import com.devone.bot.core.utils.logger.BotLogger;
 import com.devone.bot.core.utils.server.BotServerUtils;
+import com.devone.bot.core.web.bluemap.BlueMapMarkers;
 import com.devone.bot.core.storage.BotDataStorage;
 
 public class BotBootstrap {
@@ -59,7 +60,12 @@ public class BotBootstrap {
         // 🗺️ Обновление POI на BlueMap
         Bukkit.getScheduler().runTaskTimer(AIBotPlugin.getInstance(), () -> {
             if (BotServerUtils.isServerStopping()) return;
-            AIBotPlugin.getInstance().getBotManager().getBlueMapMarkers().updateAllMarkers();
+            
+            BlueMapMarkers markers = AIBotPlugin.getInstance().getBotManager().getBlueMapMarkers();
+            if(markers!=null) {
+                markers.updateAllMarkers();
+            }
+
         }, 0L, BotConstants.TICKS_BLUEMAP_UPDATE);
 
         // 💾 Сохранение памяти и инвентаря на диск
