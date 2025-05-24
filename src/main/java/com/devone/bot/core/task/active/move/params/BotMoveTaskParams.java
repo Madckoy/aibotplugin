@@ -7,7 +7,7 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 public class BotMoveTaskParams extends BotTaskParams {
 
     @JsonIgnore
-    private BotPosition target = new BotPosition(); 
+    private transient BotPosition target = new BotPosition(); 
 
     private float speed = 1.0F;
 
