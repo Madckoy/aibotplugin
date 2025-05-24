@@ -168,10 +168,8 @@ public class BotStatusServlet extends HttpServlet {
                 BotMemoryV2Partition visitedPartition = nav.partition("visited", BotMemoryV2Partition.Type.MAP);
 
                 if (visitedPartition != null) {
-                    BotLogger.debug("DEBUG", true, "visitedPartition is not null! Size = " + visitedPartition.getMap().size());
                     botJson.addProperty("visitedCount", visitedPartition.getMap().size());
                 } else {
-                    BotLogger.debug("DEBUG", true, "visitedPartition is null!");
                     botJson.addProperty("visitedCount", 0);
                 }
             }

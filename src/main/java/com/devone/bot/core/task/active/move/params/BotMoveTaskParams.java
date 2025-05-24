@@ -2,10 +2,13 @@ package com.devone.bot.core.task.active.move.params;
 
 import com.devone.bot.core.task.passive.params.BotTaskParams;
 import com.devone.bot.core.utils.blocks.BotPosition;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 
 public class BotMoveTaskParams extends BotTaskParams {
 
+    @JsonIgnore
     private BotPosition target = new BotPosition(); 
+
     private float speed = 1.0F;
 
     public BotMoveTaskParams() {

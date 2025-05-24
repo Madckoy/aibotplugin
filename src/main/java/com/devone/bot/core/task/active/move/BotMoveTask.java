@@ -111,7 +111,7 @@ public class BotMoveTask extends BotTaskAutoParams<BotMoveTaskParams> {
                 return;
             }
 
-            // turnToTarget(this, poi);
+            turnToTarget(this, target);
 
             if (remaining <= 0) {
                 BotLogger.debug(icon, isLogging(), bot.getId() + " ⏱️ Навигация превысила лимит времени");
