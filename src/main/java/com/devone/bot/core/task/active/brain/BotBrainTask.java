@@ -1,8 +1,8 @@
 package com.devone.bot.core.task.active.brain;
 
 import com.devone.bot.core.Bot;
+import com.devone.bot.core.brain.cortex.BotActionSuggestion.Suggestion;
 import com.devone.bot.core.brain.memory.BotMemoryV2Utils;
-import com.devone.bot.core.brain.navigator.BotNavigator.NavigationSuggestion;
 import com.devone.bot.core.brain.navigator.simulator.BotSimulatorResult;
 import com.devone.bot.core.task.passive.BotTaskAutoParams;
 import com.devone.bot.core.task.passive.IBotTaskParameterized;
@@ -50,31 +50,37 @@ public class BotBrainTask extends BotTaskAutoParams<BotBrainTaskParams> {
             radius = scanRadius.intValue();
         }
         // 1. Анализ сцены
-        if(bot.getNavigator().isCalculating()==false) {
+        try {
             bot.getNavigator().calculate(BotConstants.DEFAULT_NORMAL_SIGHT_FOV, radius, BotConstants.DEFAULT_SCAN_HEIGHT);
-        }    
+        } catch (Exception e) {
+        }
+        
+        
         
         // 2. Получение рекомендации
-        NavigationSuggestion suggestion = bot.getNavigator().getNavigationSuggestion();
+        Suggestion suggestion = bot.getNavigator().getSuggestion();
         BotMemoryV2Utils.memorizeValue(bot, "navigation", "scanRadius", radius);
 
         switch (suggestion) {
             case CHANGE_DIRECTION -> {
-                if(bot.getNavigator().isCalculating()==false) {
+                try {
                     //rotate to the best YAW            
                     BotSimulatorResult res = bot.getNavigator().simulate(BotConstants.DEFAULT_NORMAL_SIGHT_FOV, radius, 4);
                     System.out.println(res.yaw + " : " + res.reachables);
                     if(res.status = true) {
                         BotUtils.rotate(this, bot, res.yaw);  
-                    }
-                    return;             
+                    }                   
+                } catch (Exception e) {
                 }
+                    return;             
             }    
             case MOVE -> {
-                BotBlockData target = bot.getNavigator().getSuggestedTarget();
-                bot.getNavigator().setTarget(target);
-                float speed = 1.0f;
-                bot.getNavigator().navigate(speed);            
+                if(!bot.getNavigator().isCalculating()) {
+                    BotBlockData target = bot.getNavigator().getSuggestedTarget();
+                    bot.getNavigator().setTarget(target);
+                    float speed = 1.5f;
+                    bot.getNavigator().navigate(speed);            
+                }
                 return;
             }
 

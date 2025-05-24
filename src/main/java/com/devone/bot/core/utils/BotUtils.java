@@ -11,7 +11,7 @@ import org.bukkit.util.Vector;
 
 import com.devone.bot.AIBotPlugin;
 import com.devone.bot.core.Bot;
-import com.devone.bot.core.brain.navigator.BotNavigator.NavigationSuggestion;
+import com.devone.bot.core.brain.cortex.BotActionSuggestion.Suggestion;
 import com.devone.bot.core.task.active.move.BotMoveTask;
 import com.devone.bot.core.task.active.move.params.BotMoveTaskParams;
 import com.devone.bot.core.task.passive.BotTask;
@@ -259,16 +259,16 @@ public class BotUtils {
     public static String getNavigationSuggestionAsString(Bot bot) {
         String result = "";
 
-        if(bot.getNavigator().getNavigationSuggestion()==NavigationSuggestion.MOVE) {
+        if(bot.getNavigator().getSuggestion()==Suggestion.MOVE) {
             return "MOVE";
         }
 
-        if(bot.getNavigator().getNavigationSuggestion()==NavigationSuggestion.TELEPORT) {
+        if(bot.getNavigator().getSuggestion()==Suggestion.TELEPORT) {
             return "TELEPORT";
         }
 
 
-        if(bot.getNavigator().getNavigationSuggestion()==NavigationSuggestion.CHANGE_DIRECTION) {
+        if(bot.getNavigator().getSuggestion()==Suggestion.CHANGE_DIRECTION) {
             return "CHANGE_DIRECTION";
         }
 

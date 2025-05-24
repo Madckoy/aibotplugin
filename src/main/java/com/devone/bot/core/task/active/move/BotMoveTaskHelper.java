@@ -31,7 +31,7 @@ public class BotMoveTaskHelper {
         bot.getNPCNavigator().cancelNavigation();
         bot.getNPCNavigator().setPaused(false);
         bot.getNPCNavigator().getDefaultParameters().speedModifier(speed);
-        bot.getNPCNavigator().setTarget(loc);
+        bot.getNPCNavigator().setTarget(loc.add(0.5, 0, 0.5));
 
         if (log) {
             BotLogger.debug(BotUtils.getActiveTaskIcon(bot), true, bot.getId() + " ▶ Двигаемся к: " + target);

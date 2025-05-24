@@ -19,9 +19,7 @@ public class BotTagsMakerSimulator {
             clearBlocks.add(cloned);
         }
 
-        int walkable = BotNavigationTagsMaker.tagWalkableBlocks(clearBlocks);
-        //System.out.println("SIM Walkable: "+ walkable);
-
+        BotNavigationTagsMaker.tagWalkableBlocks(clearBlocks);
         int bestReachable = -1;
         BotSimulatorResult res = new BotSimulatorResult();
 
@@ -40,14 +38,13 @@ public class BotTagsMakerSimulator {
                 blocksCopy.add(cloned);
             }
 
-            int reachable = BotNavigationTagsMaker.tagReachableBlocks(
+            BotNavigationTagsMaker.tagReachableBlocks(
                 botCopy,
                 blocksCopy,
                 fov,
                 radius,
                 height
             );
-            //System.out.println("SIM Reachable: "+ reachable);
 
             List<BotBlockData> reachableBlocks = BotTagUtils.getTaggedBlocks(blocksCopy, "reachable:block");
 

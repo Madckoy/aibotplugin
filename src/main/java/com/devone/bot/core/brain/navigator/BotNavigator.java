@@ -6,6 +6,8 @@ import org.bukkit.Location;
 import org.bukkit.block.Block;
 
 import com.devone.bot.core.Bot;
+import com.devone.bot.core.brain.cortex.BotActionSuggestion;
+import com.devone.bot.core.brain.cortex.BotActionSuggestion.Suggestion;
 import com.devone.bot.core.brain.memory.BotMemoryV2Utils;
 import com.devone.bot.core.brain.memoryv2.BotMemoryV2;
 import com.devone.bot.core.brain.memoryv2.BotMemoryV2Partition;
@@ -29,19 +31,13 @@ import com.devone.bot.core.utils.world.BotWorldHelper;
 
 public class BotNavigator {
 
-    public static enum NavigationSuggestion {
-        MOVE,
-        CHANGE_DIRECTION,
-        TELEPORT
-    }
-
     private transient Bot bot;
     private boolean stuck = false;
     
     private boolean inDanger = false;
 
     private int stuckCount = 0;
-    private NavigationSuggestion navigationSuggestion;
+    private BotActionSuggestion.Suggestion actionSuggestion;
     private BotBlockData suggestedTarget;
 
     private List<BotBlockData> candidates;
@@ -154,7 +150,11 @@ public class BotNavigator {
         this.inDanger = inDanger;
     }
 
-    public BotSimulatorResult simulate(double sightFov, int scanRadius, int scanHeight){
+    public BotSimulatorResult simulate(double sightFov, int scanRadius, int scanHeight) throws Exception {
+        if(isCalculating()) {
+            throw new Exception("Navigation is being calculated");
+        };
+
         calculating = true;
         BotPositionSight botPos = getPositionSight();
         BotSimulatorResult res = BotTagsMakerSimulator.reachableFindBestYaw(botPos, bot.getBrain().getSceneData().blocks, sightFov, scanRadius, scanHeight );            
@@ -162,7 +162,11 @@ public class BotNavigator {
         return res;
     }
 
-    public List<BotBlockData> calculate(double sightFov, int scanRadius, int scanHeight) {
+    public List<BotBlockData> calculate(double sightFov, int scanRadius, int scanHeight) throws Exception{
+        if(isCalculating()) {
+            throw new Exception("Navigation is being calculated");
+        };
+
         calculating = true;
         try {
             BotLogger.debug(bot.getActiveTask().getIcon(), true, bot.getId() + " 💻 Navigator calculation started");
@@ -218,7 +222,7 @@ public class BotNavigator {
 
         if (!reachableValid.isEmpty()) {
             candidates = reachableValid;
-            navigationSuggestion = NavigationSuggestion.MOVE;
+            actionSuggestion = BotActionSuggestion.Suggestion.MOVE;
             suggestedTarget = BotBestTargetSelector.selectRandom(candidates);
         } else {
             candidates = List.of();
@@ -231,7 +235,7 @@ public class BotNavigator {
         boolean noTarget = suggestedTarget    == null || candidates.isEmpty();
 
         if(noTarget) {
-            navigationSuggestion = NavigationSuggestion.CHANGE_DIRECTION;
+            actionSuggestion = BotActionSuggestion.Suggestion.CHANGE_DIRECTION;
         }
 
         // Если нет ни одной полезной навигационной поверхности — считаем, что бот застрял
@@ -329,7 +333,7 @@ public class BotNavigator {
         navigation.put("position", currentPos != null ? currentPos.toCompactString() : null);
         navigation.put("yaw", sight != null ? sight.getYaw() : null);
         navigation.put("target", this.target != null ? this.target.toCompactString() : null);
-        navigation.put("suggestion", navigationSuggestion != null ? navigationSuggestion.name() : null);
+        navigation.put("suggestion", actionSuggestion != null ? actionSuggestion.name() : null);
         navigation.put("suggestedTarget", suggestedTarget != null ? suggestedTarget.toCompactString() : null);
     
         // ➤ Кандидаты
@@ -343,12 +347,12 @@ public class BotNavigator {
         }
     }
     
-    public NavigationSuggestion getNavigationSuggestion() {
-        return navigationSuggestion;
+    public Suggestion getSuggestion() {
+        return actionSuggestion;
     }
 
-    public void setNavigationSuggestion(NavigationSuggestion suggestion) {
-        this.navigationSuggestion = suggestion;
+    public void setSuggestion(Suggestion suggestion) {
+        this.actionSuggestion = suggestion;
     }
 
     public BotBlockData getSuggestedTarget() {
@@ -368,7 +372,7 @@ public class BotNavigator {
             BotLogger.debug(BotUtils.getActiveTaskIcon(bot), true,
                     bot.getId() + " 🗺️ Runtime Target position: " + this.target);
 
-            if (navigationSuggestion == NavigationSuggestion.MOVE) {
+            if (actionSuggestion == Suggestion.MOVE) {
                 BotPosition movePos = new BotPosition(this.target.getPosition());
                 BotMoveTaskParams mvParams = new BotMoveTaskParams();
                 mvParams.setTarget(movePos);
@@ -379,7 +383,7 @@ public class BotNavigator {
                 return bot.getNPC().getNavigator().canNavigateTo(loc);
             }
 
-            if (navigationSuggestion == NavigationSuggestion.TELEPORT) {
+            if (actionSuggestion == Suggestion.TELEPORT) {
                 if(suggestedTarget==null) {
                     if(getTarget()!=null) {
                         suggestedTarget = getTarget();
