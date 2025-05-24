@@ -17,7 +17,7 @@ public class BotConstants {
 
     public static final boolean FLIP_COORDS = false;
 
-    public static final int DEFAULT_SCAN_RADIUS = 11;
+    public static final int DEFAULT_SCAN_RADIUS = 10;
     public static final int DEFAULT_SCAN_HEIGHT = 4;
 
     public static final int MAX_SCAN_RANGE = 20;

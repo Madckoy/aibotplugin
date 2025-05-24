@@ -69,16 +69,14 @@ function hideInfoPanel() {
 document.getElementById('close-info-btn')?.addEventListener('click', hideInfoPanel);
 
 function getCompassArrow(yaw) {
-    if (typeof yaw !== "number") return "❓";
-    yaw = (yaw + 360) % 360;
+  if (typeof yaw !== "number") return "❓";
 
-    // Поскольку North (0°) = ВНИЗ, надо сдвинуть визуально на 180°
-    const adjustedYaw = (yaw + 180) % 360;
+  // Для BlueMap (вверх = Юг) компенсируем +180
+  const adjusted = (yaw + 180 + 360) % 360;
 
-    const arrows = ["⬇️", "↙️", "⬅️", "↖️", "⬆️", "↗️", "➡️", "↘️"];
-    const index = Math.round(adjustedYaw / 45) % 8;
+  const arrows = ["⬆️", "↗️", "➡️", "↘️", "⬇️", "↙️", "⬅️", "↖️"];
+  const index = Math.round(adjusted / 45) % 8;
 
-    const degrees = Math.round(yaw); // показываем оригинальный yaw
-    return `${arrows[index]} (${degrees}°)`;
+  return `${arrows[index]} (${Math.round(yaw)}°)`;
 }
 
