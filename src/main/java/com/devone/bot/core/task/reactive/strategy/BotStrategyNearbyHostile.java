@@ -29,7 +29,7 @@ public class BotStrategyNearbyHostile implements IBotStrategyReaction {
                 if (BotWorldHelper.isInDangerousLiquid(entity))
                     continue;
 
-                double dist = botPos.distanceTo(entity);
+                double dist = botPos.distanceTo(entity.getPosition());
                 if (dist >= 1)
                     continue;
 
