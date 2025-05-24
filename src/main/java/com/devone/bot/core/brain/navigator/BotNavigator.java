@@ -77,29 +77,26 @@ public class BotNavigator {
     }
 
     public BotPosition getPosition() {
-        if (bot.getNPC() != null) {
-            if (bot.getNPC().getEntity() != null) {
-                Location loc = bot.getNPC().getEntity().getLocation();
-                this.position = BotWorldHelper.locationToBotPosition(loc);
-            } else if (bot.getNPC().getStoredLocation() != null) {
-                Location loc = bot.getNPC().getStoredLocation();
-                this.position = BotWorldHelper.locationToBotPosition(loc);
-            }
+        Location loc = getEffectiveLocation();
+        if (loc != null) {
+            this.position = BotWorldHelper.locationToBotPosition(loc);
         }
         return this.position;
     }
 
     public BotPositionSight getPositionSight() {
-        if (bot.getNPC() != null) {
-            if (bot.getNPC().getEntity() != null) {
-                Location loc = bot.getNPC().getEntity().getLocation();
-                return BotWorldHelper.locationToBotPositionSight(loc);
-            } else if (bot.getNPC().getStoredLocation() != null) {
-                Location loc = bot.getNPC().getStoredLocation();
-                return BotWorldHelper.locationToBotPositionSight(loc);
-            }
+        Location loc = getEffectiveLocation();
+        return (loc != null) ? BotWorldHelper.locationToBotPositionSight(loc) : null;
+    }
+
+    private Location getEffectiveLocation() {
+        if (bot.getNPC() == null) return null;
+
+        if (bot.getNPC().isSpawned() && bot.getNPC().getEntity() != null) {
+            return bot.getNPC().getEntity().getLocation(); // 🔥 Always up-to-date
         }
-        return null;
+
+        return bot.getNPC().getStoredLocation(); // Fallback
     }
 
     public boolean isStuck() {
