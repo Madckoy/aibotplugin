@@ -224,21 +224,28 @@ public class BotNavigator {
             candidates = reachableValid;
             actionSuggestion = BotActionSuggestion.Suggestion.MOVE;
             suggestedTarget = BotBestTargetSelector.selectRandom(candidates);
-        } else {
-            candidates = List.of();
-            suggestedTarget = null;
-
-        }
+        } else {    
+            // check if we could use walkable as fallback
+            List<BotBlockData> walkableValid = BotTagUtils.getTaggedBlocks(bot.getBrain().getSceneData().blocks, "walkable:*, navigation:valid");
+            if( !walkableValid.isEmpty() ) {
+                candidates = walkableValid;
+                actionSuggestion = BotActionSuggestion.Suggestion.MOVE;
+                suggestedTarget = BotBestTargetSelector.selectRandom(candidates);
+            } else {
+              candidates = List.of();
+              suggestedTarget = null;
+            }
+        } 
     
         updateNavigationSummary("targets",  candidates != null ? candidates.size() : 0, candidates.size());
   
         boolean noTarget = suggestedTarget    == null || candidates.isEmpty();
 
+        // Если нет ни одной полезной навигационной поверхности — считаем, что бот застрял
         if(noTarget) {
             actionSuggestion = BotActionSuggestion.Suggestion.CHANGE_DIRECTION;
         }
 
-        // Если нет ни одной полезной навигационной поверхности — считаем, что бот застрял
         boolean stuckNow = noTarget;
     
         setStuck(stuckNow);
