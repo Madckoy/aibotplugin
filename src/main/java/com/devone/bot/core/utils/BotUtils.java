@@ -263,6 +263,11 @@ public class BotUtils {
             return "MOVE";
         }
 
+        if(bot.getNavigator().getNavigationSuggestion()==NavigationSuggestion.TELEPORT) {
+            return "TELEPORT";
+        }
+
+
         if(bot.getNavigator().getNavigationSuggestion()==NavigationSuggestion.CHANGE_DIRECTION) {
             return "CHANGE_DIRECTION";
         }

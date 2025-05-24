@@ -32,6 +32,7 @@ public class BotNavigator {
     public static enum NavigationSuggestion {
         MOVE,
         CHANGE_DIRECTION,
+        TELEPORT
     }
 
     private transient Bot bot;
