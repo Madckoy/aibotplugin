@@ -3,6 +3,7 @@ package com.devone.bot.core.task.active.brain;
 import com.devone.bot.core.Bot;
 import com.devone.bot.core.brain.memory.BotMemoryV2Utils;
 import com.devone.bot.core.brain.navigator.BotNavigator.NavigationSuggestion;
+import com.devone.bot.core.brain.navigator.simulator.BotSimulatorResult;
 import com.devone.bot.core.task.passive.BotTaskAutoParams;
 import com.devone.bot.core.task.passive.IBotTaskParameterized;
 import com.devone.bot.core.task.active.brain.params.BotBrainTaskParams;
@@ -57,9 +58,11 @@ public class BotBrainTask extends BotTaskAutoParams<BotBrainTaskParams> {
         switch (suggestion) {
             case CHANGE_DIRECTION -> {
                 //rotate to the best YAW            
-                System.out.println("Getting the best yaw"); 
-                float bestYaw = bot.getNavigator().simulate(BotConstants.DEFAULT_NORMAL_SIGHT_FOV, radius, 4);
-                BotUtils.rotate(this, bot, bestYaw);  
+                BotSimulatorResult res = bot.getNavigator().simulate(BotConstants.DEFAULT_NORMAL_SIGHT_FOV, radius, 4);
+                System.out.println(res);
+                if(res.status = true) {
+                    BotUtils.rotate(this, bot, res.yaw);  
+                }
                 return;             
             }
             case MOVE -> {

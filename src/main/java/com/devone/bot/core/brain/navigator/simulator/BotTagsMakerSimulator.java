@@ -10,11 +10,11 @@ import com.devone.bot.core.utils.blocks.BotTagUtils;
 
 public class BotTagsMakerSimulator {
 
-    public static float reachableFindBestYaw(BotPositionSight bot, List<BotBlockData> allBlocks, double fov, int radius, int height) {
-        float bestYaw = 0f;
+    public static BotSimulatorResult reachableFindBestYaw(BotPositionSight bot, List<BotBlockData> allBlocks, double fov, int radius, int height) {
         int bestReachable = -1;
+        BotSimulatorResult res = new BotSimulatorResult();
 
-          for (int yawInt = 359; yawInt >= 0; yawInt--) {
+          for (int yawInt = 0; yawInt < 360; yawInt++) {
             float yaw = (float) yawInt;
 
             BotPositionSight botCopy = new BotPositionSight(
@@ -25,7 +25,7 @@ public class BotTagsMakerSimulator {
 
             List<BotBlockData> blocksCopy = new ArrayList<>();
             for (BotBlockData block : allBlocks) {
-                BotBlockData cloned = block.clone(); // Убедись, что clone() копирует position, UUID, type, tags
+                BotBlockData cloned = block.clone(); 
                 cloned.getTags().removeIf(tag -> tag.startsWith("reachable:") || tag.startsWith("fov:") || tag.startsWith("navigation:"));
                 blocksCopy.add(cloned);
             }
@@ -41,13 +41,14 @@ public class BotTagsMakerSimulator {
             List<BotBlockData> reachable = BotTagUtils.getTaggedBlocks(blocksCopy, "reachable:block");
 
             if (reachable.size() > bestReachable) {
-                bestReachable = reachable.size();
-                bestYaw = yaw;
+                bestReachable = reachable.size();               
+                res.status = true;
+                res.yaw = yaw;
+                res.reachables = bestReachable;
             }
         }
-
-        //System.out.printf("Yaw: %.0f => Reachable: %d\n", bestYaw, bestReachable);
-        return bestYaw;
+        
+        return res;
     }
 
 }

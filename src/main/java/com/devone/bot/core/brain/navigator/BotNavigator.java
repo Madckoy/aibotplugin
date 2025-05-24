@@ -10,6 +10,7 @@ import com.devone.bot.core.brain.memory.BotMemoryV2Utils;
 import com.devone.bot.core.brain.memoryv2.BotMemoryV2;
 import com.devone.bot.core.brain.memoryv2.BotMemoryV2Partition;
 import com.devone.bot.core.brain.navigator.selector.BotBestTargetSelector;
+import com.devone.bot.core.brain.navigator.simulator.BotSimulatorResult;
 import com.devone.bot.core.brain.navigator.simulator.BotTagsMakerSimulator;
 import com.devone.bot.core.brain.navigator.tags.BotNavigationTagsMaker;
 import com.devone.bot.core.task.active.move.BotMoveTask;
@@ -155,12 +156,12 @@ public class BotNavigator {
         this.inDanger = inDanger;
     }
 
-    public float simulate(double sightFov, int scanRadius, int scanHeight){
+    public BotSimulatorResult simulate(double sightFov, int scanRadius, int scanHeight){
         calculating = true;
         BotPositionSight botPos = getPositionSight();
-        float bestYaw = BotTagsMakerSimulator.reachableFindBestYaw(botPos, bot.getBrain().getSceneData().blocks, sightFov, scanRadius, scanHeight );            
+        BotSimulatorResult res = BotTagsMakerSimulator.reachableFindBestYaw(botPos, bot.getBrain().getSceneData().blocks, sightFov, scanRadius, scanHeight );            
         calculating = false;        
-        return bestYaw;
+        return res;
     }
 
     public List<BotBlockData> calculate(double sightFov, int scanRadius, int scanHeight) {
