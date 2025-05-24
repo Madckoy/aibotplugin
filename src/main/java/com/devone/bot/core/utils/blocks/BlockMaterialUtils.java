@@ -87,7 +87,7 @@ public class BlockMaterialUtils {
     }
 
     public static boolean isDangerous(BotBlockData block) {
-        if (block == null) return false;
+        if (block == null) return true;
         String type = block.getType().toUpperCase();
         return DANGEROUS_PASSABLE.contains(type) || DANGEROUS_IMPASSABLE.contains(type);
     }
