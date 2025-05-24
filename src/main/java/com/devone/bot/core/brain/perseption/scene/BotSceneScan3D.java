@@ -1,7 +1,6 @@
 package com.devone.bot.core.brain.perseption.scene;
 
 import com.devone.bot.core.Bot;
-import com.devone.bot.core.utils.BotUtils;
 import com.devone.bot.core.utils.blocks.BotBlockData;
 import com.devone.bot.core.utils.blocks.BotPositionSight;
 import com.devone.bot.core.utils.logger.BotLogger;

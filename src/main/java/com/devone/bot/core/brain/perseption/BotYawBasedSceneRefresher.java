@@ -1,7 +1,6 @@
 package com.devone.bot.core.brain.perseption;
 
 import com.devone.bot.core.Bot;
-import com.devone.bot.core.utils.BotConstants;
 import com.devone.bot.core.utils.logger.BotLogger;
 
 
@@ -19,7 +18,7 @@ public class BotYawBasedSceneRefresher implements BotYawChangeListener {
 
         try {
             lock = true;
-            bot.getNavigator().calculate(bot.getBrain().getSceneData(), BotConstants.DEFAULT_NORMAL_SIGHT_FOV);
+            //bot.getNavigator().calculate(bot.getBrain().getSceneData(), BotConstants.DEFAULT_NORMAL_SIGHT_FOV);
         } finally {
             lock = false;
         }

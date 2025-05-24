@@ -2,7 +2,6 @@ package com.devone.bot.core.brain.navigator;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
 import org.bukkit.Location;
 import org.bukkit.block.Block;
 
@@ -13,13 +12,11 @@ import com.devone.bot.core.brain.memoryv2.BotMemoryV2Partition;
 import com.devone.bot.core.brain.navigator.selector.BotBestTargetSelector;
 import com.devone.bot.core.brain.navigator.simulator.BotTagsMakerSimulator;
 import com.devone.bot.core.brain.navigator.tags.BotNavigationTagsMaker;
-import com.devone.bot.core.brain.perseption.scene.BotSceneData;
 import com.devone.bot.core.task.active.move.BotMoveTask;
 import com.devone.bot.core.task.active.move.params.BotMoveTaskParams;
 import com.devone.bot.core.task.active.teleport.BotTeleportTask;
 import com.devone.bot.core.task.active.teleport.params.BotTeleportTaskParams;
 import com.devone.bot.core.task.passive.BotTaskManager;
-import com.devone.bot.core.utils.BotConstants;
 import com.devone.bot.core.utils.BotUtils;
 import com.devone.bot.core.utils.blocks.BlockUtils;
 import com.devone.bot.core.utils.blocks.BotBlockData;
@@ -48,14 +45,15 @@ public class BotNavigator {
     private List<BotBlockData> candidates;
     private BotPosition position;
     private transient BotBlockData target;
-    private float bestYaw;
 
-    public float getBestYaw() {
-        return bestYaw;
+    private boolean calculating = false;
+
+    public boolean isCalculating() {
+        return calculating;
     }
 
-    public void setBestYaw(float bestYaw) {
-        this.bestYaw = bestYaw;
+    public void setCalculating(boolean calculating) {
+        this.calculating = calculating;
     }
 
     public BotNavigator() {
@@ -157,7 +155,16 @@ public class BotNavigator {
         this.inDanger = inDanger;
     }
 
-    public List<BotBlockData> calculate(BotSceneData scene, double sightFov) {
+    public float simulate(double sightFov, int scanRadius, int scanHeight){
+        calculating = true;
+        BotPositionSight botPos = getPositionSight();
+        float bestYaw = BotTagsMakerSimulator.reachableFindBestYaw(botPos, bot.getBrain().getSceneData().blocks, sightFov, scanRadius, scanHeight );            
+        calculating = false;        
+        return bestYaw;
+    }
+
+    public List<BotBlockData> calculate(double sightFov, int scanRadius, int scanHeight) {
+        calculating = true;
         try {
             BotLogger.debug(bot.getActiveTask().getIcon(), true, bot.getId() + " 💻 Navigator calculation started");
         } catch (Exception ex) {
@@ -166,43 +173,38 @@ public class BotNavigator {
     
         List<BotBlockData> result = new ArrayList<>();
         BotPositionSight botPos = getPositionSight();
-        if (botPos == null) return result;
+        if (botPos == null) { 
+            calculating = false;
+            return result;
+        }
     
 
-        int radius = BotConstants.DEFAULT_SCAN_RADIUS;
-        Integer scanRadius = (Integer) BotMemoryV2Utils.readMemoryValue(bot, "navigation", "scanRadius");
+        int radius = scanRadius;
+
+        Integer scanRadiusFromMem = (Integer) BotMemoryV2Utils.readMemoryValue(bot, "navigation", "scanRadius");
             
-        if(scanRadius!=null) {
-            radius = scanRadius.intValue();
+        if(scanRadiusFromMem!=null) {
+            radius = scanRadiusFromMem.intValue();
         }
 
-        final int maxRadius = radius;
-
-        BotMemoryV2Partition navPar = bot.getBrain().getMemoryV2().partition("navigation");
-        BotMemoryV2Partition visPar = navPar.partition("visited", BotMemoryV2Partition.Type.MAP);
-        Map<String, Object>  visited = visPar.getMap();
+        // BotMemoryV2Partition navPar = bot.getBrain().getMemoryV2().partition("navigation");
+        // BotMemoryV2Partition visPar = navPar.partition("visited", BotMemoryV2Partition.Type.MAP);
+        // Map<String, Object>  visited = visPar.getMap();
         
         // Tagging blocks
         long start = System.currentTimeMillis();
+
         int walkable = BotNavigationTagsMaker.tagWalkableBlocks(bot.getBrain().getSceneData().blocks);
-
-
         int reachable = BotNavigationTagsMaker.tagReachableBlocks(
                 botPos,
                 bot.getBrain().getSceneData().blocks,
-                BotConstants.DEFAULT_NORMAL_SIGHT_FOV,
-                BotConstants.DEFAULT_SCAN_RADIUS,
-                BotConstants.DEFAULT_SCAN_HEIGHT
+                sightFov,
+                radius,
+                scanHeight
             );
            
-        float bestYaw = BotTagsMakerSimulator.reachableFindBestYaw(botPos, bot.getBrain().getSceneData().blocks, BotConstants.DEFAULT_NORMAL_SIGHT_FOV, BotConstants.DEFAULT_SCAN_RADIUS, BotConstants.DEFAULT_SCAN_HEIGHT );            
-        //setBestYaw(bestYaw);
-
         List<BotBlockData> reachableBlocks = BotTagUtils.getTaggedBlocks(bot.getBrain().getSceneData().blocks,"reachable:*");
-        //System.out.println("Reachable: " + reachableBlocks); 
-
         List<BotBlockData> walkableBlocks  = BotTagUtils.getTaggedBlocks(bot.getBrain().getSceneData().blocks,"walkable:*");
-        //System.out.println("Walkable: " + walkableBlocks); 
 
         // Валидируем цели and settting tag
         int reachableValidated = validateTargets(botPos, reachableBlocks);
@@ -227,7 +229,7 @@ public class BotNavigator {
     
         updateNavigationSummary("targets",  candidates != null ? candidates.size() : 0, candidates.size());
   
-        boolean noTarget    = suggestedTarget    == null || candidates.isEmpty();
+        boolean noTarget = suggestedTarget    == null || candidates.isEmpty();
 
         if(noTarget) {
             navigationSuggestion = NavigationSuggestion.CHANGE_DIRECTION;
@@ -252,7 +254,10 @@ public class BotNavigator {
         //BotSceneData sc_data_tagged = new BotSceneData(bot.getBrain().getSceneData().blocks, bot.getBrain().getSceneData().entities, botPos, scanInfo);
 
         long end = System.currentTimeMillis();
-        System.out.println("[Timing] Tagging completed in " + (end - start) + " ms");
+        
+        BotLogger.debug(BotUtils.getActiveTaskIcon(bot), true,
+                    bot.getId() + " ⏱ Tagging completed in " + (end - start) + " ms");
+
 
         /* 
         try {
@@ -262,7 +267,7 @@ public class BotNavigator {
             System.out.println(ex.getMessage());
         }
         */
-
+        calculating = false;
         return candidates;
     }
     
@@ -324,7 +329,6 @@ public class BotNavigator {
     
         navigation.put("position", currentPos != null ? currentPos.toCompactString() : null);
         navigation.put("yaw", sight != null ? sight.getYaw() : null);
-        navigation.put("bestYaw", getBestYaw());
         navigation.put("target", this.target != null ? this.target.toCompactString() : null);
         navigation.put("suggestion", navigationSuggestion != null ? navigationSuggestion.name() : null);
         navigation.put("suggestedTarget", suggestedTarget != null ? suggestedTarget.toCompactString() : null);

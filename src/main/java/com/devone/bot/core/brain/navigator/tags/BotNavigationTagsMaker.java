@@ -17,7 +17,7 @@ public class BotNavigationTagsMaker {
 
     public static int  tagReachableBlocks(BotPositionSight botPositionSight,
                                                           List<BotBlockData> geoBlocks,
-                                                          float sightFov, int radius, int height) {
+                                                          double sightFov, int radius, int height) {
           
         BotFovSliceTagger.tagFovSliceAll(geoBlocks, botPositionSight, sightFov, radius, height);
         int reachable = BotReachableBlockTagger.tagReachableBlocks(geoBlocks, botPositionSight);

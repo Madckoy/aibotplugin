@@ -33,27 +33,21 @@ public class BotBootstrap {
         // ⛏️ Обновление навигации и сканирования
         Bukkit.getScheduler().runTaskTimer(AIBotPlugin.getInstance(), () -> {
             if (BotServerUtils.isServerStopping()) return;
+            if(bot.getNavigator().isCalculating()) return;
 
-            String icon = BotUtils.getActiveTaskIcon(bot);
-           
+            String icon = BotUtils.getActiveTaskIcon(bot);           
             BotLogger.debug(icon, true, bot.getId() + " 🛜 Sonar Scan started");
-
             BotSonar3DTaskParams params = new BotSonar3DTaskParams();
-
             int radius = BotConstants.DEFAULT_SCAN_RADIUS;
-
-            Integer scanRadius = (Integer) BotMemoryV2Utils.readMemoryValue(bot, "navigation", "scanRadius");
-            
+            Integer scanRadius = (Integer) BotMemoryV2Utils.readMemoryValue(bot, "navigation", "scanRadius");               
             if(scanRadius!=null) {
                 radius = scanRadius.intValue();
             }
-
             params.setRadius(radius);
             BotSonar3DTask task = new BotSonar3DTask(bot);
             task.setParams(params);
             task.execute();
-
-
+            
         }, 0L, BotConstants.TICKS_NAVIGATION_UPDATE);
 
         // 🧠 Обработка задач (редко)

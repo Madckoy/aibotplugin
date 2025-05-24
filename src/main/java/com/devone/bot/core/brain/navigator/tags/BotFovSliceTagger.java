@@ -15,7 +15,7 @@ public class BotFovSliceTagger {
      */
     public static int tagFovSliceAll(List<BotBlockData> blocks,
                                      BotPositionSight bot,
-                                     float fovDeg,
+                                     double fovDeg,
                                      int radius,
                                      int height) {
 

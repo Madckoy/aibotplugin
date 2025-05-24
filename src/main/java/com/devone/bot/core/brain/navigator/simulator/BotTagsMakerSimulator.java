@@ -10,7 +10,7 @@ import com.devone.bot.core.utils.blocks.BotTagUtils;
 
 public class BotTagsMakerSimulator {
 
-    public static float reachableFindBestYaw(BotPositionSight bot, List<BotBlockData> allBlocks, float fov, int radius, int height) {
+    public static float reachableFindBestYaw(BotPositionSight bot, List<BotBlockData> allBlocks, double fov, int radius, int height) {
         float bestYaw = 0f;
         int bestReachable = -1;
 
@@ -26,7 +26,7 @@ public class BotTagsMakerSimulator {
             List<BotBlockData> blocksCopy = new ArrayList<>();
             for (BotBlockData block : allBlocks) {
                 BotBlockData cloned = block.clone(); // Убедись, что clone() копирует position, UUID, type, tags
-                cloned.getTags().removeIf(tag -> tag.startsWith("reachable:") || tag.startsWith("fov:"));
+                cloned.getTags().removeIf(tag -> tag.startsWith("reachable:") || tag.startsWith("fov:") || tag.startsWith("navigation:"));
                 blocksCopy.add(cloned);
             }
 
