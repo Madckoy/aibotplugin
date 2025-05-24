@@ -71,12 +71,11 @@ document.getElementById('close-info-btn')?.addEventListener('click', hideInfoPan
 function getCompassArrow(yaw) {
   if (typeof yaw !== "number") return "❓";
 
-  // Для BlueMap (вверх = Юг) компенсируем +180
-  const adjusted = (yaw + 180 + 360) % 360;
+  const adjusted = (yaw + mapRotation + 360) % 360;
 
-  const arrows = ["⬆️", "↗️", "➡️", "↘️", "⬇️", "↙️", "⬅️", "↖️"];
+  const directions = ["N ⬇️", "NE ↙️", "E ⬅️", "SE ↖️", "S ⬆️", "SW ↗️", "W ➡️", "NW ↘️"];
   const index = Math.round(adjusted / 45) % 8;
-
-  return `${arrows[index]} (${Math.round(yaw)}°)`;
+  
+  const degrees = Math.round(yaw);
+  return 'directions[index] (${degrees}°)`;
 }
-
