@@ -120,10 +120,10 @@ public class BotUtils {
         float pitch = (float) Math.toDegrees(-Math.atan2(dir.getY(), Math.sqrt(dir.getX() * dir.getX() + dir.getZ() * dir.getZ())));
 
         Location newLoc = from.clone();
-        newLoc.setYaw(yaw);
-        newLoc.setPitch(pitch);
 
-        bot.getNPCEntity().teleport(newLoc); // или setRotation(), если движок это поддерживает
+        //newLoc.setYaw(yaw);
+        //newLoc.setPitch(pitch);
+        //bot.getNPCEntity().teleport(newLoc); // или setRotation(), если движок это поддерживает
 
         bot.getBrain().notifyYawChanged(yaw);
     }
@@ -280,9 +280,9 @@ public class BotUtils {
     
             Location from = bot.getNPCEntity().getLocation();
             Location newLook = from.clone();
-            newLook.setYaw(newYaw);
-      
-            bot.getNPCEntity().teleport(newLook);
+            
+            //newLook.setYaw(newYaw);
+            //bot.getNPCEntity().teleport(newLook);
 
             bot.getBrain().notifyYawChanged(newYaw); // вот здесь — оповещение
 

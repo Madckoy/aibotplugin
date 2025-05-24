@@ -30,8 +30,6 @@ public class BotTagsMakerSimulator {
                 blocksCopy.add(cloned);
             }
             
-            System.out.println(blocksCopy);
-
             BotNavigationTagsMaker.tagReachableBlocks(
                 botCopy,
                 blocksCopy,
