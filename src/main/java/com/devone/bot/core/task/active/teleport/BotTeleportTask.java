@@ -72,7 +72,7 @@ public class BotTeleportTask extends BotTaskAutoParams<BotTeleportTaskParams> {
         Bukkit.getScheduler().runTask(AIBotPlugin.getInstance(), () -> {
             Location baseLocation = BotWorldHelper.botPositionToWorldLocation(target);
             double offsetX = 0.5;
-            double offsetY = 0.0;
+            double offsetY = 0.5;
             double offsetZ = 0.5;
 
             Block bl = baseLocation.getBlock();

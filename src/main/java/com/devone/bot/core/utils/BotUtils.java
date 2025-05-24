@@ -119,7 +119,7 @@ public class BotUtils {
         float yaw = (float) Math.toDegrees(Math.atan2(dir.getZ(), dir.getX())) - 90f;
         float pitch = (float) Math.toDegrees(-Math.atan2(dir.getY(), Math.sqrt(dir.getX() * dir.getX() + dir.getZ() * dir.getZ())));
 
-        Location newLoc = from.clone();
+        Location newLoc = from.clone().add(0.5, 0.5, 0.5); // центр блока;
 
         newLoc.setYaw(yaw);
         newLoc.setPitch(pitch);
