@@ -35,8 +35,8 @@ public class BotConstants {
 
     // 🔁 Тайминги в тиках
     public static final long TICKS_NAVIGATION_UPDATE = 20L;       // 1 сек
-    public static final long TICKS_TASK_UPDATE = 40L;             // 0.25 сек
-    public static final long TICKS_BLUEMAP_UPDATE = 40L;          // 2 сек
-    public static final long TICKS_MEMORY_SAVE = 200L;            // 10 сек
+    public static final long TICKS_TASK_UPDATE = 20L;             // 1 сек
+    public static final long TICKS_BLUEMAP_UPDATE = 20L;          // 1 сек
+    public static final long TICKS_MEMORY_SAVE = 10L;             // 1 сек
 
 }
