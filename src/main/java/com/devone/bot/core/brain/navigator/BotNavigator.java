@@ -375,8 +375,11 @@ public class BotNavigator {
                 BotMoveTask moveTask = new BotMoveTask(bot);
                 moveTask.setParams(mvParams);
                 BotTaskManager.push(bot, moveTask);
-            } else {
+                Location loc = BotWorldHelper.botPositionToWorldLocation(this.target.getPosition());
+                return bot.getNPC().getNavigator().canNavigateTo(loc);
+            }
 
+            if (navigationSuggestion == NavigationSuggestion.TELEPORT) {
                 if(suggestedTarget==null) {
                     if(getTarget()!=null) {
                         suggestedTarget = getTarget();
@@ -394,10 +397,9 @@ public class BotNavigator {
                 params.setPosition(suggestedTarget.getPosition());
                 tp.setParams(params);
                 BotTaskManager.push(bot, tp);
+                return true;
             }
-
-            Location loc = BotWorldHelper.botPositionToWorldLocation(this.target.getPosition());
-            return bot.getNPC().getNavigator().canNavigateTo(loc);
         }
+        return false;
     }
 }
