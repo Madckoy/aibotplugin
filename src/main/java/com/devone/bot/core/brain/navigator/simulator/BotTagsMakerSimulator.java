@@ -29,6 +29,8 @@ public class BotTagsMakerSimulator {
                 cloned.getTags().removeIf(tag -> tag.startsWith("reachable:") || tag.startsWith("fov:") || tag.startsWith("navigation:"));
                 blocksCopy.add(cloned);
             }
+            
+            System.out.println(blocksCopy);
 
             BotNavigationTagsMaker.tagReachableBlocks(
                 botCopy,
@@ -48,6 +50,8 @@ public class BotTagsMakerSimulator {
             }
         }
         
+
+
         return res;
     }
 

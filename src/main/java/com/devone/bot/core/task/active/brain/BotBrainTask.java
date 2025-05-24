@@ -50,21 +50,26 @@ public class BotBrainTask extends BotTaskAutoParams<BotBrainTaskParams> {
             radius = scanRadius.intValue();
         }
         // 1. Анализ сцены
-        bot.getNavigator().calculate(BotConstants.DEFAULT_NORMAL_SIGHT_FOV, BotConstants.DEFAULT_SCAN_RADIUS, BotConstants.DEFAULT_SCAN_HEIGHT);
+        if(bot.getNavigator().isCalculating()==false) {
+            bot.getNavigator().calculate(BotConstants.DEFAULT_NORMAL_SIGHT_FOV, radius, BotConstants.DEFAULT_SCAN_HEIGHT);
+        }    
+        
         // 2. Получение рекомендации
         NavigationSuggestion suggestion = bot.getNavigator().getNavigationSuggestion();
         BotMemoryV2Utils.memorizeValue(bot, "navigation", "scanRadius", radius);
 
         switch (suggestion) {
             case CHANGE_DIRECTION -> {
-                //rotate to the best YAW            
-                BotSimulatorResult res = bot.getNavigator().simulate(BotConstants.DEFAULT_NORMAL_SIGHT_FOV, radius, 4);
-                System.out.println(res);
-                if(res.status = true) {
-                    BotUtils.rotate(this, bot, res.yaw);  
+                if(bot.getNavigator().isCalculating()==false) {
+                    //rotate to the best YAW            
+                    BotSimulatorResult res = bot.getNavigator().simulate(BotConstants.DEFAULT_NORMAL_SIGHT_FOV, radius, 4);
+                    System.out.println(res.yaw + " : " + res.reachables);
+                    if(res.status = true) {
+                        BotUtils.rotate(this, bot, res.yaw);  
+                    }
+                    return;             
                 }
-                return;             
-            }
+            }    
             case MOVE -> {
                 BotBlockData target = bot.getNavigator().getSuggestedTarget();
                 bot.getNavigator().setTarget(target);
