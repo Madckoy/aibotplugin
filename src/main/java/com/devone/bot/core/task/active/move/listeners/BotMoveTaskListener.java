@@ -82,9 +82,9 @@ public class BotMoveTaskListener implements Listener {
             if (dx > 0.2 || dz > 0.2) {
                 Location aligned = new Location(
                     BotWorldHelper.getBotWorld(bot),
-                    Math.floor(target.getX()) + 0.0,
+                    Math.floor(target.getX()) + 0.5,
                     target.getY(),
-                    Math.floor(target.getZ()) + 0.0
+                    Math.floor(target.getZ()) + 0.5
                 );
 
                 Bukkit.getScheduler().runTask(AIBotPlugin.getInstance(), () -> {
