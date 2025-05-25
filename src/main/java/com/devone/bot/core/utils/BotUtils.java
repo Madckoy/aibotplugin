@@ -290,6 +290,7 @@ public class BotUtils {
             // Без смещения по координатам
             Location loc = bot.getNPCEntity().getLocation();
             loc.setYaw(newYaw);
+            loc.setPitch(0);
 
             bot.getNPCEntity().teleport(loc); // или setRotation(newYaw, loc.getPitch());
 
