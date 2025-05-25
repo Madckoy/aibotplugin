@@ -198,7 +198,8 @@ public abstract class BotTask<T extends BotTaskParams> implements IBotTask, List
             BotLogger.debug("🧠", isLogged(),
                     bot.getId() + " 🧹 Завершена реактивная задача: " + getClass().getSimpleName());
             BotReactiveUtils.activateReaction(bot, false);
-            BotReactiveUtils.
+            bot.getBrain().clearCurrentReactionOwner();
+            bot.getBrain().setReactionInProgress(false);
         }
         
         // ✅ Снимаем паузу, если вдруг задача её не сняла сама
