@@ -83,12 +83,12 @@ public class BotMoveTaskListener implements Listener {
             double dx = Math.abs(actual.getX() - target.getX());
             double dz = Math.abs(actual.getZ() - target.getZ());
 
-            BotPosition centered = BotMoveTaskHelper.centerBlock(target);
+            BotPosition centered = BotMoveTaskHelper.centerBlock(actual);
 
             Location aligned = new Location(
                     BotWorldHelper.getBotWorld(bot),
                     centered.getX(),
-                    centered.getY()+1,
+                    centered.getY()+0.01,
                     centered.getZ()
                 );
 
