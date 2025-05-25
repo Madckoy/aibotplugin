@@ -35,7 +35,7 @@ public class BotReactionManager {
 
         for (IBotReaction reaction : reactions) {
             BotLogger.debug(BotUtils.getActiveTaskIcon(bot), bot.isLogged(),
-                    bot.getId() + " 🔎 Пробуем намерение: " + reaction.getName());
+                    bot.getId() + " 🔎 Пробуем реакцию: " + reaction.getName());
 
             Optional<Runnable> option = reaction.validate(bot);
 
@@ -46,11 +46,11 @@ public class BotReactionManager {
             }
         }
 
-        BotLogger.debug(BotUtils.getActiveTaskIcon(bot), bot.isLogged(), bot.getId() + " ❌ Намерения не сработали.");
+        BotLogger.debug(BotUtils.getActiveTaskIcon(bot), bot.isLogged(), bot.getId() + " ❌ Ни одна реакция не активировалась");
         return Optional.empty();
     }
 
-    public static void registerIntention(IBotReaction intention) {
-        reactions.add(intention);
+    public static void registerIntention(IBotReaction r) {
+        reactions.add(r);
     }
 }

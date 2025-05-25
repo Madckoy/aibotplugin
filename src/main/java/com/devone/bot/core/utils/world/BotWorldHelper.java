@@ -199,15 +199,30 @@ public class BotWorldHelper {
     }
 
     public static boolean isInFishableWater(Bot bot) {
-        BotPosition botPos = bot.getNavigator().getPosition();
+        BotPosition pos = bot.getNavigator().getPosition();
+        Location center = BotWorldHelper.botPositionToWorldLocation(pos);
 
-        Location below = BotWorldHelper.botPositionToWorldLocation(botPos);
-        
-        below.clone().subtract(0, 1, 0);
+        Block feetBlock = center.getBlock(); // y
+        Block belowBlock = center.clone().subtract(0, 1, 0).getBlock(); // y - 1
 
-        return below.getBlock().getType() == Material.WATER &&
-               BotWorldHelper.isWater(below.clone().subtract(0, 1, 0).getBlock());
+        // Условие 1: стоим ногами в воде и под нами твёрдая поверхность
+        if (!BotWorldHelper.isWater(feetBlock) || !BotWorldHelper.isSolidSurface(belowBlock)) {
+            return false;
+        }
+
+        // Условие 2: в горизонтали вокруг ног должно быть минимум 6 блоков воды
+        int waterCount = 0;
+        for (int dx = -1; dx <= 1; dx++) {
+            for (int dz = -1; dz <= 1; dz++) {
+                if (dx == 0 && dz == 0) continue; // пропускаем сам блок
+                Block neighbor = center.clone().add(dx, 0, dz).getBlock();
+                if (BotWorldHelper.isWater(neighbor)) {
+                    waterCount++;
+                }
+            }
+        }
+
+        return waterCount >= 6;
     }
-
 
 }
