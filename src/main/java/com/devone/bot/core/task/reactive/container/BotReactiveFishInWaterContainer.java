@@ -16,7 +16,6 @@ public class BotReactiveFishInWaterContainer extends BotReactiveContainer<BotRea
         super(bot, BotReactiveFishInWaterParams.class);
         setIcon("🎣");
         setObjective("Reactive: Catch Fish If Standing in Water");
-        setReactive(true);
         setDeffered(true);
     }
 
@@ -29,7 +28,6 @@ public class BotReactiveFishInWaterContainer extends BotReactiveContainer<BotRea
         params.setIcon("🎣");
 
         BotFishingTask fishingTask = new BotFishingTask(bot);
-        fishingTask.setReactive(true);
         fishingTask.setParams(params);
 
         List<BotTask<?>> subtasks = new ArrayList<>();

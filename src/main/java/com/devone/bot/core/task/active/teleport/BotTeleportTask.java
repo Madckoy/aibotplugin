@@ -70,36 +70,36 @@ public class BotTeleportTask extends BotTaskAutoParams<BotTeleportTaskParams> {
         BotLogger.debug(icon, this.isLogged(), bot.getId() + " ⚡ Телепорт в " + target);
 
         Bukkit.getScheduler().runTask(AIBotPlugin.getInstance(), () -> {
-        Location baseLocation = BotWorldHelper.botPositionToWorldLocation(target);
-        
-        // Центр блока по X/Z даже с отрицательными координатами
-        double centerX = Math.floor(baseLocation.getX()) + 0.5;
-        double centerZ = Math.floor(baseLocation.getZ()) + 0.5;
+                Location baseLocation = BotWorldHelper.botPositionToWorldLocation(target);
+                
+                // Центр блока по X/Z даже с отрицательными координатами
+                double centerX = Math.floor(baseLocation.getX()) + 0.5;
+                double centerZ = Math.floor(baseLocation.getZ()) + 0.5;
 
-        // Y по умолчанию — верх блока
-        double y = Math.floor(baseLocation.getY());
+                // Y по умолчанию — верх блока
+                double y = Math.floor(baseLocation.getY());
 
-        Block baseBlock = new Location(baseLocation.getWorld(), centerX, y, centerZ).getBlock();
-        BotBlockData blockData = BotWorldHelper.blockToBotBlockData(baseBlock);
+                Block baseBlock = new Location(baseLocation.getWorld(), centerX, y, centerZ).getBlock();
+                BotBlockData blockData = BotWorldHelper.blockToBotBlockData(baseBlock);
 
-        // Если блок — ковер/плита/воздух — ставим на текущую Y
-        if (BlockMaterialUtils.isCover(blockData) || BlockMaterialUtils.isAir(blockData)) {
-            y = baseLocation.getY(); // сохраняем как есть
-        } else {
-            y = Math.floor(baseLocation.getY()) + 1.0; // ставим на верх блока
-        }
+                // Если блок — ковер/плита/воздух — ставим на текущую Y
+                if (BlockMaterialUtils.isCover(blockData) || BlockMaterialUtils.isAir(blockData)) {
+                    y = baseLocation.getY(); // сохраняем как есть
+                } else {
+                    y = Math.floor(baseLocation.getY()) + 1.0; // ставим на верх блока
+                }
 
-        // Чуть поднимаем, чтобы не "тонул" в блок (не более 0.01)
-        Location aligned = new Location(baseLocation.getWorld(), centerX, y + 0.01, centerZ);
+                // Чуть поднимаем, чтобы не "тонул" в блок (не более 0.01)
+                Location aligned = new Location(baseLocation.getWorld(), centerX, y + 0.01, centerZ);
 
-        bot.getNPCEntity().teleport(aligned);
-        BotMemoryV2Utils.incrementCounter(bot, "teleportUsed");            
-        bot.getTaskManager().getActiveTask().stop();
+                bot.getNPCEntity().teleport(aligned);
+                BotMemoryV2Utils.incrementCounter(bot, "teleportUsed");            
+                bot.getTaskManager().getActiveTask().stop();
 
-        BotLogger.debug(icon, isLogged(),
-            bot.getId() + " ⚡ Телепорт завершен с " + baseLocation.toVector() + " в " + aligned.toVector());
-        
-        stop();
-    });
+                BotLogger.debug(icon, isLogged(),
+                    bot.getId() + " ⚡ Телепорт завершен с " + baseLocation.toVector() + " в " + aligned.toVector());
+                
+                stop();
+            });
         }
 }
