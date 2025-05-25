@@ -35,6 +35,8 @@ public class BotWalkableBlockTagger {
 
             if(above2==null || above==null) continue; //нет места что бы стоять
             if(BlockMaterialUtils.isDangerous(above) || BlockMaterialUtils.isDangerous(above2))  continue;//над головой либо нет блоков либо опасные - не walkable
+            if (BlockMaterialUtils.isNavigationObstacle(above)) continue;
+            if (BlockMaterialUtils.isNavigationObstacle(above2)) continue;            
            
             BotBlockData below = blockMap.get(new BotPositionKey(x, y - 1, z));
             if( BlockMaterialUtils.isDangerous(above) && BlockMaterialUtils.isDangerous(above2)) continue;

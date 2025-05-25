@@ -26,6 +26,12 @@ public class BlockMaterialUtils {
         "HANGING_ROOTS", "SUGAR_CANE", "VINE"
     );
 
+    public static final Set<String> NAVIGATION_OBSTACLES = Set.of(
+        "COCOA", "LEVER", "LANTERN", "TORCH", "WALL_TORCH", "ITEM_FRAME", "FLOWER_POT",
+        "SWEET_BERRY_BUSH", "CAVE_VINES", "POINTED_DRIPSTONE", "AZALEA", "POTTED_AZALEA_BUSH",
+        "BUTTON", "TRIPWIRE_HOOK", "BAMBOO_SAPLING"
+    );
+
     // --- Определения поведения ---
     public static boolean isClimbable(BotBlockData block) {
         if (block == null) return false;
@@ -33,7 +39,6 @@ public class BlockMaterialUtils {
         return type.contains("VINE") || type.contains("LADDER") || type.contains("SCAFFOLDING");
     }
 
-    // Можно ли зайти внутрь блока (он не мешает движению)?
     public static boolean isPassableForMovement(BotBlockData block) {
         if (block == null) return false;
         String type = block.getType().toUpperCase();
@@ -42,39 +47,30 @@ public class BlockMaterialUtils {
             || DANGEROUS_PASSABLE.contains(type);
     }
 
-    // Можно ли завершить движение в этом блоке (стоять внутри)?
     public static boolean canBotStandInside(BotBlockData block) {
         if (block == null) return false;
         String type = block.getType().toUpperCase();
 
-        // Бот может стоять в воздухе, траве, воде, но не в огне/лаве
         if (AIR_TYPES.contains(type)) return true;
         if (COVER_TYPES.contains(type)) return true;
-
-        // В воде стоять — ок, в лаве/огне — нет
         if (type.equals("WATER") || type.equals("POWDER_SNOW")) return true;
 
         return false;
     }
 
-    // Можно ли стоять на этом блоке (он держит)?
     public static boolean isSolidEnoughToStandOn(BotBlockData block) {
         if (block == null) return false;
         String type = block.getType().toUpperCase();
 
         if (AIR_TYPES.contains(type)) return false;
         if (COVER_TYPES.contains(type)) return false;
-
-        // Вода и лава не держат
         if (type.equals("WATER") || type.equals("LAVA")) return false;
 
-        // Исключаем нестабильные
         if (type.contains("FENCE") || type.contains("WALL") || type.contains("DOOR")
             || type.contains("TRAPDOOR") || type.contains("BAMBOO") || type.contains("BARREL")) {
             return false;
         }
 
-        // Листва, камень, доски, земля и т.п. — держат
         return true;
     }
 
@@ -102,5 +98,12 @@ public class BlockMaterialUtils {
 
     public static boolean isLeaves(BotBlockData block) {
         return block != null && block.getType().toUpperCase().contains("LEAVES");
+    }
+
+    // --- Новые методы для soft-обструкций ---
+
+    public static boolean isNavigationObstacle(BotBlockData block) {
+        if (block == null || block.getType() == null) return false;
+        return NAVIGATION_OBSTACLES.contains(block.getType().toUpperCase());
     }
 }
