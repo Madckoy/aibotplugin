@@ -4,6 +4,7 @@ import java.util.Optional;
 
 import com.devone.bot.core.Bot;
 import com.devone.bot.core.task.passive.BotTask;
+import com.devone.bot.core.utils.logger.BotLogger;
 
 public class BotReactiveUtils {
 
@@ -16,10 +17,12 @@ public class BotReactiveUtils {
             try {
                 activeTask = bot.getActiveTask();
                 bot.getBrain().setCurrentReactionOwner(activeTask.getUUID());
+                BotLogger.debug(bot.getActiveTask().getIcon(), bot.isLogged(), bot.getId() + "  Activate reaction for: "+activeTask.getClass().getSimpleName());
             } catch (Exception ex) {
 
             }
         } else {
+            BotLogger.debug("*", bot.isLogged(), bot.getId() + "  DE-Activate current reaction");
             bot.getBrain().clearCurrentReactionOwner();
             bot.getBrain().setReactionInProgress(false);
         }
@@ -36,6 +39,11 @@ public class BotReactiveUtils {
     // ✅ Проверка: именно эта задача владеет реакцией?
     public static boolean isReactionOwnedBy(Bot bot, BotTask<?> task) {
         String ownerUUID = bot.getBrain().getCurrentReactionOwner();
-        return ownerUUID != null && ownerUUID.equals(task.getUUID());
+        if(ownerUUID==null) return false;
+        if(task.getUUID().contentEquals(ownerUUID)==true) { 
+            return true; 
+        } else { 
+            return false;
+        }
     }
 }
