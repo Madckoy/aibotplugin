@@ -2,6 +2,8 @@ package com.devone.bot.core.task.active.brain;
 
 import com.devone.bot.core.Bot;
 import com.devone.bot.core.brain.cortex.BotActionSuggestion.Suggestion;
+import com.devone.bot.core.brain.cortex.reaction.BotReactionManager;
+import com.devone.bot.core.brain.cortex.reaction.IBotReaction;
 import com.devone.bot.core.brain.memory.BotMemoryV2Utils;
 import com.devone.bot.core.brain.navigator.simulator.BotSimulatorResult;
 import com.devone.bot.core.task.passive.BotTaskAutoParams;
@@ -43,7 +45,7 @@ public class BotBrainTask extends BotTaskAutoParams<BotBrainTaskParams> {
     @Override
     public void execute() {
         BotLogger.debug(icon, isLogged(), bot.getId() + " 🧠 Brain deciding...");
-        
+
         int radius = BotConstants.DEFAULT_SCAN_RADIUS;
         Integer scanRadius = (Integer) BotMemoryV2Utils.readMemoryValue(bot, "navigation", "scanRadius");        
         if(scanRadius!=null) {
@@ -55,9 +57,10 @@ public class BotBrainTask extends BotTaskAutoParams<BotBrainTaskParams> {
         } catch (Exception e) {
         }
         
+        // 2. Орбаботка реакций
+        BotReactionManager.checkReactions(bot);        
         
-        
-        // 2. Получение рекомендации
+        // 3. Получение рекомендации
         Suggestion suggestion = bot.getNavigator().getSuggestion();
         BotMemoryV2Utils.memorizeValue(bot, "navigation", "scanRadius", radius);
 

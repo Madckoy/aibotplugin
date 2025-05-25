@@ -1,6 +1,5 @@
 package com.devone.bot.plugin.command.commands;
 
-import com.devone.bot.core.task.reactive.container.BotReactiveExcavateContainer;
 import java.util.Arrays;
 
 import org.bukkit.command.Command;
@@ -10,6 +9,7 @@ import org.bukkit.command.CommandSender;
 import com.devone.bot.AIBotPlugin;
 import com.devone.bot.core.Bot;
 import com.devone.bot.core.BotManager;
+import com.devone.bot.core.brain.cortex.sequence.BotSequenceContainerExcavate;
 import com.devone.bot.core.task.passive.BotTaskManager;
 import com.devone.bot.core.utils.logger.BotLogger;
 
@@ -43,7 +43,7 @@ public class BotExcavateCommand implements CommandExecutor {
             return false;
         }
 
-        BotTaskManager.push(bot, new BotReactiveExcavateContainer(bot));
+        BotTaskManager.push(bot, new BotSequenceContainerExcavate(bot));
 
         return true;
     }

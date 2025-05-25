@@ -4,10 +4,9 @@ import org.bukkit.entity.Player;
 import org.bukkit.event.Listener;
 
 import com.devone.bot.core.Bot;
+import com.devone.bot.core.brain.cortex.reaction.BotReactionManager;
 import com.devone.bot.core.task.active.brain.BotBrainTask;
 import com.devone.bot.core.task.passive.params.BotTaskParams;
-import com.devone.bot.core.task.reactive.BotReactiveUtils;
-import com.devone.bot.core.task.reactive.BotReactivityManager;
 import com.devone.bot.core.utils.BotConstants;
 import com.devone.bot.core.utils.BotUtils;
 import com.devone.bot.core.utils.blocks.BotPosition;
@@ -111,7 +110,7 @@ public abstract class BotTask<T extends BotTaskParams> implements IBotTask, List
         logTaskStatus();
     
         // ⛔ Если задача выключена - останавливаем её правильно
-        if (!isEnabled()) {
+        if (isEnabled()==false) {
             BotLogger.debug(icon, isLogged(), bot.getId() + " 🛑 Задача выключена и будет остановлена: " + this.getClass().getSimpleName());
             stop();
             return;
@@ -125,6 +124,7 @@ public abstract class BotTask<T extends BotTaskParams> implements IBotTask, List
                 stop();
                 return;
             }
+
             return;
         }
     
@@ -132,10 +132,7 @@ public abstract class BotTask<T extends BotTaskParams> implements IBotTask, List
             handlePlayerDisconnect();
             return;
         }
-    
-        if (handleReactiveLogic())
-            return;
-    
+      
         if(injected==true) {
             BotLogger.debug(icon, isLogged(), bot.getId() + " ▶️ Задача не на паузе и в стеке. Выполняем: " + this.getClass().getSimpleName());
             runTaskExecution();
@@ -163,27 +160,6 @@ public abstract class BotTask<T extends BotTaskParams> implements IBotTask, List
         return player != null && !player.isOnline();
     }
 
-    private boolean handleReactiveLogic() {
-        if (isReactive && !BotReactiveUtils.isAlreadyReacting(bot)) {
-            BotLogger.debug("🧠", isLogged(),
-                    bot.getId() + " ⚠️ Инжектаем реактивный контейнер с задачами (task = " + getClass().getSimpleName() + ")");
-
-            BotReactiveUtils.activateReaction(bot, true);
-        }
-
-        if (!BotReactiveUtils.isAlreadyReacting(bot)) {
-            Optional<Runnable> reaction = BotReactivityManager.checkReactions(bot);
-            if (reaction.isPresent()) {
-                setPause(true);
-                BotLogger.debug("🧠", isLogged(), bot.getId() + " 🚨 Обнаружена реакция. Текущая задача приостановлена.");
-                reaction.get().run();
-                return true;
-            }
-        }
-
-        return false;
-    }
-
     private void runTaskExecution() {
         BotLogger.debug("🧠", isLogged(), bot.getId() + " 🟡 Выполнение: " + icon + " " + getClass().getSimpleName());
         execute();
@@ -193,14 +169,6 @@ public abstract class BotTask<T extends BotTaskParams> implements IBotTask, List
 
     public void stop() {
         done = true;
-
-        if (isReactive && BotReactiveUtils.isReactionOwnedBy(bot, this)) {
-            BotLogger.debug("🧠", isLogged(),
-                    bot.getId() + " 🧹 Завершена реактивная задача: " + getClass().getSimpleName());
-            BotReactiveUtils.activateReaction(bot, false);
-            bot.getBrain().clearCurrentReactionOwner();
-            bot.getBrain().setReactionInProgress(false);
-        }
         
         // ✅ Снимаем паузу, если вдруг задача её не сняла сама
         if (isPause()) {

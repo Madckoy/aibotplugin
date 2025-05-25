@@ -9,9 +9,9 @@ import org.bukkit.command.CommandSender;
 import com.devone.bot.AIBotPlugin;
 import com.devone.bot.core.Bot;
 import com.devone.bot.core.BotManager;
+import com.devone.bot.core.brain.cortex.sequence.BotSequenceContainerMove;
+import com.devone.bot.core.brain.cortex.sequence.params.BotSequenceContainerMoveParams;
 import com.devone.bot.core.task.passive.BotTaskManager;
-import com.devone.bot.core.task.reactive.container.BotReactiveMoveContainer;
-import com.devone.bot.core.task.reactive.container.params.BotReactiveMoveContainerParams;
 import com.devone.bot.core.utils.blocks.BotPosition;
 import com.devone.bot.core.utils.logger.BotLogger;
 
@@ -62,9 +62,9 @@ public class BotMoveCommand implements CommandExecutor {
             return false;
         }
         // создаем контейнер
-        BotReactiveMoveContainerParams params = new BotReactiveMoveContainerParams();
+        BotSequenceContainerMoveParams params = new BotSequenceContainerMoveParams();
         params.position = new BotPosition(x, y, z);
-        BotReactiveMoveContainer container = new BotReactiveMoveContainer(bot);
+        BotSequenceContainerMove container = new BotSequenceContainerMove(bot);
         container.setParams(params);
         BotTaskManager.push(bot, container);
 

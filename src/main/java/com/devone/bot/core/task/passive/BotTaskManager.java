@@ -11,9 +11,6 @@ public class BotTaskManager {
 
     private final Stack<BotTask<?>> taskStack = new Stack<>();
 
-    //private final Stack<BotTask<?>> reactiveStack = new Stack<>();
-    private BotTask<?> currentReactiveRoot = null;
-
     private boolean waiting = false;
 
     private Bot bot;
@@ -37,11 +34,6 @@ public class BotTaskManager {
         taskStack.push(task);
         task.setInjected(true); // сообщаем задаче что она добавилась в общий стек
 
-        // если это первый реактивный — запоминаем
-        if (task.isReactive() && currentReactiveRoot == null) {
-            currentReactiveRoot = task;
-        }
-
         BotLogger.debug("🤖", task.isLogged(),
                 bot.getId() + " ➕ Добавлена задача: " + task.getIcon() + " " + task.getClass().getSimpleName());
     }
@@ -60,10 +52,6 @@ public class BotTaskManager {
             BotTask<?> removed = taskStack.pop();
 
             BotLogger.debug("🤖", bot.isLogged(), bot.getId() + " ➖ Удалена задача: " + removed.getClass().getSimpleName());
-
-            if (removed == currentReactiveRoot) {
-                currentReactiveRoot = null; // реактивная сессия завершена
-            }
 
             if (!taskStack.isEmpty()) {
                 taskStack.peek().setPause(false);
@@ -119,8 +107,6 @@ public class BotTaskManager {
     }
 
     public void clearTasks() {
-
-        currentReactiveRoot = null;
 
         while (!taskStack.isEmpty()) {
             BotTask<?> removedTask = taskStack.pop();

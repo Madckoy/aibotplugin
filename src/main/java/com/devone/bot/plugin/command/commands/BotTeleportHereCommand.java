@@ -8,8 +8,8 @@ import org.bukkit.entity.Player;
 import com.devone.bot.AIBotPlugin;
 import com.devone.bot.core.Bot;
 import com.devone.bot.core.BotManager;
+import com.devone.bot.core.brain.cortex.sequence.BotSequenceContainerTeleportToPlayer;
 import com.devone.bot.core.task.passive.BotTaskManager;
-import com.devone.bot.core.task.reactive.container.BotReactiveTeleportToPlayerContainer;
 import com.devone.bot.core.utils.logger.BotLogger;
 
 public class BotTeleportHereCommand implements CommandExecutor {
@@ -40,7 +40,7 @@ public class BotTeleportHereCommand implements CommandExecutor {
 
         BotLogger.debug("📌", AIBotPlugin.getInstance().isLogged(), "/bot-tp-here: Бот " + bot.getId() + " будет телепортирован к игроку");
 
-        BotTaskManager.push(bot, new BotReactiveTeleportToPlayerContainer(bot, player));
+        BotTaskManager.push(bot, new BotSequenceContainerTeleportToPlayer(bot, player));
 
         player.sendMessage("§aБот " + bot.getId() + " телепортируется к вам!");
 

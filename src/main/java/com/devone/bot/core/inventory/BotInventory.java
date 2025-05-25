@@ -100,7 +100,7 @@ public class BotInventory {
     }
 
     public void pickupAll(Boolean shouldPickup) {
-        BotLogger.debug(BotUtils.getActiveTaskIcon(bot), bot.isLogged(), bot.getId() + " Pickup parameters: " + shouldPickup +" | "+bot.getBrain().getAutoPickupItems());
+        BotLogger.debug(BotUtils.getActiveTaskIcon(bot), bot.isLogged(), bot.getId() + " Pickup parameters: " + shouldPickup );
 
         if (!bot.isNPCSpawned() || bot.getNPC() == null) {
             BotLogger.debug(BotUtils.getActiveTaskIcon(bot), bot.isLogged(), bot.getId() + " ❌ NPC issue! Can't pickup items. Pickup parameters");
@@ -110,14 +110,14 @@ public class BotInventory {
         logInventory();
 
 
-        if (!shouldPickup && !bot.getBrain().getAutoPickupItems() ) {
-            BotLogger.debug(BotUtils.getActiveTaskIcon(bot), bot.isLogged(), bot.getId() + " ❌ Will not pickup items. Pickup parameters: " + shouldPickup +" | "+bot.getBrain().getAutoPickupItems());
+        if (!shouldPickup) {
+            BotLogger.debug(BotUtils.getActiveTaskIcon(bot), bot.isLogged(), bot.getId() + " ❌ Will not pickup items. Pickup parameters: " + shouldPickup);
             return;
         }
 
         BotScanNatural.logScanNatural(bot, BotConstants.DEFAULT_SCAN_RADIUS);
 
-        if (bot.getBrain().getAutoPickupItems()) {
+        if (shouldPickup) {
             pullAllItemsinRadius(2.0);
         }
 

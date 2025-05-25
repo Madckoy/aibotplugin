@@ -9,9 +9,9 @@ import org.bukkit.entity.Player;
 import com.devone.bot.AIBotPlugin;
 import com.devone.bot.core.Bot;
 import com.devone.bot.core.BotManager;
+import com.devone.bot.core.brain.cortex.sequence.BotSequenceContainerTeleportToPlayer;
+import com.devone.bot.core.brain.cortex.sequence.params.BotSequenceContainerTeleportToPlayerParams;
 import com.devone.bot.core.task.passive.BotTaskManager;
-import com.devone.bot.core.task.reactive.container.BotReactiveTeleportToPlayerContainer;
-import com.devone.bot.core.task.reactive.container.params.BotReactiveTeleportToPlayerContainerParams;
 import com.devone.bot.core.utils.blocks.BotPosition;
 import com.devone.bot.core.utils.logger.BotLogger;
 
@@ -49,8 +49,8 @@ public class BotMoveHereCommand implements CommandExecutor {
                 "/bot-move-here: Бот " + bot.getId() + " телепортируется и направляется к игроку " + moveTo);
 
         // 📦 Контейнер
-        BotReactiveTeleportToPlayerContainerParams params = new BotReactiveTeleportToPlayerContainerParams();
-        BotReactiveTeleportToPlayerContainer cont = new BotReactiveTeleportToPlayerContainer(bot, player);
+        BotSequenceContainerTeleportToPlayerParams params = new BotSequenceContainerTeleportToPlayerParams();
+        BotSequenceContainerTeleportToPlayer cont = new BotSequenceContainerTeleportToPlayer(bot, player);
         cont.setParams(params);
         // ⏯ Старт как реактивная цепочка
         BotTaskManager.push(bot, cont);

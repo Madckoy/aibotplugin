@@ -106,7 +106,7 @@ public class BotStatusServlet extends HttpServlet {
                 botJson.addProperty("mobsKilled", (Number) 0);
             }
 
-            botJson.addProperty("autoPickUpItems", bot.getBrain().getAutoPickupItems());
+            botJson.addProperty("autoPickUpItems", true); //hardcode
 
             botJson.addProperty("task", BotUtils.getActiveTaskIcon(bot));
             
