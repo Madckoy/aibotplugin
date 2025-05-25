@@ -21,6 +21,7 @@ public class BotReactiveUtils {
             }
         } else {
             bot.getBrain().clearCurrentReactionOwner();
+            bot.getBrain().setReactionInProgress(false);
         }
     }
 

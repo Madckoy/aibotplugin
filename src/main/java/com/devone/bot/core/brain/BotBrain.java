@@ -121,6 +121,7 @@ public class BotBrain {
         this.currentReactionOwner = null;
         BotLogger.debug("🧠", owner.isLogged(),
                 owner.getId() + " ⚛️ Владелец реактивной задачи очищен");
+                
     }
 
     // 🧠 Проверка: текущая задача — владелец реакции?
