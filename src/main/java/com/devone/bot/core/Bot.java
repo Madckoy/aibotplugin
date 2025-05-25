@@ -19,11 +19,12 @@ import net.citizensnpcs.api.npc.NPC;
 
 public class Bot {
     private boolean isEnabled = true;
-    private boolean isLogging = true;
+    private boolean isLogged = true;
+
     private boolean allowPickupItems = true;
 
-    public boolean isLogging() {
-        return isLogging;
+    public boolean isLogged() {
+        return isLogged;
     }
 
     private final String id; // Уникальное имя бота
@@ -92,8 +93,8 @@ public class Bot {
         this.allowPickupItems = pickupItems;
     }
 
-    public void setLogging(boolean isLogging) {
-        this.isLogging = isLogging;
+    public void setisLogged(boolean log) {
+        this.isLogged = log;
     }
 
     public NPC getNpc() {

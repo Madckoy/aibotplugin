@@ -49,7 +49,15 @@ public abstract class BotTask<T extends BotTaskParams> implements IBotTask, List
     }
 
     protected boolean stopped = false;
-    protected boolean logging = true;
+    protected boolean isLogged = true;
+
+    public boolean isLogged() {
+        return isLogged;
+    }
+
+    public void setLogged(boolean isLogged) {
+        this.isLogged = isLogged;
+    }
 
     protected Bot bot;
     protected Player player = null;
@@ -145,7 +153,7 @@ public abstract class BotTask<T extends BotTaskParams> implements IBotTask, List
             poi = bot.getNavigator().getTarget().toCompactString();
         }
 
-        BotLogger.debug(icon, logging, bot.getId() +
+        BotLogger.debug(icon, isLogged(), bot.getId() +
                 " ❓ Status: done: " + done +", enabled: "+isEnabled() +", paused: " + pause + " , deffered: " + deffered + ", " +
                 " 📍: " + pos + " / 🎯: " + poi);
     }
@@ -156,7 +164,7 @@ public abstract class BotTask<T extends BotTaskParams> implements IBotTask, List
 
     private boolean handleReactiveLogic() {
         if (isReactive && !BotReactiveUtils.isAlreadyReacting(bot)) {
-            BotLogger.debug("🧠", logging,
+            BotLogger.debug("🧠", isLogged(),
                     bot.getId() + " ⚠️ Инжектаем реактивный контейнер с задачами (task = " + getClass().getSimpleName() + ")");
 
             BotReactiveUtils.activateReaction(bot, true);
@@ -166,7 +174,7 @@ public abstract class BotTask<T extends BotTaskParams> implements IBotTask, List
             Optional<Runnable> reaction = BotReactivityManager.checkReactions(bot);
             if (reaction.isPresent()) {
                 setPause(true);
-                BotLogger.debug("🧠", logging, bot.getId() + " 🚨 Обнаружена реакция. Текущая задача приостановлена.");
+                BotLogger.debug("🧠", isLogged(), bot.getId() + " 🚨 Обнаружена реакция. Текущая задача приостановлена.");
                 reaction.get().run();
                 return true;
             }
@@ -176,7 +184,7 @@ public abstract class BotTask<T extends BotTaskParams> implements IBotTask, List
     }
 
     private void runTaskExecution() {
-        BotLogger.debug("🧠", logging, bot.getId() + " 🟡 Выполнение: " + icon + " " + getClass().getSimpleName());
+        BotLogger.debug("🧠", isLogged(), bot.getId() + " 🟡 Выполнение: " + icon + " " + getClass().getSimpleName());
         execute();
     }
 
@@ -186,7 +194,7 @@ public abstract class BotTask<T extends BotTaskParams> implements IBotTask, List
         done = true;
 
         if (isReactive && BotReactiveUtils.isReactionOwnedBy(bot, this)) {
-            BotLogger.debug("🧠", logging,
+            BotLogger.debug("🧠", isLogged(),
                     bot.getId() + " 🧹 Завершена реактивная задача: " + getClass().getSimpleName());
             BotReactiveUtils.activateReaction(bot, false);
         }
@@ -206,7 +214,7 @@ public abstract class BotTask<T extends BotTaskParams> implements IBotTask, List
         }
 
         String status = pause ? "⏸️ Pause" : "▶️ Resume";
-        BotLogger.debug(icon, logging, bot.getId() + " " + status + " (" + getClass().getSimpleName() + ")");
+        BotLogger.debug(icon, isLogged(), bot.getId() + " " + status + " (" + getClass().getSimpleName() + ")");
     }
 
     public boolean isPauseTimedOut(long timeoutMillis) {
@@ -214,7 +222,7 @@ public abstract class BotTask<T extends BotTaskParams> implements IBotTask, List
     }
 
     private void handlePlayerDisconnect() {
-        BotLogger.debug("🧠", logging,
+        BotLogger.debug("🧠", isLogged(),
                 bot.getId() + " 🚨 Игрок " + player.getName() + " отключился. Возврат к BrainTask.");
         //BotTaskManager.clear(bot);
         BotBrainTask brain = new BotBrainTask(bot);
@@ -237,7 +245,7 @@ public abstract class BotTask<T extends BotTaskParams> implements IBotTask, List
         return pause;
     }
 
-    public boolean isDeeered() {
+    public boolean isDefered() {
         return deffered;
     }
 
@@ -246,17 +254,13 @@ public abstract class BotTask<T extends BotTaskParams> implements IBotTask, List
         return enabled;
     }
 
-    public boolean isLogging() {
-        return logging;
-    }
-
     public String getObjective() {
         return objective;
     }
 
     public void setObjective(String obj) {
         this.objective = obj;
-        BotLogger.debug(icon, logging, bot.getId() + " 𖣠 Objective: " + obj);
+        BotLogger.debug(icon, isLogged(), bot.getId() + " 𖣠 Objective: " + obj);
     }
 
     public String getIcon() {

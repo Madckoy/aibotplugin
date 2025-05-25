@@ -32,7 +32,7 @@ public class BotTaskCandidateFactory {
                     if (target == null)
                         return null;
                     return () -> {
-                        BotLogger.debug("⚔️", bot.isLogging(), bot.getId() + " Атака на: " + target);
+                        BotLogger.debug("⚔️", bot.isLogged(), bot.getId() + " Атака на: " + target);
                         BotHandAttackTaskParams p = new BotHandAttackTaskParams(target, 5.0);
                         BotHandAttackTask t = new BotHandAttackTask(bot);
                         t.setParams(p);
@@ -44,7 +44,7 @@ public class BotTaskCandidateFactory {
         candidates.add(new BotTaskCandidate(
                 () -> params.getExplorationWeight(),
                 () -> () -> {
-                    BotLogger.debug("🧭", bot.isLogging(), bot.getId() + " Разведка");
+                    BotLogger.debug("🧭", bot.isLogged(), bot.getId() + " Разведка");
                     BotTaskManager.push(bot, new BotExploreTask(bot));
                 },
                 () -> params.isAllowExploration()));
@@ -52,7 +52,7 @@ public class BotTaskCandidateFactory {
         candidates.add(new BotTaskCandidate(
                 () -> params.getExcavationWeight(),
                 () -> () -> {
-                    BotLogger.debug("⛏", bot.isLogging(), bot.getId() + " Копка");
+                    BotLogger.debug("⛏", bot.isLogged(), bot.getId() + " Копка");
                     BotExcavateTask task = new BotExcavateTask(bot);
                     task.setParams(new BotExcavateTaskParams());
                     BotTaskManager.push(bot, task);

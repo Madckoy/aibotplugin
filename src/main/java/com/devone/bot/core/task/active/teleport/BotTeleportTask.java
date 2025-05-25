@@ -44,7 +44,7 @@ public class BotTeleportTask extends BotTaskAutoParams<BotTeleportTaskParams> {
         setObjective(params.getObjective());
 
         if (this.target == null) {
-            BotLogger.debug(icon, this.isLogging(), bot.getId() + " ❌ Целевая точка не задана. Остановка задачи.");
+            BotLogger.debug(icon, this.isLogged(), bot.getId() + " ❌ Целевая точка не задана. Остановка задачи.");
             this.stop();
         }
 
@@ -54,20 +54,20 @@ public class BotTeleportTask extends BotTaskAutoParams<BotTeleportTaskParams> {
     @Override
     public void execute() {
         if (this.target == null) {
-            BotLogger.debug(icon, this.isLogging(), bot.getId() + " ❌ Нет координат для телепортации.");
+            BotLogger.debug(icon, this.isLogged(), bot.getId() + " ❌ Нет координат для телепортации.");
             stop();
             return;
         }
 
         if (bot.getNPCEntity() == null) {
-            BotLogger.debug(icon, this.isLogging(), bot.getId() + " ❌ Проблема с NPC Enitity.");
+            BotLogger.debug(icon, this.isLogged(), bot.getId() + " ❌ Проблема с NPC Enitity.");
             stop();
             return;
         }
 
         setObjective(params.getObjective() + " to: " + target.toCompactString());
 
-        BotLogger.debug(icon, this.isLogging(), bot.getId() + " ⚡ Телепорт в " + target);
+        BotLogger.debug(icon, this.isLogged(), bot.getId() + " ⚡ Телепорт в " + target);
 
         Bukkit.getScheduler().runTask(AIBotPlugin.getInstance(), () -> {
         Location baseLocation = BotWorldHelper.botPositionToWorldLocation(target);
@@ -96,7 +96,7 @@ public class BotTeleportTask extends BotTaskAutoParams<BotTeleportTaskParams> {
         BotMemoryV2Utils.incrementCounter(bot, "teleportUsed");            
         bot.getTaskManager().getActiveTask().stop();
 
-        BotLogger.debug(icon, isLogging(),
+        BotLogger.debug(icon, isLogged(),
             bot.getId() + " ⚡ Телепорт завершен с " + baseLocation.toVector() + " в " + aligned.toVector());
         
         stop();

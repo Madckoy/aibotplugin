@@ -31,7 +31,7 @@ public class BotExploreTask extends BotTaskAutoParams<BotExploreTaskParams> {
 
     @Override
     public void execute() {
-        BotLogger.debug(icon, isLogging(), bot.getId() + " 🧭 Explore with distance: " + scanRadius);
+        BotLogger.debug(icon, isLogged(), bot.getId() + " 🧭 Explore with distance: " + scanRadius);
 
         if (isPause())
             return;
@@ -52,15 +52,15 @@ public class BotExploreTask extends BotTaskAutoParams<BotExploreTaskParams> {
         BotBlockData target = bot.getNavigator().getSuggestedTarget();
         
         if (target != null) {
-            BotLogger.debug(icon, isLogging(), bot.getId() + " 🎯 Navigation - Set Target: " + target);
+            BotLogger.debug(icon, isLogged(), bot.getId() + " 🎯 Navigation - Set Target: " + target);
             bot.getNavigator().setTarget(target);
             float speed = 1.5f;
             boolean canNavigate = bot.getNavigator().navigate(speed);            
-            BotLogger.debug(icon, isLogging(), bot.getId() + " ❓ Navigation - Can navigate: " + canNavigate);
+            BotLogger.debug(icon, isLogged(), bot.getId() + " ❓ Navigation - Can navigate: " + canNavigate);
             stop();
             return;
         } else {
-            BotLogger.debug(icon, isLogging(), bot.getId() + " ⛔ Navigation - No valid target found. Possibly stuck?");
+            BotLogger.debug(icon, isLogged(), bot.getId() + " ⛔ Navigation - No valid target found. Possibly stuck?");
             bot.getNavigator().setStuck(true);
             stop();
             return;
@@ -69,7 +69,7 @@ public class BotExploreTask extends BotTaskAutoParams<BotExploreTaskParams> {
 
     @Override
     public void stop() {
-        BotLogger.debug(icon, isLogging(), bot.getId() + " ✅ Exploration task completed");
+        BotLogger.debug(icon, isLogged(), bot.getId() + " ✅ Exploration task completed");
         super.stop();
     }
 

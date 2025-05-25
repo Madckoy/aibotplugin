@@ -162,7 +162,7 @@ public class BotUtils {
         // ✅ Принудительно обновляем положение, если поворот сбрасывается
         Bukkit.getScheduler().runTaskLater(AIBotPlugin.getInstance(), () -> {
 
-            BotLogger.debug(task.getIcon(), task.isLogging(),
+            BotLogger.debug(task.getIcon(), task.isLogged(),
                     bot.getId() + " Поворачивает голову в сторону: " + target);
 
             BotUtils.lookAt(bot, target);

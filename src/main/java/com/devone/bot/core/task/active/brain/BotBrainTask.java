@@ -30,7 +30,7 @@ public class BotBrainTask extends BotTaskAutoParams<BotBrainTaskParams> {
 
         bot.getBrain().setMemoryExpirationMillis(params.getMemoryExpirationMillis());
 
-        BotLogger.debug(icon, isLogging(), bot.getId() + " ⚙️ Параметры загружены: " +
+        BotLogger.debug(icon, isLogged(), bot.getId() + " ⚙️ Параметры загружены: " +
                 "explore=" + params.isAllowExploration() + ", " +
                 "excavate=" + params.isAllowExcavation() + ", " +
                 "violence=" + params.isAllowViolence() + ", " +
@@ -42,7 +42,7 @@ public class BotBrainTask extends BotTaskAutoParams<BotBrainTaskParams> {
 
     @Override
     public void execute() {
-        BotLogger.debug(icon, isLogging(), bot.getId() + " 🧠 Brain deciding...");
+        BotLogger.debug(icon, isLogged(), bot.getId() + " 🧠 Brain deciding...");
         
         int radius = BotConstants.DEFAULT_SCAN_RADIUS;
         Integer scanRadius = (Integer) BotMemoryV2Utils.readMemoryValue(bot, "navigation", "scanRadius");        
@@ -84,7 +84,7 @@ public class BotBrainTask extends BotTaskAutoParams<BotBrainTaskParams> {
             }
 
             default -> {
-                BotLogger.debug(icon, isLogging(), bot.getId() + " 🧘 Brain is idle.");
+                BotLogger.debug(icon, isLogged(), bot.getId() + " 🧘 Brain is idle.");
             }
         }
     }

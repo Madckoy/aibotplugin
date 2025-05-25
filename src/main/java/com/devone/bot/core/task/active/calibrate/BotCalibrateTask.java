@@ -34,12 +34,12 @@ public class BotCalibrateTask extends BotTaskAutoParams<BotCalibrateTaskParams> 
 
         //BotMemoryV2Utils.clearAllVisited(bot);
 
-        //BotLogger.debug(icon, isLogging(), bot.getId() + " 🗑️ Removed all visited navigation points");
+        //BotLogger.debug(icon, isLogged(), bot.getId() + " 🗑️ Removed all visited navigation points");
 
         //bot.getNavigator().resetStuckCount();
 
         if (rmt <= 0) {
-            BotLogger.debug(icon, isLogging(), bot.getId() + " ⏱️ Task timeout passed. Ending Task.");
+            BotLogger.debug(icon, isLogged(), bot.getId() + " ⏱️ Task timeout passed. Ending Task.");
             stop();
         }
     }

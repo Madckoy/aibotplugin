@@ -27,7 +27,7 @@ public class BotDropAllTask extends BotPlayerLinkedTask<BotDropAllTaskParams> {
 
     @Override
     public void execute() {
-        BotLogger.debug(icon, isLogging(), bot.getId()+ " 🎁 Dropping all loot... ");
+        BotLogger.debug(icon, isLogged(), bot.getId()+ " 🎁 Dropping all loot... ");
         BotInventory.dropAllItems(bot);
 
         this.stop();

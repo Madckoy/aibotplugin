@@ -35,18 +35,19 @@ public class BotMoveTask extends BotTaskAutoParams<BotMoveTaskParams> {
         this.speed = params.getSpeed();
         setIcon(params.getIcon());
         setObjective(params.getObjective());
-        //setEnabled(params.isEnabled());
+        setEnabled(params.isEnabled());
+        setLogged(params.isLogged());
 
         BotPosition target = params.getTarget();
 
         if (target == null) {
-            BotLogger.debug(icon, isLogging(), bot.getId() + " ❌ Target is null. Остановка таски.");
+            BotLogger.debug(icon, isLogged(), bot.getId() + " ❌ Target is null. Остановка таски.");
             stop();
             return this;
         }
 
         bot.getNavigator().setTarget(target.toBlockData());
-        BotLogger.debug(icon, isLogging(), bot.getId() + " ✅ Цель установлена: " + target);
+        BotLogger.debug(icon, isLogged(), bot.getId() + " ✅ Цель установлена: " + target);
 
         return this;
     }
@@ -55,17 +56,17 @@ public class BotMoveTask extends BotTaskAutoParams<BotMoveTaskParams> {
     public void execute() {
 
         if (done || isPause()) {
-            BotLogger.debug(icon, isLogging(), bot.getId() + " ⭕ Таска завершена или на паузе");
+            BotLogger.debug(icon, isLogged(), bot.getId() + " ⭕ Таска завершена или на паузе");
             return;
         }
 
         if (isMoving) {
-            BotLogger.debug(icon, isLogging(), bot.getId() + " ⏳ Уже в движении...");
+            BotLogger.debug(icon, isLogged(), bot.getId() + " ⏳ Уже в движении...");
             return;
         }
 
         if (!bot.getNPC().isSpawned()) {
-            BotLogger.debug(icon, isLogging(), bot.getId() + " ⚠️ NPC не заспавнен");
+            BotLogger.debug(icon, isLogged(), bot.getId() + " ⚠️ NPC не заспавнен");
             stop();
             return;
         }
@@ -80,7 +81,7 @@ public class BotMoveTask extends BotTaskAutoParams<BotMoveTaskParams> {
         BotPosition target = block.getPosition();
         
         if (target == null) {
-            BotLogger.debug(icon, isLogging(), bot.getId() + " ❌ Цель навигации не найдена");
+            BotLogger.debug(icon, isLogged(), bot.getId() + " ❌ Цель навигации не найдена");
             stop();
             return;
         }
@@ -96,11 +97,11 @@ public class BotMoveTask extends BotTaskAutoParams<BotMoveTaskParams> {
             Bukkit.getPluginManager().registerEvents(listener, AIBotPlugin.getInstance());
         }
 
-        BotMoveTaskHelper.setTarget(bot, target, speed, isLogging());
+        BotMoveTaskHelper.setTarget(bot, target, speed, isLogged());
 
         isMoving = true;
 
-        BotLogger.debug(icon, isLogging(), bot.getId() + " 🏃 Начинаем движение к " + target);
+        BotLogger.debug(icon, isLogged(), bot.getId() + " 🏃 Начинаем движение к " + target);
 
         taskHandle = Bukkit.getScheduler().runTaskTimer(AIBotPlugin.getInstance(), () -> {
             long remaining = BotUtils.getRemainingTime(startTime, params.getTimeout());
@@ -114,7 +115,7 @@ public class BotMoveTask extends BotTaskAutoParams<BotMoveTaskParams> {
             turnToTarget(this, target);
 
             if (remaining <= 0) {
-                BotLogger.debug(icon, isLogging(), bot.getId() + " ⏱️ Навигация превысила лимит времени");
+                BotLogger.debug(icon, isLogged(), bot.getId() + " ⏱️ Навигация превысила лимит времени");
                 stop();
             }
 
@@ -132,7 +133,7 @@ public class BotMoveTask extends BotTaskAutoParams<BotMoveTaskParams> {
         }
 
         bot.getNavigator().setTarget(null);
-        BotLogger.debug(icon, isLogging(), bot.getId() + " ⭕ Движение остановлено");
+        BotLogger.debug(icon, isLogged(), bot.getId() + " ⭕ Движение остановлено");
         super.stop();
     }
 
@@ -147,7 +148,7 @@ public class BotMoveTask extends BotTaskAutoParams<BotMoveTaskParams> {
     public void onNavigationComplete(NavigationCompleteEvent event) {
         if (event.getNPC().getId() != bot.getNPC().getId()) return;
 
-        BotLogger.debug(icon, isLogging(), bot.getId() + " ✅ Навигация завершена (BotMoveTask)");
+        BotLogger.debug(icon, isLogged(), bot.getId() + " ✅ Навигация завершена (BotMoveTask)");
         stop();
     }
 }

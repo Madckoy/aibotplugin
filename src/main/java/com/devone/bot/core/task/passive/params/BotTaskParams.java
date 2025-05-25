@@ -15,7 +15,21 @@ public abstract class BotTaskParams implements IBotTaskParams {
     private String icon = "☑️";
     private String objective = "Do something abstract";
     private boolean isEnabled = false;
-    private boolean isLogging = false;
+
+    public void setEnabled(boolean isEnabled) {
+        this.isEnabled = isEnabled;
+    }
+
+    private boolean isLogged = false;
+
+    public boolean isLogged() {
+        return isLogged;
+    }
+
+    public void setLogged(boolean lg) {
+        this.isLogged = lg;
+    }
+
     private long timeout = BotConstants.DEFAULT_TASK_TIMEOUT;
 
     private transient File configFile;
@@ -88,18 +102,6 @@ public abstract class BotTaskParams implements IBotTaskParams {
 
     public boolean isEnabled() {
         return isEnabled;
-    }
-
-    public void setEnable(boolean enabled) {
-        this.isEnabled = enabled;
-    }
-
-    public boolean isLogging() {
-        return isLogging;
-    }
-
-    public void setIsLogging(boolean logging) {
-        this.isLogging = logging;
     }
 
     public long getTimeout() {
