@@ -34,7 +34,7 @@ public class BotReactionReactiveFishInWater implements IBotReaction {
         BotInventory inv = bot.getInventory();
 
         BotLogger.debug("🎣", isLogged, id + " 🔍 Проверка: есть ли уже рыба в инвентаре?");
-        boolean hasFish = Arrays.stream(FISH_TYPES).anyMatch(type -> inv.getAmount(type) > 0);
+        boolean hasFish = Arrays.stream(FISH_TYPES).anyMatch(type -> inv.getAmount(type) > 10);
         if (hasFish) {
             BotLogger.debug("🎣", isLogged, id + " 🐟 Уже есть рыба — ловить не нужно.");
             return Optional.empty();
