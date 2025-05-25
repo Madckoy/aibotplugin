@@ -21,7 +21,7 @@ public class BotCalibrateTask extends BotTaskAutoParams<BotCalibrateTaskParams> 
         super.setParams(params);
         setIcon(params.getIcon());
         setObjective(params.getObjective());
-        setEnabled(params.isEnabled());
+        //setEnabled(params.isEnabled());
         return this;
     }
 

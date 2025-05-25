@@ -55,7 +55,7 @@ public class BotExcavateTask extends BotTaskAutoParams<BotExcavateTaskParams> {
 
         setIcon(params.getIcon());
         setObjective(params.getObjective());
-        setEnabled(params.isEnabled());
+        //setEnabled(params.isEnabled());
 
         if (params.getPatternName() != null) {
             this.patternName = params.getPatternName();

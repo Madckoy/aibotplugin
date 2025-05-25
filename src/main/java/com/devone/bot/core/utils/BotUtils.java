@@ -108,22 +108,26 @@ public class BotUtils {
      * @param target Цель, к которой нужно повернуть лицо
      */
     private static void lookAt(Bot bot, BotPosition target) {
-        if (bot.getNPCEntity() == null)
-            return;
+        if (bot.getNPCEntity() == null) return;
 
         Location from = bot.getNPCEntity().getLocation();
-        Location to = BotWorldHelper.botPositionToWorldLocation(target).clone().add(0.5, 0.5, 0.5); // центр блока
+        Location to = BotWorldHelper.botPositionToWorldLocation(target).clone().add(0.5, 0.5, 0.5); // Центр блока
 
         Vector dir = to.toVector().subtract(from.toVector());
 
         float yaw = (float) Math.toDegrees(Math.atan2(dir.getZ(), dir.getX())) - 90f;
         float pitch = (float) Math.toDegrees(-Math.atan2(dir.getY(), Math.sqrt(dir.getX() * dir.getX() + dir.getZ() * dir.getZ())));
 
-        Location newLoc = from.clone().add(0.5, 0, 0.5); // центр блока;
+        // Если доступен метод faceLocation:
+        bot.getNPC().faceLocation(to);
 
+        // Или fallback: телепорт с новым поворотом
+        /*
+        Location newLoc = from.clone();
         newLoc.setYaw(yaw);
         newLoc.setPitch(pitch);
-        bot.getNPCEntity().teleport(newLoc); // или setRotation(), если движок это поддерживает
+        bot.getNPCEntity().teleport(newLoc);
+        */
 
         bot.getBrain().notifyYawChanged(yaw);
     }
@@ -282,19 +286,18 @@ public class BotUtils {
 
             float currentYaw = bot.getNavigator().getPositionSight().getYaw();
             float newYaw = (currentYaw + degrees) % 360.0f;
-    
-            Location from = bot.getNPCEntity().getLocation();
-            Location newLook = from.clone();
-            
-            newLook.setYaw(newYaw);
-            bot.getNPCEntity().teleport(newLook);
 
-            bot.getBrain().notifyYawChanged(newYaw); // вот здесь — оповещение
+            // Без смещения по координатам
+            Location loc = bot.getNPCEntity().getLocation();
+            loc.setYaw(newYaw);
+
+            bot.getNPCEntity().teleport(loc); // или setRotation(newYaw, loc.getPitch());
+
+            bot.getBrain().notifyYawChanged(newYaw);
 
             BotLogger.debug("↻", true, bot.getId() + " rotated " + degrees + "° → yaw=" + newYaw);
-        
-        }, 1L); // ✅ Через тик, чтобы дать время на обновление
-        
+
+        }, 1L);
     }
 
     private static final Gson gson = new GsonBuilder().setPrettyPrinting().create();

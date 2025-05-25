@@ -22,9 +22,9 @@ public class BotFovSliceTagger {
 
         if (blocks == null || blocks.isEmpty()) return 0;
 
-        double botX = bot.getX();
+        double botX = bot.getX()-0.5;
         double botY = bot.getY();
-        double botZ = bot.getZ();
+        double botZ = bot.getZ()-0.5;
 
         int minY = (int) Math.floor(botY - height);
         int maxY = (int) Math.floor(botY + 1 + height);

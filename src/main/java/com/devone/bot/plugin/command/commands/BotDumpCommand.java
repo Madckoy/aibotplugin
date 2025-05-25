@@ -46,13 +46,17 @@ public class BotDumpCommand implements CommandExecutor {
             return false;
         }
 
-        BotSceneData sceneData = bot.getBrain().getSceneData();
-
-        String fileName = BotConstants.PLUGIN_PATH_TMP + bot.getId() + "_scene_data.json";
-
         try {
-            BotSceneSaver.saveToJsonFile(fileName, sceneData);
-            BotLogger.debug("🧠", true, " ✅ Бот скинул данные о сцене на диск: " + fileName);
+            BotSceneData sceneDataTagged = bot.getBrain().getSceneData().clone(false);
+            String fileNameTagged = BotConstants.PLUGIN_PATH_TMP + bot.getId() + "_scene.tagged";
+            BotSceneSaver.saveToJsonFile(fileNameTagged, sceneDataTagged);
+
+            BotSceneData sceneDataRaw = bot.getBrain().getSceneData().clone(true);
+            String fileNameRaw = BotConstants.PLUGIN_PATH_TMP + bot.getId() + "_scene.raw";
+            BotSceneSaver.saveToJsonFile(fileNameRaw, sceneDataRaw);
+
+            BotLogger.info("🧠", true, " ✅ Бот скинул данные о сцене на диск: " + fileNameRaw + " и " + fileNameTagged);
+            
         } catch (IOException e) {
             BotLogger.debug("🧠", true, " ❌ Ошибка сброса данных на диск");
         }

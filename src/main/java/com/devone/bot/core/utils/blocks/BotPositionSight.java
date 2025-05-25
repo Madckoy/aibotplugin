@@ -51,4 +51,9 @@ public class BotPositionSight extends BotPosition {
             getX(), getY(), getZ(), yaw, pitch, toKey()
         );
     }
+
+    @Override
+    public BotPositionSight clone() {
+        return new BotPositionSight(getX(), getY(), getZ(), yaw, pitch);
+    }
 }

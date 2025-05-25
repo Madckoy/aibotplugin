@@ -20,4 +20,43 @@ public class BotSceneData {
         this.entities = entities;
 
     }
+
+public BotSceneData clone(boolean cleanUp) {
+    BotSceneData copy = new BotSceneData();
+
+    // Клонируем info
+    if (this.info != null) {
+        copy.info = new BotScanInfo();
+        copy.info.setRadius(this.info.getRadius());
+        copy.info.setHeight(this.info.getHeight());
+    }
+
+    // Клонируем bot позицию
+    if (this.bot != null) {
+        copy.bot = this.bot.clone(); // предполагается, что у BotPositionSight есть clone()
+    }
+
+    // Клонируем блоки
+    if (this.blocks != null) {
+        copy.blocks = this.blocks.stream()
+            .map(original -> {
+                BotBlockData cloned = original.clone(); // клонируем
+                if(cleanUp) {
+                   cloned.getTags().clear();               // удаляем все теги
+                }
+                return cloned;
+            })
+            .toList();
+    }
+
+    // Клонируем сущности
+    if (this.entities != null) {
+        copy.entities = this.entities.stream()
+            .map(BotBlockData::clone)
+            .toList();
+    }
+
+    return copy;
+}
+
 }

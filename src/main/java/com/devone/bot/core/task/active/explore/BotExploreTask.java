@@ -22,7 +22,7 @@ public class BotExploreTask extends BotTaskAutoParams<BotExploreTaskParams> {
 
         setIcon(params.getIcon());
         setObjective(params.getObjective());
-        setEnabled(params.isEnabled());
+        //setEnabled(params.isEnabled());
 
         this.scanRadius = params.getScanRadius(); // Извлекаем параметр
 

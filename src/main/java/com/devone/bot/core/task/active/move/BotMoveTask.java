@@ -35,7 +35,7 @@ public class BotMoveTask extends BotTaskAutoParams<BotMoveTaskParams> {
         this.speed = params.getSpeed();
         setIcon(params.getIcon());
         setObjective(params.getObjective());
-        setEnabled(params.isEnabled());
+        //setEnabled(params.isEnabled());
 
         BotPosition target = params.getTarget();
 

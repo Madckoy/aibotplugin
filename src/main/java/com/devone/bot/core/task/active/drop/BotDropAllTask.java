@@ -21,7 +21,7 @@ public class BotDropAllTask extends BotPlayerLinkedTask<BotDropAllTaskParams> {
     public IBotTaskParameterized<BotDropAllTaskParams> setParams(BotDropAllTaskParams params) {
         setIcon(params.getIcon());
         setObjective(params.getObjective());
-        setEnabled(params.isEnabled());
+        //setEnabled(params.isEnabled());
         return this;
     }
 

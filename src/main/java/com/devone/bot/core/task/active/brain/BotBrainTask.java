@@ -78,8 +78,7 @@ public class BotBrainTask extends BotTaskAutoParams<BotBrainTaskParams> {
                 if(!bot.getNavigator().isCalculating()) {
                     BotBlockData target = bot.getNavigator().getSuggestedTarget();
                     bot.getNavigator().setTarget(target);
-                    float speed = 1.5f;
-                    bot.getNavigator().navigate(speed);            
+                    bot.getNavigator().navigate(1.5f);            
                 }
                 return;
             }

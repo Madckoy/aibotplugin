@@ -13,5 +13,14 @@ public class BotScanInfo {
 
     public int getRadius() { return radius; }
     public int getHeight() { return height; }
+
+    public void setRadius(int radius) {
+        this.radius = radius;
+    }
+
+    public void setHeight(int height) {
+        this.height = height;
+    }
+
 }
 

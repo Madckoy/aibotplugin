@@ -26,7 +26,7 @@ public class BotMoveTaskHelper {
             return;
         }
 
-        Location loc = BotWorldHelper.botPositionToWorldLocation(target);
+        Location loc = BotWorldHelper.botPositionToWorldLocation(centerBlock(target));
 
         bot.getNPCNavigator().cancelNavigation();
         bot.getNPCNavigator().setPaused(false);
@@ -36,6 +36,14 @@ public class BotMoveTaskHelper {
         if (log) {
             BotLogger.debug(BotUtils.getActiveTaskIcon(bot), true, bot.getId() + " ▶ Двигаемся к: " + target);
         }
+    }
+
+    public static BotPosition centerBlock(BotPosition pos) {
+        return new BotPosition(
+            Math.floor(pos.getX()) + 0.5,
+            pos.getY(),
+            Math.floor(pos.getZ()) + 0.5
+        );
     }
 
     /**

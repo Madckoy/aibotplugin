@@ -26,7 +26,7 @@ public class BotDataStorage {
 
         // 🧠 Save memory
         try {
-            File memoryFile = new File(baseFile + ".memory.json");
+            File memoryFile = new File(baseFile + ".memory");
             bot.getBrain().getMemoryV2().saveToFile(memoryFile);
         } catch (IOException e) {
             BotLogger.warn("🧠", true, name + " — failed to save memory: " + e.getMessage());
@@ -34,7 +34,7 @@ public class BotDataStorage {
 
         // 🎒 Save inventory
         try {
-            File inventoryFile = new File(baseFile + ".inventory.json");
+            File inventoryFile = new File(baseFile + ".inventory");
             saveInventory(bot, inventoryFile);
         } catch (IOException e) {
             BotLogger.warn("🎒", true, name + " — failed to save inventory: " + e.getMessage());
@@ -48,7 +48,7 @@ public class BotDataStorage {
         File baseFile = new File(BOT_DATA_DIR, name);
 
         // 🧠 Load memory
-        File memoryFile = new File(baseFile + ".memory.json");
+        File memoryFile = new File(baseFile + ".memory");
         if (memoryFile.exists()) {
             try {
                 BotMemoryV2 memory = BotMemoryV2.loadFromFile(memoryFile);
@@ -59,7 +59,7 @@ public class BotDataStorage {
         }
 
         // 🎒 Load inventory
-        File inventoryFile = new File(baseFile + ".inventory.json");
+        File inventoryFile = new File(baseFile + ".inventory");
         if (inventoryFile.exists()) {
             try {
                 loadInventory(bot, inventoryFile);
@@ -70,10 +70,15 @@ public class BotDataStorage {
     }
 
     public static void deleteBotData(String botId) {
-        File[] files = BOT_DATA_DIR.listFiles((dir, name) -> name.startsWith(botId + ".") && name.endsWith(".json"));
-        if (files != null) {
-            for (File f : files) f.delete();
+        File[] memfiles = BOT_DATA_DIR.listFiles((dir, name) -> name.startsWith(botId + ".") && name.endsWith(".memory"));
+        if (memfiles != null) {
+            for (File f : memfiles) f.delete();
         }
+        File[] invfiles = BOT_DATA_DIR.listFiles((dir, name) -> name.startsWith(botId + ".") && name.endsWith(".inventory"));
+        if (invfiles != null) {
+            for (File f : invfiles) f.delete();
+        }
+
     }
 
     private static void saveInventory(Bot bot, File file) throws IOException {

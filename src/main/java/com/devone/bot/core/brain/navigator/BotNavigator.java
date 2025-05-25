@@ -260,23 +260,13 @@ public class BotNavigator {
             BotLogger.debug("*", true, bot.getId() + " 💻 Navigator calculation ended");
         }
     
-        //BotScanInfo scanInfo = new BotScanInfo(BotConstants.DEFAULT_SCAN_RADIUS, BotConstants.DEFAULT_SCAN_HEIGHT);
-        //BotSceneData sc_data_tagged = new BotSceneData(bot.getBrain().getSceneData().blocks, bot.getBrain().getSceneData().entities, botPos, scanInfo);
 
         long end = System.currentTimeMillis();
         
         BotLogger.debug(BotUtils.getActiveTaskIcon(bot), true,
                     bot.getId() + " ⏱ Tagging completed in " + (end - start) + " ms");
 
-
-        /* 
-        try {
-            BotFovSliceTagger.tagFovSliceRemoveAll(bot.getBrain().getSceneData().blocks);
-            BotSceneSaver.saveToJsonFile(BotConstants.PLUGIN_PATH_TMP + bot.getId()+"_scene_data_tagged.json_" + end, sc_data_tagged);
-        } catch (Exception ex) {
-            System.out.println(ex.getMessage());
-        }
-        */
+        
         calculating = false;
         return candidates;
     }

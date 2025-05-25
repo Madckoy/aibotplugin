@@ -70,30 +70,36 @@ public class BotTeleportTask extends BotTaskAutoParams<BotTeleportTaskParams> {
         BotLogger.debug(icon, this.isLogging(), bot.getId() + " ⚡ Телепорт в " + target);
 
         Bukkit.getScheduler().runTask(AIBotPlugin.getInstance(), () -> {
-            Location baseLocation = BotWorldHelper.botPositionToWorldLocation(target);
-            double offsetX = 0.5;
-            double offsetY = 0.5;
-            double offsetZ = 0.5;
+        Location baseLocation = BotWorldHelper.botPositionToWorldLocation(target);
+        
+        // Центр блока по X/Z даже с отрицательными координатами
+        double centerX = Math.floor(baseLocation.getX()) + 0.5;
+        double centerZ = Math.floor(baseLocation.getZ()) + 0.5;
 
-            Block bl = baseLocation.getBlock();
-            BotBlockData blockData = BotWorldHelper.blockToBotBlockData(bl);
-            // если покрытие — бот может встать прямо сюда
-            if (BlockMaterialUtils.isCover(blockData) || BlockMaterialUtils.isAir(blockData)) {
-                offsetY = 0.0;
-            } else {
-                offsetY = 1.0;
-            }
-            Location safeOffset = baseLocation.clone().add(offsetX, offsetY + 0.6, offsetZ);
+        // Y по умолчанию — верх блока
+        double y = Math.floor(baseLocation.getY());
 
-            bot.getNPCEntity().teleport(safeOffset);
+        Block baseBlock = new Location(baseLocation.getWorld(), centerX, y, centerZ).getBlock();
+        BotBlockData blockData = BotWorldHelper.blockToBotBlockData(baseBlock);
 
-            BotMemoryV2Utils.incrementCounter(bot, "teleportUsed");            
+        // Если блок — ковер/плита/воздух — ставим на текущую Y
+        if (BlockMaterialUtils.isCover(blockData) || BlockMaterialUtils.isAir(blockData)) {
+            y = baseLocation.getY(); // сохраняем как есть
+        } else {
+            y = Math.floor(baseLocation.getY()) + 1.0; // ставим на верх блока
+        }
 
-            bot.getTaskManager().getActiveTask().stop();
+        // Чуть поднимаем, чтобы не "тонул" в блок (не более 0.01)
+        Location aligned = new Location(baseLocation.getWorld(), centerX, y + 0.01, centerZ);
 
-            BotLogger.debug(icon, this.isLogging(),
-                    bot.getId() + " ⚡ Телепорт завершен с " + baseLocation.toVector() + " в " + safeOffset.toVector());
-            stop();
-        });
-    }
+        bot.getNPCEntity().teleport(aligned);
+        BotMemoryV2Utils.incrementCounter(bot, "teleportUsed");            
+        bot.getTaskManager().getActiveTask().stop();
+
+        BotLogger.debug(icon, isLogging(),
+            bot.getId() + " ⚡ Телепорт завершен с " + baseLocation.toVector() + " в " + aligned.toVector());
+        
+        stop();
+    });
+        }
 }

@@ -4,6 +4,7 @@ import com.devone.bot.AIBotPlugin;
 import com.devone.bot.core.Bot;
 import com.devone.bot.core.brain.memory.BotMemoryV2Utils;
 import com.devone.bot.core.task.active.move.BotMoveTask;
+import com.devone.bot.core.task.active.move.BotMoveTaskHelper;
 import com.devone.bot.core.utils.blocks.BotBlockData;
 import com.devone.bot.core.utils.blocks.BotPosition;
 import com.devone.bot.core.utils.logger.BotLogger;
@@ -44,8 +45,11 @@ public class BotMoveTaskListener implements Listener {
         if (!arrived) {
             BotLogger.debug(task.getIcon(), true,
                     task.getBot().getId() + " ⚠️ Навигатор завершил, но NPC не в точке XZ. Завершаем всё равно.");
+                   
         }
-        
+
+        onComplete(task.getBot());
+
         Block block = BotWorldHelper.botPositionToWorldBlock(pos);
         if (block != null) {
             BotBlockData data = new BotBlockData(block.getX(), block.getY(), block.getZ());
@@ -78,21 +82,24 @@ public class BotMoveTaskListener implements Listener {
         if (target != null && actual != null) {
             double dx = Math.abs(actual.getX() - target.getX());
             double dz = Math.abs(actual.getZ() - target.getZ());
-    
-            if (dx > 0.2 || dz > 0.2) {
-                Location aligned = new Location(
+
+            BotPosition centered = BotMoveTaskHelper.centerBlock(target);
+
+            Location aligned = new Location(
                     BotWorldHelper.getBotWorld(bot),
-                    Math.floor(target.getX()) + 0.5,
-                    target.getY(),
-                    Math.floor(target.getZ()) + 0.5
+                    centered.getX(),
+                    centered.getY()+1,
+                    centered.getZ()
                 );
 
-                Bukkit.getScheduler().runTask(AIBotPlugin.getInstance(), () -> {
+            System.out.println(centered);    
+            System.out.println(aligned);    
+
+            Bukkit.getScheduler().runTask(AIBotPlugin.getInstance(), () -> {
                         bot.getNPC().teleport(aligned, PlayerTeleportEvent.TeleportCause.PLUGIN);
                 });
 
-                BotLogger.debug("🧭", true, bot.getId() + " 📌 Выровнен в центр блока через NavigationCompleteListener: " + bot.getNPC().getStoredLocation());
-            }
+            BotLogger.debug("🧭", true, bot.getId() + " 📌 Выровнен в центр блока через NavigationCompleteListener: " + bot.getNPC().getStoredLocation());
         }
     }
 }
