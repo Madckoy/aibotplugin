@@ -24,7 +24,7 @@ public class BotManager {
     private final Map<String, Bot> botsMap = new HashMap<>();
     private final Map<UUID, Bot> selectedBots = new HashMap<>();
     private final BotManagerConfig config;
-    private boolean isLogged = true;
+    private boolean isLogged = AIBotPlugin.getInstance().isLogged();
 
     public boolean isLogged() {
         return isLogged;

@@ -49,6 +49,7 @@ public abstract class BotTask<T extends BotTaskParams> implements IBotTask, List
     }
 
     protected boolean stopped = false;
+    
     protected boolean isLogged = true;
 
     public boolean isLogged() {

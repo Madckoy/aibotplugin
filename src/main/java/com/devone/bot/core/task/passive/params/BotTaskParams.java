@@ -15,7 +15,7 @@ public abstract class BotTaskParams implements IBotTaskParams {
     private String icon = "☑️";
     private String objective = "Do something abstract";
     private boolean isEnabled = true;
-    private boolean isLogged = false;
+    private boolean isLogged = true;
 
     public boolean isLogged() {
         return isLogged;

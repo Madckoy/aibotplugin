@@ -7,6 +7,7 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Queue;
 
+import com.devone.bot.AIBotPlugin;
 import com.devone.bot.core.utils.BotConstants;
 import com.devone.bot.core.utils.blocks.BotPosition;
 import com.devone.bot.core.utils.logger.BotLogger;
@@ -30,7 +31,7 @@ public class BotPatternRunner {
     private Queue<BotPosition> voidPointsQueue = new LinkedList<>();
     private Queue<BotPosition> solidPointsQueue = new LinkedList<>();
 
-    private boolean isLogged = true;
+    private boolean isLogged = AIBotPlugin.getInstance().isLogged();
 
     public boolean isLogged() {
         return isLogged;

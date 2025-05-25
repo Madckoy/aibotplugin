@@ -6,6 +6,7 @@ import org.bukkit.entity.Entity;
 
 import org.bukkit.entity.Player;
 
+import com.devone.bot.AIBotPlugin;
 import com.devone.bot.core.bootstrap.BotBootstrap;
 import com.devone.bot.core.brain.BotBrain;
 import com.devone.bot.core.brain.navigator.BotNavigator;
@@ -19,7 +20,7 @@ import net.citizensnpcs.api.npc.NPC;
 
 public class Bot {
     private boolean isEnabled = true;
-    private boolean isLogged = true;
+    private boolean isLogged = AIBotPlugin.getInstance().isLogged();
 
     private boolean allowPickupItems = true;
 

@@ -7,16 +7,6 @@ import com.devone.bot.core.utils.logger.BotLogger;
 
 public class BotActionSelector {
 
-    private boolean isLogged = true;
-
-    public boolean isLogged() {
-        return isLogged;
-    }
-
-    public void setLogged(boolean isLogged) {
-        this.isLogged = isLogged;
-    }
-
     public static Optional<Runnable> selectWeightedRandom(Bot bot, List<BotTaskCandidate> candidates) {
         List<BotTaskCandidate> available = candidates.stream()
             .filter(BotTaskCandidate::isAvailable)
