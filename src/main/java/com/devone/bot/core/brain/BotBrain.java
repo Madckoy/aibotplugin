@@ -24,6 +24,16 @@ public class BotBrain {
     private transient BotMemoryV2 memoryV2 = null;
     private transient BotSceneData sceneData = null;
 
+    private boolean isLogged = true;
+
+    public boolean isLogged() {
+        return isLogged;
+    }
+
+    public void setLogged(boolean isLogged) {
+        this.isLogged = isLogged;
+    }
+
     private long memoryExpirationMillis = BotConstants.DEFAULT_MEMORY_EXPIRATION;
 
     private BotYawChangeListener yawListener;
@@ -96,14 +106,14 @@ public class BotBrain {
 
     // 🧠 Реактивность
     public boolean isReactionInProgress() {
-        BotLogger.debug(BotUtils.getActiveTaskIcon(owner), true,
+        BotLogger.debug(BotUtils.getActiveTaskIcon(owner), isLogged(),
                 owner.getId() + " ⚛️ Get Reactive reaction in progress status: " + this.reactionInProgress);
         return reactionInProgress;
     }
 
     public void setReactionInProgress(boolean value) {
         this.reactionInProgress = value;
-        BotLogger.debug(BotUtils.getActiveTaskIcon(owner), true,
+        BotLogger.debug(BotUtils.getActiveTaskIcon(owner), isLogged(),
                 owner.getId() + " ⚛️ Set Reactive reaction in progress status: " + this.reactionInProgress);
     }
 
@@ -113,13 +123,13 @@ public class BotBrain {
 
     public void setCurrentReactionOwner(String uuid) {
         this.currentReactionOwner = uuid;
-        BotLogger.debug("🧠", true,
+        BotLogger.debug("🧠", isLogged(),
                 owner.getId() + " ⚛️ Установлен владелец реактивной задачи: " + uuid);
     }
 
     public void clearCurrentReactionOwner() {
         this.currentReactionOwner = null;
-        BotLogger.debug("🧠", true,
+        BotLogger.debug("🧠", isLogged(),
                 owner.getId() + " ⚛️ Владелец реактивной задачи очищен");
     }
 
@@ -130,7 +140,7 @@ public class BotBrain {
 
         boolean result = currentReactionOwner.equals(task.getUUID());
 
-        BotLogger.debug("🧠", true, owner.getId() + " 🧩 Проверка владения реакцией: " + result +
+        BotLogger.debug("🧠", isLogged(), owner.getId() + " 🧩 Проверка владения реакцией: " + result +
                 " (expected=" + currentReactionOwner + ", actual=" + task.getUUID() + ")");
 
         return result;

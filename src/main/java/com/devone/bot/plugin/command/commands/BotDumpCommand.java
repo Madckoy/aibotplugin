@@ -7,6 +7,7 @@ import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
 
+import com.devone.bot.AIBotPlugin;
 import com.devone.bot.core.Bot;
 import com.devone.bot.core.BotManager;
 import com.devone.bot.core.brain.perseption.scene.BotSceneData;
@@ -26,11 +27,11 @@ public class BotDumpCommand implements CommandExecutor {
     @Override
     public boolean onCommand(CommandSender sender, Command command, String label, String[] args) {
 
-        BotLogger.debug("🔧", true, "Получена команда от сервера: " + Arrays.toString(args));
+        BotLogger.debug("🔧", AIBotPlugin.getInstance().isLogged(), "Получена команда от сервера: " + Arrays.toString(args));
 
         if (args.length < 1) {
             sender.sendMessage("❌ Недостаточно аргументов. Используйте: /bot-dump <bot_id>");
-            BotLogger.debug("❌", true, "Недостаточно аргументов для /bot-dump");
+            BotLogger.debug("❌", AIBotPlugin.getInstance().isLogged(), "Недостаточно аргументов для /bot-dump");
             return false;
         }
 
@@ -41,7 +42,7 @@ public class BotDumpCommand implements CommandExecutor {
         if (bot == null) {
             sender.sendMessage("❌ Бот с именем " + botName + " не найден.");
 
-            BotLogger.debug("❌", true, "Бот с именем " + botName + " не найден.");
+            BotLogger.debug("❌", AIBotPlugin.getInstance().isLogged(), "Бот с именем " + botName + " не найден.");
 
             return false;
         }
@@ -55,10 +56,10 @@ public class BotDumpCommand implements CommandExecutor {
             String fileNameRaw = BotConstants.PLUGIN_PATH_TMP + bot.getId() + "_scene.raw";
             BotSceneSaver.saveToJsonFile(fileNameRaw, sceneDataRaw);
 
-            BotLogger.info("🧠", true, " ✅ Бот скинул данные о сцене на диск: " + fileNameRaw + " и " + fileNameTagged);
+            BotLogger.info("🧠", AIBotPlugin.getInstance().isLogged(), " ✅ Бот скинул данные о сцене на диск: " + fileNameRaw + " и " + fileNameTagged);
             
         } catch (IOException e) {
-            BotLogger.debug("🧠", true, " ❌ Ошибка сброса данных на диск");
+            BotLogger.debug("🧠", AIBotPlugin.getInstance().isLogged(), " ❌ Ошибка сброса данных на диск");
         }
 
         return true;

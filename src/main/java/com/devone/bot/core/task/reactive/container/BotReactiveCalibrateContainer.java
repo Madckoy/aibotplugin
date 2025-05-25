@@ -23,7 +23,7 @@ public class BotReactiveCalibrateContainer extends BotReactiveContainer<BotReact
     }
 
     protected List<BotTask<?>> enqueue(Bot bot) {
-        BotLogger.debug(getIcon(), true, bot.getId() + " " + icon + " " + getObjective());
+        BotLogger.debug(getIcon(), isLogged(), bot.getId() + " " + icon + " " + getObjective());
 
         BotCalibrateTaskParams tpParams = new BotCalibrateTaskParams();
         BotCalibrateTask tpTask = new BotCalibrateTask(bot, "I want beer!");

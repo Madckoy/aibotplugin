@@ -18,7 +18,7 @@ public class BotReactiveTemplateContainer extends BotReactiveContainer<BotReacti
 
     @Override
     protected List<BotTask<?>> enqueue(Bot bot) {
-        BotLogger.debug(getIcon(), true, bot.getId() + " #️⃣ enqueue() шаблонного контейнера");
+        BotLogger.debug(getIcon(), isLogged(), bot.getId() + " #️⃣ enqueue() шаблонного контейнера");
 
         // ✅ Используем реактивный сахар внутри
         // bot.pushReactiveTask(new YourTask(bot));

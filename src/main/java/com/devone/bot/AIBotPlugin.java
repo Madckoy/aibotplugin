@@ -26,6 +26,15 @@ public class AIBotPlugin extends JavaPlugin {
     private BotManager botManager;
     private BotWebService web_service;
     private AIBotPluginConfigManager configManager;
+    private boolean isLogged = true;
+
+    public boolean isLogged() {
+        return isLogged;
+    }
+
+    public void setLogged(boolean isLogged) {
+        this.isLogged = isLogged;
+    }
 
     public AIBotPlugin() {
         
@@ -45,13 +54,13 @@ public class AIBotPlugin extends JavaPlugin {
 
         reloadPlugin(); // ✅ Now `onEnable()` only calls `reloadPlugin()`
 
-        BotLogger.debug("✅ AIBotPlugin: onEnable", true, "AI Bot Plugin has been enabled successfully!");
+        BotLogger.debug("✅ AIBotPlugin: onEnable", isLogged(), "AI Bot Plugin has been enabled successfully!");
 
     }
 
     @Override
     public void onDisable() {
-        BotLogger.debug("♻️ AIBotPlugin: onDisable", true, "AI Bot Plugin is shutting down...");
+        BotLogger.debug("♻️ AIBotPlugin: onDisable", isLogged(), "AI Bot Plugin is shutting down...");
 
         if (botManager != null) {
             botManager.saveBots(); // 💾 сохраняем всех ботов
@@ -63,13 +72,13 @@ public class AIBotPlugin extends JavaPlugin {
         if (web_service != null) {
             try {
                 web_service.stop();
-                BotLogger.debug("🛑", true, "HTTP WEB server stopped");
+                BotLogger.debug("🛑", isLogged(), "HTTP WEB server stopped");
             } catch (Exception e) {
-                BotLogger.debug("❌", true, "HTTP WEB server could not be stopped" + e.getMessage());
+                BotLogger.debug("❌", isLogged(), "HTTP WEB server could not be stopped" + e.getMessage());
             }
         }
 
-        BotLogger.debug("✅", true, "AI Bot Plugin has been disabled");
+        BotLogger.debug("✅", isLogged(), "AI Bot Plugin has been disabled");
         Bukkit.getScheduler().cancelTasks(this);
     }
 
@@ -77,27 +86,27 @@ public class AIBotPlugin extends JavaPlugin {
         
         BotLogger.init(this, configManager.getConfig()); // ✅ Log initialization first
         
-        BotLogger.debug("🔧", true, "Логирование перезапущено");
+        BotLogger.debug("🔧", isLogged(), "Логирование перезапущено");
 
-        BotLogger.debug("♻️", true, "Перезагрузка AI Bot Plugin");
+        BotLogger.debug("♻️", isLogged(), "Перезагрузка AI Bot Plugin");
 
         reloadConfig();
 
-        BotLogger.debug("🔄", true, "Конфигурация загружена заново.");
+        BotLogger.debug("🔄", isLogged(), "Конфигурация загружена заново.");
 
         botManager = new BotManager(this);
         zoneManager = new BotZoneManager(this, getDataFolder());
         
         new BotCommandsDispatcher(this, botManager, zoneManager);
 
-        BotLogger.debug("✅", true, "Менеджеры перезапущены!");
+        BotLogger.debug("✅", isLogged(), "Менеджеры перезапущены!");
 
         // ✅ Restart HTTP server properly
         if (web_service != null) {
             try {
                 web_service.stop();
             } catch (Exception e) {
-                BotLogger.debug("❌", true, "Ошибка: " + e.getMessage());
+                BotLogger.debug("❌", isLogged(), "Ошибка: " + e.getMessage());
             }
         }
 
@@ -106,9 +115,9 @@ public class AIBotPlugin extends JavaPlugin {
 
         try {
             web_service.start();
-            BotLogger.debug("🌐", true, "HTTP WEB Server started");
+            BotLogger.debug("🌐", isLogged(), "HTTP WEB Server started");
         } catch (Exception e) {
-            BotLogger.debug("❌", true, "Ошибка: " + e.getMessage());
+            BotLogger.debug("❌", isLogged(), "Ошибка: " + e.getMessage());
         }
 
         // тут зарегаем ивенты
@@ -116,7 +125,7 @@ public class AIBotPlugin extends JavaPlugin {
         //
         getServer().getPluginManager().registerEvents(new BotListener(botManager), this);
 
-        BotLogger.debug("✅", true, "AI Bot Plugin перезагружен успешно!");
+        BotLogger.debug("✅", isLogged(), "AI Bot Plugin перезагружен успешно!");
 
     }
 
@@ -133,10 +142,12 @@ public class AIBotPlugin extends JavaPlugin {
         getLogger().info("Web port: " + config.server.web_port);
         getLogger().info("map host: " + config.server.map_host);
         getLogger().info("map port: " + config.server.map_port);
+
+        setLogged(config.logging.enable);
     }
 
     private void copyEssentialResources() {
-        BotResourceExtractor.copyDirectoryFromJar("web", BotConstants.PLUGIN_PATH + "/web", true, Set.of(".html", ".css", ".js", ".png"));
+        BotResourceExtractor.copyDirectoryFromJar("web", BotConstants.PLUGIN_PATH + "/web", true , Set.of(".html", ".css", ".js", ".png"));
         BotResourceExtractor.copyDirectoryFromJar("patterns", BotConstants.PLUGIN_PATH + "/patterns", false, Set.of(".json"));
         BotResourceExtractor.copyDirectoryFromJar("config", BotConstants.PLUGIN_PATH_CONFIGS, false, Set.of(".me"));
         BotResourceExtractor.copyDirectoryFromJar("tmp", BotConstants.PLUGIN_PATH_TMP, false, Set.of(".me"));
@@ -145,9 +156,9 @@ public class AIBotPlugin extends JavaPlugin {
 
     private void ensureDataFolderExists() {
         if (!getDataFolder().exists() && getDataFolder().mkdirs()) {
-            BotLogger.debug("📁 ", true, "Created plugin data folder: " + getDataFolder().getAbsolutePath());
+            BotLogger.debug("📁 ", isLogged(), "Created plugin data folder: " + getDataFolder().getAbsolutePath());
         } else if (!getDataFolder().exists()) {
-            BotLogger.debug("❌ ", true, "Failed to create plugin data folder!");
+            BotLogger.debug("❌ ", isLogged(), "Failed to create plugin data folder!");
         }
     }
 

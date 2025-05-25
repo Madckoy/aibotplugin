@@ -42,7 +42,7 @@ public class BotTaskManager {
             currentReactiveRoot = task;
         }
 
-        BotLogger.debug("🤖", true,
+        BotLogger.debug("🤖", task.isLogged(),
                 bot.getId() + " ➕ Добавлена задача: " + task.getIcon() + " " + task.getClass().getSimpleName());
     }
 
@@ -59,7 +59,7 @@ public class BotTaskManager {
             BotLifecycleLogger.write(this.bot);
             BotTask<?> removed = taskStack.pop();
 
-            BotLogger.debug("🤖", true, bot.getId() + " ➖ Удалена задача: " + removed.getClass().getSimpleName());
+            BotLogger.debug("🤖", bot.isLogged(), bot.getId() + " ➖ Удалена задача: " + removed.getClass().getSimpleName());
 
             if (removed == currentReactiveRoot) {
                 currentReactiveRoot = null; // реактивная сессия завершена
@@ -99,16 +99,16 @@ public class BotTaskManager {
     public void updateActiveTask() {
         BotTask<?> currentTask = getActiveTask();
         if (currentTask != null) {
-            BotLogger.debug("🤖", true, bot.getId()     + " 🟢 Activate task: " + currentTask.getIcon() + " "
+            BotLogger.debug("🤖", currentTask.isLogged(), bot.getId()     + " 🟢 Activate task: " + currentTask.getIcon() + " "
                     + currentTask.getClass().getSimpleName());
 
             if (currentTask.isDone()) {
-                BotLogger.debug("🤖", true, bot.getId() + " ⭕ Deactivating task: " + currentTask.getIcon() + " "
+                BotLogger.debug("🤖", currentTask.isLogged(), bot.getId() + " ⭕ Deactivating task: " + currentTask.getIcon() + " "
                         + currentTask.getClass().getSimpleName());
                 popTask();                        
             
             } else {
-                BotLogger.debug("🤖", true, bot.getId() + " 🔵 Updating task: " + currentTask.getIcon() + " "
+                BotLogger.debug("🤖", currentTask.isLogged(), bot.getId() + " 🔵 Updating task: " + currentTask.getIcon() + " "
                         + currentTask.getClass().getSimpleName());
 
                 if(isWaiting()==false) {
@@ -125,7 +125,7 @@ public class BotTaskManager {
         while (!taskStack.isEmpty()) {
             BotTask<?> removedTask = taskStack.pop();
             removedTask.stop();
-            BotLogger.debug("🤖", true, bot.getId()     + " ⚫ Удалена задача: " + removedTask.getIcon() + " "
+            BotLogger.debug("🤖",removedTask.isLogged(), bot.getId()     + " ⚫ Удалена задача: " + removedTask.getIcon() + " "
                     + removedTask.getClass().getSimpleName());
         }
     }
@@ -148,7 +148,7 @@ public class BotTaskManager {
         for (int i = 0; i < getTaskStack().size(); i++) {
             BotTask<?> task = getTaskStack().get(i);
 
-            BotLogger.debug("🤖", true, bot.getId() + " Task Info: " + task.getIcon() + " | " + task.getObjective());
+            BotLogger.debug("🤖", task.isLogged(), bot.getId() + " Task Info: " + task.getIcon() + " | " + task.getObjective());
 
             sb.append(task != null ? task.getIcon() : "?");
             if (i < getTaskStack().size() - 1) {

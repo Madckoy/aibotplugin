@@ -110,7 +110,7 @@ public class BotNavigator {
 
     public void setTarget(BotBlockData tgt) {
         if (tgt != null) {
-            BotLogger.debug(BotUtils.getActiveTaskIcon(bot), true, bot.getId() + " 🗺️ Target is set: " + tgt);
+            BotLogger.debug(BotUtils.getActiveTaskIcon(bot), bot.isLogged(), bot.getId() + " 🗺️ Target is set: " + tgt);
         }
         this.target = tgt;
     }
@@ -118,7 +118,7 @@ public class BotNavigator {
     public void setStuck(boolean stuck) {
         try {
             if (bot.getActiveTask() != null) {
-                BotLogger.debug(BotUtils.getActiveTaskIcon(bot), true,
+                BotLogger.debug(BotUtils.getActiveTaskIcon(bot), bot.isLogged(),
                         bot.getId() + " ❓ BotState: set Stuck=" + stuck);
                 this.stuck = stuck;
                 if (stuck) {
@@ -169,9 +169,9 @@ public class BotNavigator {
 
         calculating = true;
         try {
-            BotLogger.debug(bot.getActiveTask().getIcon(), true, bot.getId() + " 💻 Navigator calculation started");
+            BotLogger.debug(bot.getActiveTask().getIcon(), bot.isLogged(), bot.getId() + " 💻 Navigator calculation started");
         } catch (Exception ex) {
-            BotLogger.debug("*", true, bot.getId() + " 💻 Navigator calculation started");
+            BotLogger.debug("❌ ", bot.isLogged(), bot.getId() + " 💻 Navigator calculation falsed");
         }
     
         List<BotBlockData> result = new ArrayList<>();
@@ -255,15 +255,15 @@ public class BotNavigator {
         updateNavigationMemory();
 
         try {
-            BotLogger.debug(bot.getActiveTask().getIcon(), true, bot.getId() + " 💻 Navigator calculation ended");
+            BotLogger.debug(bot.getActiveTask().getIcon(), bot.isLogged(), bot.getId() + " 💻 Navigator calculation ended");
         } catch (Exception ex) {
-            BotLogger.debug("*", true, bot.getId() + " 💻 Navigator calculation ended");
+            BotLogger.debug("*", bot.isLogged(), bot.getId() + " 💻 Navigator calculation ended");
         }
     
 
         long end = System.currentTimeMillis();
         
-        BotLogger.debug(BotUtils.getActiveTaskIcon(bot), true,
+        BotLogger.debug(BotUtils.getActiveTaskIcon(bot), bot.isLogged(),
                     bot.getId() + " ⏱ Tagging completed in " + (end - start) + " ms");
 
         
@@ -362,11 +362,11 @@ public class BotNavigator {
 
     public boolean navigate(float speed) {
         if (this.target == null) {
-            BotLogger.debug(BotUtils.getActiveTaskIcon(bot), true,
+            BotLogger.debug(BotUtils.getActiveTaskIcon(bot), bot.isLogged(),
                     bot.getId() + " 🗺️ Target is null. Navigation is not possible ");
             return false;
         } else {
-            BotLogger.debug(BotUtils.getActiveTaskIcon(bot), true,
+            BotLogger.debug(BotUtils.getActiveTaskIcon(bot), bot.isLogged(),
                     bot.getId() + " 🗺️ Runtime Target position: " + this.target);
 
             if (actionSuggestion == Suggestion.MOVE) {

@@ -17,7 +17,7 @@ public class BotStrategyNearbyHostile implements IBotStrategyReaction {
 
     @Override
     public Optional<Runnable> check(Bot bot) {
-        BotLogger.debug("🤖", true, bot.getId() + " 😈 Проверка реакции на близость враждебного моба");
+        BotLogger.debug("🤖", bot.isLogged(), bot.getId() + " 😈 Проверка реакции на близость враждебного моба");
 
         BotSceneData scene = bot.getBrain().getSceneData();
         BotPosition botPos = bot.getNavigator().getPosition();
@@ -33,7 +33,7 @@ public class BotStrategyNearbyHostile implements IBotStrategyReaction {
                 if (dist >= 1)
                     continue;
 
-                BotLogger.debug("🤖", true, bot.getId() + " ❗ Обнаружен враждебный моб: " + entity.getType()
+                BotLogger.debug("🤖", bot.isLogged(), bot.getId() + " ❗ Обнаружен враждебный моб: " + entity.getType()
                         + " (" + String.format("%.1f", dist) + " м)");
 
                 return Optional.of(() -> {

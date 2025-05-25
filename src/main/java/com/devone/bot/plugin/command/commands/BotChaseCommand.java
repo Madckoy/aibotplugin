@@ -5,6 +5,7 @@ import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
+import com.devone.bot.AIBotPlugin;
 import com.devone.bot.core.Bot;
 import com.devone.bot.core.BotManager;
 import com.devone.bot.core.task.passive.BotTaskManager;
@@ -36,7 +37,7 @@ public class BotChaseCommand implements CommandExecutor {
             return true;
         }
 
-        BotLogger.debug("📌", true, "/bot-chase: Бот " + bot.getId() + " следует за " + player.getName());
+        BotLogger.debug("📌", AIBotPlugin.getInstance().isLogged(), "/bot-chase: Бот " + bot.getId() + " следует за " + player.getName());
 
         // ✅ Очищаем стек задач
         //BotTaskManager.clear(bot);

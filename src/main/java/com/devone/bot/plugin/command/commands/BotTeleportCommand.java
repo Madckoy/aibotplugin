@@ -6,6 +6,7 @@ import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
 
+import com.devone.bot.AIBotPlugin;
 import com.devone.bot.core.Bot;
 import com.devone.bot.core.BotManager;
 import com.devone.bot.core.task.passive.BotTaskManager;
@@ -24,11 +25,11 @@ public class BotTeleportCommand implements CommandExecutor {
     @Override
     public boolean onCommand(CommandSender sender, Command command, String label, String[] args) {
 
-        BotLogger.debug("🔧", true, "Получена команда от сервера: " + Arrays.toString(args));
+        BotLogger.debug("🔧", AIBotPlugin.getInstance().isLogged(), "Получена команда от сервера: " + Arrays.toString(args));
 
         if (args.length < 4) {
             sender.sendMessage("❌ Недостаточно аргументов. Используйте: /bot-tp <bot_id> <x> <y> <z>");
-            BotLogger.debug("❌", true, "Недостаточно аргументов для /bot-tp");
+            BotLogger.debug("❌", AIBotPlugin.getInstance().isLogged(), "Недостаточно аргументов для /bot-tp");
             return false;
         }
 
@@ -44,7 +45,7 @@ public class BotTeleportCommand implements CommandExecutor {
 
             sender.sendMessage("❌ Координаты должны быть целыми числами.");
 
-            BotLogger.debug("❌", true, "Координаты должны быть целыми числами.");
+            BotLogger.debug("❌", AIBotPlugin.getInstance().isLogged(), "Координаты должны быть целыми числами.");
 
             return false;
         }
@@ -54,13 +55,13 @@ public class BotTeleportCommand implements CommandExecutor {
         if (bot == null) {
             sender.sendMessage("❌ Бот с именем " + botName + " не найден.");
 
-            BotLogger.debug("❌", true, "Бот с именем " + botName + " не найден.");
+            BotLogger.debug("❌", AIBotPlugin.getInstance().isLogged(), "Бот с именем " + botName + " не найден.");
 
             return false;
         }
         BotPosition loc = new BotPosition(x, y, z);
 
-        BotLogger.debug("📌", true, "/bot-tp: Бот " + bot.getId() + " телепортируется в " + loc);
+        BotLogger.debug("📌", AIBotPlugin.getInstance().isLogged(), "/bot-tp: Бот " + bot.getId() + " телепортируется в " + loc);
 
         // Удаляем все задачи
         BotTaskManager.clear(bot);
@@ -71,7 +72,7 @@ public class BotTeleportCommand implements CommandExecutor {
 
         sender.sendMessage("✅ Бот '" + botName + "' телепортируется в " + loc);
 
-        BotLogger.debug("✅", true, "Бот '" + botName + "' телепортировался в " + loc);
+        BotLogger.debug("✅", AIBotPlugin.getInstance().isLogged(), "Бот '" + botName + "' телепортировался в " + loc);
 
         return true;
     }

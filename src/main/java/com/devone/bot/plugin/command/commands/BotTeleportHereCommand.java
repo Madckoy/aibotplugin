@@ -5,6 +5,7 @@ import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
+import com.devone.bot.AIBotPlugin;
 import com.devone.bot.core.Bot;
 import com.devone.bot.core.BotManager;
 import com.devone.bot.core.task.passive.BotTaskManager;
@@ -37,7 +38,7 @@ public class BotTeleportHereCommand implements CommandExecutor {
         // Удаляем все задачи
         BotTaskManager.clear(bot);
 
-        BotLogger.debug("📌", true, "/bot-tp-here: Бот " + bot.getId() + " будет телепортирован к игроку");
+        BotLogger.debug("📌", AIBotPlugin.getInstance().isLogged(), "/bot-tp-here: Бот " + bot.getId() + " будет телепортирован к игроку");
 
         BotTaskManager.push(bot, new BotReactiveTeleportToPlayerContainer(bot, player));
 

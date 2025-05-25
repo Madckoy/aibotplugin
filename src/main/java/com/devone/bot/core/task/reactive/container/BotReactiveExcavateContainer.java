@@ -25,7 +25,7 @@ public class BotReactiveExcavateContainer extends BotReactiveContainer<BotReacti
 
     @Override
     protected List<BotTask<?>> enqueue(Bot bot) {
-        BotLogger.debug(getIcon(), true, bot.getId() + " " + icon + " " + getObjective());
+        BotLogger.debug(getIcon(), isLogged(), bot.getId() + " " + icon + " " + getObjective());
         BotExcavateTaskParams excvParams = new BotExcavateTaskParams();
         BotExcavateTask excvTask = new BotExcavateTask(bot);
         excvTask.setReactive(true);

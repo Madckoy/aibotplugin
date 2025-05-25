@@ -70,7 +70,7 @@ public class Bot {
         this.speaker = new BotSpeaker(this); // Инициализация BotCommunicator
         this.navigator = new BotNavigator(this);
 
-        BotLogger.debug("🤖", true, id + " ➕ Has been created and spawned");
+        BotLogger.debug("🤖", isLogged(), id + " ➕ Has been created and spawned");
     }
 
     public static BotTask<?> getActiveTask(Bot bot) {
@@ -130,16 +130,16 @@ public class Bot {
     public void despawnNPC() {
         if (npc != null) {
             // stop all tasks!
-            BotLogger.debug("🤖", true, id + " ➖ Stopping All Tasks");
+            BotLogger.debug("🤖", isLogged(), id + " ➖ Stopping All Tasks");
 
             BotTaskManager.clear(this);
 
-            BotLogger.debug("🤖", true, id + " ➖ Despawning and Destroying NPC");
+            BotLogger.debug("🤖", isLogged(), id + " ➖ Despawning and Destroying NPC");
             npc.despawn();
             npc.destroy();
             npc = null;
         }
-        BotLogger.debug("🤖", true, id + " ➖ Has been Despawned and Destroyed");
+        BotLogger.debug("🤖", isLogged(), id + " ➖ Has been Despawned and Destroyed");
     }
 
     public BotInventory getInventory() {

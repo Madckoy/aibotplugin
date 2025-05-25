@@ -5,6 +5,8 @@ import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
+
+import com.devone.bot.AIBotPlugin;
 import com.devone.bot.core.Bot;
 import com.devone.bot.core.BotManager;
 import com.devone.bot.core.task.passive.BotTaskManager;
@@ -43,7 +45,7 @@ public class BotMoveHereCommand implements CommandExecutor {
                 playerLoc.getBlockY(),
                 playerLoc.getBlockZ());
 
-        BotLogger.debug("🥾", true,
+        BotLogger.debug("🥾", AIBotPlugin.getInstance().isLogged(),
                 "/bot-move-here: Бот " + bot.getId() + " телепортируется и направляется к игроку " + moveTo);
 
         // 📦 Контейнер

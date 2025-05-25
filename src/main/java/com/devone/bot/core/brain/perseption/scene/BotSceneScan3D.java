@@ -66,7 +66,7 @@ public static BotSceneData scan(Bot bot, int radius, int height) {
 
         if (standingOn == Material.WATER || standingOn == Material.BUBBLE_COLUMN ||
             standingOn == Material.SEAGRASS || standingOn == Material.KELP) {
-            BotLogger.debug("📡", true, bot.getId() + " 🌊 Морской моб в воде: " + entity.getName());
+            BotLogger.debug("📡", bot.isLogged(), bot.getId() + " 🌊 Морской моб в воде: " + entity.getName());
             continue;
         }
 

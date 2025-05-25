@@ -6,6 +6,7 @@ import java.io.*;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 
+import com.devone.bot.AIBotPlugin;
 import com.devone.bot.core.utils.BotConstants;
 import com.devone.bot.core.utils.logger.BotLogger;
 
@@ -15,7 +16,7 @@ public class BotMainPageServlet extends HttpServlet {
 
         File file = new File(BotConstants.PLUGIN_PATH + "/web/template.html");
         if (!file.exists()) {
-            BotLogger.debug("⚠️", true, "template.html not found: " + file.getAbsolutePath());
+            BotLogger.debug("⚠️", AIBotPlugin.getInstance().isLogged(), "template.html not found: " + file.getAbsolutePath());
             resp.sendError(HttpServletResponse.SC_NOT_FOUND, "template.html not found");
             return;
         }

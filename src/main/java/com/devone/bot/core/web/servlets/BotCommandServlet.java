@@ -8,6 +8,7 @@ import java.util.List;
 
 import org.bukkit.Bukkit;
 
+import com.devone.bot.AIBotPlugin;
 import com.devone.bot.core.BotManager;
 import com.devone.bot.core.utils.logger.BotLogger;
 import com.google.gson.JsonObject;
@@ -40,14 +41,14 @@ public class BotCommandServlet extends HttpServlet {
             json.getAsJsonArray("params").forEach(e -> params.add(e.getAsString()));
 
             String fullCommand = command + " " + botId + " " + String.join(" ", params);
-            BotLogger.debug("🌐", true, "От сервера получена команда: " + fullCommand);
+            BotLogger.debug("🌐", AIBotPlugin.getInstance().isLogged(), "От сервера получена команда: " + fullCommand);
 
             // Выполнить команду на основном потоке сервера
             Bukkit.getScheduler().runTask(
                 Bukkit.getPluginManager().getPlugin("AIBotPlugin"),
                 () -> {
                     boolean success = Bukkit.dispatchCommand(Bukkit.getConsoleSender(), fullCommand);
-                    BotLogger.debug("📬", true, "Команда выполнена: " + fullCommand + " -> " + (success ? "✅ OK" : "❌ FAIL"));
+                    BotLogger.debug("📬", AIBotPlugin.getInstance().isLogged(), "Команда выполнена: " + fullCommand + " -> " + (success ? "✅ OK" : "❌ FAIL"));
                 }
             );
 
@@ -56,7 +57,7 @@ public class BotCommandServlet extends HttpServlet {
 
         } catch (Exception e) {
             e.printStackTrace(); // Временный вывод в консоль
-            BotLogger.debug("❌", true, "Ошибка выполнения команды: " + e.getMessage());
+            BotLogger.debug("❌", AIBotPlugin.getInstance().isLogged(), "Ошибка выполнения команды: " + e.getMessage());
             resp.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
             out.write("{\"error\":\"Internal error\"}");
             out.flush();

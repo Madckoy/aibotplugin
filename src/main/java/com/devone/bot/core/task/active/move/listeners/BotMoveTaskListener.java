@@ -33,7 +33,7 @@ public class BotMoveTaskListener implements Listener {
     public void onNavigationComplete(NavigationCompleteEvent event) {
         if (event.getNPC().getId() != task.getBot().getNPC().getId()) return;
 
-        BotLogger.debug(task.getIcon(), true,
+        BotLogger.debug(task.getIcon(), task.isLogged(),
                 task.getBot().getId() + " ✅ Навигация завершена, ID таски: " + task.getUUID());
 
         BotPosition pos = task.getParams().getTarget();
@@ -43,7 +43,7 @@ public class BotMoveTaskListener implements Listener {
                 && task.getBot().getNPC().getStoredLocation().getBlockZ() == pos.getZ();
 
         if (!arrived) {
-            BotLogger.debug(task.getIcon(), true,
+            BotLogger.debug(task.getIcon(), task.isLogged(),
                     task.getBot().getId() + " ⚠️ Навигатор завершил, но NPC не в точке XZ. Завершаем всё равно.");
                    
         }
@@ -66,7 +66,7 @@ public class BotMoveTaskListener implements Listener {
     public void onNavigationCancel(NavigationCancelEvent event) {
         if (event.getNPC().getId() != task.getBot().getNPC().getId()) return;
 
-        BotLogger.debug(task.getIcon(), true,
+        BotLogger.debug(task.getIcon(), task.isLogged(),
                 task.getBot().getId() + " ❌ Навигация отменена — NPC не смог дойти");
         task.stop();
     }
@@ -80,8 +80,8 @@ public class BotMoveTaskListener implements Listener {
         BotPosition actual = bot.getNavigator().getPosition();
     
         if (target != null && actual != null) {
-            double dx = Math.abs(actual.getX() - target.getX());
-            double dz = Math.abs(actual.getZ() - target.getZ());
+            //double dx = Math.abs(actual.getX() - target.getX());
+            //double dz = Math.abs(actual.getZ() - target.getZ());
 
             BotPosition centered = BotMoveTaskHelper.centerBlock(actual);
 
@@ -93,7 +93,7 @@ public class BotMoveTaskListener implements Listener {
                 );
 
             aligned.setYaw(bot.getNavigator().getPositionSight().getYaw());
-            aligned.setPitch(0);//(bot.getNavigator().getPositionSight().getYaw());
+            aligned.setPitch(bot.getNavigator().getPositionSight().getPitch());
 
             System.out.println(centered);    
             System.out.println(aligned);    
@@ -102,7 +102,7 @@ public class BotMoveTaskListener implements Listener {
                         bot.getNPC().teleport(aligned, PlayerTeleportEvent.TeleportCause.PLUGIN);
                 });
 
-            BotLogger.debug("🧭", true, bot.getId() + " 📌 Выровнен в центр блока через NavigationCompleteListener: " + bot.getNPC().getStoredLocation());
+            BotLogger.debug("🧭", bot.isLogged(), bot.getId() + " 📌 Выровнен в центр блока через NavigationCompleteListener: " + bot.getNPC().getStoredLocation());
         }
     }
 }

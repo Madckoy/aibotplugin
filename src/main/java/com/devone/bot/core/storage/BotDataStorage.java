@@ -29,7 +29,7 @@ public class BotDataStorage {
             File memoryFile = new File(baseFile + ".memory");
             bot.getBrain().getMemoryV2().saveToFile(memoryFile);
         } catch (IOException e) {
-            BotLogger.warn("🧠", true, name + " — failed to save memory: " + e.getMessage());
+            BotLogger.warn("🧠", bot.isLogged(), name + " — failed to save memory: " + e.getMessage());
         }
 
         // 🎒 Save inventory
@@ -37,7 +37,7 @@ public class BotDataStorage {
             File inventoryFile = new File(baseFile + ".inventory");
             saveInventory(bot, inventoryFile);
         } catch (IOException e) {
-            BotLogger.warn("🎒", true, name + " — failed to save inventory: " + e.getMessage());
+            BotLogger.warn("🎒", bot.isLogged(), name + " — failed to save inventory: " + e.getMessage());
         }
 
         // 📎 (Optional: save snapshot, etc.)
@@ -54,7 +54,7 @@ public class BotDataStorage {
                 BotMemoryV2 memory = BotMemoryV2.loadFromFile(memoryFile);
                 bot.getBrain().setMemoryV2(memory);
             } catch (IOException e) {
-                BotLogger.warn("🧠", true, name + " — failed to load memory: " + e.getMessage());
+                BotLogger.warn("🧠", bot.isLogged(), name + " — failed to load memory: " + e.getMessage());
             }
         }
 
@@ -64,7 +64,7 @@ public class BotDataStorage {
             try {
                 loadInventory(bot, inventoryFile);
             } catch (IOException e) {
-                BotLogger.warn("🎒", true, name + " — failed to load inventory: " + e.getMessage());
+                BotLogger.warn("🎒", bot.isLogged(), name + " — failed to load inventory: " + e.getMessage());
             }
         }
     }

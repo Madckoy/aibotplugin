@@ -14,21 +14,21 @@ public abstract class BotTaskParams implements IBotTaskParams {
 
     private String icon = "☑️";
     private String objective = "Do something abstract";
-    private boolean isEnabled = false;
-
-    public void setEnabled(boolean isEnabled) {
-        this.isEnabled = isEnabled;
-    }
-
+    private boolean isEnabled = true;
     private boolean isLogged = false;
 
     public boolean isLogged() {
         return isLogged;
     }
 
-    public void setLogged(boolean lg) {
-        this.isLogged = lg;
+    public void setLogged(boolean isLogged) {
+        this.isLogged = isLogged;
     }
+
+    public void setEnabled(boolean isEnabled) {
+        this.isEnabled = isEnabled;
+    }
+
 
     private long timeout = BotConstants.DEFAULT_TASK_TIMEOUT;
 

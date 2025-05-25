@@ -39,9 +39,9 @@ public class BotZoneManager {
             String zoneName = entry.getKey();
             BotZoneConfig.ZoneEntry z = entry.getValue();
             protectedZones.put(zoneName, new BotProtectedZone(z.x, z.y, z.z, z.radius));
-            BotLogger.debug("━",true, "Loaded zone: " + zoneName + " at (" + z.x + ", " + z.y + ", " + z.z + ") with radius " + z.radius);
+            BotLogger.debug("━",AIBotPlugin.getInstance().isLogged(), "Loaded zone: " + zoneName + " at (" + z.x + ", " + z.y + ", " + z.z + ") with radius " + z.radius);
         }
-        BotLogger.debug("☰", true, "Total zones loaded: " + protectedZones.size());
+        BotLogger.debug("☰", AIBotPlugin.getInstance().isLogged(), "Total zones loaded: " + protectedZones.size());
     }
 
     public void saveZones() {
@@ -51,17 +51,17 @@ public class BotZoneManager {
             data.zones.put(name, new BotZoneConfig.ZoneEntry(zone.getX(), zone.getY(), zone.getZ(), zone.getRadius()))
         );
         config.save();
-        BotLogger.debug("🗺️", true, "Zones saved successfully.");
+        BotLogger.debug("🗺️", AIBotPlugin.getInstance().isLogged(), "Zones saved successfully.");
     }
 
     public void addZone(String name, Location center, int radius) {
         protectedZones.put(name, new BotProtectedZone(center.getX(), center.getY(), center.getZ(), radius));
-        BotLogger.debug("➕", true, "Added new zone: " + name + " at " + center + " with radius " + radius);
+        BotLogger.debug("➕", AIBotPlugin.getInstance().isLogged(), "Added new zone: " + name + " at " + center + " with radius " + radius);
     }
 
     public boolean removeZone(String name) {
         if (protectedZones.remove(name) != null) {
-            BotLogger.debug("➖", true, "Removed zone: " + name);
+            BotLogger.debug("➖", AIBotPlugin.getInstance().isLogged(), "Removed zone: " + name);
             return true;
         }
         return false;
@@ -86,7 +86,7 @@ public class BotZoneManager {
 
     public static boolean isLocationInProtectedZone(BotPosition location) {
         if (instance == null) {
-            BotLogger.debug("❌",true, "ZoneManager not initialized!");
+            BotLogger.debug("❌",AIBotPlugin.getInstance().isLogged(), "ZoneManager not initialized!");
             return false;
         }
         return instance.isInProtectedZone(location);

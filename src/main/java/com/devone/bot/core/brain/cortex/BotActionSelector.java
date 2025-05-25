@@ -2,19 +2,30 @@ package com.devone.bot.core.brain.cortex;
 
 import java.util.*;
 
+import com.devone.bot.core.Bot;
 import com.devone.bot.core.utils.logger.BotLogger;
 
 public class BotActionSelector {
 
-    public static Optional<Runnable> selectWeightedRandom(List<BotTaskCandidate> candidates) {
+    private boolean isLogged = true;
+
+    public boolean isLogged() {
+        return isLogged;
+    }
+
+    public void setLogged(boolean isLogged) {
+        this.isLogged = isLogged;
+    }
+
+    public static Optional<Runnable> selectWeightedRandom(Bot bot, List<BotTaskCandidate> candidates) {
         List<BotTaskCandidate> available = candidates.stream()
             .filter(BotTaskCandidate::isAvailable)
             .toList();
 
-        BotLogger.debug("⚙️", true, "🧠 Доступные кандидаты на действие: " + candidates.size());
+        BotLogger.debug("⚙️", bot.isLogged(), "🧠 Доступные кандидаты на действие: " + candidates.size());
 
         for (BotTaskCandidate c : candidates) {
-                BotLogger.debug("⚙️", true,  "Кандидат: weight=" + c.getWeight() + " available=" + c.isAvailable());
+                BotLogger.debug("⚙️", bot.isLogged(),  "Кандидат: weight=" + c.getWeight() + " available=" + c.isAvailable());
         }    
         
         if (available.isEmpty()) return Optional.empty();

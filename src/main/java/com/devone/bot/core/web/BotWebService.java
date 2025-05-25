@@ -42,11 +42,11 @@ public class BotWebService {
 
         String bluemapBaseUrl = "http://" + MAP_HOST + ":" + MAP_PORT;
 
-        BotLogger.debug("🌐",true, "SERVER_HOST: " + SERVER_HOST);
-        BotLogger.debug("🌐",true, "SERVER_PORT: " + SERVER_PORT);
-        BotLogger.debug("🌐",true, "MAP_HOST: " + MAP_HOST);
-        BotLogger.debug("🌐",true, "MAP_PORT: " + MAP_PORT);
-        BotLogger.debug("🧭",true, "BlueMap Proxy Target: " + bluemapBaseUrl);
+        BotLogger.debug("🌐", AIBotPlugin.getInstance().isLogged(), "SERVER_HOST: " + SERVER_HOST);
+        BotLogger.debug("🌐", AIBotPlugin.getInstance().isLogged(), "SERVER_PORT: " + SERVER_PORT);
+        BotLogger.debug("🌐", AIBotPlugin.getInstance().isLogged(), "MAP_HOST: " + MAP_HOST);
+        BotLogger.debug("🌐", AIBotPlugin.getInstance().isLogged(), "MAP_PORT: " + MAP_PORT);
+        BotLogger.debug("🧭", AIBotPlugin.getInstance().isLogged(), "BlueMap Proxy Target: " + bluemapBaseUrl);
 
         this.server = new Server(SERVER_PORT);
 

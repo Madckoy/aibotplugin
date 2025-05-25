@@ -22,7 +22,7 @@ public class BotMoveTaskHelper {
      */
     public static void setTarget(Bot bot, BotPosition target, float speed, boolean log) {
         if (target == null) {
-            BotLogger.debug( BotUtils.getActiveTaskIcon(bot), true, bot.getId() + " 🏁 Не смогли начать движение.");
+            BotLogger.debug( BotUtils.getActiveTaskIcon(bot), bot.isLogged(), bot.getId() + " 🏁 Не смогли начать движение.");
             return;
         }
 
@@ -34,7 +34,7 @@ public class BotMoveTaskHelper {
         bot.getNPCNavigator().setTarget(loc);
 
         if (log) {
-            BotLogger.debug(BotUtils.getActiveTaskIcon(bot), true, bot.getId() + " ▶ Двигаемся к: " + target);
+            BotLogger.debug(BotUtils.getActiveTaskIcon(bot), bot.isLogged(), bot.getId() + " ▶ Двигаемся к: " + target);
         }
     }
 
@@ -52,7 +52,7 @@ public class BotMoveTaskHelper {
      * @param bot        бот
      * @param target     ожидаемая позиция
      * @param yTolerance допустимая погрешность по Y
-     * @return true, если бот в нужной позиции
+     * @return true  если бот в нужной позиции
      */
     public static boolean isAtTarget(Bot bot, BotPosition tgt, double yTolerance) {
         if (bot == null || tgt == null) return false;
@@ -64,7 +64,7 @@ public class BotMoveTaskHelper {
                 && botLoc.getZ() == poiLoc.getZ()
                 && Math.abs(botLoc.getY() - poiLoc.getY()) <= yTolerance;
 
-        BotLogger.debug(BotUtils.getActiveTaskIcon(bot), true, bot.getId() + " 📍 Позиция: " + botLoc + " | Цель: " + poiLoc + " | Совпадает: " + match);
+        BotLogger.debug(BotUtils.getActiveTaskIcon(bot), bot.isLogged(), bot.getId() + " 📍 Позиция: " + botLoc + " | Цель: " + poiLoc + " | Совпадает: " + match);
 
         return match;
     }

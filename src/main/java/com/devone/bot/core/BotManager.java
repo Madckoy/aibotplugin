@@ -24,6 +24,15 @@ public class BotManager {
     private final Map<String, Bot> botsMap = new HashMap<>();
     private final Map<UUID, Bot> selectedBots = new HashMap<>();
     private final BotManagerConfig config;
+    private boolean isLogged = true;
+
+    public boolean isLogged() {
+        return isLogged;
+    }
+
+    public void setLogged(boolean isLogged) {
+        this.isLogged = isLogged;
+    }
 
     private BlueMapMarkers blueMapMarkers;
 
@@ -42,9 +51,9 @@ public class BotManager {
         this.config = new BotManagerConfig(botsFile);
 
         Bukkit.getScheduler().runTaskLater(plugin, () -> {
-            BotLogger.debug("🤖", true, "💡 Loading bots...");
+            BotLogger.debug("🤖", isLogged(), "💡 Loading bots...");
             loadExistingBots();
-            BotLogger.debug("🤖", true, "✅ All bots loaded.");
+            BotLogger.debug("🤖", isLogged(), "✅ All bots loaded.");
         }, 600L);
     }
 
@@ -61,26 +70,26 @@ public class BotManager {
                     .anyMatch(b -> b.getNPCEntity().getUniqueId().equals(npcUUID));
 
             if (botExists(botEntry.name) || alreadyRegistered) {
-                BotLogger.warn("🤖", true, "🚨 Duplicate or already registered NPC: " + botEntry.name + " (UUID: " + npcUUID + ")");
+                BotLogger.warn("🤖", isLogged(), "🚨 Duplicate or already registered NPC: " + botEntry.name + " (UUID: " + npcUUID + ")");
                 continue;
             }
 
             if (!npc.isSpawned()) {
                 Location spawnLoc = BotUtils.getFallbackLocation();
                 npc.spawn(spawnLoc);
-                BotLogger.debug("🤖", true, "✅ Spawned NPC: " + botEntry.name);
+                BotLogger.debug("🤖", isLogged(), "✅ Spawned NPC: " + botEntry.name);
             }
 
             Bot bot = new Bot(botEntry.name, npc, this);
             botsMap.put(botEntry.name, bot);
 
             BotDataStorage.loadBotData(bot); // 🧠 загрузка мозгов и инвентаря
-            BotLogger.debug("🤖", true, botEntry.name + " ✅ Added to the map!");
+            BotLogger.debug("🤖", isLogged(), botEntry.name + " ✅ Added to the map!");
         }
 
         blueMapMarkers = new BlueMapMarkers(this);
 
-        BotLogger.debug("🤖", true, "✅ Loaded NPC bots: " + botsMap.size());
+        BotLogger.debug("🤖", isLogged(), "✅ Loaded NPC bots: " + botsMap.size());
     }
 
     public void saveBots() {
@@ -96,12 +105,12 @@ public class BotManager {
         }
 
         config.save();
-        BotLogger.debug("🤖", true, "✅ Bots saved.");
+        BotLogger.debug("🤖", isLogged(), "✅ Bots saved.");
     }
 
     public void addBot(String name, Bot bot) {
         if (botsMap.containsKey(name)) {
-            BotLogger.warn("🤖", true, "🚨 Bot already registered: " + name + ", skipping.");
+            BotLogger.warn("🤖", isLogged(), "🚨 Bot already registered: " + name + ", skipping.");
             return;
         }
         botsMap.put(name, bot);
@@ -116,13 +125,13 @@ public class BotManager {
             blueMapMarkers.removeMarker(name);
             BotDataStorage.deleteBotData(name);
             saveBots();
-            BotLogger.debug("🤖", true, name + " ➖ has been removed.");
+            BotLogger.debug("🤖", isLogged(), name + " ➖ has been removed.");
         }
     }
 
     public void removeAllBots() {
         new ArrayList<>(botsMap.keySet()).forEach(this::removeBot);
-        BotLogger.debug("🤖", true, "✅ All bots removed.");
+        BotLogger.debug("🤖", isLogged(), "✅ All bots removed.");
     }
 
     public Bot getBot(String name) {

@@ -10,6 +10,7 @@ import java.util.UUID;
 
 import javax.imageio.ImageIO;
 
+import com.devone.bot.AIBotPlugin;
 import com.devone.bot.core.utils.BotConstants;
 import com.devone.bot.core.utils.logger.BotLogger;
 
@@ -33,9 +34,9 @@ public static String getSkinFile(UUID botUUID) {
         BufferedImage resizedImage = resizeImage(originalImage, 16, 16);
         ImageIO.write(resizedImage, "png", skinFile);
 
-        BotLogger.debug("✅", true, "Скачан и уменьшен скин для " + botUUID);
+        BotLogger.debug("✅", AIBotPlugin.getInstance().isLogged(), "Скачан и уменьшен скин для " + botUUID);
     } catch (Exception e) {
-        BotLogger.debug("❌", true, "Ошибка скачивания скина: " + e.getMessage());
+        BotLogger.debug("❌", AIBotPlugin.getInstance().isLogged(), "Ошибка скачивания скина: " + e.getMessage());
         return "/skins/default-bot.png";
     }
 

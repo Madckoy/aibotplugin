@@ -28,7 +28,7 @@ public class BotLogger {
         logger.setLevel(logLevel);
         logger.setUseParentHandlers(false);
 
-        info("🔧 BotLogger", true, "Logger initialized with level: " + logLevel.getName());
+        info("🔧 BotLogger", AIBotPlugin.getInstance().isLogged(), "Logger initialized with level: " + logLevel.getName());
     }
 
     public static void debug(String method, boolean enabled, String message) {

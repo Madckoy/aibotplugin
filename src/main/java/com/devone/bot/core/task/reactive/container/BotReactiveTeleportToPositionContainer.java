@@ -28,7 +28,7 @@ public class BotReactiveTeleportToPositionContainer
 
     @Override
     protected List<BotTask<?>> enqueue(Bot bot) {
-        BotLogger.debug(getIcon(), true, bot.getId() + " " + icon + " " + getObjective());
+        BotLogger.debug(getIcon(), isLogged(), bot.getId() + " " + icon + " " + getObjective());
 
         BotTeleportTask tp = new BotTeleportTask(bot, null);
         BotTeleportTaskParams params = new BotTeleportTaskParams();

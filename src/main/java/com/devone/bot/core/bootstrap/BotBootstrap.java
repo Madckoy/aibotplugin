@@ -29,7 +29,7 @@ public class BotBootstrap {
     }
 
     private void startLifeCycle() {
-        BotLogger.debug("🤖", true, "💥 Запускаем Bootstrap для бота " + bot.getId());
+        BotLogger.debug("🤖", bot.isLogged(), "💥 Запускаем Bootstrap для бота " + bot.getId());
 
         // ⛏️ Обновление навигации и сканирования
         Bukkit.getScheduler().runTaskTimer(AIBotPlugin.getInstance(), () -> {
@@ -37,7 +37,7 @@ public class BotBootstrap {
             if(bot.getNavigator().isCalculating()) return;
 
             String icon = BotUtils.getActiveTaskIcon(bot);           
-            BotLogger.debug(icon, true, bot.getId() + " 🛜 Sonar Scan started");
+            BotLogger.debug(icon, bot.isLogged(), bot.getId() + " 🛜 Sonar Scan started");
             BotSonar3DTaskParams params = new BotSonar3DTaskParams();
             int radius = BotConstants.DEFAULT_SCAN_RADIUS;
             Integer scanRadius = (Integer) BotMemoryV2Utils.readMemoryValue(bot, "navigation", "scanRadius");               
@@ -78,7 +78,7 @@ public class BotBootstrap {
             long ttlMillis = 60 * 60 * 1000; // 60 минут
             int removed = BotMemoryV2Utils.cleanupVisited(bot, ttlMillis);
             if (removed > 0) {
-                BotLogger.debug("🧠", true, bot.getId() + " 🧹 Auto-removed " + removed + " visited entries");
+                BotLogger.debug("🧠", bot.isLogged(), bot.getId() + " 🧹 Auto-removed " + removed + " visited entries");
             }
         }, 20L, 600L); // каждые 30 секунд (600 ticks)
     }
@@ -89,7 +89,7 @@ public class BotBootstrap {
             taskManager.updateActiveTask();
         } else {
             if (!brainStarted) {
-                BotLogger.debug("💥", true, bot.getId() + " 😴 Бот без задач. Добавляем BotBrainTask.");
+                BotLogger.debug("💥", bot.isLogged(), bot.getId() + " 😴 Бот без задач. Добавляем BotBrainTask.");
                 BotTaskManager.push(bot, new BotBrainTask(bot));
                 brainStarted = true;
             }

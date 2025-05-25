@@ -74,22 +74,22 @@ public class BotCommandsDispatcher implements CommandExecutor {
         registerCommand("zone-remove", new BotZoneRemoveCommand(zoneManager));
         registerCommand("zone-list", new BotZoneListCommand(zoneManager));
 
-        BotLogger.debug("✅", true, "Все команды зарегистрированы: " + commandExecutors.keySet());
+        BotLogger.debug("✅", AIBotPlugin.getInstance().isLogged(), "Все команды зарегистрированы: " + commandExecutors.keySet());
     }
 
     // ✅ Регистрируем команду и проверяем, существует ли она
     private void registerCommand(String command, CommandExecutor executor) {
-        BotLogger.debug("🔹", true, "Регистрация команды: " + command);
+        BotLogger.debug("🔹", AIBotPlugin.getInstance().isLogged(), "Регистрация команды: " + command);
 
         if (plugin.getCommand(command) == null) {
-            BotLogger.debug("❌", true, "Ошибка: команда " + command + " не найдена в plugin.yml!");
+            BotLogger.debug("❌", AIBotPlugin.getInstance().isLogged(), "Ошибка: команда " + command + " не найдена в plugin.yml!");
             return;
         }
 
         commandExecutors.put(command.toLowerCase(), executor);
         plugin.getCommand(command).setExecutor(this);
 
-        BotLogger.debug("✅", true, "Команда зарегистрирована: " + command);
+        BotLogger.debug("✅", AIBotPlugin.getInstance().isLogged(), "Команда зарегистрирована: " + command);
     }
 
     @Override
@@ -109,6 +109,6 @@ public class BotCommandsDispatcher implements CommandExecutor {
         commandExecutors.clear();
         registerCommands((AIBotPlugin) plugin, ((AIBotPlugin) plugin).getBotManager(),
                 ((AIBotPlugin) plugin).getZoneManager());
-        BotLogger.debug("♻️", true, "Команды перезагружены!");
+        BotLogger.debug("♻️", AIBotPlugin.getInstance().isLogged(), "Команды перезагружены!");
     }
 }

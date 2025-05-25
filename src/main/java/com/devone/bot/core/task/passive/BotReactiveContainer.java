@@ -24,11 +24,11 @@ public abstract class BotReactiveContainer<T extends BotTaskParams> extends BotT
     @Override
     public void execute() {
 
-            BotLogger.debug(getIcon(), true,
+            BotLogger.debug(getIcon(), isLogged(),
                     bot.getId() + " 🔣 Запущен реактивный контейнер: " + this.getClass().getSimpleName());
       
             if(isDeffered()==true) {
-                BotLogger.debug(getIcon(), true,
+                BotLogger.debug(getIcon(), isLogged(),
                     bot.getId() + " ➕  Добавляем вложенные задачи в стек");
 
                 subtasks = enqueue(bot); // 📦 добавляем задачи
@@ -37,7 +37,7 @@ public abstract class BotReactiveContainer<T extends BotTaskParams> extends BotT
                     stop();
                     return;
                 } else {
-                    BotLogger.debug(getIcon(), true,
+                    BotLogger.debug(getIcon(), isLogged(),
                     bot.getId() + " ☑️ Добавлены задачи: " + subtasks);
                 }
 
@@ -47,7 +47,7 @@ public abstract class BotReactiveContainer<T extends BotTaskParams> extends BotT
                 bot.getTaskManager().wait(true); // stop updating the stack
 
                 for (BotTask<?> task : reversed) {
-                    BotLogger.debug(getIcon(), true,
+                    BotLogger.debug(getIcon(), isLogged(),
                             bot.getId() + " 🔜 Запуск подзадачи: " + task.getClass().getSimpleName());
 
                     task.setReactive(true); // наследуем реактивность
@@ -63,7 +63,7 @@ public abstract class BotReactiveContainer<T extends BotTaskParams> extends BotT
                 boolean allDone = subtasks.stream().allMatch(BotTask::isDone);
 
                 if (allDone) {
-                    BotLogger.debug(getIcon(), true, bot.getId() + " 🔚 Все подзадачи завершены. Контейнер закрывается: "
+                    BotLogger.debug(getIcon(), isLogged(), bot.getId() + " 🔚 Все подзадачи завершены. Контейнер закрывается: "
                                 + this.getClass().getSimpleName());
                     stop();
                 }
@@ -87,7 +87,7 @@ public abstract class BotReactiveContainer<T extends BotTaskParams> extends BotT
     public void stop() {
         setDeffered(false);
         setReactive(false);
-        BotLogger.debug(getIcon(), true, bot.getId() + " 🔚 Контейнер снят: " + this.getClass().getSimpleName());
+        BotLogger.debug(getIcon(), isLogged(), bot.getId() + " 🔚 Контейнер снят: " + this.getClass().getSimpleName());
         super.stop();
     }
 }

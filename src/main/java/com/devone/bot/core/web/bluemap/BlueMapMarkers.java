@@ -1,5 +1,6 @@
 package com.devone.bot.core.web.bluemap;
 
+import com.devone.bot.AIBotPlugin;
 import com.devone.bot.core.Bot;
 import com.devone.bot.core.BotManager;
 import com.devone.bot.core.utils.blocks.BotPosition;
@@ -33,7 +34,7 @@ public class BlueMapMarkers {
 
             mSet = setupMarkerSet(api);
 
-            BotLogger.debug("🗺️", true, "💡 BlueMapAPI detected! Initializing marker system...");
+            BotLogger.debug("🗺️", AIBotPlugin.getInstance().isLogged(), "💡 BlueMapAPI detected! Initializing marker system...");
 
         });
     }
@@ -45,7 +46,7 @@ public class BlueMapMarkers {
     public void updateAllMarkers() {
 
         if (mSet == null) {
-            BotLogger.warn("🗺️", true, "⚠️ Маркер-сет ещё не инициализирован — пропускаем обновление.");
+            BotLogger.warn("🗺️", AIBotPlugin.getInstance().isLogged(), "⚠️ Маркер-сет ещё не инициализирован — пропускаем обновление.");
             return;
         }
 
@@ -64,11 +65,11 @@ public class BlueMapMarkers {
                 BotPosition lastLocation = lastKnownLocations.get(botId);
 
                 if (lastLocation != null) {
-                    BotLogger.debug("🗺️", true,  bot.getId() + " 📌 Last known location on map: " + lastLocation);
+                    BotLogger.debug("🗺️", AIBotPlugin.getInstance().isLogged(),  bot.getId() + " 📌 Last known location on map: " + lastLocation);
 
                     // Если позиция не изменилась – пропускаем обновление
                     if (lastLocation.equals(loc)) {
-                        BotLogger.debug("🗺️", true, bot.getId() + " ❓ Locations are the same! ");
+                        BotLogger.debug("🗺️", AIBotPlugin.getInstance().isLogged(), bot.getId() + " ❓ Locations are the same! ");
                         continue;
                     }
                 }
@@ -77,10 +78,10 @@ public class BlueMapMarkers {
 
                 hasChanges = true;
 
-                BotLogger.debug("🗺️", true, bot.getId() + " 📍 Обновлён маркер бота : " + loc);
+                BotLogger.debug("🗺️", AIBotPlugin.getInstance().isLogged(), bot.getId() + " 📍 Обновлён маркер бота : " + loc);
 
             } else {
-                BotLogger.debug("🗺️", true, bot.getId() + " 📍 All Locations are unknown. Skip update.");
+                BotLogger.debug("🗺️", AIBotPlugin.getInstance().isLogged(), bot.getId() + " 📍 All Locations are unknown. Skip update.");
             }
 
         }
@@ -114,11 +115,11 @@ public class BlueMapMarkers {
                 map.getMarkerSets().put(MARKERS_SET_ID, markerSet);
             }
 
-            BotLogger.debug("🗺️",true, "📚 BlueMap marker set initialized.");
+            BotLogger.debug("🗺️",AIBotPlugin.getInstance().isLogged(), "📚 BlueMap marker set initialized.");
 
             return markerSet;
         } else {
-            BotLogger.debug("🗺️", true, "❌ No valid map found!");
+            BotLogger.debug("🗺️", AIBotPlugin.getInstance().isLogged(), "❌ No valid map found!");
             return null;
         }
     }
@@ -126,12 +127,12 @@ public class BlueMapMarkers {
     public void updateBlueMapMarkers(List<Bot> bots,  Map<String, BotPosition> lastKnownLocations) {
 
         if (mSet == null) {
-            BotLogger.debug("🗺️", true, "❌ MarkerSet set is not initialized yet!");
+            BotLogger.debug("🗺️", AIBotPlugin.getInstance().isLogged(), "❌ MarkerSet set is not initialized yet!");
             return;
         }
 
         if (bots.isEmpty()) {
-            BotLogger.debug("🗺️", true, "❌ No bots on the Map, skipping update.");
+            BotLogger.debug("🗺️", AIBotPlugin.getInstance().isLogged(), "❌ No bots on the Map, skipping update.");
             return;
         }
 
@@ -167,7 +168,7 @@ public class BlueMapMarkers {
 
             mSet.put(botId, marker);
 
-            BotLogger.debug("🗺️", true, botId +" ♻️ Updating BlueMap Markers for bot: " +  " at " + loc);
+            BotLogger.debug("🗺️", AIBotPlugin.getInstance().isLogged(), botId +" ♻️ Updating BlueMap Markers for bot: " +  " at " + loc);
 
         }
     }

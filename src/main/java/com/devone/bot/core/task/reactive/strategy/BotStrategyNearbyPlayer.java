@@ -18,10 +18,10 @@ public class BotStrategyNearbyPlayer implements IBotStrategyReaction {
 
     @Override
     public Optional<Runnable> check(Bot bot) {
-        BotLogger.debug("🤖", true, bot.getId() + " 🙋🏻‍♂️ Проверка реакции на игрока");
+        BotLogger.debug("🤖", bot.isLogged(), bot.getId() + " 🙋🏻‍♂️ Проверка реакции на игрока");
 
         if (BotInventory.isEmpty(bot)) {
-            BotLogger.debug("🤖", true, bot.getId() + " 🙋🏻‍♂️ Инвентарь пуст — реакции не будет");
+            BotLogger.debug("🤖", bot.isLogged(), bot.getId() + " 🙋🏻‍♂️ Инвентарь пуст — реакции не будет");
             return Optional.empty();
         }
 
@@ -35,7 +35,7 @@ public class BotStrategyNearbyPlayer implements IBotStrategyReaction {
             double dist = botLoc.distanceTo(playerLoc);
 
             if (dist < BotConstants.DEFAULT_PLAYER_DETECTION_RADIUS) {
-                BotLogger.debug("🤖", true, bot.getId() + " 🙋🏻‍♂️ Обнаружен игрок " + player.getName() + " на "
+                BotLogger.debug("🤖", bot.isLogged(), bot.getId() + " 🙋🏻‍♂️ Обнаружен игрок " + player.getName() + " на "
                         + String.format("%.1f", dist) + " м");
 
                 return Optional.of(() -> {

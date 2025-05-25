@@ -23,7 +23,7 @@ public class BotReactiveLowHealthContainer extends BotReactiveContainer<BotReact
 
     @Override
     protected List<BotTask<?>> enqueue(Bot bot) {
-        BotLogger.debug(getIcon(), true, bot.getId() + " " + icon + " " + getObjective());
+        BotLogger.debug(getIcon(), isLogged(), bot.getId() + " " + icon + " " + getObjective());
 
         BotTeleportTaskParams tpParams = new BotTeleportTaskParams();
         tpParams.setPosition(BotWorldHelper.getWorldSpawnLocation());

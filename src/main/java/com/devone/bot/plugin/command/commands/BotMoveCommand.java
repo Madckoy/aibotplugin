@@ -6,6 +6,7 @@ import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
 
+import com.devone.bot.AIBotPlugin;
 import com.devone.bot.core.Bot;
 import com.devone.bot.core.BotManager;
 import com.devone.bot.core.task.passive.BotTaskManager;
@@ -25,11 +26,11 @@ public class BotMoveCommand implements CommandExecutor {
     @Override
     public boolean onCommand(CommandSender sender, Command command, String label, String[] args) {
 
-        BotLogger.debug("🔧 ", true, "Получена команда от сервера: " + Arrays.toString(args));
+        BotLogger.debug("🔧 ", AIBotPlugin.getInstance().isLogged(), "Получена команда от сервера: " + Arrays.toString(args));
 
         if (args.length < 4) {
             sender.sendMessage("❌ Недостаточно аргументов. Используйте: /bot-move <bot_id> <x> <y> <z>");
-            BotLogger.debug("❌", true, "Недостаточно аргументов для /bot-move");
+            BotLogger.debug("❌", AIBotPlugin.getInstance().isLogged(), "Недостаточно аргументов для /bot-move");
             return false;
         }
 
@@ -46,7 +47,7 @@ public class BotMoveCommand implements CommandExecutor {
 
             sender.sendMessage("❌ Координаты должны быть целыми числами.");
 
-            BotLogger.debug("❌ ", true, "Координаты должны быть целыми числами.");
+            BotLogger.debug("❌ ", AIBotPlugin.getInstance().isLogged(), "Координаты должны быть целыми числами.");
 
             return false;
         }
@@ -56,7 +57,7 @@ public class BotMoveCommand implements CommandExecutor {
         if (bot == null) {
             sender.sendMessage("❌ Бот с именем " + botName + " не найден.");
 
-            BotLogger.debug("❌", true, "Бот с именем " + botName + " не найден.");
+            BotLogger.debug("❌", AIBotPlugin.getInstance().isLogged(), "Бот с именем " + botName + " не найден.");
 
             return false;
         }
@@ -67,7 +68,7 @@ public class BotMoveCommand implements CommandExecutor {
         container.setParams(params);
         BotTaskManager.push(bot, container);
 
-        BotLogger.debug("📌 ", true, "/bot-move: Бот " + bot.getId() + " направляется в " + params.position);
+        BotLogger.debug("📌 ", AIBotPlugin.getInstance().isLogged(), "/bot-move: Бот " + bot.getId() + " направляется в " + params.position);
         
         sender.sendMessage("✅ Бот '" + botName + "' направляется в " + x + " " + y + " " + z);
 

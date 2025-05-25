@@ -13,7 +13,7 @@ public class BotYawBasedSceneRefresher implements BotYawChangeListener {
     @Override
     public void onYawChanged(Bot bot, float newYaw) {
         try{
-            BotLogger.debug(bot.getActiveTask().getIcon(), true, bot.getId() + " YAW CHANGED. New YAW: " + newYaw);
+            BotLogger.debug(bot.getActiveTask().getIcon(), bot.isLogged(), bot.getId() + " YAW CHANGED. New YAW: " + newYaw);
         }catch (Exception ex){}
         
         if (lock) return;

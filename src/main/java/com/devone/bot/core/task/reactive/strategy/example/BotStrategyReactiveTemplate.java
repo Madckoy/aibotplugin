@@ -12,7 +12,7 @@ public class BotStrategyReactiveTemplate implements IBotStrategyReaction {
 
     @Override
     public Optional<Runnable> check(Bot bot) {
-        BotLogger.debug("🤖", true, bot.getId() + " 🔍 Проверка шаблонной реакции: " + getName());
+        BotLogger.debug("🤖", bot.isLogged(), bot.getId() + " 🔍 Проверка шаблонной реакции: " + getName());
 
         // 💡 Здесь своё условие
         boolean condition = false;
@@ -21,7 +21,7 @@ public class BotStrategyReactiveTemplate implements IBotStrategyReaction {
             return Optional.empty();
 
         return Optional.of(() -> {
-            BotLogger.debug("🤖", true, bot.getId() + " 🚀 Триггер шаблонной реакции: " + getName());
+            BotLogger.debug("🤖", bot.isLogged(), bot.getId() + " 🚀 Триггер шаблонной реакции: " + getName());
             BotTaskManager.push(bot, new BotReactiveTemplateContainer(bot)); // ✅ Сахар
         });
     }

@@ -30,7 +30,7 @@ public class BotHandAttackListener implements Listener {
 
             task.stop(); // Завершаем задачу
 
-            BotLogger.debug("💀", true, bot.getId() + " убил моба: " + event.getEntity().getType());
+            BotLogger.debug("💀", bot.isLogged(), bot.getId() + " убил моба: " + event.getEntity().getType());
         }
     }
 

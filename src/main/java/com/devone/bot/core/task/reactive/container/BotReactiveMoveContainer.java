@@ -24,7 +24,7 @@ public class BotReactiveMoveContainer extends BotReactiveContainer<BotReactiveMo
 
     @Override
     protected List<BotTask<?>> enqueue(Bot bot) {
-        BotLogger.debug(getIcon(), true, bot.getId() + " " + icon + " " + getObjective());
+        BotLogger.debug(getIcon(), isLogged(), bot.getId() + " " + icon + " " + getObjective());
         
         if(params.position!=null) {
             BotPosition movePosiiton = new BotPosition(params.position);

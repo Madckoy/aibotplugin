@@ -111,16 +111,16 @@ public abstract class BotTask<T extends BotTaskParams> implements IBotTask, List
     
         // ⛔ Если задача выключена - останавливаем её правильно
         if (!isEnabled()) {
-            BotLogger.debug(icon, true, bot.getId() + " 🛑 Задача выключена и будет остановлена: " + this.getClass().getSimpleName());
+            BotLogger.debug(icon, isLogged(), bot.getId() + " 🛑 Задача выключена и будет остановлена: " + this.getClass().getSimpleName());
             stop();
             return;
         }
     
         if (isPause() && isDeffered()==false) {
-            BotLogger.debug(icon, true, bot.getId() + " ⏸️ Задача на паузе: " + this.getClass().getSimpleName());
+            BotLogger.debug(icon, isLogged(), bot.getId() + " ⏸️ Задача на паузе: " + this.getClass().getSimpleName());
 
             if (isPauseTimedOut(BotConstants.DEFAULT_TASK_TIMEOUT)) { 
-                BotLogger.debug("🤖", true, bot.getId() + " ⏳ Таймаут паузы. Убираем задачу.");
+                BotLogger.debug("🤖", isLogged(), bot.getId() + " ⏳ Таймаут паузы. Убираем задачу.");
                 stop();
                 return;
             }
@@ -136,7 +136,7 @@ public abstract class BotTask<T extends BotTaskParams> implements IBotTask, List
             return;
     
         if(injected==true) {
-            BotLogger.debug(icon, true, bot.getId() + " ▶️ Задача не на паузе и в стеке. Выполняем: " + this.getClass().getSimpleName());
+            BotLogger.debug(icon, isLogged(), bot.getId() + " ▶️ Задача не на паузе и в стеке. Выполняем: " + this.getClass().getSimpleName());
             runTaskExecution();
         }
     }    

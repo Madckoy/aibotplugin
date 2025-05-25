@@ -64,7 +64,7 @@ public class BotUtils {
 
         // ✅ Проверяем, что блок не AIR (иначе эффект не сработает)
         if (blockType == Material.AIR) {
-            BotLogger.debug(task.getIcon(), true,
+            BotLogger.debug(task.getIcon(), task.isLogged(),
                     bot.getId() + " ⚠️ Эффект разрушения отменён: блок уже AIR " + location.toString());
             return;
         }
@@ -78,7 +78,7 @@ public class BotUtils {
         );
 
         BotPosition pos = BotWorldHelper.locationToBotPositionSight(location);
-        BotLogger.debug(task.getIcon(), true, bot.getId() + " 🎇 Эффект разрушения воспроизведён на " + pos);
+        BotLogger.debug(task.getIcon(), task.isLogged(), bot.getId() + " 🎇 Эффект разрушения воспроизведён на " + pos);
     }
 
     public static boolean requiresTool(Material blockType) {
@@ -113,15 +113,16 @@ public class BotUtils {
         Location from = bot.getNPCEntity().getLocation();
         Location to = BotWorldHelper.botPositionToWorldLocation(target).clone().add(0.5, 0.5, 0.5); // Центр блока
 
-        Vector dir = to.toVector().subtract(from.toVector());
-
-        float yaw = (float) Math.toDegrees(Math.atan2(dir.getZ(), dir.getX())) - 90f;
-        float pitch = (float) Math.toDegrees(-Math.atan2(dir.getY(), Math.sqrt(dir.getX() * dir.getX() + dir.getZ() * dir.getZ())));
-
         // Если доступен метод faceLocation:
         bot.getNPC().faceLocation(to);
 
         // Или fallback: телепорт с новым поворотом
+
+        Vector dir = to.toVector().subtract(from.toVector());
+        float yaw = (float) Math.toDegrees(Math.atan2(dir.getZ(), dir.getX())) - 90f;
+
+        // float pitch = (float) Math.toDegrees(-Math.atan2(dir.getY(), Math.sqrt(dir.getX() * dir.getX() + dir.getZ() * dir.getZ())));
+
         /*
         Location newLoc = from.clone();
         newLoc.setYaw(yaw);
@@ -148,7 +149,7 @@ public class BotUtils {
         String usedMB = String.format("%.2f", usedMemory / 1024.0 / 1024.0);
         String maxMB = String.format("%.2f", maxMemory / 1024.0 / 1024.0);
 
-        BotLogger.debug("📦", true, context + " — Использовано памяти: " + usedMB + " MB / " + maxMB + " MB");
+        BotLogger.debug("📦", AIBotPlugin.getInstance().isLogged(), context + " — Использовано памяти: " + usedMB + " MB / " + maxMB + " MB");
     }
 
     public static long getRemainingTime(long start, long timeout) {
@@ -173,9 +174,9 @@ public class BotUtils {
     public static void animateHand(BotTask<?> task, Bot bot) {
         if (bot.getNPCEntity() instanceof Player playerBot) {
             playerBot.swingMainHand();
-            BotLogger.debug(task.getIcon(), true, bot.getId() + " 👋🏻 Анимация руки выполнена");
+            BotLogger.debug(task.getIcon(), task.isLogged(), bot.getId() + " 👋🏻 Анимация руки выполнена");
         } else {
-            BotLogger.debug(task.getIcon(), true, bot.getId() + " 🖐🏻 Анимация не выполнена: бот — не игрок");
+            BotLogger.debug(task.getIcon(), task.isLogged(), bot.getId() + " 🖐🏻 Анимация не выполнена: бот — не игрок");
         }
     }
 
@@ -186,14 +187,14 @@ public class BotUtils {
 
         // Если есть дроп в радиусе 2 блоков — бот остается на месте
         if (!nearbyItems.isEmpty()) {
-            BotLogger.debug("🤖", true,
+            BotLogger.debug("🤖", bot.isLogged(),
                     bot.getId() + " 🔍 В радиусе " + pickupRadius + " блоков от есть предметы, остаюсь на месте.");
             return;
         }
 
         // Если предметов рядом нет, двигаем бота к последнему разрушенному блоку
         BotPosition pos = BotWorldHelper.locationToBotPositionSight(target);
-        BotLogger.debug("🤖", true, bot.getId() + " 📦 Дроп подобран. Двигается к цели:" + pos);
+        BotLogger.debug("🤖", bot.isLogged(), bot.getId() + " 📦 Дроп подобран. Двигается к цели:" + pos);
 
         BotMoveTask mv_task = new BotMoveTask(bot);
         BotMoveTaskParams mv_taskParams = new BotMoveTaskParams(pos);
@@ -296,7 +297,7 @@ public class BotUtils {
 
             bot.getBrain().notifyYawChanged(newYaw);
 
-            BotLogger.debug("↻", true, bot.getId() + " rotated " + degrees + "° → yaw=" + newYaw);
+            BotLogger.debug("↻", bot.isLogged(), bot.getId() + " rotated " + degrees + "° → yaw=" + newYaw);
 
         }, 1L);
     }

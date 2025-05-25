@@ -30,6 +30,15 @@ public class BotPatternRunner {
     private Queue<BotPosition> voidPointsQueue = new LinkedList<>();
     private Queue<BotPosition> solidPointsQueue = new LinkedList<>();
 
+    private boolean isLogged = true;
+
+    public boolean isLogged() {
+        return isLogged;
+    }
+
+    public void setLogged(boolean isLogged) {
+        this.isLogged = isLogged;
+    }
 
     private BotPatternRunnerParams params;
     
@@ -63,13 +72,13 @@ public class BotPatternRunner {
         voidPointsQueue.addAll(allVoidPoints);
         solidPointsQueue.addAll(allSolidPoints);
 
-        //BotLogger.debug("📐", true, " 📝 Pattern Summary: " + params.getFilename());
-        //BotLogger.debug("📐", true, "          All Points: " + allPoints);
-        //BotLogger.debug("📐", true, "     All Void Points: " + allVoidPoints);
-        //BotLogger.debug("📐", true, "    All Solid Points: " + allSolidPoints);
-        //BotLogger.debug("📐", true, " -----------------------------------------");
-        //BotLogger.debug("📐", true, " Void Points Queue: " + voidPointsQueue);
-        //BotLogger.debug("📐", true, " Solid Points Queue: " + solidPointsQueue);
+        //BotLogger.debug("📐", isLogged(), " 📝 Pattern Summary: " + params.getFilename());
+        //BotLogger.debug("📐", isLogged(), "          All Points: " + allPoints);
+        //BotLogger.debug("📐", isLogged(), "     All Void Points: " + allVoidPoints);
+        //BotLogger.debug("📐", isLogged(), "    All Solid Points: " + allSolidPoints);
+        //BotLogger.debug("📐", isLogged(), " -----------------------------------------");
+        //BotLogger.debug("📐", isLogged(), " Void Points Queue: " + voidPointsQueue);
+        //BotLogger.debug("📐", isLogged(), " Solid Points Queue: " + solidPointsQueue);
 
         return this;
     }
@@ -83,7 +92,7 @@ public class BotPatternRunner {
                 load(obs);
                 res = true;
             } catch(Exception ex) {
-                 BotLogger.debug("📐", true, " 🚨 Паттерн не загружен! JSON: " + params.getFilename());   
+                 BotLogger.debug("📐", isLogged(), " 🚨 Паттерн не загружен! JSON: " + params.getFilename());   
                  res = false;
             }    
         }
@@ -94,7 +103,7 @@ public class BotPatternRunner {
         if (checkIfLoaded(obs)) {
             return voidPointsQueue.poll();
         } else {
-            BotLogger.debug("📐", true, " 🚨 getNextVoid: checkIfLoaded вернул FALSE: " + params.getFilename());   
+            BotLogger.debug("📐", isLogged(), " 🚨 getNextVoid: checkIfLoaded вернул FALSE: " + params.getFilename());   
             return null;
         } 
     }
@@ -103,7 +112,7 @@ public class BotPatternRunner {
         if (checkIfLoaded(obs)) {
             return solidPointsQueue.poll();
         } else {
-            BotLogger.debug("📐", true, " 🚨 getNextSolid: checkIfLoaded вернул FALSE: " + params.getFilename());
+            BotLogger.debug("📐", isLogged(), " 🚨 getNextSolid: checkIfLoaded вернул FALSE: " + params.getFilename());
             return null;
         } 
     }
