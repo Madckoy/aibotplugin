@@ -15,7 +15,7 @@ public class BotSequenceContainerFishInWater extends BotSequenceContainer<BotSeq
     public BotSequenceContainerFishInWater(Bot bot) {
         super(bot, BotSequenceContainerFishInWaterParams.class);
         setIcon("🎣");
-        setObjective("Reactive: Catch Fish If Standing in Water");
+        setObjective("Sequence: Catch Fish If Standing in Water");
         setDeffered(true);
     }
 

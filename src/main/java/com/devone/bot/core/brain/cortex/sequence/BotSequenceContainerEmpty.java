@@ -15,7 +15,7 @@ public class BotSequenceContainerEmpty
     public BotSequenceContainerEmpty(Bot bot) {
         super(bot, BotSequenceContainerEmptyParams.class);
         setIcon("🔣");
-        setObjective("Reactive: Empty container");
+        setObjective("Sequence: Empty container");
     }
 
     @Override

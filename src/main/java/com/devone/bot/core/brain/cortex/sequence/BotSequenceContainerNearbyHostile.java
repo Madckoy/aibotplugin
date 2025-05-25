@@ -22,7 +22,7 @@ public class BotSequenceContainerNearbyHostile
     public BotSequenceContainerNearbyHostile(Bot bot, BotBlockData hostileMob) {
         super(bot, BotSequenceContainerNearbyHostileParams.class);
         setIcon("🔣");
-        setObjective("Reactive: Bot MoveTask and Bot Hand Attack Task");
+        setObjective("Sequence: Bot MoveTask and Bot Hand Attack Task");
         setDeffered(true);
         target = hostileMob;
     }

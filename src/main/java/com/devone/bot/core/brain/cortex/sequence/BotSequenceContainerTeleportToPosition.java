@@ -22,7 +22,7 @@ public class BotSequenceContainerTeleportToPosition
         super(bot, BotSequenceContainerTeleportToPositionParams.class);
         this.position = position;
         setIcon("🔣");
-        setObjective("Reactive: Bot Teleport Task");
+        setObjective("Sequence: Bot Teleport Task");
         setDeffered(true);
     }
 
