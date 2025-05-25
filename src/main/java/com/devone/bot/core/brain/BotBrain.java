@@ -7,8 +7,6 @@ import com.devone.bot.core.brain.perseption.BotYawBasedSceneRefresher;
 import com.devone.bot.core.brain.perseption.scene.BotSceneData;
 import com.devone.bot.core.task.passive.BotTask;
 import com.devone.bot.core.utils.BotConstants;
-import com.devone.bot.core.utils.BotUtils;
-import com.devone.bot.core.utils.logger.BotLogger;
 
 public class BotBrain {
 

@@ -1,9 +1,10 @@
 package com.devone.bot.core.task.active.brain;
 
+import java.util.Optional;
+
 import com.devone.bot.core.Bot;
 import com.devone.bot.core.brain.cortex.BotActionSuggestion.Suggestion;
 import com.devone.bot.core.brain.cortex.reaction.BotReactionManager;
-import com.devone.bot.core.brain.cortex.reaction.IBotReaction;
 import com.devone.bot.core.brain.memory.BotMemoryV2Utils;
 import com.devone.bot.core.brain.navigator.simulator.BotSimulatorResult;
 import com.devone.bot.core.task.passive.BotTaskAutoParams;
@@ -58,7 +59,13 @@ public class BotBrainTask extends BotTaskAutoParams<BotBrainTaskParams> {
         }
         
         // 2. Орбаботка реакций
-        BotReactionManager.checkReactions(bot);        
+        Optional<Runnable> reaction = BotReactionManager.checkReactions(bot);
+        if (reaction.isPresent()) {
+            reaction.get().run();  // Запускаем реакцию
+            BotLogger.debug(icon, isLogged(), bot.getId() + " 🧠 Реакция активирована — мозг уступает управление");
+            stop();
+            return;
+        }
         
         // 3. Получение рекомендации
         Suggestion suggestion = bot.getNavigator().getSuggestion();

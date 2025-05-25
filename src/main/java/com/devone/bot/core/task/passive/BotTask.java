@@ -4,7 +4,6 @@ import org.bukkit.entity.Player;
 import org.bukkit.event.Listener;
 
 import com.devone.bot.core.Bot;
-import com.devone.bot.core.brain.cortex.reaction.BotReactionManager;
 import com.devone.bot.core.task.active.brain.BotBrainTask;
 import com.devone.bot.core.task.passive.params.BotTaskParams;
 import com.devone.bot.core.utils.BotConstants;
@@ -12,7 +11,6 @@ import com.devone.bot.core.utils.BotUtils;
 import com.devone.bot.core.utils.blocks.BotPosition;
 import com.devone.bot.core.utils.logger.BotLogger;
 
-import java.util.Optional;
 import java.util.UUID;
 
 public abstract class BotTask<T extends BotTaskParams> implements IBotTask, Listener, IBotTaskParameterized<T> {
