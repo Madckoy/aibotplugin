@@ -49,7 +49,7 @@ public abstract class BotTask<T extends BotTaskParams> implements IBotTask, List
     }
 
     protected boolean stopped = false;
-    
+
     protected boolean isLogged = true;
 
     public boolean isLogged() {
@@ -199,10 +199,13 @@ public abstract class BotTask<T extends BotTaskParams> implements IBotTask, List
                     bot.getId() + " 🧹 Завершена реактивная задача: " + getClass().getSimpleName());
             BotReactiveUtils.activateReaction(bot, false);
         }
+        
         // ✅ Снимаем паузу, если вдруг задача её не сняла сама
         if (isPause()) {
             setPause(false);
         }
+        
+        setDeffered(false);
     }
 
     public void setPause(boolean pause) {
@@ -245,11 +248,6 @@ public abstract class BotTask<T extends BotTaskParams> implements IBotTask, List
     public boolean isPause() {
         return pause;
     }
-
-    public boolean isDefered() {
-        return deffered;
-    }
-
 
     public boolean isEnabled() {
         return enabled;

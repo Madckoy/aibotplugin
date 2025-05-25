@@ -15,7 +15,6 @@ import org.bukkit.entity.LivingEntity;
 import com.devone.bot.core.Bot;
 import com.devone.bot.core.utils.blocks.BotBlockData;
 import com.devone.bot.core.utils.blocks.BotPosition;
-import com.devone.bot.core.utils.blocks.BotPositionSight;
 
 public class BotWorldHelper {
 
@@ -43,11 +42,7 @@ public class BotWorldHelper {
     }
 
     public static BotPosition locationToBotPosition(Location loc) {
-        return new BotPosition(loc.getX(), loc.getY(), loc.getZ());
-    }
-
-    public static BotPositionSight locationToBotPositionSight(Location loc) {
-        return new BotPositionSight(loc.getX(), loc.getY(), loc.getZ(),  loc.getYaw(), loc.getPitch());
+        return new BotPosition(loc.getX(), loc.getY(), loc.getZ(),  loc.getYaw(), loc.getPitch());
     }
 
 
@@ -117,7 +112,7 @@ public class BotWorldHelper {
         World world = getWorld();
         double blockX = loc.getX();
         double blockZ = loc.getZ();
-        return new Location(world, blockX, loc.getY(), blockZ);
+        return new Location(world, blockX, loc.getY(), blockZ,loc.getYaw(), loc.getPitch());
     }
 
     public static Block botPositionToWorldBlock(BotPosition pos) {
@@ -139,6 +134,12 @@ public class BotWorldHelper {
         if (block == null) return false;
         Material type = block.getType();
         return type == Material.WATER || type == Material.LAVA;
+    }
+
+    public static boolean isWater(Block block) {
+        if (block == null) return false;
+        Material type = block.getType();
+        return type == Material.WATER;
     }
 
     public static boolean isSolidSurface(Block block) {
@@ -196,4 +197,17 @@ public class BotWorldHelper {
             default -> true;
         };
     }
+
+    public static boolean isInFishableWater(Bot bot) {
+        BotPosition botPos = bot.getNavigator().getPosition();
+
+        Location below = BotWorldHelper.botPositionToWorldLocation(botPos);
+        
+        below.clone().subtract(0, 1, 0);
+
+        return below.getBlock().getType() == Material.WATER &&
+               BotWorldHelper.isWater(below.clone().subtract(0, 1, 0).getBlock());
+    }
+
+
 }

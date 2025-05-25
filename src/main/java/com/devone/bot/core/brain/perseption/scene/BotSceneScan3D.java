@@ -2,7 +2,7 @@ package com.devone.bot.core.brain.perseption.scene;
 
 import com.devone.bot.core.Bot;
 import com.devone.bot.core.utils.blocks.BotBlockData;
-import com.devone.bot.core.utils.blocks.BotPositionSight;
+import com.devone.bot.core.utils.blocks.BotPosition;
 import com.devone.bot.core.utils.logger.BotLogger;
 import com.devone.bot.core.utils.world.BotWorldHelper;
 import org.bukkit.Location;
@@ -79,7 +79,7 @@ public static BotSceneData scan(Bot bot, int radius, int height) {
     }
 
     // 3. Положение бота
-    BotPositionSight botCoords = bot.getNavigator().getPositionSight();
+    BotPosition botCoords = bot.getNavigator().getPosition();
     
     //float botYaw   = BotUtils.getBotYaw(bot);
     //float botPitch = BotUtils.getBotPitch(bot);

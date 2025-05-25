@@ -24,7 +24,6 @@ import com.devone.bot.core.utils.BotUtils;
 import com.devone.bot.core.utils.blocks.BlockUtils;
 import com.devone.bot.core.utils.blocks.BotBlockData;
 import com.devone.bot.core.utils.blocks.BotPosition;
-import com.devone.bot.core.utils.blocks.BotPositionSight;
 import com.devone.bot.core.utils.blocks.BotTagUtils;
 import com.devone.bot.core.utils.logger.BotLogger;
 import com.devone.bot.core.utils.world.BotWorldHelper;
@@ -45,6 +44,16 @@ public class BotNavigator {
     private transient BotBlockData target;
 
     private boolean calculating = false;
+
+    private boolean isEnabled = true;
+
+    public boolean isEnabled() {
+        return isEnabled;
+    }
+
+    public void setEnabled(boolean isEnabled) {
+        this.isEnabled = isEnabled;
+    }
 
     public boolean isCalculating() {
         return calculating;
@@ -79,11 +88,6 @@ public class BotNavigator {
             this.position = BotWorldHelper.locationToBotPosition(loc);
         }
         return this.position;
-    }
-
-    public BotPositionSight getPositionSight() {
-        Location loc = getEffectiveLocation();
-        return (loc != null) ? BotWorldHelper.locationToBotPositionSight(loc) : null;
     }
 
     private Location getEffectiveLocation() {
@@ -151,18 +155,26 @@ public class BotNavigator {
     }
 
     public BotSimulatorResult simulate(double sightFov, int scanRadius, int scanHeight) throws Exception {
+        if(isEnabled()==false) {
+            throw new Exception("Navigatoe is disabled");
+        } 
         if(isCalculating()) {
-            throw new Exception("Navigation is being calculated");
+            throw new Exception("Navigation is being simulated");
         };
 
         calculating = true;
-        BotPositionSight botPos = getPositionSight();
+        BotPosition botPos = getPosition();
         BotSimulatorResult res = BotTagsMakerSimulator.reachableFindBestYaw(botPos, bot.getBrain().getSceneData().blocks, sightFov, scanRadius, scanHeight );            
         calculating = false;        
         return res;
     }
 
     public List<BotBlockData> calculate(double sightFov, int scanRadius, int scanHeight) throws Exception{
+
+        if(isEnabled()==false) {
+            throw new Exception("Navigator is disabled");
+        } 
+
         if(isCalculating()) {
             throw new Exception("Navigation is being calculated");
         };
@@ -175,7 +187,7 @@ public class BotNavigator {
         }
     
         List<BotBlockData> result = new ArrayList<>();
-        BotPositionSight botPos = getPositionSight();
+        BotPosition botPos = getPosition();
         if (botPos == null) { 
             calculating = false;
             return result;
@@ -272,7 +284,7 @@ public class BotNavigator {
     }
     
 
-    private int validateTargets(BotPositionSight botPos, List<BotBlockData> blocks) {
+    private int validateTargets(BotPosition botPos, List<BotBlockData> blocks) {
         if (blocks==null) return 0;
         
         int count = 0;
@@ -325,7 +337,7 @@ public class BotNavigator {
     
         // ➤ Позиция и направление
         BotBlockData currentPos = getPosition().toBlockData();
-        BotPositionSight sight = getPositionSight();
+        BotPosition sight = getPosition();
     
         navigation.put("position", currentPos != null ? currentPos.toCompactString() : null);
         navigation.put("yaw", sight != null ? sight.getYaw() : null);
@@ -360,7 +372,12 @@ public class BotNavigator {
         this.suggestedTarget = suggested;
     }
 
-    public boolean navigate(float speed) {
+    public boolean navigate(float speed) throws Exception{
+
+        if(isEnabled()==false) {
+            throw new Exception("Navigator is disabled");
+        } 
+
         if (this.target == null) {
             BotLogger.debug(BotUtils.getActiveTaskIcon(bot), bot.isLogged(),
                     bot.getId() + " 🗺️ Target is null. Navigation is not possible ");

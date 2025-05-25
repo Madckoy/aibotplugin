@@ -55,8 +55,13 @@ public class BotExploreTask extends BotTaskAutoParams<BotExploreTaskParams> {
             BotLogger.debug(icon, isLogged(), bot.getId() + " 🎯 Navigation - Set Target: " + target);
             bot.getNavigator().setTarget(target);
             float speed = 1.5f;
-            boolean canNavigate = bot.getNavigator().navigate(speed);            
-            BotLogger.debug(icon, isLogged(), bot.getId() + " ❓ Navigation - Can navigate: " + canNavigate);
+            try {
+                boolean canNavigate = bot.getNavigator().navigate(speed);                            
+                BotLogger.debug(icon, isLogged(), bot.getId() + " ❓ Navigation - Can navigate: " + canNavigate);
+            } catch (Exception e) {
+                BotLogger.debug(icon, isLogged(), bot.getId() + " ❓ Navigation - Can navigate: " + e.getMessage());
+            }
+
             stop();
             return;
         } else {

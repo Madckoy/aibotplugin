@@ -2,6 +2,7 @@ package com.devone.bot.core.task.reactive;
 
 import com.devone.bot.AIBotPlugin;
 import com.devone.bot.core.Bot;
+import com.devone.bot.core.task.reactive.strategy.BotStrategyFishInWater;
 import com.devone.bot.core.task.reactive.strategy.BotStrategyNearbyHostile;
 import com.devone.bot.core.task.reactive.strategy.BotStrategyNearbyPlayer;
 import com.devone.bot.core.utils.BotUtils;
@@ -23,6 +24,7 @@ public class BotReactivityManager {
         // 📚 Регистрация стандартных стратегий
         registerStrategy(new BotStrategyNearbyHostile());
         registerStrategy(new BotStrategyNearbyPlayer());
+        registerStrategy(new BotStrategyFishInWater()); // 🎣 Наша рыба!
 
         BotLogger.debug("🧠", AIBotPlugin.getInstance().isLogged(), "🧩 Зарегистрированы предустановленные реакции: " + strategies.size());
     }

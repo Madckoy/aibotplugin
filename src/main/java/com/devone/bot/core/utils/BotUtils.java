@@ -77,7 +77,7 @@ public class BotUtils {
                 location.getBlock().getBlockData() // Тип блока для эффекта
         );
 
-        BotPosition pos = BotWorldHelper.locationToBotPositionSight(location);
+        BotPosition pos = BotWorldHelper.locationToBotPosition(location);
         BotLogger.debug(task.getIcon(), task.isLogged(), bot.getId() + " 🎇 Эффект разрушения воспроизведён на " + pos);
     }
 
@@ -193,7 +193,7 @@ public class BotUtils {
         }
 
         // Если предметов рядом нет, двигаем бота к последнему разрушенному блоку
-        BotPosition pos = BotWorldHelper.locationToBotPositionSight(target);
+        BotPosition pos = BotWorldHelper.locationToBotPosition(target);
         BotLogger.debug("🤖", bot.isLogged(), bot.getId() + " 📦 Дроп подобран. Двигается к цели:" + pos);
 
         BotMoveTask mv_task = new BotMoveTask(bot);
@@ -281,11 +281,11 @@ public class BotUtils {
     }
 
     public static void rotate(BotTask<?> task, Bot bot, float degrees) {
-        if (bot == null || bot.getNavigator().getPositionSight() == null || bot.getNPCEntity() == null) return;
+        if (bot == null || bot.getNavigator().getPosition() == null || bot.getNPCEntity() == null) return;
 
         Bukkit.getScheduler().runTaskLater(AIBotPlugin.getInstance(), () -> {
 
-            float currentYaw = bot.getNavigator().getPositionSight().getYaw();
+            float currentYaw = bot.getNavigator().getPosition().getYaw();
             float newYaw = (currentYaw + degrees) % 360.0f;
 
             // Без смещения по координатам
@@ -320,5 +320,12 @@ public class BotUtils {
         }
     }
 
+    public static void swingMainHand(Bot bot) {
+        Player player = bot.getPlayer();
+        if (player == null || !player.isOnline()) return;
+
+        // Отправляем анимацию руки игрока (бота)
+        player.swingMainHand();
+    }
 
 }

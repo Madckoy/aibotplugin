@@ -1,8 +1,8 @@
 package com.devone.bot.core.brain.navigator.tags;
 
 import com.devone.bot.core.utils.blocks.BotBlockData;
+import com.devone.bot.core.utils.blocks.BotPosition;
 import com.devone.bot.core.utils.blocks.BotPositionKey;
-import com.devone.bot.core.utils.blocks.BotPositionSight;
 
 import java.util.*;
 
@@ -20,7 +20,7 @@ public class BotReachableBlockTagger {
         }
     }
 
-    public static int tagReachableBlocks(List<BotBlockData> blocks, BotPositionSight botPos) {
+    public static int tagReachableBlocks(List<BotBlockData> blocks, BotPosition botPos) {
         if (blocks == null || blocks.isEmpty()) return 0;
 
         Map<BotPositionKey, BotBlockData> blockMap = new HashMap<>();

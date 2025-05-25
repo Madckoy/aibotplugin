@@ -1,8 +1,8 @@
 package com.devone.bot.core.brain.navigator.tags;
 
 import com.devone.bot.core.utils.blocks.BotBlockData;
+import com.devone.bot.core.utils.blocks.BotPosition;
 import com.devone.bot.core.utils.blocks.BotPositionKey;
-import com.devone.bot.core.utils.blocks.BotPositionSight;
 
 import java.util.HashMap;
 import java.util.List;
@@ -15,7 +15,7 @@ public class BotFovSliceTagger {
      */
     
     public static int tagFovSliceAll(List<BotBlockData> blocks,
-                                    BotPositionSight bot,
+                                    BotPosition bot,
                                     double fovDeg,
                                     int radius,
                                     int height) {

@@ -48,7 +48,7 @@ public class BotLifecycleLogger {
                     botName + ", " +
                     Bukkit.getWorlds().get(0).getName() + ", " +
                     loc.toString() + ", " +
-                    bot.getNavigator().getPositionSight().getYaw() + ", " +
+                    bot.getNavigator().getPosition().getYaw() + ", " +
                     t_icon + ", " +
                     t_name + ", " +
                     e_time;

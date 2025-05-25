@@ -76,9 +76,15 @@ public class BotBrainTask extends BotTaskAutoParams<BotBrainTaskParams> {
             }    
             case MOVE -> {
                 if(!bot.getNavigator().isCalculating()) {
+                    bot.getNavigator().setEnabled(false);
                     BotBlockData target = bot.getNavigator().getSuggestedTarget();
                     bot.getNavigator().setTarget(target);
-                    bot.getNavigator().navigate(1.5f);            
+                    bot.getNavigator().setEnabled(true);                    
+                    try {
+                        bot.getNavigator().navigate(1.5f);                                    
+                    } catch (Exception e) {
+                        return;
+                    }
                 }
                 return;
             }

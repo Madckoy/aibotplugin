@@ -92,8 +92,8 @@ public class BotMoveTaskListener implements Listener {
                     centered.getZ()
                 );
 
-            aligned.setYaw(bot.getNavigator().getPositionSight().getYaw());
-            aligned.setPitch(bot.getNavigator().getPositionSight().getPitch());
+            aligned.setYaw(bot.getNavigator().getPosition().getYaw());
+            aligned.setPitch(bot.getNavigator().getPosition().getPitch());
 
             System.out.println(centered);    
             System.out.println(aligned);    

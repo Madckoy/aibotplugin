@@ -5,7 +5,7 @@ import java.util.List;
 
 import com.devone.bot.core.utils.blocks.BotBlockData;
 
-import com.devone.bot.core.utils.blocks.BotPositionSight;
+import com.devone.bot.core.utils.blocks.BotPosition;
 
 public class BotNavigationTagsMaker {
 
@@ -15,12 +15,12 @@ public class BotNavigationTagsMaker {
         return walkable;
     }
 
-    public static int  tagReachableBlocks(BotPositionSight botPositionSight,
+    public static int  tagReachableBlocks(BotPosition botPosition,
                                                           List<BotBlockData> geoBlocks,
                                                           double sightFov, int radius, int height) {
           
-        BotFovSliceTagger.tagFovSliceAll(geoBlocks, botPositionSight, sightFov, radius, height);
-        int reachable = BotReachableBlockTagger.tagReachableBlocks(geoBlocks, botPositionSight);
+        BotFovSliceTagger.tagFovSliceAll(geoBlocks, botPosition, sightFov, radius, height);
+        int reachable = BotReachableBlockTagger.tagReachableBlocks(geoBlocks, botPosition);
         return reachable;
     }
 }
