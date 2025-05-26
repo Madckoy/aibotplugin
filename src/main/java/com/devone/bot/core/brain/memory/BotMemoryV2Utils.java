@@ -48,7 +48,7 @@ public class BotMemoryV2Utils {
         if (memory == null) return;
 
         // Верхний уровень, например "STATS"
-        BotMemoryV2Partition root = memory.partition(partitionKey.toUpperCase(), BotMemoryV2Partition.Type.MAP);
+        BotMemoryV2Partition root = memory.partition(partitionKey, BotMemoryV2Partition.Type.MAP);
 
         // Раздел статистики, например "kills"
         BotMemoryV2Partition category = root.partition(subPartitionKey, BotMemoryV2Partition.Type.MAP);

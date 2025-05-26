@@ -329,8 +329,7 @@ public class BotNavigator {
     
         BotMemoryV2Partition navigation = memory.partition(BotMemoryPartition.PartitionKey.NAVIGATION.toString(), BotMemoryV2Partition.Type.MAP);
         BotMemoryV2Partition summary    = navigation.partition(BotMemoryPartition.PartitionKey.SUMMARY.toString(), BotMemoryV2Partition.Type.MAP);
-    
-        BotMemoryV2Partition item = summary.partition(key, BotMemoryV2Partition.Type.MAP);
+        BotMemoryV2Partition item       = summary.partition(key, BotMemoryV2Partition.Type.MAP);
 
         item.put(BotMemoryItem.ItemKey.CALCULATED.toString(), calculated);
         item.put(BotMemoryItem.ItemKey.CONFIRMED.toString(), confirmed);
@@ -341,15 +340,11 @@ public class BotNavigator {
         BotMemoryV2 memory = getMemory();
         if (memory == null) return;
     
-        BotMemoryV2Partition navigation = memory.partition(BotMemoryPartition.PartitionKey.NAVIGATION.toString(), BotMemoryV2Partition.Type.MAP);
     
-        // ➤ Позиция и направление
-        BotBlockData currentPos = getPosition().toBlockData();
-        BotPosition sight = getPosition();
-    
+        // ➤ Позиция, направление и рекомендации
+        BotPosition currentPos = getPosition();
+        BotMemoryV2Partition navigation = memory.partition(BotMemoryPartition.PartitionKey.NAVIGATION.toString(), BotMemoryV2Partition.Type.MAP);  
         navigation.put(BotMemoryItem.ItemKey.POSITION.toString(), currentPos != null ? currentPos.toCompactString() : null);
-        navigation.put(BotMemoryItem.ItemKey.YAW.toString(), sight != null ? sight.getYaw() : null);
-        navigation.put(BotMemoryItem.ItemKey.PITCH.toString(), sight != null ? sight.getPitch() : null);
         navigation.put(BotMemoryItem.ItemKey.TARGET.toString(), this.target != null ? this.target.toCompactString() : null);
         navigation.put(BotMemoryItem.ItemKey.SUGGESTION.toString(), actionSuggestion != null ? actionSuggestion.name() : null);
         navigation.put(BotMemoryItem.ItemKey.SUGGESTED_TARGET.toString(), suggestedTarget != null ? suggestedTarget.toCompactString() : null);
