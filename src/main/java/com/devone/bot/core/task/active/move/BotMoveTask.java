@@ -47,6 +47,7 @@ public class BotMoveTask extends BotTaskAutoParams<BotMoveTaskParams> {
         setObjective(params.getObjective());
         setAutoPickup(params.isAutoPickup());
         setLogged(params.isLogged());
+        setEnabled(params.isEnabled());
 
         BotPosition target = params.getTarget();
 
@@ -115,6 +116,11 @@ public class BotMoveTask extends BotTaskAutoParams<BotMoveTaskParams> {
 
         taskHandle = Bukkit.getScheduler().runTaskTimer(AIBotPlugin.getInstance(), () -> {
             long remaining = BotUtils.getRemainingTime(startTime, params.getTimeout());
+
+            if (params.isAutoPickup()) {
+                bot.pickupNearbyItems();
+            }
+
             setObjective(params.getObjective() + " to " + blockName + " at: " + target.toCompactString() + " (" + remaining + ")");
 
             if (done || bot.getNPCEntity() == null) {
