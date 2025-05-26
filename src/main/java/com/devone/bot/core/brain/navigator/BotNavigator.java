@@ -363,13 +363,14 @@ public class BotNavigator {
     
         // ➤ Кандидаты
         BotMemoryV2Partition candidatesPartition = navigation.partition(BotMemoryPartition.PartitionKey.CANDIDATES.toString(), BotMemoryV2Partition.Type.LIST);
-        candidatesPartition.getList().clear();
-    
+   
         if (candidates != null) {
+            candidatesPartition.getList().clear();
             for (BotBlockData pos : candidates) {
                 candidatesPartition.addToList(pos.toCompactString());
             }
         }
+
     }
     
     public Suggestion getSuggestion() {
