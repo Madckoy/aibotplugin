@@ -345,6 +345,8 @@ public class BotNavigator {
         BotPosition currentPos = getPosition();
         BotMemoryV2Partition navigation = memory.partition(BotMemoryPartition.PartitionKey.NAVIGATION.toString(), BotMemoryV2Partition.Type.MAP);  
         navigation.put(BotMemoryItem.ItemKey.POSITION.toString(), currentPos != null ? currentPos.toCompactString() : null);
+        navigation.put(BotMemoryItem.ItemKey.YAW.toString(), currentPos != null ? currentPos.getYaw() : null);
+        navigation.put(BotMemoryItem.ItemKey.PITCH.toString(), currentPos != null ? currentPos.getPitch() : null);
         navigation.put(BotMemoryItem.ItemKey.TARGET.toString(), this.target != null ? this.target.toCompactString() : null);
         navigation.put(BotMemoryItem.ItemKey.SUGGESTION.toString(), actionSuggestion != null ? actionSuggestion.name() : null);
         navigation.put(BotMemoryItem.ItemKey.SUGGESTED_TARGET.toString(), suggestedTarget != null ? suggestedTarget.toCompactString() : null);
