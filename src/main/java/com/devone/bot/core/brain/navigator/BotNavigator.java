@@ -397,9 +397,9 @@ public class BotNavigator {
 
             if (actionSuggestion == Suggestion.MOVE) {
                 BotPosition movePos = new BotPosition(this.target.getPosition());
-                BotMoveTaskParams mvParams = new BotMoveTaskParams();
-                mvParams.setTarget(movePos);
                 BotMoveTask moveTask = new BotMoveTask(bot);
+                BotMoveTaskParams mvParams = moveTask.getParams();
+                mvParams.setTarget(movePos);
                 moveTask.setParams(mvParams);
                 BotTaskManager.push(bot, moveTask);
                 Location loc = BotWorldHelper.botPositionToWorldLocation(this.target.getPosition());
@@ -420,7 +420,7 @@ public class BotNavigator {
                 }
 
                 BotTeleportTask tp = new BotTeleportTask(bot, null);
-                BotTeleportTaskParams params = new BotTeleportTaskParams();
+                BotTeleportTaskParams params = tp.getParams();
                 params.setPosition(suggestedTarget.getPosition());
                 tp.setParams(params);
                 BotTaskManager.push(bot, tp);
