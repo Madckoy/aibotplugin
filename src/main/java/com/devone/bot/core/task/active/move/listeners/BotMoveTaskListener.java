@@ -38,6 +38,7 @@ public class BotMoveTaskListener implements Listener {
 
         BotPosition pos = task.getParams().getTarget();
 
+
         // Валидация — для отладки и логов
         boolean arrived = task.getBot().getNPC().getStoredLocation().getBlockX() == pos.getX()
                 && task.getBot().getNPC().getStoredLocation().getBlockZ() == pos.getZ();
@@ -76,12 +77,10 @@ public class BotMoveTaskListener implements Listener {
     }
 
     public void onComplete(Bot bot) {
-        BotPosition target = bot.getNavigator().getTarget().getPosition();
+
         BotPosition actual = bot.getNavigator().getPosition();
     
-        if (target != null && actual != null) {
-            //double dx = Math.abs(actual.getX() - target.getX());
-            //double dz = Math.abs(actual.getZ() - target.getZ());
+        if (actual != null) {
 
             BotPosition centered = BotMoveTaskHelper.centerBlock(actual);
 
