@@ -12,6 +12,8 @@ import org.bukkit.inventory.ItemStack;
 
 import com.devone.bot.core.Bot;
 import com.devone.bot.core.BotManager;
+import com.devone.bot.core.brain.memory.BotMemoryItem;
+import com.devone.bot.core.brain.memory.BotMemoryPartition;
 import com.devone.bot.core.brain.memoryv2.BotMemoryV2;
 import com.devone.bot.core.brain.memoryv2.BotMemoryV2Partition;
 import com.devone.bot.core.utils.BotUtils;
@@ -76,34 +78,35 @@ public class BotStatusServlet extends HttpServlet {
             }
             botJson.addProperty("target", tgtLoc);
 
+            
+            BotMemoryV2Partition stats = bot.getBrain().getMemoryV2().partition(BotMemoryPartition.PartitionKey.STATS.toString(), BotMemoryV2Partition.Type.MAP);
+            Object teleportUsed = stats.get(BotMemoryItem.ItemKey.TELEPORTED.toString());
 
-
-
-            BotMemoryV2Partition stats = bot.getBrain().getMemoryV2().partition("stats", BotMemoryV2Partition.Type.MAP);
-
-            Object teleportUsed = stats.get("teleportUsed");
             if (teleportUsed != null) {
-                botJson.addProperty("teleportUsed", (Number) teleportUsed);
+                botJson.addProperty("teleports", (Number) teleportUsed);
             } else {
-                 botJson.addProperty("teleportUsed", (Number) 0);
+                 botJson.addProperty("teleports", (Number) 0);
             }
 
             // Общее число сломанных блоков
-            BotMemoryV2Partition blocks = stats.partition("blocksBroken", BotMemoryV2Partition.Type.MAP);
-            Object totalBlocks = blocks.get("total");
+            BotMemoryV2Partition blocks = stats.partition(BotMemoryPartition.PartitionKey.DESTROYED.toString(), BotMemoryV2Partition.Type.MAP);            
+            Object totalBlocks = blocks.get(BotMemoryItem.ItemKey.TOTAL.toString());
+
             if (totalBlocks != null) {
-                botJson.addProperty("blocksBroken", (Number) totalBlocks);
+                botJson.addProperty("breaks", (Number) totalBlocks);
             } else {
-                botJson.addProperty("blocksBroken", (Number) 0);
+                botJson.addProperty("breaks", (Number) 0);
             }
 
             // Общее число убитых мобов
-            BotMemoryV2Partition mobs = stats.partition("mobsKilled", BotMemoryV2Partition.Type.MAP);
-            Object totalMobs = mobs.get("total");
+            BotMemoryV2Partition mobs = stats.partition(BotMemoryPartition.PartitionKey.KILLED.toString(), BotMemoryV2Partition.Type.MAP);
+            Object totalMobs = mobs.get(BotMemoryItem.ItemKey.TOTAL.toString());
+
+
             if (totalMobs != null) {
-                botJson.addProperty("mobsKilled", (Number) totalMobs);
+                botJson.addProperty("kills", (Number) totalMobs);
             } else {
-                botJson.addProperty("mobsKilled", (Number) 0);
+                botJson.addProperty("kills", (Number) 0);
             }
 
             botJson.addProperty("autoPickUpItems", true); //hardcode
@@ -162,9 +165,9 @@ public class BotStatusServlet extends HttpServlet {
                 botJson.add("inventorySlotsFilled", inventoryArray);
 
 
-                BotMemoryV2Partition nav = bot.getBrain().getMemoryV2().partition("navigation", BotMemoryV2Partition.Type.MAP);
+                BotMemoryV2Partition nav = bot.getBrain().getMemoryV2().partition(BotMemoryPartition.PartitionKey.NAVIGATION.toString(), BotMemoryV2Partition.Type.MAP);
 
-                BotMemoryV2Partition visitedPartition = nav.partition("visited", BotMemoryV2Partition.Type.MAP);
+                BotMemoryV2Partition visitedPartition = nav.partition(BotMemoryPartition.PartitionKey.VISITED.toString(), BotMemoryV2Partition.Type.MAP);
 
                 if (visitedPartition != null) {
                     botJson.addProperty("visitedCount", visitedPartition.getMap().size());

@@ -4,6 +4,8 @@ import org.bukkit.Bukkit;
 
 import com.devone.bot.AIBotPlugin;
 import com.devone.bot.core.Bot;
+import com.devone.bot.core.brain.memory.BotMemoryItem;
+import com.devone.bot.core.brain.memory.BotMemoryPartition;
 import com.devone.bot.core.brain.memory.BotMemoryV2Utils;
 import com.devone.bot.core.task.passive.BotTaskManager;
 import com.devone.bot.core.task.active.brain.BotBrainTask;
@@ -40,9 +42,14 @@ public class BotBootstrap {
             BotLogger.debug(icon, bot.isLogged(), bot.getId() + " 🛜 Sonar Scan started");
             BotSonar3DTaskParams params = new BotSonar3DTaskParams();
             int radius = BotConstants.DEFAULT_SCAN_RADIUS;
-            Integer scanRadius = (Integer) BotMemoryV2Utils.readMemoryValue(bot, "navigation", "scanRadius");               
-            if(scanRadius!=null) {
-                radius = scanRadius.intValue();
+            
+            Integer scanRadiusFromMem = (Integer) BotMemoryV2Utils.readMemoryValue(bot, 
+                                                    BotMemoryPartition.PartitionKey.NAVIGATION.toString(), 
+                                                    BotMemoryItem.ItemKey.SCAN_RADIUS.toString());
+            
+            
+            if(scanRadiusFromMem!=null) {
+                radius = scanRadiusFromMem.intValue();
             }
             params.setRadius(radius);
             BotSonar3DTask task = new BotSonar3DTask(bot);

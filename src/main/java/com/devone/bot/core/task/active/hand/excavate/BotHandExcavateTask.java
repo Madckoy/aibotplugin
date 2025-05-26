@@ -7,6 +7,8 @@ import org.bukkit.scheduler.BukkitTask;
 
 import com.devone.bot.AIBotPlugin;
 import com.devone.bot.core.Bot;
+import com.devone.bot.core.brain.memory.BotMemoryItem;
+import com.devone.bot.core.brain.memory.BotMemoryPartition;
 import com.devone.bot.core.brain.memory.BotMemoryV2Utils;
 import com.devone.bot.core.task.active.hand.BotHandTask;
 import com.devone.bot.core.task.active.hand.excavate.params.BotHandExcavateTaskParams;
@@ -89,7 +91,10 @@ public class BotHandExcavateTask extends BotHandTask<BotHandExcavateTaskParams> 
 
                 block.breakNaturally();
 
-                BotMemoryV2Utils.incrementSummaryCounter(bot, "blocksBroken", target.getType());
+                BotMemoryV2Utils.incrementPartitionItems(bot, BotMemoryPartition.PartitionKey.STATS.toString(), 
+                                                              BotMemoryPartition.PartitionKey.DESTROYED.toString(), target.getType(),
+                                                              BotMemoryItem.ItemKey.TOTAL.toString());
+
 
                 BotLogger.debug(icon, isLogged(), bot.getId() + " 🧊 Block is excavated: " + target.getType());
             }

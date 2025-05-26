@@ -7,6 +7,8 @@ import org.bukkit.entity.Player;
 
 import com.devone.bot.AIBotPlugin;
 import com.devone.bot.core.Bot;
+import com.devone.bot.core.brain.memory.BotMemoryItem;
+import com.devone.bot.core.brain.memory.BotMemoryPartition;
 import com.devone.bot.core.brain.memory.BotMemoryV2Utils;
 import com.devone.bot.core.task.passive.BotTaskAutoParams;
 import com.devone.bot.core.task.passive.IBotTaskParameterized;
@@ -93,7 +95,10 @@ public class BotTeleportTask extends BotTaskAutoParams<BotTeleportTaskParams> {
                 Location aligned = new Location(baseLocation.getWorld(), centerX, y + 0.01, centerZ);
 
                 bot.getNPCEntity().teleport(aligned);
-                BotMemoryV2Utils.incrementCounter(bot, "teleportUsed");            
+
+                BotMemoryV2Utils.incrementPartitionItem(bot, BotMemoryPartition.PartitionKey.STATS.toString(),
+                                                             BotMemoryItem.ItemKey.TELEPORTED.toString());
+
                 bot.getTaskManager().getActiveTask().stop();
 
                 BotLogger.debug(icon, isLogged(),

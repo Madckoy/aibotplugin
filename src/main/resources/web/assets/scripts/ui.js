@@ -46,9 +46,9 @@ function updateOrCreateBotRow(bot, tbody) {
     // 🪨 Статистика
     cells[1].innerHTML = `
         <div class="bot-stats-cell">
-            <div><span>⛏️</span><span>${bot.blocksBroken}</span></div>
-            <div><span>☠️</span><span>${bot.mobsKilled}</span></div>
-            <div><span>⚡️</span><span>${bot.teleportUsed}</span></div>
+            <div><span>⛏️</span><span>${bot.breaks}</span></div>
+            <div><span>☠️</span><span>${bot.kills}</span></div>
+            <div><span>⚡️</span><span>${bot.teleports}</span></div>
         </div>`;
 
     // 📍 Позиция и цель
@@ -64,7 +64,7 @@ function updateOrCreateBotRow(bot, tbody) {
         <div class="bot-position-cell">
             <div><span>${bot.stuck}</span></div>
             <div class="bot-objective-divider"></div>
-            <div><span>${bot.stuckCount}</span></div>
+            <div><span>${bot.stucks}</span></div>
         </div>`;
 
     // 🧠 Задача

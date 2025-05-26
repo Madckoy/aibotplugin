@@ -9,7 +9,7 @@ import com.devone.bot.core.utils.blocks.BotPosition;
 
 public class BotMemoryV2Utils {
 
-    public static void incrementCounter(Bot bot, String key) {
+    public static void incrementCounter__(Bot bot, String key) {
         if (bot == null) return;
 
         BotMemoryV2 memory = bot.getBrain().getMemoryV2();
@@ -19,7 +19,7 @@ public class BotMemoryV2Utils {
         stats.increment(key);
     }
 
-    public static void incrementSummaryCounter(Bot bot, String summaryKey, String itemKey) {
+    public static void incrementSummaryCounter__(Bot bot, String summaryKey, String itemKey) {
         if (bot == null || itemKey == null) return;
 
         BotMemoryV2 memory = bot.getBrain().getMemoryV2();
@@ -32,16 +32,43 @@ public class BotMemoryV2Utils {
         summary.increment("total");
     }
 
+    public static void incrementPartitionItem(Bot bot, String part, String itemKey) {
+        if (bot == null || itemKey == null || part==null) return;
+
+        BotMemoryV2 memory = bot.getBrain().getMemoryV2();
+        if (memory == null) return;
+
+        BotMemoryV2Partition partition = memory.partition(BotMemoryPartition.PartitionKey.STATS.toString(), BotMemoryV2Partition.Type.MAP);
+        partition.increment(itemKey);
+    }
+
+    public static void incrementPartitionItems(Bot bot, String part, String subPart, String itemKey, String totalKey) {
+        if (bot == null || itemKey == null || part==null) return;
+
+        BotMemoryV2 memory = bot.getBrain().getMemoryV2();
+        if (memory == null) return;
+
+        BotMemoryV2Partition currentPart=null;
+        BotMemoryV2Partition partition = memory.partition(BotMemoryPartition.PartitionKey.STATS.toString(), BotMemoryV2Partition.Type.MAP);
+        currentPart = partition;
+        
+        if(subPart!=null) {
+            BotMemoryV2Partition subPartition = partition.partition(subPart, BotMemoryV2Partition.Type.MAP);
+            currentPart = subPartition;
+        }
+
+        currentPart.increment(itemKey);
+        currentPart.increment(totalKey);
+    }
+
+
     public static void memorizePosition(Bot bot, BotPosition pos) {
         if (bot == null || pos == null) return;
         String key = pos.toKey().toString();
 
         BotMemoryV2 memory = bot.getBrain().getMemoryV2();
-        BotMemoryV2Partition nav = memory.partition("navigation", BotMemoryV2Partition.Type.MAP);
-        BotMemoryV2Partition visited = nav.partition("visited", BotMemoryV2Partition.Type.MAP);
-        
-        //System.out.println(key);
-
+        BotMemoryV2Partition nav = memory.partition(BotMemoryPartition.PartitionKey.NAVIGATION.toString(), BotMemoryV2Partition.Type.MAP);
+        BotMemoryV2Partition visited = nav.partition(BotMemoryPartition.PartitionKey.VISITED.toString(), BotMemoryV2Partition.Type.MAP);
         visited.put(key, System.currentTimeMillis());
     }
 
@@ -49,8 +76,8 @@ public class BotMemoryV2Utils {
         if (bot == null) return;
 
         BotMemoryV2 memory           = bot.getBrain().getMemoryV2();
-        BotMemoryV2Partition nav     = memory.partition("navigation", BotMemoryV2Partition.Type.MAP);
-        nav.put("scanRadius", scanRange);
+        BotMemoryV2Partition nav     = memory.partition(BotMemoryPartition.PartitionKey.NAVIGATION.toString(), BotMemoryV2Partition.Type.MAP);
+        nav.put(BotMemoryItem.ItemKey.SCAN_RADIUS.toString(), scanRange);
     }
 
     public static void memorizeValue(Bot bot, String partition, String key, Object value) {
@@ -74,8 +101,8 @@ public class BotMemoryV2Utils {
         String key = pos.toKey().toString();
 
         BotMemoryV2 memory = bot.getBrain().getMemoryV2();
-        BotMemoryV2Partition nav = memory.partition("navigation", BotMemoryV2Partition.Type.MAP);
-        BotMemoryV2Partition visited = nav.partition("visited", BotMemoryV2Partition.Type.MAP);
+        BotMemoryV2Partition nav = memory.partition(BotMemoryPartition.PartitionKey.NAVIGATION.toString(), BotMemoryV2Partition.Type.MAP);
+        BotMemoryV2Partition visited = nav.partition(BotMemoryPartition.PartitionKey.VISITED.toString(), BotMemoryV2Partition.Type.MAP);
 
         return visited.get(key) != null;
     }
@@ -86,8 +113,8 @@ public class BotMemoryV2Utils {
         int removed = 0;
 
         BotMemoryV2 memory = bot.getBrain().getMemoryV2();
-        BotMemoryV2Partition nav = memory.partition("navigation", BotMemoryV2Partition.Type.MAP);
-        BotMemoryV2Partition visited = nav.partition("visited", BotMemoryV2Partition.Type.MAP);
+        BotMemoryV2Partition nav = memory.partition(BotMemoryPartition.PartitionKey.NAVIGATION.toString(), BotMemoryV2Partition.Type.MAP);
+        BotMemoryV2Partition visited = nav.partition(BotMemoryPartition.PartitionKey.VISITED.toString(), BotMemoryV2Partition.Type.MAP);
 
         for (String key : new ArrayList<>(visited.getMap().keySet())) {
             Object value = visited.get(key);
@@ -104,8 +131,8 @@ public class BotMemoryV2Utils {
         if (bot == null) return;
     
         BotMemoryV2 memory = bot.getBrain().getMemoryV2();
-        BotMemoryV2Partition nav = memory.partition("navigation", BotMemoryV2Partition.Type.MAP);
-        BotMemoryV2Partition visited = nav.partition("visited", BotMemoryV2Partition.Type.MAP);
+        BotMemoryV2Partition nav = memory.partition(BotMemoryPartition.PartitionKey.NAVIGATION.toString(), BotMemoryV2Partition.Type.MAP);
+        BotMemoryV2Partition visited = nav.partition(BotMemoryPartition.PartitionKey.VISITED.toString(), BotMemoryV2Partition.Type.MAP);
         visited.getMap().clear();
     }
 

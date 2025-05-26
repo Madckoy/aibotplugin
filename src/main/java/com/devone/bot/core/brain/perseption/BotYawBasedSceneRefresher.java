@@ -1,6 +1,8 @@
 package com.devone.bot.core.brain.perseption;
 
 import com.devone.bot.core.Bot;
+import com.devone.bot.core.brain.memory.BotMemoryItem;
+import com.devone.bot.core.brain.memory.BotMemoryPartition;
 import com.devone.bot.core.brain.memory.BotMemoryV2Utils;
 import com.devone.bot.core.utils.BotConstants;
 import com.devone.bot.core.utils.logger.BotLogger;
@@ -23,10 +25,15 @@ public class BotYawBasedSceneRefresher implements BotYawChangeListener {
             try {
                 //read from mem
                 int radius = BotConstants.DEFAULT_SCAN_RADIUS;
-                Integer scanRadius = (Integer) BotMemoryV2Utils.readMemoryValue(bot, "navigation", "scanRadius");               
-                if(scanRadius!=null) {
-                    radius = scanRadius.intValue();
+
+                Integer scanRadiusFromMem = (Integer) BotMemoryV2Utils.readMemoryValue(bot, 
+                                    BotMemoryPartition.PartitionKey.NAVIGATION.toString(), 
+                                    BotMemoryItem.ItemKey.SCAN_RADIUS.toString());                
+
+                if(scanRadiusFromMem!=null) {
+                    radius = scanRadiusFromMem.intValue();
                 }
+                
                 bot.getNavigator().calculate(BotConstants.DEFAULT_NORMAL_SIGHT_FOV, radius, BotConstants.DEFAULT_SCAN_HEIGHT);    
             } catch (Exception e) {
                 

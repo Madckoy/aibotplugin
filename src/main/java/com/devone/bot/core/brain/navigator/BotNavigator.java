@@ -8,6 +8,8 @@ import org.bukkit.block.Block;
 import com.devone.bot.core.Bot;
 import com.devone.bot.core.brain.cortex.BotActionSuggestion;
 import com.devone.bot.core.brain.cortex.BotActionSuggestion.Suggestion;
+import com.devone.bot.core.brain.memory.BotMemoryItem;
+import com.devone.bot.core.brain.memory.BotMemoryPartition;
 import com.devone.bot.core.brain.memory.BotMemoryV2Utils;
 import com.devone.bot.core.brain.memoryv2.BotMemoryV2;
 import com.devone.bot.core.brain.memoryv2.BotMemoryV2Partition;
@@ -126,8 +128,11 @@ public class BotNavigator {
                         bot.getId() + " ❓ BotState: set Stuck=" + stuck);
                 this.stuck = stuck;
                 if (stuck) {
+
                     incrementStuckCount();
-                    BotMemoryV2Utils.incrementCounter(bot, "stuckCount"); // ✅ глобально в memoryV2
+
+                    BotMemoryV2Utils.incrementPartitionItem(bot, BotMemoryPartition.PartitionKey.STATS.toString(),
+                                                                 BotMemoryItem.ItemKey.STUCKS.toString());
                 }
             }
         } catch (Exception ex) {
@@ -196,7 +201,9 @@ public class BotNavigator {
 
         int radius = scanRadius;
 
-        Integer scanRadiusFromMem = (Integer) BotMemoryV2Utils.readMemoryValue(bot, "navigation", "scanRadius");
+        Integer scanRadiusFromMem = (Integer) BotMemoryV2Utils.readMemoryValue(bot, 
+                                    BotMemoryPartition.PartitionKey.NAVIGATION.toString(), 
+                                    BotMemoryItem.ItemKey.SCAN_RADIUS.toString());
             
         if(scanRadiusFromMem!=null) {
             radius = scanRadiusFromMem.intValue();
@@ -320,12 +327,13 @@ public class BotNavigator {
         BotMemoryV2 memory = getMemory();
         if (memory == null) return;
     
-        BotMemoryV2Partition navigation = memory.partition("navigation", BotMemoryV2Partition.Type.MAP);
-        BotMemoryV2Partition summary = navigation.partition("summary", BotMemoryV2Partition.Type.MAP);
+        BotMemoryV2Partition navigation = memory.partition(BotMemoryPartition.PartitionKey.NAVIGATION.toString(), BotMemoryV2Partition.Type.MAP);
+        BotMemoryV2Partition summary    = navigation.partition(BotMemoryPartition.PartitionKey.SUMMARY.toString(), BotMemoryV2Partition.Type.MAP);
     
         BotMemoryV2Partition item = summary.partition(key, BotMemoryV2Partition.Type.MAP);
-        item.put("calculated", calculated);
-        item.put("confirmed", confirmed);
+
+        item.put(BotMemoryItem.ItemKey.CALCULATED.toString(), calculated);
+        item.put(BotMemoryItem.ItemKey.CONFIRMED.toString(), confirmed);
     }
     
 
@@ -333,20 +341,20 @@ public class BotNavigator {
         BotMemoryV2 memory = getMemory();
         if (memory == null) return;
     
-        BotMemoryV2Partition navigation = memory.partition("navigation", BotMemoryV2Partition.Type.MAP);
+        BotMemoryV2Partition navigation = memory.partition(BotMemoryPartition.PartitionKey.NAVIGATION.toString(), BotMemoryV2Partition.Type.MAP);
     
         // ➤ Позиция и направление
         BotBlockData currentPos = getPosition().toBlockData();
         BotPosition sight = getPosition();
     
-        navigation.put("position", currentPos != null ? currentPos.toCompactString() : null);
-        navigation.put("yaw", sight != null ? sight.getYaw() : null);
-        navigation.put("target", this.target != null ? this.target.toCompactString() : null);
-        navigation.put("suggestion", actionSuggestion != null ? actionSuggestion.name() : null);
-        navigation.put("suggestedTarget", suggestedTarget != null ? suggestedTarget.toCompactString() : null);
+        navigation.put(BotMemoryItem.ItemKey.POSITION.toString(), currentPos != null ? currentPos.toCompactString() : null);
+        navigation.put(BotMemoryItem.ItemKey.YAW.toString(), sight != null ? sight.getYaw() : null);
+        navigation.put(BotMemoryItem.ItemKey.TARGET.toString(), this.target != null ? this.target.toCompactString() : null);
+        navigation.put(BotMemoryItem.ItemKey.SUGGESTION.toString(), actionSuggestion != null ? actionSuggestion.name() : null);
+        navigation.put(BotMemoryItem.ItemKey.SUGGESTED_TARGET.toString(), suggestedTarget != null ? suggestedTarget.toCompactString() : null);
     
         // ➤ Кандидаты
-        BotMemoryV2Partition candidatesPartition = navigation.partition("candidates", BotMemoryV2Partition.Type.LIST);
+        BotMemoryV2Partition candidatesPartition = navigation.partition(BotMemoryPartition.PartitionKey.CANDIDATES.toString(), BotMemoryV2Partition.Type.LIST);
         candidatesPartition.getList().clear();
     
         if (candidates != null) {

@@ -122,7 +122,7 @@ public class BotHandAttackTask extends BotHandTask<BotHandAttackTaskParams> {
                             bot.getNavigator()
                                     .setTarget(BotWorldHelper.locationToBotPosition(living.getLocation()).toBlockData());
 
-                            //BotUtils.turnToTarget();
+                            //turnToTarget();
                             
                             BotLogger.debug(icon, isLogged(),
                                     bot.getId() + " 🏃🏻‍➡️ Pursuing mob, correcting direction. Distance: "
