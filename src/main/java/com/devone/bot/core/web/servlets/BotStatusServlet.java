@@ -72,7 +72,7 @@ public class BotStatusServlet extends HttpServlet {
             
             String tgtLoc = "";
             if (tgt != null) {
-                tgtLoc = tgt.toCompactString();
+                tgtLoc = tgt.getPosition().toCompactString();
             }
             botJson.addProperty("target", tgtLoc);
 
