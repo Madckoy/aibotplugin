@@ -9,29 +9,6 @@ import com.devone.bot.core.utils.blocks.BotPosition;
 
 public class BotMemoryV2Utils {
 
-    public static void incrementCounter__(Bot bot, String key) {
-        if (bot == null) return;
-
-        BotMemoryV2 memory = bot.getBrain().getMemoryV2();
-        if (memory == null) return;
-
-        BotMemoryV2Partition stats = memory.partition("stats", BotMemoryV2Partition.Type.MAP);
-        stats.increment(key);
-    }
-
-    public static void incrementSummaryCounter__(Bot bot, String summaryKey, String itemKey) {
-        if (bot == null || itemKey == null) return;
-
-        BotMemoryV2 memory = bot.getBrain().getMemoryV2();
-        if (memory == null) return;
-
-        BotMemoryV2Partition stats = memory.partition("stats", BotMemoryV2Partition.Type.MAP);
-        BotMemoryV2Partition summary = stats.partition(summaryKey, BotMemoryV2Partition.Type.MAP);
-
-        summary.increment(itemKey);
-        summary.increment("total");
-    }
-
     public static void incrementPartitionItem(Bot bot, String part, String itemKey) {
         if (bot == null || itemKey == null || part==null) return;
 

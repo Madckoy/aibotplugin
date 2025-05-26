@@ -256,7 +256,7 @@ public class BotNavigator {
             }
         } 
     
-        updateNavigationSummary("targets",  candidates != null ? candidates.size() : 0, candidates.size());
+        updateNavigationSummary(BotMemoryItem.ItemKey.TARGETS.toString(),  candidates != null ? candidates.size() : 0, candidates.size());
   
         boolean noTarget = suggestedTarget    == null || candidates.isEmpty();
 

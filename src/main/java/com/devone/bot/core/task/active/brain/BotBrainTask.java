@@ -76,7 +76,7 @@ public class BotBrainTask extends BotTaskAutoParams<BotBrainTaskParams> {
         
         // 3. Получение рекомендации
         Suggestion suggestion = bot.getNavigator().getSuggestion();
-        BotMemoryV2Utils.memorizeValue(bot, "navigation", "scanRadius", radius);
+        BotMemoryV2Utils.memorizeValue(bot, BotMemoryPartition.PartitionKey.NAVIGATION.toString(), BotMemoryItem.ItemKey.SCAN_RADIUS.toString(), radius);
 
         switch (suggestion) {
             case CHANGE_DIRECTION -> {

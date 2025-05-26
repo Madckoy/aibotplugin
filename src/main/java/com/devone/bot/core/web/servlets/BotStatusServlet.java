@@ -44,13 +44,13 @@ public class BotStatusServlet extends HttpServlet {
         JsonObject result = new JsonObject();
 
         String serverTime = LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss"));
-        result.addProperty("server-time", serverTime);
+        result.addProperty("server_time", serverTime);
 
         long mcTicks = Bukkit.getWorlds().get(0).getTime();
         int hour = (int) ((mcTicks / 1000 + 6) % 24);
         int minute = (int) ((mcTicks % 1000) * 60 / 1000);
         String mcTimeFormatted = String.format("%02d:%02d", hour, minute);
-        result.addProperty("mc-time", mcTimeFormatted);
+        result.addProperty("mc_time", mcTimeFormatted);
 
         JsonArray botsArray = new JsonArray();
         Collection<Bot> bots = botManager.getAllBots();
@@ -109,14 +109,14 @@ public class BotStatusServlet extends HttpServlet {
                 botJson.addProperty("kills", (Number) 0);
             }
 
-            botJson.addProperty("autoPickUpItems", true); //hardcode
+            botJson.addProperty("auto_pick_up_items", true); //hardcode
 
             botJson.addProperty("task", BotUtils.getActiveTaskIcon(bot));
             
             try {
-                botJson.addProperty("taskIsReactive", bot.getActiveTask().isReactive());
+                botJson.addProperty("task_is_reactive", bot.getActiveTask().isReactive());
             } catch (Exception e) {
-                botJson.addProperty("taskIsReactive", false);
+                botJson.addProperty("task_is_Reactive", false);
             }
 
             botJson.addProperty("object", BotUtils.getObjective(bot));
@@ -124,7 +124,7 @@ public class BotStatusServlet extends HttpServlet {
             long elapsedTime = 0;
             try {
                 elapsedTime = bot.getBrain().getCurrentTask().getElapsedTime();
-                botJson.addProperty("elapsedTime", BotUtils.formatTime(elapsedTime));
+                botJson.addProperty("elapsed_time", BotUtils.formatTime(elapsedTime));
             } catch (Exception ex) {
                 // ignore
             }
@@ -160,9 +160,9 @@ public class BotStatusServlet extends HttpServlet {
                         .sum();
 
 
-                botJson.addProperty("inventoryCount", count);
-                botJson.addProperty("inventoryMax", 36*64);
-                botJson.add("inventorySlotsFilled", inventoryArray);
+                botJson.addProperty("inventory_count", count);
+                botJson.addProperty("inventory_max", 36*64);
+                botJson.add("inventory_slots_filled", inventoryArray);
 
 
                 BotMemoryV2Partition nav = bot.getBrain().getMemoryV2().partition(BotMemoryPartition.PartitionKey.NAVIGATION.toString(), BotMemoryV2Partition.Type.MAP);
@@ -170,9 +170,9 @@ public class BotStatusServlet extends HttpServlet {
                 BotMemoryV2Partition visitedPartition = nav.partition(BotMemoryPartition.PartitionKey.VISITED.toString(), BotMemoryV2Partition.Type.MAP);
 
                 if (visitedPartition != null) {
-                    botJson.addProperty("visitedCount", visitedPartition.getMap().size());
+                    botJson.addProperty("visited_count", visitedPartition.getMap().size());
                 } else {
-                    botJson.addProperty("visitedCount", 0);
+                    botJson.addProperty("visited_count", 0);
                 }
             }
 

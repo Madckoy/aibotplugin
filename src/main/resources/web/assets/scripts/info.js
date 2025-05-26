@@ -13,8 +13,8 @@ function updateNavSummary(bot) {
     const summary = bot.memory?.navigation?.summary ?? {};
     const yaw = bot.memory?.navigation?.yaw;
     const suggestion = bot.memory?.navigation?.suggestion ?? "N/A";
-    const suggestedTarget = bot.memory?.navigation?.suggestedTarget ?? "N/A";
-    const scanRadius = bot.memory?.navigation?.scanRadius ?? "N/A";
+    const suggested_target = bot.memory?.navigation?.suggested_target ?? "N/A";
+    const scan_radius = bot.memory?.navigation?.scan_radius ?? "N/A";
 
     const format = (entry) => {
         if (!entry) return "N/A";
@@ -31,15 +31,15 @@ function updateNavSummary(bot) {
     document.getElementById("info-nav-reachable").textContent = format(summary.reachable);
     document.getElementById("info-nav-walkable").textContent = format(summary.walkable);
     document.getElementById("info-nav-navigation-suggestion").textContent = suggestion;
-    document.getElementById("info-nav-suggested-position").textContent = suggestedTarget;
+    document.getElementById("info-nav-suggested-position").textContent = suggested_target;
     document.getElementById("info-nav-facing-direction").textContent = getCompassArrow(yaw);
-    document.getElementById("info-nav-scan-range").textContent = scanRadius;
+    document.getElementById("info-nav-scan-range").textContent = scan_radius;
 }
 
 function updateStats(bot) {
     document.getElementById("info-stats-teleports").textContent = bot.teleports ?? "N/A";
-    document.getElementById("info-stats-visited").textContent = bot.visitedCount ?? "N/A";
-    document.getElementById("info-stats-inventory-count").textContent = bot.inventoryCount ?? "N/A";
+    document.getElementById("info-stats-visited").textContent = bot.visited_count ?? "N/A";
+    document.getElementById("info-stats-inventory-count").textContent = bot.inventory_count ?? "N/A";
     document.getElementById("info-stats-killed-mobs").textContent = bot.kills ?? "N/A";
     document.getElementById("info-stats-excavated").textContent = bot.breaks ?? "N/A";
 }

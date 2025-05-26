@@ -2,19 +2,20 @@ package com.devone.bot.core.brain.memory;
 
 public class BotMemoryItem {
     public enum ItemKey {
-        TOTAL("Total"),
-        SCAN_RADIUS("ScanRadius"),
-        TELEPORTED("Teleported"),
-        POSITION("Position"),
-        YAW("Yaw"),
-        TARGET("Target"),
-        SUGGESTION("Suggestion"),        
-        SUGGESTED_TARGET("SuggestedTarget"),
-        CALCULATED("Calculated"),
-        CONFIRMED("Confirmed"),
-        STUCKS("Stucks"),
-        REACHABLE("Reachable"),
-        WALKABLE("Walkable");
+        TOTAL("total"),
+        SCAN_RADIUS("scan_radius"),
+        TELEPORTED("teleports"),
+        POSITION("position"),
+        YAW("yaw"),
+        TARGET("target"),
+        TARGETS("targets"),
+        SUGGESTION("suggestion"),        
+        SUGGESTED_TARGET("suggested_target"),
+        CALCULATED("calculated"),
+        CONFIRMED("confirmed"),
+        STUCKS("stucks"),
+        REACHABLE("reachable"),
+        WALKABLE("walkable");
 
         private final String value;
 

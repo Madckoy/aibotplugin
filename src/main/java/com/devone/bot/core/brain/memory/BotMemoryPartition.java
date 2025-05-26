@@ -2,13 +2,13 @@ package com.devone.bot.core.brain.memory;
 
 public class BotMemoryPartition {
     public enum PartitionKey {
-        STATS("Stats"),
-        KILLED("Killed"),
-        DESTROYED("Destroyed"),
-        NAVIGATION("Navigation"),
-        CANDIDATES("Candidates"),
-        SUMMARY("Summary"),
-        VISITED("Visited");
+        STATS("stats"),
+        KILLED("kills"),
+        DESTROYED("breaks"),
+        NAVIGATION("navigation"),
+        CANDIDATES("candidates"),
+        SUMMARY("summary"),
+        VISITED("visited");
 
         private final String value;
 

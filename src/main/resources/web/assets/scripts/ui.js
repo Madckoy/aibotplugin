@@ -4,10 +4,10 @@ function updateMonitoringHeader(data) {
     const mcTimeElem = document.getElementById("mc-time");
     const serverTimeElem = document.getElementById("server-time");
 
-    const mcTime = data["mc-time"];
+    const mcTime = data["mc_time"];
     mcTimeElem.textContent = `⛅ ${typeof mcTime === "string" && mcTime.trim() !== "" ? mcTime : "--:--"}`;
 
-    const serverTime = data["server-time"];
+    const serverTime = data["server_time"];
     serverTimeElem.textContent = `🕒 ${typeof serverTime === "string" && serverTime.trim() !== "" ? serverTime : "--:--"}`;
 }
 
@@ -72,7 +72,7 @@ function updateOrCreateBotRow(bot, tbody) {
         <div class="bot-position-cell">
             <div><span>${bot.task}</span></div>
             <div class="bot-objective-divider"></div>
-            <div><span>${getTaskStatusEmoji(bot.taskIsReactive)}</span></div>
+            <div><span>${getTaskStatusEmoji(bot.task_is_reactive)}</span></div>
         </div>`;
 
     // 📋 Очередь задач
@@ -87,8 +87,8 @@ function updateOrCreateBotRow(bot, tbody) {
     cells[6].textContent = bot.elapsedTime;
 
     // 🎒 Инвентарь
-    cells[7].title = `Items: ${bot.inventoryCount} / ${bot.inventoryMax}`;
-    cells[7].innerHTML = generateInventoryGrid(bot.inventorySlotsFilled, bot.autoPickUpItems);
+    cells[7].title = `Items: ${bot.inventory_count} / ${bot.inventory_max}`;
+    cells[7].innerHTML = generateInventoryGrid(bot.inventory_slots_filled, bot.auto_pick_up_items);
 
     // ⚙️ Команды
     if (!cells[8].innerHTML.trim()) {
