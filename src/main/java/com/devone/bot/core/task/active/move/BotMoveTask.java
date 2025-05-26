@@ -24,7 +24,6 @@ public class BotMoveTask extends BotTaskAutoParams<BotMoveTaskParams> {
     private BotMoveTaskListener listener;
     private float speed = 1.0F;
     private boolean autoPickup = true;
-    private BotMoveTaskParams params;
 
     public boolean isAutoPickup() {
         return autoPickup;

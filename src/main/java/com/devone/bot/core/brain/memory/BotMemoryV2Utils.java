@@ -1,11 +1,15 @@
 package com.devone.bot.core.brain.memory;
 
 import java.util.ArrayList;
+import java.util.Map;
 
 import com.devone.bot.core.Bot;
 import com.devone.bot.core.brain.memoryv2.BotMemoryV2;
 import com.devone.bot.core.brain.memoryv2.BotMemoryV2Partition;
 import com.devone.bot.core.utils.blocks.BotPosition;
+import com.devone.bot.core.utils.logger.BotLogger;
+import com.google.gson.Gson;
+import com.google.gson.JsonElement;
 
 public class BotMemoryV2Utils {
 
@@ -65,12 +69,37 @@ public class BotMemoryV2Utils {
         part.put(key, value);
     }
 
-    public static Object readMemoryValue(Bot bot, String partition, String key) {
+    private static Object readMemoryValueUntyped(Bot bot, String partition, String key) {
         if (bot == null) return null;
 
         BotMemoryV2 memory           = bot.getBrain().getMemoryV2();
         BotMemoryV2Partition part    = memory.partition(partition, BotMemoryV2Partition.Type.MAP);
         return part.get(key);
+    }
+
+    public static <T> T readMemoryValueTyped(Bot bot, String partition, String key, Class<T> clazz) {
+        if (bot == null || partition == null || key == null || clazz == null) return null;
+
+        Object raw = readMemoryValueUntyped(bot, partition, key);
+        if (raw == null) return null;
+
+        if (clazz.isInstance(raw)) {
+            return clazz.cast(raw);
+        }
+
+        if (raw instanceof Map) {
+            try {
+                JsonElement json = new Gson().toJsonTree(raw);
+                return new Gson().fromJson(json, clazz);
+            } catch (Exception e) {
+                BotLogger.debug("🧠", true, "❌ Ошибка реконструкции " + clazz.getSimpleName() +
+                    " из карты (key: " + key + "): " + e.getMessage());
+                return null;
+            }
+        }
+
+        BotLogger.debug("🧠", true, "❌ Невозможно привести " + key + " (" + raw.getClass().getSimpleName() + ") к " + clazz.getSimpleName());
+        return null;
     }
 
     public static boolean isPositionVisited(Bot bot, BotPosition pos) {

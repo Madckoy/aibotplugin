@@ -201,9 +201,9 @@ public class BotNavigator {
 
         int radius = scanRadius;
 
-        Integer scanRadiusFromMem = (Integer) BotMemoryV2Utils.readMemoryValue(bot, 
+        Integer scanRadiusFromMem = (Integer) BotMemoryV2Utils.readMemoryValueTyped(bot, 
                                     BotMemoryPartition.PartitionKey.NAVIGATION.toString(), 
-                                    BotMemoryItem.ItemKey.SCAN_RADIUS.toString());
+                                    BotMemoryItem.ItemKey.SCAN_RADIUS.toString(), Integer.class);
             
         if(scanRadiusFromMem!=null) {
             radius = scanRadiusFromMem.intValue();

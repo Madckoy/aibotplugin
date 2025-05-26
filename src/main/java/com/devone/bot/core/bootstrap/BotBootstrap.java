@@ -41,16 +41,15 @@ public class BotBootstrap {
             String icon = BotUtils.getActiveTaskIcon(bot);           
             BotLogger.debug(icon, bot.isLogged(), bot.getId() + " 🛜 Sonar Scan started");
             BotSonar3DTaskParams params = new BotSonar3DTaskParams();
-            int radius = BotConstants.DEFAULT_SCAN_RADIUS;
-            
-            Integer scanRadiusFromMem = (Integer) BotMemoryV2Utils.readMemoryValue(bot, 
+
+            int radius = BotConstants.DEFAULT_SCAN_RADIUS;            
+            Integer scanRadiusFromMem = (Integer) BotMemoryV2Utils.readMemoryValueTyped(bot, 
                                                     BotMemoryPartition.PartitionKey.NAVIGATION.toString(), 
-                                                    BotMemoryItem.ItemKey.SCAN_RADIUS.toString());
-            
-            
+                                                    BotMemoryItem.ItemKey.SCAN_RADIUS.toString(), Integer.class);
             if(scanRadiusFromMem!=null) {
-                radius = scanRadiusFromMem.intValue();
+                radius = scanRadiusFromMem.intValue();                
             }
+            
             params.setRadius(radius);
             BotSonar3DTask task = new BotSonar3DTask(bot);
             task.setParams(params);

@@ -24,14 +24,14 @@ public class BotReactionStuckGuard implements IBotReaction {
         BotPosition currentPos = bot.getNavigator().getPosition();
         long currentTime = System.currentTimeMillis();
 
-        BotPosition lastPos = (BotPosition) BotMemoryV2Utils.readMemoryValue(bot, 
+        BotPosition lastPos = (BotPosition) BotMemoryV2Utils.readMemoryValueTyped(bot, 
                                 BotMemoryPartition.PartitionKey.WATCHDOG.toString(),
-                                BotMemoryItem.ItemKey.POSITION.toString());
+                                BotMemoryItem.ItemKey.POSITION.toString(),  BotPosition.class);
 
 
-        Long lastTime = (Long) BotMemoryV2Utils.readMemoryValue(bot, 
+        Long lastTime = (Long) BotMemoryV2Utils.readMemoryValueTyped(bot, 
                                 BotMemoryPartition.PartitionKey.WATCHDOG.toString(),
-                                BotMemoryItem.ItemKey.TIME.toString());
+                                BotMemoryItem.ItemKey.TIME.toString(), Long.class);
         
         if (lastPos != null && lastTime != null) {
             double distance = currentPos.distanceTo(lastPos);
