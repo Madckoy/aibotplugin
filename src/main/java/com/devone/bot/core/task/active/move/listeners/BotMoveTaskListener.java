@@ -95,8 +95,8 @@ public class BotMoveTaskListener implements Listener {
             aligned.setYaw(bot.getNavigator().getPosition().getYaw());
             aligned.setPitch(bot.getNavigator().getPosition().getPitch());
 
-            System.out.println(centered);    
-            System.out.println(aligned);    
+            // System.out.println(centered);    
+            // System.out.println(aligned);    
 
             Bukkit.getScheduler().runTask(AIBotPlugin.getInstance(), () -> {
                         bot.getNPC().teleport(aligned, PlayerTeleportEvent.TeleportCause.PLUGIN);

@@ -16,6 +16,7 @@ public class BotMemoryItem {
         CONFIRMED("confirmed"),
         STUCKS("stucks"),
         REACHABLE("reachable"),
+        COUNT("count"),
         WALKABLE("walkable"),
         TIME("time");
        

@@ -28,9 +28,10 @@ public class BotHandAttackListener implements Listener {
         if (event.getEntity().getKiller() != null 
             && event.getEntity().getKiller().getUniqueId().equals(bot.getNPCEntity().getUniqueId())) {
 
-            BotMemoryV2Utils.incrementPartitionItems(bot, BotMemoryPartition.PartitionKey.STATS.toString(), 
-                                                          BotMemoryPartition.PartitionKey.KILLED.toString(), event.getEntity().getType().name(),
-                                                          BotMemoryItem.ItemKey.TOTAL.toString());
+            BotMemoryV2Utils.incrementNestedTotal(bot, BotMemoryPartition.PartitionKey.STATS.toString(), 
+                                                    BotMemoryPartition.PartitionKey.KILLED.toString(), 
+                                                    event.getEntity().getType().name(), 
+                                                    BotMemoryItem.ItemKey.TOTAL.toString());
 
             task.stop(); // Завершаем задачу
 

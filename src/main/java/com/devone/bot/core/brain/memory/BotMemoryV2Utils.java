@@ -23,7 +23,7 @@ public class BotMemoryV2Utils {
         partition.increment(itemKey);
     }
 
-    public static void incrementPartitionItems(Bot bot, String part, String subPart, String itemKey, String totalKey) {
+    public static void incrementNestedItem(Bot bot, String part, String subPart, String itemKey) {
         if (bot == null || itemKey == null || part==null) return;
 
         BotMemoryV2 memory = bot.getBrain().getMemoryV2();
@@ -38,8 +38,29 @@ public class BotMemoryV2Utils {
             currentPart = subPartition;
         }
 
-        currentPart.increment(itemKey);
-        currentPart.increment(totalKey);
+        currentPart.increment(itemKey);        
+    }
+
+    public static void incrementNestedTotal(Bot bot, String partitionKey, String subPartitionKey, String itemKey, String totalKey) {
+        if (bot == null || itemKey == null || partitionKey == null || subPartitionKey == null || totalKey == null) return;
+
+        BotMemoryV2 memory = bot.getBrain().getMemoryV2();
+        if (memory == null) return;
+
+        // Верхний уровень, например "STATS"
+        BotMemoryV2Partition root = memory.partition(partitionKey.toUpperCase(), BotMemoryV2Partition.Type.MAP);
+
+        // Раздел статистики, например "kills"
+        BotMemoryV2Partition category = root.partition(subPartitionKey, BotMemoryV2Partition.Type.MAP);
+
+        // Увеличиваем общий total по этой категории
+        category.increment(totalKey);
+
+        // Получаем партишен сущности, например "ENDERMAN"
+        BotMemoryV2Partition entity = category.partition(itemKey, BotMemoryV2Partition.Type.MAP);
+
+        // Увеличиваем счётчик по конкретной сущности
+        entity.increment(BotMemoryItem.ItemKey.COUNT.toString());
     }
 
 

@@ -14,7 +14,7 @@ import java.util.Optional;
 
 public class BotReactionStuckGuard implements IBotReaction {
 
-    private static final long STUCK_DURATION_MS = 60000;  // 60 секунд без движения
+    private static final long STUCK_DURATION_MS = 300000;  // 5 минут без движения
     private static final double POSITION_TOLERANCE = 1.5; // Допуск в блоке
 
     @Override
