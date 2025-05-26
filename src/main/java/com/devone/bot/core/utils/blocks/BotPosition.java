@@ -91,7 +91,7 @@ public class BotPosition {
     }
 
     public String toCompactString() {
-        return String.format("[%.1f, %.1f, %.1f]", x, y, z);
+        return String.format("%.1f, %.1f, %.1f", x, y, z);
     }
 
     // --- Equals & Hash ---

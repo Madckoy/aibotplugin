@@ -68,7 +68,7 @@ public class BotStatusServlet extends HttpServlet {
             botJson.addProperty("stuck", bot.getNavigator().isStuck());
             botJson.addProperty("stuckCount", bot.getNavigator().getStuckCount());
 
-            botJson.addProperty("position", loc.toBlockData().toCompactString());
+            botJson.addProperty("position", loc.toCompactString());
             
             String tgtLoc = "";
             if (tgt != null) {
