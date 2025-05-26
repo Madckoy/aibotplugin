@@ -8,7 +8,6 @@ import com.devone.bot.core.brain.cortex.sequence.params.BotSequenceContainerExca
 import com.devone.bot.core.task.active.excavate.BotExcavateTask;
 import com.devone.bot.core.task.passive.BotSequenceContainer;
 import com.devone.bot.core.task.passive.BotTask;
-import com.devone.bot.core.task.active.excavate.params.BotExcavateTaskParams;
 import com.devone.bot.core.utils.logger.BotLogger;
 
 public class BotSequenceContainerExcavate extends BotSequenceContainer<BotSequenceContainerExcavateParams> {
@@ -24,10 +23,9 @@ public class BotSequenceContainerExcavate extends BotSequenceContainer<BotSequen
     @Override
     protected List<BotTask<?>> enqueue(Bot bot) {
         BotLogger.debug(getIcon(), isLogged(), bot.getId() + " " + icon + " " + getObjective());
-        BotExcavateTaskParams excvParams = new BotExcavateTaskParams();
+
         BotExcavateTask excvTask = new BotExcavateTask(bot);
-        excvTask.setReactive(true);
-        excvTask.setParams(excvParams);
+        excvTask.setParams(excvTask.getParams());
 
         List<BotTask<?>> subtasks = new ArrayList<>();
         subtasks.add(excvTask);

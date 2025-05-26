@@ -31,7 +31,7 @@ public class BotSequenceContainerTeleportToPosition
         BotLogger.debug(getIcon(), isLogged(), bot.getId() + " " + icon + " " + getObjective());
 
         BotTeleportTask tp = new BotTeleportTask(bot, null);
-        BotTeleportTaskParams params = new BotTeleportTaskParams();
+        BotTeleportTaskParams params = tp.getParams();
         params.setPosition(position);
         tp.setParams(params);
         

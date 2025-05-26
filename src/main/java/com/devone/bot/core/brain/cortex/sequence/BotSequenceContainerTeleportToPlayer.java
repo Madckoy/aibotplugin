@@ -36,7 +36,7 @@ public class BotSequenceContainerTeleportToPlayer
         // Location behind = playerLoc.clone().add(offset);
 
         BotTeleportTask tp = new BotTeleportTask(bot, player);
-        BotTeleportTaskParams params = new BotTeleportTaskParams();
+        BotTeleportTaskParams params = tp.getParams();
         params.setPosition(new BotPosition(
                 playerLoc.getBlockX(),
                 playerLoc.getBlockY(),

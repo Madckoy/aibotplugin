@@ -23,9 +23,20 @@ public class BotMoveTask extends BotTaskAutoParams<BotMoveTaskParams> {
     private boolean isMoving = false;
     private BotMoveTaskListener listener;
     private float speed = 1.0F;
+    private boolean autoPickup = true;
+    private BotMoveTaskParams params;
+
+    public boolean isAutoPickup() {
+        return autoPickup;
+    }
+
+    public void setAutoPickup(boolean autoPickup) {
+        this.autoPickup = autoPickup;
+    }
 
     public BotMoveTask(Bot bot) {
         super(bot, BotMoveTaskParams.class);
+        
     }
 
     @Override
@@ -35,8 +46,8 @@ public class BotMoveTask extends BotTaskAutoParams<BotMoveTaskParams> {
         this.speed = params.getSpeed();
         setIcon(params.getIcon());
         setObjective(params.getObjective());
-        //setEnabled(params.isEnabled());
-        //setLogged(params.isLogged());
+        setAutoPickup(params.isAutoPickup());
+        setLogged(params.isLogged());
 
         BotPosition target = params.getTarget();
 

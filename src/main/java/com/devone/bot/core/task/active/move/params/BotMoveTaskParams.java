@@ -10,6 +10,15 @@ public class BotMoveTaskParams extends BotTaskParams {
     private transient BotPosition target = new BotPosition(); 
 
     private float speed = 1.0F;
+    private boolean autoPickup = true;
+
+    public boolean isAutoPickup() {
+        return autoPickup;
+    }
+
+    public void setAutoPickup(boolean autoPickup) {
+        this.autoPickup = autoPickup;
+    }
 
     public BotMoveTaskParams() {
         // дефолтные значения

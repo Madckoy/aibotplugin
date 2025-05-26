@@ -8,7 +8,8 @@ public class BotMemoryPartition {
         NAVIGATION("navigation"),
         CANDIDATES("candidates"),
         SUMMARY("summary"),
-        VISITED("visited");
+        VISITED("visited"),
+        WATCHDOG("watchdog");
 
         private final String value;
 

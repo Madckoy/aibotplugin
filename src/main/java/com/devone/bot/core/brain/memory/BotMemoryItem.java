@@ -7,6 +7,7 @@ public class BotMemoryItem {
         TELEPORTED("teleports"),
         POSITION("position"),
         YAW("yaw"),
+        PITCH("pitch"),
         TARGET("target"),
         TARGETS("targets"),
         SUGGESTION("suggestion"),        
@@ -15,7 +16,9 @@ public class BotMemoryItem {
         CONFIRMED("confirmed"),
         STUCKS("stucks"),
         REACHABLE("reachable"),
-        WALKABLE("walkable");
+        WALKABLE("walkable"),
+        TIME("time");
+       
 
         private final String value;
 

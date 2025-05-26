@@ -23,12 +23,8 @@ public class BotSequenceContainerFishInWater extends BotSequenceContainer<BotSeq
     protected List<BotTask<?>> enqueue(Bot bot) {
         BotLogger.debug(getIcon(), isLogged(), bot.getId() + " 🎯 Условие сработало: ловим рыбу.");
 
-        BotFishingTaskParams params = new BotFishingTaskParams();
-        params.setObjective("Ловим рыбу руками");
-        params.setIcon("🎣");
-
         BotFishingTask fishingTask = new BotFishingTask(bot);
-        fishingTask.setParams(params);
+        fishingTask.setParams(fishingTask.getParams());
 
         List<BotTask<?>> subtasks = new ArrayList<>();
         subtasks.add(fishingTask);

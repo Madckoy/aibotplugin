@@ -35,8 +35,9 @@ public class BotSequenceContainerNearbyPlayer extends BotSequenceContainer<BotSe
         BotPosition playerLoc = new BotPosition(BotWorldHelper.locationToBotPosition(player.getLocation()));
 
         // 1. Идём к игроку
-        BotMoveTaskParams walkParams = new BotMoveTaskParams(playerLoc);
         BotMoveTask walkTask = new BotMoveTask(bot);
+        BotMoveTaskParams walkParams = walkTask.getParams();
+        walkParams.setTarget(playerLoc);
         walkTask.setParams(walkParams);
         walkTask.setObjective("🥾 Идём к игроку");
 

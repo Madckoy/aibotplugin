@@ -8,7 +8,6 @@ import com.devone.bot.core.brain.cortex.sequence.params.BotSequenceContainerCali
 import com.devone.bot.core.task.passive.BotSequenceContainer;
 import com.devone.bot.core.task.passive.BotTask;
 import com.devone.bot.core.task.active.calibrate.BotCalibrateTask;
-import com.devone.bot.core.task.active.calibrate.params.BotCalibrateTaskParams;
 import com.devone.bot.core.utils.logger.BotLogger;
 
 public class BotSequenceContainerCalibrate extends BotSequenceContainer<BotSequenceContainerCalibrateParams> {
@@ -24,9 +23,8 @@ public class BotSequenceContainerCalibrate extends BotSequenceContainer<BotSeque
     protected List<BotTask<?>> enqueue(Bot bot) {
         BotLogger.debug(getIcon(), isLogged(), bot.getId() + " " + icon + " " + getObjective());
 
-        BotCalibrateTaskParams tpParams = new BotCalibrateTaskParams();
         BotCalibrateTask tpTask = new BotCalibrateTask(bot, "I want beer!");
-        tpTask.setParams(tpParams);
+        tpTask.setParams(tpTask.getParams());
 
         List<BotTask<?>> subtasks = new ArrayList<>();
         subtasks.add(tpTask);

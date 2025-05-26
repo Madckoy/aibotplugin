@@ -27,11 +27,9 @@ public class BotSequenceContainerMove extends BotSequenceContainer<BotSequenceCo
         BotLogger.debug(getIcon(), isLogged(), bot.getId() + " " + icon + " " + getObjective());
         
         if(params.position!=null) {
-            BotPosition movePosiiton = new BotPosition(params.position);
-
-            BotMoveTaskParams mv_params = new BotMoveTaskParams();
-            mv_params.setTarget(new BotPosition(movePosiiton));
             BotMoveTask moveTask =  new BotMoveTask(bot);
+            BotMoveTaskParams mv_params = moveTask.getParams();
+            mv_params.setTarget(new BotPosition(params.position));
             moveTask.setParams(mv_params);
 
             List<BotTask<?>> subtasks = new ArrayList<>();
