@@ -70,7 +70,6 @@ public class BotBrainTask extends BotTaskAutoParams<BotBrainTaskParams> {
         if (reaction.isPresent()) {
             reaction.get().run();  // Запускаем реакцию
             BotLogger.debug(icon, isLogged(), bot.getId() + " 🧠 Реакция активирована — мозг уступает управление");
-            stop();
             return;
         }
         
