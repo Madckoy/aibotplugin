@@ -3,7 +3,6 @@ package com.devone.bot.core.brain.cortex.sequence;
 import com.devone.bot.core.Bot;
 import com.devone.bot.core.brain.cortex.sequence.params.BotSequenceContainerFishInWaterParams;
 import com.devone.bot.core.task.active.fishing.BotFishingTask;
-import com.devone.bot.core.task.active.fishing.params.BotFishingTaskParams;
 import com.devone.bot.core.task.passive.BotSequenceContainer;
 import com.devone.bot.core.task.passive.BotTask;
 import com.devone.bot.core.utils.logger.BotLogger;
