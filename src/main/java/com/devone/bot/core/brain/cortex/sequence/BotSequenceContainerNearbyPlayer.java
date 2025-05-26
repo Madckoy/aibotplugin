@@ -23,7 +23,7 @@ public class BotSequenceContainerNearbyPlayer extends BotSequenceContainer<BotSe
     public BotSequenceContainerNearbyPlayer(Bot bot, Player player) {
         super(bot, BotSequenceContainerNearbyPlayerParams.class);
         this.player = player;
-        setIcon("🔣");
+        setIcon("🔀");
         setObjective("Sequence: Bot MoveTask and Bot Drop All Task");
         setDeffered(true);
     }

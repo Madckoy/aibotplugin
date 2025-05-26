@@ -14,7 +14,7 @@ public class BotSequenceContainerEmpty
 
     public BotSequenceContainerEmpty(Bot bot) {
         super(bot, BotSequenceContainerEmptyParams.class);
-        setIcon("🔣");
+        setIcon("🔀");
         setObjective("Sequence: Empty container");
     }
 

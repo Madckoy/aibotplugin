@@ -22,7 +22,7 @@ public class BotSequenceContainerTeleportToPlayer
     public BotSequenceContainerTeleportToPlayer(Bot bot, Player player) {
         super(bot, BotSequenceContainerTeleportToPlayerParams.class);
         this.player = player;
-        setIcon("🔣");
+        setIcon("🔀");
         setObjective("Sequence: Телепорт к игроку (не вплотную)");
         setDeffered(true);
     }

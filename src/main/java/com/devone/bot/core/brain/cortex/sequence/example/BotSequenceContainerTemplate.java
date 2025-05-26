@@ -12,7 +12,7 @@ public class BotSequenceContainerTemplate extends BotSequenceContainer<BotSequen
 
     public BotSequenceContainerTemplate(Bot bot) {
         super(bot, BotSequenceContainerTemplateParams.class);
-        setIcon("#️⃣");
+        setIcon("🔀");
         setObjective("Шаблон реактивного контейнера");
     }
 

@@ -21,7 +21,7 @@ public class BotSequenceContainerTeleportToPosition
     public BotSequenceContainerTeleportToPosition(Bot bot, BotPosition position) {
         super(bot, BotSequenceContainerTeleportToPositionParams.class);
         this.position = position;
-        setIcon("🔣");
+        setIcon("🔀");
         setObjective("Sequence: Bot Teleport Task");
         setDeffered(true);
     }

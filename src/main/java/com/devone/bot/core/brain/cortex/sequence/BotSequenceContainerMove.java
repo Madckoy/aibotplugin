@@ -17,7 +17,7 @@ public class BotSequenceContainerMove extends BotSequenceContainer<BotSequenceCo
     public BotSequenceContainerMove(Bot bot) {
 
         super(bot, BotSequenceContainerMoveParams.class);
-        setIcon("🔣");
+        setIcon("🔀");
         setObjective("Sequence: Bot Move Task");
         setDeffered(true);
     }
