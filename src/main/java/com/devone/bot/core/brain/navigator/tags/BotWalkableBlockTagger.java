@@ -24,7 +24,6 @@ public class BotWalkableBlockTagger {
         blocks.sort(Comparator.comparingInt(BotBlockData::getY).reversed());
 
         for (BotBlockData block : blocks) {
-            if (shouldSkip(block)) continue;
 
             int x = block.getX();
             int y = block.getY();
@@ -32,15 +31,19 @@ public class BotWalkableBlockTagger {
 
             BotBlockData above = blockMap.get(new BotPositionKey(x, y + 1, z));
             BotBlockData above2 = blockMap.get(new BotPositionKey(x, y + 2, z));
+            BotBlockData above3 = blockMap.get(new BotPositionKey(x, y + 2, z));
 
             if (block==null || above2==null || above==null) continue; //нет места что бы стоять
-            if (BlockMaterialUtils.isDangerous(block) || 
-                BlockMaterialUtils.isDangerous(above) || 
-                BlockMaterialUtils.isDangerous(above2))  continue;//над головой либо нет блоков либо опасные - не walkable
+            if (BlockMaterialUtils.isDangerous(block)  || 
+                BlockMaterialUtils.isDangerous(above)  || 
+                BlockMaterialUtils.isDangerous(above2) || 
+                BlockMaterialUtils.isDangerous(above3))   continue;//над головой либо нет блоков либо опасные - не walkable
 
-            if (BlockMaterialUtils.isNavigationObstacle(block) || 
-                BlockMaterialUtils.isNavigationObstacle(above) || 
-                BlockMaterialUtils.isNavigationObstacle(above2)) continue;
+            if (BlockMaterialUtils.isNavigationObstacle(block)  || 
+                BlockMaterialUtils.isNavigationObstacle(above)  || 
+                BlockMaterialUtils.isNavigationObstacle(above2) || 
+                BlockMaterialUtils.isNavigationObstacle(above3)) { continue; }
+
            
             BotBlockData below = blockMap.get(new BotPositionKey(x, y - 1, z));
             if( BlockMaterialUtils.isDangerous(above) && BlockMaterialUtils.isDangerous(above2)) continue;
@@ -96,7 +99,4 @@ public class BotWalkableBlockTagger {
         return BotTagUtils.getTaggedBlocks(blocks, "walkable:*").size();
     }
 
-    private static boolean shouldSkip(BotBlockData block) {
-        return BlockMaterialUtils.isAir(block);
-    }
 }
