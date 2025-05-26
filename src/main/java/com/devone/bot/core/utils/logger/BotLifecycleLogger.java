@@ -36,11 +36,9 @@ public class BotLifecycleLogger {
         try (FileWriter writer = new FileWriter(logFile, true);
                 BufferedWriter bw = new BufferedWriter(writer)) {
 
-            String t_icon = "N/A";
             String t_name = "N/A";
             String e_time = "N/A";
 
-            t_icon = BotUtils.getActiveTaskIcon(bot);
             t_name = BotUtils.getActiveTaskSimpleName(bot);
             e_time = BotUtils.formatTime(BotUtils.getActiveTaskElapsed(bot));
 
@@ -49,7 +47,6 @@ public class BotLifecycleLogger {
                     Bukkit.getWorlds().get(0).getName() + ", " +
                     loc.toString() + ", " +
                     bot.getNavigator().getPosition().getYaw() + ", " +
-                    t_icon + ", " +
                     t_name + ", " +
                     e_time;
 
