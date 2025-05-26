@@ -37,11 +37,11 @@ function updateNavSummary(bot) {
 }
 
 function updateStats(bot) {
-    document.getElementById("info-stats-teleports").textContent = bot.teleportUsed ?? "N/A";
+    document.getElementById("info-stats-teleports").textContent = bot.teleports ?? "N/A";
     document.getElementById("info-stats-visited").textContent = bot.visitedCount ?? "N/A";
     document.getElementById("info-stats-inventory-count").textContent = bot.inventoryCount ?? "N/A";
-    document.getElementById("info-stats-killed-mobs").textContent = bot.mobsKilled ?? "N/A";
-    document.getElementById("info-stats-excavated").textContent = bot.blocksBroken ?? "N/A";
+    document.getElementById("info-stats-killed-mobs").textContent = bot.kills ?? "N/A";
+    document.getElementById("info-stats-excavated").textContent = bot.breaks ?? "N/A";
 }
 
 function showInfoPanel(bot) {

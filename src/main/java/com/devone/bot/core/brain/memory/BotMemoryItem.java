@@ -12,7 +12,9 @@ public class BotMemoryItem {
         SUGGESTED_TARGET("SuggestedTarget"),
         CALCULATED("Calculated"),
         CONFIRMED("Confirmed"),
-        STUCKS("Stucks");
+        STUCKS("Stucks"),
+        REACHABLE("Reachable"),
+        WALKABLE("Walkable");
 
         private final String value;
 

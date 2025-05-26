@@ -232,8 +232,8 @@ public class BotNavigator {
         int reachableValidated = validateTargets(botPos, reachableBlocks);
         int walkableValidated = validateTargets(botPos, walkableBlocks);          
 
-        updateNavigationSummary("reachable", reachable, reachableValidated);
-        updateNavigationSummary("walkable",  walkable,  walkableValidated);
+        updateNavigationSummary(BotMemoryItem.ItemKey.REACHABLE.toString(), reachable, reachableValidated);
+        updateNavigationSummary(BotMemoryItem.ItemKey.WALKABLE.toString(),  walkable,  walkableValidated);
     
         // Логика выбора цели (приоритетная)
         List<BotBlockData> reachableValid = BotTagUtils.getTaggedBlocks(bot.getBrain().getSceneData().blocks, "reachable:*, navigation:valid");
