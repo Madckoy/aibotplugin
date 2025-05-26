@@ -1,6 +1,7 @@
 package com.devone.bot.core.brain.cortex.reaction.reactive;
 
 import com.devone.bot.core.Bot;
+import com.devone.bot.core.brain.cortex.BotActionSuggestion.Suggestion;
 import com.devone.bot.core.brain.cortex.reaction.IBotReaction;
 import com.devone.bot.core.brain.cortex.sequence.BotSequenceContainerExcavate;
 import com.devone.bot.core.brain.memory.BotMemoryItem;
@@ -19,9 +20,12 @@ public class BotReactionStuckGuard implements IBotReaction {
 
     @Override
     public Optional<Runnable> validate(Bot bot) {
-        BotLogger.debug("🪤", bot.isLogged(), bot.getId() + " 📍 Проверка застревания...");
+        BotLogger.debug("🪤", bot.isLogged(), bot.getId() + " 📍 Проверка застревания...");        
 
         BotPosition currentPos = bot.getNavigator().getPosition();
+        
+        if (currentPos == null) return Optional.empty();
+
         long currentTime = System.currentTimeMillis();
 
         BotPosition lastPos = (BotPosition) BotMemoryV2Utils.readMemoryValueTyped(bot, 
@@ -39,10 +43,17 @@ public class BotReactionStuckGuard implements IBotReaction {
 
             if (distance < POSITION_TOLERANCE && duration > STUCK_DURATION_MS) {
                 BotLogger.debug("🪤", bot.isLogged(), bot.getId() + " ❗ Бот застрял на " + String.format("%.2f", distance) + " м в течение " + duration + " мс");
-
-                return Optional.of(() -> {
-                    BotTaskManager.push(bot, new BotSequenceContainerExcavate(bot));
-                });
+                if(!bot.getNavigator().getCandidates().isEmpty()) {
+                    // есть кандидаты - копаемся что бы выбраться
+                    return Optional.of(() -> {                                        
+                        BotTaskManager.push(bot, new BotSequenceContainerExcavate(bot));
+                    });
+                } else {
+                    // нет кандидатов. удаляем все ранее посещенные. далее поробуем повернуться
+                    BotMemoryV2Utils.clearAllVisited(bot);
+                    bot.getNavigator().setSuggestion(Suggestion.CHANGE_DIRECTION);
+                    return Optional.empty();
+                }
             }
         }
 

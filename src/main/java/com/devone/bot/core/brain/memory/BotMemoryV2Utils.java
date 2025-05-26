@@ -6,6 +6,7 @@ import java.util.Map;
 import com.devone.bot.core.Bot;
 import com.devone.bot.core.brain.memoryv2.BotMemoryV2;
 import com.devone.bot.core.brain.memoryv2.BotMemoryV2Partition;
+import com.devone.bot.core.utils.blocks.BotBlockData;
 import com.devone.bot.core.utils.blocks.BotPosition;
 import com.devone.bot.core.utils.logger.BotLogger;
 import com.google.gson.Gson;
@@ -161,6 +162,19 @@ public class BotMemoryV2Utils {
         BotMemoryV2Partition nav = memory.partition(BotMemoryPartition.PartitionKey.NAVIGATION.toString(), BotMemoryV2Partition.Type.MAP);
         BotMemoryV2Partition visited = nav.partition(BotMemoryPartition.PartitionKey.VISITED.toString(), BotMemoryV2Partition.Type.MAP);
         visited.getMap().clear();
+    }
+
+    public static boolean isBlockVisited(Bot bot, BotBlockData block) {
+        if (bot == null || block == null) return false;
+
+        String key = block.getX() + ", " + block.getY() + ", " + block.getZ();
+
+        BotMemoryV2Partition visited = bot.getBrain()
+            .getMemoryV2()
+            .partition(BotMemoryPartition.PartitionKey.NAVIGATION.toString(), BotMemoryV2Partition.Type.MAP)
+            .partition(BotMemoryPartition.PartitionKey.VISITED.toString(), BotMemoryV2Partition.Type.MAP);
+
+        return visited.getMap().containsKey(key);
     }
 
 }

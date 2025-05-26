@@ -238,6 +238,11 @@ public class BotNavigator {
         // Логика выбора цели (приоритетная)
         List<BotBlockData> reachableValid = BotTagUtils.getTaggedBlocks(bot.getBrain().getSceneData().blocks, "reachable:*, navigation:valid");
 
+        // 🧹 Убираем ранее посещённые блоки
+        reachableValid = reachableValid.stream()
+            .filter(b -> !BotMemoryV2Utils.isBlockVisited(bot, b))
+            .toList();
+
 
         if (!reachableValid.isEmpty()) {
             candidates = reachableValid;
@@ -246,6 +251,11 @@ public class BotNavigator {
         } else {    
             // check if we could use walkable as fallback
             List<BotBlockData> walkableValid = BotTagUtils.getTaggedBlocks(bot.getBrain().getSceneData().blocks, "walkable:*, navigation:valid");
+            // 🧹 Убираем ранее посещённые блоки
+            walkableValid = reachableValid.stream()
+            .filter(b -> !BotMemoryV2Utils.isBlockVisited(bot, b))
+            .toList();
+
             if( !walkableValid.isEmpty() ) {
                 candidates = walkableValid;
                 actionSuggestion = BotActionSuggestion.Suggestion.MOVE;
