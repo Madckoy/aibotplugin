@@ -37,14 +37,7 @@ public class BotBrainTask extends BotTaskAutoParams<BotBrainTaskParams> {
         setObjective(params.getObjective() != null ? params.getObjective() : "Think");
 
         bot.getBrain().setMemoryExpirationMillis(params.getMemoryExpirationMillis());
-
-        BotLogger.debug(icon, isLogged(), bot.getId() + " ⚙️ Параметры загружены: " +
-                "explore=" + params.isAllowExploration() + ", " +
-                "excavate=" + params.isAllowExcavation() + ", " +
-                "violence=" + params.isAllowViolence() + ", " +
-                "teleport=" + params.isAllowTeleport());
-       
-
+      
         return this;
     }
 

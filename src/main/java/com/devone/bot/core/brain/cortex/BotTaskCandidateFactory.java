@@ -8,7 +8,6 @@ import com.devone.bot.core.Bot;
 import com.devone.bot.core.task.passive.BotTaskManager;
 import com.devone.bot.core.task.active.brain.params.BotBrainTaskParams;
 import com.devone.bot.core.task.active.excavate.BotExcavateTask;
-import com.devone.bot.core.task.active.excavate.params.BotExcavateTaskParams;
 import com.devone.bot.core.task.active.hand.attack.BotHandAttackTask;
 import com.devone.bot.core.task.active.hand.attack.params.BotHandAttackTaskParams;
 import com.devone.bot.core.utils.BotConstants;
@@ -25,7 +24,7 @@ public class BotTaskCandidateFactory {
         List<BotTaskCandidate> candidates = new ArrayList<>();
 
         candidates.add(new BotTaskCandidate(
-                () -> params.getViolenceWeight(),
+                () -> getViolenceWeight(),
                 () -> {
                     BotBlockData target = BotEntitySelector.pickNearestTarget(data.entities, botPos, BotConstants.DEFAULT_DETECTION_RADIUS);
                     if (target == null)
@@ -38,26 +37,49 @@ public class BotTaskCandidateFactory {
                         BotTaskManager.push(bot, t);
                     };
                 },
-                () -> params.isAllowViolence() && BotEntitySelector.hasHostilesNearby(data.entities, botPos, BotConstants.DEFAULT_DETECTION_RADIUS)));
+                () -> isAllowViolence() && BotEntitySelector.hasHostilesNearby(data.entities, botPos, BotConstants.DEFAULT_DETECTION_RADIUS)));
 
         candidates.add(new BotTaskCandidate(
-                () -> params.getExplorationWeight(),
+                () -> getExplorationWeight(),
                 () -> () -> {
                     BotLogger.debug("🧭", bot.isLogged(), bot.getId() + " Разведка");
                     BotTaskManager.push(bot, new BotExploreTask(bot));
                 },
-                () -> params.isAllowExploration()));
+                () -> isAllowExploration()));
 
         candidates.add(new BotTaskCandidate(
-                () -> params.getExcavationWeight(),
+                () -> getExcavationWeight(),
                 () -> () -> {
                     BotLogger.debug("⛏", bot.isLogged(), bot.getId() + " Копка");
                     BotExcavateTask task = new BotExcavateTask(bot);
-                    task.setParams(new BotExcavateTaskParams());
+                    task.setParams(task.getParams());
                     BotTaskManager.push(bot, task);
                 },
-                () -> params.isAllowExcavation()));
+                () -> isAllowExcavation()));
 
         return candidates;
+    }
+
+    public static boolean isAllowViolence(){
+        return true;
+    }
+
+    public static boolean isAllowExploration(){
+        return true;
+    }
+
+    public static boolean isAllowExcavation(){
+        return true;
+    }
+
+    public static double getViolenceWeight(){
+        return 0.5;
+    }
+    public static double getExplorationWeight(){
+        return 0.5;
+    }
+
+    public static double getExcavationWeight(){
+        return 0.1;
     }
 }
