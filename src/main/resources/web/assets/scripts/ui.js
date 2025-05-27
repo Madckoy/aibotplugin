@@ -84,7 +84,7 @@ function updateOrCreateBotRow(bot, tbody) {
         </div>`;
 
     // ⏱️ Время
-    cells[6].textContent = bot.elapsedTime;
+    cells[6].textContent = bot.elapsed_time;
 
     // 🎒 Инвентарь
     cells[7].title = `Items: ${bot.inventory_count} / ${bot.inventory_max}`;
