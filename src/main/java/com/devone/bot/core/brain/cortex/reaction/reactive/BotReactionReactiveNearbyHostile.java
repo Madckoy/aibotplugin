@@ -5,6 +5,7 @@ import com.devone.bot.core.brain.cortex.reaction.IBotReaction;
 import com.devone.bot.core.brain.cortex.sequence.BotSequenceContainerNearbyHostile;
 import com.devone.bot.core.brain.perseption.scene.BotSceneData;
 import com.devone.bot.core.task.passive.BotTaskManager;
+import com.devone.bot.core.utils.BotConstants;
 import com.devone.bot.core.utils.blocks.BlockUtils;
 import com.devone.bot.core.utils.blocks.BotBlockData;
 import com.devone.bot.core.utils.blocks.BotPosition;
@@ -30,7 +31,7 @@ public class BotReactionReactiveNearbyHostile implements IBotReaction {
                     continue;
 
                 double dist = botPos.distanceTo(entity.getPosition());
-                if (dist >= 1)
+                if (dist > BotConstants.DEFAULT_DETECTION_RADIUS)
                     continue;
 
                 BotLogger.debug("🤖", bot.isLogged(), bot.getId() + " ❗ Обнаружен враждебный моб: " + entity.getType()
