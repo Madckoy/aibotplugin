@@ -5,11 +5,6 @@ function updateInfoPanel(bot) {
     if (!panel.classList.contains("visible")) return;
     if (currentBotId !== bot.id) return;
 
-    updateNavSummary(bot);
-    updateStats(bot);
-}
-
-function updateNavSummary(bot) {
     const summary = bot.memory?.navigation?.summary ?? {};
     const yaw = bot.memory?.navigation?.yaw;
     const suggestion = bot.memory?.navigation?.suggestion ?? "N/A";
@@ -39,19 +34,21 @@ function updateNavSummary(bot) {
     document.getElementById("info-nav-suggested-position").textContent = suggested_target;
     document.getElementById("info-nav-facing-direction").textContent = getCompassArrow(yaw);
     document.getElementById("info-nav-scan-range").textContent = scan_radius;
-    document.getElementById("info-nav-сandidates").textContent = candidates;
+    document.getElementById("info-nav-сandidates").textContent = count;
+
     document.getElementById("info-nav-watchdog-position").textContent = `${watchdog_pos}`;
     document.getElementById("info-nav-watchdog-time").textContent = `${watchdog_time}`;
-}
-
-function updateStats(bot) {
-
     document.getElementById("info-stats-teleports").textContent = bot.teleports ?? "N/A";
     document.getElementById("info-stats-visited").textContent = bot.visited_count ?? "N/A";
     document.getElementById("info-stats-inventory-count").textContent = bot.inventory_count ?? "N/A";
     document.getElementById("info-stats-killed-mobs").textContent = bot.kills ?? "N/A";
     document.getElementById("info-stats-excavated").textContent = bot.breaks ?? "N/A";
+
 }
+
+
+
+
 
 function showInfoPanel(bot) {
     const panel = document.getElementById("bot-info-panel");
