@@ -58,10 +58,11 @@ public class BotCalibrateTask extends BotTaskAutoParams<BotCalibrateTaskParams> 
 
             BotLogger.debug(icon, isLogged(), bot.getId() + " 🗑️ Reset Navigation");
             bot.getNavigator().setEnabled(true);
-            BotSimulatorResult res = bot.getNavigator().simulate(BotConstants.DEFAULT_MAX_SIGHT_FOV, BotConstants.DEFAULT_SCAN_RADIUS, BotConstants.DEFAULT_SCAN_HEIGHT);            
+            BotSimulatorResult res = bot.getNavigator().simulate(BotConstants.DEFAULT_NORMAL_SIGHT_FOV, BotConstants.DEFAULT_SCAN_RADIUS, BotConstants.DEFAULT_SCAN_HEIGHT);            
             float bestYaw = res.yaw;
             int   reachables = res.reachables;
-            message = "Best yaw: "+ bestYaw + " with Reachable: " + reachables;
+            message = "Best result: "+res.status+" with best yaw: "+ bestYaw + " with reachable: " + reachables;
+            BotLogger.debug(icon, isLogged(), bot.getId() + " "+message);
             stop();
         } catch (Exception e) {
             message = "Navigator reset failure!";

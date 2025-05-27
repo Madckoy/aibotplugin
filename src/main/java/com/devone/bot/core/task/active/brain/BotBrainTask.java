@@ -94,11 +94,15 @@ public class BotBrainTask extends BotTaskAutoParams<BotBrainTaskParams> {
                     BotSimulatorResult res = bot.getNavigator().simulate(BotConstants.DEFAULT_NORMAL_SIGHT_FOV, radius, BotConstants.DEFAULT_SCAN_HEIGHT);
                     //System.out.println(res.yaw + " : " + res.reachables);
                     if(res.status = true) {
-                        BotUtils.rotate(this, bot, res.yaw);  
-                    }                   
+                        BotLogger.debug(icon, isLogged(), bot.getId() + " 📐 есть хороший угол зрения. Поворачиваем туда!");
+                        BotUtils.rotate(this, bot, res.yaw);                          
+                    } else {
+                        BotLogger.debug(icon, isLogged(), bot.getId() + " 📐 Нет подходящего угла зрения! Застрял жестко.");                        
+                    }
                 } catch (Exception e) {
+                        BotLogger.debug(icon, isLogged(), bot.getId() + " 🆘 Симуляция не прошла!");                        
                 }
-                    return;             
+                return;             
             }    
             case MOVE -> {
                 if(!bot.getNavigator().isCalculating()) {

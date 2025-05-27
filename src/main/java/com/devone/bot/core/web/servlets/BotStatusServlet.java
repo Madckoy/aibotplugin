@@ -184,8 +184,13 @@ public class BotStatusServlet extends HttpServlet {
                                         BotMemoryPartition.PartitionKey.WATCHDOG.toString(),
                                         BotMemoryItem.ItemKey.TIME.toString(), Long.class);
 
-                botJson.addProperty("watchdog_position", lastPos.toCompactString());
-                botJson.addProperty("watchdog_time", lastTime);
+                if(lastPos!=null) {                                           
+                    botJson.addProperty("watchdog_position", lastPos.toCompactString());
+                }
+                
+                if(lastTime!=null) {
+                    botJson.addProperty("watchdog_time", lastTime);
+                }
 
             }
 
