@@ -31,12 +31,12 @@ public class BotSequenceContainerNearbyHostile
     protected List<BotTask<?>> enqueue(Bot bot) {
         BotLogger.debug(getIcon(), isLogged(), bot.getId() + " " + icon + " " + getObjective());
         // 1. Идём к мобу
-        
+         
         BotMoveTask walkTask = new BotMoveTask(bot);
         BotMoveTaskParams walkParams = walkTask.getParams();
         walkParams.setTarget(target.getPosition());
         walkTask.setParams(walkParams);
-        walkTask.setObjective("🥾 Идём к мобу");
+        walkTask.setObjective("🥾 Идём к мобу: " + target.getType());
 
         // 2. Атакуем
         BotHandAttackTask attackTask = new BotHandAttackTask(bot);

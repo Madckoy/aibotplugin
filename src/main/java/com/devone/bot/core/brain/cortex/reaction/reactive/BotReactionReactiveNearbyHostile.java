@@ -14,6 +14,8 @@ import com.devone.bot.core.utils.world.BotWorldHelper;
 
 import java.util.Optional;
 
+import org.bukkit.Location;
+
 public class BotReactionReactiveNearbyHostile implements IBotReaction {
 
     @Override
@@ -34,12 +36,19 @@ public class BotReactionReactiveNearbyHostile implements IBotReaction {
                 if (dist < BotConstants.DEFAULT_DETECTION_RADIUS)
                     continue;
 
-                BotLogger.debug("🤖", bot.isLogged(), bot.getId() + " ❗ Обнаружен враждебный моб: " + entity.getType()
+                BotLogger.debug("🤖", bot.isLogged(), bot.getId() + " ❗ Обнаружен моб: " + entity.getType()
                         + " (" + String.format("%.1f", dist) + " м)");
 
-                return Optional.of(() -> {
-                    BotTaskManager.push(bot, new BotSequenceContainerNearbyHostile(bot, entity));
-                });
+                Location eLoc = BotWorldHelper.botPositionToWorldLocation(entity.getPosition());
+                
+                boolean canNavigate = bot.getNPCNavigator().canNavigateTo(eLoc);
+                
+                if(canNavigate) {
+                    return Optional.of(() -> {
+                        BotTaskManager.push(bot, new BotSequenceContainerNearbyHostile(bot, entity));
+                    });
+                }
+
             }
         }
 
