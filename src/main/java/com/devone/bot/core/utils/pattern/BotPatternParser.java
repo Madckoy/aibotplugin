@@ -1,5 +1,6 @@
 package com.devone.bot.core.utils.pattern;
 
+import com.devone.bot.core.utils.blocks.BotOffset;
 import com.devone.bot.core.utils.blocks.BotPosition;
 import java.util.ArrayList;
 import java.util.Comparator;
@@ -12,7 +13,7 @@ public class BotPatternParser {
         public List<BotPosition> allPoints = new ArrayList<>();
         public List<BotPosition> solidPoints = new ArrayList<>();
         public List<BotPosition> voidPoints = new ArrayList<>();
-        public BotPosition offset = new BotPosition();
+        public BotOffset offset = new BotOffset();
     }
 
     public static BotPatternParserResult parse(BotPattern pattern, BotPosition observerPosition) {
@@ -23,8 +24,8 @@ public class BotPatternParser {
         BotPatternParserResult result = new BotPatternParserResult();
 
         Map<Integer, List<String>> layers = pattern.getLayers();
-        BotPosition offset = pattern.getOffset() != null ? pattern.getOffset() : new BotPosition();
-        result.offset = new BotPosition(offset);
+        BotOffset offset = pattern.getOffset() != null ? pattern.getOffset() : new BotOffset();
+        result.offset = new BotOffset(offset);
 
         double centerX = 0;
         double centerZ = 0;

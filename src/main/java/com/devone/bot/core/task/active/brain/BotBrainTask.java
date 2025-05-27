@@ -1,5 +1,7 @@
 package com.devone.bot.core.task.active.brain;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Optional;
 
 import com.devone.bot.core.Bot;
@@ -60,17 +62,23 @@ public class BotBrainTask extends BotTaskAutoParams<BotBrainTaskParams> {
         }
         
         // 1. Анализ сцены
+        List<BotBlockData> candidates = new ArrayList<>();
+
         try {
-            bot.getNavigator().calculate(BotConstants.DEFAULT_NORMAL_SIGHT_FOV, radius, BotConstants.DEFAULT_SCAN_HEIGHT);
+            candidates = bot.getNavigator().calculate(BotConstants.DEFAULT_NORMAL_SIGHT_FOV, radius, BotConstants.DEFAULT_SCAN_HEIGHT);
         } catch (Exception e) {
         }
         
         // 2. Орбаботка реакций
-        Optional<Runnable> reaction = BotReactionManager.checkReactions(bot);
+        Optional<Runnable> reaction = BotReactionManager.checkReactions(bot);       
         if (reaction.isPresent()) {
             reaction.get().run();  // Запускаем реакцию
-            BotLogger.debug(icon, isLogged(), bot.getId() + " 🧠 Реакция активирована — мозг уступает управление");
-            return;
+            BotLogger.debug(icon, isLogged(), bot.getId() + " 🧠 Реакция активирована!");
+            if(candidates.size()>0) {
+                //есть навигационные кандидаты. пробуем двигаться
+            } else {
+                return;
+            }
         }
         
         // 3. Получение рекомендации

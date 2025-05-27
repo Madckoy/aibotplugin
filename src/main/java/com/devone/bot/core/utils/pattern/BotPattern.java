@@ -1,17 +1,17 @@
 package com.devone.bot.core.utils.pattern;
 
-import com.devone.bot.core.utils.blocks.BotPosition;
+import com.devone.bot.core.utils.blocks.BotOffset;
 import java.util.List;
 import java.util.Map;
 
 public class BotPattern {
-    private BotPosition offset;
+    private BotOffset offset;
     private Map<Integer, List<String>> layers;
     private Map<String, String> legend; // Новый: эмодзи/символ ➔ Material
     private Map<String, String> proxy;  // Новый: прокси ➔ эмодзи/символ
 
-    public BotPosition getOffset() { return offset; }
-    public void setOffset(BotPosition offset) { this.offset = offset; }
+    public BotOffset getOffset() { return offset; }
+    public void setOffset(BotOffset offset) { this.offset = offset; }
 
     public Map<Integer, List<String>> getLayers() { return layers; }
     public void setLayers(Map<Integer, List<String>> layers) { this.layers = layers; }

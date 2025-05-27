@@ -9,6 +9,7 @@ import java.util.Queue;
 
 import com.devone.bot.AIBotPlugin;
 import com.devone.bot.core.utils.BotConstants;
+import com.devone.bot.core.utils.blocks.BotOffset;
 import com.devone.bot.core.utils.blocks.BotPosition;
 import com.devone.bot.core.utils.logger.BotLogger;
 import com.devone.bot.core.utils.pattern.BotPatternParser.BotPatternParserResult;
@@ -17,7 +18,7 @@ import com.devone.bot.core.utils.pattern.params.BotPatternRunnerParams;
 public class BotPatternRunner {
 
     BotPosition observer = null;
-    BotPosition offset = null;
+    BotOffset offset = null;
     String ptrnName = null;
 
     private BotPatternParserResult parsedResult = null;
@@ -130,7 +131,7 @@ public class BotPatternRunner {
         return allVoidPoints;
     }
 
-    public BotPosition getOffset() {
+    public BotOffset getOffset() {
         return offset;
     }
 

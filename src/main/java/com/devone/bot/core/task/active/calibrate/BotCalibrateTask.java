@@ -1,6 +1,8 @@
 package com.devone.bot.core.task.active.calibrate;
 
 import com.devone.bot.core.Bot;
+import com.devone.bot.core.brain.memory.BotMemoryItem;
+import com.devone.bot.core.brain.memory.BotMemoryPartition;
 import com.devone.bot.core.brain.memory.BotMemoryV2Utils;
 import com.devone.bot.core.brain.memoryv2.BotMemoryV2Partition;
 import com.devone.bot.core.brain.navigator.simulator.BotSimulatorResult;
@@ -43,12 +45,12 @@ public class BotCalibrateTask extends BotTaskAutoParams<BotCalibrateTaskParams> 
 
         bot.getNavigator().resetStuckCount();
         bot.getBrain().getMemoryV2()
-            .partition("WATCHDOG", BotMemoryV2Partition.Type.MAP)
-            .remove("POSITION");
+            .partition(BotMemoryPartition.PartitionKey.WATCHDOG.toString(), BotMemoryV2Partition.Type.MAP)
+            .remove(BotMemoryItem.ItemKey.POSITION.toString());
 
         bot.getBrain().getMemoryV2()
-            .partition("WATCHDOG", BotMemoryV2Partition.Type.MAP)
-            .remove("TIME");
+            .partition(BotMemoryPartition.PartitionKey.WATCHDOG.toString(), BotMemoryV2Partition.Type.MAP)
+            .remove(BotMemoryItem.ItemKey.POSITION.toString());
         
 
 

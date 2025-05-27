@@ -1,11 +1,12 @@
 package com.devone.bot.core.utils.pattern.params;
 
+import com.devone.bot.core.utils.blocks.BotOffset;
 import com.devone.bot.core.utils.blocks.BotPosition;
 
 public class BotPatternRunnerParams {
 
     BotPosition observer = null;
-    BotPosition  offset  = null;
+    BotOffset   offset  = null;
     String      filename = "default.json";
 
     public BotPosition getObserver() {
@@ -14,10 +15,10 @@ public class BotPatternRunnerParams {
     public void setObserver(BotPosition observer) {
         this.observer = observer;
     }
-    public BotPosition getOffset() {
+    public BotOffset getOffset() {
         return offset;
     }
-    public void setOffset(BotPosition offset) {
+    public void setOffset(BotOffset offset) {
         this.offset = offset;
     }
     public String getFilename() {
@@ -31,13 +32,13 @@ public class BotPatternRunnerParams {
         super();
     }
 
-    public BotPatternRunnerParams(BotPosition obs, BotPosition ofst,  String filename ) {
+    public BotPatternRunnerParams(BotPosition obs, BotOffset ofst,  String filename ) {
         this();
         if(obs!=null) {
             observer = new BotPosition(obs);
         }
         if(ofst!=null) {
-            offset = new BotPosition(obs);
+            offset = new BotOffset(ofst);
         }
         filename = new String(filename);
     }
