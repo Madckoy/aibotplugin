@@ -1,9 +1,7 @@
 package com.devone.bot.core.brain.cortex.reaction.reactive;
 
-import com.devone.bot.AIBotPlugin;
 import com.devone.bot.core.Bot;
 import com.devone.bot.core.brain.cortex.reaction.IBotReaction;
-import com.devone.bot.core.brain.cortex.sequence.BotSequenceContainerCalibrate;
 import com.devone.bot.core.brain.cortex.sequence.BotSequenceContainerExcavate;
 import com.devone.bot.core.brain.memory.BotMemoryItem;
 import com.devone.bot.core.brain.memory.BotMemoryPartition;
@@ -16,7 +14,7 @@ import java.util.Optional;
 
 public class BotReactionStuckGuard implements IBotReaction {
 
-    private static final long STUCK_DURATION_MS = 300000;  // 5 минут без движения
+    private static final long STUCK_DURATION_MS = 1250000;  // 2.5 минут без движения
     private static final double POSITION_TOLERANCE = 1.5; // Допуск в блоке
 
     @Override
