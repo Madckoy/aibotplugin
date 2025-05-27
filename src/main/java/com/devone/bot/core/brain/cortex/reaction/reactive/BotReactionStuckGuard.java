@@ -1,8 +1,10 @@
 package com.devone.bot.core.brain.cortex.reaction.reactive;
 
+import com.devone.bot.AIBotPlugin;
 import com.devone.bot.core.Bot;
 import com.devone.bot.core.brain.cortex.BotActionSuggestion.Suggestion;
 import com.devone.bot.core.brain.cortex.reaction.IBotReaction;
+import com.devone.bot.core.brain.cortex.sequence.BotSequenceContainerCalibrate;
 import com.devone.bot.core.brain.cortex.sequence.BotSequenceContainerExcavate;
 import com.devone.bot.core.brain.memory.BotMemoryItem;
 import com.devone.bot.core.brain.memory.BotMemoryPartition;
@@ -50,9 +52,10 @@ public class BotReactionStuckGuard implements IBotReaction {
                     });
                 } else {
                     // нет кандидатов. удаляем все ранее посещенные. далее поробуем повернуться
-                    BotMemoryV2Utils.clearAllVisited(bot);
-                    bot.getNavigator().setSuggestion(Suggestion.CHANGE_DIRECTION);
-                    return Optional.empty();
+                    BotLogger.debug("🧠", AIBotPlugin.getInstance().isLogged(), "🧩 Нет кандидатов! Нужно попробовать сбросить память!");
+                    return Optional.of(() -> {                                        
+                        BotTaskManager.push(bot, new BotSequenceContainerCalibrate(bot));
+                    });
                 }
             }
         }

@@ -1,6 +1,7 @@
 package com.devone.bot.core.task.active.calibrate;
 
 import com.devone.bot.core.Bot;
+import com.devone.bot.core.brain.memory.BotMemoryV2Utils;
 import com.devone.bot.core.task.passive.BotTaskAutoParams;
 import com.devone.bot.core.task.passive.IBotTaskParameterized;
 import com.devone.bot.core.task.active.calibrate.params.BotCalibrateTaskParams;
@@ -21,7 +22,7 @@ public class BotCalibrateTask extends BotTaskAutoParams<BotCalibrateTaskParams> 
         super.setParams(params);
         setIcon(params.getIcon());
         setObjective(params.getObjective());
-        //setEnabled(params.isEnabled());
+        setEnabled(params.isEnabled());
         return this;
     }
 
@@ -32,11 +33,13 @@ public class BotCalibrateTask extends BotTaskAutoParams<BotCalibrateTaskParams> 
 
         setObjective(params.getObjective() + " " + message + " (" + rmt + ")");
 
-        //BotMemoryV2Utils.clearAllVisited(bot);
+        BotMemoryV2Utils.clearAllVisited(bot);
 
-        //BotLogger.debug(icon, isLogged(), bot.getId() + " 🗑️ Removed all visited navigation points");
+        BotLogger.debug(icon, isLogged(), bot.getId() + " 🗑️ Removed all visited navigation points");
 
-        //bot.getNavigator().resetStuckCount();
+        bot.getNavigator().resetStuckCount();
+        
+        bot.getNavigator().setEnabled(true);
 
         if (rmt <= 0) {
             BotLogger.debug(icon, isLogged(), bot.getId() + " ⏱️ Task timeout passed. Ending Task.");

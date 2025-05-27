@@ -253,13 +253,15 @@ public class BotNavigator {
             candidates = reachableValid;
             actionSuggestion = BotActionSuggestion.Suggestion.MOVE;
             suggestedTarget = BotBestTargetSelector.selectRandom(candidates);
+            
         } else {    
             // check if we could use walkable as fallback
             List<BotBlockData> walkableValid = BotTagUtils.getTaggedBlocks(bot.getBrain().getSceneData().blocks, "walkable:*, navigation:valid");
+
             // 🧹 Убираем ранее посещённые блоки
-            // walkableValid = reachableValid.stream()
-            //.filter(b -> !BotMemoryV2Utils.isBlockVisited(bot, b))
-            //.toList();
+             walkableValid = reachableValid.stream()
+            .filter(b -> !BotMemoryV2Utils.isBlockVisited(bot, b))
+            .toList();
 
             if( !walkableValid.isEmpty() ) {
                 candidates = walkableValid;
