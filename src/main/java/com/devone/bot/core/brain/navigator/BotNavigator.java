@@ -161,9 +161,12 @@ public class BotNavigator {
 
     public BotSimulatorResult simulate(double sightFov, int scanRadius, int scanHeight) throws Exception {
         if(isEnabled()==false) {
-            throw new Exception("Navigatoe is disabled");
+            BotLogger.debug(bot.getActiveTask().getIcon(), bot.isLogged(), bot.getId() + " 💻 Navigator is disabled");
+            throw new Exception("Navigator is disabled");
+
         } 
         if(isCalculating()) {
+            BotLogger.debug(bot.getActiveTask().getIcon(), bot.isLogged(), bot.getId() + " 💻 Navigator is simulating...");
             throw new Exception("Navigation is being simulated");
         };
 
@@ -177,10 +180,12 @@ public class BotNavigator {
     public List<BotBlockData> calculate(double sightFov, int scanRadius, int scanHeight) throws Exception{
 
         if(isEnabled()==false) {
+            BotLogger.debug(bot.getActiveTask().getIcon(), bot.isLogged(), bot.getId() + " 💻 Navigator is disabled");
             throw new Exception("Navigator is disabled");
         } 
 
         if(isCalculating()) {
+            BotLogger.debug(bot.getActiveTask().getIcon(), bot.isLogged(), bot.getId() + " 💻 Navigator is calculating...");
             throw new Exception("Navigation is being calculated");
         };
 

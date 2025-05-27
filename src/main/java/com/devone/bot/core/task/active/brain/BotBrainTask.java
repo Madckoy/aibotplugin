@@ -81,7 +81,7 @@ public class BotBrainTask extends BotTaskAutoParams<BotBrainTaskParams> {
             case CHANGE_DIRECTION -> {
                 try {
                     //rotate to the best YAW            
-                    BotSimulatorResult res = bot.getNavigator().simulate(BotConstants.DEFAULT_NORMAL_SIGHT_FOV, radius, 4);
+                    BotSimulatorResult res = bot.getNavigator().simulate(BotConstants.DEFAULT_NORMAL_SIGHT_FOV, radius, BotConstants.DEFAULT_SCAN_HEIGHT);
                     //System.out.println(res.yaw + " : " + res.reachables);
                     if(res.status = true) {
                         BotUtils.rotate(this, bot, res.yaw);  

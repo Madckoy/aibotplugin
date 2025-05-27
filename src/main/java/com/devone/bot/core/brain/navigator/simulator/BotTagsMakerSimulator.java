@@ -54,6 +54,7 @@ public class BotTagsMakerSimulator {
                 res.yaw = yaw;
                 res.reachables = bestReachable;
             }
+            System.out.println("Yaw: " + yaw + " → Reachable: " + reachableBlocks.size());
         }
       
         return res;
