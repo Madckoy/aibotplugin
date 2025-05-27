@@ -54,7 +54,7 @@ public class BotReactionReactiveObstacleDetection implements IBotReaction {
                 Block mcBlock = BotWorldHelper.botBlockDataToWorldBlock(botBlock);
                 botBlock = BotWorldHelper.blockToBotBlockData(mcBlock);
 
-                if (botBlock != null && !BlockMaterialUtils.AIR_TYPES.contains(botBlock.getType())) {
+                if (botBlock != null && !BlockMaterialUtils.isPassableForMovement(botBlock)) {
                     return Optional.of(() -> {
                         BotTaskManager.push(bot, new BotSequenceContainerExcavate(bot));
                     });
