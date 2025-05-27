@@ -190,6 +190,8 @@ public class BotNavigator {
         };
 
         calculating = true;
+        actionSuggestion = BotActionSuggestion.Suggestion.NONE;
+
         try {
             BotLogger.debug(bot.getActiveTask().getIcon(), bot.isLogged(), bot.getId() + " 💻 Navigator calculation started");
         } catch (Exception ex) {
@@ -213,11 +215,7 @@ public class BotNavigator {
         if(scanRadiusFromMem!=null) {
             radius = scanRadiusFromMem.intValue();
         }
-
-        // BotMemoryV2Partition navPar = bot.getBrain().getMemoryV2().partition("navigation");
-        // BotMemoryV2Partition visPar = navPar.partition("visited", BotMemoryV2Partition.Type.MAP);
-        // Map<String, Object>  visited = visPar.getMap();
-        
+      
         // Tagging blocks
         long start = System.currentTimeMillis();
 

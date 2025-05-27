@@ -50,9 +50,10 @@ public class BotBootstrap {
                 radius = scanRadiusFromMem.intValue();                
             }
 
-            BotSonar3DTaskParams params = new BotSonar3DTaskParams();
-            params.setRadius(radius);
+            
             BotSonar3DTask task = new BotSonar3DTask(bot);
+            BotSonar3DTaskParams params = task.getParams();
+            params.setRadius(radius);
             task.setParams(params);
             task.execute();
             

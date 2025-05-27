@@ -263,6 +263,10 @@ public class BotUtils {
 
     public static String getNavigationSuggestionAsString(Bot bot) {
         String result = "";
+        
+        if(bot.getNavigator().getSuggestion()==Suggestion.NONE) {
+            return "NONE";
+        }
 
         if(bot.getNavigator().getSuggestion()==Suggestion.MOVE) {
             return "MOVE";
@@ -271,7 +275,6 @@ public class BotUtils {
         if(bot.getNavigator().getSuggestion()==Suggestion.TELEPORT) {
             return "TELEPORT";
         }
-
 
         if(bot.getNavigator().getSuggestion()==Suggestion.CHANGE_DIRECTION) {
             return "CHANGE_DIRECTION";
