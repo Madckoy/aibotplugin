@@ -203,8 +203,7 @@ public class BotExcavateTask extends BotTaskAutoParams<BotExcavateTaskParams> {
             
                 bot.getNavigator().setTarget(blockPosition.toBlockData());
             
-                turnToTarget(this, blockPosition);
-                
+                               
                 setObjective(params.getObjective() + " " + BotUtils.getBlockName(targetBlock) + " at " + blockPosition.toCompactString());
 
                 Material mat = targetBlock.getType();

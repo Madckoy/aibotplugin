@@ -31,7 +31,7 @@ public class BotReactionReactiveNearbyHostile implements IBotReaction {
                     continue;
 
                 double dist = botPos.distanceTo(entity.getPosition());
-                if (dist > BotConstants.DEFAULT_DETECTION_RADIUS)
+                if (dist < BotConstants.DEFAULT_DETECTION_RADIUS)
                     continue;
 
                 BotLogger.debug("🤖", bot.isLogged(), bot.getId() + " ❗ Обнаружен враждебный моб: " + entity.getType()
