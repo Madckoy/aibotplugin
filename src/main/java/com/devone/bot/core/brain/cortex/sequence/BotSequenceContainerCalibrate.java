@@ -23,7 +23,7 @@ public class BotSequenceContainerCalibrate extends BotSequenceContainer<BotSeque
     protected List<BotTask<?>> enqueue(Bot bot) {
         BotLogger.debug(getIcon(), isLogged(), bot.getId() + " " + icon + " " + getObjective());
 
-        BotCalibrateTask tpTask = new BotCalibrateTask(bot, "I want beer!");
+        BotCalibrateTask tpTask = new BotCalibrateTask(bot, "Initialize...");
         tpTask.setParams(tpTask.getParams());
 
         List<BotTask<?>> subtasks = new ArrayList<>();
