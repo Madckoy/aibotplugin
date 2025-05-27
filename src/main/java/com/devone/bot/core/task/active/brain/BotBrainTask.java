@@ -20,6 +20,7 @@ import com.devone.bot.core.utils.blocks.BotBlockData;
 import com.devone.bot.core.utils.logger.BotLogger;
 
 public class BotBrainTask extends BotTaskAutoParams<BotBrainTaskParams> {
+    long cycle = 0;
 
     public BotBrainTask(Bot bot) {
         super(bot, null, BotBrainTaskParams.class);
@@ -50,6 +51,11 @@ public class BotBrainTask extends BotTaskAutoParams<BotBrainTaskParams> {
     @Override
     public void execute() {
         BotLogger.debug(icon, isLogged(), bot.getId() + " 🧠 Brain deciding...");
+        
+        long rmt = BotUtils.getRemainingTime(startTime, params.getTimeout());
+        cycle++;
+        setObjective(params.getObjective() + " "+ cycle +" (" + rmt + ")");
+
 
         int radius = BotConstants.DEFAULT_SCAN_RADIUS;
         
@@ -115,8 +121,11 @@ public class BotBrainTask extends BotTaskAutoParams<BotBrainTaskParams> {
 
             default -> {
                 BotLogger.debug(icon, isLogged(), bot.getId() + " 🧘 Brain is idle.");
+                 if (rmt <= 0) {
+                    BotLogger.debug(icon, isLogged(), bot.getId() + " ⏱️ Task timeout passed. Start new cycle!");
+                    startTime = System.currentTimeMillis(); // new cycle                    
+                }
             }
         }
     }
-
 }

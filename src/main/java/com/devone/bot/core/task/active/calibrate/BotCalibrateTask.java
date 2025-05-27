@@ -71,7 +71,7 @@ public class BotCalibrateTask extends BotTaskAutoParams<BotCalibrateTaskParams> 
 
         if (rmt <= 0) {
             BotLogger.debug(icon, isLogged(), bot.getId() + " ⏱️ Task timeout passed. Ending Task.");
-            stop();
+            this.stop();
         }
     }
 }
