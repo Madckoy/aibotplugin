@@ -15,6 +15,8 @@ function updateNavSummary(bot) {
     const suggestion = bot.memory?.navigation?.suggestion ?? "N/A";
     const suggested_target = bot.memory?.navigation?.suggested_target ?? "N/A";
     const scan_radius = bot.memory?.navigation?.scan_radius ?? "N/A";
+    const candidates = bot.memory?.navigation?.candidates;
+    const count = Array.isArray(candidates) ? candidates.length : "N/A";
 
     const watchdog_pos  = bot.watchdog_position ?? "N/A";
     const watchdog_time = bot.watchdog_time? new Date(bot.watchdog_time).toLocaleString(): "N/A";
@@ -37,7 +39,9 @@ function updateNavSummary(bot) {
     document.getElementById("info-nav-suggested-position").textContent = suggested_target;
     document.getElementById("info-nav-facing-direction").textContent = getCompassArrow(yaw);
     document.getElementById("info-nav-scan-range").textContent = scan_radius;
-    document.getElementById("info-nav-watchdog-position").textContent = `${watchdog_pos} @ ${watchdog_time}`;;
+    document.getElementById("info-nav-сandidates").textContent = candidates;
+    document.getElementById("info-nav-watchdog-position").textContent = `${watchdog_pos}`;
+    document.getElementById("info-nav-watchdog-time").textContent = `${watchdog_time}`;
 }
 
 function updateStats(bot) {
