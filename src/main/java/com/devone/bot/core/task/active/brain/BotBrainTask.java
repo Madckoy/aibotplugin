@@ -97,7 +97,9 @@ public class BotBrainTask extends BotTaskAutoParams<BotBrainTaskParams> {
                     //System.out.println(res.yaw + " : " + res.reachables);
                     if(res.status = true) {
                         BotLogger.debug(icon, isLogged(), bot.getId() + " 📐 есть хороший угол зрения. Поворачиваем туда!");
-                        BotUtils.rotate(this, bot, res.yaw);                          
+
+                        BotUtils.rotate(this, bot, res.yaw);    
+              
                     } else {
                         BotLogger.debug(icon, isLogged(), bot.getId() + " 📐 Нет подходящего угла зрения!");
                         if(bot.getNavigator().getCandidates().size()>0) {

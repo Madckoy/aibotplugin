@@ -8,7 +8,7 @@ import com.devone.bot.core.utils.BotConstants;
 import com.devone.bot.core.utils.logger.BotLogger;
 
 
-public class BotYawBasedSceneRefresher implements BotYawChangeListener {
+public class BotYawBasedNavigationRefresher implements BotYawChangeListener {
 
     private boolean lock = false;
 
@@ -16,7 +16,9 @@ public class BotYawBasedSceneRefresher implements BotYawChangeListener {
     public void onYawChanged(Bot bot, float newYaw) {
         try{
             BotLogger.debug(bot.getActiveTask().getIcon(), bot.isLogged(), bot.getId() + " YAW CHANGED. New YAW: " + newYaw);
-        }catch (Exception ex){}
+        }catch (Exception ex){
+
+        }
         
         if (lock) return;
 

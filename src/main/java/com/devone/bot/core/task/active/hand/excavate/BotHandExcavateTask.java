@@ -48,8 +48,6 @@ public class BotHandExcavateTask extends BotHandTask<BotHandExcavateTaskParams> 
         BotLogger.debug(icon, isLogged(), bot.getId() + " 🔶 Executing BotHandExcavateTask");
 
         setObjective(params.getObjective() + " " + target.getType() + " at " + target.getPosition().toCompactString());
-        
-        turnToTarget(this, target.getPosition());
 
         BotHandExcavateTask heTask = this;
 
@@ -86,6 +84,8 @@ public class BotHandExcavateTask extends BotHandTask<BotHandExcavateTaskParams> 
                     cancel();
                     return;
                 }
+
+                turnToTarget(heTask, target.getPosition());
 
                 animateHand(heTask, bot);
 

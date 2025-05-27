@@ -42,8 +42,6 @@ public class BotCalibrateTask extends BotTaskAutoParams<BotCalibrateTaskParams> 
 
         setObjective(params.getObjective() + " " + message + " (" + rmt + ")");
 
-        BotLogger.debug(icon, isLogged(), bot.getId() + " 🗑️ Remove all visited navigation points");
-        BotMemoryV2Utils.clearAllVisited(bot);
 
         BotLogger.debug(icon, isLogged(), bot.getId() + " 🗑️ Reset Watchdog");
 
@@ -67,6 +65,14 @@ public class BotCalibrateTask extends BotTaskAutoParams<BotCalibrateTaskParams> 
             BotSimulatorResult res = bot.getNavigator().simulate(BotConstants.DEFAULT_NORMAL_SIGHT_FOV, BotConstants.DEFAULT_SCAN_RADIUS, BotConstants.DEFAULT_SCAN_HEIGHT);            
             float bestYaw = res.yaw;
             int   reachables = res.reachables;
+            boolean status = res.status;
+            if(status==false) {
+                BotLogger.debug(icon, isLogged(), bot.getId() + " 🗑️ Remove all visited navigation points");
+                BotMemoryV2Utils.clearAllVisited(bot);
+            } else {
+                BotLogger.debug(icon, isLogged(), bot.getId() + " 📐 есть хороший угол зрения. Поворачиваем туда!");
+                BotUtils.rotate(this, bot, res.yaw);                          
+            }
             message = "Best result: "+res.status+" with best yaw: "+ bestYaw + " with reachable: " + reachables;
             BotLogger.debug(icon, isLogged(), bot.getId() + " "+message);
             stop();
