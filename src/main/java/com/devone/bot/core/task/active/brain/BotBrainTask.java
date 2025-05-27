@@ -69,6 +69,8 @@ public class BotBrainTask extends BotTaskAutoParams<BotBrainTaskParams> {
         try {
             candidates = bot.getNavigator().calculate(BotConstants.DEFAULT_NORMAL_SIGHT_FOV, radius, BotConstants.DEFAULT_SCAN_HEIGHT);
         } catch (Exception e) {
+            BotLogger.debug(icon, isLogged(), bot.getId() + " 🆘 Навигационные расчеты не прошли!");   
+            return;
         }
         
         // 2. Орбаботка реакций
@@ -97,10 +99,21 @@ public class BotBrainTask extends BotTaskAutoParams<BotBrainTaskParams> {
                         BotLogger.debug(icon, isLogged(), bot.getId() + " 📐 есть хороший угол зрения. Поворачиваем туда!");
                         BotUtils.rotate(this, bot, res.yaw);                          
                     } else {
-                        BotLogger.debug(icon, isLogged(), bot.getId() + " 📐 Нет подходящего угла зрения! Застрял жестко.");                        
+                        BotLogger.debug(icon, isLogged(), bot.getId() + " 📐 Нет подходящего угла зрения!");
+                        if(bot.getNavigator().getCandidates().size()>0) {
+                            // попытаемся сбежать через любую точку по которой можно ходить.
+                            bot.getNavigator().setSuggestion(Suggestion.MOVE);
+                            return;                            
+                        } else {
+                            BotLogger.debug(icon, isLogged(), bot.getId() + " 📐 Вообще ничего нет. Застрял жестко. Попробуем просто подождать...");
+                            // Как вариант попробовать обнаружить предмет или животное или игрока и сменить позицию через него. 
+                            // Телепорт?
+                            return;
+                        }                        
                     }
                 } catch (Exception e) {
-                        BotLogger.debug(icon, isLogged(), bot.getId() + " 🆘 Симуляция не прошла!");                        
+                        BotLogger.debug(icon, isLogged(), bot.getId() + " 🆘 Симуляция не прошла!");
+                        return;                        
                 }
                 return;             
             }    

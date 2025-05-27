@@ -22,6 +22,9 @@ public class BotTagsMakerSimulator {
         BotNavigationTagsMaker.tagWalkableBlocks(clearBlocks);
         int bestReachable = -1;
         BotSimulatorResult res = new BotSimulatorResult();
+        res.status=false;
+        res.yaw = bot.getYaw();
+        res.reachables = bestReachable;
 
           for (int yawInt = 0; yawInt < 360; yawInt++) {
             float yaw = (float) yawInt;
