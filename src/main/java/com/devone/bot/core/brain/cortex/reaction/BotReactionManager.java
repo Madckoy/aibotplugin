@@ -5,7 +5,8 @@ import com.devone.bot.core.Bot;
 import com.devone.bot.core.brain.cortex.reaction.reactive.BotReactionReactiveFishInWater;
 import com.devone.bot.core.brain.cortex.reaction.reactive.BotReactionReactiveNearbyHostile;
 import com.devone.bot.core.brain.cortex.reaction.reactive.BotReactionReactiveNearbyPlayer;
-import com.devone.bot.core.brain.cortex.reaction.reactive.BotReactionStuckGuard;
+import com.devone.bot.core.brain.cortex.reaction.reactive.BotReactionReactiveObstacleDetection;
+import com.devone.bot.core.brain.cortex.reaction.reactive.BotReactionReactiveStuckGuard;
 import com.devone.bot.core.utils.BotUtils;
 import com.devone.bot.core.utils.logger.BotLogger;
 
@@ -23,7 +24,8 @@ public class BotReactionManager {
 
     static {
         // 📚 Регистрация стандартных реакций
-        registerIntention(new BotReactionStuckGuard());
+        registerIntention(new BotReactionReactiveObstacleDetection());
+        registerIntention(new BotReactionReactiveStuckGuard());
         registerIntention(new BotReactionReactiveNearbyHostile());
         registerIntention(new BotReactionReactiveNearbyPlayer());
         registerIntention(new BotReactionReactiveFishInWater()); // 🎣 ловим рыбу!

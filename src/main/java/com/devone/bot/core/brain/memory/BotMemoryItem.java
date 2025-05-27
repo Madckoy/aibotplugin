@@ -18,6 +18,7 @@ public class BotMemoryItem {
         REACHABLE("reachable"),
         COUNT("count"),
         WALKABLE("walkable"),
+        REMAINING_TIME("remaining_time"),
         TIME("time");
        
 

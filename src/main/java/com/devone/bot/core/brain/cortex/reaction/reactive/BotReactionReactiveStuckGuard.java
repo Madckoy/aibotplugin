@@ -12,9 +12,9 @@ import com.devone.bot.core.utils.logger.BotLogger;
 
 import java.util.Optional;
 
-public class BotReactionStuckGuard implements IBotReaction {
+public class BotReactionReactiveStuckGuard implements IBotReaction {
 
-    private static final long STUCK_DURATION_MS = 1250000;  // 2.5 минут без движения
+    private static final long STUCK_DURATION_MS = 1200000;  // 120 секунд без движения
     private static final double POSITION_TOLERANCE = 1.5; // Допуск в блоке
 
     @Override
@@ -39,6 +39,11 @@ public class BotReactionStuckGuard implements IBotReaction {
         if (lastPos != null && lastTime != null) {
             double distance = currentPos.distanceTo(lastPos);
             long duration = currentTime - lastTime;
+
+            long remaining = STUCK_DURATION_MS - duration;
+
+            BotMemoryV2Utils.memorizeValue(bot, BotMemoryPartition.PartitionKey.WATCHDOG.toString(), 
+                                            BotMemoryItem.ItemKey.REMAINING_TIME.toString(), remaining);
 
             if (distance < POSITION_TOLERANCE && duration > STUCK_DURATION_MS) {
                 BotLogger.debug("🪤", bot.isLogged(), bot.getId() + " ❗ Бот застрял на " + String.format("%.2f", distance) + " м в течение " + duration + " мс");

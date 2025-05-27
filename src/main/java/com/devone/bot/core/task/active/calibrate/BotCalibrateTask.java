@@ -56,7 +56,9 @@ public class BotCalibrateTask extends BotTaskAutoParams<BotCalibrateTaskParams> 
             .partition(BotMemoryPartition.PartitionKey.WATCHDOG.toString(), BotMemoryV2Partition.Type.MAP)
             .remove(BotMemoryItem.ItemKey.POSITION.toString());
         
-
+        bot.getBrain().getMemoryV2()
+            .partition(BotMemoryPartition.PartitionKey.WATCHDOG.toString(), BotMemoryV2Partition.Type.MAP)
+            .remove(BotMemoryItem.ItemKey.REMAINING_TIME.toString());
 
         try {
 

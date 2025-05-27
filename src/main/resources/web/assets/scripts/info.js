@@ -13,8 +13,9 @@ function updateInfoPanel(bot) {
     const candidatesArray = bot.memory?.navigation?.candidates?.list;
     const candidates = Array.isArray(candidatesArray) ? candidatesArray.length : "N/A";
 
-    const watchdog_pos  = bot.watchdog_position ?? "N/A";
-    const watchdog_time = bot.watchdog_time? new Date(bot.watchdog_time).toLocaleString(): "N/A";
+    const watchdog_pos       = bot.watchdog_position ?? "N/A";
+    const watchdog_time      = bot.watchdog_time? new Date(bot.watchdog_time).toLocaleString(): "N/A";
+    const watchdog_remaining = bot.watchdog_remaining_time? new Date(bot.watchdog_remaining_time).toLocaleString(): "N/A";
 
     const format = (entry) => {
         if (!entry) return "N/A";
@@ -37,7 +38,7 @@ function updateInfoPanel(bot) {
     document.getElementById("info-nav-candidates").textContent = `${candidates}`;
 
     document.getElementById("info-nav-watchdog-position").textContent = `${watchdog_pos}`;
-    document.getElementById("info-nav-watchdog-time").textContent = `${watchdog_time}`;
+    document.getElementById("info-nav-watchdog-time").textContent = `${watchdog_time} ( ${watchdog_remaining} )`;
     document.getElementById("info-stats-teleports").textContent = bot.teleports ?? "N/A";
     document.getElementById("info-stats-visited").textContent = bot.visited_count ?? "N/A";
     document.getElementById("info-stats-inventory-count").textContent = bot.inventory_count ?? "N/A";
