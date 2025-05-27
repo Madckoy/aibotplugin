@@ -198,7 +198,7 @@ public class BotStatusServlet extends HttpServlet {
                 }
                 
                 if(remaining!=null){
-                    botJson.addProperty("watchdog_remaining_time", remaining);
+                    botJson.addProperty("watchdog_remaining_time", remaining/6000);
                 }
 
             }
