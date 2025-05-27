@@ -21,9 +21,10 @@ public class BotConstants {
     public static final int DEFAULT_SCAN_HEIGHT = 10;
 
     public static final int MAX_SCAN_RANGE = 20;
+    
+    public static final int MAX_FOOD_ITEMS = 64;
 
     public static final double DEFAULT_NORMAL_SIGHT_FOV = 60.0;
-    //public static final double DEFAULT_MAX_SIGHT_FOV = 360.0;
 
     public static final long DEFAULT_TASK_TIMEOUT = 120_000;
     public static final double DEFAULT_HAND_DAMAGE = 5.0;
@@ -37,6 +38,6 @@ public class BotConstants {
     public static final long TICKS_NAVIGATION_UPDATE = 20L;       // 1 сек
     public static final long TICKS_TASK_UPDATE = 20L;             // 1 сек
     public static final long TICKS_BLUEMAP_UPDATE = 20L;          // 1 сек
-    public static final long TICKS_MEMORY_SAVE = 10L;             // 1 сек
+    public static final long TICKS_MEMORY_SAVE = 5L;              // 1 сек
 
 }

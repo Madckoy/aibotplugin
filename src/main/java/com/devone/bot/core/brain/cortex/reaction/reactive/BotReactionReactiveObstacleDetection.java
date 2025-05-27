@@ -46,15 +46,13 @@ public class BotReactionReactiveObstacleDetection implements IBotReaction {
             for (int dy = 0; dy <= 1; dy++) { // проверяем уровень ног и головы
                 
                 int neibX = baseX + dx;
-                int neibY = baseY;
-                int neibZ = baseZ+dz;
+                int neibY = baseY + dy;
+                int neibZ = baseZ + dz;
 
-                BotBlockData botBlock = new BotBlockData(neibX,neibY,neibZ);
+                Block mcBlock = loc.getWorld().getBlockAt(neibX, neibY, neibZ);
+                BotBlockData botBlock = BotWorldHelper.blockToBotBlockData(mcBlock);
 
-                Block mcBlock = BotWorldHelper.botBlockDataToWorldBlock(botBlock);
-                botBlock = BotWorldHelper.blockToBotBlockData(mcBlock);
-
-                if (botBlock != null && !BlockMaterialUtils.isPassableForMovement(botBlock)) {
+                if (botBlock != null && (BlockMaterialUtils.isSafeImpassable(botBlock) || BlockMaterialUtils.isDangerousImpassable(botBlock))) {
                     return Optional.of(() -> {
                         BotTaskManager.push(bot, new BotSequenceContainerExcavate(bot));
                     });

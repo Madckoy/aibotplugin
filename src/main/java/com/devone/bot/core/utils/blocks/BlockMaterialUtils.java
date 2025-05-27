@@ -12,9 +12,24 @@ public class BlockMaterialUtils {
         "LAVA", "FIRE", "NETHER_PORTAL", "END_PORTAL"
     );
 
+    public static final Set<String> SAFE_IMPASSABLE = Set.of(   
+        "DIRT", "STONE", "GRASS_BLOCK", "COBBLESTONE", "WOOD", "OAK_PLANKS",
+        "SPRUCE_PLANKS", "BIRCH_PLANKS", "JUNGLE_PLANKS", "ACACIA_PLANKS", "DARK_OAK_PLANKS",
+        "MANGROVE_PLANKS", "CHERRY_PLANKS", "BAMBOO_BLOCK",
+        "BRICKS", "SANDSTONE", "NETHERRACK", "END_STONE", "DEEPSLATE",
+        "OBSIDIAN", "GLASS", "ICE", "PACKED_ICE", "BLUE_ICE",
+        "SNOW_BLOCK", "CLAY", "TERRACOTTA", "BLACKSTONE", "TUFF",
+        "BASALT", "PURPUR_BLOCK", "QUARTZ_BLOCK", "CONCRETE", "CONCRETE_POWDER",
+        "SHROOMLIGHT", "HONEY_BLOCK", "SLIME_BLOCK"
+    );
+
     public static final Set<String> DANGEROUS_IMPASSABLE = Set.of(
         "CACTUS", "WITHER_ROSE", "SWEET_BERRY_BUSH",
-        "DRIPSTONE_BLOCK", "POINTED_DRIPSTONE", "UNKNOWN"
+        "POINTED_DRIPSTONE", "DRIPSTONE_BLOCK",
+        "MAGMA_BLOCK", "CAMPFIRE", "SOUL_CAMPFIRE", "LAVA", "FIRE",
+        "SOUL_FIRE", "BEE_NEST", "BEEHIVE", "LIGHTNING_ROD", "ANVIL",
+        "CHIPPED_ANVIL", "DAMAGED_ANVIL", "END_CRYSTAL", "RESPAWN_ANCHOR",
+        "SCULK_SHRIEKER", "SCULK_SENSOR", "POWDER_SNOW", "UNKNOWN"
     );
 
     public static final Set<String> COVER_TYPES = Set.of(
@@ -46,6 +61,7 @@ public class BlockMaterialUtils {
             || COVER_TYPES.contains(type)
             || DANGEROUS_PASSABLE.contains(type);
     }
+
 
     public static boolean canBotStandInside(BotBlockData block) {
         if (block == null) return false;
@@ -105,5 +121,13 @@ public class BlockMaterialUtils {
     public static boolean isNavigationObstacle(BotBlockData block) {
         if (block == null || block.getType() == null) return false;
         return NAVIGATION_OBSTACLES.contains(block.getType().toUpperCase());
+    }
+
+    public static boolean isSafeImpassable(BotBlockData block) {
+        return block != null && SAFE_IMPASSABLE.contains(block.getType().toUpperCase());
+    }
+
+    public static boolean isDangerousImpassable(BotBlockData block) {
+        return block != null && DANGEROUS_IMPASSABLE.contains(block.getType().toUpperCase());
     }
 }

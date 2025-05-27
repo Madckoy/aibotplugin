@@ -5,6 +5,7 @@ import com.devone.bot.core.brain.cortex.reaction.IBotReaction;
 import com.devone.bot.core.brain.cortex.sequence.BotSequenceContainerFishInWater;
 import com.devone.bot.core.inventory.BotInventory;
 import com.devone.bot.core.task.passive.BotTaskManager;
+import com.devone.bot.core.utils.BotConstants;
 import com.devone.bot.core.utils.logger.BotLogger;
 import com.devone.bot.core.utils.world.BotWorldHelper;
 import org.bukkit.Material;
@@ -34,7 +35,7 @@ public class BotReactionReactiveFishInWater implements IBotReaction {
         BotInventory inv = bot.getInventory();
 
         BotLogger.debug("🎣", isLogged, id + " 🔍 Проверка: есть ли уже рыба в инвентаре?");
-        boolean hasFish = Arrays.stream(FISH_TYPES).anyMatch(type -> inv.getAmount(type) > 10);
+        boolean hasFish = Arrays.stream(FISH_TYPES).anyMatch(type -> inv.getAmount(type) > BotConstants.MAX_FOOD_ITEMS);
         if (hasFish) {
             BotLogger.debug("🎣", isLogged, id + " 🐟 Уже есть рыба — ловить не нужно.");
             return Optional.empty();
