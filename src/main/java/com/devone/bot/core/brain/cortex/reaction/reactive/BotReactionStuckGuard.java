@@ -2,7 +2,6 @@ package com.devone.bot.core.brain.cortex.reaction.reactive;
 
 import com.devone.bot.AIBotPlugin;
 import com.devone.bot.core.Bot;
-import com.devone.bot.core.brain.cortex.BotActionSuggestion.Suggestion;
 import com.devone.bot.core.brain.cortex.reaction.IBotReaction;
 import com.devone.bot.core.brain.cortex.sequence.BotSequenceContainerCalibrate;
 import com.devone.bot.core.brain.cortex.sequence.BotSequenceContainerExcavate;
@@ -60,12 +59,16 @@ public class BotReactionStuckGuard implements IBotReaction {
             }
         }
 
-        // Обновляем позицию и время
+        // ⚠️ Обновлять только если движение было
+        if (lastPos == null || currentPos.distanceTo(lastPos) > 0.1) {
+                    // Обновляем позицию и время
         BotMemoryV2Utils.memorizeValue(bot, BotMemoryPartition.PartitionKey.WATCHDOG.toString(), 
                                             BotMemoryItem.ItemKey.POSITION.toString(), currentPos);
 
         BotMemoryV2Utils.memorizeValue(bot, BotMemoryPartition.PartitionKey.WATCHDOG.toString(), 
                                             BotMemoryItem.ItemKey.TIME.toString(), currentTime);
+
+        }
 
         return Optional.empty();
     }
