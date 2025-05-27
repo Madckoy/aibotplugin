@@ -73,7 +73,12 @@ function getCompassArrow(yaw) {
 
   const adjusted = (yaw + 360) % 360;
 
-  const directions = ["N ⬇️", "NE ↙️", "E ⬅️", "SE ↖️", "S ⬆️", "SW ↗️", "W ➡️", "NW ↘️"];
+  //const directions = ["N ⬇️", "NE ↙️", "E ⬅️", "SE ↖️", "S ⬆️", "SW ↗️", "W ➡️", "NW ↘️"];
+  
+  //const directions = ["S ⬆️", "SW ↗️", "W ➡️", "NW ↘️", "N ⬇️", "NE ↙️", "E ⬅️", "SE ↖️"];  
+  
+  const directions = ["N ⬆️", "NE ↗️", "E ➡️", "SE ↘️", "S ⬇️", "SW ↙️", "W ⬅️", "NW ↖️"];
+
   const index = Math.round(adjusted / 45) % 8;
   
   const degrees = Math.round(yaw);
