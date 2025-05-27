@@ -44,20 +44,13 @@ public class BotReactionStuckGuard implements IBotReaction {
 
             if (distance < POSITION_TOLERANCE && duration > STUCK_DURATION_MS) {
                 BotLogger.debug("🪤", bot.isLogged(), bot.getId() + " ❗ Бот застрял на " + String.format("%.2f", distance) + " м в течение " + duration + " мс");
-                if(!bot.getNavigator().getCandidates().isEmpty()) {
-                    // есть кандидаты - копаемся что бы выбраться
-                    return Optional.of(() -> {                                        
+                // копаемся что бы выбраться
+                return Optional.of(() -> {                                        
                         BotTaskManager.push(bot, new BotSequenceContainerExcavate(bot));
                     });
-                } else {
-                    // нет кандидатов. удаляем все ранее посещенные. далее поробуем повернуться
-                    BotLogger.debug("🧠", AIBotPlugin.getInstance().isLogged(), "🧩 Нет кандидатов! Нужно попробовать сбросить память!");
-                    return Optional.of(() -> {                                        
-                        BotTaskManager.push(bot, new BotSequenceContainerCalibrate(bot));
-                    });
-                }
+            
             }
-        }
+        }    
 
         // ⚠️ Обновлять только если движение было
         if (lastPos == null || currentPos.distanceTo(lastPos) > 0.1) {

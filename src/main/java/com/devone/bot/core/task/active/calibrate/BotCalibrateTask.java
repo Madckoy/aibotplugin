@@ -17,8 +17,12 @@ public class BotCalibrateTask extends BotTaskAutoParams<BotCalibrateTaskParams> 
 
     private String message="";
 
-    public BotCalibrateTask(Bot bot, String msg) {
+    public BotCalibrateTask(Bot bot) {
         super(bot, BotCalibrateTaskParams.class);
+    }
+
+    public BotCalibrateTask(Bot bot, String msg) {
+        this(bot);
         message = msg;
     }
 

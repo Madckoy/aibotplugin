@@ -5,6 +5,7 @@ import java.util.List;
 
 import com.devone.bot.core.Bot;
 import com.devone.bot.core.brain.cortex.sequence.params.BotSequenceContainerExcavateParams;
+import com.devone.bot.core.task.active.calibrate.BotCalibrateTask;
 import com.devone.bot.core.task.active.excavate.BotExcavateTask;
 import com.devone.bot.core.task.passive.BotSequenceContainer;
 import com.devone.bot.core.task.passive.BotTask;
@@ -29,7 +30,11 @@ public class BotSequenceContainerExcavate extends BotSequenceContainer<BotSequen
 
         List<BotTask<?>> subtasks = new ArrayList<>();
         subtasks.add(excvTask);
+
         
+        BotCalibrateTask calibrateTask = new BotCalibrateTask(bot);
+        subtasks.add(calibrateTask);
+
         return subtasks;
     }
 
