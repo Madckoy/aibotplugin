@@ -61,11 +61,11 @@ public class BotReactionStuckGuard implements IBotReaction {
 
         // ⚠️ Обновлять только если движение было
         if (lastPos == null || currentPos.distanceTo(lastPos) > 0.1) {
-                    // Обновляем позицию и время
-        BotMemoryV2Utils.memorizeValue(bot, BotMemoryPartition.PartitionKey.WATCHDOG.toString(), 
+            // Обновляем позицию и время
+            BotMemoryV2Utils.memorizeValue(bot, BotMemoryPartition.PartitionKey.WATCHDOG.toString(), 
                                             BotMemoryItem.ItemKey.POSITION.toString(), currentPos);
 
-        BotMemoryV2Utils.memorizeValue(bot, BotMemoryPartition.PartitionKey.WATCHDOG.toString(), 
+            BotMemoryV2Utils.memorizeValue(bot, BotMemoryPartition.PartitionKey.WATCHDOG.toString(), 
                                             BotMemoryItem.ItemKey.TIME.toString(), currentTime);
 
         }
