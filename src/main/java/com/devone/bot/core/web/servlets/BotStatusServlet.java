@@ -14,6 +14,7 @@ import com.devone.bot.core.Bot;
 import com.devone.bot.core.BotManager;
 import com.devone.bot.core.brain.memory.BotMemoryItem;
 import com.devone.bot.core.brain.memory.BotMemoryPartition;
+import com.devone.bot.core.brain.memory.BotMemoryV2Utils;
 import com.devone.bot.core.brain.memoryv2.BotMemoryV2;
 import com.devone.bot.core.brain.memoryv2.BotMemoryV2Partition;
 import com.devone.bot.core.utils.BotUtils;
@@ -164,9 +165,7 @@ public class BotStatusServlet extends HttpServlet {
                 botJson.addProperty("inventory_max", 36*64);
                 botJson.add("inventory_slots_filled", inventoryArray);
 
-
                 BotMemoryV2Partition nav = bot.getBrain().getMemoryV2().partition(BotMemoryPartition.PartitionKey.NAVIGATION.toString(), BotMemoryV2Partition.Type.MAP);
-
                 BotMemoryV2Partition visitedPartition = nav.partition(BotMemoryPartition.PartitionKey.VISITED.toString(), BotMemoryV2Partition.Type.MAP);
 
                 if (visitedPartition != null) {
@@ -174,6 +173,20 @@ public class BotStatusServlet extends HttpServlet {
                 } else {
                     botJson.addProperty("visited_count", 0);
                 }
+
+                // Watchdog
+                BotPosition lastPos = (BotPosition) BotMemoryV2Utils.readMemoryValueTyped(bot, 
+                                        BotMemoryPartition.PartitionKey.WATCHDOG.toString(),
+                                        BotMemoryItem.ItemKey.POSITION.toString(),  BotPosition.class);
+
+
+                Long lastTime = (Long) BotMemoryV2Utils.readMemoryValueTyped(bot, 
+                                        BotMemoryPartition.PartitionKey.WATCHDOG.toString(),
+                                        BotMemoryItem.ItemKey.TIME.toString(), Long.class);
+
+                botJson.addProperty("watchdog_position", lastPos.toCompactString());
+                botJson.addProperty("watchdog_time", lastTime);
+
             }
 
             botsArray.add(botJson);

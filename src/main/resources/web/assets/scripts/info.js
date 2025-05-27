@@ -16,6 +16,9 @@ function updateNavSummary(bot) {
     const suggested_target = bot.memory?.navigation?.suggested_target ?? "N/A";
     const scan_radius = bot.memory?.navigation?.scan_radius ?? "N/A";
 
+    const watchdog_pos  = bot.watchdog_position ?? "N/A";
+    const watchdog_time = bot.watchdog_time? new Date(bot.watchdog_time).toLocaleString(): "N/A";
+
     const format = (entry) => {
         if (!entry) return "N/A";
         return `${entry.calculated ?? 0} / ${entry.confirmed ?? 0}`;
@@ -34,9 +37,11 @@ function updateNavSummary(bot) {
     document.getElementById("info-nav-suggested-position").textContent = suggested_target;
     document.getElementById("info-nav-facing-direction").textContent = getCompassArrow(yaw);
     document.getElementById("info-nav-scan-range").textContent = scan_radius;
+    document.getElementById("info-nav-watchdog-position").textContent = `${watchdog_pos} @ ${watchdog_time}`;;
 }
 
 function updateStats(bot) {
+
     document.getElementById("info-stats-teleports").textContent = bot.teleports ?? "N/A";
     document.getElementById("info-stats-visited").textContent = bot.visited_count ?? "N/A";
     document.getElementById("info-stats-inventory-count").textContent = bot.inventory_count ?? "N/A";
@@ -77,7 +82,9 @@ function getCompassArrow(yaw) {
   
   //const directions = ["S ⬆️", "SW ↗️", "W ➡️", "NW ↘️", "N ⬇️", "NE ↙️", "E ⬅️", "SE ↖️"];  
   
-  const directions = ["N ⬆️", "NE ↗️", "E ➡️", "SE ↘️", "S ⬇️", "SW ↙️", "W ⬅️", "NW ↖️"];
+  //const directions = ["N ⬆️", "NE ↗️", "E ➡️", "SE ↘️", "S ⬇️", "SW ↙️", "W ⬅️", "NW ↖️"];
+
+  const directions = ["S ⬇️", "SW ↙️", "W ⬅️", "NW ↖️", "N ⬆️", "NE ↗️", "E ➡️", "SE ↘️"];
 
   const index = Math.round(adjusted / 45) % 8;
   
