@@ -20,7 +20,6 @@ import com.devone.bot.core.brain.memoryv2.BotMemoryV2Partition;
 import com.devone.bot.core.utils.BotUtils;
 import com.devone.bot.core.utils.blocks.BotBlockData;
 import com.devone.bot.core.utils.blocks.BotPosition;
-import com.devone.bot.core.utils.blocks.BotPositionKey;
 import com.devone.bot.core.web.BotWebService;
 
 import com.google.gson.JsonArray;

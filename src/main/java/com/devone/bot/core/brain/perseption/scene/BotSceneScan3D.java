@@ -3,7 +3,6 @@ package com.devone.bot.core.brain.perseption.scene;
 import com.devone.bot.core.Bot;
 import com.devone.bot.core.utils.blocks.BotBlockData;
 import com.devone.bot.core.utils.blocks.BotPosition;
-import com.devone.bot.core.utils.blocks.BotPositionKey;
 import com.devone.bot.core.utils.logger.BotLogger;
 import com.devone.bot.core.utils.world.BotWorldHelper;
 import org.bukkit.Location;
