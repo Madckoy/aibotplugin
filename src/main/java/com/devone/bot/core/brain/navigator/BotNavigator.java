@@ -131,8 +131,8 @@ public class BotNavigator {
 
                     incrementStuckCount();
 
-                    BotMemoryV2Utils.incrementPartitionItem(bot, BotMemoryPartition.PartitionKey.STATS.toString(),
-                                                                 BotMemoryItem.ItemKey.STUCKS.toString());
+                    BotMemoryV2Utils.incrementPartitionItem(bot, BotMemoryPartition.PartitionKey.STATS,
+                                                                 BotMemoryItem.ItemKey.STUCKS);
                 }
             }
         } catch (Exception ex) {
@@ -208,9 +208,9 @@ public class BotNavigator {
 
         int radius = scanRadius;
 
-        Integer scanRadiusFromMem = (Integer) BotMemoryV2Utils.readMemoryValueTyped(bot, 
-                                    BotMemoryPartition.PartitionKey.NAVIGATION.toString(), 
-                                    BotMemoryItem.ItemKey.SCAN_RADIUS.toString(), Integer.class);
+        Integer scanRadiusFromMem = (Integer) BotMemoryV2Utils.readValueTyped(bot, 
+                                    BotMemoryPartition.PartitionKey.NAVIGATION, 
+                                    BotMemoryItem.ItemKey.SCAN_RADIUS, Integer.class);
             
         if(scanRadiusFromMem!=null) {
             radius = scanRadiusFromMem.intValue();

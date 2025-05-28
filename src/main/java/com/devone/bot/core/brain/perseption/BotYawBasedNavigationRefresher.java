@@ -28,9 +28,9 @@ public class BotYawBasedNavigationRefresher implements BotYawChangeListener {
                 //read from mem
                 int radius = BotConstants.DEFAULT_SCAN_RADIUS;
 
-                Integer scanRadiusFromMem = (Integer) BotMemoryV2Utils.readMemoryValueTyped(bot, 
-                                    BotMemoryPartition.PartitionKey.NAVIGATION.toString(), 
-                                    BotMemoryItem.ItemKey.SCAN_RADIUS.toString(), Integer.class);                
+                Integer scanRadiusFromMem = (Integer) BotMemoryV2Utils.readValueTyped(bot, 
+                                    BotMemoryPartition.PartitionKey.NAVIGATION, 
+                                    BotMemoryItem.ItemKey.SCAN_RADIUS, Integer.class);                
 
                 if(scanRadiusFromMem!=null) {
                     radius = scanRadiusFromMem.intValue();

@@ -55,9 +55,9 @@ public class BotBrainTask extends BotTaskAutoParams<BotBrainTaskParams> {
 
         int radius = BotConstants.DEFAULT_SCAN_RADIUS;
         
-        Integer scanRadiusFromMem = (Integer) BotMemoryV2Utils.readMemoryValueTyped(bot, 
-                                    BotMemoryPartition.PartitionKey.NAVIGATION.toString(), 
-                                    BotMemoryItem.ItemKey.SCAN_RADIUS.toString(), Integer.class);     
+        Integer scanRadiusFromMem = (Integer) BotMemoryV2Utils.readValueTyped(bot, 
+                                    BotMemoryPartition.PartitionKey.NAVIGATION, 
+                                    BotMemoryItem.ItemKey.SCAN_RADIUS, Integer.class);     
 
         if(scanRadiusFromMem!=null) {
             radius = scanRadiusFromMem.intValue();
@@ -87,7 +87,7 @@ public class BotBrainTask extends BotTaskAutoParams<BotBrainTaskParams> {
         
         // 3. Получение рекомендации
         Suggestion suggestion = bot.getNavigator().getSuggestion();
-        BotMemoryV2Utils.memorizeValue(bot, BotMemoryPartition.PartitionKey.NAVIGATION.toString(), BotMemoryItem.ItemKey.SCAN_RADIUS.toString(), radius);
+        BotMemoryV2Utils.writeValue(bot, BotMemoryPartition.PartitionKey.NAVIGATION, BotMemoryItem.ItemKey.SCAN_RADIUS, radius);
 
         switch (suggestion) {
             case CHANGE_DIRECTION -> {

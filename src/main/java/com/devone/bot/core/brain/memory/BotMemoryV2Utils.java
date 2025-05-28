@@ -14,24 +14,24 @@ import com.google.gson.JsonElement;
 
 public class BotMemoryV2Utils {
 
-    public static void incrementPartitionItem(Bot bot, String part, String itemKey) {
+    public static void incrementPartitionItem(Bot bot, BotMemoryPartition.PartitionKey part, BotMemoryItem.ItemKey itemKey) {
         if (bot == null || itemKey == null || part==null) return;
 
         BotMemoryV2 memory = bot.getBrain().getMemoryV2();
         if (memory == null) return;
 
-        BotMemoryV2Partition partition = memory.partition(BotMemoryPartition.PartitionKey.STATS.toString(), BotMemoryV2Partition.Type.MAP);
-        partition.increment(itemKey);
+        BotMemoryV2Partition partition = memory.partition(part.toString(), BotMemoryV2Partition.Type.MAP);
+        partition.increment(itemKey.toString());
     }
 
-    public static void incrementNestedItem(Bot bot, String part, String subPart, String itemKey) {
+    public static void incrementNestedItem(Bot bot, BotMemoryPartition.PartitionKey part, String subPart, BotMemoryItem.ItemKey itemKey) {
         if (bot == null || itemKey == null || part==null) return;
 
         BotMemoryV2 memory = bot.getBrain().getMemoryV2();
         if (memory == null) return;
 
         BotMemoryV2Partition currentPart=null;
-        BotMemoryV2Partition partition = memory.partition(BotMemoryPartition.PartitionKey.STATS.toString(), BotMemoryV2Partition.Type.MAP);
+        BotMemoryV2Partition partition = memory.partition(part.toString(), BotMemoryV2Partition.Type.MAP);
         currentPart = partition;
         
         if(subPart!=null) {
@@ -39,33 +39,32 @@ public class BotMemoryV2Utils {
             currentPart = subPartition;
         }
 
-        currentPart.increment(itemKey);        
+        currentPart.increment(itemKey.toString());        
     }
 
-    public static void incrementNestedTotal(Bot bot, String partitionKey, String subPartitionKey, String itemKey, String totalKey) {
+    public static void incrementNestedTotal(Bot bot, BotMemoryPartition.PartitionKey partitionKey, BotMemoryPartition.PartitionKey subPartitionKey, String itemKey, BotMemoryItem.ItemKey totalKey) {
         if (bot == null || itemKey == null || partitionKey == null || subPartitionKey == null || totalKey == null) return;
 
         BotMemoryV2 memory = bot.getBrain().getMemoryV2();
         if (memory == null) return;
 
         // Верхний уровень, например "STATS"
-        BotMemoryV2Partition root = memory.partition(partitionKey, BotMemoryV2Partition.Type.MAP);
+        BotMemoryV2Partition root = memory.partition(partitionKey.toString(), BotMemoryV2Partition.Type.MAP);
 
         // Раздел статистики, например "kills"
-        BotMemoryV2Partition category = root.partition(subPartitionKey, BotMemoryV2Partition.Type.MAP);
+        BotMemoryV2Partition category = root.partition(subPartitionKey.toString(), BotMemoryV2Partition.Type.MAP);
 
         // Увеличиваем общий total по этой категории
-        category.increment(totalKey);
+        category.increment(totalKey.toString());
 
         // Получаем партишен сущности, например "ENDERMAN"
-        BotMemoryV2Partition entity = category.partition(itemKey, BotMemoryV2Partition.Type.MAP);
+        BotMemoryV2Partition entity = category.partition(itemKey.toString(), BotMemoryV2Partition.Type.MAP);
 
         // Увеличиваем счётчик по конкретной сущности
         entity.increment(BotMemoryItem.ItemKey.COUNT.toString());
     }
 
-
-    public static void memorizePosition(Bot bot, BotPosition pos) {
+    public static void memorizePositionAndTime(Bot bot, BotPosition pos) {
         if (bot == null || pos == null) return;
         String key = pos.toPositionKey().toString();
 
@@ -77,51 +76,50 @@ public class BotMemoryV2Utils {
 
     public static void memorizeScanRadius(Bot bot, int scanRange) {
         if (bot == null) return;
-
-        BotMemoryV2 memory           = bot.getBrain().getMemoryV2();
-        BotMemoryV2Partition nav     = memory.partition(BotMemoryPartition.PartitionKey.NAVIGATION.toString(), BotMemoryV2Partition.Type.MAP);
-        nav.put(BotMemoryItem.ItemKey.SCAN_RADIUS.toString(), scanRange);
+        writeValue(bot, BotMemoryPartition.PartitionKey.NAVIGATION, BotMemoryItem.ItemKey.SCAN_RADIUS, scanRange);
     }
 
-    public static void memorizeValue(Bot bot, String partition, String key, Object value) {
+    public static void writeValue(Bot bot, BotMemoryPartition.PartitionKey partition, BotMemoryItem.ItemKey key, Object value) {
         if (bot == null) return;
 
         BotMemoryV2 memory           = bot.getBrain().getMemoryV2();
-        BotMemoryV2Partition part    = memory.partition(partition, BotMemoryV2Partition.Type.MAP);
-        part.put(key, value);
+        BotMemoryV2Partition part    = memory.partition(partition.toString(), BotMemoryV2Partition.Type.MAP);
+        part.put(key.toString(), value);
+    }
+ 
+    public static <T> void writeValueTyped(Bot bot, BotMemoryPartition.PartitionKey partition, BotMemoryItem.ItemKey key, T value) {
+       if (bot == null) return;
+        BotMemoryV2 memory = bot.getBrain().getMemoryV2();
+        BotMemoryV2Partition part = memory.partition(partition.toString(), BotMemoryV2Partition.Type.MAP);
+
+        part.put(key.toString(), value);
     }
 
-    private static Object readMemoryValueUntyped(Bot bot, String partition, String key) {
+    private static Object readValueUntyped(Bot bot, BotMemoryPartition.PartitionKey partition, BotMemoryItem.ItemKey key) {
         if (bot == null) return null;
 
         BotMemoryV2 memory           = bot.getBrain().getMemoryV2();
-        BotMemoryV2Partition part    = memory.partition(partition, BotMemoryV2Partition.Type.MAP);
-        return part.get(key);
+        BotMemoryV2Partition part    = memory.partition(partition.toString(), BotMemoryV2Partition.Type.MAP);
+        return part.get(key.toString());
     }
 
-    public static <T> T readMemoryValueTyped(Bot bot, String partition, String key, Class<T> clazz) {
-        if (bot == null || partition == null || key == null || clazz == null) return null;
+    public static void writeNestedValue(Bot bot, BotMemoryPartition.PartitionKey partition, BotMemoryPartition.PartitionKey subPartition, BotMemoryItem.ItemKey key, Object value) {
+        if (bot == null) return;
+        BotMemoryV2 memory = bot.getBrain().getMemoryV2();
+        BotMemoryV2Partition root = memory.partition(partition.toString(), BotMemoryV2Partition.Type.MAP);
+        BotMemoryV2Partition sub = root.partition(subPartition.toString(), BotMemoryV2Partition.Type.MAP);
 
-        Object raw = readMemoryValueUntyped(bot, partition, key);
-        if (raw == null) return null;
+        sub.put(key.toString(), value);
+    }
 
-        if (clazz.isInstance(raw)) {
-            return clazz.cast(raw);
-        }
+    public static <T> void writeNestedValueTyped(Bot bot, BotMemoryPartition.PartitionKey partition, BotMemoryPartition.PartitionKey subPartition, BotMemoryItem.ItemKey key, T value) {
+        if (bot == null) return;
+        
+        BotMemoryV2 memory = bot.getBrain().getMemoryV2();
+        BotMemoryV2Partition root = memory.partition(partition.toString(), BotMemoryV2Partition.Type.MAP);
+        BotMemoryV2Partition sub = root.partition(subPartition.toString(), BotMemoryV2Partition.Type.MAP);
 
-        if (raw instanceof Map) {
-            try {
-                JsonElement json = new Gson().toJsonTree(raw);
-                return new Gson().fromJson(json, clazz);
-            } catch (Exception e) {
-                BotLogger.debug("🧠", true, "❌ Ошибка реконструкции " + clazz.getSimpleName() +
-                    " из карты (key: " + key + "): " + e.getMessage());
-                return null;
-            }
-        }
-
-        BotLogger.debug("🧠", true, "❌ Невозможно привести " + key + " (" + raw.getClass().getSimpleName() + ") к " + clazz.getSimpleName());
-        return null;
+        sub.put(key.toString(), value);
     }
 
     public static boolean isPositionVisited(Bot bot, BotPosition pos) {
@@ -155,6 +153,32 @@ public class BotMemoryV2Utils {
         return removed;
     }
 
+    public static <T> T readValueTyped(Bot bot, BotMemoryPartition.PartitionKey partition, BotMemoryItem.ItemKey key, Class<T> clazz) {
+        if (bot == null || partition == null || key == null || clazz == null) return null;
+
+        Object raw = readValueUntyped(bot, partition, key);
+        if (raw == null) return null;
+
+        if (clazz.isInstance(raw)) {
+            return clazz.cast(raw);
+        }
+
+        if (raw instanceof Map) {
+            try {
+                JsonElement json = new Gson().toJsonTree(raw);
+                return new Gson().fromJson(json, clazz);
+            } catch (Exception e) {
+                BotLogger.debug("🧠", true, "❌ Ошибка реконструкции " + clazz.getSimpleName() +
+                    " из карты (key: " + key + "): " + e.getMessage());
+                return null;
+            }
+        }
+
+        BotLogger.debug("🧠", true, "❌ Невозможно привести " + key + " (" + raw.getClass().getSimpleName() + ") к " + clazz.getSimpleName());
+        return null;
+    }
+
+    // for Blocks
     public static void clearAllVisited(Bot bot) {
         if (bot == null) return;
     
@@ -176,5 +200,4 @@ public class BotMemoryV2Utils {
 
         return visited.getMap().containsKey(key);
     }
-
 }

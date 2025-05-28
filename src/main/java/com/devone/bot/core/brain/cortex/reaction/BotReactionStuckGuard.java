@@ -16,17 +16,14 @@ public class BotReactionStuckGuard implements IBotReaction {
 
     private static final long STUCK_DURATION_MS = 120_000;  // 2 минуты
     private static final double MOVEMENT_THRESHOLD = 1.0;   // Считаем движение, если сменился блок
-    private static final String MEM_PART = BotMemoryPartition.PartitionKey.WATCHDOG.toString();
-    private static final String KEY_POS = BotMemoryItem.ItemKey.POSITION_KEY.toString();
-    private static final String KEY_TIME = BotMemoryItem.ItemKey.TIME.toString();
 
     @Override
     public Optional<Runnable> validate(Bot bot) {
         BotPosition currentPos = bot.getNavigator().getPosition();
         long now = System.currentTimeMillis();
 
-        BotPosition lastPos = BotMemoryV2Utils.readMemoryValueTyped(bot, MEM_PART, KEY_POS, BotPosition.class);
-        Long lastTime = BotMemoryV2Utils.readMemoryValueTyped(bot, MEM_PART, KEY_TIME, Long.class);
+        BotPosition lastPos = BotMemoryV2Utils.readValueTyped(bot, BotMemoryPartition.PartitionKey.WATCHDOG, BotMemoryItem.ItemKey.POSITION, BotPosition.class);
+        Long lastTime = BotMemoryV2Utils.readValueTyped(bot, BotMemoryPartition.PartitionKey.WATCHDOG, BotMemoryItem.ItemKey.TIME, Long.class);
 
         if (lastPos != null && lastTime != null) {
             double distance = currentPos.distanceTo(lastPos);
@@ -37,6 +34,10 @@ public class BotReactionStuckGuard implements IBotReaction {
             }
 
             long duration = now - lastTime;
+            long remaining = STUCK_DURATION_MS - duration;
+            
+            BotMemoryV2Utils.writeValueTyped(bot, BotMemoryPartition.PartitionKey.WATCHDOG,  BotMemoryItem.ItemKey.REMAINING_TIME, remaining);
+
             if (duration > STUCK_DURATION_MS) {
                 BotLogger.debug("🪤", bot.isLogged(), bot.getId() +
                         " ❗ Застрял на позиции " + currentPos +
@@ -57,8 +58,8 @@ public class BotReactionStuckGuard implements IBotReaction {
     }
 
     private void resetWatchdog(Bot bot, BotPosition pos, long time) {
-        BotMemoryV2Utils.memorizeValue(bot, MEM_PART, KEY_POS, pos);
-        BotMemoryV2Utils.memorizeValue(bot, MEM_PART, KEY_TIME, time);
+        BotMemoryV2Utils.writeValue(bot, BotMemoryPartition.PartitionKey.WATCHDOG, BotMemoryItem.ItemKey.POSITION, pos);
+        BotMemoryV2Utils.writeValue(bot, BotMemoryPartition.PartitionKey.WATCHDOG, BotMemoryItem.ItemKey.TIME, time);
     }
 
     @Override

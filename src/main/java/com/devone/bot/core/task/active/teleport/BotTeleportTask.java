@@ -96,8 +96,8 @@ public class BotTeleportTask extends BotTaskAutoParams<BotTeleportTaskParams> {
 
                 bot.getNPCEntity().teleport(aligned);
 
-                BotMemoryV2Utils.incrementPartitionItem(bot, BotMemoryPartition.PartitionKey.STATS.toString(),
-                                                             BotMemoryItem.ItemKey.TELEPORTED.toString());
+                BotMemoryV2Utils.incrementPartitionItem(bot, BotMemoryPartition.PartitionKey.STATS,
+                                                             BotMemoryItem.ItemKey.TELEPORTED);
 
                 bot.getTaskManager().getActiveTask().stop();
 

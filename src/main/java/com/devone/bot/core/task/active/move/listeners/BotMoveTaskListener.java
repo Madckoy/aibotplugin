@@ -56,8 +56,7 @@ public class BotMoveTaskListener implements Listener {
             BotBlockData data = new BotBlockData(block.getX(), block.getY(), block.getZ());
             data.setType(block.getType().toString());
 
-           BotMemoryV2Utils.memorizePosition( task.getBot(), pos);
-
+           BotMemoryV2Utils.memorizePositionAndTime(task.getBot(), pos);
         }
 
         task.stop();

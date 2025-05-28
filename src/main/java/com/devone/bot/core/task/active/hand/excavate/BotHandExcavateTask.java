@@ -93,10 +93,10 @@ public class BotHandExcavateTask extends BotHandTask<BotHandExcavateTaskParams> 
 
                 block.breakNaturally();
 
-                BotMemoryV2Utils.incrementNestedTotal(bot, BotMemoryPartition.PartitionKey.STATS.toString(), 
-                                                    BotMemoryPartition.PartitionKey.DESTROYED.toString(), 
+                BotMemoryV2Utils.incrementNestedTotal(bot, BotMemoryPartition.PartitionKey.STATS, 
+                                                    BotMemoryPartition.PartitionKey.DESTROYED, 
                                                     target.getType(), 
-                                                    BotMemoryItem.ItemKey.TOTAL.toString());                                                              
+                                                    BotMemoryItem.ItemKey.TOTAL);                                                              
 
 
                 BotLogger.debug(icon, isLogged(), bot.getId() + " 🧊 Block is excavated: " + target.getType());
