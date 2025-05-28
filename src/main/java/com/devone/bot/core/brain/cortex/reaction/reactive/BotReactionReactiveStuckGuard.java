@@ -57,7 +57,7 @@ public class BotReactionReactiveStuckGuard implements IBotReaction {
         }    
 
         // ⚠️ Обновлять только если движение было
-        if (lastPos == null || currentPos.distanceTo(lastPos) > 0.1) {
+        if (lastPos == null || currentPos.distanceTo(lastPos) > 0) {
             // Обновляем позицию и время
             BotMemoryV2Utils.memorizeValue(bot, BotMemoryPartition.PartitionKey.WATCHDOG.toString(), 
                                             BotMemoryItem.ItemKey.POSITION_KEY.toString(), currentPos);
