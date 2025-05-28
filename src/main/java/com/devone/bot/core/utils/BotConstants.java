@@ -17,10 +17,10 @@ public class BotConstants {
 
     public static final boolean FLIP_COORDS = false;
 
-    public static final int DEFAULT_SCAN_RADIUS = 20;
-    public static final int DEFAULT_SCAN_HEIGHT = 10;
+    public static final int DEFAULT_SCAN_RADIUS = 15;
+    public static final int DEFAULT_SCAN_HEIGHT = 5;
 
-    public static final int MAX_SCAN_RANGE = 20;
+    public static final int MAX_SCAN_RANGE = 15;
     
     public static final int MAX_FOOD_ITEMS = 64;
 
@@ -30,7 +30,7 @@ public class BotConstants {
     public static final double DEFAULT_HAND_DAMAGE = 5.0;
 
     public static final double DEFAULT_PLAYER_DETECTION_RADIUS = 15.0;
-    public static final double DEFAULT_DETECTION_RADIUS = 20.0;
+    public static final double DEFAULT_DETECTION_RADIUS = 15.0;
 
     public static final long DEFAULT_MEMORY_EXPIRATION = 300_000; // 5 мин
 
