@@ -13,7 +13,7 @@ function updateInfoPanel(bot) {
     const candidatesArray = bot.memory?.navigation?.candidates?.list;
     const candidates = Array.isArray(candidatesArray) ? candidatesArray.length : "N/A";
 
-    const watchdog_pos       = bot.watchdog_pos? bot.watchdog_pos: "N/A";
+    const watchdog_pos       = bot.watchdog_pos? formatBotPositionString(bot.watchdog_pos): "N/A";
     const watchdog_time      = bot.watchdog_time? new Date(bot.watchdog_time).toLocaleString(): "N/A";
     const watchdog_remaining = bot.watchdog_remaining? bot.watchdog_remaining: "N/A";
 
@@ -26,7 +26,6 @@ function updateInfoPanel(bot) {
         if (!entry) return "N/A";
         return `${entry.calculated ?? 0}`;
     };
-
 
     document.getElementById("info-nav-targets").textContent = simpleFormat(summary.targets);
     document.getElementById("info-nav-reachable").textContent = format(summary.reachable);
@@ -46,6 +45,16 @@ function updateInfoPanel(bot) {
     document.getElementById("info-stats-excavated").textContent = bot.breaks ?? "N/A";
 
 }
+
+ function formatBotPositionString(raw) {
+        const nums = raw.replace(/[📍:]/g, "").trim().split(",").map(s => s.trim());
+        if (nums.length === 5) {
+            const [x, y, z, yaw, pitch] = nums;
+            return `📍 ${x}, ${y}, ${z} | ${yaw}°, ${pitch}°`;
+        }
+        return raw;
+ }
+
 
 function showInfoPanel(bot) {
     const panel = document.getElementById("bot-info-panel");
@@ -75,12 +84,6 @@ function getCompassArrow(yaw) {
   if (typeof yaw !== "number") return "❓";
 
   const adjusted = (yaw + 360) % 360;
-
-  //const directions = ["N ⬇️", "NE ↙️", "E ⬅️", "SE ↖️", "S ⬆️", "SW ↗️", "W ➡️", "NW ↘️"];
-  
-  //const directions = ["S ⬆️", "SW ↗️", "W ➡️", "NW ↘️", "N ⬇️", "NE ↙️", "E ⬅️", "SE ↖️"];  
-  
-  //const directions = ["N ⬆️", "NE ↗️", "E ➡️", "SE ↘️", "S ⬇️", "SW ↙️", "W ⬅️", "NW ↖️"];
 
   const directions = ["S ⬇️", "SW ↙️", "W ⬅️", "NW ↖️", "N ⬆️", "NE ↗️", "E ➡️", "SE ↘️"];
 
