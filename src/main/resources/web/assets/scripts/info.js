@@ -47,10 +47,6 @@ function updateInfoPanel(bot) {
 
 }
 
-
-
-
-
 function showInfoPanel(bot) {
     const panel = document.getElementById("bot-info-panel");
     const isVisible = panel.classList.contains("visible");
