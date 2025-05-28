@@ -6,7 +6,6 @@ public class BotMemoryItem {
         SCAN_RADIUS("scan_radius"),
         TELEPORTED("teleports"),
         POSITION("position"),
-        POSITION_KEY("position_key"),
         YAW("yaw"),
         PITCH("pitch"),
         TARGET("target"),
