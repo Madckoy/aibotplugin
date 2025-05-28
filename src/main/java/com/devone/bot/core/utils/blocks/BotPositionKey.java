@@ -18,7 +18,7 @@ public class BotPositionKey {
     }
 
     public BotPositionKey(BotPosition pos) {
-        this((int)pos.getX(), (int)pos.getY(), (int)pos.getZ());
+        this(Math.floor(pos.getX()), Math.floor(pos.getY()), Math.floor(pos.getZ()));
     }
 
     public int getX() { return x; }
