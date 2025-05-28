@@ -18,7 +18,7 @@ public class BotWalkableBlockTagger {
 
         Map<BotPositionKey, BotBlockData> blockMap = new HashMap<>();
         for (BotBlockData block : blocks) {
-            blockMap.put(block.getPositionKey(), block);
+            blockMap.put(block.toPositionKey(), block);
         }
 
         blocks.sort(Comparator.comparingInt(BotBlockData::getY).reversed());

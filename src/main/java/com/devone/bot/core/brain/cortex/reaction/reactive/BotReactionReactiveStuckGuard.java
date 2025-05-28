@@ -22,7 +22,7 @@ public class BotReactionReactiveStuckGuard implements IBotReaction {
     public Optional<Runnable> validate(Bot bot) {
         BotLogger.debug("🪤", bot.isLogged(), bot.getId() + " 📍 Проверка застревания...");        
 
-        BotPositionKey currentPos = bot.getNavigator().getPosition().getPositionKey();
+        BotPositionKey currentPos = bot.getNavigator().getPosition().toPositionKey();
         
         if (currentPos == null) return Optional.empty();
 

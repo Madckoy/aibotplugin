@@ -320,10 +320,10 @@ public class BotNavigator {
             if (!canNavigate) continue;
        
             // 🛑 1. Исключаем блок под ногами
-            if (BlockUtils.isSameBlockUnderfoot(botPos.getBlockDataKey(), target)) continue;
+            if (BlockUtils.isSameBlockUnderfoot(botPos.toBlockDataKey(), target)) continue;
     
             // 🛑 2. Слишком близко по XZ
-            if (BlockUtils.distanceXZ(botPos.getBlockDataKey(), target) < 2.0) continue;
+            if (BlockUtils.distanceXZ(botPos.toBlockDataKey(), target) < 2.0) continue;
     
             // ✅ 3. Воздух над блоком
 

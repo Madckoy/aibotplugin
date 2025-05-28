@@ -67,7 +67,7 @@ public class BotMemoryV2Utils {
 
     public static void memorizePosition(Bot bot, BotPosition pos) {
         if (bot == null || pos == null) return;
-        String key = pos.getPositionKey().toString();
+        String key = pos.toPositionKey().toString();
 
         BotMemoryV2 memory = bot.getBrain().getMemoryV2();
         BotMemoryV2Partition nav = memory.partition(BotMemoryPartition.PartitionKey.NAVIGATION.toString(), BotMemoryV2Partition.Type.MAP);
@@ -126,7 +126,7 @@ public class BotMemoryV2Utils {
 
     public static boolean isPositionVisited(Bot bot, BotPosition pos) {
         if (bot == null || pos == null) return false;
-        String key = pos.getPositionKey().toString();
+        String key = pos.toPositionKey().toString();
 
         BotMemoryV2 memory = bot.getBrain().getMemoryV2();
         BotMemoryV2Partition nav = memory.partition(BotMemoryPartition.PartitionKey.NAVIGATION.toString(), BotMemoryV2Partition.Type.MAP);

@@ -45,7 +45,7 @@ public class BotFovSliceTagger {
 
         Map<BotPositionKey, BotBlockData> blockMap = new HashMap<>();
         for (BotBlockData b : blocks) {
-            blockMap.put(b.getPositionKey(), b);
+            blockMap.put(b.toPositionKey(), b);
         }
 
         int tagged = 0;

@@ -44,13 +44,11 @@ public class BotPosition {
     public void setPitch(float pitch) { this.pitch = pitch; }
 
     // --- Helpers ---
-    @JsonIgnore
-    public BotPositionKey getPositionKey() {
+    public BotPositionKey toPositionKey() {
         return new BotPositionKey(getX(), getY(), getZ());
     }
     
-    @JsonIgnore
-    public BotBlockData getBlockDataKey() {
+    public BotBlockData toBlockDataKey() {
         return new BotBlockData(getX(), getY(), getZ());
     }
 

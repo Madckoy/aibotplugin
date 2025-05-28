@@ -111,12 +111,12 @@ public class BotBlockData {
     }
 
     @JsonIgnore
-    public BotPositionKey getPositionKey() {
-        return position.getPositionKey();
+    public BotPositionKey toPositionKey() {
+        return position.toPositionKey();
     }
 
     public boolean isSameBlock(BotBlockData other) {
-        return other != null && this.getPositionKey().equals(other.getPositionKey());
+        return other != null && this.toPositionKey().equals(other.toPositionKey());
     }
 
     @Override
@@ -124,12 +124,12 @@ public class BotBlockData {
         if (this == o) return true;
         if (!(o instanceof BotBlockData)) return false;
         BotBlockData that = (BotBlockData) o;
-        return Objects.equals(this.getPositionKey(), that.getPositionKey());
+        return Objects.equals(this.toPositionKey(), that.toPositionKey());
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(getPositionKey());
+        return Objects.hash(toPositionKey());
     }
 
     public int distanceTo(BotBlockData other) {

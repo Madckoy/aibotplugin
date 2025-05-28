@@ -57,7 +57,7 @@ public class BotMoveTask extends BotTaskAutoParams<BotMoveTaskParams> {
             return this;
         }
 
-        bot.getNavigator().setTarget(target.getBlockDataKey());
+        bot.getNavigator().setTarget(target.toBlockDataKey());
         BotLogger.debug(icon, isLogged(), bot.getId() + " ✅ Цель установлена: " + target);
 
         return this;

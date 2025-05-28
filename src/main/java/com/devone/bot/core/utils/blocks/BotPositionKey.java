@@ -44,7 +44,7 @@ public class BotPositionKey {
 
     public int distanceTo(BotBlockData other) {
         if (other == null) return Integer.MAX_VALUE;
-        return distanceTo(other.getPosition().getPositionKey());
+        return distanceTo(other.getPosition().toPositionKey());
     }
 
     @Override

@@ -24,8 +24,9 @@ public class BotReactionManager {
 
     static {
         // 📚 Регистрация стандартных реакций
-        registerIntention(new BotReactionReactiveObstacleDetection());
+
         registerIntention(new BotReactionReactiveStuckGuard());
+        registerIntention(new BotReactionReactiveObstacleDetection());
         registerIntention(new BotReactionReactiveNearbyHostile());
         registerIntention(new BotReactionReactiveNearbyPlayer());
         registerIntention(new BotReactionReactiveFishInWater()); // 🎣 ловим рыбу!

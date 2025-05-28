@@ -19,7 +19,7 @@ public class BotSceneScan3D {
 public static BotSceneData scan(Bot bot, int radius, int height) {
     World world = BotWorldHelper.getWorld();
 
-    BotBlockData botLegsLoc = bot.getNavigator().getPosition().getBlockDataKey(); //legs
+    BotBlockData botLegsLoc = bot.getNavigator().getPosition().toBlockDataKey(); //legs
 
     Location botLoc = BotWorldHelper.botPositionToWorldLocation(botLegsLoc.getPosition());
 
