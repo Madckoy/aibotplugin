@@ -63,7 +63,7 @@ public class BotReactionStuckGuard implements IBotReaction {
     private void resetWatchdog(Bot bot, BotPosition pos, long time) {
         BotMemoryV2Utils.writeValue(bot, BotMemoryPartition.PartitionKey.WATCHDOG, BotMemoryItem.ItemKey.POSITION, pos);
         BotMemoryV2Utils.writeValue(bot, BotMemoryPartition.PartitionKey.WATCHDOG, BotMemoryItem.ItemKey.TIME, time);
-        BotMemoryV2Utils.writeValue(bot, BotMemoryPartition.PartitionKey.WATCHDOG,  BotMemoryItem.ItemKey.REMAINING_TIME, STUCK_DURATION_MS/6000);
+        BotMemoryV2Utils.writeValue(bot, BotMemoryPartition.PartitionKey.WATCHDOG,  BotMemoryItem.ItemKey.REMAINING_TIME, STUCK_DURATION_MS / 1000);
     }
 
     @Override
