@@ -112,7 +112,7 @@ public class BotBlockData {
 
     @JsonIgnore
     public BotPositionKey toKey() {
-        return position.toKey();
+        return position.getPositionKey();
     }
 
     public boolean isSameBlock(BotBlockData other) {

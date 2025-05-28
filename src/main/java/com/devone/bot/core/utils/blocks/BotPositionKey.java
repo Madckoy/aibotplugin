@@ -33,6 +33,20 @@ public class BotPositionKey {
         return x == that.x && y == that.y && z == that.z;
     }
 
+   // --- Distance ---
+    public int distanceTo(BotPositionKey other) {
+        if (other == null) return Integer.MAX_VALUE;
+        int  dx = x - other.x;
+        int  dy = y - other.y;
+        int  dz = z - other.z;
+        return (int) Math.sqrt(dx * dx + dy * dy + dz * dz);
+    }
+
+    public int distanceTo(BotBlockData other) {
+        if (other == null) return Integer.MAX_VALUE;
+        return distanceTo(other.getPosition().getPositionKey());
+    }
+
     @Override
     public int hashCode() {
         return Objects.hash(x, y, z);

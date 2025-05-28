@@ -42,11 +42,11 @@ public class BotPosition {
     public void setPitch(float pitch) { this.pitch = pitch; }
 
     // --- Helpers ---
-    public BotPositionKey toKey() {
+    public BotPositionKey getPositionKey() {
         return new BotPositionKey(getX(), getY(), getZ());
     }
 
-    public BotBlockData toBlockData() {
+    public BotBlockData getBlockDataKey() {
         return new BotBlockData(getX(), getY(), getZ());
     }
 

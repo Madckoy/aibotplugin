@@ -11,7 +11,7 @@ public class BlockUtils {
      */
     public static boolean isSamePosition(BotPosition a, BotPosition b) {
         if (a == null || b == null) return false;
-        return a.toKey().equals(b.toKey());
+        return a.getPositionKey().equals(b.getPositionKey());
     }
 
     /**

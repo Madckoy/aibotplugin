@@ -7,7 +7,8 @@ import com.devone.bot.core.brain.memory.BotMemoryItem;
 import com.devone.bot.core.brain.memory.BotMemoryPartition;
 import com.devone.bot.core.brain.memory.BotMemoryV2Utils;
 import com.devone.bot.core.task.passive.BotTaskManager;
-import com.devone.bot.core.utils.blocks.BotPosition;
+
+import com.devone.bot.core.utils.blocks.BotPositionKey;
 import com.devone.bot.core.utils.logger.BotLogger;
 
 import java.util.Optional;
@@ -21,15 +22,16 @@ public class BotReactionReactiveStuckGuard implements IBotReaction {
     public Optional<Runnable> validate(Bot bot) {
         BotLogger.debug("🪤", bot.isLogged(), bot.getId() + " 📍 Проверка застревания...");        
 
-        BotPosition currentPos = bot.getNavigator().getPosition();
+        BotPositionKey currentPos = bot.getNavigator().getPosition().getPositionKey();
         
         if (currentPos == null) return Optional.empty();
 
         long currentTime = System.currentTimeMillis();
+        long remaining   = STUCK_DURATION_MS;
 
-        BotPosition lastPos = (BotPosition) BotMemoryV2Utils.readMemoryValueTyped(bot, 
+        BotPositionKey lastPos = (BotPositionKey) BotMemoryV2Utils.readMemoryValueTyped(bot, 
                                 BotMemoryPartition.PartitionKey.WATCHDOG.toString(),
-                                BotMemoryItem.ItemKey.POSITION.toString(),  BotPosition.class);
+                                BotMemoryItem.ItemKey.POSITION_KEY.toString(),  BotPositionKey.class);
 
 
         Long lastTime = (Long) BotMemoryV2Utils.readMemoryValueTyped(bot, 
@@ -38,12 +40,9 @@ public class BotReactionReactiveStuckGuard implements IBotReaction {
         
         if (lastPos != null && lastTime != null) {
             double distance = currentPos.distanceTo(lastPos);
+
             long duration = currentTime - lastTime;
-
-            long remaining = STUCK_DURATION_MS - duration;
-
-            BotMemoryV2Utils.memorizeValue(bot, BotMemoryPartition.PartitionKey.WATCHDOG.toString(), 
-                                            BotMemoryItem.ItemKey.REMAINING_TIME.toString(), remaining);
+            remaining = remaining - duration;
 
             if (distance < POSITION_TOLERANCE && duration > STUCK_DURATION_MS) {
                 BotLogger.debug("🪤", bot.isLogged(), bot.getId() + " ❗ Бот застрял на " + String.format("%.2f", distance) + " м в течение " + duration + " мс");
@@ -59,10 +58,13 @@ public class BotReactionReactiveStuckGuard implements IBotReaction {
         if (lastPos == null || currentPos.distanceTo(lastPos) > 0.1) {
             // Обновляем позицию и время
             BotMemoryV2Utils.memorizeValue(bot, BotMemoryPartition.PartitionKey.WATCHDOG.toString(), 
-                                            BotMemoryItem.ItemKey.POSITION.toString(), currentPos);
+                                            BotMemoryItem.ItemKey.POSITION_KEY.toString(), currentPos);
 
             BotMemoryV2Utils.memorizeValue(bot, BotMemoryPartition.PartitionKey.WATCHDOG.toString(), 
                                             BotMemoryItem.ItemKey.TIME.toString(), currentTime);
+
+            BotMemoryV2Utils.memorizeValue(bot, BotMemoryPartition.PartitionKey.WATCHDOG.toString(), 
+                                            BotMemoryItem.ItemKey.REMAINING_TIME.toString(), remaining);
 
         }
 
