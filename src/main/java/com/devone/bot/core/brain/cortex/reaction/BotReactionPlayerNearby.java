@@ -1,8 +1,8 @@
-package com.devone.bot.core.brain.cortex.reaction.reactive;
+package com.devone.bot.core.brain.cortex.reaction;
 
 import com.devone.bot.core.Bot;
-import com.devone.bot.core.brain.cortex.reaction.IBotReaction;
-import com.devone.bot.core.brain.cortex.sequence.BotSequenceContainerNearbyPlayer;
+import com.devone.bot.core.brain.cortex.IBotReaction;
+import com.devone.bot.core.brain.cortex.sequence.BotSequencePlayerNearby;
 import com.devone.bot.core.inventory.BotInventory;
 import com.devone.bot.core.task.passive.BotTaskManager;
 import com.devone.bot.core.utils.BotConstants;
@@ -14,7 +14,7 @@ import org.bukkit.entity.Player;
 
 import java.util.Optional;
 
-public class BotReactionReactiveNearbyPlayer implements IBotReaction {
+public class BotReactionPlayerNearby implements IBotReaction {
 
     @Override
     public Optional<Runnable> validate(Bot bot) {
@@ -39,7 +39,7 @@ public class BotReactionReactiveNearbyPlayer implements IBotReaction {
                         + String.format("%.1f", dist) + " м");
 
                 return Optional.of(() -> {
-                    BotTaskManager.push(bot, new BotSequenceContainerNearbyPlayer(bot, player));
+                    BotTaskManager.push(bot, new BotSequencePlayerNearby(bot, player));
                 });
             }
         }

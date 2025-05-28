@@ -9,7 +9,7 @@ import org.bukkit.command.CommandSender;
 import com.devone.bot.AIBotPlugin;
 import com.devone.bot.core.Bot;
 import com.devone.bot.core.BotManager;
-import com.devone.bot.core.brain.cortex.sequence.BotSequenceContainerTeleportToPosition;
+import com.devone.bot.core.brain.cortex.sequence.BotSequenceTeleportToPosition;
 import com.devone.bot.core.task.passive.BotTaskManager;
 import com.devone.bot.core.utils.blocks.BotPosition;
 import com.devone.bot.core.utils.logger.BotLogger;
@@ -67,7 +67,7 @@ public class BotTeleportCommand implements CommandExecutor {
         BotTaskManager.clear(bot);
 
         // Создаём и запускаем реактивный контейнер
-        BotSequenceContainerTeleportToPosition tpContainer = new BotSequenceContainerTeleportToPosition(bot, loc);
+        BotSequenceTeleportToPosition tpContainer = new BotSequenceTeleportToPosition(bot, loc);
         BotTaskManager.push(bot, tpContainer);
 
         sender.sendMessage("✅ Бот '" + botName + "' телепортируется в " + loc);

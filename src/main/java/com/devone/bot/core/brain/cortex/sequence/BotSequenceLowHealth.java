@@ -4,7 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import com.devone.bot.core.Bot;
-import com.devone.bot.core.brain.cortex.sequence.params.BotSequenceContainerLowHealthParams;
+import com.devone.bot.core.brain.cortex.sequence.params.BotSequenceLowHealthParams;
 import com.devone.bot.core.task.passive.BotSequenceContainer;
 import com.devone.bot.core.task.passive.BotTask;
 import com.devone.bot.core.task.active.teleport.BotTeleportTask;
@@ -12,10 +12,10 @@ import com.devone.bot.core.task.active.teleport.params.BotTeleportTaskParams;
 import com.devone.bot.core.utils.logger.BotLogger;
 import com.devone.bot.core.utils.world.BotWorldHelper;
 
-public class BotSequenceContainerLowHealth extends BotSequenceContainer<BotSequenceContainerLowHealthParams> {
+public class BotSequenceLowHealth extends BotSequenceContainer<BotSequenceLowHealthParams> {
 
-    public BotSequenceContainerLowHealth(Bot bot) {
-        super(bot, BotSequenceContainerLowHealthParams.class);
+    public BotSequenceLowHealth(Bot bot) {
+        super(bot, BotSequenceLowHealthParams.class);
         setIcon("🔀");
         setObjective("Sequence: Bot Teleport Task on Low HP");
         setDeffered(true);

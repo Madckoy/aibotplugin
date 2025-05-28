@@ -7,20 +7,20 @@ import org.bukkit.Location;
 import org.bukkit.entity.Player;
 
 import com.devone.bot.core.Bot;
-import com.devone.bot.core.brain.cortex.sequence.params.BotSequenceContainerTeleportToPlayerParams;
+import com.devone.bot.core.brain.cortex.sequence.params.BotSequenceTeleportToPlayerParams;
 import com.devone.bot.core.task.passive.BotSequenceContainer;
 import com.devone.bot.core.task.passive.BotTask;
 import com.devone.bot.core.task.active.teleport.BotTeleportTask;
 import com.devone.bot.core.task.active.teleport.params.BotTeleportTaskParams;
 import com.devone.bot.core.utils.blocks.BotPosition;
 
-public class BotSequenceContainerTeleportToPlayer
-        extends BotSequenceContainer<BotSequenceContainerTeleportToPlayerParams> {
+public class BotSequenceTeleportToPlayer
+        extends BotSequenceContainer<BotSequenceTeleportToPlayerParams> {
 
     private final Player player;
 
-    public BotSequenceContainerTeleportToPlayer(Bot bot, Player player) {
-        super(bot, BotSequenceContainerTeleportToPlayerParams.class);
+    public BotSequenceTeleportToPlayer(Bot bot, Player player) {
+        super(bot, BotSequenceTeleportToPlayerParams.class);
         this.player = player;
         setIcon("🔀");
         setObjective("Sequence: Телепорт к игроку (не вплотную)");

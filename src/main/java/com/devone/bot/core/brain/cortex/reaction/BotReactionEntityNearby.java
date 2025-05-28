@@ -1,8 +1,8 @@
-package com.devone.bot.core.brain.cortex.reaction.reactive;
+package com.devone.bot.core.brain.cortex.reaction;
 
 import com.devone.bot.core.Bot;
-import com.devone.bot.core.brain.cortex.reaction.IBotReaction;
-import com.devone.bot.core.brain.cortex.sequence.BotSequenceContainerNearbyHostile;
+import com.devone.bot.core.brain.cortex.IBotReaction;
+import com.devone.bot.core.brain.cortex.sequence.BotSequenceEntityNearby;
 import com.devone.bot.core.brain.perseption.scene.BotSceneData;
 import com.devone.bot.core.task.passive.BotTaskManager;
 import com.devone.bot.core.utils.BotConstants;
@@ -16,7 +16,7 @@ import java.util.Optional;
 
 import org.bukkit.Location;
 
-public class BotReactionReactiveNearbyHostile implements IBotReaction {
+public class BotReactionEntityNearby implements IBotReaction {
 
     @Override
     public Optional<Runnable> validate(Bot bot) {
@@ -45,7 +45,7 @@ public class BotReactionReactiveNearbyHostile implements IBotReaction {
                 
                 if(canNavigate) {
                     return Optional.of(() -> {
-                        BotTaskManager.push(bot, new BotSequenceContainerNearbyHostile(bot, entity));
+                        BotTaskManager.push(bot, new BotSequenceEntityNearby(bot, entity));
                     });
                 }
 

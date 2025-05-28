@@ -1,14 +1,14 @@
-package com.devone.bot.core.brain.cortex.reaction.reactive.example;
+package com.devone.bot.core.brain.cortex.reaction.example;
 
 import com.devone.bot.core.Bot;
-import com.devone.bot.core.brain.cortex.reaction.IBotReaction;
-import com.devone.bot.core.brain.cortex.sequence.example.BotSequenceContainerTemplate;
+import com.devone.bot.core.brain.cortex.IBotReaction;
+import com.devone.bot.core.brain.cortex.sequence.example.BotSequenceTemplate;
 import com.devone.bot.core.task.passive.BotTaskManager;
 import com.devone.bot.core.utils.logger.BotLogger;
 
 import java.util.Optional;
 
-public class BotReactionReactiveTemplate implements IBotReaction {
+public class BotReactionTemplate implements IBotReaction {
 
     @Override
     public Optional<Runnable> validate(Bot bot) {
@@ -22,7 +22,7 @@ public class BotReactionReactiveTemplate implements IBotReaction {
 
         return Optional.of(() -> {
             BotLogger.debug("🤖", bot.isLogged(), bot.getId() + " 🚀 Триггер шаблонной реакции: " + getName());
-            BotTaskManager.push(bot, new BotSequenceContainerTemplate(bot)); // ✅ Сахар
+            BotTaskManager.push(bot, new BotSequenceTemplate(bot)); // ✅ Сахар
         });
     }
 

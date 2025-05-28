@@ -1,8 +1,8 @@
-package com.devone.bot.core.brain.cortex.reaction.reactive;
+package com.devone.bot.core.brain.cortex.reaction;
 
 import com.devone.bot.core.Bot;
-import com.devone.bot.core.brain.cortex.reaction.IBotReaction;
-import com.devone.bot.core.brain.cortex.sequence.BotSequenceContainerExcavate;
+import com.devone.bot.core.brain.cortex.IBotReaction;
+import com.devone.bot.core.brain.cortex.sequence.BotSequenceExcavate;
 
 import com.devone.bot.core.task.passive.BotTaskManager;
 
@@ -19,7 +19,7 @@ import org.bukkit.block.Block;
 
 import java.util.Optional;
 
-public class BotReactionReactiveObstacleDetection implements IBotReaction {
+public class BotReactionObstacleNearby implements IBotReaction {
 
     @Override
     public Optional<Runnable> validate(Bot bot) {
@@ -54,7 +54,7 @@ public class BotReactionReactiveObstacleDetection implements IBotReaction {
 
                 if (botBlock != null && (BlockMaterialUtils.isSafeImpassable(botBlock) || BlockMaterialUtils.isDangerousImpassable(botBlock))) {
                     return Optional.of(() -> {
-                        BotTaskManager.push(bot, new BotSequenceContainerExcavate(bot));
+                        BotTaskManager.push(bot, new BotSequenceExcavate(bot));
                     });
                 }
             }

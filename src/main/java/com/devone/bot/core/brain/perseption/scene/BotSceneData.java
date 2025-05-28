@@ -33,7 +33,7 @@ public BotSceneData clone(boolean cleanUp) {
 
     // Клонируем bot позицию
     if (this.bot != null) {
-        copy.bot = this.bot.clone(); // предполагается, что у BotPositionSight есть clone()
+        copy.bot = this.bot.copy();
     }
 
     // Клонируем блоки
@@ -42,7 +42,7 @@ public BotSceneData clone(boolean cleanUp) {
             .map(original -> {
                 BotBlockData cloned = original.clone(); // клонируем
                 if(cleanUp) {
-                   cloned.getTags().clear();               // удаляем все теги
+                   cloned.getTags().clear();            // удаляем все теги
                 }
                 return cloned;
             })

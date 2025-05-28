@@ -3,6 +3,7 @@ package com.devone.bot.core.brain.perseption.scene;
 import com.devone.bot.core.Bot;
 import com.devone.bot.core.utils.blocks.BotBlockData;
 import com.devone.bot.core.utils.blocks.BotPosition;
+import com.devone.bot.core.utils.blocks.BotPositionKey;
 import com.devone.bot.core.utils.logger.BotLogger;
 import com.devone.bot.core.utils.world.BotWorldHelper;
 import org.bukkit.Location;
@@ -19,18 +20,18 @@ public class BotSceneScan3D {
 public static BotSceneData scan(Bot bot, int radius, int height) {
     World world = BotWorldHelper.getWorld();
 
-    BotBlockData botLegsLoc = bot.getNavigator().getPosition().toBlockDataKey(); //legs
+    BotPosition botLegsLoc = bot.getNavigator().getPosition(); //legs
 
-    Location botLoc = BotWorldHelper.botPositionToWorldLocation(botLegsLoc.getPosition());
+    Location botLoc = BotWorldHelper.botPositionToWorldLocation(botLegsLoc);
 
-    int legsY = botLegsLoc.getY();   // уровень ног
-    int headY = botLegsLoc.getY()+1; // уровень головы
+    int legsY = botLegsLoc.toPositionKey().getY();   // уровень ног
+    int headY = botLegsLoc.toPositionKey().getY() + 1; // уровень головы
 
     int yMin = legsY - height;
     int yMax = headY + height; 
 
-    int centerX = botLegsLoc.getX();
-    int centerZ = botLegsLoc.getZ();
+    int centerX = botLegsLoc.toPositionKey().getX();
+    int centerZ = botLegsLoc.toPositionKey().getZ();
 
     int xMin = centerX - radius;
     int xMax = centerX + radius; 
@@ -78,18 +79,9 @@ public static BotSceneData scan(Bot bot, int radius, int height) {
         scannedEntities.add(blockData);
     }
 
-    // 3. Положение бота
-    BotPosition botCoords = bot.getNavigator().getPosition();
-    
-    //float botYaw   = BotUtils.getBotYaw(bot);
-    //float botPitch = BotUtils.getBotPitch(bot);
-
-    //BotPositionSight botCoords = new BotPositionSight(botLegsLoc.getX(), botLegsLoc.getY(), botLegsLoc.getZ(), botYaw, botPitch);
-
-    // 4. Служебная информация
     BotScanInfo info = new BotScanInfo(radius, height);
 
-    return new BotSceneData(info, botCoords, scannedBlocks, scannedEntities );
+    return new BotSceneData(info, botLegsLoc, scannedBlocks, scannedEntities );
 }
 
 }

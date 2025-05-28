@@ -1,6 +1,5 @@
 package com.devone.bot.core.utils.blocks;
 
-import java.util.Comparator;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -36,7 +35,7 @@ public class BlockUtils {
     /**
      * Расстояние по XZ-плоскости (без Y).
      */
-    public static int distanceXZ(BotBlockData a, BotBlockData b) {
+    public static int distanceXZ(BotPositionKey a, BotPositionKey b) {
         if (a == null || b == null) return Integer.MAX_VALUE;
         int dx = a.getX() - b.getX();
         int dz = a.getZ() - b.getZ();
@@ -109,15 +108,6 @@ public class BlockUtils {
             .collect(Collectors.toList());
     }
 
-    /**
-     * Поиск ближайшей позиции из списка (по эвклидову расстоянию).
-     */
-    public static BotBlockData findNearest(BotBlockData current, List<BotBlockData> candidates) {
-        return candidates.stream()
-            .filter(p -> !isSameBlockUnderfoot(current, p))
-            .min(Comparator.comparingInt(current::distanceTo))
-            .orElse(null);
-    }
 
     /**
      * Простая эвристика "достижимости".
@@ -130,7 +120,7 @@ public class BlockUtils {
     /**
      * Проверка: целевой блок прямо под ботом.
      */
-    public static boolean isSameBlockUnderfoot(BotBlockData bot, BotBlockData target) {
+    public static boolean isSameBlockUnderfoot(BotPositionKey bot, BotPositionKey target) {
         if (bot == null || target == null) return false;
         int botX = bot.getX();
         int botY = bot.getY() - 1;
@@ -141,9 +131,9 @@ public class BlockUtils {
     /**
      * Проверка полной совпадающей позиции.
      */
-    public static boolean isSameBlock(BotBlockData a, BotBlockData b) {
+    public static boolean isSameBlock(BotPositionKey a, BotPositionKey b) {
         if (a == null || b == null) return false;
-        return a.toPositionKey().equals(b.toPositionKey());
+        return a.equals(b);
     }
 
     

@@ -5,8 +5,8 @@ import java.util.List;
 import java.util.Optional;
 
 import com.devone.bot.core.Bot;
+import com.devone.bot.core.brain.cortex.BotReactionManager;
 import com.devone.bot.core.brain.cortex.BotActionSuggestion.Suggestion;
-import com.devone.bot.core.brain.cortex.reaction.BotReactionManager;
 import com.devone.bot.core.brain.memory.BotMemoryItem;
 import com.devone.bot.core.brain.memory.BotMemoryPartition;
 import com.devone.bot.core.brain.memory.BotMemoryV2Utils;

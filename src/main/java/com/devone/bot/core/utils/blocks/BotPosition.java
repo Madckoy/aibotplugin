@@ -44,23 +44,23 @@ public class BotPosition {
     public void setPitch(float pitch) { this.pitch = pitch; }
 
     // --- Helpers ---
+    @JsonIgnore
     public BotPositionKey toPositionKey() {
         return new BotPositionKey(getX(), getY(), getZ());
     }
     
-    public BotBlockData toBlockDataKey() {
-        return new BotBlockData(getX(), getY(), getZ());
-    }
-
+    @JsonIgnore    
     public BotPosition add(double dx, double dy, double dz) {
         return new BotPosition(this.x + dx, this.y + dy, this.z + dz, this.yaw, this.pitch);
     }
 
-    public BotPosition clone() {
-        return new BotPosition(this);
+    @JsonIgnore
+    public BotPosition copy() {
+        return new BotPosition(this.x, this.y, this.z, this.yaw, this.pitch);
     }
 
     // --- Distance ---
+    @JsonIgnore
     public double distanceTo(BotPosition other) {
         if (other == null) return Double.MAX_VALUE;
         double dx = x - other.x;
@@ -69,27 +69,10 @@ public class BotPosition {
         return Math.sqrt(dx * dx + dy * dy + dz * dz);
     }
 
-    public double distanceTo(BotBlockData other) {
-        if (other == null) return Double.MAX_VALUE;
-        return distanceTo(other.getPosition());
-    }
-
-    public int blockDistanceTo(BotBlockData other) {
-        return (other == null) ? Integer.MAX_VALUE : blockDistanceTo(other.getPosition());
-    }
-
-    public int blockDistanceTo(BotPosition other) {
-        if (other == null) return Integer.MAX_VALUE;
-        int dx = (int) Math.floor(x) - (int) Math.floor(other.x);
-        int dy = (int) Math.floor(y) - (int) Math.floor(other.y);
-        int dz = (int) Math.floor(z) - (int) Math.floor(other.z);
-        return (int) Math.sqrt(dx * dx + dy * dy + dz * dz);
-    }
-
     // --- Output ---
     @Override
     public String toString() {
-        return String.format("%.2f, %.2f, %.2f", x, y, z);
+        return String.format("%.2f, %.2f, %.2f, %.2f, %.2f", x, y, z, yaw, pitch);
     }
 
     public String toCompactString() {

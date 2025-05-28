@@ -1,8 +1,8 @@
-package com.devone.bot.core.brain.cortex.reaction.reactive;
+package com.devone.bot.core.brain.cortex.reaction;
 
 import com.devone.bot.core.Bot;
-import com.devone.bot.core.brain.cortex.reaction.IBotReaction;
-import com.devone.bot.core.brain.cortex.sequence.BotSequenceContainerFishInWater;
+import com.devone.bot.core.brain.cortex.IBotReaction;
+import com.devone.bot.core.brain.cortex.sequence.BotSequenceInWater;
 import com.devone.bot.core.inventory.BotInventory;
 import com.devone.bot.core.task.passive.BotTaskManager;
 import com.devone.bot.core.utils.BotConstants;
@@ -12,7 +12,7 @@ import org.bukkit.Material;
 
 import java.util.*;
 
-public class BotReactionReactiveFishInWater implements IBotReaction {
+public class BotReactionInWater implements IBotReaction {
 
     private static final Material[] FISH_TYPES = {
         Material.COD,
@@ -55,7 +55,7 @@ public class BotReactionReactiveFishInWater implements IBotReaction {
 
         BotLogger.debug("🎣", isLogged, id + " ✅ Условия выполнены — запускаем реакцию на рыбалку");
 
-        return Optional.of(() -> BotTaskManager.push(bot, new BotSequenceContainerFishInWater(bot)));
+        return Optional.of(() -> BotTaskManager.push(bot, new BotSequenceInWater(bot)));
     }
 
     @Override

@@ -4,18 +4,18 @@ import java.util.ArrayList;
 import java.util.List;
 
 import com.devone.bot.core.Bot;
-import com.devone.bot.core.brain.cortex.sequence.params.BotSequenceContainerEmptyParams;
+import com.devone.bot.core.brain.cortex.sequence.params.BotSequenceEmptyParams;
 import com.devone.bot.core.task.passive.BotSequenceContainer;
 import com.devone.bot.core.task.passive.BotTask;
 import com.devone.bot.core.utils.logger.BotLogger;
 
-public class BotSequenceContainerEmpty
-        extends BotSequenceContainer<BotSequenceContainerEmptyParams> {
+public class BotSequenceEmpty
+        extends BotSequenceContainer<BotSequenceEmptyParams> {
 
-    public BotSequenceContainerEmpty(Bot bot) {
-        super(bot, BotSequenceContainerEmptyParams.class);
+    public BotSequenceEmpty(Bot bot) {
+        super(bot, BotSequenceEmptyParams.class);
         setIcon("🔀");
-        setObjective("Sequence: Empty container");
+        setObjective("Sequence: Empty");
     }
 
     @Override

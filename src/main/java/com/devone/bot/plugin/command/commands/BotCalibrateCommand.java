@@ -7,7 +7,7 @@ import org.bukkit.entity.Player;
 
 import com.devone.bot.core.Bot;
 import com.devone.bot.core.BotManager;
-import com.devone.bot.core.brain.cortex.sequence.BotSequenceContainerCalibrate;
+import com.devone.bot.core.brain.cortex.sequence.BotSequenceCalibrate;
 import com.devone.bot.core.task.passive.BotTaskManager;
 
 public class BotCalibrateCommand implements CommandExecutor {
@@ -36,7 +36,7 @@ public class BotCalibrateCommand implements CommandExecutor {
         // ✅ Реактивная остановка с контейнером
         //BotTaskManager.clear(bot);
 
-        BotTaskManager.push(bot, new BotSequenceContainerCalibrate(bot));
+        BotTaskManager.push(bot, new BotSequenceCalibrate(bot));
 
         player.sendMessage("§aБот " + bot.getId() + " остановлен и переходит в режим калибровки");
 

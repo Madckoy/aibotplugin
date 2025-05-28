@@ -3,15 +3,15 @@ package com.devone.bot.core.brain.cortex.sequence.example;
 import java.util.List;
 
 import com.devone.bot.core.Bot;
-import com.devone.bot.core.brain.cortex.sequence.params.example.BotSequenceContainerTemplateParams;
+import com.devone.bot.core.brain.cortex.sequence.params.example.BotSequenceTemplateParams;
 import com.devone.bot.core.task.passive.BotSequenceContainer;
 import com.devone.bot.core.task.passive.BotTask;
 import com.devone.bot.core.utils.logger.BotLogger;
 
-public class BotSequenceContainerTemplate extends BotSequenceContainer<BotSequenceContainerTemplateParams> {
+public class BotSequenceTemplate extends BotSequenceContainer<BotSequenceTemplateParams> {
 
-    public BotSequenceContainerTemplate(Bot bot) {
-        super(bot, BotSequenceContainerTemplateParams.class);
+    public BotSequenceTemplate(Bot bot) {
+        super(bot, BotSequenceTemplateParams.class);
         setIcon("🔀");
         setObjective("Шаблон реактивного контейнера");
     }

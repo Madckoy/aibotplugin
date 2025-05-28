@@ -9,6 +9,7 @@ import java.util.Set;
 import org.bukkit.Material;
 import org.bukkit.block.Block;
 import com.devone.bot.core.Bot;
+import com.devone.bot.core.brain.navigator.tags.BotWalkableBlockTagger;
 import com.devone.bot.core.inventory.BotInventory;
 import com.devone.bot.core.task.passive.BotTaskAutoParams;
 import com.devone.bot.core.task.passive.BotTaskManager;
@@ -201,7 +202,7 @@ public class BotExcavateTask extends BotTaskAutoParams<BotExcavateTaskParams> {
                 BotLogger.debug(icon, isLogged(), bot.getId() + " 👆 Берем Next блок: " + blockPosition);
                 Block targetBlock = BotWorldHelper.botPositionToWorldBlock(blockPosition);
             
-                bot.getNavigator().setTarget(blockPosition.toBlockDataKey());
+                bot.getNavigator().setTarget(BotWorldHelper.blockToBotBlockData(targetBlock));
             
                                
                 setObjective(params.getObjective() + " " + BotUtils.getBlockName(targetBlock) + " at " + blockPosition.toCompactString());

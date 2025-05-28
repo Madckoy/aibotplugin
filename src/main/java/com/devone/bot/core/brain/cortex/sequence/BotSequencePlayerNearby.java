@@ -1,7 +1,7 @@
 package com.devone.bot.core.brain.cortex.sequence;
 
 import com.devone.bot.core.Bot;
-import com.devone.bot.core.brain.cortex.sequence.params.BotSequenceContainerNearbyPlayerParams;
+import com.devone.bot.core.brain.cortex.sequence.params.BotSequencePlayerNearbyParams;
 import com.devone.bot.core.task.passive.BotSequenceContainer;
 import com.devone.bot.core.task.passive.BotTask;
 import com.devone.bot.core.task.active.drop.BotDropAllTask;
@@ -16,12 +16,12 @@ import java.util.List;
 
 import org.bukkit.entity.Player;
 
-public class BotSequenceContainerNearbyPlayer extends BotSequenceContainer<BotSequenceContainerNearbyPlayerParams> {
+public class BotSequencePlayerNearby extends BotSequenceContainer<BotSequencePlayerNearbyParams> {
 
     Player player = null;
 
-    public BotSequenceContainerNearbyPlayer(Bot bot, Player player) {
-        super(bot, BotSequenceContainerNearbyPlayerParams.class);
+    public BotSequencePlayerNearby(Bot bot, Player player) {
+        super(bot, BotSequencePlayerNearbyParams.class);
         this.player = player;
         setIcon("🔀");
         setObjective("Sequence: Bot MoveTask and Bot Drop All Task");

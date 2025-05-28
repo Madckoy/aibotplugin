@@ -4,20 +4,20 @@ import java.util.ArrayList;
 import java.util.List;
 
 import com.devone.bot.core.Bot;
-import com.devone.bot.core.brain.cortex.sequence.params.BotSequenceContainerExcavateParams;
+import com.devone.bot.core.brain.cortex.sequence.params.BotSequenceExcavateParams;
 import com.devone.bot.core.task.active.calibrate.BotCalibrateTask;
 import com.devone.bot.core.task.active.excavate.BotExcavateTask;
 import com.devone.bot.core.task.passive.BotSequenceContainer;
 import com.devone.bot.core.task.passive.BotTask;
 import com.devone.bot.core.utils.logger.BotLogger;
 
-public class BotSequenceContainerExcavate extends BotSequenceContainer<BotSequenceContainerExcavateParams> {
+public class BotSequenceExcavate extends BotSequenceContainer<BotSequenceExcavateParams> {
 
-    public BotSequenceContainerExcavate(Bot bot) {
+    public BotSequenceExcavate(Bot bot) {
 
-        super(bot, BotSequenceContainerExcavateParams.class);
+        super(bot, BotSequenceExcavateParams.class);
         setIcon("🔀");
-        setObjective("Sequence: Excavate Tasks");
+        setObjective("Sequence: Excavate Task");
         setDeffered(true);
     }
 

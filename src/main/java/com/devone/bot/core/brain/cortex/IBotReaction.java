@@ -1,5 +1,5 @@
 
-package com.devone.bot.core.brain.cortex.reaction;
+package com.devone.bot.core.brain.cortex;
 
 import com.devone.bot.core.Bot;
 

@@ -13,9 +13,6 @@ public class BotBlockData {
     private String type;
     private UUID uuid;
 
-    @JsonIgnore
-    private String tag; // устаревшее поле
-
     private List<String> tags = new ArrayList<>();
 
     public BotBlockData() {
@@ -23,13 +20,11 @@ public class BotBlockData {
     }
 
     public BotBlockData(int x, int y, int z) {
-        this();
         this.position = new BotPosition(x, y, z);
     }
-
     public BotBlockData(double x, double y, double z) {
         this();
-        this.position = new BotPosition(x, y, z);
+        this.position = new BotPosition(Math.floor(x), Math.floor(y), Math.floor(z));
     }
 
     public BotPosition getPosition() {
@@ -101,16 +96,6 @@ public class BotBlockData {
     }
     
     @JsonIgnore
-    public String getTag() {
-        return tag;
-    }
-
-    @JsonIgnore
-    public void setTag(String tag) {
-        this.tag = tag;
-    }
-
-    @JsonIgnore
     public BotPositionKey toPositionKey() {
         return position.toPositionKey();
     }
@@ -137,9 +122,9 @@ public class BotBlockData {
         int dx = getX() - other.getX();
         int dy = getY() - other.getY();
         int dz = getZ() - other.getZ();
-        return (int) Math.sqrt(dx * dx + dy * dy + dz * dz);
+        return (int) Math.round(Math.sqrt(dx * dx + dy * dy + dz * dz));
     }
-
+    
     @Override
     public BotBlockData clone() {
         BotBlockData copy = new BotBlockData();
@@ -147,7 +132,6 @@ public class BotBlockData {
         copy.setType(this.getType());                          // копия типа
         copy.setUUID(this.getUUID());                          // UUID
         copy.setTags(new ArrayList<>(this.getTags()));         // копия всех тегов
-        copy.setTag(this.getTag());                            // если где-то ещё используется устаревшее поле
         return copy;
     }
 

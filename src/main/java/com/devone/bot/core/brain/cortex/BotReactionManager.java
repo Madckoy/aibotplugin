@@ -1,12 +1,12 @@
-package com.devone.bot.core.brain.cortex.reaction;
+package com.devone.bot.core.brain.cortex;
 
 import com.devone.bot.AIBotPlugin;
 import com.devone.bot.core.Bot;
-import com.devone.bot.core.brain.cortex.reaction.reactive.BotReactionReactiveFishInWater;
-import com.devone.bot.core.brain.cortex.reaction.reactive.BotReactionReactiveNearbyHostile;
-import com.devone.bot.core.brain.cortex.reaction.reactive.BotReactionReactiveNearbyPlayer;
-import com.devone.bot.core.brain.cortex.reaction.reactive.BotReactionReactiveObstacleDetection;
-import com.devone.bot.core.brain.cortex.reaction.reactive.BotReactionReactiveStuckGuard;
+import com.devone.bot.core.brain.cortex.reaction.BotReactionInWater;
+import com.devone.bot.core.brain.cortex.reaction.BotReactionEntityNearby;
+import com.devone.bot.core.brain.cortex.reaction.BotReactionPlayerNearby;
+import com.devone.bot.core.brain.cortex.reaction.BotReactionObstacleNearby;
+import com.devone.bot.core.brain.cortex.reaction.BotReactionStuckGuard;
 import com.devone.bot.core.utils.BotUtils;
 import com.devone.bot.core.utils.logger.BotLogger;
 
@@ -25,11 +25,11 @@ public class BotReactionManager {
     static {
         // 📚 Регистрация стандартных реакций
 
-        registerIntention(new BotReactionReactiveStuckGuard());
-        registerIntention(new BotReactionReactiveObstacleDetection());
-        registerIntention(new BotReactionReactiveNearbyHostile());
-        registerIntention(new BotReactionReactiveNearbyPlayer());
-        registerIntention(new BotReactionReactiveFishInWater()); // 🎣 ловим рыбу!
+        registerIntention(new BotReactionStuckGuard());
+        registerIntention(new BotReactionObstacleNearby());
+        registerIntention(new BotReactionEntityNearby());
+        registerIntention(new BotReactionPlayerNearby());
+        registerIntention(new BotReactionInWater()); // 🎣 ловим рыбу!
         
         BotLogger.debug("🧠", AIBotPlugin.getInstance().isLogged(), "🧩 Зарегистрированы предустановленные реакции: " + reactions.size());
     }

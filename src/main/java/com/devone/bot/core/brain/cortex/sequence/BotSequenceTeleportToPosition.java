@@ -4,7 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import com.devone.bot.core.Bot;
-import com.devone.bot.core.brain.cortex.sequence.params.BotSequenceContainerTeleportToPositionParams;
+import com.devone.bot.core.brain.cortex.sequence.params.BotSequenceTeleportToPositionParams;
 import com.devone.bot.core.task.passive.BotSequenceContainer;
 import com.devone.bot.core.task.passive.BotTask;
 import com.devone.bot.core.task.active.teleport.BotTeleportTask;
@@ -13,13 +13,13 @@ import com.devone.bot.core.task.active.teleport.params.BotTeleportTaskParams;
 import com.devone.bot.core.utils.blocks.BotPosition;
 import com.devone.bot.core.utils.logger.BotLogger;
 
-public class BotSequenceContainerTeleportToPosition
-        extends BotSequenceContainer<BotSequenceContainerTeleportToPositionParams> {
+public class BotSequenceTeleportToPosition
+        extends BotSequenceContainer<BotSequenceTeleportToPositionParams> {
 
     private final BotPosition position;
 
-    public BotSequenceContainerTeleportToPosition(Bot bot, BotPosition position) {
-        super(bot, BotSequenceContainerTeleportToPositionParams.class);
+    public BotSequenceTeleportToPosition(Bot bot, BotPosition position) {
+        super(bot, BotSequenceTeleportToPositionParams.class);
         this.position = position;
         setIcon("🔀");
         setObjective("Sequence: Bot Teleport Task");
