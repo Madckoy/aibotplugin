@@ -34,11 +34,14 @@ public class BotReactionStuckGuard implements IBotReaction {
             }
 
             long duration = now - lastTime;
-            long remaining = STUCK_DURATION_MS - duration;
+            long remaining = (STUCK_DURATION_MS - duration)/6000;
             
             BotMemoryV2Utils.writeValueTyped(bot, BotMemoryPartition.PartitionKey.WATCHDOG,  BotMemoryItem.ItemKey.REMAINING_TIME, remaining);
 
-            if (duration > STUCK_DURATION_MS) {
+            if ( remaining < 0 ) {
+                
+                BotMemoryV2Utils.writeValue(bot, BotMemoryPartition.PartitionKey.WATCHDOG, BotMemoryItem.ItemKey.TIME, now);
+
                 BotLogger.debug("🪤", bot.isLogged(), bot.getId() +
                         " ❗ Застрял на позиции " + currentPos +
                         " (расстояние: " + String.format("%.2f", distance) + " м) " +
@@ -60,6 +63,7 @@ public class BotReactionStuckGuard implements IBotReaction {
     private void resetWatchdog(Bot bot, BotPosition pos, long time) {
         BotMemoryV2Utils.writeValue(bot, BotMemoryPartition.PartitionKey.WATCHDOG, BotMemoryItem.ItemKey.POSITION, pos);
         BotMemoryV2Utils.writeValue(bot, BotMemoryPartition.PartitionKey.WATCHDOG, BotMemoryItem.ItemKey.TIME, time);
+        BotMemoryV2Utils.writeValue(bot, BotMemoryPartition.PartitionKey.WATCHDOG,  BotMemoryItem.ItemKey.REMAINING_TIME, STUCK_DURATION_MS/6000);
     }
 
     @Override
