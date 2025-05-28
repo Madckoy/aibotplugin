@@ -1,0 +1,384 @@
+{
+  "AIR": {
+    "color": "#88ccff",
+    "transparent": true,
+    "opacity": 0.01,
+    "depthWrite": false
+  },
+  "CAVE_AIR": {
+    "color": "#88ccff",
+    "transparent": true,
+    "opacity": 0.02,
+    "depthWrite": false
+  },
+  "WATER": {
+    "color": "#2244aa",
+    "transparent": true,
+    "opacity": 0.7,
+    "depthWrite": false
+  },
+  "LAVA": {
+    "color": "#ff6600"
+  },
+  "SHORT_GRASS": {
+    "color": "#66bb55",
+    "transparent": true,
+    "opacity": 0.5,
+    "depthWrite": false
+  },
+  "FERN": {
+    "color": "#55aa44",
+    "transparent": true,
+    "opacity": 0.5,
+    "depthWrite": false
+  },
+  "VINE": {
+    "color": "#447733",
+    "transparent": true,
+    "opacity": 0.5,
+    "depthWrite": false
+  },
+  "GRASS_BLOCK": {
+    "color": "#55cc55"
+  },
+  "BAMBOO": {
+    "color": "#00994C",
+    "transparent": true,
+    "opacity": 0.7,
+    "depthWrite": false
+  },
+  "POPPY": {
+    "color": "#c0392b",
+    "transparent": true,
+    "opacity": 0.7,
+    "depthWrite": false
+  },
+  "DIRT": {
+    "color": "#8B4513"
+  },
+  "PODZOL": {
+    "color": "#994C00"
+  },
+  "SAND": {
+    "color": "#FFFFC2"
+  },
+  "SANDSTONE": {
+    "color": "#AAAAC2"
+  },
+  "STONE": {
+    "color": "#888888"
+  },
+  "GRAVEL": {
+    "color": "#676767"
+  },
+  "JUNGLE_LEAVES": {
+    "color": "#99AA33",
+    "transparent": true,
+    "opacity": 0.7,
+    "depthWrite": false
+  },
+  "JUNGLE_LOG": {
+    "color": "#996633"
+  },
+  "OAK_LOG": {
+    "color": "#996633"
+  },
+  "OAK_LEAVES": {
+    "color": "#009900",
+    "transparent": true,
+    "opacity": 0.7,
+    "depthWrite": false
+  },
+  "LAPIS_ORE": {
+    "color": "#093af0"
+  },
+  "ANDESITE": {
+    "color": "#AEB6BF"
+  },
+  "COCOA": {
+    "color": "#663300"
+  },
+  "MELON": {
+    "color": "#44dd44"
+  },
+  "COAL_ORE": {
+    "color": "#333333"
+  },
+  "COPPER_ORE": {
+    "color": "#ff7733"
+  },
+  "BUSH": {
+    "color": "#145a32",
+    "transparent": true,
+    "opacity": 0.7,
+    "depthWrite": false
+  },
+  "CLAY": {
+    "color": "#568eaa"
+  },
+  "GRANITE": {
+    "color": "#A45C43"
+  },
+  "DIORITE": {
+    "color": "#7f8c8d"
+  },
+  "IRON_ORE": {
+    "color": "#85929e"
+  },
+  "SEAGRASS": {
+    "color": "#1a5c32",
+    "transparent": true,
+    "opacity": 0.7,
+    "depthWrite": false
+  },
+  "TALL_SEAGRASS": {
+    "color": "#1a5c32",
+    "transparent": true,
+    "opacity": 0.7,
+    "depthWrite": false
+  },
+  "MOSSY_STONE_BRICK_SLAB": {
+    "color": "#145a32"
+  },
+  "NETHERRACK": {
+    "color": "#641e16"
+  },
+  "CRYING_OBSIDIAN": {
+    "color": "#4a235a"
+  },
+  "MAGMA_BLOCK": {
+    "color": "#c25e06"
+  },
+  "CHEST": {
+    "color": "#fad7a0"
+  },
+  "OBSIDIAN": {
+    "color": "#0f1015"
+  },
+  "BIRCH_LEAVES": {
+    "color": "#145a32",
+    "transparent": true,
+    "opacity": 0.7,
+    "depthWrite": false
+  },
+  "LEAF_LITTER": {
+    "color": "#ba4a00",
+    "transparent": true,
+    "opacity": 0.7,
+    "depthWrite": false
+  },
+  "BIRCH_LOG": {
+    "color": "#d0d3d4"
+  },
+  "DIRT_PATH": {
+    "color": "#6e2c00"
+  },
+  "HAY_BLOCK": {
+    "color": "#d4ac0d"
+  },
+  "TALL_GRASS": {
+    "color": "#145a32",
+    "transparent": true,
+    "opacity": 0.7,
+    "depthWrite": false
+  },
+  "DANDELION": {
+    "color": "#fcf3cf",
+    "transparent": true,
+    "opacity": 0.7,
+    "depthWrite": false
+  },
+  "OAK_FENCE": {
+    "color": "#dc7633",
+    "transparent": true,
+    "opacity": 0.7,
+    "depthWrite": false
+  },
+  "OAK_SLAB": {
+    "color": "#dc7633"
+  },
+  "WHITE_WOOL": {
+    "color": "#ecf0f1"
+  },
+  "YELLOW_WOOL": {
+    "color": "#f4d03f"
+  },
+  "TORCH": {
+    "color": "#e74c3c"
+  },
+  "OAK_PLANKS": {
+    "color": "#f39c12"
+  },
+  "MOSSY_COBBLESTONE": {
+    "color": "#196f3d"
+  },
+  "COBBLESTONE": {
+    "color": "#717d7e"
+  },
+  "POTATOES": {
+    "color": "#7cfc00",
+    "transparent": true,
+    "opacity": 0.7,
+    "depthWrite": false
+  },
+  "WHEAT": {
+    "color": "#daa520",
+    "transparent": true,
+    "opacity": 0.7,
+    "depthWrite": false
+  },
+  "BEETROOTS": {
+    "color": "#c0392b",
+    "transparent": true,
+    "opacity": 0.7,
+    "depthWrite": false
+  },
+  "CARROTS": {
+    "color": "#e67e22",
+    "transparent": true,
+    "opacity": 0.7,
+    "depthWrite": false
+  },
+  "FARMLAND": {
+    "color": "#5d4037"
+  },
+  "OAK_STAIRS": {
+    "color": "#dc7633"
+  },
+  "WALL_TORCH": {
+    "color": "#e74c3c"
+  },
+  "OAK_DOOR": {
+    "color": "#dc7633",
+    "transparent": true,
+    "opacity": 0.8,
+    "depthWrite": false
+  },
+  "GLASS_PANE": {
+    "color": "#aed6f1",
+    "transparent": true,
+    "opacity": 0.3,
+    "depthWrite": false
+  },
+  "YELLOW_BED": {
+    "color": "#f4d03f"
+  },
+  "COBBLESTONE_STAIRS": {
+    "color": "#717d7e"
+  },
+  "OAK_PRESSURE_PLATE": {
+    "color": "#dc7633"
+  },
+  "BELL": {
+    "color": "#f1c40f"
+  },
+  "GLASS": {
+    "color": "#ffffff",
+    "transparent": true,
+    "opacity": 0.2,
+    "depthWrite": false
+  },
+  "BLUE_WOOL": {
+    "color": "#3498db"
+  },
+  "RED_WOOL": {
+    "color": "#e74c3c"
+  },
+  "GREEN_WOOL": {
+    "color": "#2ecc71"
+  },
+  "BLACK_WOOL": {
+    "color": "#2c3e50"
+  },
+  "WHITE_BED": {
+    "color": "#ecf0f1"
+  },
+  "RED_BED": {
+    "color": "#c0392b"
+  },
+  "BLUE_BED": {
+    "color": "#2980b9"
+  },
+  "CACTUS": {
+    "color": "#145a32"
+  },
+  "ICE": {
+    "color": "#b3e5fc",
+    "transparent": true,
+    "opacity": 0.3,
+    "depthWrite": false
+  },
+  "PACKED_ICE": {
+    "color": "#a9cce3",
+    "transparent": false
+  },
+  "SNOW": {
+    "color": "#ffffff"
+  },
+  "SNOW_BLOCK": {
+    "color": "#ecf0f1"
+  },
+  "WOODEN_BUTTON": {
+    "color": "#a04000"
+  },
+  "STONE_BUTTON": {
+    "color": "#95a5a6"
+  },
+  "LEVER": {
+    "color": "#7f8c8d"
+  },
+  "RAIL": {
+    "color": "#b7950b"
+  },
+  "POWERED_RAIL": {
+    "color": "#f1c40f"
+  },
+  "ACTIVATOR_RAIL": {
+    "color": "#a93226"
+  },
+  "DETECTOR_RAIL": {
+    "color": "#af601a"
+  },
+  "NOTE_BLOCK": {
+    "color": "#784212"
+  },
+  "JUKEBOX": {
+    "color": "#5d4037"
+  },
+  "BOOKSHELF": {
+    "color": "#f5cba7"
+  },
+  "CRAFTING_TABLE": {
+    "color": "#935116"
+  },
+  "FURNACE": {
+    "color": "#566573"
+  },
+  "ANVIL": {
+    "color": "#2f4f4f"
+  },
+  "ENCHANTING_TABLE": {
+    "color": "#6c3483"
+  },
+  "ENDER_CHEST": {
+    "color": "#1a237e"
+  },
+  "BEDROCK": {
+    "color": "#4d5656"
+  },
+  "SPONGE": {
+    "color": "#f4d03f"
+  },
+  "WET_SPONGE": {
+    "color": "#d4ac0d"
+  },
+  "COMMAND_BLOCK": {
+    "color": "#f39c12"
+  },
+  "BARRIER": {
+    "color": "#ff0000",
+    "transparent": true,
+    "opacity": 0.1,
+    "depthWrite": false
+  }
+}
