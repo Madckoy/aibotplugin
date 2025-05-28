@@ -59,7 +59,8 @@ public class BotDumpCommand implements CommandExecutor {
             BotLogger.info("🧠", AIBotPlugin.getInstance().isLogged(), " ✅ Бот скинул данные о сцене на диск: " + fileNameRaw + " и " + fileNameTagged);
             
         } catch (IOException e) {
-            BotLogger.debug("🧠", AIBotPlugin.getInstance().isLogged(), " ❌ Ошибка сброса данных на диск");
+            
+            BotLogger.debug("🧠", AIBotPlugin.getInstance().isLogged(), " ❌ Ошибка сброса данных на диск: "+e.getMessage());
         }
 
         return true;
