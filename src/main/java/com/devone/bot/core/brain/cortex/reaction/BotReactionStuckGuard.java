@@ -34,12 +34,12 @@ public class BotReactionStuckGuard implements IBotReaction {
             }
 
             long duration = now - lastTime;
-            long remaining = (STUCK_DURATION_MS - duration)/6000;
+            long remaining = (STUCK_DURATION_MS - duration)/1000;
             
             BotMemoryV2Utils.writeValueTyped(bot, BotMemoryPartition.PartitionKey.WATCHDOG,  BotMemoryItem.ItemKey.REMAINING_TIME, remaining);
 
             if ( remaining < 0 ) {
-                
+
                 BotMemoryV2Utils.writeValue(bot, BotMemoryPartition.PartitionKey.WATCHDOG, BotMemoryItem.ItemKey.TIME, now);
 
                 BotLogger.debug("🪤", bot.isLogged(), bot.getId() +
