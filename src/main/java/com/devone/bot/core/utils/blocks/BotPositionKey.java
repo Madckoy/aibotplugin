@@ -12,13 +12,13 @@ public class BotPositionKey {
     }
     
     public BotPositionKey(double x, double y, double z) {
-        this.x = (int)Math.floor(x);
-        this.y = (int)Math.floor(y);
-        this.z = (int)Math.floor(z);
+        this.x = (int) Math.floor(x);
+        this.y = (int) Math.floor(y);
+        this.z = (int) Math.floor(z);
     }
 
     public BotPositionKey(BotPosition pos) {
-        this(Math.floor(pos.getX()), Math.floor(pos.getY()), Math.floor(pos.getZ()));
+        this((int) Math.floor(pos.getX()), (int) Math.floor(pos.getY()), (int) Math.floor(pos.getZ()));
     }
 
     public int getX() { return x; }
