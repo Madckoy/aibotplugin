@@ -52,7 +52,7 @@ public class BotDumpCommand implements CommandExecutor {
             String fileNameTagged = BotConstants.PLUGIN_PATH_TMP + bot.getId() + "_scene.tagged";
             BotSceneSaver.saveToJsonFile(fileNameTagged, sceneDataTagged);
 
-            BotSceneData sceneDataRaw = bot.getBrain().getSceneData().clone(true);
+            BotSceneData sceneDataRaw = sceneDataTagged.clone(true);
             String fileNameRaw = BotConstants.PLUGIN_PATH_TMP + bot.getId() + "_scene.raw";
             BotSceneSaver.saveToJsonFile(fileNameRaw, sceneDataRaw);
 
