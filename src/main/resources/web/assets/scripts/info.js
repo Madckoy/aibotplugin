@@ -13,9 +13,9 @@ function updateInfoPanel(bot) {
     const candidatesArray = bot.memory?.navigation?.candidates?.list;
     const candidates = Array.isArray(candidatesArray) ? candidatesArray.length : "N/A";
 
-    const watchdog_pos       = bot.watchdog_position ?? "N/A";
+    const watchdog_pos       = bot.watchdog_pos? bot.watchdog_pos.toLocaleString(): "N/A";
     const watchdog_time      = bot.watchdog_time? new Date(bot.watchdog_time).toLocaleString(): "N/A";
-    const watchdog_remaining = bot.watchdog_remaining_time? bot.watchdog_remaining_time.toLocaleString(): "N/A";
+    const watchdog_remaining = bot.watchdog_remaining? bot.watchdog_remaining_time.toLocaleString(): "N/A";
 
     const format = (entry) => {
         if (!entry) return "N/A";

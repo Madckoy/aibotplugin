@@ -191,7 +191,7 @@ public class BotStatusServlet extends HttpServlet {
 
 
                 if(lastPos!=null) {                                           
-                    botJson.addProperty("watchdog_position", lastPos.toString());
+                    botJson.addProperty("watchdog_pos", lastPos.toString());
                 }
                 
                 if(lastTime!=null) {
@@ -199,7 +199,7 @@ public class BotStatusServlet extends HttpServlet {
                 }
                 
                 if(remaining!=null){
-                    botJson.addProperty("watchdog_remaining_time", remaining/6000);
+                    botJson.addProperty("watchdog_remaining", remaining/6000);
                 }
 
             }
