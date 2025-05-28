@@ -16,7 +16,7 @@ import java.util.Optional;
 public class BotReactionReactiveStuckGuard implements IBotReaction {
 
     private static final long STUCK_DURATION_MS = 1200000;  // 120 секунд без движения
-    private static final double POSITION_TOLERANCE = 1.5; // Допуск в блоке
+    private static final double POSITION_TOLERANCE = 1;     // Допуск в блоке
 
     @Override
     public Optional<Runnable> validate(Bot bot) {
@@ -27,7 +27,6 @@ public class BotReactionReactiveStuckGuard implements IBotReaction {
         if (currentPos == null) return Optional.empty();
 
         long currentTime = System.currentTimeMillis();
-        long remaining   = STUCK_DURATION_MS;
 
         BotPositionKey lastPos = (BotPositionKey) BotMemoryV2Utils.readMemoryValueTyped(bot, 
                                 BotMemoryPartition.PartitionKey.WATCHDOG.toString(),
@@ -42,7 +41,10 @@ public class BotReactionReactiveStuckGuard implements IBotReaction {
             double distance = currentPos.distanceTo(lastPos);
 
             long duration = currentTime - lastTime;
-            remaining = remaining - duration;
+            long remaining = STUCK_DURATION_MS - duration;
+
+            BotMemoryV2Utils.memorizeValue(bot, BotMemoryPartition.PartitionKey.WATCHDOG.toString(), 
+                                            BotMemoryItem.ItemKey.REMAINING_TIME.toString(), remaining);
 
             if (distance < POSITION_TOLERANCE && duration > STUCK_DURATION_MS) {
                 BotLogger.debug("🪤", bot.isLogged(), bot.getId() + " ❗ Бот застрял на " + String.format("%.2f", distance) + " м в течение " + duration + " мс");
@@ -62,9 +64,6 @@ public class BotReactionReactiveStuckGuard implements IBotReaction {
 
             BotMemoryV2Utils.memorizeValue(bot, BotMemoryPartition.PartitionKey.WATCHDOG.toString(), 
                                             BotMemoryItem.ItemKey.TIME.toString(), currentTime);
-
-            BotMemoryV2Utils.memorizeValue(bot, BotMemoryPartition.PartitionKey.WATCHDOG.toString(), 
-                                            BotMemoryItem.ItemKey.REMAINING_TIME.toString(), remaining);
 
         }
 
