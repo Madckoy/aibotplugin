@@ -28,7 +28,7 @@ public class BotReachableBlockTagger {
 
         for (BotBlockData block : blocks) {
             if (hasWalkableTag(block)) {
-                BotPositionKey key = block.toKey();
+                BotPositionKey key = block.getPositionKey();
                 walkableSet.add(key);
                 blockMap.put(key, block);
             }
@@ -109,7 +109,7 @@ public class BotReachableBlockTagger {
             if (!block.hasTag("fov:slice")) continue;
             if (!block.hasTag("walkable:cover")) continue;
 
-            BotPositionKey currentKey = block.toKey();
+            BotPositionKey currentKey = block.getPositionKey();
             BotPositionKey belowKey = new BotPositionKey(currentKey.getX(), currentKey.getY() - 1, currentKey.getZ());
 
             BotBlockData belowBlock = blockMap.get(belowKey);

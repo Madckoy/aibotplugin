@@ -1,5 +1,7 @@
 package com.devone.bot.core.utils.blocks;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 public class BotPosition {
     private double x, y, z;
     private float pitch;
@@ -42,10 +44,12 @@ public class BotPosition {
     public void setPitch(float pitch) { this.pitch = pitch; }
 
     // --- Helpers ---
+    @JsonIgnore
     public BotPositionKey getPositionKey() {
         return new BotPositionKey(getX(), getY(), getZ());
     }
-
+    
+    @JsonIgnore
     public BotBlockData getBlockDataKey() {
         return new BotBlockData(getX(), getY(), getZ());
     }
