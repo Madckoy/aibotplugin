@@ -255,7 +255,7 @@ public class BotExcavateTask extends BotTaskAutoParams<BotExcavateTaskParams> {
         this.runner = null;
         bot.getNavigator().setTarget(null);
         BotLogger.debug(icon, isLogged(), bot.getId() + " 🛑 Задача разрушения остановлена.");
-        bot.getNavigator().setSuggestion(Suggestion.NAVIGATION_CHANGE_DIRECTION);
+        bot.getNavigator().setSuggestion(null);
         super.stop();
     }
 
