@@ -26,7 +26,7 @@ public class BotTaskCandidateFactory {
         candidates.add(new BotTaskCandidate(
                 () -> getViolenceWeight(),
                 () -> {
-                    BotBlockData target = BotEntitySelector.pickNearestTarget(data.entities, botPos, BotConstants.DEFAULT_DETECTION_RADIUS);
+                    BotBlockData target = BotEntitySelector.pickNearestBlockData(data.entities, botPos, BotConstants.DEFAULT_DETECTION_RADIUS);
                     if (target == null)
                         return null;
                     return () -> {

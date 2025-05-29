@@ -6,9 +6,7 @@ import com.devone.bot.core.task.passive.BotSequenceContainer;
 import com.devone.bot.core.task.passive.BotTask;
 import com.devone.bot.core.task.active.drop.BotDropAllTask;
 import com.devone.bot.core.task.active.move.BotMoveTask;
-import com.devone.bot.core.task.active.move.params.BotMoveTaskParams;
 import com.devone.bot.core.utils.blocks.BotBlockData;
-import com.devone.bot.core.utils.blocks.BotPosition;
 import com.devone.bot.core.utils.logger.BotLogger;
 import com.devone.bot.core.utils.world.BotWorldHelper;
 
@@ -37,12 +35,12 @@ public class BotSequencePlayerNearby extends BotSequenceContainer<BotSequencePla
 
         // 1. Идём к игроку
         BotMoveTask walkTask = new BotMoveTask(bot);
-        bot.getNavigator().setTarget(plBlock);
-        walkTask.setObjective("🥾 Идём к игроку");
+        walkTask.setTarget(plBlock.getPosition());
+        walkTask.setObjective("🥾 Approach player");
 
         // 2. Дропаем ресы
         BotDropAllTask dropTask = new BotDropAllTask(bot, player);
-        dropTask.setObjective("🎁 Передаём ресурсы");
+        dropTask.setObjective("🎁 Drop resources");
 
         List<BotTask<?>> subtasks = new ArrayList<>();
         subtasks.add(walkTask);

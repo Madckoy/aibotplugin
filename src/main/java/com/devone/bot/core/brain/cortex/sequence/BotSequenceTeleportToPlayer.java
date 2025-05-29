@@ -44,7 +44,7 @@ public class BotSequenceTeleportToPlayer
 
         tp.setParams(params);
         tp.setIcon("⚡");
-        tp.setObjective("Телепорт к игроку сзади");
+        tp.setObjective("Teleport behind a player");
 
         List<BotTask<?>> subtasks = new ArrayList<>();
         subtasks.add(tp);

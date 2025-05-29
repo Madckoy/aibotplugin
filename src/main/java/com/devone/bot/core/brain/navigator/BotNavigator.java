@@ -18,7 +18,6 @@ import com.devone.bot.core.brain.navigator.simulator.BotSimulatorResult;
 import com.devone.bot.core.brain.navigator.simulator.BotTagsMakerSimulator;
 import com.devone.bot.core.brain.navigator.tags.BotNavigationTagsMaker;
 import com.devone.bot.core.task.active.move.BotMoveTask;
-import com.devone.bot.core.task.active.move.params.BotMoveTaskParams;
 import com.devone.bot.core.task.active.teleport.BotTeleportTask;
 import com.devone.bot.core.task.active.teleport.params.BotTeleportTaskParams;
 import com.devone.bot.core.task.passive.BotTaskManager;
@@ -259,6 +258,8 @@ public class BotNavigator {
         // Если нет ни одной полезной навигационной поверхности — считаем, что бот застрял
         if(noTarget) {
             actionSuggestion = BotActionSuggestion.Suggestion.NAVIGATION_CHANGE_DIRECTION;
+        } else {
+            setTarget(suggestedTarget);
         }
 
         boolean stuckNow = noTarget;
@@ -387,6 +388,7 @@ public class BotNavigator {
             if (actionSuggestion == Suggestion.NAVIGATION_MOVE) {
                 
                 BotMoveTask moveTask = new BotMoveTask(bot);
+                moveTask.setTarget(target.getPosition());
                 
                 BotTaskManager.push(bot, moveTask);
                 Location loc = BotWorldHelper.botPositionToWorldLocation(this.target.getPosition());

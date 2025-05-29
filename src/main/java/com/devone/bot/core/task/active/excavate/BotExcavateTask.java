@@ -9,6 +9,7 @@ import java.util.Set;
 import org.bukkit.Material;
 import org.bukkit.block.Block;
 import com.devone.bot.core.Bot;
+import com.devone.bot.core.brain.cortex.BotActionSuggestion.Suggestion;
 import com.devone.bot.core.inventory.BotInventory;
 import com.devone.bot.core.task.passive.BotTaskAutoParams;
 import com.devone.bot.core.task.passive.BotTaskManager;
@@ -254,7 +255,7 @@ public class BotExcavateTask extends BotTaskAutoParams<BotExcavateTaskParams> {
         this.runner = null;
         bot.getNavigator().setTarget(null);
         BotLogger.debug(icon, isLogged(), bot.getId() + " 🛑 Задача разрушения остановлена.");
-        bot.getNavigator().setSuggestion(null);
+        bot.getNavigator().setSuggestion(Suggestion.NAVIGATION_SIMULATE);
         super.stop();
     }
 

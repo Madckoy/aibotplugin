@@ -19,7 +19,7 @@ public class BotReactionNavigationСalculate implements IBotReaction {
     public Optional<Runnable> validate(Bot bot) {
         if (bot.getNavigator().getSuggestion() != Suggestion.NAVIGATION_CALCULATE || bot.getNPCNavigator().isNavigating()) return Optional.empty();
 
-        BotLogger.debug(ICON, bot.isLogged(), bot.getId() + " 🧭 Проверка на необходимость расчетов для текущего yaw");
+        BotLogger.debug(ICON, bot.isLogged(), bot.getId() + " Проверка на необходимость расчетов для текущего yaw");
         BotLogger.debug(ICON, bot.isLogged(), bot.getId() + " В движении: " + bot.getNPCNavigator().isNavigating());
         BotLogger.debug(ICON, bot.isLogged(), bot.getId() + " Текущая рекомендация: "+bot.getNavigator().getSuggestion());
         BotLogger.debug(ICON, bot.isLogged(), bot.getId() + " Навигатор занят? "+bot.getNavigator().isCalculating());
@@ -51,7 +51,7 @@ public class BotReactionNavigationСalculate implements IBotReaction {
 
         @Override
     public String getName() {
-        return ICON+" Расчет навигации";
+        return " Calculate best view angle";
     }
     
     @Override

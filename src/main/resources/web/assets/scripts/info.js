@@ -7,7 +7,7 @@ function updateInfoPanel(bot) {
     if (currentBotId !== bot.id) return;
 
     const summary = bot.memory?.navigation?.summary ?? {};
-    const yaw = bot.memory?.navigation?.yaw;
+    const yaw = bot.memory?.navigation?.position?.yaw;
     const suggestion = bot.memory?.navigation?.suggestion ?? "N/A";
     const suggested_target = bot.memory?.navigation?.suggested_target;
     const suggestedText = suggested_target

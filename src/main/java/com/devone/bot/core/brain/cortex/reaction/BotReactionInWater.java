@@ -25,7 +25,7 @@ public class BotReactionInWater implements IBotReaction {
 
     @Override
     public Optional<Runnable> validate(Bot bot) {
-        BotLogger.debug(ICON, bot.isLogged(), bot.getId() + " 💦 Проверка на присутствие в воде. ");
+        BotLogger.debug(ICON, bot.isLogged(), bot.getId() + " Проверка на присутствие в воде. ");
         BotLogger.debug(ICON, bot.isLogged(), bot.getId() + " В движении: " + bot.getNPCNavigator().isNavigating());
         BotLogger.debug(ICON, bot.isLogged(), bot.getId() + " Текущая рекомендация: "+bot.getNavigator().getSuggestion());
         BotLogger.debug(ICON, bot.isLogged(), bot.getId() + " Навигатор занят? "+bot.getNavigator().isCalculating());
@@ -67,6 +67,11 @@ public class BotReactionInWater implements IBotReaction {
 
     @Override
     public String getName() {
-        return ICON+" Вода под ногами? Пробуем поймать рыбу";
+        return " If in water, go fishing";
+    }
+    
+    @Override
+    public boolean shouldInterrupt(Bot bot) {
+        return true ;
     }
 }

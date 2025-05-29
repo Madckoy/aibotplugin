@@ -23,7 +23,7 @@ public class BotReactionEntityNearby implements IBotReaction {
 
     @Override
     public Optional<Runnable> validate(Bot bot) {
-        BotLogger.debug(ICON, bot.isLogged(), bot.getId() + " 👿 Проверка реакции на близость враждебного моба");
+        BotLogger.debug(ICON, bot.isLogged(), bot.getId() + " Проверка реакции на близость враждебного моба");
         BotLogger.debug(ICON, bot.isLogged(), bot.getId() + " В движении: " + bot.getNPCNavigator().isNavigating());
         BotLogger.debug(ICON, bot.isLogged(), bot.getId() + " Текущая рекомендация: "+bot.getNavigator().getSuggestion());
         BotLogger.debug(ICON, bot.isLogged(), bot.getId() + " Навигатор занят? "+bot.getNavigator().isCalculating());        
@@ -65,7 +65,7 @@ public class BotReactionEntityNearby implements IBotReaction {
 
     @Override
     public String getName() {
-        return ICON+" Близость враждебного моба";
+        return " Presence of entity";
     }
 
     @Override

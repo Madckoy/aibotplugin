@@ -14,7 +14,7 @@ public class BotReactionNavigationSimulate implements IBotReaction {
 
     @Override
     public Optional<Runnable> validate(Bot bot) {
-        BotLogger.debug(ICON, bot.isLogged(), bot.getId() + " 🧭 Проверка на необходимость симуляции по кругу.");
+        BotLogger.debug(ICON, bot.isLogged(), bot.getId() + " Проверка на необходимость симуляции по кругу.");
         BotLogger.debug(ICON, bot.isLogged(), bot.getId() + " В движении: " + bot.getNPCNavigator().isNavigating());
         BotLogger.debug(ICON, bot.isLogged(), bot.getId() + " Текущая рекомендация: "+bot.getNavigator().getSuggestion());
         BotLogger.debug(ICON, bot.isLogged(), bot.getId() + " Навигатор занят? "+bot.getNavigator().isCalculating());
@@ -33,7 +33,7 @@ public class BotReactionNavigationSimulate implements IBotReaction {
 
         @Override
     public String getName() {
-        return ICON+" Расчет лучшего угла";
+        return " Run navigation simulation";
     }
     
     @Override

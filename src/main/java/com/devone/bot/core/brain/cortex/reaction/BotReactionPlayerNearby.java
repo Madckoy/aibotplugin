@@ -19,7 +19,7 @@ public class BotReactionPlayerNearby implements IBotReaction {
 
     @Override
     public Optional<Runnable> validate(Bot bot) {
-        BotLogger.debug(ICON, bot.isLogged(), bot.getId() + " 🙋🏻‍♂️ Проверка реакции на игрока");
+        BotLogger.debug(ICON, bot.isLogged(), bot.getId() + " Проверка реакции на игрока");
         BotLogger.debug(ICON, bot.isLogged(), bot.getId() + " Проверка на препятствия рядом");
         BotLogger.debug(ICON, bot.isLogged(), bot.getId() + " В движении: " + bot.getNPCNavigator().isNavigating());
         BotLogger.debug(ICON, bot.isLogged(), bot.getId() + " Текущая рекомендация: "+bot.getNavigator().getSuggestion());
@@ -57,7 +57,7 @@ public class BotReactionPlayerNearby implements IBotReaction {
 
     @Override
     public String getName() {
-        return "🙋🏻‍♂️ Игрок рядом — выдать ресурсы";
+        return " Check if player is nearby";
     }
 
     @Override

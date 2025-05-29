@@ -15,7 +15,7 @@ public class BotEntitySelector {
      * @param botOrigin координаты бота
      * @return ближайшая цель или null, если список пуст
      */
-    public static BotBlockData pickNearestTarget(List<BotBlockData> targets, BotPosition botOrigin, double distance) {
+    public static BotBlockData pickNearestBlockData(List<BotBlockData> targets, BotPosition botOrigin, double distance) {
         if (targets == null || targets.isEmpty() || botOrigin == null) return null;
 
         return targets.stream()

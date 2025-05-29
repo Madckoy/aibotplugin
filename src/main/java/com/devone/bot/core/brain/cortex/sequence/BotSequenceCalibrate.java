@@ -24,7 +24,6 @@ public class BotSequenceCalibrate extends BotSequenceContainer<BotSequenceCalibr
         BotLogger.debug(getIcon(), isLogged(), bot.getId() + " " + icon + " " + getObjective());
 
         BotCalibrateTask tpTask = new BotCalibrateTask(bot, "Initialize...");
-        tpTask.setParams(tpTask.getParams());
 
         List<BotTask<?>> subtasks = new ArrayList<>();
         subtasks.add(tpTask);

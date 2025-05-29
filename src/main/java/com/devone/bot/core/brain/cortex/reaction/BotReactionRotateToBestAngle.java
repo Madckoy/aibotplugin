@@ -20,7 +20,7 @@ public class BotReactionRotateToBestAngle implements IBotReaction {
     @Override
     public Optional<Runnable> validate(Bot bot) {
 
-        BotLogger.debug("🤖", bot.isLogged(), bot.getId() + " 📐 Проверка реакции на рекомендацию поискать лучший угол");
+        BotLogger.debug("🤖", bot.isLogged(), bot.getId() + "Проверка реакции на рекомендацию поискать лучший угол");
         BotLogger.debug(ICON, bot.isLogged(), bot.getId() + " Проверка на препятствия рядом");
         BotLogger.debug(ICON, bot.isLogged(), bot.getId() + " В движении: " + bot.getNPCNavigator().isNavigating());
         BotLogger.debug(ICON, bot.isLogged(), bot.getId() + " Текущая рекомендация: "+bot.getNavigator().getSuggestion());
@@ -47,12 +47,15 @@ public class BotReactionRotateToBestAngle implements IBotReaction {
                     BotConstants.DEFAULT_NORMAL_SIGHT_FOV, 
                     radius, 
                     BotConstants.DEFAULT_SCAN_HEIGHT
-                );
+                );                
 
                 if (res.status) {
                     BotLogger.debug(ICON, bot.isLogged(), bot.getId() + " 📐 есть хороший угол зрения. Поворачиваем туда!" + res.yaw);
                     BotUtils.rotate(bot.getActiveTask(), bot, res.yaw);
                     bot.getNavigator().setSuggestion(Suggestion.NAVIGATION_CALCULATE);
+
+                    BotMemoryV2Utils.memorizeScanRadius(bot, radius);
+
                 } else {
                     BotLogger.debug(ICON, bot.isLogged(), bot.getId() + " 📐 Нет подходящего угла зрения!");
                     if (!bot.getNavigator().getCandidates().isEmpty()) {
@@ -71,7 +74,7 @@ public class BotReactionRotateToBestAngle implements IBotReaction {
 
     @Override
     public String getName() {
-        return ICON+" Поворт на лучший угол зрения";
+        return " Find the best view angle";
     }
 
     @Override

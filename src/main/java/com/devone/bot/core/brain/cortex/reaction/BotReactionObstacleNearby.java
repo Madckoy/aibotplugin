@@ -25,7 +25,7 @@ public class BotReactionObstacleNearby implements IBotReaction {
     @Override
     public Optional<Runnable> validate(Bot bot) {
 
-        BotLogger.debug(ICON, bot.isLogged(), bot.getId() + " 🛑 Проверка на препятствия рядом");
+        BotLogger.debug(ICON, bot.isLogged(), bot.getId() + " Проверка на препятствия рядом");
         BotLogger.debug(ICON, bot.isLogged(), bot.getId() + " В движении: " + bot.getNPCNavigator().isNavigating());
         BotLogger.debug(ICON, bot.isLogged(), bot.getId() + " Текущая рекомендация: "+bot.getNavigator().getSuggestion());
         BotLogger.debug(ICON, bot.isLogged(), bot.getId() + " Навигатор занят? "+bot.getNavigator().isCalculating());
@@ -34,7 +34,11 @@ public class BotReactionObstacleNearby implements IBotReaction {
 
 
         BotPosition botPos = bot.getNavigator().getPosition();
+        System.out.println(botPos);
+        System.out.println(botPos.toPositionKey());
         Location loc = BotWorldHelper.botPositionToWorldLocation(botPos);
+        System.out.println(loc);
+        System.out.println(loc.getBlock());
 
         int baseX = loc.getBlockX();
         int baseY = loc.getBlockY();
@@ -61,6 +65,7 @@ public class BotReactionObstacleNearby implements IBotReaction {
                 BotBlockData botBlock = BotWorldHelper.blockToBotBlockData(mcBlock);
 
                 if (botBlock != null && (BlockMaterialUtils.isSafeImpassable(botBlock) || BlockMaterialUtils.isDangerousImpassable(botBlock))) {
+                    System.out.println(botBlock.getType());
                     return Optional.of(() -> {
                         BotTaskManager.push(bot, new BotSequenceExcavate(bot));
                     });
@@ -73,7 +78,7 @@ public class BotReactionObstacleNearby implements IBotReaction {
 
     @Override
     public String getName() {
-        return ICON+" Препятствие возле бота";
+        return " Check if have navigation obstackles";
     }
 
     @Override

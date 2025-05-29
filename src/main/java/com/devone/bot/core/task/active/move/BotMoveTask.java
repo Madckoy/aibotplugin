@@ -8,7 +8,6 @@ import com.devone.bot.core.task.passive.IBotTaskParameterized;
 import com.devone.bot.core.task.active.move.listeners.BotMoveTaskListener;
 import com.devone.bot.core.task.active.move.params.BotMoveTaskParams;
 import com.devone.bot.core.utils.*;
-import com.devone.bot.core.utils.blocks.BotBlockData;
 import com.devone.bot.core.utils.blocks.BotPosition;
 import com.devone.bot.core.utils.logger.BotLogger;
 import com.devone.bot.core.utils.world.BotWorldHelper;
@@ -25,6 +24,7 @@ public class BotMoveTask extends BotTaskAutoParams<BotMoveTaskParams> {
     private BotMoveTaskListener listener;
     private float speed = 1.0F;
     private boolean autoPickup = true;
+    private BotPosition target;
 
     public boolean isAutoPickup() {
         return autoPickup;
@@ -70,16 +70,7 @@ public class BotMoveTask extends BotTaskAutoParams<BotMoveTaskParams> {
             stop();
             return;
         }
-
-        BotBlockData block = bot.getNavigator().getTarget();
-
-        if(block==null) {
-            stop();
-            return;
-        }
-
-        BotPosition target = block.getPosition();
-        
+       
         if (target == null) {
             BotLogger.debug(icon, isLogged(), bot.getId() + " ❌ Цель навигации не найдена");
             stop();
@@ -125,6 +116,10 @@ public class BotMoveTask extends BotTaskAutoParams<BotMoveTaskParams> {
             }
 
         }, 0L, 40L); // раз в 2 секунды
+    }
+
+    public void setTarget(BotPosition tgt) {
+        this.target = tgt;
     }
 
     @Override

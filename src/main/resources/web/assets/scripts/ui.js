@@ -99,7 +99,7 @@ function updateOrCreateBotRow(bot, tbody) {
                 <button class="cmd-btn" data-bot="${bot.id}" data-cmd="bot-excavate">⛏️</button>
                 <div class="bot-objective-divider"></div>      
                 <button class="cmd-btn" data-bot="${bot.id}" data-cmd="bot-drop-all">📦</button>
-                <button class="cmd-btn" data-bot="${bot.id}" data-cmd="bot-dump">#️⃣</button>
+                <button class="cmd-btn" data-bot="${bot.id}" data-cmd="bot-dump">🥪</button>
                 <button class="cmd-btn" data-bot="${bot.id}" data-cmd="bot-info">ℹ️</button>
             </div>`;
     }

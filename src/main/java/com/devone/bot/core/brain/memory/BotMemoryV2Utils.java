@@ -13,6 +13,9 @@ import com.google.gson.Gson;
 import com.google.gson.JsonElement;
 
 public class BotMemoryV2Utils {
+    
+    private static final Gson gson = new Gson(); // можно переиспользовать
+
 
     public static void incrementPartitionItem(Bot bot, BotMemoryPartition.PartitionKey part, BotMemoryItem.ItemKey itemKey) {
         if (bot == null || itemKey == null || part==null) return;
@@ -199,5 +202,26 @@ public class BotMemoryV2Utils {
             .partition(BotMemoryPartition.PartitionKey.VISITED.toString(), BotMemoryV2Partition.Type.MAP);
 
         return visited.getMap().containsKey(key);
+    }
+
+    @SuppressWarnings("unchecked")
+    public static <T> T deserializeTyped(Object raw, Class<T> clazz) {
+        if (raw == null || clazz == null) return null;
+
+        if (clazz.isInstance(raw)) {
+            return clazz.cast(raw);
+        }
+
+        if (raw instanceof Map) {
+            try {
+                JsonElement json = gson.toJsonTree(raw);
+                return gson.fromJson(json, clazz);
+            } catch (Exception e) {
+                // Можно логировать если нужно
+                return null;
+            }
+        }
+
+        return null;
     }
 }

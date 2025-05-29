@@ -12,7 +12,7 @@ public class BotReactionMoveTo implements IBotReaction {
 
     @Override
     public Optional<Runnable> validate(Bot bot) {
-        BotLogger.debug(ICON, bot.isLogged(), bot.getId() + " 🦶 Проверка на движение. ");
+        BotLogger.debug(ICON, bot.isLogged(), bot.getId() + " Проверка на движение. ");
         BotLogger.debug(ICON, bot.isLogged(), bot.getId() + " В движении: " + bot.getNPCNavigator().isNavigating());
         BotLogger.debug(ICON, bot.isLogged(), bot.getId() + " Текущая рекомендация: "+bot.getNavigator().getSuggestion());
         BotLogger.debug(ICON, bot.isLogged(), bot.getId() + " Навигатор занят? "+bot.getNavigator().isCalculating());
@@ -35,7 +35,7 @@ public class BotReactionMoveTo implements IBotReaction {
 
         @Override
     public String getName() {
-        return ICON+" Двигаемся в точку навигации";
+        return " Moving to position";
     }
 
     @Override

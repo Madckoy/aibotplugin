@@ -27,6 +27,7 @@ public class BotSequenceMove extends BotSequenceContainer<BotSequenceMoveParams>
         
         if(params.position!=null) {
             BotMoveTask moveTask =  new BotMoveTask(bot);
+            moveTask.setTarget(bot.getNavigator().getTarget().getPosition());
             
             List<BotTask<?>> subtasks = new ArrayList<>();
             subtasks.add(moveTask);

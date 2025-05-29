@@ -77,7 +77,7 @@ public class BotReactionStuckGuard implements IBotReaction {
 
     @Override
     public String getName() {
-        return "⚓ Застревание на координатах";
+        return " Check if stuck at the same block";
     }
      
     @Override
