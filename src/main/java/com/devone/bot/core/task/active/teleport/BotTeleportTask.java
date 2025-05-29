@@ -100,8 +100,6 @@ public class BotTeleportTask extends BotTaskAutoParams<BotTeleportTaskParams> {
                 BotMemoryV2Utils.incrementPartitionItem(bot, BotMemoryPartition.PartitionKey.STATS,
                                                              BotMemoryItem.ItemKey.TELEPORTED);
 
-                bot.getTaskManager().getActiveTask().stop();
-
                 BotLogger.debug(icon, isLogged(),
                     bot.getId() + " ⚡ Телепорт завершен с " + baseLocation.toVector() + " в " + aligned.toVector());
                 
@@ -112,7 +110,8 @@ public class BotTeleportTask extends BotTaskAutoParams<BotTeleportTaskParams> {
     @Override
     public void stop() {
        
-        bot.getNavigator().setSuggestion(Suggestion.NAVIGATION_CHANGE_DIRECTION);
+        bot.getNavigator().setSuggestion(null);
+        bot.getNavigator().setTarget(null);
        
         super.stop();
     }
