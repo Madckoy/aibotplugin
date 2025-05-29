@@ -268,15 +268,15 @@ public class BotUtils {
             return "NONE";
         }
 
-        if(bot.getNavigator().getSuggestion()==Suggestion.MOVE) {
+        if(bot.getNavigator().getSuggestion()==Suggestion.NAVIGATION_MOVE) {
             return "MOVE";
         }
 
-        if(bot.getNavigator().getSuggestion()==Suggestion.TELEPORT) {
+        if(bot.getNavigator().getSuggestion()==Suggestion.NAVIGATION_TELEPORT) {
             return "TELEPORT";
         }
 
-        if(bot.getNavigator().getSuggestion()==Suggestion.CHANGE_DIRECTION) {
+        if(bot.getNavigator().getSuggestion()==Suggestion.NAVIGATION_CHANGE_DIRECTION) {
             return "CHANGE_DIRECTION";
         }
 

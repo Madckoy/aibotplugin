@@ -249,7 +249,7 @@ public class BotNavigator {
 
         if (!reachableValid.isEmpty()) {
             candidates = reachableValid;
-            actionSuggestion = BotActionSuggestion.Suggestion.MOVE;
+            actionSuggestion = BotActionSuggestion.Suggestion.NAVIGATION_MOVE;
             suggestedTarget = BotBestTargetSelector.selectRandom(candidates);
             
         } else {    
@@ -263,7 +263,7 @@ public class BotNavigator {
 
             if( !walkableValid.isEmpty() ) {
                 candidates = walkableValid;
-                actionSuggestion = BotActionSuggestion.Suggestion.MOVE;
+                actionSuggestion = BotActionSuggestion.Suggestion.NAVIGATION_MOVE;
                 suggestedTarget = BotBestTargetSelector.selectRandom(candidates);
             } else {
               candidates = List.of();
@@ -277,7 +277,7 @@ public class BotNavigator {
 
         // Если нет ни одной полезной навигационной поверхности — считаем, что бот застрял
         if(noTarget) {
-            actionSuggestion = BotActionSuggestion.Suggestion.CHANGE_DIRECTION;
+            actionSuggestion = BotActionSuggestion.Suggestion.NAVIGATION_CHANGE_DIRECTION;
         }
 
         boolean stuckNow = noTarget;
@@ -408,7 +408,7 @@ public class BotNavigator {
             BotLogger.debug(BotUtils.getActiveTaskIcon(bot), bot.isLogged(),
                     bot.getId() + " 🗺️ Runtime Target position: " + this.target);
 
-            if (actionSuggestion == Suggestion.MOVE) {
+            if (actionSuggestion == Suggestion.NAVIGATION_MOVE) {
                 BotPosition movePos = new BotPosition(this.target.getPosition());
                 BotMoveTask moveTask = new BotMoveTask(bot);
                 BotMoveTaskParams mvParams = moveTask.getParams();
@@ -419,7 +419,7 @@ public class BotNavigator {
                 return bot.getNPC().getNavigator().canNavigateTo(loc);
             }
 
-            if (actionSuggestion == Suggestion.TELEPORT) {
+            if (actionSuggestion == Suggestion.NAVIGATION_TELEPORT) {
                 if(suggestedTarget==null) {
                     if(getTarget()!=null) {
                         suggestedTarget = getTarget();

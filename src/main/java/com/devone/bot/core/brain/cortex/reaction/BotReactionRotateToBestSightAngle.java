@@ -19,7 +19,7 @@ public class BotReactionRotateToBestSightAngle implements IBotReaction {
     
     @Override
     public Optional<Runnable> validate(Bot bot) {
-        if (bot.getNavigator().getSuggestion() != Suggestion.CHANGE_DIRECTION) return Optional.empty();
+        if (bot.getNavigator().getSuggestion() != Suggestion.NAVIGATION_CHANGE_DIRECTION) return Optional.empty();
 
         int radius = BotConstants.DEFAULT_SCAN_RADIUS;
         
@@ -44,10 +44,11 @@ public class BotReactionRotateToBestSightAngle implements IBotReaction {
                 if (res.status) {
                     BotLogger.debug(ICON, bot.isLogged(), bot.getId() + " 📐 есть хороший угол зрения. Поворачиваем туда!");
                     BotUtils.rotate(bot.getActiveTask(), bot, res.yaw);
+                    bot.getNavigator().setSuggestion(Suggestion.NAVIGATION_CALCULATE);
                 } else {
                     BotLogger.debug(ICON, bot.isLogged(), bot.getId() + " 📐 Нет подходящего угла зрения!");
                     if (!bot.getNavigator().getCandidates().isEmpty()) {
-                        bot.getNavigator().setSuggestion(Suggestion.MOVE);
+                        bot.getNavigator().setSuggestion(Suggestion.NAVIGATION_CALCULATE);
                     } else {
                         BotLogger.debug(ICON, bot.isLogged(), bot.getId() + " 📐 Застрял жестко. Пробуем ждать...");
                     }
