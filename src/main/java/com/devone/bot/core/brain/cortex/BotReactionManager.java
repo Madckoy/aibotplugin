@@ -38,25 +38,26 @@ public class BotReactionManager {
         BotLogger.debug("🧠", AIBotPlugin.getInstance().isLogged(), "🧩 Зарегистрированы реакции: " + reactions.size());
     }
 
-    public static Optional<Runnable> checkReactions(Bot bot) {
-
-        BotLogger.debug(BotUtils.getActiveTaskIcon(bot), bot.isLogged(), bot.getId() + " 🧩 Проверка реакций...");
-
+    public static Optional<BotReactionResult> checkReactions(Bot bot) {
         for (IBotReaction reaction : reactions) {
-            BotLogger.debug(BotUtils.getActiveTaskIcon(bot), bot.isLogged(),
-                    bot.getId() + " 🔎 Пробуем реакцию: " + reaction.getName());
-
-            Optional<Runnable> option = reaction.validate(bot);
-
-            if (option.isPresent()) {
+            Optional<Runnable> action = reaction.validate(bot);
+            if (action.isPresent()) {
                 BotLogger.debug(BotUtils.getActiveTaskIcon(bot), bot.isLogged(),
+                    bot.getId() + " 🔎 Пробуем реакцию: " + reaction.getName());            
+
+                Optional<Runnable> option = reaction.validate(bot);                    
+                
+                if (option.isPresent()) {
+                   BotLogger.debug(BotUtils.getActiveTaskIcon(bot), bot.isLogged(),
                         bot.getId() + " ✅ Реакция сработала: " + reaction.getName());
-                return option;
+
+                return Optional.of(new BotReactionResult(reaction.getName(), action.get()));
+                }                
             }
         }
-
         BotLogger.debug(BotUtils.getActiveTaskIcon(bot), bot.isLogged(), bot.getId() + " ❌ Ни одна реакция не активировалась");
-        return Optional.empty();
+
+        return Optional.empty(); // <- правильно
     }
 
     public static void register(IBotReaction r) {

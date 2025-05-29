@@ -5,6 +5,8 @@ import java.util.Optional;
 import com.devone.bot.core.Bot;
 import com.devone.bot.core.brain.cortex.BotActionSuggestion.Suggestion;
 import com.devone.bot.core.brain.cortex.BotReactionManager;
+import com.devone.bot.core.brain.cortex.BotReactionResult;
+import com.devone.bot.core.brain.cortex.IBotReaction;
 import com.devone.bot.core.task.passive.BotTaskAutoParams;
 import com.devone.bot.core.task.passive.IBotTaskParameterized;
 import com.devone.bot.core.task.active.brain.params.BotBrainTaskParams;
@@ -46,9 +48,10 @@ public class BotBrainTask extends BotTaskAutoParams<BotBrainTaskParams> {
         }        
 
         // Орбаботка реакций
-        Optional<Runnable> reaction = BotReactionManager.checkReactions(bot);       
-        if (reaction.isPresent()) {
-            reaction.get().run();  // Запускаем реакцию
+        Optional<BotReactionResult> result = BotReactionManager.checkReactions(bot);       
+        if (result.isPresent()) {
+            setObjective(result.get().name);
+            result.get().action.run();
         }
     }
 }

@@ -48,7 +48,7 @@ public class BotSonar3DTask extends BotTaskAutoParams<BotSonar3DTaskParams> {
 
      @Override
     public void stop() {
-        bot.getNavigator().setSuggestion(Suggestion.NAVIGATION_CHANGE_DIRECTION);        
+        //bot.getNavigator().setSuggestion(Suggestion.NAVIGATION_CHANGE_DIRECTION);        
         super.stop();
     }
     
