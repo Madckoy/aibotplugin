@@ -23,6 +23,9 @@ public class BotReactionInWater implements IBotReaction {
 
     @Override
     public Optional<Runnable> validate(Bot bot) {
+
+        if (bot.getNPCNavigator().isNavigating()) return Optional.empty();
+
         String id = bot.getId();
         boolean isLogged = bot.isLogged();
 

@@ -339,15 +339,14 @@ public class BotNavigator {
     
         // ➤ Позиция, направление и рекомендации
         BotPosition currentPos = getPosition();
-        BotMemoryV2Partition navigation = memory.partition(BotMemoryPartition.PartitionKey.NAVIGATION.toString(), BotMemoryV2Partition.Type.MAP);  
-        navigation.put(BotMemoryItem.ItemKey.POSITION.toString(), currentPos != null ? currentPos.toCompactString() : null);
-        navigation.put(BotMemoryItem.ItemKey.YAW.toString(), currentPos != null ? currentPos.getYaw() : null);
-        navigation.put(BotMemoryItem.ItemKey.PITCH.toString(), currentPos != null ? currentPos.getPitch() : null);
-        navigation.put(BotMemoryItem.ItemKey.TARGET.toString(), this.target != null ? this.target.toCompactString() : null);
-        navigation.put(BotMemoryItem.ItemKey.SUGGESTION.toString(), actionSuggestion != null ? actionSuggestion.name() : null);
-        navigation.put(BotMemoryItem.ItemKey.SUGGESTED_TARGET.toString(), suggestedTarget != null ? suggestedTarget.toCompactString() : null);
-    
+        BotMemoryV2Utils.writeValueTyped(bot, BotMemoryPartition.PartitionKey.NAVIGATION, BotMemoryItem.ItemKey.POSITION, currentPos);
+        BotMemoryV2Utils.writeValueTyped(bot, BotMemoryPartition.PartitionKey.NAVIGATION, BotMemoryItem.ItemKey.TARGET, this.target);
+        BotMemoryV2Utils.writeValueTyped(bot, BotMemoryPartition.PartitionKey.NAVIGATION, BotMemoryItem.ItemKey.SUGGESTION, actionSuggestion);
+        BotMemoryV2Utils.writeValueTyped(bot, BotMemoryPartition.PartitionKey.NAVIGATION, BotMemoryItem.ItemKey.SUGGESTED_TARGET, suggestedTarget);
+
+   
         // ➤ Кандидаты
+        BotMemoryV2Partition navigation = memory.partition(BotMemoryPartition.PartitionKey.NAVIGATION.toString(), BotMemoryV2Partition.Type.MAP);
         BotMemoryV2Partition candidatesPartition = navigation.partition(BotMemoryPartition.PartitionKey.CANDIDATES.toString(), BotMemoryV2Partition.Type.LIST);
    
         if (candidates != null) {

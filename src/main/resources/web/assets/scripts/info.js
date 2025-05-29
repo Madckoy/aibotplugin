@@ -1,3 +1,4 @@
+
 function updateInfoPanel(bot) {
     const panel = document.getElementById("bot-info-panel");
     const currentBotId = panel.getAttribute("data-bot-id");
@@ -8,7 +9,11 @@ function updateInfoPanel(bot) {
     const summary = bot.memory?.navigation?.summary ?? {};
     const yaw = bot.memory?.navigation?.yaw;
     const suggestion = bot.memory?.navigation?.suggestion ?? "N/A";
-    const suggested_target = bot.memory?.navigation?.suggested_target ?? "N/A";
+    const suggested_target = bot.memory?.navigation?.suggested_target;
+    const suggestedText = suggested_target
+        ? `${suggested_target.x}, ${suggested_target.y}, ${suggested_target.z} / ${suggested_target.type ?? "?"}`
+        : "N/A";
+
     const scan_radius = bot.memory?.navigation?.scan_radius ?? "N/A";
     const candidatesArray = bot.memory?.navigation?.candidates?.list;
     const candidates = Array.isArray(candidatesArray) ? candidatesArray.length : "N/A";
@@ -31,7 +36,7 @@ function updateInfoPanel(bot) {
     document.getElementById("info-nav-reachable").textContent = format(summary.reachable);
     document.getElementById("info-nav-walkable").textContent = format(summary.walkable);
     document.getElementById("info-nav-navigation-suggestion").textContent = suggestion;
-    document.getElementById("info-nav-suggested-position").textContent = suggested_target;
+    document.getElementById("info-nav-suggested-position").textContent = suggestedText;
     document.getElementById("info-nav-facing-direction").textContent = getCompassArrow(yaw);
     document.getElementById("info-nav-scan-range").textContent = `${scan_radius}`;
     document.getElementById("info-nav-candidates").textContent = `${candidates}`;
@@ -50,7 +55,7 @@ function updateInfoPanel(bot) {
         const nums = raw.replace(/[📍:]/g, "").trim().split(",").map(s => s.trim());
         if (nums.length === 5) {
             const [x, y, z, yaw, pitch] = nums;
-            return `📍 ${x}, ${y}, ${z} | ${yaw}°, ${pitch}°`;
+            return `${x}, ${y}, ${z} | ${yaw}°, ${pitch}°`;
         }
         return raw;
  }

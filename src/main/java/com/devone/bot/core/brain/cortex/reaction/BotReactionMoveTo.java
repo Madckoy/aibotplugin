@@ -13,7 +13,7 @@ public class BotReactionMoveTo implements IBotReaction {
 
     @Override
     public Optional<Runnable> validate(Bot bot) {
-        if (bot.getNavigator().getSuggestion() != Suggestion.NAVIGATION_MOVE) return Optional.empty();
+        if (bot.getNavigator().getSuggestion() != Suggestion.NAVIGATION_MOVE || bot.getNPCNavigator().isNavigating()) return Optional.empty();
 
         return Optional.of(() -> {
                 if(bot.getNavigator().isCalculating()==false) {

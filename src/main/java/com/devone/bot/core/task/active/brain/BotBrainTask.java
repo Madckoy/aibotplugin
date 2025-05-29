@@ -1,10 +1,10 @@
 package com.devone.bot.core.task.active.brain;
 
-import java.util.Optional;
-
+import java.util.List;
 import com.devone.bot.core.Bot;
 import com.devone.bot.core.brain.cortex.BotReactionManager;
 import com.devone.bot.core.brain.cortex.BotReactionResult;
+import com.devone.bot.core.brain.cortex.BotActionSuggestion.Suggestion;
 import com.devone.bot.core.task.passive.BotTaskAutoParams;
 import com.devone.bot.core.task.passive.IBotTaskParameterized;
 import com.devone.bot.core.task.active.brain.params.BotBrainTaskParams;
@@ -44,12 +44,18 @@ public class BotBrainTask extends BotTaskAutoParams<BotBrainTaskParams> {
             BotLogger.debug(icon, isLogged(), bot.getId() + " ⏱️ Task timeout passed. Start new cycle!");
             startTime = System.currentTimeMillis(); // new cycle                    
         }        
+        
+        System.out.println(bot.getNavigator().getSuggestion());
 
-        // Орбаботка реакций
-        Optional<BotReactionResult> result = BotReactionManager.checkReactions(bot);       
-        if (result.isPresent()) {
-            setObjective(result.get().name);
-            result.get().action.run();
+        if(bot.getNavigator().getSuggestion()==null) {
+            bot.getNavigator().setSuggestion(Suggestion.NAVIGATION_SIMULATE);
+        }
+
+        // Обработка реакций
+        List<BotReactionResult> reactions = BotReactionManager.checkReactions(bot);
+        for (BotReactionResult r : reactions) {
+            setObjective(r.name); // или логика по приоритету
+            r.action.run();
         }
     }
 }

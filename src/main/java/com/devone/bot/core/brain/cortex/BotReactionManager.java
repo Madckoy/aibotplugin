@@ -4,12 +4,13 @@ import com.devone.bot.AIBotPlugin;
 import com.devone.bot.core.Bot;
 import com.devone.bot.core.brain.cortex.reaction.BotReactionInWater;
 import com.devone.bot.core.brain.cortex.reaction.BotReactionMoveTo;
+import com.devone.bot.core.brain.cortex.reaction.BotReactionNavigationSimulate;
+import com.devone.bot.core.brain.cortex.reaction.BotReactionNavigationСalculate;
 import com.devone.bot.core.brain.cortex.reaction.BotReactionEntityNearby;
 import com.devone.bot.core.brain.cortex.reaction.BotReactionPlayerNearby;
 import com.devone.bot.core.brain.cortex.reaction.BotReactionRotateToBestAngle;
 import com.devone.bot.core.brain.cortex.reaction.BotReactionObstacleNearby;
 import com.devone.bot.core.brain.cortex.reaction.BotReactionStuckGuard;
-import com.devone.bot.core.utils.BotUtils;
 import com.devone.bot.core.utils.logger.BotLogger;
 
 import java.util.ArrayList;
@@ -25,39 +26,46 @@ public class BotReactionManager {
     private static final List<IBotReaction> reactions = new ArrayList<>();
 
     static {
-        // 📚 Регистрация стандартных реакций
-
+        // 📚 Регистрация навигационных реакций
+        register(new BotReactionNavigationSimulate());
+        register(new BotReactionNavigationСalculate());
+        register(new BotReactionRotateToBestAngle());
+        register(new BotReactionMoveTo());
+        // 📚 Регистрация позиционных реакций
         register(new BotReactionStuckGuard());
         register(new BotReactionObstacleNearby());
         register(new BotReactionEntityNearby());
         register(new BotReactionPlayerNearby());
-        register(new BotReactionInWater()); // 🎣 ловим рыбу!
-        register(new BotReactionRotateToBestAngle());
-        register(new BotReactionMoveTo());
+        register(new BotReactionInWater());
+
         
         BotLogger.debug("🧠", AIBotPlugin.getInstance().isLogged(), "🧩 Зарегистрированы реакции: " + reactions.size());
     }
 
-    public static Optional<BotReactionResult> checkReactions(Bot bot) {
+    public static List<BotReactionResult> checkReactions(Bot bot) {
+        List<BotReactionResult> results = new ArrayList<>();
+
         for (IBotReaction reaction : reactions) {
+            BotLogger.debug("🧠", bot.isLogged(), bot.getId() + " 🔍 Проверка реакции: " + reaction.getName());
+
             Optional<Runnable> action = reaction.validate(bot);
+
             if (action.isPresent()) {
-                BotLogger.debug(BotUtils.getActiveTaskIcon(bot), bot.isLogged(),
-                    bot.getId() + " 🔎 Пробуем реакцию: " + reaction.getName());            
+                BotLogger.debug("🧠", bot.isLogged(), bot.getId() + " ✅ Реакция сработала: " + reaction.getName());
+                results.add(new BotReactionResult(reaction.getName(), action.get()));
 
-                Optional<Runnable> option = reaction.validate(bot);                    
-                
-                if (option.isPresent()) {
-                   BotLogger.debug(BotUtils.getActiveTaskIcon(bot), bot.isLogged(),
-                        bot.getId() + " ✅ Реакция сработала: " + reaction.getName());
-
-                return Optional.of(new BotReactionResult(reaction.getName(), action.get()));
-                }                
+                if (reaction.shouldInterrupt(bot)) {
+                    BotLogger.debug("🧠", bot.isLogged(), bot.getId() + " ⛔ Прерывание цепочки реакций: " + reaction.getName());
+                    break;
+                }
             }
         }
-        BotLogger.debug(BotUtils.getActiveTaskIcon(bot), bot.isLogged(), bot.getId() + " ❌ Ни одна реакция не активировалась");
 
-        return Optional.empty(); // <- правильно
+        if (results.isEmpty()) {
+            BotLogger.debug("🧠", bot.isLogged(), bot.getId() + " ❌ Ни одна реакция не сработала");
+        }
+
+        return results;
     }
 
     public static void register(IBotReaction r) {

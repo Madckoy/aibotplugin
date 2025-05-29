@@ -17,7 +17,7 @@ public class BotReactionNavigationСalculate implements IBotReaction {
 
     @Override
     public Optional<Runnable> validate(Bot bot) {
-        if (bot.getNavigator().getSuggestion() != Suggestion.NAVIGATION_CALCULATE) return Optional.empty();
+        if (bot.getNavigator().getSuggestion() != Suggestion.NAVIGATION_CALCULATE || bot.getNPCNavigator().isNavigating()) return Optional.empty();
 
         return Optional.of(() -> {
             if (bot.getNavigator().isCalculating()==false) {
