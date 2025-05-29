@@ -30,10 +30,9 @@ public class BotSequenceExcavate extends BotSequenceContainer<BotSequenceExcavat
 
         List<BotTask<?>> subtasks = new ArrayList<>();
         subtasks.add(excvTask);
-
         
-        BotCalibrateTask calibrateTask = new BotCalibrateTask(bot);
-        subtasks.add(calibrateTask);
+        //BotCalibrateTask calibrateTask = new BotCalibrateTask(bot);
+        //subtasks.add(calibrateTask);
 
         return subtasks;
     }

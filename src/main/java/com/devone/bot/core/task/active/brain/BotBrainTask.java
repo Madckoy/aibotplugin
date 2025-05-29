@@ -8,6 +8,7 @@ import com.devone.bot.core.brain.cortex.BotActionSuggestion.Suggestion;
 import com.devone.bot.core.task.passive.BotTaskAutoParams;
 import com.devone.bot.core.task.passive.IBotTaskParameterized;
 import com.devone.bot.core.task.active.brain.params.BotBrainTaskParams;
+import com.devone.bot.core.task.active.calibrate.BotCalibrateTask;
 import com.devone.bot.core.utils.BotUtils;
 import com.devone.bot.core.utils.logger.BotLogger;
 
@@ -49,6 +50,11 @@ public class BotBrainTask extends BotTaskAutoParams<BotBrainTaskParams> {
 
         if(bot.getNavigator().getSuggestion()==null) {
             bot.getNavigator().setSuggestion(Suggestion.NAVIGATION_SIMULATE);
+        }
+        // regular reset 
+        if (cycle % 9999 == 0) {
+            BotCalibrateTask calibrateTask = new BotCalibrateTask(bot);
+            bot.getTaskManager().pushTask(calibrateTask);
         }
 
         // Обработка реакций
