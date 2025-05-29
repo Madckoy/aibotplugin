@@ -1,6 +1,7 @@
 package com.devone.bot.core.task.active.sonar;
 
 import com.devone.bot.core.Bot;
+import com.devone.bot.core.brain.cortex.BotActionSuggestion.Suggestion;
 import com.devone.bot.core.brain.perseption.scene.BotSceneData;
 import com.devone.bot.core.brain.perseption.scene.BotSceneScan3D;
 import com.devone.bot.core.task.passive.BotTaskAutoParams;
@@ -45,4 +46,10 @@ public class BotSonar3DTask extends BotTaskAutoParams<BotSonar3DTaskParams> {
         stop();
     }
 
+     @Override
+    public void stop() {
+        bot.getNavigator().setSuggestion(Suggestion.NAVIGATION_CHANGE_DIRECTION);        
+        super.stop();
+    }
+    
 }

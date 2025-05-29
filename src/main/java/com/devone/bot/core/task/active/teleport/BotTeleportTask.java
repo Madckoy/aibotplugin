@@ -7,6 +7,7 @@ import org.bukkit.entity.Player;
 
 import com.devone.bot.AIBotPlugin;
 import com.devone.bot.core.Bot;
+import com.devone.bot.core.brain.cortex.BotActionSuggestion.Suggestion;
 import com.devone.bot.core.brain.memory.BotMemoryItem;
 import com.devone.bot.core.brain.memory.BotMemoryPartition;
 import com.devone.bot.core.brain.memory.BotMemoryV2Utils;
@@ -107,4 +108,12 @@ public class BotTeleportTask extends BotTaskAutoParams<BotTeleportTaskParams> {
                 stop();
             });
         }
+
+    @Override
+    public void stop() {
+       
+        bot.getNavigator().setSuggestion(Suggestion.NAVIGATION_CHANGE_DIRECTION);
+       
+        super.stop();
+    }
 }

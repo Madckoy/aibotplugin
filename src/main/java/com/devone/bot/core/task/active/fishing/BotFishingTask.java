@@ -1,6 +1,7 @@
 package com.devone.bot.core.task.active.fishing;
 
 import com.devone.bot.core.Bot;
+import com.devone.bot.core.brain.cortex.BotActionSuggestion.Suggestion;
 import com.devone.bot.core.task.passive.BotTaskAutoParams;
 import com.devone.bot.core.task.passive.IBotTaskParameterized;
 import com.devone.bot.core.task.active.fishing.params.BotFishingTaskParams;
@@ -40,6 +41,7 @@ public class BotFishingTask extends BotTaskAutoParams<BotFishingTaskParams> {
 
         if (System.currentTimeMillis() >= endTime) {
             BotLogger.debug(icon, isLogged(), id + " ⏰ Завершил рыбалку");
+            bot.getNavigator().setSuggestion(Suggestion.NAVIGATION_CALCULATE);
             stop();
             return;
         }

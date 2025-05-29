@@ -2,6 +2,7 @@ package com.devone.bot.core.task.active.move;
 
 import com.devone.bot.AIBotPlugin;
 import com.devone.bot.core.Bot;
+import com.devone.bot.core.brain.cortex.BotActionSuggestion.Suggestion;
 import com.devone.bot.core.task.passive.BotTaskAutoParams;
 import com.devone.bot.core.task.passive.IBotTaskParameterized;
 import com.devone.bot.core.task.active.move.listeners.BotMoveTaskListener;
@@ -150,6 +151,9 @@ public class BotMoveTask extends BotTaskAutoParams<BotMoveTaskParams> {
 
         bot.getNavigator().setTarget(null);
         BotLogger.debug(icon, isLogged(), bot.getId() + " ⭕ Движение остановлено");
+        
+        bot.getNavigator().setSuggestion(Suggestion.NAVIGATION_CALCULATE);
+        
         super.stop();
     }
 
