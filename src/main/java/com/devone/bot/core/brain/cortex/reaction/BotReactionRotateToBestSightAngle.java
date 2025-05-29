@@ -48,13 +48,15 @@ public class BotReactionRotateToBestSightAngle implements IBotReaction {
                 } else {
                     BotLogger.debug(ICON, bot.isLogged(), bot.getId() + " 📐 Нет подходящего угла зрения!");
                     if (!bot.getNavigator().getCandidates().isEmpty()) {
-                        bot.getNavigator().setSuggestion(Suggestion.NAVIGATION_CALCULATE);
+                        bot.getNavigator().setSuggestion(Suggestion.NAVIGATION_CHANGE_DIRECTION);
                     } else {
                         BotLogger.debug(ICON, bot.isLogged(), bot.getId() + " 📐 Застрял жестко. Пробуем ждать...");
+                        bot.getNavigator().setSuggestion(Suggestion.NAVIGATION_CALCULATE);
                     }
                 }
             } catch (Exception e) {
                 BotLogger.debug(ICON, bot.isLogged(), bot.getId() + " 🆘 Симуляция не прошла!");
+                bot.getNavigator().setSuggestion(Suggestion.NAVIGATION_CHANGE_DIRECTION);
             }
         });
     }
