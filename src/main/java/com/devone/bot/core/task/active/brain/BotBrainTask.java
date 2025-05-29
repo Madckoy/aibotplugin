@@ -77,66 +77,6 @@ public class BotBrainTask extends BotTaskAutoParams<BotBrainTaskParams> {
         Optional<Runnable> reaction = BotReactionManager.checkReactions(bot);       
         if (reaction.isPresent()) {
             reaction.get().run();  // Запускаем реакцию
-            BotLogger.debug(icon, isLogged(), bot.getId() + " 🧠 Реакция активирована!");
-            if(candidates.size()>0) {
-                //есть навигационные кандидаты. пробуем двигаться
-            } else {
-                return;
-            }
-        }
-        
-        // 3. Получение рекомендации
-        Suggestion suggestion = bot.getNavigator().getSuggestion();
-        BotMemoryV2Utils.writeValue(bot, BotMemoryPartition.PartitionKey.NAVIGATION, BotMemoryItem.ItemKey.SCAN_RADIUS, radius);
-
-        switch (suggestion) {
-            case CHANGE_DIRECTION -> {
-                try {
-                    //rotate to the best YAW            
-                    BotSimulatorResult res = bot.getNavigator().simulate(BotConstants.DEFAULT_NORMAL_SIGHT_FOV, radius, BotConstants.DEFAULT_SCAN_HEIGHT);
-                    //System.out.println(res.yaw + " : " + res.reachables);
-                    if(res.status = true) {
-                        BotLogger.debug(icon, isLogged(), bot.getId() + " 📐 есть хороший угол зрения. Поворачиваем туда!");
-
-                        BotUtils.rotate(this, bot, res.yaw);    
-              
-                    } else {
-                        BotLogger.debug(icon, isLogged(), bot.getId() + " 📐 Нет подходящего угла зрения!");
-                        if(bot.getNavigator().getCandidates().size()>0) {
-                            // попытаемся сбежать через любую точку по которой можно ходить.
-                            bot.getNavigator().setSuggestion(Suggestion.MOVE);
-                            return;                            
-                        } else {
-                            BotLogger.debug(icon, isLogged(), bot.getId() + " 📐 Вообще ничего нет. Застрял жестко. Попробуем просто подождать...");
-                            // Как вариант попробовать обнаружить предмет или животное или игрока и сменить позицию через него. 
-                            // Телепорт?
-                            return;
-                        }                        
-                    }
-                } catch (Exception e) {
-                        BotLogger.debug(icon, isLogged(), bot.getId() + " 🆘 Симуляция не прошла!");
-                        return;                        
-                }
-                return;             
-            }    
-            case MOVE -> {
-                if(!bot.getNavigator().isCalculating()) {
-                    bot.getNavigator().setEnabled(false);
-                    BotBlockData target = bot.getNavigator().getSuggestedTarget();
-                    bot.getNavigator().setTarget(target);
-                    bot.getNavigator().setEnabled(true);                    
-                    try {
-                        bot.getNavigator().navigate(1.5f);                                    
-                    } catch (Exception e) {
-                        return;
-                    }
-                }
-                return;
-            }
-
-            default -> {
-                BotLogger.debug(icon, isLogged(), bot.getId() + " 🧘 Brain is idle.");
-            }
         }
     }
 }

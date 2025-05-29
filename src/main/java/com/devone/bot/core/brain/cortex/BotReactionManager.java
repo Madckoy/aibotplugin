@@ -3,8 +3,10 @@ package com.devone.bot.core.brain.cortex;
 import com.devone.bot.AIBotPlugin;
 import com.devone.bot.core.Bot;
 import com.devone.bot.core.brain.cortex.reaction.BotReactionInWater;
+import com.devone.bot.core.brain.cortex.reaction.BotReactionMoveToReachable;
 import com.devone.bot.core.brain.cortex.reaction.BotReactionEntityNearby;
 import com.devone.bot.core.brain.cortex.reaction.BotReactionPlayerNearby;
+import com.devone.bot.core.brain.cortex.reaction.BotReactionRotateToBestSightAngle;
 import com.devone.bot.core.brain.cortex.reaction.BotReactionObstacleNearby;
 import com.devone.bot.core.brain.cortex.reaction.BotReactionStuckGuard;
 import com.devone.bot.core.utils.BotUtils;
@@ -25,13 +27,15 @@ public class BotReactionManager {
     static {
         // 📚 Регистрация стандартных реакций
 
-        registerIntention(new BotReactionStuckGuard());
-        registerIntention(new BotReactionObstacleNearby());
-        registerIntention(new BotReactionEntityNearby());
-        registerIntention(new BotReactionPlayerNearby());
-        registerIntention(new BotReactionInWater()); // 🎣 ловим рыбу!
+        register(new BotReactionStuckGuard());
+        register(new BotReactionObstacleNearby());
+        register(new BotReactionEntityNearby());
+        register(new BotReactionPlayerNearby());
+        register(new BotReactionInWater()); // 🎣 ловим рыбу!
+        register(new BotReactionRotateToBestSightAngle());
+        register(new BotReactionMoveToReachable());
         
-        BotLogger.debug("🧠", AIBotPlugin.getInstance().isLogged(), "🧩 Зарегистрированы предустановленные реакции: " + reactions.size());
+        BotLogger.debug("🧠", AIBotPlugin.getInstance().isLogged(), "🧩 Зарегистрированы реакции: " + reactions.size());
     }
 
     public static Optional<Runnable> checkReactions(Bot bot) {
@@ -55,7 +59,7 @@ public class BotReactionManager {
         return Optional.empty();
     }
 
-    public static void registerIntention(IBotReaction r) {
+    public static void register(IBotReaction r) {
         reactions.add(r);
     }
 }
