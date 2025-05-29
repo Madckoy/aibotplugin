@@ -72,7 +72,7 @@ public class BotCalibrateTask extends BotTaskAutoParams<BotCalibrateTaskParams> 
                 BotLogger.debug(icon, isLogged(), bot.getId() + " 🗑️ Remove all visited navigation points");
                 BotMemoryV2Utils.clearAllVisited(bot);
             } else {
-                BotLogger.debug(icon, isLogged(), bot.getId() + " 📐 есть хороший угол зрения. Поворачиваем туда!");
+                BotLogger.debug(icon, isLogged(), bot.getId() + " 📐 есть хороший угол зрения. Поворачиваем туда! Yaw:"+res.yaw);
                 BotUtils.rotate(this, bot, res.yaw);                          
             }
             message = "Best result: "+res.status+" with best yaw: "+ bestYaw + " with reachable: " + reachables;
@@ -86,8 +86,14 @@ public class BotCalibrateTask extends BotTaskAutoParams<BotCalibrateTaskParams> 
 
         if (rmt <= 0) {
             BotLogger.debug(icon, isLogged(), bot.getId() + " ⏱️ Task timeout passed. Ending Task.");
-            bot.getNavigator().setSuggestion(Suggestion.NAVIGATION_CHANGE_DIRECTION);
+            bot.getNavigator().setSuggestion(null);
             this.stop();
         }
+    }
+    @Override
+    public void stop() {
+        bot.getNavigator().setTarget(null);
+        bot.getNavigator().setSuggestion(null);
+        super.stop();
     }
 }
