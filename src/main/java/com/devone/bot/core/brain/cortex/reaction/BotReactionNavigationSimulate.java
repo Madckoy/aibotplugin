@@ -14,18 +14,30 @@ public class BotReactionNavigationSimulate implements IBotReaction {
 
     @Override
     public Optional<Runnable> validate(Bot bot) {
-        if (bot.getNavigator().getSuggestion() != Suggestion.NAVIGATION_SIMULATE || bot.getNPCNavigator().isNavigating()) {            
-            return Optional.empty();
-        }
-        
+        BotLogger.debug(ICON, bot.isLogged(), bot.getId() + " 🧭 Проверка на необходимость симуляции по кругу.");
+        BotLogger.debug(ICON, bot.isLogged(), bot.getId() + " В движении: " + bot.getNPCNavigator().isNavigating());
+        BotLogger.debug(ICON, bot.isLogged(), bot.getId() + " Текущая рекомендация: "+bot.getNavigator().getSuggestion());
+        BotLogger.debug(ICON, bot.isLogged(), bot.getId() + " Навигатор занят? "+bot.getNavigator().isCalculating());
+
+
+
+        if (bot.getNavigator().getSuggestion() != Suggestion.NAVIGATION_SIMULATE ) return Optional.empty();
+        if(bot.getNPCNavigator().isNavigating()) return Optional.empty();
+      
         return Optional.of(() -> {
             BotLogger.debug(ICON, bot.isLogged(), bot.getId() + " 📐 Расчет лучшего угла");
             bot.getNavigator().setSuggestion(Suggestion.NAVIGATION_CHANGE_DIRECTION);
-        });   
+        });  
+
     }
 
         @Override
     public String getName() {
         return ICON+" Расчет лучшего угла";
+    }
+    
+    @Override
+    public boolean shouldInterrupt(Bot bot) {
+        return true ;
     }
 }

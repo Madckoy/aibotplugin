@@ -16,10 +16,16 @@ public class BotReactionStuckGuard implements IBotReaction {
 
     private static final long STUCK_DURATION_MS = 240_000;  // 2 минуты
     private static final double MOVEMENT_THRESHOLD = 1.0;   // Считаем движение, если сменился блок
+    private static final String ICON = "⚓";
 
     @Override
     public Optional<Runnable> validate(Bot bot) {
-        if(bot.getNPCNavigator().isNavigating()) { return Optional.empty(); }
+        BotLogger.debug("🤖", bot.isLogged(), bot.getId() + " ⚓ Проверка реакции на застревание");
+        BotLogger.debug(ICON, bot.isLogged(), bot.getId() + " В движении: " + bot.getNPCNavigator().isNavigating());
+        BotLogger.debug(ICON, bot.isLogged(), bot.getId() + " Текущая рекомендация: "+bot.getNavigator().getSuggestion());
+        BotLogger.debug(ICON, bot.isLogged(), bot.getId() + " Навигатор занят? "+bot.getNavigator().isCalculating());
+
+        if(bot.getNPCNavigator().isNavigating()) return Optional.empty();        
 
         BotPosition currentPos = bot.getNavigator().getPosition();
         long now = System.currentTimeMillis();
@@ -70,6 +76,11 @@ public class BotReactionStuckGuard implements IBotReaction {
 
     @Override
     public String getName() {
-        return "🪤 Застревание на координатах";
+        return "⚓ Застревание на координатах";
+    }
+     
+    @Override
+    public boolean shouldInterrupt(Bot bot) {
+        return true ;
     }
 }

@@ -19,7 +19,16 @@ public class BotReactionRotateToBestAngle implements IBotReaction {
     
     @Override
     public Optional<Runnable> validate(Bot bot) {
-        if (bot.getNavigator().getSuggestion() != Suggestion.NAVIGATION_CHANGE_DIRECTION || bot.getNPCNavigator().isNavigating()) return Optional.empty();
+
+        BotLogger.debug("🤖", bot.isLogged(), bot.getId() + " 📐 Проверка реакции на рекомендацию поискать лучший угол");
+        BotLogger.debug(ICON, bot.isLogged(), bot.getId() + " Проверка на препятствия рядом");
+        BotLogger.debug(ICON, bot.isLogged(), bot.getId() + " В движении: " + bot.getNPCNavigator().isNavigating());
+        BotLogger.debug(ICON, bot.isLogged(), bot.getId() + " Текущая рекомендация: "+bot.getNavigator().getSuggestion());
+        BotLogger.debug(ICON, bot.isLogged(), bot.getId() + " Навигатор занят? "+bot.getNavigator().isCalculating());
+
+
+        if (bot.getNavigator().getSuggestion() != Suggestion.NAVIGATION_CHANGE_DIRECTION) return Optional.empty();
+        if(bot.getNPCNavigator().isNavigating()) return Optional.empty();
 
         return Optional.of(() -> {
             try {
@@ -47,7 +56,7 @@ public class BotReactionRotateToBestAngle implements IBotReaction {
                 } else {
                     BotLogger.debug(ICON, bot.isLogged(), bot.getId() + " 📐 Нет подходящего угла зрения!");
                     if (!bot.getNavigator().getCandidates().isEmpty()) {
-                        bot.getNavigator().setSuggestion(Suggestion.NAVIGATION_CHANGE_DIRECTION);
+                        bot.getNavigator().setSuggestion(Suggestion.NONE);
                     } else {
                         BotLogger.debug(ICON, bot.isLogged(), bot.getId() + " 📐 Застрял жестко. Пробуем ждать...");
                         bot.getNavigator().setSuggestion(Suggestion.NONE);
@@ -55,7 +64,7 @@ public class BotReactionRotateToBestAngle implements IBotReaction {
                 }
             } catch (Exception e) {
                 BotLogger.debug(ICON, bot.isLogged(), bot.getId() + " 🆘 Симуляция не прошла! Ошибка: "+e.getMessage());
-                bot.getNavigator().setSuggestion(Suggestion.NAVIGATION_CHANGE_DIRECTION);
+                bot.getNavigator().setSuggestion(Suggestion.NONE);
             }
         });
     }
@@ -63,5 +72,10 @@ public class BotReactionRotateToBestAngle implements IBotReaction {
     @Override
     public String getName() {
         return ICON+" Поворт на лучший угол зрения";
+    }
+
+    @Override
+    public boolean shouldInterrupt(Bot bot) {
+        return true ;
     }
 }

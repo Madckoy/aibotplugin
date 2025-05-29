@@ -64,7 +64,7 @@ public class BotTeleportCommand implements CommandExecutor {
         BotLogger.debug("📌", AIBotPlugin.getInstance().isLogged(), "/bot-tp: Бот " + bot.getId() + " телепортируется в " + loc);
 
         // Удаляем все задачи
-        BotTaskManager.clear(bot);
+        // BotTaskManager.clear(bot);
 
         // Создаём и запускаем реактивный контейнер
         BotSequenceTeleportToPosition tpContainer = new BotSequenceTeleportToPosition(bot, loc);

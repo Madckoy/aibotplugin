@@ -19,9 +19,16 @@ public class BotReactionNavigationСalculate implements IBotReaction {
     public Optional<Runnable> validate(Bot bot) {
         if (bot.getNavigator().getSuggestion() != Suggestion.NAVIGATION_CALCULATE || bot.getNPCNavigator().isNavigating()) return Optional.empty();
 
+        BotLogger.debug(ICON, bot.isLogged(), bot.getId() + " 🧭 Проверка на необходимость расчетов для текущего yaw");
+        BotLogger.debug(ICON, bot.isLogged(), bot.getId() + " В движении: " + bot.getNPCNavigator().isNavigating());
+        BotLogger.debug(ICON, bot.isLogged(), bot.getId() + " Текущая рекомендация: "+bot.getNavigator().getSuggestion());
+        BotLogger.debug(ICON, bot.isLogged(), bot.getId() + " Навигатор занят? "+bot.getNavigator().isCalculating());
+
+        if (bot.getNavigator().getSuggestion() != Suggestion.NAVIGATION_CALCULATE ) return Optional.empty();
+        if(bot.getNPCNavigator().isNavigating()) return Optional.empty();
+
         return Optional.of(() -> {
-            if (bot.getNavigator().isCalculating()==false) {
-                
+               
                 int radius = BotConstants.DEFAULT_SCAN_RADIUS;
                         
                 Integer scanRadiusFromMem = (Integer) BotMemoryV2Utils.readValueTyped(bot, 
@@ -39,13 +46,16 @@ public class BotReactionNavigationСalculate implements IBotReaction {
                 } catch (Exception e) {
                     BotLogger.debug("🤖", bot.isLogged(), bot.getId() + " ⛔ Unable to calculate!");
                 }
-                    
-            }
         });
     }
 
         @Override
     public String getName() {
         return ICON+" Расчет навигации";
+    }
+    
+    @Override
+    public boolean shouldInterrupt(Bot bot) {
+        return true ;
     }
 }

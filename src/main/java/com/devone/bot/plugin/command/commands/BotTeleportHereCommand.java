@@ -36,7 +36,7 @@ public class BotTeleportHereCommand implements CommandExecutor {
         }
 
         // Удаляем все задачи
-        BotTaskManager.clear(bot);
+        // BotTaskManager.clear(bot);
 
         BotLogger.debug("📌", AIBotPlugin.getInstance().isLogged(), "/bot-tp-here: Бот " + bot.getId() + " будет телепортирован к игроку");
 

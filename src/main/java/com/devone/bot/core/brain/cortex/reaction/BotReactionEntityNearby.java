@@ -13,14 +13,22 @@ import com.devone.bot.core.utils.logger.BotLogger;
 import com.devone.bot.core.utils.world.BotWorldHelper;
 
 import java.util.Optional;
-
 import org.bukkit.Location;
+
+
 
 public class BotReactionEntityNearby implements IBotReaction {
 
+    private static final String ICON = "👿";
+
     @Override
     public Optional<Runnable> validate(Bot bot) {
-        BotLogger.debug("🤖", bot.isLogged(), bot.getId() + " 😈 Проверка реакции на близость враждебного моба");
+        BotLogger.debug(ICON, bot.isLogged(), bot.getId() + " 👿 Проверка реакции на близость враждебного моба");
+        BotLogger.debug(ICON, bot.isLogged(), bot.getId() + " В движении: " + bot.getNPCNavigator().isNavigating());
+        BotLogger.debug(ICON, bot.isLogged(), bot.getId() + " Текущая рекомендация: "+bot.getNavigator().getSuggestion());
+        BotLogger.debug(ICON, bot.isLogged(), bot.getId() + " Навигатор занят? "+bot.getNavigator().isCalculating());        
+
+        if(bot.getNPCNavigator().isNavigating()) return Optional.empty();
 
         BotSceneData scene = bot.getBrain().getSceneData();
         BotPosition botPos = bot.getNavigator().getPosition();
@@ -58,5 +66,10 @@ public class BotReactionEntityNearby implements IBotReaction {
     @Override
     public String getName() {
         return "😈 Близость враждебного моба";
+    }
+
+    @Override
+    public boolean shouldInterrupt(Bot bot) {
+        return true ;
     }
 }

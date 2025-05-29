@@ -1,7 +1,6 @@
 package com.devone.bot.core.task.active.calibrate;
 
 import com.devone.bot.core.Bot;
-import com.devone.bot.core.brain.cortex.BotActionSuggestion.Suggestion;
 import com.devone.bot.core.brain.memory.BotMemoryItem;
 import com.devone.bot.core.brain.memory.BotMemoryPartition;
 import com.devone.bot.core.brain.memory.BotMemoryV2Utils;

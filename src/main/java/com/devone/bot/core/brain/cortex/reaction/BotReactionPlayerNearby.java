@@ -15,10 +15,18 @@ import org.bukkit.entity.Player;
 import java.util.Optional;
 
 public class BotReactionPlayerNearby implements IBotReaction {
+    private static final String ICON = "🙋🏻‍♂️";
 
     @Override
     public Optional<Runnable> validate(Bot bot) {
         BotLogger.debug("🤖", bot.isLogged(), bot.getId() + " 🙋🏻‍♂️ Проверка реакции на игрока");
+        BotLogger.debug(ICON, bot.isLogged(), bot.getId() + " Проверка на препятствия рядом");
+        BotLogger.debug(ICON, bot.isLogged(), bot.getId() + " В движении: " + bot.getNPCNavigator().isNavigating());
+        BotLogger.debug(ICON, bot.isLogged(), bot.getId() + " Текущая рекомендация: "+bot.getNavigator().getSuggestion());
+        BotLogger.debug(ICON, bot.isLogged(), bot.getId() + " Навигатор занят? "+bot.getNavigator().isCalculating());
+
+        if(bot.getNPCNavigator().isNavigating()) return Optional.empty();
+        
 
         if (BotInventory.isEmpty(bot)) {
             BotLogger.debug("🤖", bot.isLogged(), bot.getId() + " 🙋🏻‍♂️ Инвентарь пуст — реакции не будет");
@@ -50,5 +58,10 @@ public class BotReactionPlayerNearby implements IBotReaction {
     @Override
     public String getName() {
         return "🙋🏻‍♂️ Игрок рядом — выдать ресурсы";
+    }
+
+    @Override
+    public boolean shouldInterrupt(Bot bot) {
+        return true ;
     }
 }

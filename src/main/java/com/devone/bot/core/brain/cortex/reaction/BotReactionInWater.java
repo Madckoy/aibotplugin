@@ -20,16 +20,20 @@ public class BotReactionInWater implements IBotReaction {
         Material.TROPICAL_FISH,
         Material.PUFFERFISH
     };
+    
+    private static final String ICON = "💦";
 
     @Override
     public Optional<Runnable> validate(Bot bot) {
-
-        if (bot.getNPCNavigator().isNavigating()) return Optional.empty();
+        BotLogger.debug(ICON, bot.isLogged(), bot.getId() + " 💦 Проверка на присутствие в воде. ");
+        BotLogger.debug(ICON, bot.isLogged(), bot.getId() + " В движении: " + bot.getNPCNavigator().isNavigating());
+        BotLogger.debug(ICON, bot.isLogged(), bot.getId() + " Текущая рекомендация: "+bot.getNavigator().getSuggestion());
+        BotLogger.debug(ICON, bot.isLogged(), bot.getId() + " Навигатор занят? "+bot.getNavigator().isCalculating());
+                
+        if(bot.getNPCNavigator().isNavigating()) return Optional.empty();
 
         String id = bot.getId();
         boolean isLogged = bot.isLogged();
-
-        BotLogger.debug("🎣", isLogged, id + " 🎯 Проверка: бот стоит в воде?");
 
         if (!BotWorldHelper.isInFishableWater(bot)) {
             return Optional.empty();
@@ -63,6 +67,6 @@ public class BotReactionInWater implements IBotReaction {
 
     @Override
     public String getName() {
-        return "🎣 Вода под ногами — поймать рыбу";
+        return "🎣 Вода под ногами? Пробуем поймать рыбу";
     }
 }

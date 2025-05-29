@@ -8,7 +8,7 @@ import java.util.Optional;
 public interface IBotReaction {
     Optional<Runnable> validate(Bot bot);
     String getName();
-    /** По умолчанию реакция прерывает остальные */
+    /** По умолчанию реакция не рерывает остальные */
     default boolean shouldInterrupt(Bot bot) {
         return false;
     }
