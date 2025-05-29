@@ -47,16 +47,6 @@ public class BotNavigator {
 
     private boolean calculating = false;
 
-    private boolean isEnabled = true;
-
-    public boolean isEnabled() {
-        return isEnabled;
-    }
-
-    public void setEnabled(boolean isEnabled) {
-        this.isEnabled = isEnabled;
-    }
-
     public boolean isCalculating() {
         return calculating;
     }
@@ -160,11 +150,7 @@ public class BotNavigator {
     }
 
     public BotSimulatorResult simulate(double sightFov, int scanRadius, int scanHeight) throws Exception {
-        if(isEnabled()==false) {
-            BotLogger.debug(bot.getActiveTask().getIcon(), bot.isLogged(), bot.getId() + " 💻 Navigator is disabled");
-            throw new Exception("Navigator is disabled");
 
-        } 
         if(isCalculating()) {
             BotLogger.debug(bot.getActiveTask().getIcon(), bot.isLogged(), bot.getId() + " 💻 Navigator is simulating...");
             throw new Exception("Navigation is being simulated");
@@ -178,11 +164,6 @@ public class BotNavigator {
     }
 
     public List<BotBlockData> calculate(double sightFov, int scanRadius, int scanHeight) throws Exception{
-
-        if(isEnabled()==false) {
-            BotLogger.debug(bot.getActiveTask().getIcon(), bot.isLogged(), bot.getId() + " 💻 Navigator is disabled");
-            throw new Exception("Navigator is disabled");
-        } 
 
         if(isCalculating()) {
             BotLogger.debug(bot.getActiveTask().getIcon(), bot.isLogged(), bot.getId() + " 💻 Navigator is calculating...");
@@ -395,10 +376,6 @@ public class BotNavigator {
     }
 
     public boolean navigate(float speed) throws Exception{
-
-        if(isEnabled()==false) {
-            throw new Exception("Navigator is disabled");
-        } 
 
         if (this.target == null) {
             BotLogger.debug(BotUtils.getActiveTaskIcon(bot), bot.isLogged(),

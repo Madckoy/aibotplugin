@@ -3,10 +3,10 @@ package com.devone.bot.core.brain.cortex;
 import com.devone.bot.AIBotPlugin;
 import com.devone.bot.core.Bot;
 import com.devone.bot.core.brain.cortex.reaction.BotReactionInWater;
-import com.devone.bot.core.brain.cortex.reaction.BotReactionMoveToReachable;
+import com.devone.bot.core.brain.cortex.reaction.BotReactionMoveTo;
 import com.devone.bot.core.brain.cortex.reaction.BotReactionEntityNearby;
 import com.devone.bot.core.brain.cortex.reaction.BotReactionPlayerNearby;
-import com.devone.bot.core.brain.cortex.reaction.BotReactionRotateToBestSightAngle;
+import com.devone.bot.core.brain.cortex.reaction.BotReactionRotateToBestAngle;
 import com.devone.bot.core.brain.cortex.reaction.BotReactionObstacleNearby;
 import com.devone.bot.core.brain.cortex.reaction.BotReactionStuckGuard;
 import com.devone.bot.core.utils.BotUtils;
@@ -32,8 +32,8 @@ public class BotReactionManager {
         register(new BotReactionEntityNearby());
         register(new BotReactionPlayerNearby());
         register(new BotReactionInWater()); // 🎣 ловим рыбу!
-        register(new BotReactionRotateToBestSightAngle());
-        register(new BotReactionMoveToReachable());
+        register(new BotReactionRotateToBestAngle());
+        register(new BotReactionMoveTo());
         
         BotLogger.debug("🧠", AIBotPlugin.getInstance().isLogged(), "🧩 Зарегистрированы реакции: " + reactions.size());
     }

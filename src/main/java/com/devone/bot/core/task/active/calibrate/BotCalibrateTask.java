@@ -61,8 +61,9 @@ public class BotCalibrateTask extends BotTaskAutoParams<BotCalibrateTaskParams> 
         try {
 
             BotLogger.debug(icon, isLogged(), bot.getId() + " 🗑️ Reset Navigation");
-            bot.getNavigator().setEnabled(true);
+
             BotSimulatorResult res = bot.getNavigator().simulate(BotConstants.DEFAULT_NORMAL_SIGHT_FOV, BotConstants.DEFAULT_SCAN_RADIUS, BotConstants.DEFAULT_SCAN_HEIGHT);            
+
             float bestYaw = res.yaw;
             int   reachables = res.reachables;
             boolean status = res.status;

@@ -1,7 +1,6 @@
 package com.devone.bot.core.task.active.sonar;
 
 import com.devone.bot.core.Bot;
-import com.devone.bot.core.brain.cortex.BotActionSuggestion.Suggestion;
 import com.devone.bot.core.brain.perseption.scene.BotSceneData;
 import com.devone.bot.core.brain.perseption.scene.BotSceneScan3D;
 import com.devone.bot.core.task.passive.BotTaskAutoParams;

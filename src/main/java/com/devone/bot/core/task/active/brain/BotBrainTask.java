@@ -3,10 +3,8 @@ package com.devone.bot.core.task.active.brain;
 import java.util.Optional;
 
 import com.devone.bot.core.Bot;
-import com.devone.bot.core.brain.cortex.BotActionSuggestion.Suggestion;
 import com.devone.bot.core.brain.cortex.BotReactionManager;
 import com.devone.bot.core.brain.cortex.BotReactionResult;
-import com.devone.bot.core.brain.cortex.IBotReaction;
 import com.devone.bot.core.task.passive.BotTaskAutoParams;
 import com.devone.bot.core.task.passive.IBotTaskParameterized;
 import com.devone.bot.core.task.active.brain.params.BotBrainTaskParams;

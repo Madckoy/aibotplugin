@@ -14,7 +14,7 @@ import com.devone.bot.core.utils.BotUtils;
 import com.devone.bot.core.utils.logger.BotLogger;
 
 
-public class BotReactionRotateToBestSightAngle implements IBotReaction {
+public class BotReactionRotateToBestAngle implements IBotReaction {
     private static final String ICON = "📐";
     
     @Override

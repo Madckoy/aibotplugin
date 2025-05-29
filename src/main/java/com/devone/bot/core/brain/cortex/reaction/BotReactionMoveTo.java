@@ -8,7 +8,7 @@ import com.devone.bot.core.brain.cortex.IBotReaction;
 import com.devone.bot.core.utils.blocks.BotBlockData;
 import com.devone.bot.core.utils.logger.BotLogger;
 
-public class BotReactionMoveToReachable implements IBotReaction {
+public class BotReactionMoveTo implements IBotReaction {
     private static final String ICON = "🦶";
 
     @Override
@@ -16,19 +16,16 @@ public class BotReactionMoveToReachable implements IBotReaction {
         if (bot.getNavigator().getSuggestion() != Suggestion.NAVIGATION_MOVE) return Optional.empty();
 
         return Optional.of(() -> {
-            if (!bot.getNavigator().isCalculating()) {
-                bot.getNavigator().setEnabled(false);
-                BotBlockData target = bot.getNavigator().getSuggestedTarget();
-                bot.getNavigator().setTarget(target);
-                bot.getNavigator().setEnabled(true);
-
-                try {
-                    bot.getNavigator().navigate(1.5f);
-                    BotLogger.debug(ICON, bot.isLogged(), bot.getId() + " 🦶 Начал движение к цели.");
-                } catch (Exception e) {
-                    BotLogger.debug(ICON, bot.isLogged(), bot.getId() + " 🆘 Ошибка при навигации!");
+                if(bot.getNavigator().isCalculating()==false) {
+                    BotBlockData target = bot.getNavigator().getSuggestedTarget();
+                    bot.getNavigator().setTarget(target);
+                    try {
+                        bot.getNavigator().navigate(1.5f);
+                        BotLogger.debug(ICON, bot.isLogged(), bot.getId() + " 🦶 Начал движение к цели.");
+                    } catch (Exception e) {
+                        BotLogger.debug(ICON, bot.isLogged(), bot.getId() + " 🆘 Ошибка при навигации!");
+                    }
                 }
-            }
         });
     }
 

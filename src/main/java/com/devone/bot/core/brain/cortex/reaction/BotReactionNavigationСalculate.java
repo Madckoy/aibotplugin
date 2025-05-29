@@ -5,6 +5,7 @@ import java.util.Optional;
 import com.devone.bot.core.Bot;
 import com.devone.bot.core.brain.cortex.BotActionSuggestion.Suggestion;
 import com.devone.bot.core.utils.BotConstants;
+import com.devone.bot.core.utils.logger.BotLogger;
 import com.devone.bot.core.brain.cortex.IBotReaction;
 import com.devone.bot.core.brain.memory.BotMemoryItem;
 import com.devone.bot.core.brain.memory.BotMemoryPartition;
@@ -19,10 +20,8 @@ public class BotReactionNavigationСalculate implements IBotReaction {
         if (bot.getNavigator().getSuggestion() != Suggestion.NAVIGATION_CALCULATE) return Optional.empty();
 
         return Optional.of(() -> {
-            if (!bot.getNavigator().isCalculating()) {
+            if (bot.getNavigator().isCalculating()==false) {
                 
-                bot.getNavigator().setEnabled(true);
-
                 int radius = BotConstants.DEFAULT_SCAN_RADIUS;
                         
                 Integer scanRadiusFromMem = (Integer) BotMemoryV2Utils.readValueTyped(bot, 
@@ -38,7 +37,7 @@ public class BotReactionNavigationСalculate implements IBotReaction {
                 try {
                     bot.getNavigator().calculate(BotConstants.DEFAULT_NORMAL_SIGHT_FOV, rds , BotConstants.DEFAULT_SCAN_HEIGHT);   
                 } catch (Exception e) {
-                    // TODO: handle exception
+                    BotLogger.debug("🤖", bot.isLogged(), bot.getId() + " ⛔ Unable to calculate!");
                 }
                     
             }
