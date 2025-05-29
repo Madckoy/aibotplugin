@@ -34,7 +34,7 @@ public class BotSequenceEntityNearby
          
         BotMoveTask walkTask = new BotMoveTask(bot);
         BotMoveTaskParams walkParams = walkTask.getParams();
-        walkParams.setTarget(target.getPosition());
+        bot.getNavigator().setTarget(target);
         walkTask.setParams(walkParams);
         walkTask.setObjective("🥾 Идём к мобу: " + target.getType());
 

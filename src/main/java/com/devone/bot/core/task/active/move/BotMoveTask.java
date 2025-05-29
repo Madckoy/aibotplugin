@@ -49,18 +49,6 @@ public class BotMoveTask extends BotTaskAutoParams<BotMoveTaskParams> {
         setAutoPickup(params.isAutoPickup());
         setLogged(params.isLogged());
         setEnabled(params.isEnabled());
-
-        BotPosition target = params.getTarget();
-
-        if (target == null) {
-            BotLogger.debug(icon, isLogged(), bot.getId() + " ❌ Target is null. Остановка таски.");
-            stop();
-            return this;
-        }
-
-        bot.getNavigator().setTarget(new BotBlockData(target.toPositionKey().getX(), target.toPositionKey().getY(), target.toPositionKey().getZ()));
-        BotLogger.debug(icon, isLogged(), bot.getId() + " ✅ Цель установлена: " + target);
-
         return this;
     }
 

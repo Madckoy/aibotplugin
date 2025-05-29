@@ -8,8 +8,7 @@ import com.devone.bot.core.brain.cortex.sequence.params.BotSequenceMoveParams;
 import com.devone.bot.core.task.passive.BotSequenceContainer;
 import com.devone.bot.core.task.passive.BotTask;
 import com.devone.bot.core.task.active.move.BotMoveTask;
-import com.devone.bot.core.task.active.move.params.BotMoveTaskParams;
-import com.devone.bot.core.utils.blocks.BotPosition;
+
 import com.devone.bot.core.utils.logger.BotLogger;
 
 public class BotSequenceMove extends BotSequenceContainer<BotSequenceMoveParams> {
@@ -28,12 +27,10 @@ public class BotSequenceMove extends BotSequenceContainer<BotSequenceMoveParams>
         
         if(params.position!=null) {
             BotMoveTask moveTask =  new BotMoveTask(bot);
-            BotMoveTaskParams mv_params = moveTask.getParams();
-            mv_params.setTarget(new BotPosition(params.position));
-            moveTask.setParams(mv_params);
-
+            
             List<BotTask<?>> subtasks = new ArrayList<>();
             subtasks.add(moveTask);
+
             return subtasks;
         } else {
             return null;

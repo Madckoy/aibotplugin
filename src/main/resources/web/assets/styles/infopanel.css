@@ -2,7 +2,7 @@
 .info-panel {
     position: fixed;
     top: 60%;
-    right: 30px;
+    right: 0px;
     transform: translate(100%, -50%);
     width: 650px;
     background: rgba(30, 30, 30, 0.95);

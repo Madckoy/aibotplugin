@@ -36,7 +36,7 @@ public class BotMoveTaskListener implements Listener {
         BotLogger.debug(task.getIcon(), task.isLogged(),
                 task.getBot().getId() + " ✅ Навигация завершена, ID таски: " + task.getUUID());
 
-        BotPosition pos = task.getParams().getTarget();
+        BotPosition pos = task.getBot().getNavigator().getTarget().getPosition();
 
 
         // Валидация — для отладки и логов

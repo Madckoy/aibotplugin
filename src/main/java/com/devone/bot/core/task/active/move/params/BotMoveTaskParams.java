@@ -6,9 +6,6 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 
 public class BotMoveTaskParams extends BotTaskParams {
 
-    @JsonIgnore
-    private transient BotPosition target = new BotPosition(); 
-
     private float speed = 1.0F;
     private boolean autoPickup = true;
 
@@ -28,21 +25,11 @@ public class BotMoveTaskParams extends BotTaskParams {
 
     public BotMoveTaskParams(BotPosition target) {
         this(); // загружаем всё остальное
-        this.target = target; // но вручную задаём координату
     }
 
     public BotMoveTaskParams(BotPosition target, float speed) {
         this(); // загружаем всё остальное
-        this.target = target;
         this.speed = speed;
-    }
-
-    public BotPosition getTarget() {
-        return target;
-    }
-
-    public void setTarget(BotPosition target) {
-        this.target = target;
     }
 
     public float getSpeed() {
@@ -56,7 +43,6 @@ public class BotMoveTaskParams extends BotTaskParams {
     @Override
     public String toString() {
         return "BotMoveTaskParams{" +
-                "target=" + target +
                 ", speed=" + speed +
                 '}';
     }

@@ -385,11 +385,9 @@ public class BotNavigator {
                     bot.getId() + " 🗺️ Runtime Target position: " + this.target);
 
             if (actionSuggestion == Suggestion.NAVIGATION_MOVE) {
-                BotPosition movePos = new BotPosition(this.target.getPosition());
+                
                 BotMoveTask moveTask = new BotMoveTask(bot);
-                BotMoveTaskParams mvParams = moveTask.getParams();
-                mvParams.setTarget(movePos);
-                moveTask.setParams(mvParams);
+                
                 BotTaskManager.push(bot, moveTask);
                 Location loc = BotWorldHelper.botPositionToWorldLocation(this.target.getPosition());
                 return bot.getNPC().getNavigator().canNavigateTo(loc);
