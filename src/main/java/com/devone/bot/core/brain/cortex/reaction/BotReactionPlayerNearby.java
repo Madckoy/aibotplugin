@@ -62,6 +62,6 @@ public class BotReactionPlayerNearby implements IBotReaction {
 
     @Override
     public boolean shouldInterrupt(Bot bot) {
-        return true ;
+        return false ;
     }
 }

@@ -48,7 +48,7 @@ public class BotCalibrateTask extends BotTaskAutoParams<BotCalibrateTaskParams> 
         bot.getNavigator().resetStuckCount();
         bot.getBrain().getMemoryV2()
             .partition(BotMemoryPartition.PartitionKey.WATCHDOG.toString(), BotMemoryV2Partition.Type.MAP)
-            .remove(BotMemoryItem.ItemKey.POSITION.toString());
+            .remove(BotMemoryItem.ItemKey.POSITION_KEY.toString());
 
         bot.getBrain().getMemoryV2()
             .partition(BotMemoryPartition.PartitionKey.WATCHDOG.toString(), BotMemoryV2Partition.Type.MAP)

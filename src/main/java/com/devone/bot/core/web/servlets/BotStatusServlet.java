@@ -19,6 +19,7 @@ import com.devone.bot.core.brain.memoryv2.BotMemoryV2Partition;
 import com.devone.bot.core.utils.BotUtils;
 import com.devone.bot.core.utils.blocks.BotBlockData;
 import com.devone.bot.core.utils.blocks.BotPosition;
+import com.devone.bot.core.utils.blocks.BotPositionKey;
 import com.devone.bot.core.web.BotWebService;
 
 import com.google.gson.JsonArray;
@@ -127,7 +128,8 @@ public class BotStatusServlet extends HttpServlet {
     }
 
     private void addWatchdogJson(Bot bot, JsonObject json) {
-        BotPosition lastPos = BotMemoryV2Utils.readValueTyped(bot, BotMemoryPartition.PartitionKey.WATCHDOG, BotMemoryItem.ItemKey.POSITION, BotPosition.class);
+        //BotPosition lastPos = new BotPosition(bot.getNavigator().getPosition());//BotMemoryV2Utils.readValueTyped(bot, BotMemoryPartition.PartitionKey.WATCHDOG, BotMemoryItem.ItemKey.POSITION, BotPosition.class);
+        BotPositionKey lastPos = BotMemoryV2Utils.readValueTyped(bot, BotMemoryPartition.PartitionKey.WATCHDOG, BotMemoryItem.ItemKey.POSITION_KEY, BotPositionKey.class);        
         Long lastTime = BotMemoryV2Utils.readValueTyped(bot, BotMemoryPartition.PartitionKey.WATCHDOG, BotMemoryItem.ItemKey.TIME, Long.class);
         Integer  remaining = BotMemoryV2Utils.readValueTyped(bot, BotMemoryPartition.PartitionKey.WATCHDOG, BotMemoryItem.ItemKey.REMAINING_TIME, Integer.class);
 

@@ -26,17 +26,18 @@ public class BotReactionManager {
     private static final List<IBotReaction> reactions = new ArrayList<>();
 
     static {
-        // 📚 Регистрация навигационных реакций
-        register(new BotReactionNavigationSimulate());
-        register(new BotReactionNavigationСalculate());
-        register(new BotReactionRotateToBestAngle());
-        register(new BotReactionMoveTo());
         // 📚 Регистрация позиционных реакций
         register(new BotReactionStuckGuard());
         register(new BotReactionObstacleNearby());
         register(new BotReactionEntityNearby());
         register(new BotReactionPlayerNearby());
         register(new BotReactionInWater());
+        // 📚 Регистрация навигационных реакций
+        register(new BotReactionNavigationSimulate());
+        register(new BotReactionNavigationСalculate());
+        register(new BotReactionRotateToBestAngle());
+        register(new BotReactionMoveTo());
+ 
 
         
         BotLogger.debug("🧠", AIBotPlugin.getInstance().isLogged(), "🧩 Зарегистрированы реакции: " + reactions.size());
