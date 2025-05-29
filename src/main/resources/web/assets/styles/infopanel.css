@@ -54,6 +54,25 @@
     border-left: 1px solid rgba(255, 255, 255, 0.2);
 }
 
+.info-column-left {
+    flex: 1;
+    padding: 5px;
+    border-left: 1px solid rgba(255, 255, 255, 0.2);
+}
+
+.info-column-middle {
+    flex: 1;
+    padding: 5px;
+    border-left: 1px solid rgba(255, 255, 255, 0.2);
+}
+
+.info-column-right {
+    /*flex: 1;*/
+    padding: 5px;
+    border-left: 1px solid rgba(255, 255, 255, 0.2);
+}
+
+
 .info-column:first-child {
     border-left: none; /* Убираем разделитель на первом элементе */
 }
