@@ -280,6 +280,11 @@ public class BotUtils {
             return "CHANGE_DIRECTION";
         }
 
+        if(bot.getNavigator().getSuggestion()==Suggestion.NAVIGATION_CALCULATE) {
+            return "CALCULATE";
+        }
+
+
        return result;
     }
 
