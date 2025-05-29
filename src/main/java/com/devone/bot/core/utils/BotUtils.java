@@ -261,33 +261,6 @@ public class BotUtils {
         }
     }
 
-    public static String getNavigationSuggestionAsString(Bot bot) {
-        String result = "";
-        
-        if(bot.getNavigator().getSuggestion()==Suggestion.NONE) {
-            return "NONE";
-        }
-
-        if(bot.getNavigator().getSuggestion()==Suggestion.NAVIGATION_MOVE) {
-            return "MOVE";
-        }
-
-        if(bot.getNavigator().getSuggestion()==Suggestion.NAVIGATION_TELEPORT) {
-            return "TELEPORT";
-        }
-
-        if(bot.getNavigator().getSuggestion()==Suggestion.NAVIGATION_CHANGE_DIRECTION) {
-            return "CHANGE_DIRECTION";
-        }
-
-        if(bot.getNavigator().getSuggestion()==Suggestion.NAVIGATION_CALCULATE) {
-            return "CALCULATE";
-        }
-
-
-       return result;
-    }
-
     public static void rotate(BotTask<?> task, Bot bot, float degrees) {
         if (bot == null || bot.getNavigator().getPosition() == null || bot.getNPCEntity() == null) return;
 
