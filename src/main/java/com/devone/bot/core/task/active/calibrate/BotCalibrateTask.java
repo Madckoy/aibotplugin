@@ -7,6 +7,7 @@ import com.devone.bot.core.brain.memory.BotMemoryV2Utils;
 import com.devone.bot.core.brain.memoryv2.BotMemoryV2Partition;
 import com.devone.bot.core.brain.navigator.simulator.BotSimulatorResult;
 import com.devone.bot.core.task.passive.BotTaskAutoParams;
+import com.devone.bot.core.task.passive.BotTaskManager;
 import com.devone.bot.core.task.passive.IBotTaskParameterized;
 import com.devone.bot.core.task.active.calibrate.params.BotCalibrateTaskParams;
 import com.devone.bot.core.utils.BotConstants;
@@ -57,30 +58,7 @@ public class BotCalibrateTask extends BotTaskAutoParams<BotCalibrateTaskParams> 
         bot.getBrain().getMemoryV2()
             .partition(BotMemoryPartition.PartitionKey.WATCHDOG.toString(), BotMemoryV2Partition.Type.MAP)
             .remove(BotMemoryItem.ItemKey.REMAINING_TIME.toString());
-
-        try {
-
-            BotLogger.debug(icon, isLogged(), bot.getId() + " 🗑️ Reset Navigation");
-
-            BotSimulatorResult res = bot.getNavigator().simulate(BotConstants.DEFAULT_NORMAL_SIGHT_FOV, BotConstants.DEFAULT_SCAN_RADIUS, BotConstants.DEFAULT_SCAN_HEIGHT);            
-
-            float bestYaw = res.yaw;
-            int   reachables = res.reachables;
-            boolean status = res.status;
-            if(status==false) {
-                BotLogger.debug(icon, isLogged(), bot.getId() + " 🗑️ Remove all visited navigation points");
-                BotMemoryV2Utils.clearAllVisited(bot);
-            } else {
-                BotLogger.debug(icon, isLogged(), bot.getId() + " 📐 есть хороший угол зрения. Поворачиваем туда! Yaw:"+res.yaw);
-                BotUtils.rotate(this, bot, res.yaw);                          
-            }
-            message = "Best result: "+res.status+" with best yaw: "+ bestYaw + " with reachable: " + reachables;
-            BotLogger.debug(icon, isLogged(), bot.getId() + " "+message);
-            stop();
-        } catch (Exception e) {
-            message = "Navigator reset failure!";
-        }
-        
+       
         setObjective(params.getObjective() + " " + message + " (" + rmt + ")");
 
         if (rmt <= 0) {
@@ -94,5 +72,6 @@ public class BotCalibrateTask extends BotTaskAutoParams<BotCalibrateTaskParams> 
         bot.getNavigator().setTarget(null);
         bot.getNavigator().setSuggestion(null);
         super.stop();
+        BotTaskManager.clear(bot);
     }
 }
