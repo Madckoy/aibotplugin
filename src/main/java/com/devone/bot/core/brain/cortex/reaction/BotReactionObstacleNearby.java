@@ -73,7 +73,7 @@ public class BotReactionObstacleNearby implements IBotReaction {
 
     @Override
     public String getName() {
-        return "⛏️ Препятствие возле бота";
+        return ICON+" Препятствие возле бота";
     }
 
     @Override

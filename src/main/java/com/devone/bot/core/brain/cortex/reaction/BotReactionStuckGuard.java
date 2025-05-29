@@ -42,7 +42,7 @@ public class BotReactionStuckGuard implements IBotReaction {
             }
 
             Long duration = now - lastTime;
-            Long remaining = (STUCK_DURATION_MS - duration) / 1000L;
+            long remaining = (STUCK_DURATION_MS - duration) / 1000;
             
             BotMemoryV2Utils.writeValueTyped(bot, BotMemoryPartition.PartitionKey.WATCHDOG,  BotMemoryItem.ItemKey.REMAINING_TIME, remaining);
 
@@ -69,9 +69,9 @@ public class BotReactionStuckGuard implements IBotReaction {
     }
 
     private void resetWatchdog(Bot bot, BotPosition pos, long time) {
-        BotMemoryV2Utils.writeValueTyped(bot, BotMemoryPartition.PartitionKey.WATCHDOG, BotMemoryItem.ItemKey.POSITION, pos);
-        BotMemoryV2Utils.writeValueTyped(bot, BotMemoryPartition.PartitionKey.WATCHDOG, BotMemoryItem.ItemKey.TIME, time);
-        BotMemoryV2Utils.writeValueTyped(bot, BotMemoryPartition.PartitionKey.WATCHDOG, BotMemoryItem.ItemKey.REMAINING_TIME, STUCK_DURATION_MS / 1000L);
+        BotMemoryV2Utils.writeValueTyped(bot, BotMemoryPartition.PartitionKey.WATCHDOG, BotMemoryItem.ItemKey.POSITION, pos.toString());
+        BotMemoryV2Utils.writeValue(bot, BotMemoryPartition.PartitionKey.WATCHDOG, BotMemoryItem.ItemKey.TIME, time);
+        BotMemoryV2Utils.writeValue(bot, BotMemoryPartition.PartitionKey.WATCHDOG, BotMemoryItem.ItemKey.REMAINING_TIME, STUCK_DURATION_MS / 1000);
     }
 
     @Override

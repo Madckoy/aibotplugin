@@ -65,7 +65,7 @@ public class BotReactionEntityNearby implements IBotReaction {
 
     @Override
     public String getName() {
-        return "😈 Близость враждебного моба";
+        return ICON+" Близость враждебного моба";
     }
 
     @Override

@@ -67,6 +67,6 @@ public class BotReactionInWater implements IBotReaction {
 
     @Override
     public String getName() {
-        return "🎣 Вода под ногами? Пробуем поймать рыбу";
+        return ICON+" Вода под ногами? Пробуем поймать рыбу";
     }
 }
