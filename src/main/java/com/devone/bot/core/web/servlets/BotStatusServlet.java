@@ -131,7 +131,7 @@ public class BotStatusServlet extends HttpServlet {
         //BotPosition lastPos = new BotPosition(bot.getNavigator().getPosition());//BotMemoryV2Utils.readValueTyped(bot, BotMemoryPartition.PartitionKey.WATCHDOG, BotMemoryItem.ItemKey.POSITION, BotPosition.class);
         BotPositionKey lastPos = BotMemoryV2Utils.readValueTyped(bot, BotMemoryPartition.PartitionKey.WATCHDOG, BotMemoryItem.ItemKey.POSITION_KEY, BotPositionKey.class);        
         Long lastTime = BotMemoryV2Utils.readValueTyped(bot, BotMemoryPartition.PartitionKey.WATCHDOG, BotMemoryItem.ItemKey.TIME, Long.class);
-        Integer  remaining = BotMemoryV2Utils.readValueTyped(bot, BotMemoryPartition.PartitionKey.WATCHDOG, BotMemoryItem.ItemKey.REMAINING_TIME, Integer.class);
+        Long  remaining = BotMemoryV2Utils.readValueTyped(bot, BotMemoryPartition.PartitionKey.WATCHDOG, BotMemoryItem.ItemKey.REMAINING_TIME, Long.class);
 
         if (lastPos != null) json.addProperty("watchdog_pos", lastPos.toString());
         if (lastTime != null) json.addProperty("watchdog_time", lastTime);

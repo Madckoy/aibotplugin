@@ -2,12 +2,11 @@
 .info-panel {
     position: fixed;
     top: 60%;
-    right: 0;
+    right: 30px;
     transform: translate(100%, -50%);
     width: 650px;
     background: rgba(30, 30, 30, 0.95);
-    border-left: 5px solid #444;
-    padding: 5px;
+    padding:5px;
     color: #ddd;
     font-family: 'Segoe UI', 'Roboto', 'Inter', sans-serif;
     font-size: 12px;
@@ -35,8 +34,10 @@
 
 .close-btn-container {
     position: relative;
-    height: 25px;
+    height: 28px;
     z-index: 10;
+    font-size: medium;
+    background-color:black;
 }
 
 /* Новые стили для контента */
