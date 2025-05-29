@@ -204,7 +204,6 @@ public class BotMemoryV2Utils {
         return visited.getMap().containsKey(key);
     }
 
-    @SuppressWarnings("unchecked")
     public static <T> T deserializeTyped(Object raw, Class<T> clazz) {
         if (raw == null || clazz == null) return null;
 
