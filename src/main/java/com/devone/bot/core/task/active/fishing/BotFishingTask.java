@@ -46,11 +46,11 @@ public class BotFishingTask extends BotTaskAutoParams<BotFishingTaskParams> {
             return;
         }
 
-        // Анимация — каждый тик
-        BotUtils.swingMainHand(bot);
-
         // 25% шанс поймать рыбу
         if (!hasCaughtFish && random.nextFloat() <= 0.25f) {
+            // Анимация — каждый тик
+            BotUtils.animateHandSync(this, bot);
+
             Material[] fishTypes = {
                 Material.COD,
                 Material.SALMON,

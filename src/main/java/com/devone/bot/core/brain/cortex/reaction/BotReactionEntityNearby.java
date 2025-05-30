@@ -26,37 +26,26 @@ public class BotReactionEntityNearby implements IBotReaction {
         BotLogger.debug(ICON, bot.isLogged(), bot.getId() + " Проверка реакции на близость враждебного моба");
         BotLogger.debug(ICON, bot.isLogged(), bot.getId() + " В движении: " + bot.getNPCNavigator().isNavigating());
         BotLogger.debug(ICON, bot.isLogged(), bot.getId() + " Текущая рекомендация: "+bot.getNavigator().getSuggestion());
-        BotLogger.debug(ICON, bot.isLogged(), bot.getId() + " Навигатор занят? "+bot.getNavigator().isCalculating());        
-
-        if(bot.getNPCNavigator().isNavigating()) return Optional.empty();
+        BotLogger.debug(ICON, bot.isLogged(), bot.getId() + " Навигатор занят? "+bot.getNavigator().isCalculating());      
+        
+        if (bot.getNPCNavigator().isNavigating() || bot.getNavigator().isCalculating()) return Optional.empty();
 
         BotSceneData scene = bot.getBrain().getSceneData();
         BotPosition botPos = bot.getNavigator().getPosition();
+        if (scene == null || botPos == null) return Optional.empty();
 
-        if (scene != null) {
-            for (BotBlockData entity : scene.entities) {
-                if (BlockUtils.isHostileEntity(entity)==false)
-                    continue;
-                if (BotWorldHelper.isInDangerousLiquid(entity))
-                    continue;
+        for (BotBlockData entity : scene.entities) {
+            if (!BlockUtils.isHostileEntity(entity)) continue;
+            if (BotWorldHelper.isInDangerousLiquid(entity)) continue;
 
-                double dist = botPos.distanceTo(entity.getPosition());
-                if (dist < BotConstants.DEFAULT_DETECTION_RADIUS)
-                    continue;
+            double dist = botPos.distanceTo(entity.getPosition());
+            if (dist > BotConstants.DEFAULT_DETECTION_RADIUS) continue;
 
+            Location eLoc = BotWorldHelper.botPositionToWorldLocation(entity.getPosition());
+            if (bot.getNPCNavigator().canNavigateTo(eLoc)) {
                 BotLogger.debug("🤖", bot.isLogged(), bot.getId() + " ❗ Обнаружен моб: " + entity.getType()
                         + " (" + String.format("%.1f", dist) + " м)");
-
-                Location eLoc = BotWorldHelper.botPositionToWorldLocation(entity.getPosition());
-                
-                boolean canNavigate = bot.getNPCNavigator().canNavigateTo(eLoc);
-                
-                if(canNavigate) {
-                    return Optional.of(() -> {
-                        BotTaskManager.push(bot, new BotSequenceEntityNearby(bot, entity));
-                    });
-                }
-
+                return Optional.of(() -> BotTaskManager.push(bot, new BotSequenceEntityNearby(bot, entity)));
             }
         }
 

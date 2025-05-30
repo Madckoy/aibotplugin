@@ -10,7 +10,6 @@ import com.devone.bot.AIBotPlugin;
 import com.devone.bot.core.Bot;
 import com.devone.bot.core.BotManager;
 import com.devone.bot.core.brain.cortex.sequence.BotSequenceMove;
-import com.devone.bot.core.brain.cortex.sequence.params.BotSequenceMoveParams;
 import com.devone.bot.core.task.passive.BotTaskManager;
 import com.devone.bot.core.utils.blocks.BotPosition;
 import com.devone.bot.core.utils.logger.BotLogger;

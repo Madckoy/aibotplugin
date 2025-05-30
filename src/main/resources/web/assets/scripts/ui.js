@@ -95,11 +95,15 @@ function updateOrCreateBotRow(bot, tbody) {
         cells[8].innerHTML = `
             <div class="bot-position-cell">
                 <button class="cmd-btn" data-bot="${bot.id}" data-cmd="bot-tp">⚡</button>
+                <button class="cmd-btn" data-bot="${bot.id}" data-cmd="bot-tp-spawn">🏡</button>
                 <button class="cmd-btn" data-bot="${bot.id}" data-cmd="bot-move">🏃🏻‍♂️‍➡️</button>
                 <button class="cmd-btn" data-bot="${bot.id}" data-cmd="bot-excavate">⛏️</button>
+                <button class="cmd-btn" data-bot="${bot.id}" data-cmd="bot-drop-all">📦</button>                
                 <div class="bot-objective-divider"></div>      
-                <button class="cmd-btn" data-bot="${bot.id}" data-cmd="bot-drop-all">📦</button>
-                <button class="cmd-btn" data-bot="${bot.id}" data-cmd="bot-dump">🥪</button>
+                <button class="cmd-btn" data-bot="${bot.id}" data-cmd="bot-dump">🥪</button>                
+                <button class="cmd-btn" data-bot="${bot.id}" data-cmd="bot-radius-inc">◻️</button>
+                <button class="cmd-btn" data-bot="${bot.id}" data-cmd="bot-radius-dec">▫️</button>
+                <button class="cmd-btn" data-bot="${bot.id}" data-cmd="bot-calibrate">⚙️</button>
                 <button class="cmd-btn" data-bot="${bot.id}" data-cmd="bot-info">ℹ️</button>
             </div>`;
     }

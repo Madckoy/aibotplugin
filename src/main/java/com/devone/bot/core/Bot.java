@@ -66,11 +66,13 @@ public class Bot {
         this.npc = an_npc;
         this.botManager = botManager;
         this.inventory = new BotInventory(this);
-        this.bootstrap = new BotBootstrap(this);
+        
         this.brain = new BotBrain(this); // Инициализация рантайм статуса
         this.speaker = new BotSpeaker(this); // Инициализация BotCommunicator
         this.navigator = new BotNavigator(this);
 
+        this.bootstrap = new BotBootstrap(this);
+        
         BotLogger.debug("🤖", isLogged(), id + " ➕ Has been created and spawned");
     }
 

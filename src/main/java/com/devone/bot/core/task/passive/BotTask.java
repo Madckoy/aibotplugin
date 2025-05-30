@@ -4,7 +4,6 @@ import org.bukkit.entity.Player;
 import org.bukkit.event.Listener;
 
 import com.devone.bot.core.Bot;
-import com.devone.bot.core.task.active.brain.BotBrainTask;
 import com.devone.bot.core.task.passive.params.BotTaskParams;
 import com.devone.bot.core.utils.BotConstants;
 import com.devone.bot.core.utils.BotUtils;
@@ -126,10 +125,10 @@ public abstract class BotTask<T extends BotTaskParams> implements IBotTask, List
             return;
         }
     
-        if (playerDisconnected()) {
-            handlePlayerDisconnect();
-            return;
-        }
+        //if (playerDisconnected()) {
+        //    handlePlayerDisconnect();
+        //    return;
+        //}
       
         if(injected==true) {
             BotLogger.debug(icon, isLogged(), bot.getId() + " ▶️ Задача не на паузе и в стеке. Выполняем: " + this.getClass().getSimpleName());
@@ -154,9 +153,9 @@ public abstract class BotTask<T extends BotTaskParams> implements IBotTask, List
                 " 📍: " + pos + " / 🎯: " + poi);
     }
 
-    private boolean playerDisconnected() {
-        return player != null && !player.isOnline();
-    }
+    //private boolean playerDisconnected() {
+    //    return player != null && !player.isOnline();
+    //}
 
     private void runTaskExecution() {
         BotLogger.debug("🧠", isLogged(), bot.getId() + " 🟡 Выполнение: " + icon + " " + getClass().getSimpleName());
@@ -193,10 +192,10 @@ public abstract class BotTask<T extends BotTaskParams> implements IBotTask, List
         return pause && (System.currentTimeMillis() - pauseStartTime) > timeoutMillis;
     }
 
-    private void handlePlayerDisconnect() {
-        BotLogger.debug("🧠", isLogged(),
-                bot.getId() + " 🚨 Игрок " + player.getName() + " отключился");
-    }
+    //private void handlePlayerDisconnect() {
+    //    BotLogger.debug("🧠", isLogged(),
+    //            bot.getId() + " 🚨 Игрок " + player.getName() + " отключился");
+    //}
 
     @Override
     public IBotTaskParameterized<T> setParams(T params) {
@@ -254,11 +253,11 @@ public abstract class BotTask<T extends BotTaskParams> implements IBotTask, List
         this.isReactive = reactive;
     }
 
-    public void turnToTarget(BotTask<?> task, BotPosition target) {
-        BotUtils.turnToTarget(task, bot, target);
+    public void turnToTargetSync(BotTask<?> task, BotPosition target) {
+        BotUtils.turnToTargetSync(task, bot, target);
     }
 
-    public void animateHand(BotTask<?> task, Bot bot) {
-        BotUtils.animateHand(task, bot);
+    public void animateHandSync(BotTask<?> task, Bot bot) {
+        BotUtils.animateHandSync(task, bot);
     }
 }

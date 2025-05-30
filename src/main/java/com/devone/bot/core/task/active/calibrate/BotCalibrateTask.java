@@ -3,6 +3,7 @@ package com.devone.bot.core.task.active.calibrate;
 import com.devone.bot.core.Bot;
 import com.devone.bot.core.brain.memory.BotMemoryItem;
 import com.devone.bot.core.brain.memory.BotMemoryPartition;
+import com.devone.bot.core.brain.memory.BotMemoryV2Utils;
 import com.devone.bot.core.brain.memoryv2.BotMemoryV2Partition;
 import com.devone.bot.core.task.passive.BotTaskAutoParams;
 import com.devone.bot.core.task.passive.BotTaskManager;
@@ -37,13 +38,15 @@ public class BotCalibrateTask extends BotTaskAutoParams<BotCalibrateTaskParams> 
     public void execute() {
 
         long rmt = BotUtils.getRemainingTime(startTime, params.getTimeout());
+        
+        message = message+"◼";
 
         setObjective(params.getObjective() + " " + message + " (" + rmt + ")");
-
 
         BotLogger.debug(icon, isLogged(), bot.getId() + " 🗑️ Reset Watchdog");
 
         bot.getNavigator().resetStuckCount();
+
         bot.getBrain().getMemoryV2()
             .partition(BotMemoryPartition.PartitionKey.WATCHDOG.toString(), BotMemoryV2Partition.Type.MAP)
             .remove(BotMemoryItem.ItemKey.POSITION_KEY.toString());
@@ -56,13 +59,17 @@ public class BotCalibrateTask extends BotTaskAutoParams<BotCalibrateTaskParams> 
             .partition(BotMemoryPartition.PartitionKey.WATCHDOG.toString(), BotMemoryV2Partition.Type.MAP)
             .remove(BotMemoryItem.ItemKey.REMAINING_TIME.toString());
        
-        setObjective(params.getObjective() + " " + message + " (" + rmt + ")");
+        BotMemoryV2Utils.clearAllVisited(bot);
+
+        message = message+"◼";
 
         if (rmt <= 0) {
             BotLogger.debug(icon, isLogged(), bot.getId() + " ⏱️ Task timeout passed. Ending Task.");
             bot.getNavigator().setSuggestion(null);
             this.stop();
         }
+
+        stop();
     }
     @Override
     public void stop() {

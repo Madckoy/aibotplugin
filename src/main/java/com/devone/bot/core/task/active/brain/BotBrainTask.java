@@ -54,7 +54,7 @@ public class BotBrainTask extends BotTaskAutoParams<BotBrainTaskParams> {
             bot.getNavigator().setSuggestion(Suggestion.NAVIGATION_SIMULATE);
         }
         // regular reset 
-        if (cycle % 999 == 0) {
+        if (cycle % 2000 == 0) {
             BotCalibrateTask calibrateTask = new BotCalibrateTask(bot);
             bot.getTaskManager().pushTask(calibrateTask);
         }

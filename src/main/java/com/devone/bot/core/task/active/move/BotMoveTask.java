@@ -88,7 +88,7 @@ public class BotMoveTask extends BotTaskAutoParams<BotMoveTaskParams> {
             Bukkit.getPluginManager().registerEvents(listener, AIBotPlugin.getInstance());
         }
 
-        BotMoveTaskHelper.setTarget(bot, target, speed, isLogged());
+        BotMoveTaskHelper.setTargetAndStartMoving(bot, target, speed);
 
         isMoving = true;
 
@@ -108,14 +108,14 @@ public class BotMoveTask extends BotTaskAutoParams<BotMoveTaskParams> {
                 return;
             }
 
-            turnToTarget(this, target);
+            turnToTargetSync(this, target);
 
             if (remaining <= 0) {
                 BotLogger.debug(icon, isLogged(), bot.getId() + " ⏱️ Навигация превысила лимит времени");
                 stop();
             }
 
-        }, 0L, 40L); // раз в 2 секунды
+        }, 0L, 20L); // раз в 2 секунды
     }
 
     public void setTarget(BotPosition tgt) {

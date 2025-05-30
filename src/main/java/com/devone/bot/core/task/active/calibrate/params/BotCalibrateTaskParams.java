@@ -8,7 +8,7 @@ public class BotCalibrateTaskParams extends BotTaskParams {
         super();
 
         setIcon("🛠️");
-        setObjective("Calibration");
+        setObjective("Calibrating");
     }
 
 }

@@ -6,7 +6,7 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 
 public class BotMoveTaskParams extends BotTaskParams {
 
-    private float speed = 1.0F;
+    private float speed = 0.6F;
     private boolean autoPickup = true;
 
     public boolean isAutoPickup() {

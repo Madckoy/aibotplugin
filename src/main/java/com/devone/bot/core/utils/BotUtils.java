@@ -55,7 +55,7 @@ public class BotUtils {
         return result;
     }
 
-    public static void playBlockBreakEffect(BotTask<?> task, Bot bot, Location location) {
+    public static void playBlockBreakEffectSync(BotTask<?> task, Bot bot, Location location) {
         if (location == null || location.getWorld() == null)
             return;
 
@@ -106,7 +106,7 @@ public class BotUtils {
      * @param bot    Бот (CraftPlayer или NPC, поддерживающий teleport)
      * @param target Цель, к которой нужно повернуть лицо
      */
-    private static void lookAt(Bot bot, BotPosition target) {
+    private static void lookAtSync(Bot bot, BotPosition target) {
         if (bot.getNPCEntity() == null) return;
 
         Location from = bot.getNPCEntity().getLocation();
@@ -157,7 +157,7 @@ public class BotUtils {
         return diff;
     }
 
-    public static void turnToTarget(BotTask<?> task, Bot bot, BotPosition target) {
+    public static void turnToTargetAsync(BotTask<?> task, Bot bot, BotPosition target) {
 
         // ✅ Принудительно обновляем положение, если поворот сбрасывается
         Bukkit.getScheduler().runTaskLater(AIBotPlugin.getInstance(), () -> {
@@ -165,19 +165,18 @@ public class BotUtils {
             BotLogger.debug(task.getIcon(), task.isLogged(),
                     bot.getId() + " Поворачивает голову в сторону: " + target);
 
-            BotUtils.lookAt(bot, target);
+            BotUtils.lookAtSync(bot, target);
 
         }, 1L); // ✅ Через тик, чтобы дать время на обновление
     }
 
-    public static void animateHand(BotTask<?> task, Bot bot) {
-        if (bot.getNPCEntity() instanceof Player playerBot) {
-            playerBot.swingMainHand();
-            BotLogger.debug(task.getIcon(), task.isLogged(), bot.getId() + " 👋🏻 Анимация руки выполнена");
-        } else {
-            BotLogger.debug(task.getIcon(), task.isLogged(), bot.getId() + " 🖐🏻 Анимация не выполнена: бот — не игрок");
-        }
+    public static void turnToTargetSync(BotTask<?> task, Bot bot, BotPosition target) {
+        BotLogger.debug(task.getIcon(), task.isLogged(),
+                bot.getId() + " Поворачивает голову в сторону: " + target);
+
+        BotUtils.lookAtSync(bot, target); // 🔥 Без задержки
     }
+   
 
     // под вопросом, стоит ли перенести в BotUtils или в BotInventory
     public void checkAndSelfMove(Bot bot, Location target) {
@@ -212,23 +211,7 @@ public class BotUtils {
         return icon;
     }
 
-    public static float getBotYaw__(Bot bot) {
-
-        Location botLocation = bot.getNPC().getStoredLocation();
-        float botYaw = botLocation.getYaw();
-
-        return botYaw;
-    }
-    
-    public static float getBotPitch__(Bot bot) {
-
-        Location botLocation = bot.getNPC().getStoredLocation();
-        float botPitch = botLocation.getPitch();
-
-        return botPitch;
-    }
-
-    public static String getObjective(Bot bot) {
+     public static String getObjective(Bot bot) {
         try {
             return bot.getActiveTask().getObjective();
         } catch (Exception ex) {
@@ -260,7 +243,7 @@ public class BotUtils {
         }
     }
 
-    public static void rotate(BotTask<?> task, Bot bot, float degrees) {
+    public static void rotateAsync(BotTask<?> task, Bot bot, float degrees) {
         if (bot == null || bot.getNavigator().getPosition() == null || bot.getNPCEntity() == null) return;
 
         Bukkit.getScheduler().runTaskLater(AIBotPlugin.getInstance(), () -> {
@@ -300,12 +283,36 @@ public class BotUtils {
         }
     }
 
-    public static void swingMainHand(Bot bot) {
-        Player player = bot.getPlayer();
-        if (player == null || !player.isOnline()) return;
 
-        // Отправляем анимацию руки игрока (бота)
-        player.swingMainHand();
+    public static void animateHandAsync(BotTask<?> task, Bot bot) {
+
+        if (bot.getNPCEntity() instanceof Player playerBot) {
+
+            // ✅ Принудительно обновляем 
+            Bukkit.getScheduler().runTaskLater(AIBotPlugin.getInstance(), () -> {
+                BotLogger.debug(task.getIcon(), task.isLogged(), bot.getId() + " 👋🏻 Анимация руки выполнена");
+                playerBot.swingMainHand();
+            }, 1L); // ✅ Через тик, чтобы дать время на обновление
+
+        } else {
+            BotLogger.debug(task.getIcon(), task.isLogged(), bot.getId() + " 🖐🏻 Анимация не выполнена: бот — не игрок");
+        }
+
     }
+
+    public static void animateHandSync(BotTask<?> task, Bot bot) {
+
+        if (bot.getNPCEntity() instanceof Player playerBot) {
+
+            BotLogger.debug(task.getIcon(), task.isLogged(), bot.getId() + " 👋🏻 Анимация руки выполнена");
+            
+            playerBot.swingMainHand();
+
+        } else {
+            BotLogger.debug(task.getIcon(), task.isLogged(), bot.getId() + " 🖐🏻 Анимация не выполнена: бот — не игрок");
+        }
+
+    }
+
 
 }

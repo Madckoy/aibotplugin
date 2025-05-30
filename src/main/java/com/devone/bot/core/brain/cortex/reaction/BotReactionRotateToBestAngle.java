@@ -51,7 +51,9 @@ public class BotReactionRotateToBestAngle implements IBotReaction {
 
                 if (res.status) {
                     BotLogger.debug(ICON, bot.isLogged(), bot.getId() + " 📐 есть хороший угол зрения. Поворачиваем туда!" + res.yaw);
-                    BotUtils.rotate(bot.getActiveTask(), bot, res.yaw);
+                    
+                    BotUtils.rotateAsync(bot.getActiveTask(), bot, res.yaw);
+
                     bot.getNavigator().setSuggestion(Suggestion.NAVIGATION_CALCULATE);
 
                     BotMemoryV2Utils.memorizeScanRadius(bot, radius);

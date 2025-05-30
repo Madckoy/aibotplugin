@@ -35,9 +35,12 @@ public class BotConstants {
     public static final long DEFAULT_MEMORY_EXPIRATION = 300_000; // 5 мин
 
     // 🔁 Тайминги в тиках
-    public static final long TICKS_NAVIGATION_UPDATE = 20L;       // 1 сек
-    public static final long TICKS_TASK_UPDATE = 20L;             // 1 сек
-    public static final long TICKS_BLUEMAP_UPDATE = 20L;          // 1 сек
-    public static final long TICKS_MEMORY_SAVE = 5L;              // 1 сек
+    public static final long TICKS_NAVIGATION_UPDATE = 2L;       // 1 сек
+    public static final long TICKS_TASK_UPDATE = 2L;             // 1 сек
+    public static final long TICKS_BLUEMAP_UPDATE = 2L;          // 1 сек
+    public static final long TICKS_MEMORY_SAVE = 2L;              // 1 сек
+    public static final long TICKS_FAST_UPDATE = 1L;
+    public static final long TICKS_MEMORY_CLEANUP = 30000L;
+    
 
 }

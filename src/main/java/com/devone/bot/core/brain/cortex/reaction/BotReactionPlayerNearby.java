@@ -10,6 +10,7 @@ import com.devone.bot.core.utils.blocks.BotPosition;
 import com.devone.bot.core.utils.logger.BotLogger;
 import com.devone.bot.core.utils.world.BotWorldHelper;
 import org.bukkit.Bukkit;
+import org.bukkit.Location;
 import org.bukkit.entity.Player;
 
 import java.util.Optional;
@@ -25,7 +26,7 @@ public class BotReactionPlayerNearby implements IBotReaction {
         BotLogger.debug(ICON, bot.isLogged(), bot.getId() + " Текущая рекомендация: "+bot.getNavigator().getSuggestion());
         BotLogger.debug(ICON, bot.isLogged(), bot.getId() + " Навигатор занят? "+bot.getNavigator().isCalculating());
 
-        if(bot.getNPCNavigator().isNavigating()) return Optional.empty();
+        if(bot.getNPCNavigator().isNavigating() || bot.getNavigator().isCalculating()) return Optional.empty();
         
 
         if (BotInventory.isEmpty(bot)) {
@@ -42,13 +43,17 @@ public class BotReactionPlayerNearby implements IBotReaction {
             BotPosition playerLoc = new BotPosition(BotWorldHelper.locationToBotPosition(player.getLocation()));
             double dist = botLoc.distanceTo(playerLoc);
 
-            if (dist < BotConstants.DEFAULT_PLAYER_DETECTION_RADIUS) {
-                BotLogger.debug("🤖", bot.isLogged(), bot.getId() + " 🙋🏻‍♂️ Обнаружен игрок " + player.getName() + " на "
-                        + String.format("%.1f", dist) + " м");
+            if (dist > BotConstants.DEFAULT_PLAYER_DETECTION_RADIUS) continue;
+            
+            Location pLoc = BotWorldHelper.botPositionToWorldLocation(playerLoc);
 
-                return Optional.of(() -> {
-                    BotTaskManager.push(bot, new BotSequencePlayerNearby(bot, player));
-                });
+            if (bot.getNPCNavigator().canNavigateTo(pLoc)) {
+                    BotLogger.debug("🤖", bot.isLogged(), bot.getId() + " 🙋🏻‍♂️ Обнаружен игрок " + player.getName() + " на "
+                    + String.format("%.1f", dist) + " м");
+    
+                    return Optional.of(() -> {
+                        BotTaskManager.push(bot, new BotSequencePlayerNearby(bot, player));
+                    });
             }
         }
 

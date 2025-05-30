@@ -51,13 +51,11 @@ public class BotHandAttackTask extends BotHandTask<BotHandAttackTaskParams> {
     }
 
     public void execute() {
-
         super.execute();
-
         BotLogger.debug(icon, isLogged(), bot.getId() + " 🔶 Executing BotHandAttackTask");
 
         if (getTarget() == null) {
-            BotLogger.debug(icon, isLogged(), bot.getId() + " ❌ BotHandAttackTask: Target is null.");
+            BotLogger.debug(icon, isLogged(), bot.getId() + " ❌ Target is null.");
             this.stop();
             return;
         }
@@ -69,23 +67,27 @@ public class BotHandAttackTask extends BotHandTask<BotHandAttackTaskParams> {
 
         BotHandAttackTask haTask = this;
 
+        final int COOLDOWN_TICKS = 10; // задержка между атаками
+        final int TURN_INTERVAL = 5;
+        final int PURSUIT_DISTANCE_TICKS = 20;
+
+        final int[] attackCooldown = {0}; // оборачиваем, чтобы использовать в лямбде
+
         bukkitTask = new BukkitRunnable() {
+            
             @Override
             public void run() {
                 if (done || bot.getNPCEntity() == null) {
-                    BotLogger.debug(icon, isLogged(),
-                            bot.getId() + " ❌ BotHandAttackTask: Task is done or Bot NPC is null.");
+                    BotLogger.debug(icon, isLogged(), bot.getId() + " ❌ Task is done or Bot NPC is null.");
                     stop();
                     cancel();
                     return;
                 }
 
-                setObjective(params.getObjective() + " " + getTarget().getType() + " (" + getTarget().getX() + ", "
-                        + getTarget().getY() + ", " + getTarget().getZ() + ")");
-
+                setObjective(params.getObjective() + " " + getTarget().getType() + " at " + getTarget().getPosition().toCompactString());
                 attempts++;
 
-                // 🧠 Работа с мобом по UUID
+                // Работаем через UUID
                 if (getTarget().getUUID() != null) {
                     LivingEntity living = BotWorldHelper.findLivingEntityByUUID(getTarget().getUUID());
 
@@ -99,65 +101,66 @@ public class BotHandAttackTask extends BotHandTask<BotHandAttackTaskParams> {
                         return;
                     }
 
-                    // 🔄 Обновляем targetLocation
-                    BotPosition pos = BotWorldHelper.locationToBotPosition(living.getLocation());
-                    
-                    bot.getNavigator().setTarget(new BotBlockData(pos.toPositionKey().getX(), pos.toPositionKey().getY(), pos.toPositionKey().getZ()));
+                    BotPosition  pos = BotWorldHelper.locationToBotPosition(living.getLocation());
+                    BotBlockData bl = BotWorldHelper.blockToBotBlockData(living.getLocation().getBlock());
 
-                    BotUtils.turnToTarget(haTask, bot, pos);
-
+                    // Устанавливаем цель для логики навигации и NPC
+                    bot.getNavigator().setTarget(bl);
                     bot.getNPCNavigator().setTarget(living.getLocation());
+
                     double distance = bot.getNPCEntity().getLocation().distance(living.getLocation());
 
+                    // ⏱️ Проверка поворота к цели
+                    if (pursuitTicks % TURN_INTERVAL == 0) {
+                        BotUtils.turnToTargetSync(haTask, bot, pos);
+                    }
+
+                    // 🏃 Преследование
                     if (distance > 2.0) {
                         bot.getNPCNavigator().getDefaultParameters().speedModifier(2.5F);
 
-                        if (pursuitTicks % 20 == 0) {
+                        if (pursuitTicks % PURSUIT_DISTANCE_TICKS == 0) {
                             bot.getNPCNavigator().setTarget(living.getLocation());
+                            bot.getNavigator().setTarget(BotWorldHelper.blockToBotBlockData(living.getLocation().getBlock()));
 
-                            bot.getNavigator()
-                                    .setTarget(BotWorldHelper.blockToBotBlockData(living.getLocation().getBlock()));
-
-                            //turnToTarget();
-                            
                             BotLogger.debug(icon, isLogged(),
-                                    bot.getId() + " 🏃🏻‍➡️ Pursuing mob, correcting direction. Distance: "
-                                            + String.format("%.2f", distance));
+                                    bot.getId() + " 🏃🏻‍➡️ Correcting direction. Distance: " + String.format("%.2f", distance));
                         }
 
                         BotLogger.debug(icon, isLogged(),
                                 bot.getId() + " 🏃🏻‍➡️ Pursuing mob, distance: " + String.format("%.2f", distance));
-
                     } else {
+                        // ⚔️ Удар с задержкой
+                        if (attackCooldown[0] <= 0) {
+                            animateHandSync(haTask, bot);
+                            living.damage(damage, bot.getNPCEntity());
+                            hits++;
 
-                        animateHand(haTask, bot);
-
-                        living.damage(damage, bot.getNPCEntity());
-                        hits++;
-
-                        BotLogger.debug(icon, isLogged(), bot.getId() + " ⚔️ Attacked mob: " + living.getType());
+                            BotLogger.debug(icon, isLogged(), bot.getId() + " ⚔️ Attacked mob: " + living.getType());
+                            attackCooldown[0] = COOLDOWN_TICKS;
+                        } else {
+                            attackCooldown[0]--;
+                        }
                     }
 
+                    // ❌ Условия остановки
                     if (++pursuitTicks > MAX_PURSUIT_TICKS) {
                         BotLogger.debug(icon, isLogged(), bot.getId() + " ⏱️ Pursuit timeout reached.");
                         stop();
                         cancel();
-                        return;
-                    }
-
-                    if (attempts > MAX_ATTEMPTS) { // застряли
+                    } else if (attempts > MAX_ATTEMPTS) {
                         BotPosition endPos = bot.getNavigator().getTarget().getPosition();
                         if (endPos.equals(startPos) && hits == 0) {
-                            BotLogger.debug(icon, isLogged(), bot.getId() + " ⏱️ Seems like the bot got stuck.");
+                            BotLogger.debug(icon, isLogged(), bot.getId() + " ⏱️ Seems like bot is stuck.");
                             stop();
                             cancel();
-                            return;
                         }
                     }
                 }
             }
-        }.runTaskTimer(AIBotPlugin.getInstance(), 0L, 10L);
+        }.runTaskTimer(AIBotPlugin.getInstance(), 0L, 1L);
     }
+
 
     @Override
     public void stop() {

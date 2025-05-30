@@ -7,7 +7,7 @@ public class BotFishingTaskParams extends BotTaskParams {
     public BotFishingTaskParams() {
         super();
         setIcon("🎣");
-        setObjective("Fish while in water");
+        setObjective("Fishing while in water");
     }
 
     @Override

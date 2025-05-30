@@ -13,7 +13,6 @@ import com.devone.bot.core.brain.memory.BotMemoryV2Utils;
 import com.devone.bot.core.task.active.hand.BotHandTask;
 import com.devone.bot.core.task.active.hand.excavate.params.BotHandExcavateTaskParams;
 import com.devone.bot.core.utils.BotUtils;
-import com.devone.bot.core.utils.blocks.BotBlockData;
 import com.devone.bot.core.utils.logger.BotLogger;
 import com.devone.bot.core.utils.world.BotWorldHelper;
 
@@ -83,11 +82,11 @@ public class BotHandExcavateTask extends BotHandTask<BotHandExcavateTaskParams> 
                     return;
                 }
 
-                turnToTarget(heTask, getTarget().getPosition());
+                turnToTargetSync(heTask, getTarget().getPosition());
 
-                animateHand(heTask, bot);
+                animateHandSync(heTask, bot);
 
-                BotUtils.playBlockBreakEffect(heTask, bot, block.getLocation());
+                BotUtils.playBlockBreakEffectSync(heTask, bot, block.getLocation());
 
                 block.breakNaturally();
 
@@ -99,7 +98,7 @@ public class BotHandExcavateTask extends BotHandTask<BotHandExcavateTaskParams> 
 
                 BotLogger.debug(icon, isLogged(), bot.getId() + " 🧊 Block is excavated: " + getTarget().getType());
             }
-        }.runTaskTimer(AIBotPlugin.getInstance(), 0L, 1L);
+        }.runTaskTimer(AIBotPlugin.getInstance(), 1L, 1L);
     }
 
     @Override

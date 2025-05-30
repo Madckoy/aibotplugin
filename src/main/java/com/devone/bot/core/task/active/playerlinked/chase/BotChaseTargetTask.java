@@ -18,9 +18,11 @@ public class BotChaseTargetTask extends BotTaskAutoParams<BotChaseTaskParams> {
     private double attackRange;
 
     private final int updateIntervalTicks = 10;
+    private boolean chasing = false;
 
     public BotChaseTargetTask(Bot bot, BotBlockData target) {
         super(bot, BotChaseTaskParams.class);
+        this.target = target;
     }
 
     @Override
@@ -31,42 +33,67 @@ public class BotChaseTargetTask extends BotTaskAutoParams<BotChaseTaskParams> {
         this.attackRange = params.getAttackRange();
         setIcon(params.getIcon());
         setObjective(params.getObjective());
-
-        if (target != null) {
-            bot.getNavigator().setTarget(target);
-        }
-
-        BotLogger.debug("✅", this.isLogged(),
-                "Chase parameters: " + target + " | " + chaseDistance + " | " + attackRange);
         return this;
     }
 
     @Override
     public void execute() {
         if (target == null) {
-            BotLogger.debug("💀", this.isLogged(), "Цель исчезла. Завершаем преследование.");
-            this.stop();
+            BotLogger.debug("💀", isLogged(), "❌ Цель отсутствует. Завершаем задачу.");
+            stop();
             return;
         }
 
         setObjective(params.getObjective() + ": " + target.getType() + " at " + target.getPosition().toCompactString());
+        chasing = true;
 
-        updateFollowLogic();
-
-        Bukkit.getScheduler().runTaskLater(AIBotPlugin.getInstance(), this::execute, updateIntervalTicks);
-
-        if (getElapsedTime() > 120000) {
-            BotLogger.debug("💀", this.isLogged(), "Не могу добраться до цели. Завершаю преследование.");
-            this.stop();
-        }
+        scheduleNextChaseCycle();
     }
 
-    private void updateFollowLogic() {
- 
-        BotUtils.turnToTarget(this, bot, target.getPosition());
- 
-        BotLogger.debug("🏃", this.isLogged(), "Chasing: " + target);
-        this.stop();
+    private void scheduleNextChaseCycle() {
+        Bukkit.getScheduler().runTaskLater(AIBotPlugin.getInstance(), () -> {
+
+            if (!chasing || target == null) {
+                BotLogger.debug("💀", isLogged(), "❌ Преследование завершено (null/invalid)");
+                stop();
+                return;
+            }
+
+            double distance = bot.getNavigator().getPosition().distanceTo(target.getPosition());
+
+            if (distance > chaseDistance) {
+                BotLogger.debug("🚫", isLogged(), "Цель вне зоны преследования: " + distance);
+                stop();
+                return;
+            }
+
+            // 🔁 продолжаем преследование
+            BotLogger.debug("🏃", isLogged(), "Преследуем: " + target + " на расстоянии " + distance);
+            BotUtils.turnToTargetSync(this, bot, target.getPosition());
+            bot.getNavigator().setTarget(target);
+
+            if (distance <= attackRange) {
+                BotLogger.debug("🎯", isLogged(), "Цель достигнута. Завершаем.");
+                stop();
+                return;
+            }
+
+            if (getElapsedTime() > 120000) {
+                BotLogger.debug("⏳", isLogged(), "Таймаут преследования. Завершаем.");
+                stop();
+                return;
+            }
+
+            // 📆 Назначаем следующий шаг
+            scheduleNextChaseCycle();
+
+        }, updateIntervalTicks);
+    }
+
+    @Override
+    public void stop() {
+        chasing = false;
+        super.stop();
     }
 
     public BotBlockData getFollowingObject() {

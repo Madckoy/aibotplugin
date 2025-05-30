@@ -7,7 +7,6 @@ import com.devone.bot.core.task.active.move.BotMoveTask;
 import com.devone.bot.core.task.active.move.BotMoveTaskHelper;
 import com.devone.bot.core.utils.blocks.BotBlockData;
 import com.devone.bot.core.utils.blocks.BotPosition;
-import com.devone.bot.core.utils.blocks.BotPositionKey;
 import com.devone.bot.core.utils.logger.BotLogger;
 import com.devone.bot.core.utils.world.BotWorldHelper;
 
@@ -66,6 +65,37 @@ public class BotMoveTaskListener implements Listener {
     }
 
     public void onComplete(Bot bot) {
+        BotPosition actual = bot.getNavigator().getPosition();
+
+        if (actual != null) {
+            BotPosition centered = BotMoveTaskHelper.centerBlock(actual);
+
+            // Сравниваем дистанцию между фактической и целевой позицией
+            if (actual.distanceTo(centered) > 0.1) {
+                Location aligned = new Location(
+                        BotWorldHelper.getBotWorld(bot),
+                        centered.getX(),
+                        centered.getY() + 0.01,
+                        centered.getZ()
+                );
+                aligned.setYaw(actual.getYaw());
+                aligned.setPitch(actual.getPitch());
+
+                Bukkit.getScheduler().runTask(AIBotPlugin.getInstance(), () -> {
+                    bot.getNPC().teleport(aligned, PlayerTeleportEvent.TeleportCause.PLUGIN);
+                });
+
+                BotLogger.debug("🧭", bot.isLogged(), bot.getId()
+                        + " 📌 Выровнен в центр блока (прыжок > 0.1): " + aligned);
+            } else {
+                BotLogger.debug("🧭", bot.isLogged(), bot.getId()
+                        + " ℹ️ Уже почти в центре блока, телепортация не требуется");
+            }
+        }
+    }
+
+
+    public void onComplete__(Bot bot) {
 
         BotPosition actual = bot.getNavigator().getPosition();
     

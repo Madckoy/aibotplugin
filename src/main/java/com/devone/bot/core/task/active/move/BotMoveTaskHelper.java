@@ -20,7 +20,7 @@ public class BotMoveTaskHelper {
      * @param speed  множитель скорости
      * @param log    включить логирование
      */
-    public static void setTarget(Bot bot, BotPosition target, float speed, boolean log) {
+    public static void setTargetAndStartMoving(Bot bot, BotPosition target, float speed) {
         if (target == null) {
             BotLogger.debug( BotUtils.getActiveTaskIcon(bot), bot.isLogged(), bot.getId() + " 🏁 Не смогли начать движение.");
             return;
@@ -33,9 +33,8 @@ public class BotMoveTaskHelper {
         bot.getNPCNavigator().getDefaultParameters().speedModifier(speed);
         bot.getNPCNavigator().setTarget(loc);
 
-        if (log) {
-            BotLogger.debug(BotUtils.getActiveTaskIcon(bot), bot.isLogged(), bot.getId() + " ▶ Двигаемся к: " + target);
-        }
+        BotLogger.debug(BotUtils.getActiveTaskIcon(bot), bot.isLogged(), bot.getId() + " ▶ Двигаемся к: " + target);
+
     }
 
     public static BotPosition centerBlock(BotPosition pos) {
