@@ -15,7 +15,7 @@ public abstract class BotSequenceContainer<T extends BotTaskParams> extends BotT
 
     public BotSequenceContainer(Bot bot, Class<T> paramClass) {
         super(bot, null, paramClass);
-        setIcon("🔣");
+        setIcon("<");
         setObjective("Container for tasks");
         setDeffered(true);
     }
@@ -57,6 +57,8 @@ public abstract class BotSequenceContainer<T extends BotTaskParams> extends BotT
                 setDeffered(false);
             }
 
+            stop();
+            /*
             if(subtasks!=null) {
                 boolean allDone = subtasks.stream().allMatch(BotTask::isDone);
 
@@ -69,7 +71,7 @@ public abstract class BotSequenceContainer<T extends BotTaskParams> extends BotT
             } else {
                stop();     
             }
-
+            */    
             return;
     }
 

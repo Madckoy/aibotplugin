@@ -62,13 +62,11 @@ public class BotMoveCommand implements CommandExecutor {
             return false;
         }
         // создаем контейнер
-        BotSequenceMoveParams params = new BotSequenceMoveParams();
-        params.position = new BotPosition(x, y, z);
-        BotSequenceMove container = new BotSequenceMove(bot);
-        container.setParams(params);
+        BotPosition pos = new BotPosition(x, y, z);
+        BotSequenceMove container = new BotSequenceMove(bot, pos);
         BotTaskManager.push(bot, container);
 
-        BotLogger.debug("📌 ", AIBotPlugin.getInstance().isLogged(), "/bot-move: Бот " + bot.getId() + " направляется в " + params.position);
+        BotLogger.debug("📌 ", AIBotPlugin.getInstance().isLogged(), "/bot-move: Бот " + bot.getId() + " направляется в " + pos.toPositionKey());
         
         sender.sendMessage("✅ Бот '" + botName + "' направляется в " + x + " " + y + " " + z);
 

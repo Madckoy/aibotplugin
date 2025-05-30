@@ -16,9 +16,9 @@ public class BotSequenceLowHealth extends BotSequenceContainer<BotSequenceLowHea
 
     public BotSequenceLowHealth(Bot bot) {
         super(bot, BotSequenceLowHealthParams.class);
-        setIcon("🔀");
+        //setIcon("🔀");
         setObjective("Sequence: Bot Teleport Task on Low HP");
-        setDeffered(true);
+        //setDeffered(true);
     }
 
     @Override

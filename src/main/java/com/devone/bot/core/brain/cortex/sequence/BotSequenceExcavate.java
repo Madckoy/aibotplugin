@@ -16,9 +16,9 @@ public class BotSequenceExcavate extends BotSequenceContainer<BotSequenceExcavat
     public BotSequenceExcavate(Bot bot) {
 
         super(bot, BotSequenceExcavateParams.class);
-        setIcon("🔀");
+        //setIcon("🔀");
         setObjective("Sequence: Excavate Task");
-        setDeffered(true);
+        //setDeffered(true);
     }
 
     @Override

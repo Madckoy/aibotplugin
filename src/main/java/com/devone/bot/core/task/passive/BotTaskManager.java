@@ -138,7 +138,7 @@ public class BotTaskManager {
 
             sb.append(task != null ? task.getIcon() : "?");
             if (i < getTaskStack().size() - 1) {
-                sb.append(" ➜ ");
+                sb.append(":");
             }
         }
         return sb.toString();

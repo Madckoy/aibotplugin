@@ -22,9 +22,9 @@ public class BotSequenceTeleportToPlayer
     public BotSequenceTeleportToPlayer(Bot bot, Player player) {
         super(bot, BotSequenceTeleportToPlayerParams.class);
         this.player = player;
-        setIcon("🔀");
+        //setIcon("🔀");
         setObjective("Sequence: Телепорт к игроку (не вплотную)");
-        setDeffered(true);
+        //setDeffered(true);
     }
 
     @Override

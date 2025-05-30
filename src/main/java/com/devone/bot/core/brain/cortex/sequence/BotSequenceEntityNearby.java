@@ -21,9 +21,9 @@ public class BotSequenceEntityNearby
 
     public BotSequenceEntityNearby(Bot bot, BotBlockData hostileMob) {
         super(bot, BotSequenceEntityNearbyParams.class);
-        setIcon("🔀");
+        //setIcon("🔀");
         setObjective("Sequence: Bot MoveTask and Bot Hand Attack Task");
-        setDeffered(true);
+        //setDeffered(true);
         target = hostileMob;
     }
 

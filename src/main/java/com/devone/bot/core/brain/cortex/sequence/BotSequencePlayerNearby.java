@@ -22,9 +22,9 @@ public class BotSequencePlayerNearby extends BotSequenceContainer<BotSequencePla
     public BotSequencePlayerNearby(Bot bot, Player player) {
         super(bot, BotSequencePlayerNearbyParams.class);
         this.player = player;
-        setIcon("🔀");
+        //setIcon("🔀");
         setObjective("Sequence: Bot MoveTask and Bot Drop All Task");
-        setDeffered(true);
+        //setDeffered(true);
     }
 
     @Override
@@ -36,15 +36,15 @@ public class BotSequencePlayerNearby extends BotSequenceContainer<BotSequencePla
         // 1. Идём к игроку
         BotMoveTask walkTask = new BotMoveTask(bot);
         walkTask.setTarget(plBlock.getPosition());
-        walkTask.setObjective("🥾 Approach player");
 
         // 2. Дропаем ресы
         BotDropAllTask dropTask = new BotDropAllTask(bot, player);
-        dropTask.setObjective("🎁 Drop resources");
 
         List<BotTask<?>> subtasks = new ArrayList<>();
+
         subtasks.add(walkTask);
         subtasks.add(dropTask);
+
         return subtasks;
     }
 }

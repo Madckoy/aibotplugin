@@ -13,6 +13,7 @@ import com.devone.bot.core.utils.BotUtils;
 import com.devone.bot.core.utils.logger.BotLogger;
 
 public class BotBrainTask extends BotTaskAutoParams<BotBrainTaskParams> {
+
     long cycle = 0;
 
     public BotBrainTask(Bot bot) {
@@ -52,7 +53,7 @@ public class BotBrainTask extends BotTaskAutoParams<BotBrainTaskParams> {
             bot.getNavigator().setSuggestion(Suggestion.NAVIGATION_SIMULATE);
         }
         // regular reset 
-        if (cycle % 9999 == 0) {
+        if (cycle % 999 == 0) {
             BotCalibrateTask calibrateTask = new BotCalibrateTask(bot);
             bot.getTaskManager().pushTask(calibrateTask);
         }
@@ -60,7 +61,7 @@ public class BotBrainTask extends BotTaskAutoParams<BotBrainTaskParams> {
         // Обработка реакций
         List<BotReactionResult> reactions = BotReactionManager.checkReactions(bot);
         for (BotReactionResult r : reactions) {
-            setObjective(r.name); // или логика по приоритету
+            setObjective(params.getObjective() + " "+ cycle +" | "+r.name+" (" + rmt + ")"); // или логика по приоритету
             r.action.run();
         }
     }

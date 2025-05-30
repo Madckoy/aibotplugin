@@ -14,8 +14,9 @@ public class BotSequenceEmpty
 
     public BotSequenceEmpty(Bot bot) {
         super(bot, BotSequenceEmptyParams.class);
-        setIcon("🔀");
+        //setIcon("🔀");
         setObjective("Sequence: Empty");
+        //setDeffered(true);
     }
 
     @Override

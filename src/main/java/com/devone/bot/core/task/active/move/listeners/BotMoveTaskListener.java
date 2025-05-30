@@ -7,6 +7,7 @@ import com.devone.bot.core.task.active.move.BotMoveTask;
 import com.devone.bot.core.task.active.move.BotMoveTaskHelper;
 import com.devone.bot.core.utils.blocks.BotBlockData;
 import com.devone.bot.core.utils.blocks.BotPosition;
+import com.devone.bot.core.utils.blocks.BotPositionKey;
 import com.devone.bot.core.utils.logger.BotLogger;
 import com.devone.bot.core.utils.world.BotWorldHelper;
 
@@ -36,18 +37,7 @@ public class BotMoveTaskListener implements Listener {
         BotLogger.debug(task.getIcon(), task.isLogged(),
                 task.getBot().getId() + " ✅ Навигация завершена, ID таски: " + task.getUUID());
 
-        BotPosition pos = task.getBot().getNavigator().getTarget().getPosition();
-
-
-        // Валидация — для отладки и логов
-        boolean arrived = task.getBot().getNPC().getStoredLocation().getBlockX() == pos.getX()
-                && task.getBot().getNPC().getStoredLocation().getBlockZ() == pos.getZ();
-
-        if (!arrived) {
-            BotLogger.debug(task.getIcon(), task.isLogged(),
-                    task.getBot().getId() + " ⚠️ Навигатор завершил, но NPC не в точке XZ. Завершаем всё равно.");
-                   
-        }
+        BotPosition pos = task.getBot().getNavigator().getPosition();
 
         onComplete(task.getBot());
 

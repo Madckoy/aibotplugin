@@ -21,15 +21,23 @@ public class BotDropAllTask extends BotPlayerLinkedTask<BotDropAllTaskParams> {
     public IBotTaskParameterized<BotDropAllTaskParams> setParams(BotDropAllTaskParams params) {
         setIcon(params.getIcon());
         setObjective(params.getObjective());
-        //setEnabled(params.isEnabled());
+        setEnabled(params.isEnabled());
         return this;
     }
 
     @Override
     public void execute() {
         BotLogger.debug(icon, isLogged(), bot.getId()+ " 🎁 Dropping all loot... ");
+
         BotInventory.dropAllItems(bot);
 
-        this.stop();
+        stop();
+    }
+
+    @Override
+    public void stop() {
+        BotLogger.debug(icon, isLogged(), bot.getId() + " ✅ Drop task completed");
+        super.stop();
+        done=true;
     }
 }
