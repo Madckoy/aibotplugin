@@ -32,8 +32,11 @@ public class BotHandExcavateTask extends BotHandTask<BotHandExcavateTaskParams> 
 
     @Override
     public void execute() {
-        super.execute();
 
+        BotLogger.debug(icon, isLogged(), bot.getId() + " Исполняем подзадачу руки");
+        super.execute();
+        BotLogger.debug(icon, isLogged(), bot.getId() + " Исполняем подзадачу руки - прверка таргета");
+        
         if (getTarget() == null) {
             BotLogger.debug(icon, isLogged(), bot.getId() + " ❌ BotHandExcavateTask: Target is null.");
             this.stop();

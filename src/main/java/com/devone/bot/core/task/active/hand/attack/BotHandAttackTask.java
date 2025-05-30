@@ -44,8 +44,6 @@ public class BotHandAttackTask extends BotHandTask<BotHandAttackTaskParams> {
 
         setIcon(params.getIcon());
         setObjective(params.getObjective());
-
-        setTarget(params.getTarget());
         this.damage = params.getDamage();        
 
         BotLogger.debug(icon, isLogged(), bot.getId() + " ✅ Parameters for BotHandAttackTask set.");

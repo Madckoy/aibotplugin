@@ -13,12 +13,10 @@ public class BotHandExcavateTaskParams extends BotHandTaskParams {
 
     public BotHandExcavateTaskParams(BotBlockData target) {
         this();
-        setTarget(target);
-    }
+         }
 
     public BotHandExcavateTaskParams(BotBlockData target, double damage) {
         this();
-        setTarget(target);
         setDamage(damage);
     }
 
@@ -31,7 +29,6 @@ public class BotHandExcavateTaskParams extends BotHandTaskParams {
     public String toString() {
         return "BotHandExcavateTaskParams{" +
                 "damage=" + getDamage() +
-                ", target=" + getTarget() +
                 '}';
     }
 }

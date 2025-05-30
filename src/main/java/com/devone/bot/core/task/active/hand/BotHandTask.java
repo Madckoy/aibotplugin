@@ -25,14 +25,6 @@ public abstract class BotHandTask<T extends BotHandTaskParams> extends BotTaskAu
 
         setIcon(params.getIcon());
         setObjective(params.getObjective());
-        setTarget(params.getTarget());
-
-        if (target != null) {            
-            BotLogger.debug(icon, isLogged(), bot.getId() + " ✅ Target for BotHandTask is set: " + target);
-        } else {
-            BotLogger.debug(icon, isLogged(), bot.getId() + " ⚠️ Target is null in BotHandTask.");
-        }
-
         return this;
     }
 
@@ -40,7 +32,7 @@ public abstract class BotHandTask<T extends BotHandTaskParams> extends BotTaskAu
     public void execute() {
         BotLogger.debug(icon, isLogged(), bot.getId() + " 🔶 Executing BotHandTask...");
 
-        if (target == null) {
+        if (getTarget() == null) {
             BotLogger.debug(icon, isLogged(), bot.getId() + " ❌ BotHandTask: Target is null.");
             this.stop();
             return;

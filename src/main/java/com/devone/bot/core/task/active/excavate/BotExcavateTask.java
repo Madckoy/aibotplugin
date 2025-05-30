@@ -202,9 +202,8 @@ public class BotExcavateTask extends BotTaskAutoParams<BotExcavateTaskParams> {
                 BotLogger.debug(icon, isLogged(), bot.getId() + " 👆 Берем Next блок: " + blockPosition);
                 Block targetBlock = BotWorldHelper.botPositionToWorldBlock(blockPosition);
             
-                //bot.getNavigator().setTarget(BotWorldHelper.blockToBotBlockData(targetBlock));
-            
-                               
+                bot.getNavigator().setTarget(BotWorldHelper.blockToBotBlockData(targetBlock));
+                                           
                 setObjective(params.getObjective() + " " + BotUtils.getBlockName(targetBlock) + " at " + blockPosition.toCompactString());
 
                 Material mat = targetBlock.getType();
@@ -218,9 +217,10 @@ public class BotExcavateTask extends BotTaskAutoParams<BotExcavateTaskParams> {
                 }
 
                 this.setPause(true);
-
+                BotLogger.debug(icon, isLogged(), " Вызываем подзадачу руки");
                 BotBlockData blockData = BotWorldHelper.blockToBotBlockData(targetBlock);
                 BotHandExcavateTask handTask = new BotHandExcavateTask(bot);
+                BotLogger.debug(icon, isLogged(), " Целевой блок: "+blockData);
                 handTask.setTarget(blockData);
                 BotTaskManager.push(bot, handTask);
             }

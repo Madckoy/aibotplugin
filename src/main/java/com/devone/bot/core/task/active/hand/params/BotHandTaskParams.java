@@ -8,8 +8,6 @@ public class BotHandTaskParams extends BotTaskParams {
 
     private double damage = BotConstants.DEFAULT_HAND_DAMAGE;
 
-    private transient BotBlockData target = new BotBlockData();
-
     public BotHandTaskParams() {
         setIcon("✋🏻");
         setObjective("Hand");
@@ -17,12 +15,10 @@ public class BotHandTaskParams extends BotTaskParams {
 
     public BotHandTaskParams(BotBlockData target) {
         this(); // загружаем из файла
-        this.target = target;
     }
 
     public BotHandTaskParams(BotBlockData target, double damage) {
         this(); // загружаем из файла
-        this.target = target;
         this.damage = damage;
     }
 
@@ -32,14 +28,6 @@ public class BotHandTaskParams extends BotTaskParams {
 
     public void setDamage(double damage) {
         this.damage = damage;
-    }
-
-    public BotBlockData getTarget() {
-        return target;
-    }
-
-    public void setTarget(BotBlockData target) {
-        this.target = target;
     }
 
     @Override

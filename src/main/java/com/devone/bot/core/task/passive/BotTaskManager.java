@@ -34,15 +34,19 @@ public class BotTaskManager {
 
         try {
             BotTask<?> activeTask = bot.getTaskManager().getActiveTask();
-            if(activeTask.isReactive() && isWaiting()==false) {
-                //another reactive task is being executed
+            if(activeTask instanceof BotSequenceContainer) {
+                if(activeTask.isReactive() && isWaiting()==false) {
+                    //another reactive task is being executed
                 
-                System.out.println(activeTask);                
-                System.out.println(waiting);
+                    System.out.println(activeTask);                
+                    System.out.println(waiting);
 
+                    activeTask.stop();
+                    return;
+                }
+            } else {
                 activeTask.stop();
-                return;
-            }   
+            }  
         } catch (Exception e) {
                 BotLogger.debug("🤖", AIBotPlugin.getInstance().isLogged(),
                    bot.getId() + "Error in " + this.getClass().getSimpleName() +" "+ e.getMessage());
