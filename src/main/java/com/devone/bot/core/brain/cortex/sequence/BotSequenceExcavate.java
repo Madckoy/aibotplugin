@@ -26,8 +26,6 @@ public class BotSequenceExcavate extends BotSequenceContainer<BotSequenceExcavat
         BotLogger.debug(getIcon(), isLogged(), bot.getId() + " " + icon + " " + getObjective());
 
         BotExcavateTask excvTask = new BotExcavateTask(bot);
-        excvTask.setParams(excvTask.getParams());
-
         List<BotTask<?>> subtasks = new ArrayList<>();
         subtasks.add(excvTask);
         

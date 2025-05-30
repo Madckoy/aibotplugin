@@ -20,6 +20,14 @@ import com.devone.bot.core.utils.world.BotWorldHelper;
 public class BotHandAttackTask extends BotHandTask<BotHandAttackTaskParams> {
 
     private BotBlockData target;
+    public BotBlockData getTarget() {
+        return target;
+    }
+
+    public void setTarget(BotBlockData target) {
+        this.target = target;
+    }
+
     private double damage = BotConstants.DEFAULT_HAND_DAMAGE;
     private BukkitTask bukkitTask;
     private BotHandAttackListener listener;
@@ -46,10 +54,8 @@ public class BotHandAttackTask extends BotHandTask<BotHandAttackTaskParams> {
         setIcon(params.getIcon());
         setObjective(params.getObjective());
 
-        this.target = params.getTarget();
-        this.damage = params.getDamage();
-
-        bot.getNavigator().setTarget(target);
+        setTarget(params.getTarget());
+        this.damage = params.getDamage();        
 
         BotLogger.debug(icon, isLogged(), bot.getId() + " ✅ Parameters for BotHandAttackTask set.");
         return this;
@@ -72,6 +78,8 @@ public class BotHandAttackTask extends BotHandTask<BotHandAttackTaskParams> {
             Bukkit.getPluginManager().registerEvents(listener, AIBotPlugin.getInstance());
         }
 
+        bot.getNavigator().setTarget(target);
+        
         BotHandAttackTask haTask = this;
 
         bukkitTask = new BukkitRunnable() {

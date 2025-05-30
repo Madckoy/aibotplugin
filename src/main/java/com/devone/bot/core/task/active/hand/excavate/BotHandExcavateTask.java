@@ -22,6 +22,14 @@ public class BotHandExcavateTask extends BotHandTask<BotHandExcavateTaskParams> 
     private BukkitTask bukkitTask;
     private BotBlockData target;
 
+    public BotBlockData getTarget() {
+        return target;
+    }
+
+    public void setTarget(BotBlockData target) {
+        this.target = target;
+    }
+
     public BotHandExcavateTask(Bot bot) {
         super(bot, BotHandExcavateTaskParams.class);
     }
@@ -29,9 +37,6 @@ public class BotHandExcavateTask extends BotHandTask<BotHandExcavateTaskParams> 
     public BotHandExcavateTask setParams(BotHandExcavateTaskParams params) {
         super.setParams(params); // вызовет BotHandTask.setParams()
         this.target = params.getTarget();
-
-        bot.getNavigator().setTarget(target);
-
         return this;
     }
 
@@ -45,7 +50,9 @@ public class BotHandExcavateTask extends BotHandTask<BotHandExcavateTaskParams> 
             return;
         }
 
+        bot.getNavigator().setTarget(this.target);
         BotLogger.debug(icon, isLogged(), bot.getId() + " 🔶 Executing BotHandExcavateTask");
+
 
         setObjective(params.getObjective() + " " + target.getType() + " at " + target.getPosition().toCompactString());
 
@@ -110,8 +117,6 @@ public class BotHandExcavateTask extends BotHandTask<BotHandExcavateTaskParams> 
             bukkitTask.cancel();
             bukkitTask = null;
         }
-
-        bot.getNavigator().setTarget(null);
 
         super.stop();
     }

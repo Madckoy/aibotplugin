@@ -2,6 +2,7 @@ package com.devone.bot.core.task.passive;
 
 import java.util.Stack;
 
+import com.devone.bot.AIBotPlugin;
 import com.devone.bot.core.Bot;
 import com.devone.bot.core.task.passive.params.BotTaskParams;
 import com.devone.bot.core.utils.logger.BotLifecycleLogger;
@@ -30,6 +31,19 @@ public class BotTaskManager {
             BotTask<?> currentTask = taskStack.peek();
             currentTask.setPause(true); // Ставим текущую задачу на паузу
         }
+
+        try {
+            BotTask<?> activeTask = bot.getTaskManager().getActiveTask();
+            if(activeTask.isReactive() && isWaiting()==false) {
+                //another reactive task is being executed
+                activeTask.stop();
+                return;
+            }   
+        } catch (Exception e) {
+                BotLogger.debug("🤖", AIBotPlugin.getInstance().isLogged(),
+                   bot.getId() + "Error in " + this.getClass().getSimpleName() +" "+ e.getMessage());
+        }                    
+
 
         taskStack.push(task);
         task.setInjected(true); // сообщаем задаче что она добавилась в общий стек
@@ -138,7 +152,12 @@ public class BotTaskManager {
 
             sb.append(task != null ? task.getIcon() : "?");
             if (i < getTaskStack().size() - 1) {
-                sb.append(":");
+                if(task instanceof BotSequenceContainer) {
+                    sb.append(" ");
+                } else {
+                    sb.append(" ▸ ");
+                }
+
             }
         }
         return sb.toString();

@@ -28,7 +28,8 @@ public class BotBrainTask extends BotTaskAutoParams<BotBrainTaskParams> {
 
         super.setParams(params);
         setIcon(params.getIcon() != null ? params.getIcon() : "🧠");
-        setObjective(params.getObjective() != null ? params.getObjective() : "Thinking...");
+        
+        setObjective(params.getObjective() != null ? params.getObjective() : "Thinking");
 
         bot.getBrain().setMemoryExpirationMillis(params.getMemoryExpirationMillis());
       
@@ -37,11 +38,11 @@ public class BotBrainTask extends BotTaskAutoParams<BotBrainTaskParams> {
 
     @Override
     public void execute() {
-        BotLogger.debug(icon, isLogged(), bot.getId() + " 🧠 Brain deciding...");
+        BotLogger.debug(icon, isLogged(), bot.getId() + " 🧠 Brain thinking...");
                
         long rmt = BotUtils.getRemainingTime(startTime, params.getTimeout());
         cycle++;
-        setObjective(params.getObjective() + " "+ cycle +" (" + rmt + ")");
+        setObjective(params.getObjective() + " cycle: "+ cycle +" (" + rmt + ")");
         if (rmt <= 0) {
             BotLogger.debug(icon, isLogged(), bot.getId() + " ⏱️ Task timeout passed. Start new cycle!");
             startTime = System.currentTimeMillis(); // new cycle                    
@@ -61,7 +62,7 @@ public class BotBrainTask extends BotTaskAutoParams<BotBrainTaskParams> {
         // Обработка реакций
         List<BotReactionResult> reactions = BotReactionManager.checkReactions(bot);
         for (BotReactionResult r : reactions) {
-            setObjective(params.getObjective() + " "+ cycle +" | "+r.name+" (" + rmt + ")"); // или логика по приоритету
+            setObjective(params.getObjective() + " cycle: "+ cycle +" | "+r.name+" (" + rmt + ")"); // или логика по приоритету
             r.action.run();
         }
     }

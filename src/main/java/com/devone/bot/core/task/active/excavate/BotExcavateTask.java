@@ -221,9 +221,7 @@ public class BotExcavateTask extends BotTaskAutoParams<BotExcavateTaskParams> {
 
                 BotBlockData blockData = BotWorldHelper.blockToBotBlockData(targetBlock);
                 BotHandExcavateTask handTask = new BotHandExcavateTask(bot);
-                BotHandExcavateTaskParams params = new BotHandExcavateTaskParams();
-                params.setTarget(blockData);
-                handTask.setParams(params);
+                handTask.setTarget(blockData);
                 BotTaskManager.push(bot, handTask);
             }
         }
@@ -255,7 +253,7 @@ public class BotExcavateTask extends BotTaskAutoParams<BotExcavateTaskParams> {
         this.runner = null;
         bot.getNavigator().setTarget(null);
         BotLogger.debug(icon, isLogged(), bot.getId() + " 🛑 Задача разрушения остановлена.");
-        bot.getNavigator().setSuggestion(Suggestion.NAVIGATION_SIMULATE);
+        bot.getNavigator().setSuggestion(null);
         super.stop();
     }
 

@@ -15,17 +15,19 @@ public abstract class BotSequenceContainer<T extends BotTaskParams> extends BotT
 
     public BotSequenceContainer(Bot bot, Class<T> paramClass) {
         super(bot, null, paramClass);
-        setIcon("<");
-        setObjective("Container for tasks");
+        setIcon("🟣");
+        setObjective("Sequence Container for tasks");
         setDeffered(true);
+        setReactive(true);
     }
 
     @Override
     public void execute() {
 
             BotLogger.debug(getIcon(), isLogged(),
-                    bot.getId() + " 🔣 Запущен контейнер: " + this.getClass().getSimpleName());
-      
+                    bot.getId() + "Запущен контейнер: " + this.getClass().getSimpleName());
+                 
+
             if(isDeffered()==true) {
                 BotLogger.debug(getIcon(), isLogged(),
                     bot.getId() + " ➕  Добавляем вложенные задачи в стек");
@@ -47,7 +49,9 @@ public abstract class BotSequenceContainer<T extends BotTaskParams> extends BotT
 
                 for (BotTask<?> task : reversed) {
                     BotLogger.debug(getIcon(), isLogged(),
-                            bot.getId() + " 🔜 Запуск подзадачи: " + task.getClass().getSimpleName());
+                            bot.getId() + " 🔜 Запуск подзадачи: " + task.getClass().getSimpleName());                            
+                    
+                    task.setReactive(true);
 
                     bot.getTaskManager().wait(true); 
                     bot.getTaskManager().pushTask(task);
@@ -56,9 +60,7 @@ public abstract class BotSequenceContainer<T extends BotTaskParams> extends BotT
                 bot.getTaskManager().wait(false); // continue updating the stack
                 setDeffered(false);
             }
-
-            stop();
-            /*
+          
             if(subtasks!=null) {
                 boolean allDone = subtasks.stream().allMatch(BotTask::isDone);
 
@@ -71,7 +73,7 @@ public abstract class BotSequenceContainer<T extends BotTaskParams> extends BotT
             } else {
                stop();     
             }
-            */    
+                
             return;
     }
 

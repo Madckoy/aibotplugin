@@ -38,9 +38,7 @@ public class BotSequenceEntityNearby
 
         // 2. Атакуем
         BotHandAttackTask attackTask = new BotHandAttackTask(bot);
-        BotHandAttackTaskParams params = attackTask.getParams();
-        params.setTarget(target);
-        attackTask.setParams(params);
+        attackTask.setTarget(target);
 
         List<BotTask<?>> subtasks = new ArrayList<>();
         subtasks.add(walkTask);

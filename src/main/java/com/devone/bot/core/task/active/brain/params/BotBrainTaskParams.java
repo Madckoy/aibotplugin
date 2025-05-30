@@ -9,7 +9,7 @@ public class BotBrainTaskParams extends BotTaskParams {
     public BotBrainTaskParams() {
         super();
         setIcon("🧠");
-        setObjective("Think");
+        setObjective("Thinking");
     }
 
     public static BotBrainTaskParams clone(BotBrainTaskParams source) {

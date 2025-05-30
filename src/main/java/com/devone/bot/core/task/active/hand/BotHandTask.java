@@ -11,6 +11,10 @@ public abstract class BotHandTask<T extends BotHandTaskParams> extends BotTaskAu
 
     private BotBlockData target;
 
+    public void setTarget(BotBlockData target) {
+        this.target = target;
+    }
+
     public BotHandTask(Bot bot, Class<T> paramClass) {
         super(bot, paramClass);
     }
@@ -21,11 +25,9 @@ public abstract class BotHandTask<T extends BotHandTaskParams> extends BotTaskAu
 
         setIcon(params.getIcon());
         setObjective(params.getObjective());
-        this.target = params.getTarget();
+        setTarget(params.getTarget());
 
-        if (target != null) {
-            
-            bot.getNavigator().setTarget(target);
+        if (target != null) {            
 
             BotLogger.debug(icon, isLogged(), bot.getId() + " ✅ Target for BotHandTask is set: " + target);
         } else {
@@ -44,9 +46,8 @@ public abstract class BotHandTask<T extends BotHandTaskParams> extends BotTaskAu
             this.stop();
             return;
         }
-        // turnToTarget(this, target.getPosition());
 
-        // Конкретная логика — в наследнике
+        bot.getNavigator().setTarget(target);
     }
 
     @Override
