@@ -44,8 +44,6 @@ public class BotTaskManager {
                     activeTask.stop();
                     return;
                 }
-            } else {
-                activeTask.stop();
             }  
         } catch (Exception e) {
                 BotLogger.debug("🤖", AIBotPlugin.getInstance().isLogged(),
@@ -142,7 +140,7 @@ public class BotTaskManager {
         task.setReactive(task.isReactive()); // не переопределяем, если уже выставлено
         bot.getTaskManager().pushTask(task);
     }
-
+    
     public static void clear(Bot bot) {
         bot.getBootstrap().getTaskManager().clearTasks();
     }
