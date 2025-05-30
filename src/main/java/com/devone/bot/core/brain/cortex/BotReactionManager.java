@@ -6,6 +6,7 @@ import com.devone.bot.core.brain.cortex.reaction.BotReactionInWater;
 import com.devone.bot.core.brain.cortex.reaction.BotReactionMoveTo;
 import com.devone.bot.core.brain.cortex.reaction.BotReactionNavigationSimulate;
 import com.devone.bot.core.brain.cortex.reaction.BotReactionNavigationСalculate;
+import com.devone.bot.core.brain.cortex.reaction.BotReactionEnsureSpawned;
 import com.devone.bot.core.brain.cortex.reaction.BotReactionEntityNearby;
 import com.devone.bot.core.brain.cortex.reaction.BotReactionPlayerNearby;
 import com.devone.bot.core.brain.cortex.reaction.BotReactionRotateToBestAngle;
@@ -26,6 +27,8 @@ public class BotReactionManager {
     private static final List<IBotReaction> reactions = new ArrayList<>();
 
     static {
+        // 📚 Регистрация на проблемы с Ентити
+        register(new BotReactionEnsureSpawned());
         // 📚 Регистрация позиционных реакций
         register(new BotReactionStuckGuard());
         register(new BotReactionObstacleNearby());
