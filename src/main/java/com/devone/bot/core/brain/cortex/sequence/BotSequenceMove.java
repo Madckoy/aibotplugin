@@ -20,7 +20,7 @@ public class BotSequenceMove extends BotSequenceContainer<BotSequenceMoveParams>
         super(bot, BotSequenceMoveParams.class);
         //setIcon("🔀");
         setObjective("Sequence: Bot Move Task");
-        //setDeffered(true);
+        setDeffered(true);
 
         target = tgtBlock;
     }

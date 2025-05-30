@@ -28,7 +28,6 @@ public abstract class BotHandTask<T extends BotHandTaskParams> extends BotTaskAu
         setTarget(params.getTarget());
 
         if (target != null) {            
-
             BotLogger.debug(icon, isLogged(), bot.getId() + " ✅ Target for BotHandTask is set: " + target);
         } else {
             BotLogger.debug(icon, isLogged(), bot.getId() + " ⚠️ Target is null in BotHandTask.");

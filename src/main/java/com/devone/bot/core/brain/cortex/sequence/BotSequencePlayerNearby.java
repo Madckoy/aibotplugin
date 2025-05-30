@@ -24,7 +24,7 @@ public class BotSequencePlayerNearby extends BotSequenceContainer<BotSequencePla
         this.player = player;
         //setIcon("🔀");
         setObjective("Sequence: Bot MoveTask and Bot Drop All Task");
-        //setDeffered(true);
+        setDeffered(true);
     }
 
     @Override

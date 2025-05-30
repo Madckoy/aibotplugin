@@ -23,7 +23,7 @@ public class BotSequenceTeleportToPosition
         this.position = position;
         //setIcon("🔀");
         setObjective("Sequence: Bot Teleport Task");
-       // setDeffered(true);
+        setDeffered(true);
     }
 
     @Override

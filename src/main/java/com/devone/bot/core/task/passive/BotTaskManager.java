@@ -36,6 +36,10 @@ public class BotTaskManager {
             BotTask<?> activeTask = bot.getTaskManager().getActiveTask();
             if(activeTask.isReactive() && isWaiting()==false) {
                 //another reactive task is being executed
+                
+                System.out.println(activeTask);                
+                System.out.println(waiting);
+
                 activeTask.stop();
                 return;
             }   

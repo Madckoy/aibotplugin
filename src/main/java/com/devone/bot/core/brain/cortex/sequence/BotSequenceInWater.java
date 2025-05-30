@@ -15,7 +15,7 @@ public class BotSequenceInWater extends BotSequenceContainer<BotSequenceInWaterP
         super(bot, BotSequenceInWaterParams.class);
         //setIcon("🔀");
         setObjective("Sequence: Catch Fish While Standing in Water");
-        //setDeffered(true);
+        setDeffered(true);
     }
 
     @Override

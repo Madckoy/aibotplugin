@@ -19,15 +19,6 @@ import com.devone.bot.core.utils.world.BotWorldHelper;
 
 public class BotHandAttackTask extends BotHandTask<BotHandAttackTaskParams> {
 
-    private BotBlockData target;
-    public BotBlockData getTarget() {
-        return target;
-    }
-
-    public void setTarget(BotBlockData target) {
-        this.target = target;
-    }
-
     private double damage = BotConstants.DEFAULT_HAND_DAMAGE;
     private BukkitTask bukkitTask;
     private BotHandAttackListener listener;
@@ -67,7 +58,7 @@ public class BotHandAttackTask extends BotHandTask<BotHandAttackTaskParams> {
 
         BotLogger.debug(icon, isLogged(), bot.getId() + " 🔶 Executing BotHandAttackTask");
 
-        if (target == null) {
+        if (getTarget() == null) {
             BotLogger.debug(icon, isLogged(), bot.getId() + " ❌ BotHandAttackTask: Target is null.");
             this.stop();
             return;
@@ -78,8 +69,6 @@ public class BotHandAttackTask extends BotHandTask<BotHandAttackTaskParams> {
             Bukkit.getPluginManager().registerEvents(listener, AIBotPlugin.getInstance());
         }
 
-        bot.getNavigator().setTarget(target);
-        
         BotHandAttackTask haTask = this;
 
         bukkitTask = new BukkitRunnable() {
@@ -93,19 +82,19 @@ public class BotHandAttackTask extends BotHandTask<BotHandAttackTaskParams> {
                     return;
                 }
 
-                setObjective(params.getObjective() + " " + target.getType() + " (" + target.getX() + ", "
-                        + target.getY() + ", " + target.getZ() + ")");
+                setObjective(params.getObjective() + " " + getTarget().getType() + " (" + getTarget().getX() + ", "
+                        + getTarget().getY() + ", " + getTarget().getZ() + ")");
 
                 attempts++;
 
                 // 🧠 Работа с мобом по UUID
-                if (target.getUUID() != null) {
-                    LivingEntity living = BotWorldHelper.findLivingEntityByUUID(target.getUUID());
+                if (getTarget().getUUID() != null) {
+                    LivingEntity living = BotWorldHelper.findLivingEntityByUUID(getTarget().getUUID());
 
                     if (living == null || living.isDead() || living.getHealth() <= 0) {
                         BotLogger.debug(icon, isLogged(), bot.getId() + " 💀 Target is dead or unreachable.");
-                        target.setUUID(null);
-                        target = null;
+                        getTarget().setUUID(null);
+                        setTarget(null);
                         bot.getNavigator().setTarget(null);
                         stop();
                         cancel();

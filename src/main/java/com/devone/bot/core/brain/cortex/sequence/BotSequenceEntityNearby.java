@@ -23,7 +23,7 @@ public class BotSequenceEntityNearby
         super(bot, BotSequenceEntityNearbyParams.class);
         //setIcon("🔀");
         setObjective("Sequence: Bot MoveTask and Bot Hand Attack Task");
-        //setDeffered(true);
+        setDeffered(true);
         target = hostileMob;
     }
 

@@ -17,7 +17,7 @@ public class BotSequenceCalibrate extends BotSequenceContainer<BotSequenceCalibr
         super(bot, BotSequenceCalibrateParams.class);
         //setIcon("<");
         setObjective("Sequence: Bot Calibration Task");
-        //setDeffered(true);
+        setDeffered(true);
     }
 
     protected List<BotTask<?>> enqueue(Bot bot) {

@@ -24,7 +24,7 @@ public class BotSequenceTeleportToPlayer
         this.player = player;
         //setIcon("🔀");
         setObjective("Sequence: Телепорт к игроку (не вплотную)");
-        //setDeffered(true);
+        setDeffered(true);
     }
 
     @Override

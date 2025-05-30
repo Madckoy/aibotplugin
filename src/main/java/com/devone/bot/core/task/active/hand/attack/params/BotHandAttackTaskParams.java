@@ -5,8 +5,6 @@ import com.devone.bot.core.utils.blocks.BotBlockData;
 
 public class BotHandAttackTaskParams extends BotHandTaskParams {
 
-    public BotBlockData target = new BotBlockData();
-
     public BotHandAttackTaskParams() {
         super(); // Важно вызвать родительский конструктор
         setIcon("⚔️");
@@ -16,18 +14,9 @@ public class BotHandAttackTaskParams extends BotHandTaskParams {
     // Конструктор с параметрами (animal и damage)
     public BotHandAttackTaskParams(BotBlockData target, double damage) {
         super(); // Важно вызвать родительский конструктор
-        this.target = target;
         setDamage(damage);
         setIcon("⚔️");
         setObjective("Attack");
-    }
-
-    public BotBlockData getTarget() {
-        return target;
-    }
-
-    public void setTarget(BotBlockData target) {
-        this.target = target;
     }
 
     @Override
